@@ -10,12 +10,12 @@ test: silentclean timed_test
 dirtytest: timed_test
 
 # Run all DOCK tests
-dock: sampling traditional gbsa scoresofscores filtering \
-	parallel chemgrid denovo amberdock
+dock: sampling traditional gbsa scoresofscores amberdock filtering \
+	denovo parallel chemgrid 
 
 # Run DOCK database filtering tests
 filtering:
-	cd database_filter && make -e test
+	make -e -C ./database_filter test rdkittest
 
 # Run DOCK sampling related tests
 sampling:
@@ -63,16 +63,24 @@ chemgrid:
 
 #Run DOCK denovo test
 denovo:
-	cd de_novo && make -e test
-	cd genetic && make -e test
-	cd fraglib_gen && make -e test
+	make -e -C ./de_novo test
+	make -e -C ./genetic test
+	make -e -C ./fraglib_gen test
+	make -e -C ./de_novo rdkittest
 
 # Run DOCK parallel tests
 parallel:
 	@echo "MPI_HOME is defined to ${MPI_HOME}"
-	cd mpi && make -e test
+	make -e -C ./mpi test rdkittest
 
 mpi:	parallel
+
+# Run independent DOCK RDKit tests
+# The serial ones are intended to fail if dock6.rdkit does not exist
+rdkit:
+	make -e -C ./database_filter rdkittest_no_dock6_rdkit_is_an_error
+	make -e -C ./de_novo rdkittest_no_dock6_rdkit_is_an_error
+	make -e -C ./mpi rdkittest
 
 # Run tests on the utilities
 utils:

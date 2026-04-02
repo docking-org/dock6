@@ -6,15 +6,15 @@ include ../../install/config.h
 BIN= ../../bin
 PROGS= dock6$(DOCK_SUFFIX)
 
-OBJS= amber_typer.o base_grid.o base_mpi.o base_score.o conf_gen_ag.o conf_gen_cg.o conf_gen_dn.o conf_gen_dn_ga.o conf_gen_ga.o conf_gen_hdb.o\
-      dock.o dockmol.o filter.o fingerprint.o fraggraph.o fragment.o gasteiger.o grid.o hungarian.o library_file.o \
-      master_conf.o master_score.o orient.o sasa.o score.o score_amber.o score_chemgrid.o \
-      score_descriptor.o score_footprint.o score_ph4.o score_volume.o score_gist.o score_hbond.o score_internal.o score_multigrid.o score_sasa.o \
-      score_solvent.o simplex.o sphere.o trace.o utils.o
+OBJS= amber_typer.o base_grid.o base_mpi.o base_score.o conf_gen_ag.o \
+      conf_gen_cg.o conf_gen_dn.o conf_gen_dn_ga.o conf_gen_ga.o conf_gen_hdb.o \
+      dock.o dockmol.o filter.o fingerprint.o fraggraph.o fragment.o \
+      gasteiger.o grid.o hungarian.o library_file.o master_conf.o master_score.o \
+      orient.o sasa.o score.o score_amber.o score_chemgrid.o \
+      score_descriptor.o score_footprint.o score_ph4.o score_volume.o \
+      score_gist.o score_hbond.o score_internal.o score_multigrid.o score_sasa.o \
+      score_solvent.o simplex.o sphere.o trace.o utils.o iso_align.o rdtyper.o
 
-ifeq ($(RDKIT),yes)
-OBJS += rdtyper.o
-endif
 
 all:  $(PROGS)
 
@@ -80,7 +80,7 @@ conf_gen_cg.o: score_hbond.h score_internal.h score_descriptor.h hungarian.h
 conf_gen_cg.o: score_gist.h score_amber.h nab/nab.h defreal.h nab/nabtypes.h
 conf_gen_cg.o: nab/defreal.h score_chemgrid.h base_grid.h score_solvent.h
 conf_gen_cg.o: grid.h score_sasa.h sasa.h simplex.h trace.h trace.inl
-conf_gen_dn.o: conf_gen_dn.h amber_typer.h utils.h dockmol.h fragment.h
+conf_gen_dn.o: conf_gen_dn.h amber_typer.h utils.h dockmol.h fragment.h iso_align.h
 conf_gen_dn.o: master_score.h score.h base_score.h score_multigrid.h
 conf_gen_dn.o: score_footprint.h score_ph4.h score_volume.h score_hbond.h
 conf_gen_dn.o: score_internal.h score_descriptor.h fingerprint.h hungarian.h
@@ -134,7 +134,7 @@ fragment.o: base_score.h score_multigrid.h score_footprint.h score_ph4.h
 fragment.o: score_volume.h score_hbond.h score_internal.h score_descriptor.h
 fragment.o: fingerprint.h hungarian.h score_gist.h score_amber.h nab/nab.h
 fragment.o: defreal.h nab/nabtypes.h nab/defreal.h score_chemgrid.h
-fragment.o: base_grid.h score_solvent.h grid.h score_sasa.h sasa.h
+fragment.o: base_grid.h score_solvent.h grid.h score_sasa.h sasa.h iso_align.h
 gasteiger.o: gasteiger.h dockmol.h utils.h
 grid.o: grid.h base_grid.h utils.h trace.h trace.inl
 hungarian.o: hungarian.h dockmol.h utils.h
@@ -211,6 +211,7 @@ trace.o: trace.h trace.inl
 utils.o: utils.h
 xlogp.o: xlogp.h dockmol.h utils.h
 rdtyper.o: rdtyper.h dockmol.h
+iso_align.o: iso_align.h iso_align.cpp dockmol.h hungarian.h
 
 sffdock6$(DOCK_SUFFIX):  configured $(OBJS) nab_objects
 	$(LOAD) $(CFLAGS) -o $@ $(OBJS) \
@@ -220,11 +221,5 @@ nab/stubs.o \
 nab/wallclock.o \
 $(LIBS) $(DOCKBUILDFLAGS)
 
-junk:
-	/amber/amber12/AmberTools/src/blas/./dgemm.o \
-/amber/amber12/AmberTools/src/blas/./lsame.o \
-/amber/amber12/AmberTools/src/blas/./xerbla.o \
-/12/lib/libpbsa.a \
-	$(LOAD) $(CFLAGS) -o $@ $(OBJS) nab/*.o $(LIBS) $(DOCKBUILDFLAGS)
 
 # DO NOT DELETE

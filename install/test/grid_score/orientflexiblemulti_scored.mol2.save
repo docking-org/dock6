@@ -1,11 +1,11 @@
 
 ##########                                Name:        ZINC00158442
-##########                DOCK_Rotatable_Bonds:                   1
-##########                         Heavy_Atoms:                  10
 ##########                    Molecular_Weight:             207.134
+##########                DOCK_Rotatable_Bonds:                   1
 ##########                       Formal_Charge:                   1
 ##########                     HBond_Acceptors:                   1
 ##########                        HBond_Donors:                   0
+##########                         Heavy_Atoms:                  10
 ##########                          Grid_Score:           -0.554125
 ##########                     Grid_vdw_energy:           -1.959602
 ##########                      Grid_es_energy:            1.405477
@@ -78,12 +78,12 @@ bcc
 
 
 ##########                                Name:        ZINC00158751
-##########                DOCK_Rotatable_Bonds:                   1
-##########                         Heavy_Atoms:                   7
 ##########                    Molecular_Weight:             112.152
+##########                DOCK_Rotatable_Bonds:                   1
 ##########                       Formal_Charge:         0.000100005
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
+##########                         Heavy_Atoms:                   7
 ##########                          Grid_Score:          -13.890112
 ##########                     Grid_vdw_energy:          -12.362978
 ##########                      Grid_es_energy:           -1.527134
@@ -124,12 +124,12 @@ bcc
 
 
 ##########                                Name:        ZINC00013564
-##########                DOCK_Rotatable_Bonds:                   0
-##########                         Heavy_Atoms:                   9
 ##########                    Molecular_Weight:             140.206
+##########                DOCK_Rotatable_Bonds:                   0
 ##########                       Formal_Charge:         0.000199944
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
+##########                         Heavy_Atoms:                   9
 ##########                          Grid_Score:          -15.287382
 ##########                     Grid_vdw_energy:          -17.370550
 ##########                      Grid_es_energy:            2.083168
@@ -182,12 +182,12 @@ bcc
 
 
 ##########                                Name:        ZINC00150863
-##########                DOCK_Rotatable_Bonds:                   0
-##########                         Heavy_Atoms:                   7
 ##########                    Molecular_Weight:             113.183
+##########                DOCK_Rotatable_Bonds:                   0
 ##########                       Formal_Charge:         9.99719e-05
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
+##########                         Heavy_Atoms:                   7
 ##########                          Grid_Score:          -13.396927
 ##########                     Grid_vdw_energy:          -13.679748
 ##########                      Grid_es_energy:            0.282820
@@ -234,12 +234,12 @@ bcc
 
 
 ##########                                Name:        ZINC00152265
-##########                DOCK_Rotatable_Bonds:                   1
-##########                         Heavy_Atoms:                   8
 ##########                    Molecular_Weight:             126.179
+##########                DOCK_Rotatable_Bonds:                   1
 ##########                       Formal_Charge:         9.99914e-05
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
+##########                         Heavy_Atoms:                   8
 ##########                          Grid_Score:          -15.236704
 ##########                     Grid_vdw_energy:          -13.851338
 ##########                      Grid_es_energy:           -1.385365
@@ -286,12 +286,12 @@ bcc
 
 
 ##########                                Name:        ZINC00152280
-##########                DOCK_Rotatable_Bonds:                   2
-##########                         Heavy_Atoms:                   9
 ##########                    Molecular_Weight:             140.206
+##########                DOCK_Rotatable_Bonds:                   2
 ##########                       Formal_Charge:        -4.65661e-08
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
+##########                         Heavy_Atoms:                   9
 ##########                          Grid_Score:          -17.706253
 ##########                     Grid_vdw_energy:          -16.459993
 ##########                      Grid_es_energy:           -1.246260
@@ -344,12 +344,12 @@ bcc
 
 
 ##########                                Name:        ZINC00157111
-##########                DOCK_Rotatable_Bonds:                   2
-##########                         Heavy_Atoms:                   8
 ##########                    Molecular_Weight:             123.178
+##########                DOCK_Rotatable_Bonds:                   2
 ##########                       Formal_Charge:         7.45058e-08
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
+##########                         Heavy_Atoms:                   8
 ##########                          Grid_Score:          -14.073079
 ##########                     Grid_vdw_energy:          -12.586664
 ##########                      Grid_es_energy:           -1.486415
@@ -394,12 +394,12 @@ bcc
 
 
 ##########                                Name:        ZINC00157152
-##########                DOCK_Rotatable_Bonds:                   1
-##########                         Heavy_Atoms:                   8
 ##########                    Molecular_Weight:             126.179
+##########                DOCK_Rotatable_Bonds:                   1
 ##########                       Formal_Charge:         1.49012e-08
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
+##########                         Heavy_Atoms:                   8
 ##########                          Grid_Score:          -15.555840
 ##########                     Grid_vdw_energy:          -15.114218
 ##########                      Grid_es_energy:           -0.441622
@@ -446,12 +446,12 @@ bcc
 
 
 ##########                                Name:        ZINC00157402
-##########                DOCK_Rotatable_Bonds:                   1
-##########                         Heavy_Atoms:                   8
 ##########                    Molecular_Weight:             126.179
+##########                DOCK_Rotatable_Bonds:                   1
 ##########                       Formal_Charge:         9.99123e-05
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
+##########                         Heavy_Atoms:                   8
 ##########                          Grid_Score:          -15.105305
 ##########                     Grid_vdw_energy:          -13.295808
 ##########                      Grid_es_energy:           -1.809497
@@ -498,12 +498,12 @@ bcc
 
 
 ##########                                Name:        ZINC00157467
-##########                DOCK_Rotatable_Bonds:                   2
-##########                         Heavy_Atoms:                   7
 ##########                    Molecular_Weight:             114.168
+##########                DOCK_Rotatable_Bonds:                   2
 ##########                       Formal_Charge:        -0.000199951
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   1
+##########                         Heavy_Atoms:                   7
 ##########                          Grid_Score:          -14.412565
 ##########                     Grid_vdw_energy:          -13.521505
 ##########                      Grid_es_energy:           -0.891060
@@ -548,12 +548,12 @@ bcc
 
 
 ##########                                Name:        ZINC00157960
-##########                DOCK_Rotatable_Bonds:                   1
-##########                         Heavy_Atoms:                  10
 ##########                    Molecular_Weight:             154.233
+##########                DOCK_Rotatable_Bonds:                   1
 ##########                       Formal_Charge:          0.00010002
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
+##########                         Heavy_Atoms:                  10
 ##########                          Grid_Score:          -17.022007
 ##########                     Grid_vdw_energy:          -16.388033
 ##########                      Grid_es_energy:           -0.633974

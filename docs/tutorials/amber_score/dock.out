@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.10
+DOCK v6.11
 
-Released January 2023
+Released November 2023
 Copyright UCSF
 --------------------------------------
 
@@ -119,7 +119,7 @@ Initializing Library File Routines...
 -----------------------------------
 Molecule: AAH
 
- Elapsed time for docking:	9.915 seconds
+ Elapsed time for docking:	10.034 seconds
 
  Anchors:		1
  Orientations:		1
@@ -132,4 +132,4 @@ Molecule: AAH
 
 
 1 Molecules Processed
-Total elapsed time:	10.837 seconds
+Total elapsed time:	11.031 seconds

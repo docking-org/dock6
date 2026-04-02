@@ -11,11 +11,11 @@
 University of California at San Francisco, DOCK 4.0.1
 
 __________________Job_Information_________________
-launch_time                    Thu Jun 23 18:46:06 2022
+launch_time                    Thu May 25 14:57:07 2023
 host_name                      unknown
 memory_limit                   -1
-working_directory              /export/home/jbickel/builds/dock6/install/test/grid_generation
-user_name                      jbickel
+working_directory              install/test/grid_generation
+user_name                      stpak
 
 ________________General_Parameters________________
 compute_grids                  yes

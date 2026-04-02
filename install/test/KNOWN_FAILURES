@@ -60,6 +60,11 @@ descriptor_score/Des_Tan+SGE
    These tests are particularly sensitive with respect to the number of
    conformations which then produces significant scoring differences.
 
+genetic/elitism.GA_max
+   The Offspring Ensemble in this test is sensitive and can lead to a cascade
+   of output differences.  However, the scoring differences at the tail of the
+   output, while significant, are moderate.
+
 minimization
    On macOS these tests are prone to insignificant but noisy differences
    in floating point numbers.  Reported platforms are OS X 10.8, 10.9.5, and
@@ -84,5 +89,5 @@ in floating point arithmetic.
 binary file formats and memory layouts as well as floating point arithmetic.
 ------------------------------------------------------------------------------
 
-Last updated January 30, 2023.
+Last updated November 15, 2023.
 

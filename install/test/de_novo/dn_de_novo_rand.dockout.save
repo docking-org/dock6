@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.10
+DOCK v6.11
 
-Released January 2023
+Released November 2023
 Copyright UCSF
 --------------------------------------
 
@@ -28,7 +28,7 @@ dn_pruning_conformer_score_scaling_factor                    2.0
 dn_pruning_clustering_cutoff                                 100.0
 dn_mol_wt_cutoff_type                                        soft
 dn_upper_constraint_mol_wt                                   550.0
-dn_lower_constraint_mol_wt                                   0.0
+dn_lower_constraint_mol_wt                                   300.0
 dn_mol_wt_std_dev                                            50.0
 dn_constraint_rot_bon                                        15
 dn_constraint_formal_charge                                  2.0
@@ -409,6 +409,7 @@ Reading in 31 grids
       From this ensemble, the average molecular weight is 94.9714
       From this ensemble, the average number of rotatable bonds is 1
       From this ensemble, the average formal_charge is -2
+      While writing molecules to file, 0 molecules were rejected on the lower bound molecular weight.
       After writing 0 of those to file, 4 are returned to root for the next iteration
 
   ##### Entering layer of growth #2
@@ -419,6 +420,7 @@ Reading in 31 grids
     From Root[3], created 0 new fragments with an added layer
       From all frags in root, kept a total of 0 new fragments with an added layer
       After pruning by the RMSD heuristic, that number goes down to 0
+      While writing molecules to file, 0 molecules were rejected on the lower bound molecular weight.
       After writing 0 of those to file, 0 are returned to root for the next iteration
 
 Root is empty, continuing.
@@ -428,4 +430,4 @@ There are no more anchors. Exiting.
 
 
 252 Molecules Processed
-Total elapsed time:	5.195 seconds
+Total elapsed time:	3.285 seconds

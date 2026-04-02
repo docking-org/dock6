@@ -120,7 +120,7 @@ GA_Recomb::input_parameters( Parameter_Reader & parm )
         }
         fin.close();
     }
-    ga_PAINS_path = parm.query_param("PAINS_path","pains_table.dat");
+    ga_PAINS_path = parm.query_param("PAINS_path","pains_table_2019_09_01.dat");
     std::vector<std::string> PAINStmp;
     if (PAINStmp.empty() == true){
         std::ifstream fin(ga_PAINS_path);

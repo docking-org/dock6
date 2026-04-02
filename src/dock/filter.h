@@ -66,6 +66,8 @@ class Filter
     float max_clogp;
     float min_logs;
     float max_logs;
+    float min_tpsa;
+    float max_tpsa;
     float min_qed;
     float max_qed;
     float min_sa;

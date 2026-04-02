@@ -1,0 +1,592 @@
+
+
+
+--------------------------------------
+DOCK v6.11
+
+Released November 2023
+Copyright UCSF
+--------------------------------------
+
+
+Conformational Sampling Parameters
+------------------------------------------------------------------------------------------
+conformer_search_type                                        denovo
+
+De Novo Build Parameters
+------------------------------------------------------------------------------------------
+dn_fraglib_scaffold_file                                     ./dn_generate_fragments_scaffold.mol2
+dn_fraglib_linker_file                                       ./dn_generate_fragments_linker.mol2
+dn_fraglib_sidechain_file                                    ./dn_generate_fragments_sidechain.mol2
+dn_user_specified_anchor                                     no
+dn_torenv_table                                              ./dn_generate_fragments_torenv.dat
+dn_name_identifier                                           denovo
+dn_sampling_method                                           graph
+dn_graph_max_picks                                           30
+dn_graph_breadth                                             3
+dn_graph_depth                                               2
+dn_graph_temperature                                         100
+dn_pruning_conformer_score_cutoff                            100.0
+dn_pruning_conformer_score_scaling_factor                    2.0
+dn_pruning_clustering_cutoff                                 100.0
+dn_mol_wt_cutoff_type                                        soft
+dn_upper_constraint_mol_wt                                   550.0
+dn_lower_constraint_mol_wt                                   0.0
+dn_mol_wt_std_dev                                            50.0
+dn_drive_verbose                                             no
+dn_drive_clogp                                               yes
+dn_lower_clogp                                               -10
+dn_upper_clogp                                               10
+dn_clogp_std_dev                                             2.02
+dn_drive_esol                                                no
+dn_drive_tpsa                                                no
+dn_drive_qed                                                 yes
+dn_lower_qed                                                 0.05
+dn_qed_std_dev                                               0.19
+dn_drive_sa                                                  yes
+dn_upper_sa                                                  9.0
+dn_sa_std_dev                                                0.9
+dn_drive_stereocenters                                       yes
+dn_upper_stereocenter                                        2
+dn_drive_pains                                               no
+dn_start_at_layer                                            1
+sa_fraglib_path                                              ../../../parameters/sa_fraglib.dat
+PAINS_path                                                   ../../../parameters/pains_table_2019_09_01.dat
+dn_constraint_rot_bon                                        15
+dn_constraint_formal_charge                                  2.0
+dn_heur_unmatched_num                                        1
+dn_heur_matched_rmsd                                         2.0
+dn_unique_anchors                                            1
+dn_max_grow_layers                                           9
+dn_max_root_size                                             25
+dn_max_layer_size                                            25
+dn_max_current_aps                                           5
+dn_max_scaffolds_per_layer                                   1
+dn_write_checkpoints                                         yes
+dn_write_prune_dump                                          yes
+dn_write_orients                                             no
+dn_write_growth_trees                                        no
+dn_output_prefix                                             dn_de_novo_graph_rd
+
+Internal Energy Parameters
+------------------------------------------------------------------------------------------
+use_internal_energy                                          yes
+internal_energy_rep_exp                                      12
+internal_energy_cutoff                                       100.0
+Note: Internal energy only includes repulsive VDW for growth and/or minimization.
+
+Database Filter Parameters
+------------------------------------------------------------------------------------------
+use_database_filter                                          no
+
+Orient Ligand Parameters
+------------------------------------------------------------------------------------------
+orient_ligand                                                yes
+automated_matching                                           yes
+receptor_site_file                                           ./dn_rec.spheres
+max_orientations                                             1000
+critical_points                                              no
+chemical_matching                                            no
+use_ligand_spheres                                           no
+
+Bump Filter Parameters
+------------------------------------------------------------------------------------------
+bump_filter                                                  no
+
+Master Score Parameters
+------------------------------------------------------------------------------------------
+score_molecules                                              yes
+
+Contact Score Parameters
+------------------------------------------------------------------------------------------
+contact_score_primary                                        no
+
+Grid Score Parameters
+------------------------------------------------------------------------------------------
+grid_score_primary                                           no
+
+MultiGrid Score Parameters
+------------------------------------------------------------------------------------------
+multigrid_score_primary                                      no
+
+Dock3.5 Score Parameters
+------------------------------------------------------------------------------------------
+dock3.5_score_primary                                        no
+
+Continuous Energy Score Parameters
+------------------------------------------------------------------------------------------
+continuous_score_primary                                     no
+
+Footprint Similarity Score Parameters
+------------------------------------------------------------------------------------------
+footprint_similarity_score_primary                           no
+
+Pharmacophore Similarity Score Parameters
+------------------------------------------------------------------------------------------
+pharmacophore_score_primary                                  no
+
+Hbond Energy Score Parameters
+------------------------------------------------------------------------------------------
+hbond_score_primary                                          no
+
+Internal Energy Score Parameters
+------------------------------------------------------------------------------------------
+internal_energy_score_primary                                no
+
+Descriptor Score Parameters
+------------------------------------------------------------------------------------------
+descriptor_score_primary                                     yes
+descriptor_use_grid_score                                    no
+descriptor_use_multigrid_score                               yes
+descriptor_use_pharmacophore_score                           no
+descriptor_use_tanimoto                                      no
+descriptor_use_hungarian                                     no
+descriptor_use_volume_overlap                                no
+
+--- Descriptor Score Parameters: Multigrid Score ---
+descriptor_multigrid_score_rep_rad_scale                     1
+descriptor_multigrid_score_vdw_scale                         1
+descriptor_multigrid_score_es_scale                          1
+descriptor_multigrid_score_number_of_grids                   31
+descriptor_multigrid_score_grid_prefix0                      ./dn_rec.resid_017
+descriptor_multigrid_score_grid_prefix1                      ./dn_rec.resid_018
+descriptor_multigrid_score_grid_prefix2                      ./dn_rec.resid_019
+descriptor_multigrid_score_grid_prefix3                      ./dn_rec.resid_020
+descriptor_multigrid_score_grid_prefix4                      ./dn_rec.resid_023
+descriptor_multigrid_score_grid_prefix5                      ./dn_rec.resid_031
+descriptor_multigrid_score_grid_prefix6                      ./dn_rec.resid_045
+descriptor_multigrid_score_grid_prefix7                      ./dn_rec.resid_046
+descriptor_multigrid_score_grid_prefix8                      ./dn_rec.resid_047
+descriptor_multigrid_score_grid_prefix9                      ./dn_rec.resid_048
+descriptor_multigrid_score_grid_prefix10                     ./dn_rec.resid_050
+descriptor_multigrid_score_grid_prefix11                     ./dn_rec.resid_054
+descriptor_multigrid_score_grid_prefix12                     ./dn_rec.resid_065
+descriptor_multigrid_score_grid_prefix13                     ./dn_rec.resid_066
+descriptor_multigrid_score_grid_prefix14                     ./dn_rec.resid_067
+descriptor_multigrid_score_grid_prefix15                     ./dn_rec.resid_071
+descriptor_multigrid_score_grid_prefix16                     ./dn_rec.resid_088
+descriptor_multigrid_score_grid_prefix17                     ./dn_rec.resid_091
+descriptor_multigrid_score_grid_prefix18                     ./dn_rec.resid_098
+descriptor_multigrid_score_grid_prefix19                     ./dn_rec.resid_099
+descriptor_multigrid_score_grid_prefix20                     ./dn_rec.resid_101
+descriptor_multigrid_score_grid_prefix21                     ./dn_rec.resid_103
+descriptor_multigrid_score_grid_prefix22                     ./dn_rec.resid_153
+descriptor_multigrid_score_grid_prefix23                     ./dn_rec.resid_154
+descriptor_multigrid_score_grid_prefix24                     ./dn_rec.resid_232
+descriptor_multigrid_score_grid_prefix25                     ./dn_rec.resid_259
+descriptor_multigrid_score_grid_prefix26                     ./dn_rec.resid_294
+descriptor_multigrid_score_grid_prefix27                     ./dn_rec.resid_301
+descriptor_multigrid_score_grid_prefix28                     ./dn_rec.resid_302
+descriptor_multigrid_score_grid_prefix29                     ./dn_rec.resid_303
+descriptor_multigrid_score_grid_prefix30                     ./dn_rec.resid_remaining
+multigrid_score_individual_rec_ensemble                      no
+multigrid_score_weights_text                                 no
+descriptor_multigrid_score_fp_ref_mol                        yes
+descriptor_multigrid_score_footprint_ref                     dn_lig.mol2
+descriptor_multigrid_score_foot_compare_type                 Euclidean
+-------------------------------------------------------------
+You chose to use the Euclidean distance as the metric 
+to compare the footprints.  When the value is 0 then 
+there is perfect agreement between the two footprints.
+As the agreement gets worse between the two
+footprints the value increases.
+-------------------------------------------------------------
+descriptor_multigrid_score_normalize_foot                    no
+-------------------------------------------------------------
+You chose to not normalize footprints which penalizes
+the score of the pose if the footprint is bad.
+-------------------------------------------------------------
+descriptor_multigrid_score_vdw_euc_scale                     1.0
+descriptor_multigrid_score_es_euc_scale                      1.0
+
+--- Descriptor Score Weights ---
+descriptor_weight_multigrid_score                            1
+
+Using these settings, the Descriptor Score function takes the form:
+Descriptor_Score = (1 * Multigrid_Score)
+
+Zou GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+
+Hawkins GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+
+SASA Score Parameters
+------------------------------------------------------------------------------------------
+
+Amber Score Parameters
+------------------------------------------------------------------------------------------
+
+Simplex Minimization Parameters
+------------------------------------------------------------------------------------------
+minimize_ligand                                              yes
+minimize_anchor                                              yes
+minimize_flexible_growth                                     yes
+use_advanced_simplex_parameters                              no
+simplex_max_cycles                                           1
+simplex_score_converge                                       0.1
+simplex_cycle_converge                                       1.0
+simplex_trans_step                                           1.0
+simplex_rot_step                                             0.1
+simplex_tors_step                                            10.0
+simplex_anchor_max_iterations                                500
+simplex_grow_max_iterations                                  500
+simplex_grow_tors_premin_iterations                          0
+simplex_random_seed                                          0
+simplex_restraint_min                                        no
+
+Atom Typing Parameters
+------------------------------------------------------------------------------------------
+atom_model                                                   all
+vdw_defn_file                                                ../../../parameters/vdw_de_novo.defn
+flex_defn_file                                               ../../../parameters/flex.defn
+flex_drive_file                                              ../../../parameters/flex_drive.tbl
+------------------------------------------------------------------------------------------
+
+Initializing De Novo Growth Routines...
+ Reading the scaffold library from ./dn_generate_fragments_scaffold.mol2...Done (#=0)
+ Reading the linker library from ./dn_generate_fragments_linker.mol2...Done (#=4)
+ Reading the sidechain library from ./dn_generate_fragments_sidechain.mol2...Done (#=2)
+ Reading the torenv table from ./dn_generate_fragments_torenv.dat...Done: (#=5)
+Initializing Orienting Routines...
+Initializing typer for Multigrid Score within Descriptor Score...
+To cite Multigrid Energy Score use: 
+ Balius, T. E.; Mukherjee, S.; Rizzo, R. C. Implementation and Evaluation of a Docking-rescoring Method using Molecular Footprint Comparisons. J. Comput. Chem., 2011, 32, 2273-2289
+
+Initializing Multi Grid Score Routines...
+Reading in 31 grids
+ Reading the energy grid from ./dn_rec.resid_017.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_017.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_018.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_018.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_019.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_019.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_020.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_020.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_023.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_023.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_031.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_031.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_045.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_045.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_046.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_046.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_047.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_047.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_048.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_048.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_050.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_050.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_054.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_054.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_065.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_065.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_066.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_066.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_067.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_067.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_071.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_071.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_088.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_088.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_091.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_091.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_098.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_098.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_099.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_099.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_101.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_101.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_103.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_103.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_153.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_153.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_154.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_154.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_232.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_232.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_259.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_259.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_294.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_294.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_301.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_301.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_302.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_302.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_303.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_303.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_remaining.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_remaining.bmp
+ Done reading the grid box quantifiers.
+
+
+##### Entering the main de novo build engine #####
+
+##### Now orienting anchor #1
+  ##### Entering layer of growth #1
+  Root size at the beginning of this layer = 40
+    From Root[0], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[0],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[1], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[1],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[2], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[2],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[3], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[3],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[4], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[4],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[5], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[5],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[6], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[6],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[7], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[7],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[8], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[8],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[9], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[9],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[10], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[10],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[11], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[11],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[12], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[12],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[13], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[13],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[14], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[14],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[15], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[15],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[16], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[16],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[17], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[17],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[18], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[18],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[19], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[19],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[20], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[20],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[21], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[21],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[22], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[22],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[23], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[23],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[24], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[24],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[25], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[25],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[26], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[26],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[27], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[27],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[28], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[28],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[29], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[29],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[30], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[30],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[31], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[31],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[32], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[32],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[33], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[33],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[34], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[34],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[35], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[35],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[36], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[36],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[37], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[37],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[38], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[38],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+    From Root[39], created 6 new fragments with an added layer
+        From RD_layer[1]anchor[0]Root[39],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
+      From all frags in root, kept a total of 240 new fragments with an added layer
+      After pruning by the RMSD heuristic, that number goes down to 3
+      From this ensemble, the average molecular weight is 94.9714
+      From this ensemble, the average number of rotatable bonds is 1
+      From this ensemble, the average formal_charge is -2
+      After writing 0 of those to file, 3 are returned to root for the next iteration
+
+  ##### Entering layer of growth #2
+  Root size at the beginning of this layer = 3
+    From Root[0], created 6 new fragments with an added layer
+        From RD_layer[2]anchor[0]Root[0],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[2],the number of rejected molecules is 0
+    From Root[1], created 6 new fragments with an added layer
+        From RD_layer[2]anchor[0]Root[1],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[2],the number of rejected molecules is 0
+    From Root[2], created 6 new fragments with an added layer
+        From RD_layer[2]anchor[0]Root[2],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[2],the number of rejected molecules is 0
+      From all frags in root, kept a total of 18 new fragments with an added layer
+      After pruning by the RMSD heuristic, that number goes down to 3
+      From this ensemble, the average molecular weight is 108.998
+      From this ensemble, the average number of rotatable bonds is 2
+      From this ensemble, the average formal_charge is -2
+      After writing 0 of those to file, 3 are returned to root for the next iteration
+
+  ##### Entering layer of growth #3
+  Root size at the beginning of this layer = 3
+    From Root[0], created 6 new fragments with an added layer
+        From RD_layer[3]anchor[0]Root[0],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[3],the number of rejected molecules is 0
+    From Root[1], created 4 new fragments with an added layer
+        From RD_layer[3]anchor[0]Root[1],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[3],the number of rejected molecules is 0
+    From Root[2], created 5 new fragments with an added layer
+        From RD_layer[3]anchor[0]Root[2],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[3],the number of rejected molecules is 0
+      From all frags in root, kept a total of 15 new fragments with an added layer
+      After pruning by the RMSD heuristic, that number goes down to 3
+      From this ensemble, the average molecular weight is 137.009
+      From this ensemble, the average number of rotatable bonds is 3
+      From this ensemble, the average formal_charge is -2
+      After writing 0 of those to file, 3 are returned to root for the next iteration
+
+  ##### Entering layer of growth #4
+  Root size at the beginning of this layer = 3
+    From Root[0], created 1 new fragments with an added layer
+        From RD_layer[4]anchor[0]Root[0],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[4],the number of rejected molecules is 0
+    From Root[1], created 1 new fragments with an added layer
+        From RD_layer[4]anchor[0]Root[1],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[4],the number of rejected molecules is 0
+    From Root[2], created 0 new fragments with an added layer
+        From RD_layer[4]anchor[0]Root[2],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[4],the number of rejected molecules is 0
+      From all frags in root, kept a total of 2 new fragments with an added layer
+      After pruning by the RMSD heuristic, that number goes down to 2
+      From this ensemble, the average molecular weight is 152.023
+      From this ensemble, the average number of rotatable bonds is 4
+      From this ensemble, the average formal_charge is -2
+      After writing 0 of those to file, 2 are returned to root for the next iteration
+
+  ##### Entering layer of growth #5
+  Root size at the beginning of this layer = 2
+    From Root[0], created 6 new fragments with an added layer
+        From RD_layer[5]anchor[0]Root[0],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[5],the number of rejected molecules is 0
+    From Root[1], created 6 new fragments with an added layer
+        From RD_layer[5]anchor[0]Root[1],the number of rejected molecules is 0
+        Cumulatively, in RD_layer[5],the number of rejected molecules is 0
+      From all frags in root, kept a total of 12 new fragments with an added layer
+      After pruning by the RMSD heuristic, that number goes down to 2
+      From this ensemble, the average molecular weight is 169.03
+      From this ensemble, the average number of rotatable bonds is 5
+      From this ensemble, the average formal_charge is -2
+      After writing 2 of those to file, 0 are returned to root for the next iteration
+
+Root is empty, continuing.
+
+There are no more anchors. Exiting.
+
+
+
+287 Molecules Processed
+Total elapsed time:	9.833 seconds

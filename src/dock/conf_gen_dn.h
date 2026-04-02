@@ -119,6 +119,9 @@ class           DN_Build {
     std::string        dn_fraglib_scaffold_file;
     std::string        dn_fraglib_linker_file;
     std::string        dn_fraglib_sidechain_file;
+    std::string        dn_fraglib_iso_scaffold_file;
+    std::string        dn_fraglib_iso_linker_file;
+    std::string        dn_fraglib_iso_sidechain_file;
     //std::string      dn_fraglib_rigid_file;
     bool               dn_user_specified_anchor;    // user can specify anchor(s) (good for lead opt)
     std::string        dn_fraglib_anchor_file;
@@ -166,10 +169,13 @@ class           DN_Build {
     bool               dn_normal; // normal de novo
     bool               dn_drive_clogp;
     bool               dn_drive_esol;
+    bool               dn_drive_tpsa;
     bool               dn_drive_qed;
     bool               dn_drive_sa;
     bool               dn_drive_stereocenters;
+    bool               dn_drive_pains;
     bool               dn_calc_pains;
+
     // Driving attributes
     double             dn_lower_clogp;
     double             dn_upper_clogp;
@@ -177,11 +183,15 @@ class           DN_Build {
     double             dn_lower_esol;
     double             dn_upper_esol;
     double             dn_esol_std_dev;
+    double             dn_lower_tpsa;
+    double             dn_upper_tpsa;
+    double             dn_tpsa_std_dev;
     double             dn_lower_qed;
     double             dn_qed_std_dev;
     double             dn_upper_sa;
     double             dn_sa_std_dev;
     int                dn_upper_stereocenter;
+    int                dn_upper_pains;
     // Attributes for debugging
     bool               dn_drive_verbose;
     bool               dn_save_all_molecules;
@@ -217,6 +227,11 @@ class           DN_Build {
     std::vector <Fragment>     scaffolds;
     std::vector <Fragment>     linkers;
     std::vector <Fragment>     sidechains;
+
+    std::vector <Fragment>     isoscaffolds;
+    std::vector <Fragment>     isolinkers;
+    std::vector <Fragment>     isosidechains;
+
     std::vector <Fragment>     scaf_link_sid;       // a combination of the first three
     //std::vector <Fragment>   rigids;
     std::vector <Fragment>     anchors;
@@ -245,10 +260,14 @@ class           DN_Build {
     std::string roulette_dummy_replace_2;
     bool tmp_first_check;
     bool tmp_second_check;
+
+    //PAK
+    bool            dn_iso_align;
     /** Functions **/
 
     // Read parameters from file, initialize stuff, prepare vectors and molecules
     void            input_parameters( Parameter_Reader & parm );
+    void            iso_initialize();
     void            initialize();
     void            initialize_internal_energy_parms( bool, int, int, float, float );
     void            read_library_anchor( std::vector <Fragment> &, std::string );
@@ -259,6 +278,7 @@ class           DN_Build {
     void            generate_roulette();
     // Main build functions
     void            build_molecules( Master_Score &, Simplex_Minimizer &, AMBER_TYPER &, Orient & );
+    void            frag_iso_align();
     void            orient_fragments( std::vector <Fragment> &, Fragment &, Master_Score &, Simplex_Minimizer &,
                                       AMBER_TYPER &, Orient & );
     void            simple_build( Master_Score &, Simplex_Minimizer &, AMBER_TYPER & );
@@ -304,11 +324,13 @@ class           DN_Build {
 
     // RDKit-related functions for descriptor-driven processes
     #ifdef BUILD_DOCK_WITH_RDKIT
-    bool            clogp_cutoff( Fragment & ); 
-    bool            esol_cutoff( Fragment & ); 
-    bool            qed_cutoff( Fragment & ); 
-    bool            sa_cutoff( Fragment & ); 
-    bool            stereocenter_cutoff( Fragment & ); 
+    bool            clogp_cutoff( Fragment &,ostringstream& ); 
+    bool            esol_cutoff( Fragment &,ostringstream& ); 
+    bool            tpsa_cutoff( Fragment &,ostringstream& );
+    bool            qed_cutoff( Fragment & ,ostringstream&); 
+    bool            sa_cutoff( Fragment & ,ostringstream&); 
+    bool            pains_cutoff( Fragment & ,ostringstream&);
+    bool            stereocenter_cutoff( Fragment & ,ostringstream&); 
     bool            drive_growth( Fragment & );
     #endif
 
@@ -354,5 +376,8 @@ bool            size_sort(const Fragment &, const Fragment &);
 //Comparator functions JDB
 bool            roulette_sort_order_frequencies( const vector<double>& vect1, const vector<double>& vect2);
 bool            roulette_sort_order_torsions(const vector<double>& vect1, const vector<double>& vect2);    
+
+
+//
 
 double time_seconds();

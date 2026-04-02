@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.10
+DOCK v6.11
 
-Released January 2023
+Released November 2023
 Copyright UCSF
 --------------------------------------
 
@@ -132,7 +132,7 @@ Initializing Grid Score Routines...
 -----------------------------------
 Molecule: UNNAMED
 
- Elapsed time for docking:	2.644 seconds
+ Elapsed time for docking:	2.649 seconds
 
  Anchors:		1
  Orientations:		1
@@ -146,4 +146,4 @@ Molecule: UNNAMED
 
 
 1 Molecules Processed
-Total elapsed time:	6.160 seconds
+Total elapsed time:	5.967 seconds

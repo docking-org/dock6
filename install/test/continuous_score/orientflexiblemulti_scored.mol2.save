@@ -1,11 +1,11 @@
 
 ##########                                Name:        ZINC00158442
-##########                DOCK_Rotatable_Bonds:                   1
-##########                         Heavy_Atoms:                  10
 ##########                    Molecular_Weight:             207.134
+##########                DOCK_Rotatable_Bonds:                   1
 ##########                       Formal_Charge:                   1
 ##########                     HBond_Acceptors:                   1
 ##########                        HBond_Donors:                   0
+##########                         Heavy_Atoms:                  10
 ##########                    Continuous_Score:           -4.639492
 ##########               Continuous_vdw_energy:           -3.619774
 ##########                Continuous_es_energy:           -1.019718
@@ -78,12 +78,12 @@ bcc
 
 
 ##########                                Name:        ZINC00158751
-##########                DOCK_Rotatable_Bonds:                   1
-##########                         Heavy_Atoms:                   7
 ##########                    Molecular_Weight:             112.152
+##########                DOCK_Rotatable_Bonds:                   1
 ##########                       Formal_Charge:         0.000100005
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
+##########                         Heavy_Atoms:                   7
 ##########                    Continuous_Score:          -15.894675
 ##########               Continuous_vdw_energy:          -15.653869
 ##########                Continuous_es_energy:           -0.240807
@@ -124,12 +124,12 @@ bcc
 
 
 ##########                                Name:        ZINC00013564
-##########                DOCK_Rotatable_Bonds:                   0
-##########                         Heavy_Atoms:                   9
 ##########                    Molecular_Weight:             140.206
+##########                DOCK_Rotatable_Bonds:                   0
 ##########                       Formal_Charge:         0.000199944
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
+##########                         Heavy_Atoms:                   9
 ##########                    Continuous_Score:          -19.680984
 ##########               Continuous_vdw_energy:          -20.133223
 ##########                Continuous_es_energy:            0.452239
@@ -182,12 +182,12 @@ bcc
 
 
 ##########                                Name:        ZINC01555236
-##########                DOCK_Rotatable_Bonds:                   2
-##########                         Heavy_Atoms:                  11
 ##########                    Molecular_Weight:             150.244
+##########                DOCK_Rotatable_Bonds:                   2
 ##########                       Formal_Charge:              0.9999
 ##########                     HBond_Acceptors:                   1
 ##########                        HBond_Donors:                   0
+##########                         Heavy_Atoms:                  11
 ##########                    Continuous_Score:           41.036900
 ##########               Continuous_vdw_energy:           39.154430
 ##########                Continuous_es_energy:            1.882468
@@ -260,12 +260,12 @@ bcc
 
 
 ##########                                Name:        ZINC00150863
-##########                DOCK_Rotatable_Bonds:                   0
-##########                         Heavy_Atoms:                   7
 ##########                    Molecular_Weight:             113.183
+##########                DOCK_Rotatable_Bonds:                   0
 ##########                       Formal_Charge:         9.99719e-05
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
+##########                         Heavy_Atoms:                   7
 ##########                    Continuous_Score:          -16.177170
 ##########               Continuous_vdw_energy:          -15.992753
 ##########                Continuous_es_energy:           -0.184416
@@ -312,12 +312,12 @@ bcc
 
 
 ##########                                Name:        ZINC00152265
-##########                DOCK_Rotatable_Bonds:                   1
-##########                         Heavy_Atoms:                   8
 ##########                    Molecular_Weight:             126.179
+##########                DOCK_Rotatable_Bonds:                   1
 ##########                       Formal_Charge:         9.99914e-05
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
+##########                         Heavy_Atoms:                   8
 ##########                    Continuous_Score:          -16.063633
 ##########               Continuous_vdw_energy:          -15.430454
 ##########                Continuous_es_energy:           -0.633179
@@ -364,12 +364,12 @@ bcc
 
 
 ##########                                Name:        ZINC00152280
-##########                DOCK_Rotatable_Bonds:                   2
-##########                         Heavy_Atoms:                   9
 ##########                    Molecular_Weight:             140.206
+##########                DOCK_Rotatable_Bonds:                   2
 ##########                       Formal_Charge:        -4.65661e-08
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
+##########                         Heavy_Atoms:                   9
 ##########                    Continuous_Score:          -18.690922
 ##########               Continuous_vdw_energy:          -18.074432
 ##########                Continuous_es_energy:           -0.616490
@@ -422,12 +422,12 @@ bcc
 
 
 ##########                                Name:        ZINC00157111
-##########                DOCK_Rotatable_Bonds:                   2
-##########                         Heavy_Atoms:                   8
 ##########                    Molecular_Weight:             123.178
+##########                DOCK_Rotatable_Bonds:                   2
 ##########                       Formal_Charge:         7.45058e-08
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
+##########                         Heavy_Atoms:                   8
 ##########                    Continuous_Score:           -1.237884
 ##########               Continuous_vdw_energy:           -0.519723
 ##########                Continuous_es_energy:           -0.718161
@@ -472,12 +472,12 @@ bcc
 
 
 ##########                                Name:        ZINC00157152
-##########                DOCK_Rotatable_Bonds:                   1
-##########                         Heavy_Atoms:                   8
 ##########                    Molecular_Weight:             126.179
+##########                DOCK_Rotatable_Bonds:                   1
 ##########                       Formal_Charge:         1.49012e-08
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
+##########                         Heavy_Atoms:                   8
 ##########                    Continuous_Score:          -18.033497
 ##########               Continuous_vdw_energy:          -17.797813
 ##########                Continuous_es_energy:           -0.235684
@@ -524,12 +524,12 @@ bcc
 
 
 ##########                                Name:        ZINC00157402
-##########                DOCK_Rotatable_Bonds:                   1
-##########                         Heavy_Atoms:                   8
 ##########                    Molecular_Weight:             126.179
+##########                DOCK_Rotatable_Bonds:                   1
 ##########                       Formal_Charge:         9.99123e-05
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
+##########                         Heavy_Atoms:                   8
 ##########                    Continuous_Score:          -17.583597
 ##########               Continuous_vdw_energy:          -18.325937
 ##########                Continuous_es_energy:            0.742339
@@ -576,12 +576,12 @@ bcc
 
 
 ##########                                Name:        ZINC00157467
-##########                DOCK_Rotatable_Bonds:                   2
-##########                         Heavy_Atoms:                   7
 ##########                    Molecular_Weight:             114.168
+##########                DOCK_Rotatable_Bonds:                   2
 ##########                       Formal_Charge:        -0.000199951
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   1
+##########                         Heavy_Atoms:                   7
 ##########                    Continuous_Score:          -16.937094
 ##########               Continuous_vdw_energy:          -16.433516
 ##########                Continuous_es_energy:           -0.503579
@@ -626,12 +626,12 @@ bcc
 
 
 ##########                                Name:        ZINC00157960
-##########                DOCK_Rotatable_Bonds:                   1
-##########                         Heavy_Atoms:                  10
 ##########                    Molecular_Weight:             154.233
+##########                DOCK_Rotatable_Bonds:                   1
 ##########                       Formal_Charge:          0.00010002
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
+##########                         Heavy_Atoms:                  10
 ##########                    Continuous_Score:          -18.870466
 ##########               Continuous_vdw_energy:          -18.738770
 ##########                Continuous_es_energy:           -0.131696

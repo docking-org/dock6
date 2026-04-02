@@ -15,7 +15,7 @@ OPTION_SEPARATOR_REGULAR_EXPRESSION='\.'
 usage(){
 cat << EOF
 
-Usage: $CONFIG_COMMAND [-help] [compiler/platform [parallel] ]
+Usage: $CONFIG_COMMAND [-help] [compiler/platform [parallel] [rdkit] ]
 
 Installation Summary
       $CONFIG_COMMAND is the first step in the installation of $DOCK_VERSION.
@@ -152,8 +152,8 @@ if [ -f $CONFIGURATIONS/$CONFIG_FILE ]; then
     echo
     echo "Don't forget to make clean before rebuilding."
     echo "To reconfigure and rebuild everything start with" \
-         "make distclean:"
-    echo "Reconfiguring after make distclean will avoid this warning."
+         "make -i distclean:"
+    echo "Reconfiguring after make -i distclean will avoid this warning."
     echo
 fi
 

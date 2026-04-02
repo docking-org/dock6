@@ -22,6 +22,9 @@ utils:
 	$(MAKE) -C resp  install
 	$(MAKE) -C docktools  install
 
+rdkit:
+	$(MAKE) -C rdkit install
+
 clean:
 	$(MAKE) -C dock  clean
 	$(MAKE) -C accessories  clean

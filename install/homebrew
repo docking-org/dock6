@@ -1,0 +1,40 @@
+# DOCK configuration file for GNU compilers installed on macOS using the
+# Homebrew package manager.  This configuration file for Apple is a work in
+# progress.  It depends on idiosyncratic details of one's environment and
+# compiler installation.  It may be the case that the general gnu set of DOCK
+# configuration files work fine on your mac.
+
+# CC is the C compiler
+# CFLAGS is the flags for the C compiler
+# CXX is the C++ compiler
+# CXXFLAGS is the flags for the C++ compiler
+# DOCK_SUFFIX is the suffix for the dock executable
+# FC is the Fortran compiler
+# FFLAGS is the flags for the Fortran compiler
+# LIBS is the flags for the linker
+# LINK_WITHOUT_FORTRAN_MAIN is the flag for linking without Fortran's main
+# LOAD is the command to invoke the linker
+
+CC=          gcc-11
+CFLAGS=      -O2 -Wl,-ld_classic
+CXX=         g++-11
+CXXFLAGS=    -O2 -std=c++11 -Wl,-ld_classic
+DOCK_SUFFIX=
+FC=          gfortran-11
+FFLAGS=      -O2 -fno-automatic -fno-second-underscore -std=legacy
+LIBS=        -lm -lpthread -Wl,-ld_classic
+LINK_WITHOUT_FORTRAN_MAIN=
+LOAD=        g++-11
+
+# Macro definitions for NAB
+# AR is the library archiver
+# LEX is the lexical analyzer generator; the darwin and xopen defines are
+# workarounds for some macOS 12 header file issues; e.g.:
+# sff.c:1615:19: error: implicitly declaring library function 'strdup' with type 'char *(const char *)
+# see also https://github.com/gphoto/libgphoto2/issues/552
+# OCFLAGS is the flags for the C compilers with high optimization
+# RANLIB is the library index generator
+AR=          ar rv
+LEX=         flex -D_DARWIN_C_SOURCE -D_XOPEN_SOURCE=600
+OCFLAGS=     -O3 -D_ANSI_SOURCE
+RANLIB=      ranlib

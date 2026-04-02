@@ -3,9 +3,11 @@
 ##########                DOCK_Rotatable_Bonds:                  10
 ##########                         Heavy_Atoms:                  29
 ##########                    Molecular_Weight:             393.442
+##########                DOCK_Rotatable_Bonds:                  10
 ##########                       Formal_Charge:        -0.000999957
 ##########                     HBond_Acceptors:                   7
 ##########                        HBond_Donors:                   1
+##########                         Heavy_Atoms:                  29
 ##########                            HA_RMSDs:           -1000.000
 ##########                            HA_RMSDh:           -1000.000
 ##########                            HA_RMSDm:               0.000

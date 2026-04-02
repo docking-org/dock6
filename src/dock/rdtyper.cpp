@@ -1,4 +1,3 @@
-
 // General headers
 #include <iostream>
 #include <string>
@@ -8,9 +7,12 @@
 #include <utility>
 #include <fstream>
 #include <tuple>
-#include <boost/range/combine.hpp>
 #include <memory>
+
+#ifdef BUILD_DOCK_WITH_RDKIT
+ 
 // RDKit stuff
+#include <boost/range/combine.hpp>
 #include <RDGeneral/export.h>
 #include <RDGeneral/Invariant.h>
 #include <GraphMol/RDKitBase.h>
@@ -33,7 +35,7 @@
 #include "dockmol.h"
 #include "rdtyper.h"
 
- 
+
 /////////////////////////////////
 //     Accessory functions     //
 /////////////////////////////////
@@ -78,18 +80,16 @@ int getAcceptorSmarts (RDKit::ROMol &mol ) {
     int sum_results = 0;
     RDKit::ROMol arlt;
     int num_accvec = AcceptorSmarts.size(); 
-    std::vector <std::pair<int,int>> matchVect = {};
-  
+    std::vector<std::vector <std::pair<int,int>>> matchVect = {};
     //testing if the mol has any "Acceptors"
     for(int i=0; i < num_accvec; i++){
         //initiaizing a pointer because SmartsToMol returns a pointer
         RDKit::RWMol * rdmolListOfacc = RDKit::SmartsToMol(AcceptorSmarts[i]); 
-        if (RDKit::SubstructMatch(mol, *rdmolListOfacc, matchVect, true, false, false)){
-             sum_results++;
-        }
+        sum_results = sum_results + RDKit::SubstructMatch( mol, *rdmolListOfacc, matchVect, true, true, false, false, 1000, 1);
         //delete pointer
         delete rdmolListOfacc;
     }
+    matchVect.clear();
 
     return sum_results;
 }
@@ -122,7 +122,7 @@ int getStructuralALERTS (RDKit::ROMol &mol) {
         "C1(=[O,N])C=CC(=[O,N])C=C1",
         "C1(=[O,N])C(=[O,N])C=CC=C1",
         "a21aa3a(aa1aaaa2)aaaa3",
-        "a1aa2a(aa3c(S2)aaaa3)aa1",
+        //"a1aa2a(aa3c(S2)aaaa3)aa1",
         "a31a(a2a(aa1)aaaa2)aaaa3",
         "a1aa2a3a(a1)A=AA=A3=AA=A2",
         "c1cc([NH2])ccc1",
@@ -221,18 +221,21 @@ int getStructuralALERTS (RDKit::ROMol &mol) {
     int sum_results = 0;
     RDKit::ROMol arlt;
     int num_altvec = StructuralAlertSmarts.size();
-    std::vector <std::pair<int,int>> matchVect = {};
-    
+    std::vector <std::pair<int,int>> matchVect = {}; 
     //testing if the mol has any "StructuralAlerts"
     for(int i=0; i < num_altvec; i++){  
         //initializing pointer because SmartsToMol returns pointers
         RDKit::RWMol *rdmolListOfStructAlerts = RDKit::SmartsToMol( StructuralAlertSmarts[i]);
-        if (RDKit::SubstructMatch(mol, *rdmolListOfStructAlerts, matchVect, true, false, false)){
-             sum_results++;
+        if (RDKit::SubstructMatch(mol, *rdmolListOfStructAlerts,matchVect)){
+             //This line of code returns the results with the number of matches, but in QED.py in RDKIT
+             //shows that it is only if it there or not. So it should be a boolean.
+             //sum_results = sum_results + RDKit::SubstructMatch( mol, *rdmolListOfStructAlerts, matchVect, true, true, false, false, 1000, 1);
+            sum_results +=1;
         }
         //delete pointer
         delete rdmolListOfStructAlerts;
     }
+    matchVect.clear();
  
 return sum_results;
 }
@@ -259,32 +262,42 @@ double ADS(double x, std::string parameter_type) {
     return results_ads;
 }
 
+
 //calculating number of PAINS and the names of the PAINS associated with the PAINS hits
-int calculate_pns (DOCKMol &mol , RDKit::ROMol &rdmol , std::map <std::string,std::string> & PAINSmap) {
-    //intializing variables and vectors
-    int sum_results = 0;;
-    int num_pnsvec = PAINSmap.size() - 1;
-    std::vector < std::pair<int,int>> matchVect1 = {};    
-    std::map<std::string, std::string>::iterator itr;
-    std::vector<std::string> vectmp {}; 
+//this is changed because RDKit has a way to calculate the pains using RDKIT functions only
+int calculate_pns (DOCKMol &mol) {
+    int total_results {0};
+    RDKit::FilterCatalogParams params;
+    std::vector<RDKit::FilterCatalog::CONST_SENTRY> matches{};
 
-    //searching if the mol is a PAINS by using the PAINS map
-    for(itr=PAINSmap.begin(); itr!=PAINSmap.end(); ++itr){
-        //initializing pointer because SmartsToMol returns pointers
-        RDKit::RWMol *rdmolListOfpns = RDKit::SmartsToMol(itr->first);
+    params.addCatalog(RDKit::FilterCatalogParams::PAINS_A);
+    params.addCatalog(RDKit::FilterCatalogParams::PAINS_B);
+    params.addCatalog(RDKit::FilterCatalogParams::PAINS_C);
+    RDKit::FilterCatalog catalog(params);
 
-        if (RDKit::SubstructMatch( rdmol , *rdmolListOfpns , matchVect1  , true , false , false )){
-            sum_results++;
-            mol.pns_name.push_back( PAINSmap[itr->first] );
+    RDKit::ROMol *romol = RDKit::SmilesToMol(mol.smiles, 0, true, nullptr);
+
+    if(catalog.hasMatch(*romol)){
+        matches = catalog.getMatches(*romol);
+         
+        total_results = matches.size();
+        for(int i = 0; i<matches.size(); i++){
+            std::string pain_name = matches[i]->getDescription();
+            mol.pns_name.push_back(pain_name+" ");
         }
-        //deleting pointer
-        delete rdmolListOfpns; 
-    } 
-    vectmp.clear(); 
- 
+    }
+    
+    delete romol;
 
-return sum_results;
+    return total_results;
 }
+
+int getSSSR(RDKit::ROMol &mol) {
+    RDKit::VECT_INT_VECT rings;
+    int nr = RDKit::MolOps::findSSSR(mol, rings);
+    return nr;
+}
+
 
 /////////////////////////////////////
 ////     RDTyper class methods     //
@@ -295,29 +308,19 @@ int RDTYPER::get_pns (DOCKMol &mol, RDKit::ROMol &rdmol, std::map<std::string,st
     int score {0};
   
     //calculate pains  
-    score = calculate_pns (mol, rdmol, PAINSmap);
+    score = calculate_pns(mol);
 
     return score;
 }
 
 double RDTYPER::calculate_sa_score(RDKit::ROMol &rdmol, int nChiralCenters, int rtn_nSpi, std::map<unsigned int, double> &fragMap) {
 
-    ////loads up predetermined fragments for SA_scoring
-    //std::map<unsigned int, double> fragMap; 
-    //if (fragMap.empty() == true){
-    //    std::ifstream fin(sa_fraglib_path);
-    //    double key;
-    //    double value;
-    //    while (fin >> key >> value)
-    //        fragMap[key] = value;
-    //} 
- 
     //variables initialize
     double                         score1            {0};
     double                         score2            {0};
     double                         score3            {0};
-    double                         nf                {0};
-    double                         sfp               {0};
+    int                            nf                {0};
+    unsigned int                   sfp               {0};
     double                         tmp_val          {-4}; 
     double                         nAtoms            {0};
     RDKit::RingInfo*               ri;
@@ -345,12 +348,16 @@ double RDTYPER::calculate_sa_score(RDKit::ROMol &rdmol, int nChiralCenters, int 
     //for loops through the fragment file to recognize fragments
     for (auto &temp: fps) {
         nf = nf + temp.second;
+        //temp.second is v
         sfp = temp.first;
-        if (fragMap[sfp] != 0) {
+        //temp.first is bitId 
+        auto search = fragMap.find(sfp);
+        if (search != fragMap.end()){
             score1 = score1 + (fragMap[sfp] * temp.second);
         } else {
             score1 = score1 + ( tmp_val * temp.second);
         }
+        
     }
     //DELETE POINTERS
     delete fp;
@@ -393,7 +400,10 @@ double RDTYPER::calculate_sa_score(RDKit::ROMol &rdmol, int nChiralCenters, int 
      
     //calculates sascore in total
     sascore = score1 + score2 + score3;
- 
+    //please uncomment these if you want to know the breakdown of all scores
+    //std::cout << "score1: " << score1 << std::endl;
+    //std::cout << "score2: " << score2 << std::endl;
+    //std::cout << "score3: " << score3 << std::endl; 
     //normalizes SAscore
     min = -4.0;
     max = 2.5;
@@ -432,7 +442,8 @@ double RDTYPER::calculate_qed_score(RDKit::ROMol &rdmol, double CLOGP, double TP
     HBA = getAcceptorSmarts ( *removeHrdmol );
     HBD = RDKit::Descriptors::calcNumHBD( *removeHrdmol );
     ROTB = RDKit::Descriptors::calcNumRotatableBonds( *removeHrdmol , true );
-    AROM = RDKit::MolOps::findSSSR( *deleteSubs );
+    //AROM = RDKit::MolOps::findSSSR( *deleteSubs );
+    AROM = getSSSR(*deleteSubs); 
     ALERTS = getStructuralALERTS( *removeHrdmol );
     std::vector <double> QED_properties_numbers {MW, CLOGP, HBA, HBD, TPSA, ROTB, AROM, ALERTS};
  
@@ -511,22 +522,30 @@ double RDTYPER::calculate_esol(RDKit::ROMol &rdmol, double CLOGP, bool delaney) 
     std::vector <std::vector <std::pair<int, int> > > matchVect1;
     
     //pointers initialized
-    RDKit::RWMol *mol_ptr {nullptr};
-    mol_ptr = new RDKit::RWMol;
-      
+    RDKit::RWMol *mol_ptr = RDKit::SmartsToMol("a" , 0 , false , 0);
+
     //ESOL parameters calcualted 
     MW = RDKit::Descriptors::calcAMW( rdmol );
     ROTB = RDKit::Descriptors::calcNumRotatableBonds( rdmol, true );
  
     //logic to calculate the RDKIT optimized ESOL or the original version
     if (delaney == true) {
-    esol_ap_counter = esol_ap_counter +  RDKit::SubstructMatch( rdmol, *mol_ptr, matchVect1, true, true, false, false, 1000, 1);
+    esol_ap_counter = esol_ap_counter + 
+    RDKit::SubstructMatch( rdmol, *mol_ptr, matchVect1, true, true, false, false, 1000, 1);
     AP = esol_ap_counter / rdmol.getNumAtoms();
-    esol_score = esol_intercept + esol_coef_logp * CLOGP + esol_coef_mw  * MW  + esol_coef_rotors * ROTB + esol_coef_ap * AP; 
+    esol_score = esol_intercept           + 
+                 esol_coef_logp   * CLOGP + 
+                 esol_coef_mw     * MW    + 
+                 esol_coef_rotors * ROTB  + 
+                 esol_coef_ap     * AP; 
     } else {
     esol_ap_orig_counter = esol_ap_orig_counter +  RDKit::SubstructMatch( rdmol, *mol_ptr, matchVect1, true, true, false, false, 1000, 1);
     AP = esol_ap_orig_counter / rdmol.getNumAtoms();
-    esol_score = esol_orig_intercept + esol_coef_orig_logp * CLOGP + esol_coef_orig_mw  * MW  + esol_coef_orig_rotors * ROTB + esol_coef_orig_ap * AP; 
+    esol_score = esol_orig_intercept           + 
+                 esol_coef_orig_logp   * CLOGP + 
+                 esol_coef_orig_mw     * MW    + 
+                 esol_coef_orig_rotors * ROTB  + 
+                 esol_coef_orig_ap     * AP; 
     }  
 
     //delete pointers
@@ -535,47 +554,62 @@ double RDTYPER::calculate_esol(RDKit::ROMol &rdmol, double CLOGP, bool delaney) 
     return esol_score; 
 }
 
-
 void RDTYPER::calculate_descriptors(DOCKMol &mol, std::map<unsigned int, double> &fragMap, bool create_smiles, std::map<std::string,std::string> &PAINSmap){    
-
     if (create_smiles == true){
         // Start calculation
         try {
             // Create RDKit mol object
-            RDKit::ROMol rdmol = mol.DOCKMol_to_ROMol( create_smiles );
-
+            RDKit::ROMol tmp_rdmol = mol.DOCKMol_to_ROMol( create_smiles );
+            if (mol.smiles == ""){
+                throw mol.title + "_has_no_SMILES_string"; 
+            }
             // Create RDKit mol object that needs to be used (no H)
             // intializing pointers
             RDKit::RWMol *rwmol = RDKit::SmilesToMol(mol.smiles, 0, true, nullptr);
             RDKit::ROMol noH_rdmol {*rwmol};
- 
+
             //initialize datastructs that is unique to MACCSfingerprinting 
-            ExplicitBitVect *MACCSfp = RDKit::MACCSFingerprints::getFingerprintAsBitVect( rdmol );;
+            //ExplicitBitVect *MACCSfp = RDKit::MACCSFingerprints::getFingerprintAsBitVect(tmp_rdmol);
+            ExplicitBitVect *MACCSfp = RDKit::MACCSFingerprints::getFingerprintAsBitVect(noH_rdmol);
             boost::dynamic_bitset<> tmp_bitset = *(MACCSfp->dp_bits); 
 
-            //delete pointer
-            delete rwmol;
+            mol.num_arom_rings = RDKit::Descriptors::calcNumAromaticRings(noH_rdmol);
+            mol.num_alip_rings = RDKit::Descriptors::calcNumAliphaticRings(noH_rdmol);
+            mol.num_sat_rings = RDKit::Descriptors::calcNumSaturatedRings(noH_rdmol);
+            mol.num_stereocenters = RDKit::Descriptors::numAtomStereoCenters(noH_rdmol);
+            mol.num_spiro_atoms = RDKit::Descriptors::calcNumSpiroAtoms(noH_rdmol);
+            mol.tpsa = RDKit::Descriptors::calcTPSA(noH_rdmol);
+            mol.clogp = RDKit::Descriptors::calcClogP(noH_rdmol);
 
-            // Calculate descriptors
-            mol.num_arom_rings = RDKit::Descriptors::calcNumAromaticRings(rdmol);
-            mol.num_alip_rings = RDKit::Descriptors::calcNumAliphaticRings(rdmol);
-            mol.num_sat_rings = RDKit::Descriptors::calcNumSaturatedRings(rdmol);
-            mol.num_stereocenters = RDKit::Descriptors::numAtomStereoCenters(rdmol);
-            mol.num_spiro_atoms = RDKit::Descriptors::calcNumSpiroAtoms(rdmol);
-            mol.clogp = RDKit::Descriptors::calcClogP(rdmol);
-            mol.tpsa = RDKit::Descriptors::calcTPSA(rdmol);
+
+
+            //This uses a rdkit mol object that comes from SMILES. 
             mol.qed_score = calculate_qed_score(noH_rdmol, mol.clogp, mol.tpsa, WEIGHT_MEAN);
             mol.sa_score = calculate_sa_score(noH_rdmol, mol.num_stereocenters, mol.num_spiro_atoms, fragMap);
             mol.esol = calculate_esol(noH_rdmol, mol.clogp, true);
-            mol.pns = get_pns(mol, rdmol, PAINSmap);
+            mol.pns = get_pns(mol, tmp_rdmol, PAINSmap);
+
+
+
+            //to assign MACCS fingerprints
             mol.MACCS = tmp_bitset;
+            mol.MACCS_size = tmp_bitset.size();
 
             //delete MACCS pointer
             delete MACCSfp;
 
+            //delete pointer
+            delete rwmol;
+
+        } catch (const char* message){
+            std::cout << message << std::endl;
+            mol.smiles = mol.title + " RDKIT ERROR";
+            mol.bad_molecule = true;
+          
         } catch (...) {
             // RDKit could not read this molecule
             mol.smiles = mol.title + " RDKIT ERROR";
+            mol.bad_molecule = true;
         }
     } else {
         std::cout << "Warning: SMILES are needed to calculate the descriptors" << std::endl;
@@ -584,6 +618,6 @@ void RDTYPER::calculate_descriptors(DOCKMol &mol, std::map<unsigned int, double>
          
 }
 
-
-
-
+#else
+  // Configured to Not BUILD_DOCK_WITH_RDKIT
+#endif

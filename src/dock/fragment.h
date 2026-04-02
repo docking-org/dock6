@@ -28,6 +28,27 @@ class           AttPoint {
 // +++++++++++++++++++++++++++++++++++++++++
 // Scaffolds, Linkers, Sidechains, and Rigids are condensed into one class called Fragment
 class           Fragment {
+
+    private:
+        std::vector <float>     *radial_dist_distri;
+        int                     num_du;
+        bool                    iso_aligned;
+
+    public:
+        void                    is_iso_aligned();
+        void                    is_not_iso_aligned();
+        bool                    is_it_iso_aligned();
+        void                    calc_radial_dist_distri();
+        void                    set_radial_dist_distri(int,std::vector<float>);
+        std::vector<float>      get_radial_dist_distri(int);
+        void                    print_radial_dist_distri();
+        void                    allocate_radial_dist_distri();
+        void                    clear_radial_dist_distri();
+        void                    calc_num_du();
+        int                     get_num_du();
+
+
+
    public:
   
        DOCKMol                          mol;

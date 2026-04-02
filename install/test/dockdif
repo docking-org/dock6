@@ -221,7 +221,7 @@ do
     # this requires \@ for regular expression addresses.
     # see UNIX Power Tools, 2nd ed., p617.
     sed -e '\@[Ee]lapsed time[: ]@d' \
-        -e 's|[a-zA-Z0-9\._/]*dock[_/0-9]*[0-9]*/\([a-zA-Z0-9\._/]*\)|\1|' \
+        -e 's|[a-zA-Z0-9\._/-]*dock[_/0-9]*[0-9]*/\([a-zA-Z0-9\._/]*\)|\1|' \
         -e 's@ t=0s$@@' \
         -e 's@ t=[0-9][0-9]*\.[0-9]*[0-9]s$@@' \
         -e '\@^launch_time @d' \
@@ -230,7 +230,7 @@ do
         -e '\@^user_name @d' \
         -e '\@^|@d' \
         -e '\@VERSION@d' \
-        -e 's|[a-zA-Z0-9\._/]*amber[1-9][0-9]*/\([a-zA-Z0-9\._/]*\)|\1|' \
+        -e 's|[a-zA-Z0-9\._/-]*amber[1-9][0-9]*/\([a-zA-Z0-9\._/]*\)|\1|' \
         -e '\@^  program started on [MTWTFSS][ouehrau][oeduitn] @{N;d;}' \
         -e '\@^ time to read in and/or assign rad/chrg=@d' \
         -e '\@^ start vw surface at@d' \

@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.10
+DOCK v6.11
 
-Released January 2023
+Released November 2023
 Copyright UCSF
 --------------------------------------
 Parallel dock running 2 MPI processes
@@ -124,7 +124,7 @@ flex_drive_file                                              ../../../parameters
 
 Molecule Library Output Parameters
 ------------------------------------------------------------------------------------------
-ligand_outfile_prefix                                        residues
+ligand_outfile_prefix                                        _rd_residues
 write_orientations                                           no
 num_scored_conformers                                        1
 rank_ligands                                                 yes
@@ -262,5 +262,5 @@ Molecule: ZINC00157960
 
 
 12 Molecules Processed
-Total elapsed time:	1.467 seconds
+Total elapsed time:	0.932 seconds
 Finalizing MPI Routines...

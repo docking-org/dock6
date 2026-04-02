@@ -51,5 +51,5 @@ default: all
 # This special target declares these targets as phony, ie, not based on
 # files with that name; it avoids problems when such files do exist.
 .PHONY:  all archive_export clean cleandock configured distclean dock \
-         dockclean install realclean superclean test uninstall utils
+         dockclean install rdkitclean realclean superclean test uninstall utils
 

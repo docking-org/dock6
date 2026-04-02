@@ -147,7 +147,7 @@ bondtype.o: bondtype.C
 	$(CXX) -c $(CXXFLAGS) -o bondtype.o bondtype.C
 
 bondtype$(SFX): bondtype.o
-	$(CXX) bondtype.o $(LM) -o bondtype$(SFX)  
+	$(CXX) $(CXXFLAGS) bondtype.o $(LM) -o bondtype$(SFX)  
 
 crdgrow$(SFX): crdgrow.o
 	$(CC) $(CFLAGS) crdgrow.o $(LM) -o crdgrow$(SFX)

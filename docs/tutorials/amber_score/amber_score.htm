@@ -24,7 +24,7 @@ style='font-size:27.0pt'>Amber Score in DOCK6</span></b></span></p>
 
 <p class=style4style10 align=center style='text-align:center'><span
 style='font-family:Arial'>Author: Devleena Shivakumar<br>
-Last updated January 27, 2023 by Scott Brozell<o:p></o:p></span></p>
+Last updated November 14, 2023 by Scott Brozell<o:p></o:p></span></p>
 
 <p class=style4> This tutorial introduces DOCK Amber score
 and describes the preparation of input files for DOCK Amber rescoring.
@@ -74,8 +74,8 @@ have a large number of
 test cases, we have found 100 minimization and 3000 MD steps to produce good
 results. These are set as defaults in the program.</p>
 
-<p class=style4>It is highly recommended to run a DOCK calculation with a less expensive
-primary/secondary score to write out the topmost poses. Amber score
+<p class=style4>Writing the topmost poses from a DOCK calculation with a less
+expensive score than Amber score is highly recommended.  Then Amber score
 should be used on these topmost poses for each ligand.  For example,
 for T4 Lysozyme the DOCK score is calculated for 1 million compounds
 from the Available Chemicals Directory (ACD).
@@ -265,7 +265,6 @@ it: <a href="dock.in">dock.in</a>.<br>
 The following options are Amber score specific:<br>
 ligand_atom_file............................. lig.amber_score.mol2<br>
 amber_score_primary.......................... yes<br>
-amber_score_secondary........................ no<br>
 amber_score_receptor_file_prefix............. 1lgu<br>
 amber_score_movable_region................... ligand<br>
 amber_score_minimization_rmsgrad............. 0.01<br>

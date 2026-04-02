@@ -1,0 +1,103 @@
+Dear New DOCK Developer,
+
+PLEASE read this document completely.  It contains:
+
+1)  Instructions for accessing the source code repository
+2)  Rules for using the repository
+3)  Recommendations for using the server effectively
+4)  Commonly used commands
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+INSTRUCTIONS FOR ACCESSING THE SOURCE CODE REPOSITORY
+
+Coming soon...
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+RULES FOR USING THE REPOSITORY
+
+Coming soon...
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+RECOMMENDATIONS FOR USING THE REPOSITORY
+
+0)  Commit early, commit often.  Merge with master early, merge with
+master often.
+
+1)  Push tested development code to the Git server frequently.  This 
+makes your contributions available to the other coders and eases 
+transitions when releases approach.
+
+2)  You will be notified by email when there are bug fixes added to the 
+trunk.  When you receive these emails, update your code to ensure you do
+not lose these fixes in your work.
+
+3)  Communication will be essential for this process to run smoothly.  
+Please strive to overuse the list server and to royally irritate all 
+contacts.  It will make life easier for everyone when we 
+are doing the releases.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+COMMONLY USED COMMAND EXAMPLES
+
+1)  Creating a New Branch
+
+
+2)  Adding New Code
+
+
+3)  Merging from master to Branch
+# ensure your copy of the master branch is up to date:
+git checkout master
+git pull
+# go to your branch:
+git checkout my-branch
+# see the differences between your branch and master;
+# know in advance whether they'll be conflicts:
+git diff origin/master
+# do the merge:
+git merge master
+
+4)  Other Frequently Used Commands
+
+
+More information about Git is available online:
+
+
+SSH AUTHENTICATION AGENT INSTRUCTIONS
+
+This procedure will replace the password request on a per
+command basis with a single passphrase entry on login.
+The three steps in the procedure are
+public and private key generation on your local machine, creation of your
+ssh authorized key file on the machine containing the cvs repository,
+and addition of the ssh authentication agent processing to your local
+machine dot (startup) file.
+
+1.  Key generation
+On your local machine execute the command
+ssh-keygen -t ed25519
+
+$HOME/.ssh/id_ed25519.pub
+is the default location for the key.
+Follow the usual common sense rules for your passphrase.
+
+2.  Authorized key file creation
+Git accounts are on GitHub.  Follow the point-n-click road.
+
+3.  Startup file modification
+On your local machine add these lines, which use csh syntax,
+to your .login file
+    set jamesbond = $HOME/.ssh/secretagent
+    rm -f $jamesbond
+    ssh-agent >! $jamesbond
+    source $jamesbond
+    ssh-add
+
+
+If you desire to use ssh agent authentication for additional local
+machines then repeat step 1 on those machines and append the additional
+public keys to the authorized key page on GitHub.
+

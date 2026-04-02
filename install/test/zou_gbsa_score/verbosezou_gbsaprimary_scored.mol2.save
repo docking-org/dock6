@@ -1,10 +1,16 @@
 
-########## Name:		 C1 
-##########   GB/SA Score:           12.737526
-##########           vdw:          -19.641209
-##########            gb:           30.694984
-##########            sa:            5.696250
-##########    del_SAS_hp:           -4.012500
+##########                                Name:                 C1 
+##########                    Molecular_Weight:             314.468
+##########                DOCK_Rotatable_Bonds:                   1
+##########                       Formal_Charge:         0.000100061
+##########                     HBond_Acceptors:                   2
+##########                        HBond_Donors:                   0
+##########                         Heavy_Atoms:                  23
+##########                      Zou_GBSA_Score:           12.738913
+##########                 Zou_GBSA_vdw_energy:          -19.641209
+##########                  Zou_GBSA_gb_energy:           30.696371
+##########                  Zou_GBSA_sa_energy:            5.696250
+##########        Zou_GBSA_delta_SAS_hp_energy:           -4.012500
 
 @<TRIPOS>MOLECULE
  C1 

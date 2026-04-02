@@ -1,13 +1,13 @@
 
 ##########                                Name:                 C1 
-##########                DOCK_Rotatable_Bonds:                   1
-##########                         Heavy_Atoms:                  23
 ##########                    Molecular_Weight:             314.468
+##########                DOCK_Rotatable_Bonds:                   1
 ##########                       Formal_Charge:         0.000100061
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
-##########                  Hawkins_GBSA_Score:          -58.148178
-##########             Hawkins_GBSA_vdw_energy:          -53.120110
+##########                         Heavy_Atoms:                  23
+##########                  Hawkins_GBSA_Score:          -58.148186
+##########             Hawkins_GBSA_vdw_energy:          -53.120113
 ##########              Hawkins_GBSA_es_energy:          -16.514315
 ##########              Hawkins_GBSA_gb_energy:           16.355957
 ##########              Hawkins_GBSA_sa_energy:           -4.869713

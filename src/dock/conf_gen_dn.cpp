@@ -3,8 +3,11 @@
 #include "fingerprint.h"
 #include "hungarian.h"
 #include "gasteiger.h"
+#include "iso_align.h"
+
 #include <fstream>
 #include <iomanip>
+#include <iostream>
 #include <map>
 
 #include "trace.h"
@@ -27,6 +30,7 @@ class Master_Score;
 const string DN_Build::DELIMITER    = "########## ";
 const int    DN_Build::FLOAT_WIDTH  = 20;
 const int    DN_Build::STRING_WIDTH = 17 + 19;
+
 
 
 //
@@ -88,16 +92,33 @@ DN_Build::input_parameters( Parameter_Reader & parm )
     // User has the option to specify anchor(s)
     dn_user_specified_anchor = (parm.query_param
                                ("dn_user_specified_anchor", "yes", "yes no") == "yes");
+
+
     if (dn_user_specified_anchor){
         dn_fraglib_anchor_file = parm.query_param("dn_fraglib_anchor_file", "fraglib_anchor.mol2");
-        // denovo random refinement option LEP
-        //dn_refinement_random = (parm.query_param
-        //                       ("dn_refinement_random", "yes", "yes no") == "yes");
-        //if (dn_refinement_random){
-        //    dn_refinement_random_picks = atoi(parm.query_param("dn_refinement_random_picks", "3").c_str());
-        //}
-
     }
+
+    ////User has the option if they want to align their fragments
+    //dn_iso_align = (parm.query_param( "dn_iso_align",
+    //                                              "no", "yes no") == "yes");
+
+    //if (dn_iso_align){
+
+    //    dn_fraglib_iso_scaffold_file  = parm.query_param( "dn_fraglib_iso_scaffold_file",
+    //                                                      "fraglib_iso_iso_scaffold.mol2" );
+    //    dn_fraglib_iso_linker_file    = parm.query_param( "dn_fraglib_iso_linker_file",
+    //                                                      "fraglib_iso_linker.mol2" );
+    //    dn_fraglib_iso_sidechain_file = parm.query_param( "dn_fraglib_iso_sidechain_file",
+    //                                                      "fraglib_iso_sidechain.mol2" );
+    //    return;
+
+    //}
+    // denovo random refinement option LEP
+    //dn_refinement_random = (parm.query_param
+    //                       ("dn_refinement_random", "yes", "yes no") == "yes");
+    //if (dn_refinement_random){
+    //    dn_refinement_random_picks = atoi(parm.query_param("dn_refinement_random_picks", "3").c_str());
+    //}
 
     // Ask the user for a torsion environment table of allowable environments
     // (The only time you might NOT want this is if you are doing simple_build. Otherwise it really
@@ -108,7 +129,7 @@ DN_Build::input_parameters( Parameter_Reader & parm )
     if (dn_use_torenv_table){
         dn_torenv_table = parm.query_param("dn_torenv_table", "fraglib_torenv.dat");
         //dn_use_roulette = parm.query_param("dn_use_roulette", "yes", "yes no") == "yes";
-        dn_use_roulette = false;
+	dn_use_roulette = false;
     }
     
     denovo_name = parm.query_param( "dn_name_identifier",
@@ -170,6 +191,7 @@ DN_Build::input_parameters( Parameter_Reader & parm )
     // User specifies a cutoff for pruning torsions - equivalent to the anchor and grow heuristic
     dn_pruning_clustering_cutoff = atof(parm.query_param("dn_pruning_clustering_cutoff",
                                                          "100.0").c_str());
+
     // User can specify whether they want a hard or soft MW cutoff
     // In both cases the upper bound is assessed during growth, while the lower bound is assesed
     // before molecules are written to file so as not to remove viable molecules from the growing ensemble
@@ -193,61 +215,93 @@ DN_Build::input_parameters( Parameter_Reader & parm )
     dn_drive_verbose = (parm.query_param("dn_drive_verbose","no") == "yes");
     if (dn_drive_verbose){
         dn_save_all_molecules = (parm.query_param("dn_save_all_mols","no") == "yes");
+    }else{
+        dn_save_all_molecules = false;
     }
-
-    //dn_start_at_layer = atoi(parm.query_param("dn_start_at_layer","1").c_str());
 
     dn_drive_clogp = (parm.query_param("dn_drive_clogp","no") == "yes");
     if (dn_drive_clogp){
-        dn_lower_clogp = atof(parm.query_param("dn_lower_clogp","0").c_str());
-        dn_upper_clogp = atof(parm.query_param("dn_upper_clogp","5").c_str());
-        dn_clogp_std_dev = atof(parm.query_param("dn_clogp_std_dev","2.33").c_str());
+        dn_lower_clogp = atof(parm.query_param("dn_lower_clogp","-0.30").c_str());
+        dn_upper_clogp = atof(parm.query_param("dn_upper_clogp","3.75").c_str());
+        dn_clogp_std_dev = atof(parm.query_param("dn_clogp_std_dev","2.02").c_str());
     }
     
     dn_drive_esol = (parm.query_param("dn_drive_esol","no") == "yes");
     if (dn_drive_esol){
-        dn_lower_esol = atof(parm.query_param("dn_lower_esol","-6").c_str());
-        dn_upper_esol = atof(parm.query_param("dn_upper_esol","0").c_str());
-        dn_esol_std_dev = atof(parm.query_param("dn_esol_std_dev","2.15").c_str());
+        dn_lower_esol = atof(parm.query_param("dn_lower_esol","-5.23").c_str());
+        dn_upper_esol = atof(parm.query_param("dn_upper_esol","-1.35").c_str());
+        dn_esol_std_dev = atof(parm.query_param("dn_esol_std_dev","1.94").c_str());
     }
-    
+
+    dn_drive_tpsa = (parm.query_param("dn_drive_tpsa","no") == "yes");
+    if (dn_drive_tpsa){
+        dn_lower_tpsa = atof(parm.query_param("dn_lower_tpsa","28.53").c_str());
+        dn_upper_tpsa = atof(parm.query_param("dn_upper_tpsa","113.20").c_str());
+        dn_tpsa_std_dev = atof(parm.query_param("dn_tpsa_std_dev","42.33").c_str());
+    }
+ 
     dn_drive_qed = (parm.query_param("dn_drive_qed","no") == "yes");
     if (dn_drive_qed){
-        dn_lower_qed = atof(parm.query_param("dn_lower_qed","0.4").c_str());
-        dn_qed_std_dev = atof(parm.query_param("dn_qed_std_dev","0.18").c_str());
+        dn_lower_qed = atof(parm.query_param("dn_lower_qed","0.61").c_str());
+        dn_qed_std_dev = atof(parm.query_param("dn_qed_std_dev","0.19").c_str());
     }
     
     dn_drive_sa = (parm.query_param("dn_drive_sa","no") == "yes");
     if (dn_drive_sa){
-        dn_upper_sa = atof(parm.query_param("dn_upper_sa","4.5").c_str());
-        dn_sa_std_dev = atof(parm.query_param("dn_sa_std_dev","1.01").c_str());
+        dn_upper_sa = atof(parm.query_param("dn_upper_sa","3.34").c_str());
+        dn_sa_std_dev = atof(parm.query_param("dn_sa_std_dev","0.9").c_str());
+        if (dn_upper_sa == 0.0) {
+            std::cout << "ERROR: Lowest score for SynthA is not 0.0, please try again"<< std::endl;
+            exit(0);
+        }
     }
     
     dn_drive_stereocenters = (parm.query_param("dn_drive_stereocenters","no") == "yes");
     if (dn_drive_stereocenters){
         dn_upper_stereocenter = atoi(parm.query_param("dn_upper_stereocenter","2").c_str());
+        if (dn_upper_stereocenter == 0) {
+            std::cout << "ERROR: Upperbound for stereocenters during DN_drive cannot be 0, please try again" <<std::endl;
+            exit(0);
+        }
     }
     
+    dn_drive_pains = (parm.query_param("dn_drive_pains","no") == "yes");
+    if (dn_drive_pains){
+        dn_upper_pains = atoi(parm.query_param("dn_upper_pains","1").c_str());
+        if (dn_upper_pains == 0) {
+            std::cout << "ERROR: Upperbound for number of pains during DN_drive cannot be 0, please try again" << std::endl;
+            exit(0);
+        }
+    }    
+    
+
     if (dn_drive_clogp || dn_drive_esol || dn_drive_qed ||
-        dn_drive_sa || dn_drive_stereocenters){
+        dn_drive_sa || dn_drive_stereocenters || dn_drive_pains || dn_drive_tpsa){
         dn_start_at_layer = atoi(parm.query_param("dn_start_at_layer","1").c_str());
 
         // Add fragMap to memory once
         sa_fraglib_path = parm.query_param("sa_fraglib_path","sa_fraglib.dat");
-        if (fragMap.empty() == true){
+
+        if (fragMap.empty() == true) {
             std::ifstream fin(sa_fraglib_path);
             double key;
             double val;
             while (fin >> key >> val) {
                 fragMap[key] = val;
             }
+            //the fragMap is empty so quit 
+            if (fragMap.empty() == true){
+                std::cout << "sa_fraglib.dat is empty. Please give the correct fraglib data table...";
+                exit(0);
+            }
             fin.close();
         }
 
         // Add PAINSMap to memory once
-        PAINS_path = parm.query_param("PAINS_path","pains_table.dat");
+        PAINS_path = parm.query_param("PAINS_path","pains_table_2019_09_01.dat");
+
         std::vector<std::string> PAINStmp;
-        if (PAINStmp.empty() == true){
+        if (PAINStmp.empty() == true) {
             std::ifstream fin(PAINS_path);
             std::string tmp_string;
             while (fin >> tmp_string) {
@@ -255,16 +309,24 @@ DN_Build::input_parameters( Parameter_Reader & parm )
             }
             fin.close();
         }
+        //if the PAINStmp is still empty, quit 
+        if (PAINStmp.empty() == true){
+            std::string tmp_string;
+            std::cout << "pains_table.dat is empty. Please give the correct PAINS table...";
+            exit(0);
+        }
+
+        //processing the pains maps.
         int numofvectors = PAINStmp.size() - 1;
         for (int i{0}; i < numofvectors; ) {
             PAINSMap[PAINStmp[i]] = " " + PAINStmp[i + 1];
-            i += 2; 
+            i += 2;
         }
-        PAINStmp.clear();        
+        PAINStmp.clear();
     }
 
     #endif
- 
+
     // User can specify an upper bound for rotatable bonds
     dn_constraint_rot_bon = atoi(parm.query_param("dn_constraint_rot_bon", "15").c_str());
 
@@ -325,6 +387,142 @@ DN_Build::input_parameters( Parameter_Reader & parm )
 
 } // end DN_Build::input_parameters()
 
+void DN_Build::frag_iso_align(){
+
+    class Iso_Align    iso_ali;
+    class Iso_Parm     iso_parm;
+
+    std::fstream frefout_molecules;
+    frefout_molecules.open("refsource.mol2",std::ios_base::out);
+
+    //for the testing fragments
+    std::fstream testfout_molecules;
+    testfout_molecules.open("output.mol2",std::ios_base::out);
+
+    
+    if(dn_user_specified_anchor){    
+
+        anchors[0].calc_num_du();
+         
+
+        if (anchors[0].get_num_du()==1){
+
+           iso_ali.align(anchors[0], isosidechains, iso_parm);
+           //activate each heavy atom 
+           for (unsigned int i =0; i<anchors[0].mol.num_atoms;i++){
+               anchors[0].mol.atom_active_flags[i] = true;
+           }
+
+           Write_Mol2(anchors[0].mol,frefout_molecules);
+           for (unsigned int i=0;i<isosidechains.size();i++){
+     
+
+               for (unsigned int j =0; j<isosidechains[i].mol.num_atoms;j++){
+                   isosidechains[i].mol.atom_active_flags[j] = true;
+               }
+               if (isosidechains[i].is_it_iso_aligned()){
+                   Write_Mol2(isosidechains[i].mol,testfout_molecules);
+               }
+           }
+
+        }else if (anchors[0].get_num_du()==2){
+
+            iso_ali.align(anchors[0], isolinkers, iso_parm);
+            //activate each heavy atom 
+            for (unsigned int i =0; i<anchors[0].mol.num_atoms;i++){
+                anchors[0].mol.atom_active_flags[i] = true;
+            }
+
+            Write_Mol2(anchors[0].mol,frefout_molecules);
+            for (unsigned int i=0;i<isolinkers.size();i++){
+     
+
+                for (unsigned int j =0; j<isolinkers[i].mol.num_atoms;j++){
+                    isolinkers[i].mol.atom_active_flags[j] = true;
+                }
+                if (isolinkers[i].is_it_iso_aligned()){
+                    Write_Mol2(isolinkers[i].mol,testfout_molecules);
+                }
+            }
+
+        }else if (anchors[0].get_num_du()>=3){
+
+            iso_ali.align(anchors[0], isoscaffolds,iso_parm);
+            //activate each heavy atom 
+            for (unsigned int i =0; i<anchors[0].mol.num_atoms;i++){
+                anchors[0].mol.atom_active_flags[i] = true;
+            }
+
+            Write_Mol2(anchors[0].mol,frefout_molecules);
+            for (unsigned int i=0;i<isoscaffolds.size();i++){
+     
+
+                for (unsigned int j =0; j<isoscaffolds[i].mol.num_atoms;j++){
+                    isoscaffolds[i].mol.atom_active_flags[j] = true;
+                }
+                if (isoscaffolds[i].is_it_iso_aligned()){
+                    Write_Mol2(isoscaffolds[i].mol,testfout_molecules);
+                }
+            }
+
+
+        }
+
+
+    }else{
+        std::cout <<"DN_emptylogic"<< std::endl;
+        //iso_ali.align(scaffolds, scaffolds);  
+    }
+
+}
+
+
+void
+DN_Build::iso_initialize()
+{
+    Trace trace("DN_Build::iso_initialize()");
+    cout <<endl <<"Initializing De Novo Growth Routines..." <<endl;
+
+    cout <<" Reading the scaffold library from " <<dn_fraglib_scaffold_file <<"...";
+    read_library( scaffolds, dn_fraglib_scaffold_file );
+    cout <<"Done (#=" <<scaffolds.size() <<")" <<endl;
+
+    cout <<" Reading the linker library from " <<dn_fraglib_linker_file <<"...";
+    read_library( linkers, dn_fraglib_linker_file );
+    cout <<"Done (#=" <<linkers.size() <<")" <<endl;
+
+    cout <<" Reading the sidechain library from " <<dn_fraglib_sidechain_file <<"...";
+    read_library( sidechains, dn_fraglib_sidechain_file );
+    cout <<"Done (#=" <<sidechains.size() <<")" <<endl;
+
+
+
+
+    cout <<" Reading the iso_scaffold library from " <<dn_fraglib_iso_scaffold_file <<"...";
+    read_library( isoscaffolds, dn_fraglib_iso_scaffold_file );
+    cout <<"Done (#=" <<isoscaffolds.size() <<")" <<endl;
+
+    cout <<" Reading the iso_linker library from " <<dn_fraglib_iso_linker_file <<"...";
+    read_library( isolinkers, dn_fraglib_iso_linker_file );
+    cout <<"Done (#=" <<isolinkers.size() <<")" <<endl;
+
+    cout <<" Reading the iso_sidechain library from " <<dn_fraglib_iso_sidechain_file <<"...";
+    read_library( isosidechains, dn_fraglib_iso_sidechain_file );
+    cout <<"Done (#=" <<isosidechains.size() <<")" <<endl;
+
+    if (dn_user_specified_anchor){
+        cout <<" Reading the anchor library from " <<dn_fraglib_anchor_file <<"...";
+        read_library( anchors, dn_fraglib_anchor_file );
+        cout <<"Done (#=" <<anchors.size() <<")" <<endl;
+    }
+
+
+}
+
+
+
+
+
 
 
 // +++++++++++++++++++++++++++++++++++++++++
@@ -379,7 +577,6 @@ DN_Build::initialize()
         for (int i=0; i<linkers.size(); i++){ scaf_link_sid.push_back(linkers[i]); }
         for (int i=0; i<sidechains.size(); i++){ scaf_link_sid.push_back(sidechains[i]); }
     }
-    
     // BCF compute MW and formal charge of each fragment (stored in frag.mol) for easy pruning later
     for (int i=0; i<scaf_link_sid.size(); i++) {
           // Declare a temporary fingerprint object and compute atom environments (necessary for Gasteiger)
@@ -402,9 +599,7 @@ DN_Build::initialize()
     // This function will find what fragments are similar to what other fragments in each of the
     // libraries, storing that information as a FragGraph object
     if (dn_sampling_method_graph){
-
         prepare_fragment_graph( scaf_link_sid, scaf_link_sid_graph );
-
         // To visualize or inspect graph, uncomment this. Note: exits program on finishing.
         //print_fraggraph();
     }
@@ -977,7 +1172,6 @@ DN_Build::prepare_fragment_graph( vector <Fragment> & frag_vec, vector <FragGrap
 } // end DN_Build::prepare_fragment_graph()
 
 
-
 // +++++++++++++++++++++++++++++++++++++++++
 // This function is the main de novo engine for building molecules. (called in dock.cpp)
 void
@@ -1016,9 +1210,9 @@ DN_Build::build_molecules( Master_Score & score, Simplex_Minimizer & simplex, AM
     ostringstream fout_rejected_name;
     fout_rejected_name << dn_output_prefix << ".denovo_rejected.mol2";
     fstream fout_rejected;
-    if (dn_save_all_molecules) {
-        fout_rejected.open(fout_rejected_name.str().c_str(), fstream::out|fstream::app);
-    }    
+        if (dn_save_all_molecules) {
+            fout_rejected.open(fout_rejected_name.str().c_str(), fstream::out|fstream::app);
+        }
     fout_rejected_name.clear();
     #endif
 
@@ -1181,7 +1375,10 @@ DN_Build::build_molecules( Master_Score & score, Simplex_Minimizer & simplex, AM
                cout <<"  ##### Entering layer of growth #" <<(counter+1) <<endl;
                cout <<"  Root size at the beginning of this layer = " <<root.size() <<endl;
             }
- 
+            //PAK
+            #ifdef BUILD_DOCK_WITH_RDKIT
+            int total_rej_molecules = 0;
+            #endif
             // for each fragment in root
             for (int i=0; i<root.size(); i++){
     
@@ -1275,7 +1472,7 @@ DN_Build::build_molecules( Master_Score & score, Simplex_Minimizer & simplex, AM
                             // Only copy things that are within the user-defined property constraints
                             if (growing[x].mol.rot_bonds <= dn_constraint_rot_bon && 
                                 fabs(growing[x].mol.formal_charge) <= (fabs(dn_constraint_formal_charge)+0.1) ){
-                                
+
                                 // If hard cutoff is used, evaluate upper limit and pass if it is below
                                 if (dn_MW_cutoff_type_hard && growing[x].mol.mol_wt <= dn_upper_constraint_mol_wt){
                                     layer.push_back( growing[x] );
@@ -1287,7 +1484,8 @@ DN_Build::build_molecules( Master_Score & score, Simplex_Minimizer & simplex, AM
                                 // In any other situation, the molecule fails the cutoff requirements
                                 } else {
                                     continue;
-                                } 
+                                }
+
                             }
                         } else {
                             break;
@@ -1309,27 +1507,113 @@ DN_Build::build_molecules( Master_Score & score, Simplex_Minimizer & simplex, AM
                 // pick fragments to put back onto root
                 
                 #ifdef BUILD_DOCK_WITH_RDKIT
-                if (dn_drive_clogp || dn_drive_esol || dn_drive_qed || dn_drive_sa || dn_drive_stereocenters) {
+                if (dn_drive_clogp || dn_drive_esol || dn_drive_qed || dn_drive_sa || dn_drive_stereocenters || dn_drive_pains || dn_drive_tpsa) {
                     dn_normal = false;
                     // Start interface with RDKit
                     RDTYPER rdprops;
                     for (unsigned int i = 0; i < layer.size(); ++i){
                         rdprops.calculate_descriptors( layer[i].mol, fragMap, true, PAINSMap);
                     }
+
+                    int num_rej_mol = 0;  
+                    if (rejected.size()!=0) { num_rej_mol = rejected.size();
+                    }else { num_rej_mol = 0;}
+                    int num_rej_mol_in_attFrag = 0;
+                    float rej_avg_mw   = 0.0;
+                    float rej_avg_esol = 0.0;
+                    float rej_avg_logp = 0.0;
+                    float rej_avg_tpsa = 0.0;
+                    float rej_avg_qed  = 0.0;
+                    float rej_avg_sa   = 0.0;
+                    float rej_avg_stereo = 0.0;
+                   float rej_avg_pains = 0.0;
                     
-                    for (unsigned int x = 0; x < layer.size(); ++x){
-                       
+
+                    for (unsigned int x = 0; x < layer.size(); ++x){   
                         // Figure out which molecules fail which test 
                         // Conditional that drives growth
-                        if ( counter > dn_start_at_layer ){
+                        if (dn_drive_verbose){ 
+                            stringstream tmp_string;
+                            string out_string; 
+                            
+                            tmp_string<<"RD_layer["<< to_string(counter+1)<<"]"   
+                                  <<"anchor["<<to_string(a)<<"]"
+                                  <<"Root[" <<to_string(i)<<"]"
+                                  <<"attached_frag["<<to_string(x)<<"]";
+                            tmp_string >> out_string; 
+                            cout << setw(57) << right<< out_string; 
+                        }
+                        if ( (counter+1) >= dn_start_at_layer ){
                             bool drive;
-                            drive = drive_growth( layer[x] );
+                            if (dn_drive_verbose){
+                                cout<<endl;
+                            }
+                            drive = drive_growth( layer[x] ); 
                             if (drive) { next_layer.push_back(layer[x]); }
-                            else { rejected.push_back(layer[x]); }
+                            else { 
+                                rejected.push_back(layer[x]); 
+                                num_rej_mol_in_attFrag++;
+                            }
                         // Accept all molecules built before dn_start_at_layer
-                        } else if ( counter <= dn_start_at_layer ){ next_layer.push_back(layer[x]); }
+                        } else if ( (counter+1) < dn_start_at_layer ){ 
+                            next_layer.push_back(layer[x]); 
+                            if (dn_drive_verbose){
+                                cout << "        molecule_accepted via not start on dn_start_at_layer" << endl;
+                            }
+                        }
                         // Reject all others
-                        else { rejected.push_back(layer[x]); }
+                        else { 
+                            rejected.push_back(layer[x]);
+                            num_rej_mol_in_attFrag++;
+                            if (dn_drive_verbose){
+                                cout << "        rejected because notDrive ";
+                            }
+                        } 
+
+                        if (num_rej_mol < rejected.size()) {
+
+                            num_rej_mol = rejected.size();
+                            total_rej_molecules = rejected.size();
+                        }
+                    }
+                 
+                    
+                    if (dn_drive_verbose){  
+                        cout << endl;
+                        for ( int u = 0; u < rejected.size(); u++){
+                            
+                            rej_avg_esol += rejected[u].mol.esol;
+                            rej_avg_logp += rejected[u].mol.clogp;
+                            rej_avg_tpsa += rejected[u].mol.tpsa;
+                            rej_avg_qed  += rejected[u].mol.qed_score;
+                            rej_avg_sa   += rejected[u].mol.sa_score;
+                           rej_avg_pains += rejected[u].mol.pns;
+                          rej_avg_stereo += rejected[u].mol.num_stereocenters;
+                        }
+                        rej_avg_esol = rej_avg_esol / rejected.size();
+                        rej_avg_logp = rej_avg_logp / rejected.size(); 
+                        rej_avg_tpsa = rej_avg_tpsa / rejected.size();
+                        rej_avg_qed  = rej_avg_qed  / rejected.size();
+                        rej_avg_sa   = rej_avg_sa   / rejected.size();
+                       rej_avg_pains = rej_avg_pains / rejected.size(); 
+                      rej_avg_stereo = rej_avg_stereo / rejected.size();
+
+
+                        cout <<"        From RD_layer[" << (counter+1)<<"]"<<"anchor["<<a<<"]"<<"Root[" <<i <<"], the number of rejected molecules is " << num_rej_mol_in_attFrag << endl;   
+                        cout <<"        Cumulatively, in RD_layer[" <<(counter+1)<<"], the number of Rejected Molecules is " << num_rej_mol << endl; 
+                        if (num_rej_mol != 0){
+                            cout <<"        Cumulatively, in RD_layer[" << (counter+1)<<"]"<<"anchor["<<a<<"], "<<setw(20)<<left<<"the rejected_average_Stereocenter is " << rej_avg_stereo   << endl;
+                            cout <<"        Cumulatively, in RD_layer[" << (counter+1)<<"]"<<"anchor["<<a<<"], "<<setw(20)<<left<<"the rejected_average_tpsa is "  << rej_avg_tpsa << endl;
+                            cout <<"        Cumulatively, in RD_layer[" << (counter+1)<<"]"<<"anchor["<<a<<"], "<<setw(20)<<left<<"the rejected_average_cLOGP is "  << rej_avg_logp << endl;
+                            cout <<"        Cumulatively, in RD_layer[" << (counter+1)<<"]"<<"anchor["<<a<<"], "<<setw(20)<<left<<"the rejected_average_logS is "   << rej_avg_esol << endl;
+                            cout <<"        Cumulatively, in RD_layer[" << (counter+1)<<"]"<<"anchor["<<a<<"], "<<setw(20)<<left<<"the rejected_average_QED is "    << rej_avg_qed  << endl;
+                            cout <<"        Cumulatively, in RD_layer[" << (counter+1)<<"]"<<"anchor["<<a<<"], "<<setw(20)<<left<<"the rejected_average_SynthA is " << rej_avg_sa   << endl;
+                            cout <<"        Cumulatively, in RD_layer[" << (counter+1)<<"]"<<"anchor["<<a<<"], "<<setw(20)<<left<<"the rejected_average_numPains is " << rej_avg_pains   << endl;
+                        }
+
+                    }else{
+                        cout <<"        From RD_layer[" << (counter+1)<<"]"<<"anchor["<<a<<"]"<<"Root[" <<i <<"],the number of rejected molecules is " << num_rej_mol_in_attFrag << endl;
+                        cout <<"        Cumulatively, in RD_layer[" <<(counter+1)<<"],the number of rejected molecules is " << num_rej_mol << endl; 
                     }
                 } else {
                 // Regular de novo
@@ -1411,7 +1695,11 @@ DN_Build::build_molecules( Master_Score & score, Simplex_Minimizer & simplex, AM
 
                }
             }
-
+            #ifdef BUILD_DOCK_WITH_RDKIT
+            if (dn_drive_verbose){
+            cout << "      From this ensemble, the total RD_D3N_rejected molecules is " <<total_rej_molecules<<endl;
+            }
+            #endif
             // prepare to write some molecules to file
             int write_to_file_counter=0;
 
@@ -1457,19 +1745,18 @@ DN_Build::build_molecules( Master_Score & score, Simplex_Minimizer & simplex, AM
                 } else {
                     // Mol only written out if cutoff hard and mol wt higher than lower bound or if soft cutoff send to mw_cutoff function which automatically
                     // evaluates true if greater than lower bound or passes with some probability if less than
-                    if ((dn_MW_cutoff_type_hard && next_layer[i].mol.mol_wt > dn_lower_constraint_mol_wt) || (!dn_MW_cutoff_type_hard && mw_cutoff(next_layer[i],0) )){ 
-
+                    if ((dn_MW_cutoff_type_hard && next_layer[i].mol.mol_wt > dn_lower_constraint_mol_wt) || (!dn_MW_cutoff_type_hard && mw_cutoff(next_layer[i],0) )){
                        if (dn_ga_flag == false){
                            // LEP - save unique name to dockmol object title (instead of energy)  
                            ostringstream new_comment;
-           		        new_comment << denovo_name<< "_layer"<<counter+1<<"_"<< write_to_file_counter;
-   		                next_layer[i].mol.title = new_comment.str();
-   		                new_comment.clear();
-   
-   		           // write mols to file
+        	               new_comment << denovo_name<< "_layer"<<counter+1<<"_"<< write_to_file_counter;
+		                   next_layer[i].mol.title = new_comment.str();
+		                   new_comment.clear();
+
+		                   // write mols to file
                            fout_molecules << next_layer[i].mol.current_data;
-   		           //LEP added in unique denovo name and scientific notation to floating point for output
-   		           fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Name:" << setw(FLOAT_WIDTH) << next_layer[i].mol.title <<endl;
+		                   //LEP added in unique denovo name and scientific notation to floating point for output
+		                   fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Name:" << setw(FLOAT_WIDTH) << next_layer[i].mol.title <<endl;
                            fout_molecules <<DELIMITER<<setw(STRING_WIDTH)<<"Molecular_Weight:"<<setw(FLOAT_WIDTH)<<next_layer[i].mol.mol_wt <<endl;
                            fout_molecules <<DELIMITER<<setw(STRING_WIDTH)<<"DOCK_Rotatable_Bonds:"<<setw(FLOAT_WIDTH)<<next_layer[i].mol.rot_bonds <<endl;
                            fout_molecules << fixed <<DELIMITER<<setw(STRING_WIDTH)<<"Formal_Charge:"<<setw(FLOAT_WIDTH)<<next_layer[i].mol.formal_charge <<endl;
@@ -1478,32 +1765,35 @@ DN_Build::build_molecules( Master_Score & score, Simplex_Minimizer & simplex, AM
                            #ifdef BUILD_DOCK_WITH_RDKIT
                            // Descriptors (beginning)
                            if (!dn_normal) {
-   
                                std::vector<std::string> vecpnstmp{};
                                vecpnstmp = next_layer[i].mol.pns_name;
                                std::string molpns_name = std::accumulate(vecpnstmp.begin(), vecpnstmp.end(), std::string(""));
-   
+                               if (next_layer[i].mol.pns == 0 && molpns_name.empty() == true){
+                                   molpns_name = "NO_PAINS"; 
+                               }else if(next_layer[i].mol.pns != 0 && molpns_name.empty() == false){}
+                               else{
+                                   molpns_name = "ERROR_IN_PAINS_MATCHING_PLEASE_INVESTIGATE";
+                               }
                                fout_molecules << fixed << DELIMITER << setw(STRING_WIDTH) << "RD_num_arom_rings:" << setw(FLOAT_WIDTH) << next_layer[i].mol.num_arom_rings << endl;
                                fout_molecules << fixed << DELIMITER << setw(STRING_WIDTH) << "RD_num_alip_rings:" << setw(FLOAT_WIDTH) << next_layer[i].mol.num_alip_rings << endl;
                                fout_molecules << fixed << DELIMITER << setw(STRING_WIDTH) << "RD_num_sat_rings:" << setw(FLOAT_WIDTH) << next_layer[i].mol.num_sat_rings << endl;
                                fout_molecules << fixed << DELIMITER << setw(STRING_WIDTH) << "RD_Stereocenters:" << setw(FLOAT_WIDTH) << next_layer[i].mol.num_stereocenters << endl;
                                fout_molecules << fixed << DELIMITER << setw(STRING_WIDTH) << "RD_Spiro_atoms:" << setw(FLOAT_WIDTH) << next_layer[i].mol.num_spiro_atoms << endl;
-                               fout_molecules << fixed << DELIMITER << setw(STRING_WIDTH) << "RD_TPSA:" << setw(FLOAT_WIDTH) << next_layer[i].mol.tpsa << endl;
                                fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_LogP:" << setw(FLOAT_WIDTH) << next_layer[i].mol.clogp << endl;
-                               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_LogS:" << setw(FLOAT_WIDTH) << next_layer[i].mol.esol << endl;
-                               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_QED:" << setw(FLOAT_WIDTH) << next_layer[i].mol.qed_score << endl;
+                               fout_molecules << fixed << DELIMITER << setw(STRING_WIDTH) << "RD_TPSA:" << setw(FLOAT_WIDTH) << next_layer[i].mol.tpsa << endl;
                                fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_SYNTHA:" << setw(FLOAT_WIDTH) << next_layer[i].mol.sa_score << endl;
-                               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_SMILES:" << setw(FLOAT_WIDTH) << next_layer[i].mol.smiles << endl;
+                               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_QED:" << setw(FLOAT_WIDTH) << next_layer[i].mol.qed_score << endl;
+                               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_LogS:" << setw(FLOAT_WIDTH) << next_layer[i].mol.esol << endl;
                                fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_num_of_PAINS:" << setw(FLOAT_WIDTH) << next_layer[i].mol.pns << endl; 
                                fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_PAINS_names:" << setw(FLOAT_WIDTH) << molpns_name << endl; 
+                               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_SMILES:" << setw(FLOAT_WIDTH) << next_layer[i].mol.smiles << endl;
                            }// Descriptors (end)
                            #endif   
                            fout_molecules <<DELIMITER<<setw(STRING_WIDTH)<<"Layer_Completed:"<<setw(FLOAT_WIDTH)<<counter+1 <<endl;
                            fout_molecules <<DELIMITER<<setw(STRING_WIDTH)<<"Frag_String:"<<setw(FLOAT_WIDTH)<<next_layer[i].mol.energy << "\n"<<endl;
-       
                            Write_Mol2(next_layer[i].mol, fout_molecules);
-                           write_to_file_counter++;
-                       }   
+                           write_to_file_counter++;                                                                                                                       
+                       }
                     }
                     else{ mw_low_prune_counter++; }
 
@@ -1546,69 +1836,120 @@ DN_Build::build_molecules( Master_Score & score, Simplex_Minimizer & simplex, AM
             #ifdef BUILD_DOCK_WITH_RDKIT
             if (dn_save_all_molecules) {
 
-                // for everything in rejected...
-                for (unsigned int i=0; i < rejected.size(); ++i){
-                    // calculate some ensemble properties
-
-                    calc_mol_wt(rejected[i].mol);
-                    calc_rot_bonds(rejected[i].mol);
-                    calc_formal_charge(rejected[i].mol);
-                    calc_num_HA_HD(rejected[i].mol);
-                }
 
                 // Print rejected molecules to file
+
                 for (unsigned int i = 0; i < rejected.size(); ++i) {
 
-                    // Prepare title 
-                    ostringstream new_title;
-                    new_title << denovo_name << "_layer" << counter + 1 << "_rejected_" << i;
-                    rejected[i].mol.title = new_title.str();
-                    new_title.clear();
+                    bool rejected_flag = true;
 
-                    std::vector<std::string> vecpnstmp{};
-                    vecpnstmp = rejected[i].mol.pns_name;
-                    std::string molpns_name = std::accumulate(vecpnstmp.begin(), vecpnstmp.end(), std::string(""));                
+                    for (int j=0; j<rejected[i].aps.size(); j++){
 
-                    // Write mols and attributes to file
-                    fout_rejected << DELIMITER << setw(STRING_WIDTH) << "Name:" << setw(FLOAT_WIDTH) << rejected[i].mol.title << endl;
-                    fout_rejected << DELIMITER << setw(STRING_WIDTH) << "Molecular_Weight:" << setw(FLOAT_WIDTH) << rejected[i].mol.mol_wt << endl;
-                    fout_rejected << DELIMITER << setw(STRING_WIDTH) << "DOCK_Rotatable_Bonds:" << setw(FLOAT_WIDTH) << rejected[i].mol.rot_bonds << endl;
-                    fout_rejected << DELIMITER << setw(STRING_WIDTH) << "Formal_Charge:" << setw(FLOAT_WIDTH) << rejected[i].mol.formal_charge << endl;
-                    fout_rejected << fixed << DELIMITER << setw(STRING_WIDTH) << "HBond_Acceptors:" << setw(FLOAT_WIDTH) << rejected[i].mol.hb_acceptors << endl;
-                    fout_rejected << fixed << DELIMITER << setw(STRING_WIDTH) << "HBond_Donors:" << setw(FLOAT_WIDTH) << rejected[i].mol.hb_donors << endl;
-                    fout_rejected << fixed << DELIMITER << setw(STRING_WIDTH) << "RD_num_arom_rings:" << setw(FLOAT_WIDTH) << rejected[i].mol.num_arom_rings << endl;
-                    fout_rejected << fixed << DELIMITER << setw(STRING_WIDTH) << "RD_num_alip_rings:" << setw(FLOAT_WIDTH) << rejected[i].mol.num_alip_rings << endl;
-                    fout_rejected << fixed << DELIMITER << setw(STRING_WIDTH) << "RD_num_sat_rings:" << setw(FLOAT_WIDTH) << rejected[i].mol.num_sat_rings << endl;
-                    fout_rejected << fixed << DELIMITER << setw(STRING_WIDTH) << "RD_Stereocenters:" << setw(FLOAT_WIDTH) << rejected[i].mol.num_stereocenters << endl;
-                    fout_rejected << fixed << DELIMITER << setw(STRING_WIDTH) << "RD_Spiro_atoms:" << setw(FLOAT_WIDTH) << rejected[i].mol.num_spiro_atoms << endl;
-                    fout_rejected << fixed << DELIMITER << setw(STRING_WIDTH) << "RD_TPSA:" << setw(FLOAT_WIDTH) << rejected[i].mol.tpsa << endl;
-                    fout_rejected << DELIMITER << setw(STRING_WIDTH) << "RD_LogP:" << setw(FLOAT_WIDTH) << rejected[i].mol.clogp << endl;
-                    fout_rejected << DELIMITER << setw(STRING_WIDTH) << "RD_LogS:" << setw(FLOAT_WIDTH) << rejected[i].mol.esol << endl;
-                    fout_rejected << DELIMITER << setw(STRING_WIDTH) << "RD_QED:" << setw(FLOAT_WIDTH) << rejected[i].mol.qed_score << endl;
-                    fout_rejected << DELIMITER << setw(STRING_WIDTH) << "RD_SYNTHA:" << setw(FLOAT_WIDTH) << rejected[i].mol.sa_score << endl;
-                    fout_rejected << DELIMITER << setw(STRING_WIDTH) << "RD_SMILES:" << setw(FLOAT_WIDTH) << rejected[i].mol.smiles << endl;
-                    fout_rejected << DELIMITER << setw(STRING_WIDTH) << "RD_num_of_PAINS:" << setw(FLOAT_WIDTH) << rejected[i].mol.pns << endl; 
-                    fout_rejected << DELIMITER << setw(STRING_WIDTH) << "RD_PAINS_names:" << setw(FLOAT_WIDTH) << molpns_name << endl; 
+                        string bond_type;
 
-                    if (rejected[i].mol.fail_clogp) { fout_rejected << DELIMITER << setw(STRING_WIDTH) << "Failed_LogP:" << setw(FLOAT_WIDTH) << "TRUE" << endl; }
-                    else { fout_rejected << DELIMITER << setw(STRING_WIDTH) << "Failed_LogP:" << setw(FLOAT_WIDTH) << "FALSE" << endl; }                
-                    if (rejected[i].mol.fail_esol) { fout_rejected << DELIMITER << setw(STRING_WIDTH) << "Failed_LogS:" << setw(FLOAT_WIDTH) << "TRUE" << endl; }
-                    else { fout_rejected << DELIMITER << setw(STRING_WIDTH) << "Failed_LogS:" << setw(FLOAT_WIDTH) << "FALSE" << endl; }
-                    if (rejected[i].mol.fail_qed) { fout_rejected << DELIMITER << setw(STRING_WIDTH) << "Failed_QED:" << setw(FLOAT_WIDTH) << "TRUE" << endl; }
-                    else { fout_rejected << DELIMITER << setw(STRING_WIDTH) << "Failed_QED:" << setw(FLOAT_WIDTH) << "FALSE" << endl; }
-                    if (rejected[i].mol.fail_sa) { fout_rejected << DELIMITER << setw(STRING_WIDTH) << "Failed_SYNTHA:" << setw(FLOAT_WIDTH) << "TRUE" << endl; }
-                    else { fout_rejected << DELIMITER << setw(STRING_WIDTH) << "Failed_SYNTHA:" << setw(FLOAT_WIDTH) << "FALSE" << endl; }
-                    if (rejected[i].mol.fail_stereo) { fout_rejected << DELIMITER << setw(STRING_WIDTH) << "Failed_stereo:" << setw(FLOAT_WIDTH) << "TRUE" << endl; }
-                    else { fout_rejected << DELIMITER << setw(STRING_WIDTH) << "Failed_stereo:" << setw(FLOAT_WIDTH) << "FALSE" << endl; }
-                    fout_rejected << DELIMITER << setw(STRING_WIDTH) << "Frag_String:" << setw(FLOAT_WIDTH) << rejected[i].mol.energy << "\n"<<endl;
- 
-                    // Use dockmol Write_Mol2 function
-                    Write_Mol2( rejected[i].mol, fout_rejected );   
+                        // Loop over all bonds in frag1
+                        for (int k=0; k<rejected[i].mol.num_bonds; k++){
+                            if (rejected[i].mol.bonds_origin_atom[k] == rejected[i].aps[j].dummy_atom ||
+                                rejected[i].mol.bonds_target_atom[k] == rejected[i].aps[j].dummy_atom   ){   
+                                if (rejected[i].mol.bonds_origin_atom[k] == rejected[i].aps[j].heavy_atom ||
+                                    rejected[i].mol.bonds_target_atom[k] == rejected[i].aps[j].heavy_atom   ){   
+
+                                    // This is the bond you're looking for...
+                                    bond_type = rejected[i].mol.bond_types[k];
+                                    break;
+                                }
+                            }
+                        }
+
+                        // Only cap it if the dummy is on a single bond 
+                        if ( bond_type == "1" ){
+
+                            dummy_to_H(rejected[i], rejected[i].aps[j].heavy_atom, rejected[i].aps[j].dummy_atom);
+                            //prune_dump[i].mol.mol_wt += ATOMIC_WEIGHT_H;
+
+                        // Otherwise, ignore this molecule
+                        } else {
+                            rejected_flag = false;
+                            break;
+                        }
+
+                    }
+                    //Run prune_dump mols through multi torenv check to not make garbage
+                    if (valid_torenv_multi(rejected[i])){
+                        // If there was no problem capping the molecules, then write to file
+                        if (rejected_flag){
+                            //reactivate all atoms so it can be recognized by  Write_Mol2() for mol2 writing 
+                            for (int q =0; q<rejected[i].mol.num_atoms;q++){
+                                rejected[i].mol.atom_active_flags[q] = true;
+                            }
+
+                            calc_mol_wt(rejected[i].mol);
+                            calc_rot_bonds(rejected[i].mol);
+                            calc_formal_charge(rejected[i].mol);
+                            calc_num_HA_HD(rejected[i].mol);
+
+                            // Prepare title 
+                            ostringstream new_title;
+                            new_title << denovo_name << "_layer" << counter + 1 << "_rejected_" << i;
+                            rejected[i].mol.title = new_title.str();
+                            new_title.clear();
+
+                            std::vector<std::string> vecpnstmp{};
+                            vecpnstmp = rejected[i].mol.pns_name;
+                            std::string molpns_name = std::accumulate(vecpnstmp.begin(), vecpnstmp.end(), std::string(""));                
+                            if (rejected[i].mol.pns == 0 && molpns_name.empty() == true){
+                                molpns_name = "NO_PAINS"; 
+                            }else if(rejected[i].mol.pns != 0 && molpns_name.empty() == false) {}
+                            else{
+                                molpns_name = "ERROR_IN_PAINS_MATCHING_PLEASE_INVESTIGATE";
+                            }
+
+                            // Write mols and attributes to file
+                            fout_rejected << DELIMITER << setw(STRING_WIDTH) << "Name:" << setw(FLOAT_WIDTH) << rejected[i].mol.title << endl;
+                            fout_rejected << DELIMITER << setw(STRING_WIDTH) << "Molecular_Weight:" << setw(FLOAT_WIDTH) << rejected[i].mol.mol_wt << endl;
+                            fout_rejected << DELIMITER << setw(STRING_WIDTH) << "DOCK_Rotatable_Bonds:" << setw(FLOAT_WIDTH) << rejected[i].mol.rot_bonds << endl;
+                            fout_rejected << DELIMITER << setw(STRING_WIDTH) << "Formal_Charge:" << setw(FLOAT_WIDTH) << rejected[i].mol.formal_charge << endl;
+                            fout_rejected << fixed << DELIMITER << setw(STRING_WIDTH) << "HBond_Acceptors:" << setw(FLOAT_WIDTH) << rejected[i].mol.hb_acceptors << endl;
+                            fout_rejected << fixed << DELIMITER << setw(STRING_WIDTH) << "HBond_Donors:" << setw(FLOAT_WIDTH) << rejected[i].mol.hb_donors << endl;
+                            fout_rejected << fixed << DELIMITER << setw(STRING_WIDTH) << "RD_num_arom_rings:" << setw(FLOAT_WIDTH) << rejected[i].mol.num_arom_rings << endl;
+                            fout_rejected << fixed << DELIMITER << setw(STRING_WIDTH) << "RD_num_alip_rings:" << setw(FLOAT_WIDTH) << rejected[i].mol.num_alip_rings << endl;
+                            fout_rejected << fixed << DELIMITER << setw(STRING_WIDTH) << "RD_num_sat_rings:" << setw(FLOAT_WIDTH) << rejected[i].mol.num_sat_rings << endl;
+                            fout_rejected << fixed << DELIMITER << setw(STRING_WIDTH) << "RD_Stereocenters:" << setw(FLOAT_WIDTH) << rejected[i].mol.num_stereocenters << endl;
+                            fout_rejected << fixed << DELIMITER << setw(STRING_WIDTH) << "RD_Spiro_atoms:" << setw(FLOAT_WIDTH) << rejected[i].mol.num_spiro_atoms << endl;
+                            fout_rejected << DELIMITER << setw(STRING_WIDTH) << "RD_LogP:" << setw(FLOAT_WIDTH) << rejected[i].mol.clogp << endl;
+                            fout_rejected << fixed << DELIMITER << setw(STRING_WIDTH) << "RD_TPSA:" << setw(FLOAT_WIDTH) << rejected[i].mol.tpsa << endl;
+                            fout_rejected << DELIMITER << setw(STRING_WIDTH) << "RD_SYNTHA:" << setw(FLOAT_WIDTH) << rejected[i].mol.sa_score << endl;
+                            fout_rejected << DELIMITER << setw(STRING_WIDTH) << "RD_QED:" << setw(FLOAT_WIDTH) << rejected[i].mol.qed_score << endl;
+                            fout_rejected << DELIMITER << setw(STRING_WIDTH) << "RD_LogS:" << setw(FLOAT_WIDTH) << rejected[i].mol.esol << endl;
+                            fout_rejected << DELIMITER << setw(STRING_WIDTH) << "RD_num_of_PAINS:" << setw(FLOAT_WIDTH) << rejected[i].mol.pns << endl; 
+                            fout_rejected << DELIMITER << setw(STRING_WIDTH) << "RD_PAINS_names:" << setw(FLOAT_WIDTH) << molpns_name << endl; 
+                            fout_rejected << DELIMITER << setw(STRING_WIDTH) << "RD_SMILES:" << setw(FLOAT_WIDTH) << rejected[i].mol.smiles << endl;
+
+                            if (rejected[i].mol.fail_stereo) { fout_rejected << DELIMITER << setw(STRING_WIDTH) << "Failed_stereo:" << setw(FLOAT_WIDTH) << "TRUE" << endl; }
+                            else { fout_rejected << DELIMITER << setw(STRING_WIDTH) << "Failed_stereo:" << setw(FLOAT_WIDTH) << "FALSE" << endl; }
+                            if (rejected[i].mol.fail_clogp) { fout_rejected << DELIMITER << setw(STRING_WIDTH) << "Failed_LogP:" << setw(FLOAT_WIDTH) << "TRUE" << endl; }
+                            else { fout_rejected << DELIMITER << setw(STRING_WIDTH) << "Failed_LogP:" << setw(FLOAT_WIDTH) << "FALSE" << endl; }                
+                            if (rejected[i].mol.fail_tpsa) { fout_rejected << DELIMITER << setw(STRING_WIDTH) << "Failed_TPSA:" << setw(FLOAT_WIDTH) << "TRUE" << endl; }
+                            else { fout_rejected << DELIMITER << setw(STRING_WIDTH) << "Failed_TPSA:" << setw(FLOAT_WIDTH) << "FALSE" << endl; }
+                            if (rejected[i].mol.fail_sa) { fout_rejected << DELIMITER << setw(STRING_WIDTH) << "Failed_SYNTHA:" << setw(FLOAT_WIDTH) << "TRUE" << endl; }
+                            else { fout_rejected << DELIMITER << setw(STRING_WIDTH) << "Failed_SYNTHA:" << setw(FLOAT_WIDTH) << "FALSE" << endl; }
+                            if (rejected[i].mol.fail_qed) { fout_rejected << DELIMITER << setw(STRING_WIDTH) << "Failed_QED:" << setw(FLOAT_WIDTH) << "TRUE" << endl; }
+                            else { fout_rejected << DELIMITER << setw(STRING_WIDTH) << "Failed_QED:" << setw(FLOAT_WIDTH) << "FALSE" << endl; }
+                            if (rejected[i].mol.fail_esol) { fout_rejected << DELIMITER << setw(STRING_WIDTH) << "Failed_LogS:" << setw(FLOAT_WIDTH) << "TRUE" << endl; }
+                            else { fout_rejected << DELIMITER << setw(STRING_WIDTH) << "Failed_LogS:" << setw(FLOAT_WIDTH) << "FALSE" << endl; }
+                            if (rejected[i].mol.fail_pains) { fout_rejected << DELIMITER << setw(STRING_WIDTH) << "Failed_numPains:" << setw(FLOAT_WIDTH) << "TRUE" << endl; }
+                            else { fout_rejected << DELIMITER << setw(STRING_WIDTH) << "Failed_numPains:" << setw(FLOAT_WIDTH) << "FALSE" << endl; }
+                            fout_rejected << DELIMITER << setw(STRING_WIDTH) << "Frag_String:" << setw(FLOAT_WIDTH) << rejected[i].mol.energy << "\n"<<endl;
+
+                            // Use dockmol Write_Mol2 function
+                            Write_Mol2( rejected[i].mol, fout_rejected );   
+                        }
+                    }    
                 }
             
-            // Clear up rejected vector
+            // Clear up rejected vector after writing to Mol2.
             rejected.clear();
-            }               
+            }else{ rejected.clear();}               
             #endif
                                                     
             // If dn_write_prune_dump is turned on, do that here.
@@ -1663,7 +2004,6 @@ DN_Build::build_molecules( Master_Score & score, Simplex_Minimizer & simplex, AM
 
                         // If there was no problem capping the molecules, then write to file
                         if (prune_dump_flag){
-
                             //PAK-reactivate all atoms so it can be recognized by  Write_Mol2() for mol2 writing
                             for (int q =0; q<prune_dump[i].mol.num_atoms;q++){
                                 prune_dump[i].mol.atom_active_flags[q] = true;
@@ -4015,14 +4355,13 @@ DN_Build::sample_minimized_torsions( Fragment & frag1, vector <Fragment> & list_
 // +++++++++++++++++++++++++++++++++++++++++
 // This function is used for a soft cutoff of MW and will accept molecules at a rate inversely proportional to how much they exceed the cutoff
 bool DN_Build::mw_cutoff( Fragment &temp_molecule, int upper_lower_swtch ){ 
-
     // Define variables
     float  rand_num{};
     float  rand_num_dec{};
     double excessMW{};
     double Z_scoreExcess{};
     double acceptRate{};
-    
+
     // if exceeds upper boundary accept or reject with some probability
     if (upper_lower_swtch == 1 && temp_molecule.mol.mol_wt > dn_upper_constraint_mol_wt){
         rand_num = (rand() % 100 +1) ; // This generates a random number from 1 to 100
@@ -4049,7 +4388,7 @@ bool DN_Build::mw_cutoff( Fragment &temp_molecule, int upper_lower_swtch ){
         } else {
             return false;
         }
-    }  
+    }
 
     // This last else should be entered if a soft cut off is used and the mol wt is within accepted MW bounds
     else {
@@ -4057,9 +4396,9 @@ bool DN_Build::mw_cutoff( Fragment &temp_molecule, int upper_lower_swtch ){
     }
 } // End DN_Build::mw_cutoff()
 
-
+// +++++++++++++++++++++++++++++++++++++++++
 #ifdef BUILD_DOCK_WITH_RDKIT
-bool DN_Build::clogp_cutoff( Fragment &temp_molecule ){//, Fragment &temp_molecule ){
+bool DN_Build::clogp_cutoff( Fragment &temp_molecule, ostringstream &verb_str){//, Fragment &temp_molecule ){
     // Define variables
     float  rand_num{};
     float  rand_num_dec{};
@@ -4068,18 +4407,6 @@ bool DN_Build::clogp_cutoff( Fragment &temp_molecule ){//, Fragment &temp_molecu
     double acceptRate{};
     
     // directing clogp
-    
-    // Hard cutoff test
-/*    if (temp_molecule.mol.clogp > dn_lower_clogp) {
-        if (temp_molecule.mol.clogp > dn_upper_clogp) {
-            return false;
-        } else {
-            return true;
-        }
-    } else {
-        return false;
-    }
-*/
 
     // soft cutoff
     if (temp_molecule.mol.clogp > dn_lower_clogp) {
@@ -4094,11 +4421,26 @@ bool DN_Build::clogp_cutoff( Fragment &temp_molecule ){//, Fragment &temp_molecu
             Z_scoreExcess = excessCLOGP / dn_clogp_std_dev;
             acceptRate = exp(-1 * Z_scoreExcess * Z_scoreExcess);
             if (rand_num_dec < acceptRate) {
+                if (dn_drive_verbose) {
+
+                cout <<"  clogp_Molecule_pseudoaccepted upperbound "<<verb_str.str();                                                    
+
+                }
                 return true; // molecule accepted and given to push_back
             } else {
+                if (dn_drive_verbose) {
+
+                cout <<"        clogp_Molecule_REJECTED upperbound "<<verb_str.str();                                                    
+
+                }
                 return false;
             }
         } else { // mol.clogp > dn_lower_clogp && mol.clogp < dn_upper_clogp
+            if (dn_drive_verbose) {
+
+                cout <<"                   clogp_Molecule_accepted "<<verb_str.str();
+                                                                    
+            } 
             return true;
         }
     } else { // mol.clogp < dn_lower_clogp. Needs soft cutoff
@@ -4110,62 +4452,30 @@ bool DN_Build::clogp_cutoff( Fragment &temp_molecule ){//, Fragment &temp_molecu
         Z_scoreExcess = excessCLOGP / dn_clogp_std_dev;
         acceptRate = exp(-1 * Z_scoreExcess * Z_scoreExcess);
         if (rand_num_dec < acceptRate) {
+            if (dn_drive_verbose) {
+
+                cout <<"  clogp_Molecule_pseudoaccepted lowerbound "<<verb_str.str();                                                    
+            }
             return true; // molecule accepted and given to push_back
         } else {
+            if (dn_drive_verbose) {
+
+                cout<<"        clogp_Molecule_REJECTED lowerbound " <<verb_str.str();
+            }
             return false;
         }
     }
-
-// wrong code below commented out. Flawed logic
-/*    if (temp_molecule.mol.clogp > dn_upper_clogp) {
-        rand_num = (rand() % 100 + 1);
-        rand_num_dec = rand_num / 100;
-        excessCLOGP = temp_molecule.mol.clogp - dn_upper_clogp;
-        Z_scoreExcess = excessCLOGP / dn_clogp_std_dev;
-        acceptRate = exp(-1 * Z_scoreExcess * Z_scoreExcess);
-        if (rand_num_dec < acceptRate) {
-            return true; // molecule accepted and given to push_back
-        } else {
-            return false;        
-        }
-    } else if (temp_molecule.mol.clogp < dn_lower_clogp) {
-        rand_num = (rand() % 100 + 1);
-        rand_num_dec = rand_num / 100;
-        excessCLOGP = dn_lower_clogp - temp_molecule.mol.clogp;
-        Z_scoreExcess = excessCLOGP / dn_clogp_std_dev;
-        acceptRate = exp(-1 * Z_scoreExcess * Z_scoreExcess);
-        if (rand_num_dec < acceptRate) {
-            return true; // molecule accepted and given to push_back
-        } else {
-            return false;
-        }
-    } else {
-        return true;
-    } 
-*/
                                                            
 } // End DN_Build::clogp_cutoff()
 
 
-bool DN_Build::esol_cutoff( Fragment &temp_molecule ){//, Fragment &temp_molecule ){
+bool DN_Build::esol_cutoff( Fragment &temp_molecule, ostringstream & verb_str){//, Fragment &temp_molecule ){
     // Initialize variables
     float  rand_num{};
     float  rand_num_dec{};
     double excessESOL{};
     double Z_scoreExcess{};
     double acceptRate{};
-
-    //// directing esol
-    // Hard cut-off (test case)
-/*    if (temp_molecule.mol.esol > dn_lower_esol) {
-        if (temp_molecule.mol.esol > dn_upper_esol) {
-            return false;
-        } else {
-            return true;
-        }
-    } else {
-        return false;
-    }*/
 
     // soft cutoff
     if (temp_molecule.mol.esol > dn_lower_esol) {
@@ -4180,11 +4490,25 @@ bool DN_Build::esol_cutoff( Fragment &temp_molecule ){//, Fragment &temp_molecul
             Z_scoreExcess = excessESOL / dn_esol_std_dev;
             acceptRate = exp(-1 * Z_scoreExcess * Z_scoreExcess);
             if (rand_num_dec < acceptRate) {
+                if (dn_drive_verbose) { 
+
+                cout <<"   logs_Molecule_pseudoaccepted upperbound "<< verb_str.str(); 
+
+                }
                 return true; // molecule accepted and given to push_back
             } else {
+                if (dn_drive_verbose) { 
+
+                cout <<"         logs_Molecule_REJECTED upperbound "<<verb_str.str();                                                    
+
+                } 
                 return false;
             }
         } else { // mol.esol > dn_lower_esol && mol.esol < dn_upper_esol
+            if (dn_drive_verbose) {
+
+                cout <<"                    logs_Molecule_accepted "<<verb_str.str();
+            }
             return true;
         }
     } else { // mol.esol < dn_lower_esol. Needs soft cutoff
@@ -4196,45 +4520,94 @@ bool DN_Build::esol_cutoff( Fragment &temp_molecule ){//, Fragment &temp_molecul
         Z_scoreExcess = excessESOL / dn_esol_std_dev;
         acceptRate = exp(-1 * Z_scoreExcess * Z_scoreExcess);
         if (rand_num_dec < acceptRate) {
+            if (dn_drive_verbose) { 
+
+                cout <<"   logs_Molecule_pseudoaccepted lowerbound "<< verb_str.str();
+            }
             return true; // molecule accepted and given to push_back
         } else {
+            if (dn_drive_verbose) {
+
+                cout <<"         logs_Molecule_REJECTED lowerbound "<< verb_str.str();
+            }
             return false;                                           
         }
     }
 
-// wrong code below commented out. Flawed logic
-/*
-    if (temp_molecule.mol.esol < dn_upper_esol &&
-        temp_molecule.mol.esol > dn_lower_esol) {
-        return true; // molecule accepted and given to push_back
-    } else if (temp_molecule.mol.esol > dn_upper_esol) {
-        rand_num = (rand() % 100 + 1);
-        rand_num_dec = rand_num / 100;
-        excessESOL = temp_molecule.mol.esol - dn_upper_esol;
-        Z_scoreExcess = excessESOL / dn_esol_std_dev;
-        acceptRate = exp(-1 * Z_scoreExcess * Z_scoreExcess);
-        if (rand_num_dec < acceptRate) {
-            return true; // molecule accepted and given to push_back
-        } else {
-            return false;        
-        }
-    } else if (temp_molecule.mol.esol < dn_lower_esol) {
-        rand_num = (rand() % 100 + 1);
-        rand_num_dec = rand_num / 100;
-        excessESOL = dn_lower_esol - temp_molecule.mol.esol;
-        Z_scoreExcess = excessESOL / dn_esol_std_dev;
-        acceptRate = exp(-1 * Z_scoreExcess * Z_scoreExcess);
-        if (rand_num_dec < acceptRate) {
-            return true; // molecule accepted and given to push_back
-        } else {
-            return false;                                           
-        }                      
-    }
-*/
 } // End DN_Build::esol_cutoff()
 
+bool DN_Build::tpsa_cutoff( Fragment &temp_molecule,ostringstream& verb_str ){//, Fragment &temp_molecule ){
+    // Initialize variables
+    float  rand_num{};
+    float  rand_num_dec{};
+    double excessTPSA{};
+    double Z_scoreExcess{};
+    double acceptRate{};
 
-bool DN_Build::qed_cutoff( Fragment &temp_molecule ){//, Fragment &temp_molecule ){
+    // soft cutoff
+    if (temp_molecule.mol.tpsa > dn_lower_tpsa) {
+
+        // Check if value is higher than upper boundary
+        if (temp_molecule.mol.tpsa > dn_upper_tpsa) {
+
+            // Do soft cutoff procedure
+            rand_num = (rand() % 100 + 1);
+            rand_num_dec = rand_num / 100;
+            excessTPSA = temp_molecule.mol.tpsa - dn_upper_tpsa;
+            Z_scoreExcess = excessTPSA / dn_tpsa_std_dev;
+            acceptRate = exp(-1 * Z_scoreExcess * Z_scoreExcess);
+            if (rand_num_dec < acceptRate) {
+                if (dn_drive_verbose) {
+
+                cout <<"   tpsa_Molecule_pseudoaccepted upperbound "<<verb_str.str();
+
+                }
+                return true; // molecule accepted and given to push_back
+            } else {
+                if (dn_drive_verbose) {
+
+                cout <<"         tpsa_Molecule_REJECTED upperbound "<<verb_str.str();                                                    
+
+                }
+                return false;
+            }
+        } else { // mol.tpsa > dn_lower_tpsa && mol.tpsa < dn_upper_esol
+            if (dn_drive_verbose) {
+
+                cout <<"                    tpsa_Molecule_accepted "<<verb_str.str();
+                                                                    
+                                                                    
+            }
+            return true;
+        }
+    } else { // mol.tpsa < dn_lower_tpsa. Needs soft cutoff
+
+        // Do soft cutoff procedure
+        rand_num = (rand() % 100 + 1);
+        rand_num_dec = rand_num / 100;
+        excessTPSA = dn_lower_tpsa - temp_molecule.mol.tpsa;
+        Z_scoreExcess = excessTPSA / dn_tpsa_std_dev;
+        acceptRate = exp(-1 * Z_scoreExcess * Z_scoreExcess);
+        if (rand_num_dec < acceptRate) {
+            if (dn_drive_verbose) {
+
+                cout <<"   tpsa_Molecule_pseudoaccepted lowerbound "<< verb_str.str();
+                                                                    
+            }
+            return true; // molecule accepted and given to push_back
+        } else {
+            if (dn_drive_verbose) {
+
+                cout <<"         tpsa_Molecule_REJECTED lowerbound "<<verb_str.str();
+                                                                    
+            }
+            return false;
+        }
+    }
+
+} // End DN_Build::tpsa_cutoff()
+
+bool DN_Build::qed_cutoff( Fragment &temp_molecule,ostringstream& verb_str ){//, Fragment &temp_molecule ){
     // Initialize variables
     float  rand_num{};
     float  rand_num_dec{};
@@ -4250,17 +4623,32 @@ bool DN_Build::qed_cutoff( Fragment &temp_molecule ){//, Fragment &temp_molecule
         Z_scoreExcess = excessQED  / dn_qed_std_dev;
         acceptRate = exp(-1 * Z_scoreExcess * Z_scoreExcess);
         if (rand_num_dec < acceptRate) {
+            if (dn_drive_verbose) { 
+
+                cout <<"               qed_Molecule_pseudoaccepted "<<verb_str.str();                                                    
+                                                                    
+                                                                    
+                                                                    
+            }
             return true; // molecule accepted and given to push_back
         } else {
+            if (dn_drive_verbose) {
+
+                cout <<"                     qed_Molecule_REJECTED "<<verb_str.str();
+            }
             return false;
         }
     } else {
+        if (dn_drive_verbose) {
+
+                cout <<"                     qed_Molecule_accepted "<<verb_str.str();
+        }
         return true; // molecule accepted and given to push_back
     }
 } // End DN_Build::qed_cutoff()
 
 
-bool DN_Build::sa_cutoff( Fragment &temp_molecule ){//, Fragment &temp_molecule ){
+bool DN_Build::sa_cutoff( Fragment &temp_molecule, ostringstream & verb_str ){//, Fragment &temp_molecule ){
     // Initialize variables
     float  rand_num{};
     float  rand_num_dec{};
@@ -4278,17 +4666,30 @@ bool DN_Build::sa_cutoff( Fragment &temp_molecule ){//, Fragment &temp_molecule 
         Z_scoreExcess = excessSA / dn_sa_std_dev;
         acceptRate = exp(-1 * Z_scoreExcess * Z_scoreExcess);
         if (rand_num_dec < acceptRate) {
+            if (dn_drive_verbose) {
+
+                cout <<"            SynthA_Molecule_pseudoaccepted " << verb_str.str();
+                                                                    
+            }
             return true;
         } else {
+            if (dn_drive_verbose) {
+
+                cout <<"                  SynthA_Molecule_REJECTED " << verb_str.str();
+            }
             return false;
         }
     } else {
+        if (dn_drive_verbose) {
+
+                cout <<"                  SynthA_Molecule_accepted " << verb_str.str();
+        }
         return true;
     }
 } // End DN_Build::sa_cutoff() 
 
 
-bool DN_Build::stereocenter_cutoff( Fragment &temp_molecule ){//, Fragment &temp_molecule ){
+bool DN_Build::stereocenter_cutoff( Fragment &temp_molecule,ostringstream & verb_str ){//, Fragment &temp_molecule ){
     // Initialize variables
     float  rand_num1{};
     float  rand_num2{};
@@ -4302,14 +4703,63 @@ bool DN_Build::stereocenter_cutoff( Fragment &temp_molecule ){//, Fragment &temp
         rand_num2 = (rand() % 100 + 1) / (temp_molecule.mol.num_stereocenters - 1);
         rand_num2_dec = rand_num2 / 100;
         if (rand_num1_dec < rand_num2_dec) {
+            if (dn_drive_verbose) {
+
+                cout <<"      stereocenter_Molecule_pseudoaccepted "<<verb_str.str();
+            }
             return true;
         } else {
+            if (dn_drive_verbose) {
+
+                cout <<"            stereocenter_Molecule_REJECTED " <<verb_str.str();
+            }
             return false;
         }
     } else {
+        if (dn_drive_verbose) {
+
+                cout <<"            stereocenter_Molecule_accepted " << verb_str.str();
+        }
         return true;
     }
 } // End DN_Build::stereocenter_cutoff()
+
+bool DN_Build::pains_cutoff( Fragment &temp_molecule,ostringstream & verb_str ){//, Fragment &temp_molecule ){
+    // Initialize variables
+    float  rand_num1{};
+    float  rand_num2{};
+    float  rand_num1_dec{};
+    float  rand_num2_dec{};
+
+    // smoothing #pains
+    if (temp_molecule.mol.pns > dn_upper_pains) {
+        rand_num1 = (rand() % 100 + 1);
+        rand_num1_dec = rand_num1 / 100; 
+        rand_num2 = (rand() % 100 + 1) / (temp_molecule.mol.pns - 1);
+        rand_num2_dec = rand_num2 / 100; 
+        if (rand_num1_dec < rand_num2_dec) {
+            if (dn_drive_verbose) {
+
+                cout <<"             PAINS_Molecule_pseudoaccepted " <<verb_str.str();
+            }
+            return true;
+        } else {
+            if (dn_drive_verbose) {
+
+               cout <<"                   PAINS_Molecule_REJECTED " <<verb_str.str();
+            }
+            return false;
+        }
+    } else {
+        if (dn_drive_verbose) {
+
+                cout <<"                   PAINS_Molecule_accepted " <<verb_str.str();
+                
+        }
+        return true;
+    }    
+} // End DN_Build::pains_cutoff()
+
 
 
 // bool dn_drive_clogp, bool dn_drive_esol, bool dn_drive_qed, bool dn_drive_sa, 
@@ -4321,42 +4771,63 @@ bool DN_Build::drive_growth( Fragment &temp_molecule ){
     bool drive_qed;
     bool drive_sa;
     bool drive_stereocenters;
-
+    bool drive_pains;
+    bool drive_tpsa;
+    ostringstream verbose_comment; 
+    if (dn_drive_verbose) {  
+        verbose_comment<< "stereo " << setw(10)<<fixed<< setprecision(6)<< temp_molecule.mol.num_stereocenters
+                                                                        << " tpsa "  <<setw(10)<<fixed<< setprecision(6)<< temp_molecule.mol.tpsa
+                                                                        << " clogp "  <<setw(10)<<fixed<< setprecision(6)<< temp_molecule.mol.clogp
+                                                                        << " logs "    <<setw(10)<<fixed<< setprecision(6)<<temp_molecule.mol.esol
+                                                                        << " qed "    <<setw(10)<<fixed<< setprecision(6)<< temp_molecule.mol.qed_score
+                                                                        << " SynthA " <<setw(10)<<fixed<< setprecision(6)<< temp_molecule.mol.sa_score
+                                                                        << " numPains " <<setw(10)<<fixed<< setprecision(6)<< temp_molecule.mol.pns <<endl;
+    }
     // Does temp_molecule passes filters?
     //
     // Remember that only one false is enough to make this 
     // method return `false`. That's why the `else` clause
     // should be always true. Remember of TRUTH TABLES.
     //
+    // STEREOCENTERS
+    if (dn_drive_stereocenters) {
+        drive_stereocenters = stereocenter_cutoff( temp_molecule,verbose_comment);
+        temp_molecule.mol.fail_stereo = !drive_stereocenters;
+    } else { drive_stereocenters = true; }
+    // TPSA
+    if (dn_drive_tpsa) {
+        drive_tpsa = tpsa_cutoff( temp_molecule,verbose_comment);
+        temp_molecule.mol.fail_tpsa = !drive_tpsa;
+    } else { drive_tpsa = true; } 
     // CLOGP
     if (dn_drive_clogp) {
-        drive_clogp = clogp_cutoff( temp_molecule );
+        drive_clogp = clogp_cutoff( temp_molecule,verbose_comment);
         temp_molecule.mol.fail_clogp = !drive_clogp;
     } else { drive_clogp = true; }
     // ESOL
     if (dn_drive_esol) {
-        drive_esol = esol_cutoff( temp_molecule );
+        drive_esol = esol_cutoff( temp_molecule,verbose_comment);
         temp_molecule.mol.fail_esol = !drive_esol;
-    } else { drive_esol = true; }
+    } else { drive_esol = true; } 
     // QED
     if (dn_drive_qed) {
-        drive_qed = qed_cutoff( temp_molecule );
+        drive_qed = qed_cutoff( temp_molecule,verbose_comment);
         temp_molecule.mol.fail_qed = !drive_qed;
     } else { drive_qed = true; }
     // SA
     if (dn_drive_sa) {
-        drive_sa = sa_cutoff( temp_molecule );
+        drive_sa = sa_cutoff( temp_molecule,verbose_comment);
         temp_molecule.mol.fail_sa = !drive_sa;
     } else { drive_sa = true; }
-    // STEREOCENTERS
-    if (dn_drive_stereocenters) {
-        drive_stereocenters = stereocenter_cutoff( temp_molecule );
-        temp_molecule.mol.fail_stereo = !drive_stereocenters;
-    } else { drive_stereocenters = true; }
+    // PAINS
+    if (dn_drive_pains) {
+        drive_pains = pains_cutoff( temp_molecule,verbose_comment);
+        temp_molecule.mol.fail_pains = !drive_pains;
+    } else { drive_pains = true; } 
 
     // Analyze truth value and return result
-    if (drive_clogp && drive_esol && drive_qed &&
-        drive_sa && drive_stereocenters) {
+    if (drive_clogp && drive_esol && drive_tpsa && drive_qed &&
+        drive_sa && drive_stereocenters && drive_pains) {
         // These are AND operations. If a single one of these booleans is
         // `false,` this method returns `false.`
         return true;

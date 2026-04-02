@@ -1,5 +1,5 @@
 # DOCK configuration file for SGI platforms (IRIX operating systems and
-# MIPSpro Compilers).  This platform is offcially unsupported, but DOCK
+# MIPSpro Compilers).  This platform is officially unsupported, but DOCK
 # has been built with version 7.4 compilers on an Octane2 machine.
 
 # CC is the C compiler; for this platform c99 is another choice.

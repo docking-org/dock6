@@ -1,7 +1,7 @@
 # DOCK configuration file for SGI platforms (IRIX operating systems and
 # MIPSpro Compilers) with MPI based parallelism (specifically MPICH2 but
-# should for all MPIs).
-# This platform is offcially unsupported, but DOCK
+# should work for all MPIs).
+# This platform is officially unsupported, but DOCK
 # has been built with version 7.4 compilers on an Octane2 machine.
 
 # REQUIREMENTS - define these environment variables:

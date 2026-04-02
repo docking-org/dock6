@@ -1,11 +1,11 @@
 
 ##########                                Name:                 C1 
-##########                DOCK_Rotatable_Bonds:                   1
-##########                         Heavy_Atoms:                  23
 ##########                    Molecular_Weight:             314.468
+##########                DOCK_Rotatable_Bonds:                   1
 ##########                       Formal_Charge:         0.000100061
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
+##########                         Heavy_Atoms:                  23
 ##########                            HA_RMSDs:               0.508
 ##########                            HA_RMSDh:               0.508
 ##########                            HA_RMSDm:               0.508

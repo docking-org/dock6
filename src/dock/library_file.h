@@ -38,8 +38,11 @@ class           Library_File:public Base_MPI {
     std::ifstream   ligand_in;
     std::ofstream   ligand_out_orients;
     std::ofstream   ligand_out_scored;
-    std::ofstream   ligand_out_confs;
-    std::ofstream   ligand_out_ranked;
+    std::ofstream   ligand_out_confs; 
+    std::ofstream   ligand_out_ranked; 
+    #ifdef BUILD_DOCK_WITH_RDKIT 
+    std::ofstream   ligand_out_rejected;
+    #endif
     std::ofstream   ligand_out_footprint_scored;
     std::ofstream   ligand_out_footprint_confs;
     std::ofstream   ligand_out_footprint_ranked;
@@ -62,6 +65,9 @@ class           Library_File:public Base_MPI {
     std::string     output_file_confs;
     std::string     output_file_scored;
     std::string     output_file_ranked;
+    #ifdef BUILD_DOCK_WITH_RDKIT 
+    std::string     output_file_rejected;
+    #endif
     std::string     output_file_footprint_confs;
     std::string     output_file_footprint_scored;
     std::string     output_file_footprint_ranked;

@@ -131,7 +131,7 @@ clean_amberize:
 		tleap.in tleap.out *.dif
 
 clean_dock:
-	/bin/rm -f *.dif *.dockout *_conformers.mol2 \
+	/bin/rm -f *.dif *.dockout *.dockrdkitout *rejected.mol2 *_conformers.mol2 \
 		*_orients.mol2 *_primary_conformers.mol2 *_primary_ranked.mol2 \
 		*_primary_scored.mol2 *_ranked.mol2 *_scored.mol2 \
 		*_secondary_conformers.mol2 *_secondary_ranked.mol2 \
@@ -187,7 +187,9 @@ clean_fraglib:
 	/bin/rm	-f	*torenv.dat
 
 .SUFFIXES:
-.SUFFIXES:  .dockin .dockout .dif .dockmpiout
+.SUFFIXES:  .dockin .dockout .dif .dockmpiout .dockrdkitin .dockrdkitout \
+	    .dockrdkitmpiin .dockrdkitmpiout
+
 
 # Inference rule to create a DOCK output file of extension .dockout from
 # a DOCK input file of extension .dockin
@@ -349,6 +351,75 @@ clean_fraglib:
 	   ../dockdif -t 8 $*_secondary_ranked.mol2.save $*_secondary_ranked.mol2 ;\
 	fi ;\
 	)
+
+# Inference rule to create a DOCK output file of extension .dockrdkitout from
+# a DOCK input file of extension .dockrdkitin
+.dockrdkitin.dockrdkitout: 
+	@echo
+	@echo "Processing $(DOCK) with RDKit test $*"
+	$(DOCK_BIN)/$(DOCK).rdkit $(DOCK_VERBOSE) -i $< -o $@
+	../dockdif -t 8 $@.save $@
+	@# Compare other $(DOCK) output files if they exist
+	@( \
+	if [ -f $*_rd.denovo_build.mol2 ] ; then \
+           ../dockdif -t 8 $*_rd.denovo_build.mol2.save $*_rd.denovo_build.mol2 ;\
+	fi ;\
+        if [ -f $*_rd.restart0001.mol2 ] ; then \
+           ../dockdif -w -t 3 $*_rd.restart0001.mol2.save $*_rd.restart0001.mol2 ;\
+        fi ;\
+	if [ -f $*_rd_db_scored.mol2 ] ; then \
+	   ../dockdif -t 8 $*_rd_db_scored.mol2.save $*_rd_db_scored.mol2 ;\
+	fi ;\
+	)
+
+# Inference rule to create a DOCK output file of extension .dockrdkitmpiout from
+# a DOCK input file of extension .dockrdkitmpiin
+.dockrdkitmpiin.dockrdkitmpiout:
+	@echo
+	@echo "Processing parallel $(DOCK) with RDKit test $*"
+	@# First assign the number of MPI processes, DOCK_PROCESSES, if needed;
+	@# then search in order MPI_HOME, MPICH_HOME, and the path for mpirun.
+	@( \
+	if [ -z "$(DOCK_PROCESSES)" ] ; then \
+	    echo "Environment variable DOCK_PROCESSES is not defined." ;\
+	    DOCK_PROCESSES=2 ;\
+	fi ;\
+	echo "Using $$DOCK_PROCESSES MPI processes for DOCK." ;\
+	if [ -n "$(MPI_HOME)" ] ; then \
+	    echo "Environment variable MPI_HOME is defined." ;\
+	    if [ -x "$(MPI_HOME)/bin/mpirun" ] ; then \
+	        echo "$(MPI_HOME)/bin/mpirun -np $$DOCK_PROCESSES "\
+                     "$(DOCK_BIN)/$(DOCK).rdkit_mpi -i $< -o $@ " ;\
+	        $(MPI_HOME)/bin/mpirun -np $$DOCK_PROCESSES $(DOCK_BIN)/$(DOCK).rdkit_mpi -i $< -o $@  ;\
+	    else \
+	        echo "Error!  $(MPI_HOME)/bin/mpirun is not executable !" ;\
+	        exit 1 ;\
+	    fi ;\
+	elif [ -n "$(MPICH_HOME)" ]; then \
+	    echo "Environment variable MPICH_HOME is defined." ;\
+	    if [ -x "$(MPICH_HOME)/bin/mpirun" ] ; then \
+	        echo "$(MPICH_HOME)/bin/mpirun -np $$DOCK_PROCESSES "\
+                     "$(DOCK_BIN)/$(DOCK).rdkit_mpi -i $< -o $@ " ;\
+	        $(MPICH_HOME)/bin/mpirun -np $$DOCK_PROCESSES $(DOCK_BIN)/$(DOCK).rdkit_mpi -i $< -o $@  ;\
+	    else \
+	        echo "Error!  $(MPICH_HOME)/bin/mpirun is not executable !" ;\
+	        exit 1 ;\
+	    fi ;\
+	else \
+	    echo "Environment variables MPI_HOME and MPICH_HOME are not defined." ;\
+	    echo "    Assuming mpirun is in the PATH." ;\
+	    echo "mpirun -np $$DOCK_PROCESSES $(DOCK_BIN)/$(DOCK).rdkit_mpi -i $< -o $@ " ;\
+	    mpirun -np $$DOCK_PROCESSES $(DOCK_BIN)/$(DOCK).rdkit_mpi -i $< -o $@  ;\
+	fi ;\
+	)
+	../dockdif -t 8 $@.save $@
+	@# Compare other $(DOCK) output files if they exist
+	@( \
+	if [ -f $*_rd_ranked.mol2 ] ; then \
+	   ../dockdif -t 8 $*_rd_ranked.mol2.save $*_rd_ranked.mol2 ;\
+	fi ;\
+	)
+
 
 # This special target declares these targets as phony, ie, not based on
 # files with that name; it avoids problems when such files do exist.

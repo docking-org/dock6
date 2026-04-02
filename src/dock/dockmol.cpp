@@ -5,7 +5,7 @@ Copyright (c) 2006-2015, Rational Discovery LLC, Greg Landrum, and Julie Penzott
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
+DKdification, are permitted provided that the following conditions are met:
 
 1. Redistributions of source code must retain the above copyright notice, this
    list of conditions and the following disclaimer.
@@ -47,6 +47,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <GraphMol/SmilesParse/SmilesWrite.h>
 #include <GraphMol/MolOps.h>
 #include <GraphMol/Conformer.h>
+#include <GraphMol/SanitException.h>
 
 // Important definitions
 // Necessary for RDKit::RWMol object
@@ -594,6 +595,7 @@ copy_molecule(DOCKMol & target, const DOCKMol & original)
     target.num_bonds = original.num_bonds;
     target.num_residues = original.num_residues; // this is the number in this molecule
     target.heavy_atoms = original.heavy_atoms;
+    target.bad_molecule = original.bad_molecule;
 
     target.num_active_atoms = original.num_active_atoms;
     target.num_active_bonds = original.num_active_bonds;
@@ -643,6 +645,7 @@ copy_molecule(DOCKMol & target, const DOCKMol & original)
 
     // GDRM, 2020_10_13
     #ifdef BUILD_DOCK_WITH_RDKIT
+    target.fails_filt        = original.fails_filt;
     target.num_stereocenters = original.num_stereocenters;
     target.num_spiro_atoms = original.num_spiro_atoms;
     target.clogp = original.clogp;
@@ -654,14 +657,17 @@ copy_molecule(DOCKMol & target, const DOCKMol & original)
     target.qed_score = original.qed_score;
     target.sa_score = original.sa_score;
     target.esol = original.esol;
-    target.fail_clogp = original.fail_clogp;
-    target.fail_esol = original.fail_esol;
-    target.fail_qed = original.fail_qed;
-    target.fail_sa = original.fail_sa;
-    target.fail_stereo = original.fail_stereo;
     target.pns = original.pns;
     target.pns_name = original.pns_name;
     target.MACCS = original.MACCS;
+    target.MACCS_size = original.MACCS_size;
+    target.fail_clogp = original.fail_clogp;
+    target.fail_esol = original.fail_esol;
+    target.fail_tpsa = original.fail_tpsa;
+    target.fail_qed = original.fail_qed;
+    target.fail_sa = original.fail_sa;
+    target.fail_stereo = original.fail_stereo;
+    target.fail_pains = original.fail_pains;
     #endif
 
     // copy arrays
@@ -774,7 +780,6 @@ copy_molecule(DOCKMol & target, const DOCKMol & original)
 
     for (i = 0; i < 2 * original.num_bonds; i++)
         target.atom_child_list[i] = original.atom_child_list[i];
-
 }
 
 //DOCKMol::initialize_from_mol2(std::ifstream &)
@@ -1113,6 +1118,7 @@ DOCKMol::allocate_arrays(int natoms, int nbonds, int nresidues) //added jwu
     // test_child_list = new bool[2*num_bonds*num_atoms];
 
     #ifdef BUILD_DOCK_WITH_RDKIT
+    fails_filt = false;
     num_stereocenters = 0;
     num_spiro_atoms = 0;
     clogp = 0.0;
@@ -1126,14 +1132,18 @@ DOCKMol::allocate_arrays(int natoms, int nbonds, int nresidues) //added jwu
     esol = 0.0;
     fail_clogp = false;
     fail_esol = false;
+    fail_tpsa = false;
     fail_qed = false;
     fail_sa = false;
     fail_stereo = false;
-    pns = 0.0;
+    fail_pains = false;
+    pns = 0;
     pns_name = {};
     MACCS = {};
+    MACCS_size = 0;
     #endif
 
+    bad_molecule = false;
 }
 
 /*************************************/
@@ -1282,6 +1292,7 @@ DOCKMol::clear_molecule()
     #ifdef BUILD_DOCK_WITH_RDKIT
     // GDRM, Feb 26, 2020
     // Clear RDKit-related data
+    fails_filt = false;   
     num_stereocenters = 0;
     num_spiro_atoms = 0;
     clogp = 0.0;
@@ -1296,7 +1307,16 @@ DOCKMol::clear_molecule()
     pns = 0.0;
     pns_name = {};
     MACCS = {};
+    MACCS_size = 0;
+    fail_clogp = false;
+    fail_esol = false;
+    fail_tpsa = false;
+    fail_qed = false;
+    fail_sa = false;
+    fail_stereo = false;
+    fail_pains = false;
     #endif
+    bad_molecule = false;
 
 }
 
@@ -1929,22 +1949,27 @@ DOCKMol::prepare_molecule()
 #ifdef BUILD_DOCK_WITH_RDKIT
 
 void fixNitroSubstructureAndCharge(RDKit::RWMol &res, unsigned int atIdx) {
+    //cout << "Working on Nitro groups" << endl;
+
+    // Loop through the neighbors of an atom and count double-bonded oxygens
     unsigned int noODblNeighbors = 0;
-    RDKit::ROMol::ADJ_ITER nbrIdxIt, nbrEndIdxIt;
+    RDKit::ROMol::ADJ_ITER nbrIdxIt, nbrEndIdxIt; // Iterator 
     vector<unsigned int> toModIdx {};
     boost::tie(nbrIdxIt, nbrEndIdxIt) =
-        res.getAtomNeighbors(res.getAtomWithIdx(atIdx));
+        res.getAtomNeighbors(res.getAtomWithIdx(atIdx)); // method that gets neighbors
     while (nbrIdxIt != nbrEndIdxIt) {
-        RDKit::Bond *curBond = res.getBondBetweenAtoms(atIdx, *nbrIdxIt);
+        RDKit::Bond *curBond = res.getBondBetweenAtoms(atIdx, *nbrIdxIt); //current bond
         if (res.getAtomWithIdx(*nbrIdxIt)->getAtomicNum() == 8 &&
             (curBond->getBondType() == RDKit::Bond::DOUBLE ||
              curBond->getBondType() == RDKit::Bond::AROMATIC)) {
             ++noODblNeighbors;
             toModIdx.push_back(*nbrIdxIt); // save the indices if condition is met
         }
-        ++nbrIdxIt;
+        ++nbrIdxIt; // move the iterator
     }
     if (noODblNeighbors == 2) {
+        // It this counter is 2 we have found a nitro group and its formal charge needs to be
+        // addressed.
         unsigned int count = 0;
         RDKit::Atom *nbr = res.getAtomWithIdx(atIdx);
         for (vector<unsigned int>::iterator it = toModIdx.begin(); it < toModIdx.end(); ++it) {
@@ -1961,32 +1986,36 @@ void fixNitroSubstructureAndCharge(RDKit::RWMol &res, unsigned int atIdx) {
             }
             ++count;
         }
+    } else { 
+        // 2022-02-07: Addition of fix to formal charge in all other N.pl3 cases.
+        res.getAtomWithIdx(atIdx)->setFormalCharge(0);
     }
 }
 
 void fixProtonatedAmidineSubstructureAndCharge(RDKit::RWMol &res, unsigned int atIdx){
-    unsigned int noNArNeighbors = 0;
-    unsigned int noCNeighbors = 0;
-    RDKit::ROMol::ADJ_ITER nbrIdxIt, nbrEndIdxIt;
+    //cout << "Working on Protonated Amidines" << endl;
+    unsigned int noNArNeighbors = 0; // number of aromatic nitrogens
+    unsigned int noCNeighbors = 0; // number of carbon neighbors
+    RDKit::ROMol::ADJ_ITER nbrIdxIt, nbrEndIdxIt;  // Iterator
     vector<unsigned int> toModIdx {};
     boost::tie(nbrIdxIt, nbrEndIdxIt) =
-        res.getAtomNeighbors(res.getAtomWithIdx(atIdx));
+        res.getAtomNeighbors(res.getAtomWithIdx(atIdx)); // Check neighboring atoms
     while (nbrIdxIt != nbrEndIdxIt) {
         RDKit::Bond *curBond = res.getBondBetweenAtoms(atIdx, *nbrIdxIt);
         if (res.getAtomWithIdx(*nbrIdxIt)->getAtomicNum() == 7 &&
             curBond->getBondType() == RDKit::Bond::AROMATIC) {
-            ++noNArNeighbors;
+            ++noNArNeighbors; // Add if there are aromatic nitrogens
             toModIdx.push_back(*nbrIdxIt);
         } else if (res.getAtomWithIdx(*nbrIdxIt)->getAtomicNum() == 6) {
-            ++noCNeighbors;
+            ++noCNeighbors; // count carbon neighbors
         }
         ++nbrIdxIt;
     }
     if (noNArNeighbors == 2 && noCNeighbors == 1) {
         unsigned int count = 0;
-        RDKit::Atom *nbr = res.getAtomWithIdx(atIdx);
+        RDKit::Atom *nbr = res.getAtomWithIdx(atIdx); // select atom of interest
         for (vector<unsigned int>::iterator it = toModIdx.begin(); it < toModIdx.end(); ++it){
-            RDKit::Bond *curBond = res.getBondBetweenAtoms(atIdx, *it);
+            RDKit::Bond *curBond = res.getBondBetweenAtoms(atIdx, *it); // current bond
             if (count == (noNArNeighbors - 1)) {
                 string tATT;
                 res.getAtomWithIdx(*it)->getProp(RDKit::common_properties::_TriposAtomType, tATT);
@@ -2010,28 +2039,37 @@ void fixProtonatedAmidineSubstructureAndCharge(RDKit::RWMol &res, unsigned int a
     }
 }
 
+/*
+ * I'm not sure we are using the fixPhosphateSubstructureAndCharge method, but
+ * it needs some work for the reason in one of the comments below
+ */
 void fixPhosphateSubstructureAndCharge(RDKit::RWMol &res, unsigned int atIdx) {
+    //cout << "Working on phosphates" << endl;
+    // Phosphates sometimes come with aromatic bonds between phosphates and oxygens
+    // but RDKit does not like it at all
     unsigned int noOArNeighbors = 0;
     RDKit::ROMol::ADJ_ITER nbrIdxIt, nbrEndIdxIt;
     vector<unsigned int> toModIdx {};
     boost::tie(nbrIdxIt, nbrEndIdxIt) =
-        res.getAtomNeighbors(res.getAtomWithIdx(atIdx));
+        res.getAtomNeighbors(res.getAtomWithIdx(atIdx)); //creates an iterator
     while (nbrIdxIt != nbrEndIdxIt) {
         RDKit::Bond *curBond = res.getBondBetweenAtoms(atIdx, *nbrIdxIt);
         if (res.getAtomWithIdx(*nbrIdxIt)->getAtomicNum() == 8 &&
-            (curBond->getBondType() == RDKit::Bond::DOUBLE ||
+            (curBond->getBondType() == RDKit::Bond::DOUBLE || // maybe DOUBLE is not an issue
             curBond->getBondType() == RDKit::Bond::AROMATIC)) {
             ++noOArNeighbors;
             toModIdx.push_back(*nbrIdxIt);
         }
         ++nbrIdxIt;
     }
-    if (noOArNeighbors > 1) { // I might need to change it to consider non-terminal phosphates
+    if (noOArNeighbors > 1) { 
+        // We might need to change it; I'm not sure it is changing the proper
+        // bonds. If this code changes regular sigma bonds, we're in trouble.
         unsigned int count = 0;
         RDKit::Atom *nbr = res.getAtomWithIdx(atIdx);
-        for (vector<unsigned int>::iterator it = toModIdx.begin(); it < toModIdx.end(); ++it) {
+        for (vector<unsigned int>::iterator it=toModIdx.begin(); it<toModIdx.end(); ++it){
             RDKit::Bond *curBond = res.getBondBetweenAtoms(atIdx, *it);
-            if (count == (noOArNeighbors - 1)) {
+            if (count == (noOArNeighbors - 1)){
                 curBond->setBondType(RDKit::Bond::SINGLE);
                 res.getAtomWithIdx(atIdx)->setFormalCharge(0);
                 res.getAtomWithIdx(atIdx)->setIsAromatic(false);
@@ -2044,10 +2082,20 @@ void fixPhosphateSubstructureAndCharge(RDKit::RWMol &res, unsigned int atIdx) {
             }
             ++count;
         }
+    //} else {
+    //    continue;
     }
 }
 
 void guessFormalCharges(RDKit::RWMol &res) {
+    // RDKit does not get the total molecular charge from the DOCKMol object.
+    // It guesses the total charge based on the valences of each atom. 
+    // For instance, if RDKit detects a Nitrogen atoms making 4 bonds (i.e.,
+    // two doubles, a double and two singles, four singles) it will try to 
+    // assign a formal charge of +1 to this nitrogen atom.
+    // guessFormalCharges(RDKit::RWMol) is meant to assign proper formal charges
+    // according to the connectivity of each atom.
+
   for (RDKit::RWMol::AtomIterator atomIt = res.beginAtoms();
        atomIt != res.endAtoms(); ++atomIt) {
     RDKit::Atom *at = (*atomIt);
@@ -2100,11 +2148,13 @@ void guessFormalCharges(RDKit::RWMol &res) {
       if (noAromBonds == 3 && tATT == "N.ar") {
         std::string nm;
         res.getProp(RDKit::common_properties::_Name, nm);
-        BOOST_LOG(rdWarningLog)
-            << nm
-            << ": warning - aromatic N with 3 aromatic bonds - "
-               "skipping charge guess for this atom"
-            << std::endl;
+        cout << nm << ": warning - aromatic N with 3 aromatic bonds - "
+             << "skipping charge guess for this atom" << endl;
+        //BOOST_LOG(rdWarningLog)
+        //    << nm
+        //    << ": warning - aromatic N with 3 aromatic bonds - "
+        //       "skipping charge guess for this atom"
+        //    << std::endl;
         continue;
       }
 
@@ -2196,7 +2246,13 @@ unsigned int chkNoHNeighbNOx(RDKit::RWMol &res, RDKit::ROMol::ADJ_ITER atIdxIt,
 
 bool cleanUpSubstructures(RDKit::RWMol &res) {
     // NOTE: check the nitro fix in guess formal charges!
+
+    // bitset that represent 'fixed' atoms, i.e., atoms that have already been
+    // modified:
+    // 1 corresponds to an atom already modified.
+    // 0 corresponds to an atom that hasn't been modified yet.
     boost::dynamic_bitset<> isFixed(res.getNumAtoms());
+
     for (RDKit::ROMol::AtomIterator atIt = res.beginAtoms(); atIt != res.endAtoms();
         ++atIt) {
     std::string tAT;
@@ -2205,29 +2261,38 @@ bool cleanUpSubstructures(RDKit::RWMol &res) {
     at->getProp(RDKit::common_properties::_TriposAtomType, tAT);
 
     if (tAT == "N.4") {
+        //std::cout << "    cleaning_up_substructures_N.4" << std::endl;
         at->setFormalCharge(1);
     } else if (tAT == "N.2") { // sulfonamides can be tricky
+        //std::cout << "    cleaning_up_substructures_N.2" << std::endl;
         RDKit::ROMol::ADJ_ITER nbrIdxIt, endNbrsIdxIt;
         boost::tie(nbrIdxIt, endNbrsIdxIt) = res.getAtomNeighbors(at);
         RDKit::Atom *nbr = res.getAtomWithIdx(*nbrIdxIt);
         string tATT;
         nbr->getProp(RDKit::common_properties::_TriposAtomType, tATT);
         // check if neighbor is S.3 and bond order is 2
-        if (tATT == "S.3") {
+        if (tATT == "S.3") { 
             RDKit::Bond *b =  res.getBondBetweenAtoms(idx, *nbrIdxIt);
             if (b->getBondType() == RDKit::Bond::DOUBLE) {
                 b->setBondType(RDKit::Bond::SINGLE);
             }
         }
     } else if (tAT == "N.pl3") {
+        //std::cout << "    cleaning_up_substructures_N.pl3" << std::endl;
+        //This will check if the nitrogen atom is attached to two oxygens
+        // in the fucntion below
         fixNitroSubstructureAndCharge(res, idx);
     } else if (tAT == "C.2") { // Discover amidines
+        //std::cout << "    cleaning_up_substructures_C.2" << std::endl;
         fixProtonatedAmidineSubstructureAndCharge(res, idx);
     } else if (tAT == "O.2") {
+        //std::cout << "    cleaning_up_substructures_O.2" << std::endl;
         // Sulfonamines frequently have S.3 and O.2 instead of S.o2 and O.co2 atom types.
         if (at->getDegree() != 1) { // O.2 can only have one neighbor
-            BOOST_LOG(rdWarningLog) << "Warning - O.2 with degree >1." << endl;
-            return false;
+            // We do not use BOOST_LOG in this code. It was easier to comment it out.
+            //BOOST_LOG(rdWarningLog) << "Warning - O.2 with degree >1." << endl;
+            cout << "Warning - O.2 with degree >1." << endl;
+            return true;
         }
         RDKit::ROMol::ADJ_ITER nbrIdxIt, endNbrsIdxIt;
         boost::tie(nbrIdxIt, endNbrsIdxIt) = res.getAtomNeighbors(at);
@@ -2235,7 +2300,7 @@ bool cleanUpSubstructures(RDKit::RWMol &res) {
         string tATT;
         nbr->getProp(RDKit::common_properties::_TriposAtomType, tATT);
         // bizzarely typed sulfonamide
-        if (tATT == "S.3") {
+        if (tATT == "S.3") { 
             // We have to make sure that bond orders surrounding this sulfur atom are correct 
             RDKit::Bond *b =  res.getBondBetweenAtoms(idx, *nbrIdxIt);
             b->setBondType(RDKit::Bond::DOUBLE);
@@ -2244,11 +2309,13 @@ bool cleanUpSubstructures(RDKit::RWMol &res) {
             nbr->setIsAromatic(false);
         }
     } else if (tAT == "O.co2") {
+        //std::cout << "    cleaning_up_substructures_O.co2" << std::endl;
         // negatively charged carboxylates with O.co2
         // according to Tripos, those should only appear in carboxylates and
         // phosphates,
         if (at->getDegree() != 1) { // degrees are the #neighbors in the graph
-            BOOST_LOG(rdWarningLog) << "Warning - O.co2 with degree >1." << endl;
+            //BOOST_LOG(rdWarningLog) << "Warning - O.co2 with degree >1." << endl;
+            cout << "Warning - O.2 with degree >1." << endl;
             return false;
         }
         RDKit::ROMol::ADJ_ITER nbrIdxIt, endNbrsIdxIt;
@@ -2282,12 +2349,13 @@ bool cleanUpSubstructures(RDKit::RWMol &res) {
         // GDRM 2020-11-03 patch
         } else if (tATT == "P.3") {
             fixPhosphateSubstructureAndCharge(res, *nbrIdxIt);
-        } else {
-            std::string nm;
+        } else { 
+            string nm;
             res.getProp(RDKit::common_properties::_Name, nm);
-            BOOST_LOG(rdWarningLog)
-            << nm << ": warning - O.co2 with non C.2 or S.o2 neighbor."
-            << std::endl;
+            //BOOST_LOG(rdWarningLog)
+            //<< nm << ": warning - O.co2 with non C.2 or S.o2 neighbor."
+            //<< endl;
+            cout << nm << ": warning - O.co2 with non C.2 or S.o2 neighbor." << endl;
             return false;
         }
     } else if (tAT == "C.cat") {
@@ -2297,6 +2365,7 @@ bool cleanUpSubstructures(RDKit::RWMol &res) {
         // heavy atoms will get the double bond and the positive charge.
         // remember : this is not canonical!
         // first - set the C.cat as fixed
+        //std::cout << "    cleaning_up_substructures_C.cat" << std::endl;
         isFixed[idx] = 1;
         RDKit::ROMol::ADJ_ITER nbrIdxIt, endNbrsIdxIt, tmpIdxIt;
         unsigned int lowestDeg = 100;
@@ -2309,7 +2378,7 @@ bool cleanUpSubstructures(RDKit::RWMol &res) {
         tmpIdxIt = nbrIdxIt;
         // declare and initialise toModIdx
         int toModIdx = -1;
-        unsigned int noNNeighbors = 0;
+        unsigned int noNNeighbors = 0; 
         while (tmpIdxIt != endNbrsIdxIt) {
             if (res.getAtomWithIdx(*tmpIdxIt)->getSymbol() == "N") {
                 ++noNNeighbors;
@@ -2319,9 +2388,10 @@ bool cleanUpSubstructures(RDKit::RWMol &res) {
         if (noNNeighbors < 2 || noNNeighbors > 3) {
             std::string nm;
             res.getProp(RDKit::common_properties::_Name, nm);
-            BOOST_LOG(rdWarningLog)
-            << nm << ": Error - C.Cat with bad number of N neighbors."
-            << std::endl;
+            //BOOST_LOG(rdWarningLog)
+            //<< nm << ": Error - C.Cat with bad number of N neighbors."
+            //<< std::endl;
+            cout << nm << ": Error - C.Cat with bad number of N neighbors." << endl;
             return false;
         } else if (noNNeighbors == 2) {
             // the idea is that we assign the positive charge according to the
@@ -2345,22 +2415,25 @@ bool cleanUpSubstructures(RDKit::RWMol &res) {
                     // since I cannot think of a case where this is a problem - throw a
                     // warning
                     if (isFixed[*nbrIdxIt]) {
-                        std::string nm;
+                        string nm;
                         res.getProp(RDKit::common_properties::_Name, nm);
-                        BOOST_LOG(rdWarningLog)
-                        << nm << ": warning - charged amidine and isFixed atom."
-                        << std::endl;
+                        cout << nm << ": WARNING - charged amidine and isFixed atom." << endl;
+                        //BOOST_LOG(rdWarningLog)
+                        //<< nm << ": warning - charged amidine and isFixed atom."
+                        //<< std::endl;
                     }
                     isFixed[*nbrIdxIt] = 1;
                     if (firstIdent) {
                         idxIt2 = nbrIdxIt;
+                        
                     } else {
-                        idxIt1 = nbrIdxIt;
+                        idxIt1 = nbrIdxIt; 
                         firstIdent = true;
                     }
                 }
                 ++nbrIdxIt;
             }
+            
             // now that we know which are the relevant atoms we check the above
             // features
             // is part of N-oxide?
@@ -2453,15 +2526,20 @@ bool cleanUpSubstructures(RDKit::RWMol &res) {
 }
 
 /////////
-
 bool DOCKMol::isNitro( string atom_type, int idx ){
     /*
     We need to identify nitro groups if we are to have them properly read
     by RDKit from our DOCKMol objects.
+
+    Nitro groups can be tricky because EVEN corinna gives bizarre bond orders
+    that RDKit cannot comply with. For instance, corinna commonly makes nitro
+    N(=O)(=O) which RDKit wrongly types as [N+](=O)(=O) when it is supposed to
+    type [N+][O-](=O) 
+ 
     */
     if (atom_type == "N.pl3"){
         int numONeighbors = 0;
-        vector<int> neighbor_atoms = get_atom_neighbors(idx);
+        vector<int> neighbor_atoms = get_atom_neighbors(idx); // This is a DOCK6 function
         for (vector<int>::iterator ptr = neighbor_atoms.begin();
             ptr < neighbor_atoms.end(); ++ptr) {
             if (atom_types[*ptr] == "O.2") { ++numONeighbors; }
@@ -2475,7 +2553,8 @@ bool DOCKMol::isNitro( string atom_type, int idx ){
 // bool DOCKMol::isPhosphate( string atom_type, int idx ){
 //     /*
 //     We need to identify phosphate groups if we are to have them properly read
-//     by RDKit from our DOCKMol objects.
+//     by RDKit from our DOCKMol objects. DOCK6-RDKIT WILL IMPROVE ITS STATISTICS
+//     IF WE SOLVE THE PHOSPHATE ISSUE.
 //     */
 //     if (atom_type == "P.3"){
 //         int numONeighbors = 0;
@@ -2499,7 +2578,7 @@ RDKit::Atom *DOCKMol::createAtom( unsigned int atomIdx, RDGeom::Point3D & pos, b
     auto *rdatom = new RDKit::Atom();
 
     // Add positions
-    pos.x = x[atomIdx];
+    pos.x = x[atomIdx]; // Assigning DOCKMol variable to RDKit position object
     pos.y = y[atomIdx];
     pos.z = z[atomIdx];
 
@@ -2514,8 +2593,14 @@ RDKit::Atom *DOCKMol::createAtom( unsigned int atomIdx, RDGeom::Point3D & pos, b
     rdatom->setProp( "_TriposPartialCharge", charges[atomIdx] );
     rdatom->setNoImplicit( noImplicit ); // no implicit atoms
     if (npl3) {
-        rdatom->setFormalCharge(2); // Future RDKit-related methods fix this.
+        // Not all N.pl3 atoms need this formal charge assignment. It is added here to avoid crashes
+        // in nitrogroups. If it is unnecessary, it will be set back to zero in the charge fixing 
+        // step (see fixNitroSubstructureAndCharge above)
+        rdatom->setFormalCharge(2);
     }
+
+    //cout << "Atom " << atom_types[atomIdx] << ", of index " <<  atomIdx << " created"
+    //     << " in RDKit object." << endl;
 
     return rdatom;
 }
@@ -2547,7 +2632,8 @@ RDKit::Bond *DOCKMol::createBond( unsigned int bondIdx ){
     //} else {
     //}
 
-    // // Debug
+    //  //Debug
+    //
     // outfile << "Atom types of interest: " << tAT1 << " and " << tAT2 << endl;
     //
     // if (bond_type == RDKit::Bond::AROMATIC && (tAT1 == "N.pl3" || tAT2 == "N.pl3")){
@@ -2559,6 +2645,12 @@ RDKit::Bond *DOCKMol::createBond( unsigned int bondIdx ){
     //
     //     bond_type = RDKit::Bond::DOUBLE;
     //}
+
+    // These lines will help you identify which bond is being made
+    string tAT1 { atom_types[ bonds_origin_atom[bondIdx] ] };
+    string tAT2 { atom_types[ bonds_target_atom[bondIdx] ] };
+    //cout << "Atom types of interest: " << tAT1 << " and " << tAT2 << endl;
+    //cout << "Bond type: " << bond_types[bondIdx] << endl;
 
     // Create bond and assign its ends
     auto *bond = new RDKit::Bond( bond_type );
@@ -2656,57 +2748,94 @@ void DOCKMol::addBondsToRWMol( RDKit::RWMol & tmp ){
 // GDRM June 01, 2020
 RDKit::ROMol  DOCKMol::DOCKMol_to_ROMol( bool create_smiles ){
     // create temporary RWMol object
-    RDKit::RWMol tmp;
-
+    RDKit::RWMol  tmp;
     // assign parameters from DOCKMol to RWMol
+    // assign name to RDKit::common_properties::_Name.
+    // Variables starting with "_" usually are protected and need a setting function
+    tmp.setProp( RDKit::common_properties::_Name, title );
+ 
     // odbfile << "Adding atoms and bonds\n";
+    //std::cout << "\n" "-----------------------------------" << endl;
+    //std::cout << "adding_atoms" << std::endl;
     addAtomsToRWMol( tmp );
     // odbfile << "Atoms added to RWMol\n";
+    //std::cout << "adding_bonds" << std::endl;
     addBondsToRWMol( tmp );
     // odbfile << "Bonds added to RWMol\n";
-
     // Make molecule Lewis structure-compliant
+    //std::cout << "cleaning_up_substructures" << std::endl;
     bool fix = cleanUpSubstructures( tmp );
+
     // odbfile << "Clean up done!\n";
     if (fix){
-        guessFormalCharges( tmp );
-        // odbfile << "Charging done!\n";
+      //std::cout << "guessing_formal_charges" << std::endl;
+      guessFormalCharges( tmp );
+      // odbfile << "Charging done!\n";
     } else {
-        cerr << "Error: " << title << " has issues." << endl;
+          //std::cout << "guessing_formal_charges_has_issues" << std::endl;    
+        cerr << "Error: " << title << " has issues." << endl; 
         auto tmp = RDKit::RWMol();
         return tmp;
     }
 
     // assign chirality
+    //std::cout << "assigning_chiral_types_from_3D" << std::endl;
     RDKit::MolOps::assignChiralTypesFrom3D( tmp );
-
-    // clean up
-    RDKit::MolOps::cleanUp( tmp );
 
     // sanitize
     // odbfile << "Starting sanitization\n";
+    //std::cout << "sanitizing_molecule" << std::endl;
+    //RDKit::MolOps::sanitizeMol( tmp);
 
-    RDKit::MolOps::sanitizeMol( tmp );
+
+    //instead of calling the RDKit::MolOps::sanitizeMol() function
+    //call the individual rdkit function that is in
+    //in the sanitizeMol function in the specific order.
+    //std::cout << "cleaning_up" << std::endl;
+    RDKit::MolOps::cleanUp(tmp);
+    //std::cout << "updating_property_cache" << std::endl;
+    tmp.updatePropertyCache(false);
+    //std::cout << "symmetrizing_SSSR" << std::endl;
+    RDKit::MolOps::symmetrizeSSSR(tmp); 
+    //std::cout << "kekulizing" << std::endl;
+    RDKit::MolOps::Kekulize(tmp);
+    //std::cout << "assigning_radicals" << std::endl;
+    RDKit::MolOps::assignRadicals(tmp);
+    //std::cout << "setting_aromaticity" << std::endl;
+    RDKit::MolOps::setAromaticity(tmp);
+    //std::cout << "setting_conjugation" << std::endl;
+    RDKit::MolOps::setConjugation(tmp);
+    //std::cout << "setting_hybridization" << std::endl;
+    RDKit::MolOps::setHybridization(tmp);
+    //std::cout << "cleaning_up_chirality" << std::endl;
+    RDKit::MolOps::cleanupChirality(tmp);
+    //std::cout << "adjusting_Hs" << std::endl;
+    RDKit::MolOps::adjustHs(tmp);
     // odbfile << "Sanitization done\n";
 
     // detect bond stereochemistry
+    //std::cout << "detecting_bond_stereochemistry" << std::endl;
     RDKit::MolOps::detectBondStereochemistry( tmp );
 
     // Update
+    //std::cout << "updating_property_cache_2" << std::endl;
     tmp.updatePropertyCache( false );
 
     // assign stereochemistry
+    //std::cout << "assigning_stereochemistry_from_3D" << std::endl; 
     RDKit::MolOps::assignStereochemistryFrom3D( tmp );
 
+    //std::cout << "creating_smiles" << std::endl;
     if (create_smiles) {
         RDKit::RWMol smi_gen {tmp};
+        //std::cout << "creating_smiles_removing_Hs" << std::endl;
         RDKit::MolOps::removeHs(smi_gen);
         smiles = RDKit::MolToSmiles(smi_gen, true, false, -1, true, false, false, false);
     }
-
+    //std::cout << "converting_to_ROMol" << std::endl;
     // Copy all assigned attributes to an immutable RDKit::ROMol object.
     RDKit::ROMol rdmol{tmp}; // The RDKit::ROMol object cannot be modified.
-
+    //std::cout << "ENDING" << std::endl;
     return rdmol;
 }
 

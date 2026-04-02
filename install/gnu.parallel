@@ -1,5 +1,5 @@
 # DOCK configuration file for GNU compilers with MPI based parallelism
-# (specifically MPICH2 but should for all MPIs).
+# (specifically MPICH2 but should work for all MPIs).
 # This configuration file can be used on many platforms:
 #  Linux, Macintosh OS X, Windows with Cygwin, etc.
 # If gfortran is not preferred then change FC below to g95 or g77.

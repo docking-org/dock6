@@ -1,11 +1,11 @@
 
 ##########                                Name:        ZINC00003959
-##########                DOCK_Rotatable_Bonds:                   4
-##########                         Heavy_Atoms:                  23
 ##########                    Molecular_Weight:             312.351
+##########                DOCK_Rotatable_Bonds:                   4
 ##########                       Formal_Charge:                   1
 ##########                     HBond_Acceptors:                   7
 ##########                        HBond_Donors:                   6
+##########                         Heavy_Atoms:                  23
 ##########                            HA_RMSDs:               0.000
 ##########                            HA_RMSDh:               0.000
 ##########                            HA_RMSDm:               0.000

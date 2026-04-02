@@ -2,9 +2,11 @@
 #include <string.h>
 #include "dockmol.h"
 #include "fragment.h"
+#include "iso_align.h"
 
 using namespace std;
 
+class Iso_Align;
 
 
 // +++++++++++++++++++++++++++++++++++++++++
@@ -26,7 +28,7 @@ Fragment::Fragment(){
                size = 0;
                ring_size = 0;
                mut_type = 500; // mutations start at 0, so initalizing beyond
-        
+               num_du = 0; 
        };
 Fragment::~Fragment(){
             mol.clear_molecule();
@@ -36,7 +38,78 @@ Fragment::~Fragment(){
             aps_bonds_type.clear();
             aps_cos.clear();
             aps_dist.clear();
+            num_du = 0;
        };
+
+
+// methods that sets radial distanace for iso_align protocol
+void Fragment::set_radial_dist_distri(int atom_num, std::vector<float> radial){
+
+    Iso_Align iso_ali;
+    (*this).radial_dist_distri[atom_num] = radial;
+}
+
+void Fragment::calc_radial_dist_distri(){
+
+    Iso_Align iso_ali;
+    iso_ali.get_all_radial_dist(*this);
+
+}
+
+void Fragment::print_radial_dist_distri(){
+    for (unsigned int i; i< this->mol.num_atoms; i++){
+        int obj_radial_vec_size = this->radial_dist_distri[i].size();
+        for (unsigned int j=0; j<obj_radial_vec_size; j++){
+            std::cout << this->radial_dist_distri[i][j] << " " ;
+            if ((j+1)==obj_radial_vec_size){
+                std::cout << std::endl;
+            }
+        }
+    }
+
+}
+
+std::vector<float> Fragment::get_radial_dist_distri(int atom_num){
+    return this->radial_dist_distri[atom_num];
+}
+
+void Fragment::allocate_radial_dist_distri(){
+
+    radial_dist_distri    = new      std::vector<float> [this->mol.num_atoms];
+}
+
+void Fragment::clear_radial_dist_distri(){
+
+    delete[]radial_dist_distri; 
+
+}
+
+void Fragment::calc_num_du(){
+    int counter = 0;
+    for (unsigned int i =0; i< this->mol.num_atoms; i++){
+        if (this->mol.atom_types[i] == "Du"){counter++;}
+    }
+    this->num_du = counter; 
+}
+
+int Fragment::get_num_du(){
+
+    return this->num_du;
+}
+
+void Fragment::is_iso_aligned(){
+    this->iso_aligned=true;
+}
+void Fragment::is_not_iso_aligned(){
+    this->iso_aligned=false;
+}
+bool Fragment::is_it_iso_aligned(){
+
+    return this->iso_aligned;
+}
+
+// 
+
 
 
 // +++++++++++++++++++++++++++++++++++++++++

@@ -25,7 +25,7 @@
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // 
 // 
-// This software is copyrighted, 2004-2018,
+// This software is copyrighted, 2004-2023,
 // by Scott R. Brozell and David A. Case. 
 // 
 // The authors hereby grant permission to use, copy, modify, and re-distribute
@@ -129,8 +129,9 @@ Amber_Score::input_parameters(Parameter_Reader & parm, bool & primary_score,
         primary_score = use_primary_score;
     }
     if (!secondary_score) {
-        //yesorno = parm.query_param("amber_score_secondary", "no", "yes no");
-	yesorno = "no";
+        // Secondary scoring capabilities have been removed program wide in 6.10
+        // yesorno = parm.query_param("amber_score_secondary", "no", "yes no");
+        yesorno = "no";
         use_secondary_score = (yesorno == "yes");
         // temporarily disable amber_score_secondary until next release
         if ( use_secondary_score ) {

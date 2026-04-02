@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.10
+DOCK v6.11
 
-Released January 2023
+Released November 2023
 Copyright UCSF
 --------------------------------------
 
@@ -158,29 +158,29 @@ VERBOSE MOLECULE STATS
 -----------------------------------
 VERBOSE GROWTH STATS : ANCHOR #1
 
-1/1 anchor orients retained (max 300) t=0.01s
+1/1 anchor orients retained (max 300) t=0.002874s
 Lyr 1-2 Segs|Lyr 2-2 Segs|number of layers:3
 Lyr:1 Seg:0 Bond:1 : Sampling 6 dihedrals N(N.4)  C(C.3)  C(C.ar)  C(C.ar)
-Lyr:1 Seg:0 6/6 retained, Pruning:  t=0.02s
+Lyr:1 Seg:0 6/6 retained, Pruning:  t=0.008509s
 Lyr:1 Seg:1 Bond:49 : Sampling 6 dihedrals C(C.ar)  C(C.ar)  C(C.3)  N(N.4)
-Lyr:1 Seg:1 36/36 retained, Pruning:  t=0.13s
+Lyr:1 Seg:1 36/36 retained, Pruning:  t=0.064958s
 Lyr:2 Seg:0 Bond:0 : Sampling 3 dihedrals C(C.ar)  C(C.3)  N(N.4)  C(C.3)
-Lyr:2 Seg:0 72/108 retained, Pruning: 36-score  t=0.42s
+Lyr:2 Seg:0 72/108 retained, Pruning: 36-score  t=0.287455s
 Lyr:2 Seg:1 Bond:51 : Sampling 3 dihedrals C(C.ar)  C(C.3)  N(N.4)  C(C.3)
-Lyr:2 Seg:1 200/216 retained, Pruning: 14-score 2-clustered  t=1.05s
+Lyr:2 Seg:1 199/216 retained, Pruning: 14-score 3-clustered  t=0.828324s
 No more anchor fragments to be docked.
 
 -----------------------------------
 Molecule: CHEMBL543895
 
- Elapsed time for docking:	1.122 seconds
+ Elapsed time for docking:	0.880 seconds
 
  Anchors:		1
  Orientations:		1
- Conformations:		200
+ Conformations:		199
 
-                      Internal_Score:           13.288237
+                      Internal_Score:           13.288239
 
 
 1 Molecules Processed
-Total elapsed time:	1.366 seconds
+Total elapsed time:	1.107 seconds

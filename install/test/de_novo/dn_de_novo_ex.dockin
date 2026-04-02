@@ -12,7 +12,7 @@ dn_pruning_conformer_score_scaling_factor                    2.0
 dn_pruning_clustering_cutoff                                 100.0
 dn_mol_wt_cutoff_type                                        soft
 dn_upper_constraint_mol_wt                                   550.0
-dn_lower_constraint_mol_wt                                   0.0
+dn_lower_constraint_mol_wt                                   300.0
 dn_mol_wt_std_dev                                            50.0
 dn_constraint_rot_bon                                        15
 dn_constraint_formal_charge                                  2.0

@@ -1,11 +1,11 @@
 
 ##########                                Name:            1M17.lig
-##########                DOCK_Rotatable_Bonds:                  10
-##########                         Heavy_Atoms:                  29
 ##########                    Molecular_Weight:             393.442
+##########                DOCK_Rotatable_Bonds:                  10
 ##########                       Formal_Charge:         0.000100046
 ##########                     HBond_Acceptors:                   7
 ##########                        HBond_Donors:                   1
+##########                         Heavy_Atoms:                  29
 ##########                    Descriptor_Score:          -30.420767
 ##########                    Continuous_Score:          -30.420767
 ##########          desc_Continuous_vdw_energy:          -26.484882

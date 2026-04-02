@@ -3,7 +3,7 @@
 
 
 
-  <title>DOCK 6.10 User Manual</title>
+  <title>DOCK 6.11 User Manual</title>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
   <style type="text/css">
@@ -26,7 +26,7 @@ font-size: 36px;
 </head><body>
 
 
-<h1 class="style4" align="center">DOCK 6.10 Users Manual</h1>
+<h1 class="style4" align="center">DOCK 6.11 Users Manual</h1>
 <p class="style4" align="center">&nbsp; </p>
 <p class="style2" align="center"><strong>Principal contributors to the current code:</strong></p>
 
@@ -39,6 +39,7 @@ Chris Corbo (SUNY-Stony Brook)<br>
 Brian Fochtman (SUNY-Stony Brook)<br>
 Lingling Jiang (Columbia University) <br>
 P. Therese Lang (UCB) <br>
+Guilherme D. R. Matos (SUNY-Stony Brook) <br>
 T. Dwight McGee Jr. (SUNY-Stony Brook) <br>
 Demetri Moustakas (Harvard) <br>
 Sudipto Mukherjee (Temple) <br>
@@ -71,7 +72,7 @@ All Rights Reserved <br>
 </p>
 
 
-<p class="style2" align="center">Last updated January 2023 <br>
+<p class="style2" align="center">Last updated November 14, 2023 <br>
 </p>
 
 
@@ -207,6 +208,9 @@ Sampling Methods</a></p>
 	  
 		<p class="style2"><a href="#denovoInputParameters">2.5.2.1.
 	DOCK_DN Input Parameters</a></p>
+
+		<p class="style2"><a href="#denovoD3NInputParameters">2.5.2.2.
+	DOCK_D3N Input Parameters</a></p>
 	
 	
 	  </blockquote>
@@ -216,6 +220,8 @@ Sampling Methods</a></p>
 	  
 		<p class="style2"><a href="#GAInputParameters">2.5.3.1 
 	DOCK_GA Input Parameters</a></p>
+		<p class="style2"><a href="#GARDKITInputParameters">2.5.3.2
+	DOCK_GA RDKit Input Parameters</a></p>
 	
 	 
   </blockquote>
@@ -233,6 +239,8 @@ Fragment Library Generation</a></p>
 Database Filter</a></p>
 	<blockquote>
 	<p class="style2"><a href="#DatabaseFilterInputParameters">2.7.1 
+	Input Parameters</a></p>
+	<p class="style2"><a href="#DatabaseFilterRDKITInputParameters">2.7.2 RDKit
 	Input Parameters</a></p>
 	</blockquote>
 
@@ -680,7 +688,7 @@ orientations of protein-protein and protein-DNA complexes </li>
 
 
     <li class="style2">help guide synthetic efforts by
-examining small molecules that are computationally derivatized </li>
+examining small molecules that are computationally derived </li>
 
 
 
@@ -747,9 +755,10 @@ examining small molecules that are computationally derivatized </li>
     scientific method</a>.
     Most initial installation problems are due to unavailable or fouled tools,
     especially compilers; verify that your compilers work before installing DOCK.
-    To observe what's under the hood, view the configuration
-    file (install/config.h) that is created by configure,
-    and execute make -n for a dry run.  Note that most platform idiosyncrasies
+    To observe what's under the hood, view the DOCK configuration file
+    (install/config.h) that is created by configure, especially its troubleshooting
+    section that describes corrective measures for common difficulties.
+    Execute make -n for a dry run.  Platform idiosyncrasies
     can and should be corrected by editing the install/config.h, as opposed to
     editing the original source file, e.g., install/gnu.
     Consult the <a href="http://dock.compbio.ucsf.edu/DOCK_6/faq.htm">FAQ</a>.
@@ -826,6 +835,25 @@ containing operating system appropriate variables</p>
           <td>GNU compilers with parallel processing capability </td>
         </tr>
         <tr class="style2">
+          <td>gnu.parallel.rdkit</td>
+          <td>GNU compilers with parallel processing capability and 
+            <a href="https://www.rdkit.org/docs/">RDKit</a> capability</td>
+        </tr>
+        <tr class="style2">
+          <td>gnu.rdkit</td>
+          <td>GNU compilers with <a href="https://www.rdkit.org/docs/">RDKit</a>
+            capability</td>
+        </tr>
+        <tr class="style2">
+          <td>homebrew</td>
+          <td>GNU compilers installed on macOS using the Homebrew package manager </td>
+        </tr>
+        <tr class="style2">
+          <td>homebrew.rdkit</td>
+          <td>GNU compilers installed on macOS using the Homebrew package manager
+            with <a href="https://www.rdkit.org/docs/">RDKit</a> capability</td>
+        </tr>
+        <tr class="style2">
           <td>ibmaix</td>
           <td>IBM AIX and native compilers</td>
         </tr>
@@ -886,7 +914,7 @@ simply hand edit install/config.h to use the alternative.
     the DOCK programs<br>
 
     <p class="style2">Finer control over which executables are built is
-    available, but is rarely necessary, via one of the following commands:<br>
+    available, but is rarely necessary, via one of the following commands:<br><br>
 
     [user@dock ~] make dock # builds only the dock program<br>
 
@@ -997,7 +1025,73 @@ any MPI installation even though they were initially tailored to MPICH.
   the link flags (-L and -l) from the command:
   $MPI_HOME/mpicc -show;
   in general, the LIBS should contain those link flags in the same order. </p>
+
+
+<p class="style2">
+(ii) As of version 6.11, DOCK can be compiled with 
+<a href="https://www.rdkit.org/">RDKit</a>.
+However, RDKit is not packaged with DOCK. It must be downloaded
+and built separately to eventually be compiled with DOCK.
+Importantly, for consistency with published work on DOCK6 Using RDKit,
+<a href="#Matos2023">Matos et al. <em>J. Chem. Inf. Model.</em> 2023</a>,
+we recommend installing RDKit Release 2019.09.1 which depends on
+Boost 1.71.0 and Eigen 3.3.9.  If you already have this RDKit installed then
+you can build a DOCK executable with support for RDKit by first defining these
+environment variables (using Bourne shell syntax): <br><br>
+
+    export BOOST="/path/to/boost/root/dir/" <br>
+    export RDBASE="/path/to/rdkit/root/dir" <br>
+    export LD_LIBRARY_PATH="${BOOST}/lib:${RDBASE}/lib:${LD_LIBRARY_PATH}" <br><br>
+
+and then running the following commands for a serial executable (or their
+equivalent for a parallel executable): <br><br>
+
+    cd install; make distclean; ./configure gnu.rdkit;
+    make dock; make test;.
+
+</p>
+<p class="style2"> <a name="rdkitinstall"></a>
+If you don't have RDKit installed then there are several approaches:
+The simplest may be to use the automated recipe supplied by DOCK; see below.
+The other approach is to manually install RDKit yourself.  This path has several
+options; for instructions please refer to this
+<a href="https://www.rdkit.org/docs/Install.html">RDKit website,</a>
+and consult the
+<a href="http://dock.compbio.ucsf.edu/DOCK_6/faq.htm#rdkitinstall">How is RDKit installed ?</a>
+DOCK FAQ for a Python-less approach.
+</p>
+<p class="style2">
+The DOCK automated recipe for installing RDKit requires that you have
+anaconda/miniconda installed. After the installation of anaconda/miniconda,
+you must export the root path of anaconda/miniconda as "CONDABASE" in your
+.bashrc or equivalent file, e.g.:
+<br><br>
+export CONDABASE="/path/to/miniconda3"
+<br><br>
+
+Then you can invoke DOCK's recipe for installing RDKit as shown below:
+    <p class="style2">
+    [user@dock ~] cd ./install <br>
+    [user@dock ~] make rdkit # downloads RDKit and its dependencies, then compiles. Please follow the instructions shown in the screen.
+    </p>
+
+<p class="style2">If you need to clean out the RDKit compiled contents, please
+execute the command below. Once you execute that command then 
+you will not be able to compile DOCK with RDKit unless you rebuild RDKit:
+</p>
+
+    <p class="style2">
+    [user@dock ~] make rdkitclean # to clean out everything pertaining to RDKit.
+    </p>
+
+<!--
+This looks errant
+</p>
+-->
+
   </blockquote>
+
+
 
 </blockquote>
 
@@ -1133,6 +1227,19 @@ final ensemble. Secondary score, introduced in 6.1, has been fully removed
 in this version.
 </font></p>
 
+
+  <p class="style1">Version 6.11 </p>
+  <p class="style2" align="left"><font face="Arial, Helvetica, sans-serif">
+New feature includes the integration of the open-source toolkit RDKit with the 
+DOCK6 codebase, allowing users to calculate important drug-based descriptors for molecules.
+On top of the ability to calculate these descriptors, DOCK6.11 include an enhanced version of 
+DOCK_DN, termed "descriptor-driven de novo design" (DOCK_D3N). This method allows users 
+to specify descriptors (and their target ranges) to bias the on-the-fly molecular construction.
+This powerful and flexible routine tailors ligand growth towards desirable 
+regions of chemical space. Further, RDKit is utilized in a wide array of DOCK features to
+calculate descriptors for resulting molecules. (DOCK_GA, Database Filtering, Rigid/Flexible Docking)
+
+</font></p>
 </blockquote>
 
 
@@ -1179,7 +1286,7 @@ programs in DOCK suite</strong></p>
   <p class="style2" align="left"> The program <a href="#Sphgen">sphgen</a>
 identifies the active site, and other sites of interest, and generates
 the sphere centers that fill the site. It has been described in the
-original paper (<a href="http://dock.compbio.ucsf.edu/DOCK_6/KuntzJMolBiol1982">Kuntz et al. <em>J.
+original paper (<a href="#KuntzJMolBiol1982">Kuntz et al. <em>J.
 Mol. Biol.</em> 1982</a>). The program <a href="#Grid">grid</a>
 generates the scoring grids
 (<a href="#ShoichetetalJCompChem1992">Shoichet
@@ -1189,12 +1296,12 @@ Comp. Chem.</em> 1992</a>). Within the DOCK suite of
 programs, the program DOCK matches spheres
 (generated by <a href="#Sphgen">sphgen</a>) with ligand atoms and uses
 scoring grids (from <a href="#Grid">grid)</a> to
-evaluate ligand orientations (<a href="http://dock.compbio.ucsf.edu/DOCK_6/KuntzJMolBiol1982">Kuntz
+evaluate ligand orientations (<a href="#KuntzJMolBiol1982">Kuntz
 et al. <em>J. Mol. Biol.</em> 1982</a> and
 <a href="#ShoichetetalJCompChem1992">Shoichet et al. <em>J.
 Comp. Chem. </em>1992</a>). Program DOCK also minimizes
 energy based scores (<a href="#MengetalProteins1993">Meng
-et al. <em>Proteins</em>. 1993</a>).</p>
+et al. <em>Proteins</em> 1993</a>).</p>
 
 
 
@@ -1789,11 +1896,11 @@ Chem. Soc.</em>, 1999</a>)</p>
 
 
 
-  <p class="style2"><em>Version 6.0-6.10</em></p>
+  <p class="style2"><em>Version 6.0-6.11</em></p>
 <p class="style2">Authors: P. Therese Lang, Demetri Moustakas, Scott Brozell, 
 Noel Carrascal, Sudipto Mukherjee, Lauren Prentis, Courtney Singleton, Yuchen Zhou, 
 Brian Fochtman, Trent Balius, T. Dwight McGee Jr., 
-William Joseph Allen, John Bickel, Steven Pak, Christopher Corbo, Brock Boysan, Patrick Holden, 
+William Joseph Allen, John Bickel, Guilherme D. R. Matos, Steven Pak, Christopher Corbo, Brock Boysan, Patrick Holden, 
 Scott Pegg, Kaushik Raha, Devleena Shivakumar, 
 Robert Rizzo, David Case, Brian Shoichet, Irwin Kuntz</p>
 
@@ -1811,7 +1918,8 @@ the NAB library of functions such as receptor flexibility, the full
 AMBER molecular mechanics scoring function with implicit solvent,
 conjugate gradient minimization, and molecular dynamics simulation
 capabilities. The most recent version of DOCK 6 includes novel searching methods 
-(DOCK_DN and DOCK_GA) and the ability to create fragment libraries. 
+(DOCK_DN, DOCK_GA) and the ability to create fragment libraries. DOCK_D3N
+depends on an enhanced version of DOCK by integrating RDKit.
 See
 <a href="#LangRNA2009">Lang et al. <em>RNA</em>, 2009</a>,
 
@@ -2495,7 +2603,8 @@ Growth Tree and Statistics </em></p>
   <blockquote>
 
 
-    <p class="style2"> Dock uses Breadth First Search to sample the conformational space of the ligand. The tree is pruned at every stage of growth to remove unsuitable conformations.  In order to be as space efficient as possible, DOCK only saves one level of growth at a time unless "write_growth_tree" is turned on.  In order to construct the growth tree it was necessary to do the following:  (1) Retain all levels of growth (before and after minimization) in memory.  (2) Link every conformer to its parent conformer during growth.  (3) While writing out the tree, the traversal starts from a fully grown ligand (leaf), moving up the branch (parent conformer) until the ligand anchor (root) is reached. Finally, the growth tree branch is printed as a multi-mol2 file starting from the anchor to the fully grown ligand, including minimizations. This newly implemented feature allows visualization of all stages of growth and optimize behavior of current DOCK routines. Note that the growth trees can easily be visualized using the Viewdock module in the UCSF chimera program. Extra information regarding conformer number, anchor number, parent conformer etc. can also be accessed directly using this tool. </p>
+    <p class="style2"> Dock uses Breadth First Search to sample the conformational space of the ligand. The tree is pruned at every stage of growth to remove unsuitable conformations.  In order to be as space efficient as possible, DOCK only saves one level of growth at a time unless "write_growth_tree" is turned on.  In order to construct the growth tree it was necessary to do the following:  (1) Retain all levels of growth (before and after minimization) in memory.  (2) Link every conformer to its parent conformer during growth.  (3) While writing out the tree, the traversal starts from a fully grown ligand (leaf), moving up the branch (parent conformer) until the ligand anchor (root) is reached. Finally, the growth tree branch is printed as a multi-mol2 file starting from the anchor to the fully grown ligand, including minimizations. This newly implemented feature allows visualization of all stages of growth and optimize behavior of current DOCK routines. Note that the growth trees can easily be visualized using the
+ViewDock module in the UCSF chimera program. Extra information regarding conformer number, anchor number, parent conformer etc. can also be accessed directly using this tool. </p>
 
     <p class="style2"> Format for branch files name is as follows: </p>
 
@@ -2705,7 +2814,7 @@ De novo  Design </strong></p>
 	different conformers for the various grown molecules (similar to standard docking 
 	runs that specify multi-conformer output).  If only a single unique conformer for 
 	each de novo grown molecule is desired, at this time, users would need to post-process
-	their results (see <a href="http://ringo.ams.sunysb.edu/index.php/Make_Unique_script_usage">Make Unique Script Usage</a>).  A more elegant solution to 
+	their results (see <a href="https://ringo.ams.stonybrook.edu/index.php/Make_Unique_script_usage">Make Unique Script Usage</a>).  A more elegant solution to 
 	this issue is being explored. </p>
 
   <p class="style2">
@@ -2738,6 +2847,49 @@ De novo  Design </strong></p>
 			2 C2     0.6443		-16.1780	-10.2132	C.ar	1	<1>		-0.1263 
 			3 C3    -0.4560		-14.9142	-9.8558		C.ar	1	<1>		-0.0990
 	</pre>
+
+
+	</blockquote>
+	
+	<blockquote>
+	<p class='style2'><em> De novo DOCK Descriptor Driven Design (D3N)</em></p>
+	<p class='style2'> When DOCK is compiled with RDKit (configure with gnu.rdkit or 
+        gnu.parallel.rdkit) termed DOCK/RDKit, DOCK/RDKit takes advantage of multiple cheminformatics 
+        descriptors featured in RDKit. In standard DOCK_DN design, molecules are constructed based on 
+        the user defined energy grids and/or torsion environments. In previous versions, there 
+        was no method to drive molecular construction based on key cheminformatics descriptors, 
+        until now. In version 6.11, users can bias molecular growth to promote partially grown molecules 
+        to the next layers of growth that are contingent on user-defined ranges for the descriptor 
+        being employed. As each partially grown molecule is passed 
+	to the next layer of growth, the molecules undergo a Metropolis-like criteria to assess if the 
+        values for computed descriptors fall within user-defined ranges based on input file. 
+        If they pass the criteria, the molecule is to be sent to the next layer immediately. 
+        However, if molecules fail the criteria, they will be rejected. 
+	Since the criteria is based on Metropolis-like procedure, the resulting distributions 
+        of these descriptors will have soft tails near the user-defined upper and lower limit 
+        for a given ensemble of molecules. Shown below is an example header information for a 
+        constructed molecule. All descriptors that are shown in the descriptor will have a "RD_" prefix.
+	</p>
+
+	<pre>
+
+			##########                   RD_num_arom_rings:                   2
+			##########                   RD_num_alip_rings:                   1
+			##########                    RD_num_sat_rings:                   0
+			##########                    RD_Stereocenters:                   0
+			##########                      RD_Spiro_atoms:                   0
+			##########                             RD_LogP:            2.505100
+			##########                             RD_TPSA:           31.350000
+			##########                           RD_SYNTHA:            2.218558
+			##########                              RD_QED:            0.798296
+			##########                             RD_LogS:           -3.425866
+			##########                     RD_num_of_PAINS:                   0
+			##########                      RD_PAINS_names:            NO_PAINS
+			##########                           RD_SMILES:c1csc(Cc2ccc3c(c2)OCCO3)n1
+
+	</pre>
+
+
 
 
 	</blockquote>
@@ -2946,6 +3098,182 @@ De novo  Design </strong></p>
 
 </p>	
 </blockquote>
+
+
+  <blockquote>
+  <p class="style2" align="left"><em><em><a name="denovoD3NInputParameters"></a> 2.5.2.2  DOCK_D3N Input Parameters </em></em>
+  <br><br>
+  DOCK_D3N is developed on top of DOCK_DN. The input parameters shown below is also prompted with the input parameters in standard 
+	DOCK_DN, when DOCK is compiled with RDKit
+</p>
+<table style="border:1px solid black; width:100%">
+
+  <tr>
+    <th style="border:1px solid black;">Parameter</th>
+    <th style="border:1px solid black;">Description</th> 
+    <th style="border:1px solid black;">Default Value</th>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dn_drive_verbose</td>
+    <td style="border:1px solid black;">Turn on verbose D3N to output more information</td> 
+    <td style="border:1px solid black;">no</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dn_save_all_molecules</td>
+    <td style="border:1px solid black;">Save all molecules that are rejected by D3N</td> 
+    <td style="border:1px solid black;">no</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dn_drive_clogp</td>
+    <td style="border:1px solid black;">Turn on if you want to bias construction with cLogP</td> 
+    <td style="border:1px solid black;">no</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dn_lower_clogp</td>
+    <td style="border:1px solid black;">Lower limit of the range</td> 
+    <td style="border:1px solid black;">-0.30</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dn_upper_clogp</td>
+    <td style="border:1px solid black;">Upper limit of the range</td> 
+    <td style="border:1px solid black;">3.75</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dn_clogp_std_dev</td>
+    <td style="border:1px solid black;">Standard deviation of the Metropolis-like procedure</td> 
+    <td style="border:1px solid black;">2.02</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dn_drive_esol</td>
+    <td style="border:1px solid black;">Turn on if you want to bias construction with ESOL(LogS)</td> 
+    <td style="border:1px solid black;">no</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dn_lower_esol</td>
+    <td style="border:1px solid black;">Lower limit of the range</td> 
+    <td style="border:1px solid black;">-5.23</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dn_upper_esol</td>
+    <td style="border:1px solid black;">Upper limit of the range</td> 
+    <td style="border:1px solid black;">-1.35</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dn_esol_std_dev</td>
+    <td style="border:1px solid black;">Standard deviation of the Metropolis-like procedure</td> 
+    <td style="border:1px solid black;">1.94</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dn_drive_tpsa</td>
+    <td style="border:1px solid black;">Turn on if you want to bias construction with TPSA</td> 
+    <td style="border:1px solid black;">no</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dn_lower_tpsa</td>
+    <td style="border:1px solid black;">Lower limit of the range</td> 
+    <td style="border:1px solid black;">28.53</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dn_upper_tpsa</td>
+    <td style="border:1px solid black;">Upper limit of the range</td> 
+    <td style="border:1px solid black;">113.20</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dn_tpsa_std_dev</td>
+    <td style="border:1px solid black;">Standard deviation of the Metropolis-like procedure</td> 
+    <td style="border:1px solid black;">42.33</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dn_drive_qed</td>
+    <td style="border:1px solid black;">Turn on if you want to bias construction with QED</td> 
+    <td style="border:1px solid black;">no</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dn_lower_qed</td>
+    <td style="border:1px solid black;">Lower limit of the range</td> 
+    <td style="border:1px solid black;">0.61</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dn_qed_std_dev</td>
+    <td style="border:1px solid black;">Standard deviation of the Metropolis-like procedure</td> 
+    <td style="border:1px solid black;">0.19</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dn_drive_sa</td>
+    <td style="border:1px solid black;">Turn on if you want to bias construction with Synthetic Accessibility (SynthA/sa)</td> 
+    <td style="border:1px solid black;">no</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dn_upper_sa</td>
+    <td style="border:1px solid black;">Upper limit of the range</td> 
+    <td style="border:1px solid black;">3.34</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dn_sa_std_dev</td>
+    <td style="border:1px solid black;">Standard deviation of the Metropolis-like procedure</td> 
+    <td style="border:1px solid black;">0.9</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dn_drive_stereocenters</td>
+    <td style="border:1px solid black;">Turn on if you want to bias construction with number of stereocenters</td> 
+    <td style="border:1px solid black;">no</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dn_upper_stereocenter</td>
+    <td style="border:1px solid black;">Upper limit of the range</td> 
+    <td style="border:1px solid black;">2</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dn_drive_pains</td>
+    <td style="border:1px solid black;">Turn on if you want to bias construction with number of Pan-assay Interference Compounds (PAINS/pains)</td> 
+    <td style="border:1px solid black;">no</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dn_upper_pains</td>
+    <td style="border:1px solid black;">Upper limit of the range</td> 
+    <td style="border:1px solid black;">1</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dn_start_at_layer</td>
+    <td style="border:1px solid black;">Layer number you want to start D3N</td> 
+    <td style="border:1px solid black;">1</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">sa_fraglib_path</td>
+    <td style="border:1px solid black;">Path to SynthA parameters</td> 
+    <td style="border:1px solid black;">sa_fraglib_path</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">PAINS_path</td>
+    <td style="border:1px solid black;">Path to PAINS parameters</td> 
+    <td style="border:1px solid black;">pains_table_2019_09_01.dat</td>
+  </tr>
+
+</table>
+<p class='style2'>
+NOTE: some descriptors do not have double-sided limits. This is as intended because these descriptors
+have a one-sided direction of "most favorable" score. 
+</p>
+<p class='style2'><em> DOCK_D3N Output Components</em></p>
+	<p class='style2'>1. ${output}.denovo_build.mol2 is the mol2 file containing the complete top scoring molecules. Molecules are
+      appended to this file as molecules are built to completion.</p>
+
+	<p class='style2'>2. ${output}.denovo_rejected.mol2 is the mol2 file containing the partially/complete 
+        molecules. Whenever molecules are rejected by the Metropolis-like criteria, molecules 
+        will go here. (This file is created, when "dn_save_all_molecules" is turned on. )</p>
+
+   <p class='style2'>3. ${output}.anchor_{#}.root_layer_{##}.mol2 is the partial molecules for each 
+       anchor (#) at each layer (##). These files are generated as the algorithm is running. This feature is 
+       turned on/off by the input parameter "dn_write_checkpoints".</p>
+
+   <p class='style2'>4. ${output}.anchor_{#}.prune_dump_layer_{##}.mol2 is the partial and complete 
+      molecules that were filtered out for having undesirable properties
+      for each anchor (#) at each layer (##) of growth. This feature is turned on/off by the 
+      input parameter "dn_write_prune_dump".</p>
+
+</p>	
+</blockquote>
+
 </blockquote>
                                                                                                                                                                                                                                                                                                                                                          
   <p class="style1" align="center"><a href="#TableofContents">RETURN TO TABLE OF CONTENTS</a></p>
@@ -2959,7 +3287,7 @@ DOCK_GA: Small Molecule Evolution using a Genetic Algorithm</strong></p>
       construction method that utilizes evolutionary principles,
     	including molecular recombination (referred to as crossover), mutation, and natural selection, 
     	to guide de novo design of ligands that interact favorably with the target 
-    	(see <a href="#prentisetal2022"> Prentis et al</a> and
+    	(see <a href="#prentisetal2022"> Prentis et al.</a> and
     	<a href="http://ringo.ams.stonybrook.edu/index.php/Small_Molecule_Evolution_(DOCK_GA)">online tutorials</a>). 
     	DOCK_GA can be used (1) to generate structural analogs with tailored interactions to the 
     	target, (2) as a de novo design method to grow molecules from a molecular segment, and 
@@ -3243,6 +3571,31 @@ DOCK_GA: Small Molecule Evolution using a Genetic Algorithm</strong></p>
    <p class='style2'>2. ${ga_output_prefix}.restart####.mol2 is the molecules from each generation (####). This file can be used as a restart file where the user only needs to
       change simplex_random_seed to the number of the generation last completed.</p>
 
+
+  <p class="style2" align="left"><em><em><a name="GARDKITInputParameters"></a></em> 2.5.3.2 DOCK_GA RDKit Input Parameters </em></p>
+  <p class="style2">When RDKit is compiled with DOCK, the input parameters below will be prompted.
+  All molecules in the output mol2 files will contain RDKit descriptors in the header.
+  Currently, DOCK_GA does not have descriptor-driven capabilities.
+  </p> 
+  <table style="border:1px solid black; width:100%">
+  <tr>
+    <th style="border:1px solid black;">Parameter</th>
+    <th style="border:1px solid black;">Description</th> 
+    <th style="border:1px solid black;">Default Value</th>
+  </tr>
+    <tr>
+      <td style="border:1px solid black;">sa_fraglib_path</td>
+      <td style="border:1px solid black;">Path to SynthA parameters</td> 
+      <td style="border:1px solid black;">sa_fraglib.dat</td>
+    </tr>
+    <tr>
+      <td style="border:1px solid black;">PAINS_path</td>
+      <td style="border:1px solid black;">Path to PAINS parameters</td> 
+      <td style="border:1px solid black;">pains_table_2019_09_01.dat</td>
+    </tr>
+  </table>
+
+
   </blockquote>
   
 <p class="style1" align="center"><a href="#TableofContents">RETURN TO TABLE OF CONTENTS</a></p>
@@ -3427,9 +3780,161 @@ Database Filter </strong></p>
   </tr>
  </table>
   <ul>
-
+     <p class='style2'><em>Database Filtering Output Components</em></p>
+	<p class='style2'>1. ${output}.scored.mol2 is the mol2 file containing scored molecules that passed dbfilter.</p>
 
   </blockquote>
+
+
+
+  <blockquote>
+
+  <p class="style2" align="left"><em><em><a name="DatabaseFilterRDKITInputParameters"></a></em>2.7.2 Database Filter RDKit Parameters </em></p>
+  <p class="style2">RDKit is built on top of the DOCK database filtering feature. The input parameters 
+                    shown below will be prompted with the input parameters during standard 
+	            Databse Filtering procedure, when DOCK is compiled with RDKit.
+  </p>
+<table style="border:1px solid black; width:100%">
+
+  <tr>
+    <th style="border:1px solid black;">Parameter</th>
+    <th style="border:1px solid black;">Description</th> 
+    <th style="border:1px solid black;">Default Value</th>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dbfilter_max_stereocenters</td>
+    <td style="border:1px solid black;">Upper limit to number of stereocenters</td> 
+    <td style="border:1px solid black;">6</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dbfilter_min_stereocenters</td>
+    <td style="border:1px solid black;">Lower limit to number of  stereocenters</td> 
+    <td style="border:1px solid black;">0</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dbfilter_max_spiro_centers</td>
+    <td style="border:1px solid black;">Upper limit to number of spiro_centers</td> 
+    <td style="border:1px solid black;">6</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dbfilter_min_spiro_centers</td>
+    <td style="border:1px solid black;">Lower limit to number of spiro_centers</td> 
+    <td style="border:1px solid black;">0</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dbfilter_max_clogp</td>
+    <td style="border:1px solid black;">Upper limit to number of cLogP</td>
+    <td style="border:1px solid black;">20</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dbfilter_min_clogp</td>
+    <td style="border:1px solid black;">Lower limit to number of cLogP</td> 
+    <td style="border:1px solid black;">-20</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dbfilter_max_logs</td>
+    <td style="border:1px solid black;">Upper limit to number of LogS</td>
+    <td style="border:1px solid black;">20</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dbfilter_min_logs</td>
+    <td style="border:1px solid black;">Lower limit to number of LogS</td> 
+    <td style="border:1px solid black;">-20</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dbfilter_max_tpsa</td>
+    <td style="border:1px solid black;">Upper limit to number of TPSA</td>
+    <td style="border:1px solid black;">1000.0</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dbfilter_min_tpsa</td>
+    <td style="border:1px solid black;">Lower limit to number of TPSA</td> 
+    <td style="border:1px solid black;">0.0</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dbfilter_max_qed</td>
+    <td style="border:1px solid black;">Upper limit to number of QED</td>
+    <td style="border:1px solid black;">1.0</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dbfilter_min_qed</td>
+    <td style="border:1px solid black;">Lower limit to number of QED</td> 
+    <td style="border:1px solid black;">0.0</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dbfilter_max_sa</td>
+    <td style="border:1px solid black;">Upper limit to number of SynthA</td>
+    <td style="border:1px solid black;">10</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dbfilter_min_sa</td>
+    <td style="border:1px solid black;">Lower limit to number of SynthA</td> 
+    <td style="border:1px solid black;">1</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dbfilter_max_pns</td>
+    <td style="border:1px solid black;">Upper limit to number of PAINS</td>
+    <td style="border:1px solid black;">100</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dbfilter_sa_fraglib_path</td>
+    <td style="border:1px solid black;">Path to SynthA parameters</td> 
+    <td style="border:1px solid black;">sa_fraglib.dat</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dbfilter_PAINS_path</td>
+    <td style="border:1px solid black;">Path to PAINS parameters</td> 
+    <td style="border:1px solid black;">pains_table_2019_09_01.dat</td>
+  </tr>
+ </table>
+  <ul>
+
+     <p class='style2'><em>RDKit Database Filtering Output Components</em></p>
+	<p class='style2'>1. ${output}.scored.mol2 is the mol2 file containing 
+         scored molecules that passed dbfilter.
+        </p>
+
+	<p class='style2'>2. ${output}.rejected.mol2 is the mol2 file containing 
+        scored molecules that got rejected by dbfilter.
+        </p>
+
+	<p class='style2'>NOTE: ${output}.scored.mol2 will contain RDKit descriptors that are not 
+        filterable based on the input dock file. </br>
+        These descriptors are:
+            <table  style="border:1px solid black; width:100%">
+            <tr>
+              <th style="border:1px solid black;">Descriptor</th>
+              <th style="border:1px solid black;">Description</th> 
+            </tr>
+            <tr>  
+              <td style="border:1px solid black;">RD_num_arom_rings</td>
+              <td style="border:1px solid black;">Number of aromatics rings</td>
+            </tr> 
+            <tr>  
+              <td style="border:1px solid black;">RD_num_alip_rings</td>
+              <td style="border:1px solid black;">Number of aliphatic rings</td>
+            </tr> 
+            <tr>  
+              <td style="border:1px solid black;">RD_num_sat_rings</td>
+              <td style="border:1px solid black;">Number of saturated rings</td>
+            </tr> 
+
+            <tr>  
+              <td style="border:1px solid black;">RD_PAINS_names</td>
+              <td style="border:1px solid black;">List of PAINS if there are hits</td>
+            </tr> 
+
+            <tr>  
+              <td style="border:1px solid black;">RD_SMILES</td>
+              <td style="border:1px solid black;">SMILES string representing the molecule</td>
+            </tr> 
+           </table>
+        </p>
+	<p class='style2'>NOTE: ${output}.out file will contain one descriptor that is not found in ${output}.scored.mol2 due to
+        its long length. This descriptor is MACCS keys labeled as "RD_MACCS"
+     
+       </p>
+</blockquote>
 
 
 <p class="style1" align="center"><a href="#TableofContents">RETURN TO TABLE OF CONTENTS</a></p>
@@ -6123,7 +6628,7 @@ HBA        12   15.0957    0.1565   53.3356    0.3976    0.3143    0.8621    1.0
   </tr>
   <tr>
     <td style="border:1px solid black;">fms_score_match_proj_cutoff</td>
-    <td style="border:1px solid black;">Specify the scalar projection cutoff &#963 in the pharmacophore matching protocol. Default value cos(45 ° ) &#8776 0.7071 corresponds to a vector angle cutoff of 45 °</td> 
+    <td style="border:1px solid black;">Specify the scalar projection cutoff &#963 in the pharmacophore matching protocol. Default value cos(45 Â° ) &#8776 0.7071 corresponds to a vector angle cutoff of 45 Â°</td> 
     <td style="border:1px solid black;">0.7071</td>
   </tr>
   <tr>
@@ -6220,7 +6725,7 @@ HBA        12   15.0957    0.1565   53.3356    0.3976    0.3143    0.8621    1.0
   </tr>
   <tr>
     <td style="border:1px solid black;">descriptor_fms_score_match_proj_cutoff</td>
-    <td style="border:1px solid black;">Specify the scalar projection cutoff &#963 in the pharmacophore matching protocol. Default value cos(45 ° ) &#8776 0.7071 corresponds to a vector angle cutoff of 45 °</td> 
+    <td style="border:1px solid black;">Specify the scalar projection cutoff &#963 in the pharmacophore matching protocol. Default value cos(45 Â° ) &#8776 0.7071 corresponds to a vector angle cutoff of 45 Â°</td> 
     <td style="border:1px solid black;">0.7071</td>
   </tr>
   <tr>
@@ -6924,10 +7429,10 @@ E<sub>restraint</sub>= k RMSD<sup>2</sup>
 
 <p class="style2">
 
-where the parameter k is in kcal/(mol Å<sup>2</sup>). 
+where the parameter k is in kcal/(mol Ã…<sup>2</sup>). 
 Simplex minimization energy evaluation is the sum (Score + Internal Energy+ E<sub>restraint</sub>).
-A typical value of k=10 kcal/(mol Å<sup>2</sup>),
-for small conformational changes where say RMSD =0.5 Å,
+A typical value of k=10 kcal/(mol Ã…<sup>2</sup>),
+for small conformational changes where say RMSD =0.5 Ã…,
 yields E<sub>constraint</sub> =10*(0.5)^2=2.5 kcal/mol.
 This indicates that the constraint will affect the minimization
 very little unless the ligand is moved a lot. 
@@ -9358,9 +9863,9 @@ output_prefix ; output grid prefix name</p>
  &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
  &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
  &nbsp; <big><span style="font-family: Times New Roman,Times,serif; font-style: italic;">&nbsp;
-   E<sub>dsol</sub></span> &nbsp;=&nbsp; <span style="font-style: italic; font-family: Times New Roman,Times,serif;">S</span><sub style="font-style: italic; font-family: Times New Roman,Times,serif;">i</sub><span style="font-family: Times New Roman,Times,serif;"> </span>ø<sup style="font-family: Times New Roman,Times,serif;">DES,EXPL</sup>(<span style="font-style: italic; font-family: Times New Roman,Times,serif;">x</span><sub style="font-style: italic; font-family: Times New Roman,Times,serif;">i</sub>)
+   E<sub>dsol</sub></span> &nbsp;=&nbsp; <span style="font-style: italic; font-family: Times New Roman,Times,serif;">S</span><sub style="font-style: italic; font-family: Times New Roman,Times,serif;">i</sub><span style="font-family: Times New Roman,Times,serif;"> </span>Ã¸<sup style="font-family: Times New Roman,Times,serif;">DES,EXPL</sup>(<span style="font-style: italic; font-family: Times New Roman,Times,serif;">x</span><sub style="font-style: italic; font-family: Times New Roman,Times,serif;">i</sub>)
    + &nbsp;<span style="font-style: italic; font-family: Times New Roman,Times,serif;">f</span><sub style="font-style: italic; font-family: Times New Roman,Times,serif;">i</sub>
- ø<sup style="font-family: Times New Roman,Times,serif;">DES,BULK</sup>(<span style="font-family: Times New Roman,Times,serif; font-style: italic;">x</span><sub style="font-family: Times New Roman,Times,serif; font-style: italic;">i</sub>)</big></p>
+ Ã¸<sup style="font-family: Times New Roman,Times,serif;">DES,BULK</sup>(<span style="font-family: Times New Roman,Times,serif; font-style: italic;">x</span><sub style="font-family: Times New Roman,Times,serif; font-style: italic;">i</sub>)</big></p>
 
 
 
@@ -9392,8 +9897,8 @@ output_prefix ; output grid prefix name</p>
    and beta = -0.005 kcal/mol.<span style="font-family: Times New Roman,Times,serif; font-style: italic;">
    f<sub>i</sub></span> is the volume of ligand atom i,
    calculated from the amber radius of the ligand atom. For the receptor,
-   these can be precalculated and stored on a grid.&nbsp;<big>ø<sup style="font-family: Times New Roman,Times,serif;">DES,BULK</sup>(<span style="font-style: italic; font-family: Times New Roman,Times,serif;">x</span><sub style="font-style: italic; font-family: Times New Roman,Times,serif;">i</sub>)</big><span style="font-style: italic; font-family: Times New Roman,Times,serif;"></span>
- &nbsp;and&nbsp;<big>ø<sup style="font-family: Times New Roman,Times,serif;">DES,EXPL</sup>(<span style="font-family: Times New Roman,Times,serif; font-style: italic;">x</span><sub style="font-family: Times New Roman,Times,serif; font-style: italic;">i</sub>)</big><span style="font-family: Times New Roman,Times,serif; font-style: italic;"></span>
+   these can be precalculated and stored on a grid.&nbsp;<big>Ã¸<sup style="font-family: Times New Roman,Times,serif;">DES,BULK</sup>(<span style="font-style: italic; font-family: Times New Roman,Times,serif;">x</span><sub style="font-style: italic; font-family: Times New Roman,Times,serif;">i</sub>)</big><span style="font-style: italic; font-family: Times New Roman,Times,serif;"></span>
+ &nbsp;and&nbsp;<big>Ã¸<sup style="font-family: Times New Roman,Times,serif;">DES,EXPL</sup>(<span style="font-family: Times New Roman,Times,serif; font-style: italic;">x</span><sub style="font-family: Times New Roman,Times,serif; font-style: italic;">i</sub>)</big><span style="font-family: Times New Roman,Times,serif; font-style: italic;"></span>
    are interpolated from grids calculated using the solvgrid program
    during docking. It requires the calculation of&nbsp;two separate
    grids:</p>
@@ -10785,7 +11290,8 @@ File Formats<span class="style2"></span></p>
   similarity, among others, will be written to file depending on which scoring 
   function(s) were used.
 
-  The Chimera program <a href="https://www.cgl.ucsf.edu/chimera/docs/UsersGuide/frametut.html"> ViewDock</a> 
+  The Chimera program
+  <a href="https://www.cgl.ucsf.edu/chimera/docs/UsersGuide/frametut.html"> ViewDock</a> 
   tool can be used to load a DOCK multi-mol2 files containing various descriptors 
   which can be examined in the ViewDock ListBox. This can be a useful way 
   to prioritize subsets of compounds from a large virtual screen.  ListBox descriptors 
@@ -11055,9 +11561,9 @@ References<span class="style2"></span></p>
   Kuntz, I. D.; Rizzo, R. C.  DOCK 6: Impact of New Features and Current
   Docking Performance.  J. Comput. Chem. 36: 1132-1156, 2015. </p>
   
-	  <p class='style2'><a name="allenetal2017"></a> Allen, W.J.; Fochtman, B.C.; 
-	  Balius, T.E.; Rizzo, R.C. Customizable de novo design strategies for DOCK: Application to 
-	  HIVgp41 and other therapeutic targets J. Comput. Chem. 38: 2641-2663, 2017.</p>
+  <p class='style2'><a name="allenetal2017"></a> Allen, W.J.; Fochtman, B.C.; 
+  Balius, T.E.; Rizzo, R.C. Customizable de novo design strategies for DOCK: Application to 
+  HIVgp41 and other therapeutic targets J. Comput. Chem. 38: 2641-2663, 2017.</p>
 
       <p class="style2"><a name="Baliusetal2011"></a>Balius, T.E., Mukherjee, S.,
   and Rizzo, R.C., Implementation and Evaluation of a Docking-Rescoring Method
@@ -11144,15 +11650,22 @@ The Hungarian method for the assignment problem. Nav. Res. Logist. Q.
   DOCK 6: Combining Techniques to Model RNA-Small Molecule Complexes.
   RNA 15:1219-1230, 2009. </p>
 
-      <p class="style2"> <a name="LiuetalJPhysChemB2004"></a>Liu, H.-Y.,
+    <p class="style2"> <a name="LiuetalJPhysChemB2004"></a>Liu, H.-Y.,
   Kuntz, I. D., and Zou, X. Pairwise GB/SA Scoring Function for
   Structure-based Drug Design. J. Phys. Chem. B. 108: 5453-5462, 2004. </p>
-      <p class="style2"><a name="LutyPWdesolJCC1995"></a>Luty,
+
+    <p class="style2"><a name="LutyPWdesolJCC1995"></a>Luty,
 B. A.; Wasserman P.F.; Hodge C.N.; Zacharias M.; McCammon J.A. A
 Molecular Mechanics / Grid Method for Evaluation of Ligand-Receptor
 Interactions. J. Comput. Chem. 16:454-464, 1995.</p>
 
-      <p class="style2"> <a name="MengetalProteins1993"></a>Meng, E.C.,
+    <p class="style2"><a name="Matos2023"></a>
+  Matos, G.D.R., Pak, S., and Rizzo, R.C.
+  Descriptor-Driven de Novo Design Algorithms for DOCK6 Using RDKit.
+  J. Chem. Inf. Model., 63(18): 5803-5822, 2023.
+  https://doi.org/10.1021/acs.jcim.3c01031 </p>
+
+    <p class="style2"> <a name="MengetalProteins1993"></a>Meng, E.C.,
   Gschwend, D.A., Blaney, J.M. and Kuntz, I.D. Orientational sampling and
   rigid-body minimization in molecular docking. Proteins. 17(3): 266-278,
   1993. </p>
@@ -11205,7 +11718,7 @@ Theory Comput. 2: 128-139, 2006. </p>
 
 <p class="style2"><a name="sarenietal1998"></a>Sareni, B., 
     Krahenbuhl, L., Fitness sharing and niching methods revisited. IEEE Transactions on Evolutionary Computation, Institute of Electrical and Electronics Engineers, 1998, 2, 8. </p>
-	
+
       <p class="style2"><a name="sastryetal2015"></a>Sastry, G.M., 
     Dixon, S.L., Sherman, W. Rapid Shape-Based Ligand Alignment and 
     Virtual Screening Method Based on Atom/Feature-Pair Similarities

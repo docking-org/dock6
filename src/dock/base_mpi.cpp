@@ -42,7 +42,7 @@ dockmol_to_string(DOCKMol & mol, string & text)
     ostr->put(tmp_char);
     ostr->write(mol.score_text_data.c_str(), mol.score_text_data.size());
     ostr->put(tmp_char);
-
+    
     // write the atom information
     for (i = 0; i < mol.num_atoms; i++)
         *ostr << mol.x[i] << endl;
@@ -109,6 +109,7 @@ dockmol_to_string(DOCKMol & mol, string & text)
 
     // write molecular info YZ added to allow printing to header
     *ostr << mol.rot_bonds << endl;
+    *ostr << mol.heavy_atoms << endl;
     *ostr << mol.mol_wt << endl;
     *ostr << mol.formal_charge << endl;
 
@@ -165,11 +166,18 @@ dockmol_to_string(DOCKMol & mol, string & text)
 
     // added by Guilherme D.
     #ifdef BUILD_DOCK_WITH_RDKIT
-    //to prepare the pns names
+    //to pass through rdkit properties 
+
+    ////to prepare the pns names
     std::vector<std::string> vecpnstmp{};
     vecpnstmp = mol.pns_name;
     std::string molpns_name = std::accumulate(vecpnstmp.begin(), vecpnstmp.end(), std::string("")); 
-    // write RDKit info
+    //// write RDKit info
+    if (mol.fails_filt) {
+       *ostr << 1 << endl;
+    } else {
+       *ostr << 0 << endl;
+    }
     *ostr << mol.num_stereocenters << endl;
     *ostr << mol.num_spiro_atoms << endl;
     *ostr << mol.clogp << endl;
@@ -177,39 +185,25 @@ dockmol_to_string(DOCKMol & mol, string & text)
     *ostr << mol.num_arom_rings << endl;
     *ostr << mol.num_alip_rings << endl;
     *ostr << mol.num_sat_rings << endl;
-    *ostr << mol.smiles << endl;
+    ostr->write(mol.smiles.c_str(), mol.smiles.size());
+    ostr->put(tmp_char);
     *ostr << mol.qed_score << endl;
     *ostr << mol.sa_score << endl;
     *ostr << mol.esol << endl;
-    /*if (mol.fail_clogp){ 
-        *ostr << 1 << endl;
-    } else {
-        *ostr << 0 << endl;
-    }                      
-    if (mol.fail_esol){ 
-        *ostr << 1 << endl;
-    } else {
-        *ostr << 0 << endl;
-    }
-    if (mol.fail_qed){ 
-        *ostr << 1 << endl;
-    } else {
-        *ostr << 0 << endl;
-    }
-    if (mol.fail_sa){ 
-        *ostr << 1 << endl;
-    } else {
-        *ostr << 0 << endl;
-    }                       
-    if (mol.fail_stereo){ 
-        *ostr << 1 << endl;
-    } else {
-        *ostr << 0 << endl;
-    }*/                        
     *ostr << mol.pns << endl;
-    *ostr << molpns_name << endl;
+    if ( mol.pns == 0){
+    }else{
+        for (int z = 0; z < mol.pns; z++) {
+            *ostr << mol.pns_name[z] << std::endl;
+        }
+    }
+    *ostr << mol.MACCS_size << std::endl;
+    for (int z = 0; z < (mol.MACCS_size-1); z++) {
+        *ostr << mol.MACCS[z];
+    }
     #endif
 
+    *ostr << mol.bad_molecule << std::endl;
     // write amber information
     ostr->write(mol.amber_score_ligand_id.c_str(),
                 mol.amber_score_ligand_id.size());
@@ -239,7 +233,7 @@ string_to_dockmol(DOCKMol & mol, string & text)
     mol.clear_molecule();
 
     istringstream  *istr = new istringstream(text.c_str());
-
+   
     // read the molecule size information
     istr->getline(line, 1000);
     sscanf(line, "%d", &(mol.num_atoms));
@@ -371,6 +365,8 @@ string_to_dockmol(DOCKMol & mol, string & text)
     istr->getline(line, 1000);
     sscanf(line, "%u", &(mol.rot_bonds));
     istr->getline(line, 1000);
+    sscanf(line, "%u", &(mol.heavy_atoms));
+    istr->getline(line, 1000);
     sscanf(line, "%f", &(mol.mol_wt));
     istr->getline(line, 1000);
     sscanf(line, "%f", &(mol.formal_charge));
@@ -448,11 +444,16 @@ string_to_dockmol(DOCKMol & mol, string & text)
 
     // Added by Guilherme D. (Sept/2020)
     #ifdef BUILD_DOCK_WITH_RDKIT
-    //to prepare the pains names
+    //to pass through rdkit properties 
+ 
+    ////to prepare the pains names 
     std::vector<std::string> vecpnstmp{};
     vecpnstmp = mol.pns_name;
     std::string molpns_name = std::accumulate(vecpnstmp.begin(), vecpnstmp.end(), std::string("")); 
- 
+
+    istr->getline(line, 1000);
+    sscanf(line, "%u", &(mol.fails_filt));  
+
     istr->getline(line, 1000);
     sscanf(line, "%u", &(mol.num_stereocenters));
     istr->getline(line, 1000);
@@ -468,7 +469,7 @@ string_to_dockmol(DOCKMol & mol, string & text)
     istr->getline(line, 1000);
     sscanf(line, "%u", &(mol.num_sat_rings)); 
     istr->getline(line, 1000);
-    sscanf(line, "%s", &(mol.smiles)); 
+    mol.smiles = line;
     istr->getline(line, 1000);
     sscanf(line, "%lf", &(mol.qed_score));
     istr->getline(line, 1000);
@@ -476,21 +477,37 @@ string_to_dockmol(DOCKMol & mol, string & text)
     istr->getline(line, 1000);
     sscanf(line, "%lf", &(mol.esol));
     istr->getline(line, 1000);
-    sscanf(line, "%lf", &(mol.pns));
+    sscanf(line, "%u", &(mol.pns));
+    if (mol.pns == 0) {
+    }else{
+        for (int z = 1; z<=mol.pns; z++) {
+            istr->getline(line, 1000);
+            mol.pns_name.push_back(line); 
+        }
+    }
+    //MACCS_size is required because when MACCS fp calc succeeded it outputs 167 chars
+    //when it fails, it outputs 166 chars.
     istr->getline(line, 1000);
-    sscanf(line, "%lf", molpns_name);
+    sscanf(line, "%u", &(mol.MACCS_size));
+    boost::dynamic_bitset<> tmp_bitset;
+    for (int z = 0; z<(mol.MACCS_size-1); z++) {
+        istr->getline(line, 1000); 
+        tmp_bitset.push_back(strtol(line,nullptr,2));
+    }
+    mol.MACCS = tmp_bitset;
     #endif
+    //needed for mpi dbfiltering
+    istr->getline(line, 1000);
+    sscanf(line, "%u", &(mol.bad_molecule));
 
 
     // read amber information
     istr->getline(line, sizeof(line));
     mol.amber_score_ligand_id = line;
-    trace.note( "amber_score_ligand_id = " + mol.amber_score_ligand_id );
-
-    // free the array
+    trace.note( "amber_score_ligand_id = " + mol.amber_score_ligand_id ); 
+    // free the array 
     delete          istr;
     istr = NULL;
-
 }
 /************************************************/
 bool
@@ -568,8 +585,7 @@ Base_MPI::add_to_send_queue(DOCKMol & mol)
 
     tmp_mol.clear_molecule();
     send_queue.push_back(tmp_mol);
-    copy_molecule(send_queue[send_queue.size() - 1], mol);
-
+    copy_molecule(send_queue[send_queue.size() - 1], mol); 
     if (send_queue.size() >= mpi_work_unit) {
         continue_mols = false;
     }
@@ -579,15 +595,11 @@ Base_MPI::add_to_send_queue(DOCKMol & mol)
 bool
 Base_MPI::get_from_send_queue(DOCKMol & mol)
 {
-
     if (recv_queue.size() > 0)
         recv_queue_request();
-
     if (send_queue.size() == 0)
         send_queue_request();
-
     mol.clear_molecule();
-
     if (send_queue.size() > 0) {
 
         copy_molecule(mol, send_queue[send_queue.size() - 1]);
@@ -617,16 +629,13 @@ Base_MPI::add_to_recv_queue(RANKMol & mol)
 bool
 Base_MPI::get_from_recv_queue(RANKMol & mol)
 {
-
     if ((recv_queue.size() == 0) && (receive_flag == true)) {
         receive_recv_queue();
         receive_flag = false;
     }
-
     mol.clear_molecule();
-
+    
     if (recv_queue.size() > 0) {
-
         copy_molecule(mol.mol, recv_queue[recv_queue.size() - 1].mol);
         mol.data = recv_queue[recv_queue.size() - 1].data;
         mol.score = recv_queue[recv_queue.size() - 1].score;
@@ -634,7 +643,6 @@ Base_MPI::get_from_recv_queue(RANKMol & mol)
         recv_queue.pop_back();
         return true;
     }
-
     return false;
 
 }
@@ -688,9 +696,7 @@ Base_MPI::send_queue_request()
     char           *mols;
     string          str;
     int             size = 0;
-
     tmp_mol.clear_molecule();
-
     request[0] = rank;
     request[1] = 1;
 

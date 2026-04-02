@@ -23,7 +23,7 @@
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //
 //
-// This software is copyrighted, 2004-2022,
+// This software is copyrighted, 2004-2023,
 // by the DOCK Developers.
 //
 // The authors hereby grant permission to use, copy, modify, and re-distribute
@@ -249,7 +249,6 @@ main(int argc, char **argv)
         }
         return 1;               // non-zero return indicates error
     }
-
     // /////////////////////////////////////////////////////////////////////////
     // Initialization routines
     c_master_conf.initialize();
@@ -292,10 +291,10 @@ main(int argc, char **argv)
         //if (c_master_conf.c_dn_build.simple_build_flag)
         //    c_master_conf.c_dn_build.simple_build(c_master_score, c_simplex, c_typer);
         //else
-            c_master_conf.c_dn_build.build_molecules(c_master_score, c_simplex, c_typer, c_orient);
+	    c_master_conf.c_dn_build.build_molecules(c_master_score, c_simplex, c_typer, c_orient);
 
     } else if (c_master_conf.method == 3) { // this is covalent
-    while (c_library.get_mol(mol,false, USE_MPI, c_master_score.amber, c_typer, c_master_score, c_simplex)) {
+    while (c_library.get_mol(mol,false, USE_MPI, c_master_score.amber, c_typer, c_master_score, c_simplex)) { 
         // If MPI is used this is done on the compute nodes.
         // filtering must be done here because it needs all prep for docking
         // before the mols can be eliminated.
@@ -576,8 +575,7 @@ main(int argc, char **argv)
     // Else if you are doing flexible, rigid, or fixed anchor docking, enter here
     } else {
 
-    while (c_library.get_mol(mol,c_filter.use_database_filter, USE_MPI, c_master_score.amber, c_typer, c_master_score, c_simplex)) {
-
+    while (c_library.get_mol(mol,c_filter.use_database_filter, USE_MPI, c_master_score.amber, c_typer, c_master_score, c_simplex)) { 
         // If MPI is used this is done on the compute nodes.
         // filtering must be done here because it needs all prep for docking
         // before the mols can be eliminated.
@@ -618,7 +616,19 @@ main(int argc, char **argv)
             //other descriptors are now computed & printed in amber_typer.cpp
             //print out the descriptors
             //cout << c_filter.get_descriptors(mol);
-
+            #ifdef BUILD_DOCK_WITH_RDKIT
+            if (c_filter.fails_filter(mol))  {
+                 //ligand failed the filter 
+                 mol.fails_filt = true;
+                 //move to the next ligand to be docked
+                 //cout << "\n" "-----------------------------------" "\n";
+                 //cout << "Molecule: " << mol.title << "\n\n";
+                 cout << mol.current_data << endl;
+                 //continue;
+            }else{
+                mol.fails_filt = false;
+            } 
+            #else
             if (c_filter.fails_filter(mol))  {
                  //ligand failed the filter
                  //move to the next ligand to be docked
@@ -627,6 +637,7 @@ main(int argc, char **argv)
                  cout << mol.current_data << endl;
                  continue;
             }
+            #endif
         }
 
         // sudipto & trent Dec 09, 2008

@@ -34,7 +34,7 @@ All Rights Reserved <br>
 </p>
 
 <p class="style2" align="center">Last updated
-January 30, 2023 <br>
+November 14, 2023 <br>
 </p>
 
 
@@ -63,6 +63,9 @@ January 30, 2023 <br>
    <ul>
       <li> <a href="#dmsinstall">
   <strong>How is dms installed ?</strong>
+  </a>
+      <li> <a href="#rdkitinstall">
+  <strong>How is RDKit installed ?</strong>
   </a>
       <li> <a href="#amberhome">
   <strong> Should AMBERHOME be set ? </strong>
@@ -137,8 +140,8 @@ January 30, 2023 <br>
   <a name="currentrelease"></a>
   <p align="left" class="style2"><strong>What is the current release of DOCK?</strong></p>
   <blockquote>
-    <p align="left" class="style2">The current release is version 6.10
-     which was released in January 2023.
+    <p align="left" class="style2">The current release is version 6.11
+     which was released in November 2023.
     </p>
   </blockquote>
   <hr>
@@ -227,11 +230,69 @@ make install
  </blockquote>
  <hr>
 
+  <a name="rdkitinstall"></a>
+  <p align="left" class="style2"><strong>How is RDKit installed ?</strong></p>
+  <blockquote>
+  <p align="left" class="style2"> 
+    The RDKit installation
+    <a href="https://dock.compbio.ucsf.edu/DOCK_6/dock6_manual.htm#rdkitinstall">section in the DOCK 6 manual</a>
+    describes the main approaches.  If the automated recipe supplied by Dock
+    fails then this manual workaround is suggested (where the starting
+    directory is the top level directory of DOCK) :
+  <br>
+  <code>
+cd src/rdkit
+  </code>
+  <br>
+  <code>
+make rdkitclean
+  </code>
+  <br>
+  <code>
+make getdepend
+  </code>
+  <br>
+  <code>
+make extract
+  </code>
+  <br>
+  <code>
+cd rdkit-Release_2019_09_1
+  </code>
+  <br>
+  <code>
+rm -rf build && mkdir build && cd build
+  </code>
+  <br>
+  <code>
+cmake .. -DRDK_INSTALL_INTREE=OFF -DCMAKE_INSTALL_PREFIX=`pwd`/.. -DBOOST_ROOT=${BOOST_ROOT} -DBoost_NO_SYSTEM_PATHS=ON -DBoost_USE_STATIC_LIBS=OFF -DEIGEN3_INCLUDE_DIR=/absolute/path/to/dock6/src/rdkit/eigen-3.3.9 -DRDK_BUILD_PYTHON_WRAPPERS=OFF
+  </code>
+  <br>
+  <code>
+make
+  </code>
+  <br>
+  <code>
+make install
+  </code>
+  <br>
+  Note that this assumes that Boost has been installed with top level
+  directory specified in environment variable BOOST_ROOT.  This recipe is very
+  close to that specified by target rdkit in src/rdkit/Makefile;
+  the main difference is that this workaround eschews all Python.
+  Note that a variety of Python related error messages have been observed when
+  trying to use the automated DOCK procedure for installing RDKit.  This may be
+  due to the difficulty of employing Python for multiple purposes.  See
+  <a href="https://www.admin-magazine.com/HPC/Articles/Re-Installing-Python">this</a>
+  for advice on rectifying your Python installation.
+ </blockquote>
+ <hr>
+
   <a name="amberhome"></a>
   <p align="left" class="style2"><strong>Should AMBERHOME be set ? </strong></p>
   <blockquote>
   <p align="left" class="style2"> No.  In fact, for DOCK versions through
-  6.10 a defined <code>AMBERHOME</code> environment variable will cause
+  6.11 a defined <code>AMBERHOME</code> environment variable will cause
   problems for the DOCK Amber score preparation procedure.
   For examples on undefining <code>AMBERHOME</code> see the
   <a href="#Error from amberize_ligand;"> next FAQ.</a>
@@ -571,24 +632,34 @@ Error from amberize_ligand; the name of the ligand is
   <p align="left" class="style2">
     Versions 6 of DOCK officially support
     <a href="https://en.wikipedia.org/wiki/MacOS">macOS</a>
-    platforms.  GNU compilers and thus configuration files are recommended.
-    However, the main effort is setting up your macOS for building
-    computational chemistry software.  There are various schools of thought. 
-    As of 
+    platforms.  GNU compilers and thus configuration files are recommended
+    in general (but keep on reading).
+    The main effort is setting up your macOS for building computational
+    chemistry software.  There are various schools of thought.  As of 
     <a href="https://en.wikipedia.org/wiki/MacOS_Monterey">macOS Monterey</a>
-    (version 12) and
+    (version 12),
     <a href="https://en.wikipedia.org/wiki/MacOS_Ventura">macOS Ventura</a>
-    (version 13) installing prerequisites natively is generally possible; see the
+    (version 13), and
+    <a href="https://en.wikipedia.org/wiki/MacOS_Sonoma">macOS Ventura</a>
+    (version 14) installing prerequisites natively is generally possible; see the
     <a href="https://ambermd.org/InstMacOS.php">Amber instructions</a> for
     installing Xcode and gfortran.  However, employing a package management
     system may still be the most prudent path.
     <a href="https://jswails.wikidot.com/mac-os-x">Here</a>
     is one approach using MacPorts, and another using Homebrew is
-    <a href="https://macinchem.org/reviews/cheminfo/cheminfoMac.php">here.</a>
+    <a href="https://macinchem.org/2023/04/06/cheminformatics-on-a-mac">here.</a>
+    In DOCK release 6.11 we added homebrew configuration files which merely
+    cater to idiosyncratic details of compiler naming, e.g., gcc-11.
+  </p>
+  <p align="left" class="style2">
     The most frequent user issue is compilation errors caused by stale GNU
-    compilers (e.g., gcc 4.2.1).
+    compilers (e.g., gcc 4.2.1).  On the other hand, a GNU compiler on the
+    bleeding edge can also cause problems because DOCK has not yet been updated
+    to support compiler releases subsequent to the DOCK release.  As a point of
+    reference in late 2023, DOCK release 6.11 was tested with GNU 12.3.0.
     <a href="https://dock.compbio.ucsf.edu/DOCK_6/index.htm#searchdockfans">Search</a>
     the DOCK-Fans mail archives for the latest user experiences.
+  </p>
  </blockquote>
  <hr>
 

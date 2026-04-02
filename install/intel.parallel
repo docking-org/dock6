@@ -1,5 +1,5 @@
 # DOCK configuration file for Intel compilers with MPI based parallelism
-# (specifically MPICH2 but should for all MPIs).
+# (specifically MPICH2 but should work for all MPIs).
 
 # REQUIREMENTS - define these environment variables:
 # MPI_HOME is the root directory of the MPI installation

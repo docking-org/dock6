@@ -1,10 +1,11 @@
 
 ##########                                Name:                 AAH
-##########                DOCK_Rotatable_Bonds:                   0
 ##########                    Molecular_Weight:                   0
+##########                DOCK_Rotatable_Bonds:                   0
 ##########                       Formal_Charge:                   0
 ##########                     HBond_Acceptors:                   3
 ##########                        HBond_Donors:                   2
+##########                         Heavy_Atoms:                   0
 ##########                         Amber_Score:           10.892540
 ##########                Amber_complex_energy:        -4640.051698
 ##########               Amber_receptor_energy:         4584.941716

@@ -1079,6 +1079,9 @@ Library_File::initialize(int argc, char **argv, bool USE_MPI)
         output_file_confs = output_file_prefix + "_conformers.mol2";
         output_file_scored = output_file_prefix + "_scored.mol2";
         output_file_ranked = output_file_prefix + "_ranked.mol2";
+        #ifdef BUILD_DOCK_WITH_RDKIT 
+        output_file_rejected = output_file_prefix + "_rejected.mol2";
+        #endif
         if(write_footprints){
             output_file_footprint_confs = output_file_prefix + "_footprint_conformers.txt";
             output_file_footprint_scored = output_file_prefix + "_footprint_scored.txt";
@@ -1189,6 +1192,14 @@ Library_File::open_files()
                 " for writing.  Program will terminate." << endl << endl;
             exit(0);
         }
+        #ifdef BUILD_DOCK_WITH_RDKIT
+        ligand_out_rejected.open(output_file_rejected.c_str());
+        if (ligand_out_rejected.fail()) {
+            cout << "\n\nCould not open " << output_file_rejected <<
+                " for writing.  Program will terminate." << endl << endl;
+            exit(0);
+        } 
+        #endif
         if (write_footprints) {
             ligand_out_footprint_scored.open(output_file_footprint_scored.c_str());
             if (ligand_out_footprint_scored.fail()) {
@@ -1280,6 +1291,10 @@ Library_File::close_files()
     ligand_out_orients.close();
     ligand_out_confs.close();
     ligand_out_scored.close();
+    #ifdef BUILD_DOCK_WITH_RDKIT
+    ligand_out_rejected.close();
+    #endif
+    
     ligand_out_ranked.close(); 
     if(write_footprints) {
         ligand_out_footprint_confs.close();
@@ -1612,14 +1627,10 @@ Library_File::get_mol(DOCKMol & mol,bool USE_FILT, bool USE_MPI, bool amber, AMB
 /***/
         if (is_master_node()) { // master node code
             while (listen_for_request()) {
-
                 if (is_send_request()) {
-
                     while (continue_reading_mols()) {
-
                         if (read_mol(mol, amber)) {
                             add_to_send_queue(mol);
-
                             // if HDB mols in send queue, then set continue
                             // mols true to allow all to be sent
                             if (mol_branches.size() > 0)
@@ -1636,13 +1647,10 @@ Library_File::get_mol(DOCKMol & mol,bool USE_FILT, bool USE_MPI, bool amber, AMB
                 }               // End send mol code
 
                 if (is_receive_request()) {
-
                     receive_flag = true;
 
                     ranked_poses.clear();
-
                     while (get_from_recv_queue(tmp_mol)) {
-
                         ranked_poses.push_back(tmp_mol);
 
                     }           // End loop over received mols
@@ -1651,7 +1659,6 @@ Library_File::get_mol(DOCKMol & mol,bool USE_FILT, bool USE_MPI, bool amber, AMB
                     num_anchors = stats[0];
                     num_orients = stats[1];
                     num_confs = stats[2];
-
                     if (read_success) {
                         sort_write(USE_FILT, USE_MPI, score, min);
                     }
@@ -1681,22 +1688,18 @@ Library_File::get_mol(DOCKMol & mol,bool USE_FILT, bool USE_MPI, bool amber, AMB
             stats[0] = num_anchors;
             stats[1] = num_orients;
             stats[2] = num_confs;
-
             // init pose ranking
             ranked_poses.clear();
             high_position = 0;
             high_score = 0.0;
-
             // get molecule from server
             if (get_from_send_queue(mol)) {
 
                 num_anchors = 0;
                 num_orients = 0;
                 num_confs = 0;
-
                 if (calc_rmsd)
                     submit_rmsd_reference(mol, typer);
-
                 read_success = true;
 
                 return true;
@@ -1958,14 +1961,12 @@ Library_File::write_scored_poses(bool USE_FILT, bool USE_MPI, Master_Score & sco
     SCOREMol        tmp_mol;
     DOCKMol         tmp_dockmol;
     //PAK
-    Filter          filt;
-    
 
-  /**
-  change if statement- only skip the writing if it is a client
-  for both single proc. and master mode, writing should occur
-  **/
-
+    /**
+    change if statement- only skip the writing if it is a client
+    for both single proc. and master mode, writing should occur
+    **/
+ 
     if (ranked_poses.size() > 0) {
 
         if (USE_MPI) {
@@ -2005,11 +2006,9 @@ Library_File::write_scored_poses(bool USE_FILT, bool USE_MPI, Master_Score & sco
                 //filterXlogP.getXLogP(ranked_poses[i].mol);
 
                 if (ranked_poses[i].mol.num_atoms > 0) {
-
                     // if clustering is used, and molecule is a
                     // clusterhead, write it out
                     if (cluster_assignments[i] > 0) {
-
                         ligand_out_scored << "\n" << DELIMITER << setw(STRING_WIDTH) << "Name:" 
                             << setw(FLOAT_WIDTH) << ranked_poses[i].mol.title << endl;
                         ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "DOCK_Rotatable_Bonds:"
@@ -2019,18 +2018,29 @@ Library_File::write_scored_poses(bool USE_FILT, bool USE_MPI, Master_Score & sco
                                 << setw(FLOAT_WIDTH) << ranked_poses[i].mol.heavy_atoms << endl;
                         ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "Molecular_Weight:"
                             << setw(FLOAT_WIDTH) << ranked_poses[i].mol.mol_wt << endl;
+                        ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "DOCK_Rotatable_Bonds:"
+                            << setw(FLOAT_WIDTH) << ranked_poses[i].mol.rot_bonds << endl;
                         ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "Formal_Charge:"
                             << setw(FLOAT_WIDTH) << ranked_poses[i].mol.formal_charge << endl;
                         ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "HBond_Acceptors:"
                             << setw(FLOAT_WIDTH) << ranked_poses[i].mol.hb_acceptors << endl;
                         ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "HBond_Donors:"
                             << setw(FLOAT_WIDTH) << ranked_poses[i].mol.hb_donors << endl;
+                        ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "Heavy_Atoms:"
+                            << setw(FLOAT_WIDTH) << ranked_poses[i].mol.heavy_atoms << endl;
                         #ifdef BUILD_DOCK_WITH_RDKIT
                         //if dbfilter is used...write theses scores
                         if (USE_FILT) {
                             std::vector<std::string> vecpnstmp{};
                             vecpnstmp = ranked_poses[i].mol.pns_name;
                             std::string molpns_name = std::accumulate(vecpnstmp.begin(), vecpnstmp.end(), std::string(""));
+                            if (ranked_poses[i].mol.pns == 0 && molpns_name.empty() == true){
+                                molpns_name = "NO_PAINS"; 
+                            }else if (ranked_poses[i].mol.pns != 0 && molpns_name.empty() == false) {}
+                            else{
+                                molpns_name = "ERROR_IN_PAINS_MATCHING_PLEASE_INVESTIGATE";
+                            }
+
 
                             ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "RD_num_arom_rings:"
                                 << setw(FLOAT_WIDTH) << ranked_poses[i].mol.num_arom_rings << endl;
@@ -2067,7 +2077,7 @@ Library_File::write_scored_poses(bool USE_FILT, bool USE_MPI, Master_Score & sco
                                 << setw(FLOAT_WIDTH) << ranked_poses[i].mol.smiles << endl;
                         }
                         #endif
-
+                     
                         if (calc_rmsd)
                             ligand_out_scored << calc_rmsd_string(ranked_poses[i].mol);
 
@@ -2079,13 +2089,14 @@ Library_File::write_scored_poses(bool USE_FILT, bool USE_MPI, Master_Score & sco
                            write_footprint_file(ranked_poses[i].mol, score, ligand_out_footprint_scored);
                         if (write_hbonds)
                            write_hbond_file(ranked_poses[i].mol, score, ligand_out_hbond_scored);
-                    }
+                    } 
                 }
             } 
         } else {
 
             for (i = 0; i < ranked_poses.size(); i++) {
                  calc_num_HBA_HBD(ranked_poses[i].mol); 
+              
                  // GDRM, October 2020
                  // If possible, the lines below should not be here. Variables should be
                  // calculated elsewhere and stored in DOCKMol. Check copying function in
@@ -2094,74 +2105,112 @@ Library_File::write_scored_poses(bool USE_FILT, bool USE_MPI, Master_Score & sco
                  //// Calculate xlogp
                  //xlogp  filterXlogP {};
                  //filterXlogP.getXLogP(ranked_poses[i].mol);
-
+               
                 if (ranked_poses[i].mol.num_atoms > 0) {
-                    ligand_out_scored << "\n" << DELIMITER << setw(STRING_WIDTH) << "Name:" 
-                        << setw(FLOAT_WIDTH) << ranked_poses[i].mol.title << "\n";
-                    ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "DOCK_Rotatable_Bonds:"
-                        << setw(FLOAT_WIDTH) << ranked_poses[i].mol.rot_bonds << endl;
-                    if (ranked_poses[i].mol.heavy_atoms > 0)
+                    #ifdef BUILD_DOCK_WITH_RDKIT 
+                    if ( USE_FILT && (ranked_poses[i].mol.fails_filt || ranked_poses[i].mol.bad_molecule) ) {
+                        ligand_out_rejected << "\n" << DELIMITER << setw(STRING_WIDTH) << "Name:"
+                            << setw(FLOAT_WIDTH) << ranked_poses[i].mol.title << endl;
+                        ligand_out_rejected << DELIMITER << setw(STRING_WIDTH) << "Molecular_Weight:"
+                            << setw(FLOAT_WIDTH) << ranked_poses[i].mol.mol_wt << endl;
+                        ligand_out_rejected << DELIMITER << setw(STRING_WIDTH) << "DOCK_Rotatable_Bonds:"
+                            << setw(FLOAT_WIDTH) << ranked_poses[i].mol.rot_bonds << endl;
+                        ligand_out_rejected << DELIMITER << setw(STRING_WIDTH) << "Formal_Charge:"
+                            << setw(FLOAT_WIDTH) << ranked_poses[i].mol.formal_charge << endl;
+                        ligand_out_rejected << DELIMITER << setw(STRING_WIDTH) << "HBond_Acceptors:"
+                            << setw(FLOAT_WIDTH) << ranked_poses[i].mol.hb_acceptors << endl;
+                        ligand_out_rejected << DELIMITER << setw(STRING_WIDTH) << "HBond_Donors:"
+                            << setw(FLOAT_WIDTH) << ranked_poses[i].mol.hb_donors << endl;
+                        ligand_out_rejected << DELIMITER << setw(STRING_WIDTH) << "Heavy_Atoms:"
+                            << setw(FLOAT_WIDTH) << ranked_poses[i].mol.heavy_atoms << endl;
+                        if (ranked_poses[i].mol.bad_molecule && ranked_poses[i].mol.fails_filt){
+                            ligand_out_rejected << DELIMITER << setw(STRING_WIDTH) << "Cause_of_rej:"
+                                << setw(FLOAT_WIDTH) << "bad_input_filt_fail" << endl;
+                        }else if (ranked_poses[i].mol.bad_molecule){
+                            ligand_out_rejected << DELIMITER << setw(STRING_WIDTH) << "Cause_of_rej:"
+                                << setw(FLOAT_WIDTH) << "bad_input" << endl; 
+                        }else if (ranked_poses[i].mol.fails_filt){
+                            ligand_out_rejected << DELIMITER << setw(STRING_WIDTH) << "Cause_of_rej:"
+                                << setw(FLOAT_WIDTH) << "filter_fails" << endl;
+                        }
+                        ligand_out_rejected << ranked_poses[i].data << "\n";
+                        write_mol(ranked_poses[i].mol, ligand_out_rejected); 
+                    }else{
+                    #endif
+                        ligand_out_scored << "\n" << DELIMITER << setw(STRING_WIDTH) << "Name:" 
+                            << setw(FLOAT_WIDTH) << ranked_poses[i].mol.title << "\n";
+                        ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "Molecular_Weight:"
+                            << setw(FLOAT_WIDTH) << ranked_poses[i].mol.mol_wt << endl;
+                        ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "DOCK_Rotatable_Bonds:"
+                            << setw(FLOAT_WIDTH) << ranked_poses[i].mol.rot_bonds << endl;
+                        ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "Formal_Charge:"
+                            << setw(FLOAT_WIDTH) << ranked_poses[i].mol.formal_charge << endl;
+                        ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "HBond_Acceptors:"
+                            << setw(FLOAT_WIDTH) << ranked_poses[i].mol.hb_acceptors << endl;
+                        ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "HBond_Donors:"
+                            << setw(FLOAT_WIDTH) << ranked_poses[i].mol.hb_donors << endl;
                         ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "Heavy_Atoms:"
                             << setw(FLOAT_WIDTH) << ranked_poses[i].mol.heavy_atoms << endl;
-                    ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "Molecular_Weight:"
-                        << setw(FLOAT_WIDTH) << ranked_poses[i].mol.mol_wt << endl;
-                    ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "Formal_Charge:"
-                        << setw(FLOAT_WIDTH) << ranked_poses[i].mol.formal_charge << endl;
-                    ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "HBond_Acceptors:"
-                        << setw(FLOAT_WIDTH) << ranked_poses[i].mol.hb_acceptors << endl;
-                    ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "HBond_Donors:"
-                        << setw(FLOAT_WIDTH) << ranked_poses[i].mol.hb_donors << endl;
-                    #ifdef BUILD_DOCK_WITH_RDKIT
-                    //if dbfilter is used...write theses scores
-                    if (USE_FILT) {
-                        std::vector<std::string> vecpnstmp{};
-                        vecpnstmp = ranked_poses[i].mol.pns_name;
-                        std::string molpns_name = std::accumulate(vecpnstmp.begin(), vecpnstmp.end(), std::string(""));
+                        #ifdef BUILD_DOCK_WITH_RDKIT
+                        //if dbfilter is used...write theses scores
+                        if (USE_FILT) {
+                            std::vector<std::string> vecpnstmp{};
+                            vecpnstmp = ranked_poses[i].mol.pns_name;
+                            std::string molpns_name = std::accumulate(vecpnstmp.begin(), vecpnstmp.end(), std::string(""));
+                            if (ranked_poses[i].mol.pns == 0 && molpns_name.empty() == true){
+                                molpns_name = "NO_PAINS"; 
+                            }else if(ranked_poses[i].mol.pns != 0 && molpns_name.empty() == false) {}
+                            else{
+                                molpns_name = "ERROR_IN_PAINS_MATCHING_PLEASE_INVESTIGATE";
+                            }
 
-                        ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "RD_num_arom_rings:"
-                            << setw(FLOAT_WIDTH) << ranked_poses[i].mol.num_arom_rings << endl;
-                        ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "RD_num_alip_rings:"
-                            << setw(FLOAT_WIDTH) << ranked_poses[i].mol.num_alip_rings << endl;
-                        ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "RD_num_sat_rings:"
-                            << setw(FLOAT_WIDTH) << ranked_poses[i].mol.num_sat_rings << endl;
-                        ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "RD_Stereocenters:"
-                            << setw(FLOAT_WIDTH) << ranked_poses[i].mol.num_stereocenters << endl;
-                        ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "RD_Spiro_atoms:"
-                            << setw(FLOAT_WIDTH) << ranked_poses[i].mol.num_spiro_atoms << endl;
-                        ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "RD_LogP:"
-                            << setw(FLOAT_WIDTH) << ranked_poses[i].mol.clogp << endl;
-                        ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "RD_TPSA:"
-                            << setw(FLOAT_WIDTH) << ranked_poses[i].mol.tpsa << endl;
-                        ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "RD_SYNTHA:"
-                            << setw(FLOAT_WIDTH) << ranked_poses[i].mol.sa_score << endl;
-                        ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "RD_QED:"
-                            << setw(FLOAT_WIDTH) << ranked_poses[i].mol.qed_score << endl;
-                        ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "RD_LogS:"
-                            << setw(FLOAT_WIDTH) << ranked_poses[i].mol.esol << endl;
-                        ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "RD_num_of_PAINS:"
-                            << setw(FLOAT_WIDTH) << ranked_poses[i].mol.pns << endl; 
-                        ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "RD_PAINS_names:"
-                           << setw(FLOAT_WIDTH) << molpns_name << endl;                   
+                            ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "RD_num_arom_rings:"
+                                << setw(FLOAT_WIDTH) << ranked_poses[i].mol.num_arom_rings << endl;
+                            ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "RD_num_alip_rings:"
+                                << setw(FLOAT_WIDTH) << ranked_poses[i].mol.num_alip_rings << endl;
+                            ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "RD_num_sat_rings:"
+                                << setw(FLOAT_WIDTH) << ranked_poses[i].mol.num_sat_rings << endl;
+                            ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "RD_Stereocenters:"
+                                << setw(FLOAT_WIDTH) << ranked_poses[i].mol.num_stereocenters << endl;
+                            ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "RD_Spiro_atoms:"
+                                << setw(FLOAT_WIDTH) << ranked_poses[i].mol.num_spiro_atoms << endl;
+                            ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "RD_LogP:"
+                                << setw(FLOAT_WIDTH) << ranked_poses[i].mol.clogp << endl;
+                            ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "RD_TPSA:"
+                                << setw(FLOAT_WIDTH) << ranked_poses[i].mol.tpsa << endl;
+                            ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "RD_SYNTHA:"
+                                << setw(FLOAT_WIDTH) << ranked_poses[i].mol.sa_score << endl;
+                            ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "RD_QED:"
+                                << setw(FLOAT_WIDTH) << ranked_poses[i].mol.qed_score << endl;
+                            ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "RD_LogS:"
+                                << setw(FLOAT_WIDTH) << ranked_poses[i].mol.esol << endl;
+                            ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "RD_num_of_PAINS:"
+                                << setw(FLOAT_WIDTH) << ranked_poses[i].mol.pns << endl; 
+                            ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "RD_PAINS_names:"
+                               << setw(FLOAT_WIDTH) << molpns_name << endl;                   
+                        }
+                        #endif
+                        //ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "xLogP:"
+                        //    << setw(FLOAT_WIDTH) << ranked_poses[i].mol.xlogp << endl;
+                        #ifdef BUILD_DOCK_WITH_RDKIT
+                        if (USE_FILT) {
+                            ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "RD_SMILES:"
+                                << setw(FLOAT_WIDTH) << ranked_poses[i].mol.smiles << endl;
+                        }
+                       
+                        #endif
+
+                        if (calc_rmsd)
+                            ligand_out_scored << calc_rmsd_string(ranked_poses[i].mol); 
+                        ligand_out_scored << ranked_poses[i].mol.current_data << "\n";
+                        write_mol(ranked_poses[i].mol, ligand_out_scored);
+                        if (write_footprints)
+                           write_footprint_file(ranked_poses[i].mol, score, ligand_out_footprint_scored);
+                        if (write_hbonds)
+                           write_hbond_file(ranked_poses[i].mol, score, ligand_out_hbond_scored);
+                    #ifdef BUILD_DOCK_WITH_RDKIT
                     }
                     #endif
-                    //ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "xLogP:"
-                    //    << setw(FLOAT_WIDTH) << ranked_poses[i].mol.xlogp << endl;
-                    #ifdef BUILD_DOCK_WITH_RDKIT
-                    if (USE_FILT) {
-                        ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "RD_SMILES:"
-                            << setw(FLOAT_WIDTH) << ranked_poses[i].mol.smiles << endl;
-                    }
-                    #endif
-
-               if (calc_rmsd)
-                        ligand_out_scored << calc_rmsd_string(ranked_poses[i].mol);
- 
-                    ligand_out_scored << ranked_poses[i].mol.current_data << "\n";
-                    write_mol(ranked_poses[i].mol, ligand_out_scored);
-                    if (write_footprints)
-                       write_footprint_file(ranked_poses[i].mol, score, ligand_out_footprint_scored);
-                    if (write_hbonds)
-                       write_hbond_file(ranked_poses[i].mol, score, ligand_out_hbond_scored);
                 }
 
            }
@@ -2229,18 +2278,29 @@ Library_File::write_ranked_ligands(bool USE_FILT , Master_Score & score )
                     << setw(FLOAT_WIDTH) << ranked_list[i].second.heavy_atoms << endl;
             ligand_out_ranked << DELIMITER << setw(STRING_WIDTH) << "Molecular_Weight:"
                 << setw(FLOAT_WIDTH) << ranked_list[i].second.mol_wt << endl;
+            ligand_out_ranked << DELIMITER << setw(STRING_WIDTH) << "DOCK_Rotatable_Bonds:"
+                << setw(FLOAT_WIDTH) << ranked_list[i].second.rot_bonds << endl;
             ligand_out_ranked << DELIMITER << setw(STRING_WIDTH) << "Formal_Charge:"
                 << setw(FLOAT_WIDTH) << ranked_list[i].second.formal_charge << endl;
             ligand_out_ranked << DELIMITER << setw(STRING_WIDTH) << "HBond_Acceptors:"
                 << setw(FLOAT_WIDTH) << ranked_list[i].second.hb_acceptors << endl;
             ligand_out_ranked << DELIMITER << setw(STRING_WIDTH) << "HBond_Donors:"
                 << setw(FLOAT_WIDTH) << ranked_list[i].second.hb_donors << endl;
+            ligand_out_ranked << DELIMITER << setw(STRING_WIDTH) << "Heavy_Atoms:"
+                << setw(FLOAT_WIDTH) << ranked_list[i].second.heavy_atoms << endl;
             #ifdef BUILD_DOCK_WITH_RDKIT
             //if dbfilter is used...write theses scores
             if (USE_FILT) {
                 std::vector<std::string> vecpnstmp{};
                 vecpnstmp = ranked_list[i].second.pns_name;
                 std::string molpns_name = std::accumulate(vecpnstmp.begin(), vecpnstmp.end(), std::string(""));
+                if (ranked_list[i].second.pns == 0 && molpns_name.empty() == true){
+                    molpns_name = "NO_PAINS"; 
+                }else if ( ranked_list[i].second.pns != 0 && molpns_name.empty() == false) {
+               
+                }else {
+                    molpns_name = "ERROR_IN_PAINS_MATCHING_PLEASE_INVESTIGATE";
+                }
 
                 ligand_out_ranked << DELIMITER << setw(STRING_WIDTH) << "RD_num_arom_rings:"
                     << setw(FLOAT_WIDTH) << ranked_list[i].second.num_arom_rings << endl;

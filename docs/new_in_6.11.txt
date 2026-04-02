@@ -1,0 +1,150 @@
+DOCK 6.11
+
+This is a release of the version with the new descriptor-driven de novo design
+method DOCK_D3N.  DOCK_D3N takes advantage of the integration of DOCK6 and RDKit
+as presented in reference [1].
+
+
+NEW IN DOCK 6.11
+
+Enhanced DOCK_DN routine (DOCK_D3N)
+    New feature includes the integration of the open-source toolkit RDKit with
+    the DOCK6 codebase, allowing users to calculate important drug-based
+    descriptors for molecules. On top of the ability to calculate these
+    descriptors, DOCK6.11 include an enhanced version of DOCK_DN, termed
+    "descriptor-driven de novo design" (DOCK_D3N). This method allows users to
+    specify descriptors (and their target ranges) to bias the on-the-fly
+    molecular construction.  This powerful and flexible routine tailors ligand
+    growth towards desirable regions of chemical space.
+
+Integration of RDKit and DOCK
+    In DOCK6.11, compilation infrastructure is developed to download and compile
+    RDKit to eventually compile with DOCK. This enables DOCK to interface
+    with various features in RDKit.  For consistency with reference [1], this
+    installation mechanism uses RDKit Release 2019.09.1 which depends on
+    Boost 1.71.0 and Eigen 3.3.9.
+
+Calculation of cheminformatic descriptors
+    RDKit is utilized in a wide array of DOCK features to calculate
+    descriptors for resulting molecules (DOCK_GA, Database Filtering,
+    Rigid/Flexible Docking).
+
+Miscellaneous
+    Incremental improvements in documentation, installation, and testing.
+    Configuration files for GNU compilers installed on macOS using the
+    Homebrew package manager have been added.  These cater to idiosyncratic
+    details of environment's, and it may be the case that the general gnu set
+    of DOCK configuration files work fine on your mac.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+BUG FIXES
+
+For DOCK:
+
+    1. In DOCK_DN, not all dumped pruned molecules were not being written in an
+       output mol2 file due to deactivated molecules.  Reactivation of molecules
+       were added to fix this.
+
+    2. In DOCK_DN/GA, DOCK will check if the VDW input parameter file is correct.
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+INPUT PARAMETER CHANGES AND THEIR DEFAULT VALUES
+
+Example:
+    parameter_name                      [default_value] (options):
+
+
+Added:
+
+For DOCK_DN:
+    dn_drive_verbose                     [no]                          (yes,no):
+    dn_drive_clogp                       [no]                          (yes,no):
+    dn_lower_clogp                       [-0.30]                       ():
+    dn_upper_clogp                       [3.75]                        ():
+    dn_clogp_std_dev                     [2.02]                        ():
+    dn_drive_esol                        [no]                          (yes,no):
+    dn_lower_esol                        [-5.23]                       ():
+    dn_upper_esol                        [-1.35]                       ():
+    dn_esol_std_dev                      [1.94]                        ():
+    dn_drive_tpsa                        [no]                          (yes,no):
+    dn_lower_tpsa                        [28.53]                       ():
+    dn_upper_tpsa                        [113.20]                      ():
+    dn_tpsa_std_dev                      [42.33]                       ():
+    dn_drive_qed                         [no]                          (yes,no):
+    dn_lower_qed                         [0.61]                        ():
+    dn_qed_std_dev                       [0.19]                        ():
+    dn_drive_sa                          [no]                          (yes,no):
+    dn_upper_sa                          [3.34]                        ():
+    dn_sa_std_dev                        [0.9]                         ():
+    dn_drive_stereocenters               [no]                          (yes,no):
+    dn_upper_stereocenter                [2]                           ():
+    dn_drive_pains                       [no]                          (yes,no):
+    dn_upper_pains                       [1]                           ():
+    dn_start_at_layer                    [1]                           ():
+    sa_fraglib_path                      [sa_fraglib.dat]              ():
+    PAINS_path                           [pains_table_2019_09_01.dat]  ():
+
+For Database Filter:
+    dbfilter_max_stereocenters           [6]                           ():
+    dbfilter_min_stereocenters           [0]                           ():
+    dbfilter_max_spiro_centers           [6]                           ():
+    dbfilter_min_spiro_centers           [0]                           ():
+    dbfilter_max_clogp                   [20]                          ():
+    dbfilter_min_clogp                   [-20]                         ():
+    dbfilter_max_logs                    [20]                          ():
+    dbfilter_min_logs                    [-20]                         ():
+    dbfilter_max_tpsa                    [1000.0]                      ():
+    dbfilter_min_tpsa                    [0.0]                         ():
+    dbfilter_max_qed                     [1.0]                         ():
+    dbfilter_min_qed                     [0.0]                         ():
+    dbfilter_max_sa                      [10]                          ():
+    dbfilter_min_sa                      [1]                           ():
+    dbfilter_max_pns                     [100]                         ():
+    filter_sa_fraglib_path               [sa_fraglib.dat]              ():
+    filter_PAINS_path                    [pains_table_2019_09_01.dat]  ():
+
+For DOCK_GA:
+    sa_fraglib_path                      [sa_fraglib.dat]              ():
+    PAINS_path                           [pains_table_2019_09_01.dat]  ():
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+OUTPUT COMPONENTS
+
+For DOCK_D3N:
+    1. ${output}.denovo_rejected.mol2 is the mol2 file containing the
+       partially/complete molecules by D3N. Whenever molecules are outside of
+       the user-defined ranges shown in the table above, molecules will go here.
+       (This file is created, when "dn_save_all_molecules" is turned on. )
+
+For Database Filter:
+    1. ${output}.rejected.mol2 is the mol2 file containing scored molecules
+       that got rejected by dbfilter.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+KNOWN BUGS
+
+    1. When selecting both internal energy and internal energy score, the
+       parameter "internal_energy_rep_exp" appears twice in the question tree,
+       and it will be queried during user input when DOCK is invoked from the
+       command-line even if the value is already set.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+RELEASE DATE
+
+November 2023
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+REFERENCES
+
+1. Matos G.D.R; Pak S.; Rizzo, R.C.  Descriptor-Driven de Novo Design
+Algorithms for DOCK6 Using RDKit.  J. Chem. Inf. Model., 63(18): 5803-5822,
+2023.  https://doi.org/10.1021/acs.jcim.3c01031
+

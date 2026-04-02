@@ -55,24 +55,32 @@ void Filter::input_parameters(Parameter_Reader & parm)
         min_clogp = atof(parm.query_param("dbfilter_min_clogp","-20.0").c_str());
         max_logs = atof(parm.query_param("dbfilter_max_logs","20.0").c_str());
         min_logs = atof(parm.query_param("dbfilter_min_logs","-20.0").c_str());
+        max_tpsa = atof(parm.query_param("dbfilter_max_tpsa","1000.0").c_str());
+        min_tpsa = atof(parm.query_param("dbfilter_min_tpsa","0.0").c_str());
         max_qed = atof(parm.query_param("dbfilter_max_qed","1.0").c_str());
         min_qed = atof(parm.query_param("dbfilter_min_qed","0.0").c_str());
         max_sa = atof(parm.query_param("dbfilter_max_sa","10.0").c_str());
         min_sa = atof(parm.query_param("dbfilter_min_sa","1.0").c_str());
         max_pns = atoi(parm.query_param("dbfilter_max_pns","100").c_str());
-        sa_fraglib_path = parm.query_param("filter_sa_fraglib_path","sa_fraglib.dat");
-        PAINS_path = parm.query_param("filter_PAINS_path","pains_table.dat");
 
+        sa_fraglib_path = parm.query_param("dbfilter_sa_fraglib_path","sa_fraglib.dat");
         // Import fragMap
         if (fragMap.empty() == true) {
             std::ifstream fin(sa_fraglib_path);
-            double key;
-            double val;
+            double key; 
+            double val; 
             while (fin >> key >> val) {
-                fragMap[key] = val;
+                fragMap[key] = val; 
             }
+            //the fragMap is empty so quit 
+            if (fragMap.empty() == true){
+                std::cout << "sa_fraglib.dat is empty. Please give the correct fraglib data table...";
+                exit(0);
+            }
+            fin.close();
         }
-        
+
+        PAINS_path = parm.query_param("dbfilter_PAINS_path","pains_table_2019_09_01.dat");
         // Import PAINSMap 
         std::vector<std::string> PAINStmp;
         if (PAINStmp.empty() == true) {
@@ -83,13 +91,20 @@ void Filter::input_parameters(Parameter_Reader & parm)
             }
             fin.close();
         }
-        int numofvectors = PAINStmp.size() - 1;
+        //if the PAINStmp is still empty 
+        if (PAINStmp.empty() == true){
+            std::string tmp_string;
+            std::cout << "pains_table.dat is empty. Please give the correct PAINS table...";
+            exit(0);
+        }
+
+        int numofvectors = PAINStmp.size() - 1; 
         for (int i{0}; i < numofvectors; ) {
             PAINSMap[PAINStmp[i]] = " " + PAINStmp[i + 1];
             i += 2;
         }
         PAINStmp.clear();
-          
+
         #endif
 
         // Turn these on once someone gets a chance to test it
@@ -130,12 +145,6 @@ void Filter::calc_descriptors(DOCKMol & mol)
     //xlogp filterXlogP {};
     // Calculate xlogp and store in mol object - this changes atom types and charges
     // DO NOT uncomment until code is fixed - LEP
-    //#ifdef BUILD_DOCK_WITH_RDKIT
-    //int counter{1};
-    //for (auto const& [key, val] : PAINSMap) {
-    //    cout << counter << " " << key << " == " << val << endl;
-    //    ++counter;
-    //}
 
 
     RDTYPER rdprops;
@@ -161,6 +170,7 @@ void Filter::calc_descriptors(DOCKMol & mol)
             for (int i = 0; i < mol.num_bonds; i++){
                 if (mol.bond_is_rotor(i)) { mol.rot_bonds++; }
             }
+            //calculate HBD and HBA
             lib.calc_num_HBA_HBD(mol);
 
         } catch (...) {
@@ -198,6 +208,7 @@ void Filter::calc_descriptors(DOCKMol & mol)
     // Calculate xlogp and store in mol object - this changes atom types and charges
     // DO NOT uncomment until code is fixed - LEP
     Library_File lib;
+
     mol.heavy_atoms = 0;
     mol.rot_bonds = 0;
     mol.hb_acceptors = 0;
@@ -210,7 +221,7 @@ void Filter::calc_descriptors(DOCKMol & mol)
     // Count the number of rotatable bonds
     for (int i = 0; i < mol.num_bonds; i++)
          if (mol.bond_is_rotor(i)) mol.rot_bonds++;
-
+     
     // Calculate the number of HBA and HBD
     lib.calc_num_HBA_HBD(mol);
 
@@ -404,6 +415,21 @@ bool Filter::fails_filter(DOCKMol & mol)
                     fails = true;
             }
 
+            // TPSA (Topological Polar Surface Area)
+            if (mol.tpsa > max_tpsa)
+            {
+                    strstrm << "Filter Rejected: tpsa is too high: "
+                                << setprecision(2) << fixed
+                                << mol.tpsa << endl;
+                    fails = true;
+            } else if (mol.tpsa < min_tpsa)
+            {
+                    strstrm << "Filter Rejected: tpsa is too low: "
+                                << setprecision(2) << fixed
+                                << mol.tpsa << endl;
+                    fails = true;
+            }
+
             // QED (druglikeness)
             if (mol.qed_score > max_qed)
             {
@@ -452,7 +478,7 @@ bool Filter::fails_filter(DOCKMol & mol)
         // save the reason for filtering ligand so that MPI docking does not print
         // "Could not score conformer" whenever something is filtered
         if (fails) mol.current_data = strstrm.str();
-        if (fails) mol.primary_data = strstrm.str();
+        if (fails) mol.primary_data = strstrm.str(); 
         return fails;
 }
 
@@ -466,19 +492,24 @@ string Filter::get_descriptors(DOCKMol & mol)
         std::vector<std::string> vecpnstmp{};
         vecpnstmp = mol.pns_name;
         std::string molpns_name = std::accumulate(vecpnstmp.begin(), vecpnstmp.end(), std::string("")); 
+        if (mol.pns == 0 && molpns_name.empty() == true){
+            molpns_name = "NO_PAINS"; 
+        }else if (mol.pns != 0 && molpns_name.empty() == false) {}
+        else{
+            molpns_name = "ERROR_IN_PAINS_MATCHING_PLEASE_INVESTIGATE";
+        }
         
         // Return a formatted string with all the descriptors to 
         // print in the dock output
         //ostringstream strstrm;
-        
-        strstrm         << "\n" "-----------------------------------" << endl
+        strstrm         << "\n" "-----------------------------------" << endl 
                         << " Molecule:         \t" << mol.title << endl
-                        << " Rotatable_Bonds:  \t" << mol.rot_bonds << endl
-                        << " Heavy_Atoms:      \t" << mol.heavy_atoms << endl
                         << " Molecular_Weight: \t" << mol.mol_wt << endl
+                        << " Rotatable_Bonds:  \t" << mol.rot_bonds << endl
                         << " Formal_Charge:    \t" << mol.formal_charge << endl
                         << " HBond_donors:     \t" << mol.hb_donors << endl
                         << " HBond_acceptors:  \t" << mol.hb_acceptors << endl
+                        << " Heavy_Atoms:      \t" << mol.heavy_atoms << endl
                         << " RD_num_arom_rings:\t" << mol.num_arom_rings << endl
                         << " RD_num_alip_rings:\t" << mol.num_alip_rings << endl
                         << " RD_num_sat_rings: \t" << mol.num_sat_rings << endl
@@ -491,7 +522,7 @@ string Filter::get_descriptors(DOCKMol & mol)
                         << " RD_SYNTHA:        \t" << mol.sa_score << endl
                         << " RD_QED:           \t" << mol.qed_score << endl
                         << " RD_LogS:          \t" << mol.esol << endl
-                        << " RD_PAINS:         \t" << mol.pns << endl
+                        << " RD_num_of_PAINS:  \t" << mol.pns << endl
                         << " RD_PAINS_Names:   \t" << molpns_name << endl 
                         << " RD_SMILES:        \t" << mol.smiles << endl
                         << " RD_MACCS:         \t" << mol.MACCS << endl 

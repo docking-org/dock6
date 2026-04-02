@@ -99,6 +99,7 @@ class           DOCKMol {
     std::string     mol_data;   // misc data
 
     bool            bad_molecule; // errors in atom section of mol2 file
+    
 
     // Molecule Size and Property Info
     int             num_atoms;
@@ -305,6 +306,7 @@ class           DOCKMol {
     #ifdef BUILD_DOCK_WITH_RDKIT
 
     // Descriptors and related stuff
+    bool           fails_filt;
     int            num_stereocenters; // number of stereocenters
     int            num_spiro_atoms; // number of spiro centers
     double         clogp; // Wildman-Crippen log P
@@ -319,16 +321,20 @@ class           DOCKMol {
     int            pns;
     std::vector<std::string>    pns_name;   
     boost::dynamic_bitset<> MACCS;
+    //for MPI, MACCS_size is required to get mpi to work. 
+    int            MACCS_size;
     //ExplicitBitVect *MACCS;
 
 
     // Descriptor-driven de novo variables
     bool           fail_clogp;
     bool           fail_esol;
+    bool           fail_tpsa;
     bool           fail_qed;
     bool           fail_sa;
     bool           fail_stereo;
-    int            dropped_at_layer;
+    bool           fail_pains;
+    //int            dropped_at_layer;
 
     // RDKit-related methods
     RDKit::ROMol   DOCKMol_to_ROMol(bool create_smiles);

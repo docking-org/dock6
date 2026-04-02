@@ -36,6 +36,9 @@ parallel: configuredparallel
 	make cleandock
 	make dock
 
+rdkit:
+	$(MAKE) -C ../src/rdkit install
+
 utils: configured
 	@echo "Starting installation of "
 	@echo ${DOCK_VERSION}
@@ -70,6 +73,9 @@ cleandock:
 
 dockclean: cleandock
 
+rdkitclean:
+	$(MAKE) -C ../src/rdkit rdkitclean
+
 # This target removes installed executables from bin.
 uninstall:
 	$(MAKE) -C ../src  uninstall
@@ -85,6 +91,7 @@ distclean: realclean
 
 # This target cleans and removes all executables and the configuration file.
 superclean: uninstall distclean
+	$(MAKE) -C ../src/rdkit rdkitclean
 
 configured:
 	@# abort if the configuration file does not exist
@@ -107,6 +114,7 @@ help:
 	@echo "configure is the first step in the installation.  Execute this: "
 	@echo "./configure -help"
 
+
 #
 # The targets below are for DOCK developers.
 #
@@ -127,6 +135,8 @@ DISTRIBUTION_TAG=dock6-9-rc1
 DISTRIBUTION_TAG=dock6-9-release
 DISTRIBUTION_TAG=dock6-10-beta
 DISTRIBUTION_TAG=dock6-10-release
+DISTRIBUTION_TAG=dock6-11-beta
+DISTRIBUTION_TAG=dock6-11-release
 #DOCK_HOME=..
 DOCK_MODULE=dock6
 DOCK_ARCHIVE=$(DOCK_MODULE).$(DISTRIBUTION_TAG)
