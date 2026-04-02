@@ -1,0 +1,55 @@
+********>Bugfix 1:
+
+Authors:  Trent E. Balius and Scott Brozell.
+
+Date:  September 22, 2025
+
+Program:  dock6
+
+Description:  In orienting the ligand, include in a matching clique the case of
+an identical receptor sphere and ligand atom pair.  This bug was exposed when
+ligand atoms were used to generate receptor spheres:  When comparing the
+results for the reference ligand to those for a translated reference ligand,
+the translated ligand had more generated matches.
+
+Fix:  make the changes to the indicated files below:
+This is most simply accomplished with the commands:
+cd $DOCK_HOME; patch -N -p0 < bugfix.1
+cd install; make dock; make test
+
+-------------------------------------------------------------------------
+ src/dock/orient.cpp | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git src/dock/orient.cpp src/dock/orient.cpp
+index 19a1a539..419c73df 100644
+--- src/dock/orient.cpp
++++ src/dock/orient.cpp
+@@ -1610,9 +1610,9 @@ Orient::id_all_cliques()
+                     new_state[new_level] = new_state[new_level - 1];
+                 if (new_level >= max_nodes) { 
+                     // add state to cliques if tolerance is proper
+-                    if ((new_level_residuals[new_level - 1] >
++                    if ((new_level_residuals[new_level - 1] >=
+                          orig_tolerance * (am_iteration_num - 1))
+-                        && (new_level_residuals[new_level - 1] <= loop_tolerance)) {
++                        && (new_level_residuals[new_level - 1] < loop_tolerance)) {
+                         limit_cliques++;
+ 
+                         tmp_clique.nodes.clear();
+@@ -1679,9 +1679,9 @@ Orient::id_all_cliques()
+                 if (new_level >= min_nodes) {
+ 
+                     // add state to cliques
+-                    if ((new_level_residuals[new_level - 1] >
++                    if ((new_level_residuals[new_level - 1] >=
+                          orig_tolerance * (am_iteration_num - 1))
+-                        && (new_level_residuals[new_level - 1] <= loop_tolerance)) {
++                        && (new_level_residuals[new_level - 1] < loop_tolerance)) {
+ 
+                         tmp_clique.nodes.clear();
+                         tmp_clique.residual =
+--------------------------------------------------------------------------
+
+Workaround:  none.
+

@@ -1610,9 +1610,9 @@ Orient::id_all_cliques()
                     new_state[new_level] = new_state[new_level - 1];
                 if (new_level >= max_nodes) { 
                     // add state to cliques if tolerance is proper
-                    if ((new_level_residuals[new_level - 1] >
+                    if ((new_level_residuals[new_level - 1] >=
                          orig_tolerance * (am_iteration_num - 1))
-                        && (new_level_residuals[new_level - 1] <= loop_tolerance)) {
+                        && (new_level_residuals[new_level - 1] < loop_tolerance)) {
                         limit_cliques++;
 
                         tmp_clique.nodes.clear();
@@ -1679,9 +1679,9 @@ Orient::id_all_cliques()
                 if (new_level >= min_nodes) {
 
                     // add state to cliques
-                    if ((new_level_residuals[new_level - 1] >
+                    if ((new_level_residuals[new_level - 1] >=
                          orig_tolerance * (am_iteration_num - 1))
-                        && (new_level_residuals[new_level - 1] <= loop_tolerance)) {
+                        && (new_level_residuals[new_level - 1] < loop_tolerance)) {
 
                         tmp_clique.nodes.clear();
                         tmp_clique.residual =
