@@ -40,5 +40,5 @@ flex_defn_file                                               /mnt/nfs/home/tbali
 flex_drive_file                                              /mnt/nfs/home/tbalius/zzz.github/dock6/parameters/flex_drive.tbl
 ligand_outfile_prefix                                        output
 write_orientations                                           no
-num_scored_conformers                                        1
+num_final_scored_poses                                       1
 rank_ligands                                                 no

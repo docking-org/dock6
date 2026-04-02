@@ -9,6 +9,11 @@
 //#include "master_score.h"
 
 #include <list>
+#include <cstring>
+#include <unistd.h>
+#include <chrono>
+#include <thread>
+
 
 #ifdef BUILD_DOCK_WITH_RDKIT
 #include "rdtyper.h"
@@ -57,7 +62,11 @@ GA_Recomb::GA_Recomb(){
     limit_max_change_ramp_gens = 5; //arbitrary value, as long as this is greater than zero it can exit the program when children are failed to be made
     delta_max = LimitMaxChange();
     dnm_enabled = false;
-
+    int mut_types = 4;
+    for(int i=0; i<mut_types; i++){
+       total_mut_attempts.push_back(0);
+       total_muts.push_back(0);
+    }
 }
 GA_Recomb::~GA_Recomb(){
     parents.clear();
@@ -69,7 +78,18 @@ GA_Recomb::~GA_Recomb(){
     mutated_parents.clear();
     divergent_children.clear();
     pruned_parents.clear();
+    filtered_mols.clear();
 
+    //#ifdef BUILD_DOCK_WITH_RDKIT
+    #if 0
+    rdkit_rejected_mols.clear();
+    #endif
+
+    total_muts.clear();
+    total_mut_attempts.clear();
+    generated_molecule_counter.clear();
+    valid_torenv_molecule_counter.clear();
+    unpruned_molecule_counter.clear();
 
 }
 
@@ -119,7 +139,101 @@ GA_Recomb::input_parameters( Parameter_Reader & parm )
     ga_fraglib_linker_file    = parm.query_param("ga_fraglib_linker_file",    "fraglib_linker.mol2");
     ga_fraglib_sidechain_file = parm.query_param("ga_fraglib_sidechain_file", "fraglib_sidechain.mol2");
 
+    // Isoswap parameters 
+    // used
+    // ga_num_iso_picks turned off for next release. 6.13
+    ga_num_iso_picks              = 0;
+    //ga_num_iso_picks              = atoi(parm.query_param("ga_num_iso_picks", "0").c_str());
+ 
+    if (ga_num_iso_picks <0){
+        std::cout << "INPUT ERROR: ga_num_iso_picks can't be less than 0" << std::endl;
+        exit(1);
+    }
+
+    if (ga_num_iso_picks>0){
+        // used
+        ga_iso_pick_meth              = parm.query_param("ga_iso_pick_meth", "top_rank", "top_rank | rand | worst_rank");
+        if (ga_iso_print_out.compare("yes") == 0) {
+            ga_iso_output_verbose_path =  parm.query_param("ga_iso_output_verbose_path", "./").c_str();
+        }
+
+        //used
+        ga_iso_fraglib_dir    = parm.query_param("ga_iso_fraglib_dir", "isofrags").c_str();
+        //used
+        ga_iso_num_gets       = atoi(parm.query_param("ga_iso_num_gets","100").c_str());
+    }
+
     #ifdef BUILD_DOCK_WITH_RDKIT
+    //ga_drive_stdev_ramp = (parm.query_param("ga_drive_stdev_ramp","yes") == "yes");
+
+    //ga_drive_clogp = (parm.query_param("ga_drive_clogp","no") == "yes");
+    //if (ga_drive_clogp){
+    //    ga_lower_clogp = atof(parm.query_param("ga_lower_clogp","-0.30").c_str());
+    //    ga_upper_clogp = atof(parm.query_param("ga_upper_clogp","3.75").c_str());
+    //    ga_clogp_std_dev = atof(parm.query_param("ga_clogp_std_dev","2.02").c_str());
+    //}
+    //
+    //ga_drive_esol = (parm.query_param("ga_drive_esol","no") == "yes");
+    //if (ga_drive_esol){
+    //    ga_lower_esol = atof(parm.query_param("ga_lower_esol","-5.23").c_str());
+    //    ga_upper_esol = atof(parm.query_param("ga_upper_esol","-1.35").c_str());
+    //    ga_esol_std_dev = atof(parm.query_param("ga_esol_std_dev","1.94").c_str());
+    //}
+
+    ////TPSA 
+    //ga_drive_tpsa = (parm.query_param("ga_drive_tpsa","no") == "yes");
+    //if (ga_drive_tpsa){
+    //    ga_lower_tpsa = atof(parm.query_param("ga_lower_tpsa","28.53").c_str());
+    //    ga_upper_tpsa = atof(parm.query_param("ga_upper_tpsa","113.20").c_str());
+    //    ga_tpsa_std_dev = atof(parm.query_param("ga_tpsa_std_dev","42.33").c_str());
+    //}
+
+    //ga_drive_qed = (parm.query_param("ga_drive_qed","no") == "yes");
+    //if (ga_drive_qed){
+    //    ga_lower_qed = atof(parm.query_param("ga_lower_qed","0.61").c_str());
+    //    ga_qed_std_dev = atof(parm.query_param("ga_qed_std_dev","0.19").c_str());
+    //}
+
+    //ga_drive_sa = (parm.query_param("ga_drive_sa","no") == "yes");
+    //if (ga_drive_sa){
+    //    ga_upper_sa = atof(parm.query_param("ga_upper_sa","3.34").c_str());
+    //    ga_sa_std_dev = atof(parm.query_param("ga_sa_std_dev","0.9").c_str());
+    //    if (ga_upper_sa == 0.0) {
+    //        std::cout << "ERROR: Lowest score for SynthA is not 0.0, please try again"<< std::endl;
+    //        exit(0);
+    //    }
+    //}
+
+    //ga_drive_stereocenters = (parm.query_param("ga_drive_stereocenters","no") == "yes");
+    //if (ga_drive_stereocenters){
+    //    ga_upper_stereocenter = atoi(parm.query_param("ga_upper_stereocenter","2").c_str());
+    //    if (ga_upper_stereocenter == 0) {
+    //        std::cout << "ERROR: Upperbound for stereocenters during DN_drive cannot be 0, please try again" <<std::endl;
+    //        exit(0);
+    //    }
+    //}
+
+    //ga_drive_pains = (parm.query_param("ga_drive_pains","no") == "yes");
+    //if (ga_drive_pains){
+    //    ga_upper_pains = atoi(parm.query_param("ga_upper_pains","1").c_str());
+    //    if (ga_upper_pains == 0) {
+    //        std::cout << "ERROR: Upperbound for number of pains during DN_drive cannot be 0, please try again" << std::endl;
+    //        exit(0);
+    //    }
+    //}
+    //if (ga_drive_clogp || ga_drive_esol || ga_drive_qed ||
+    //    ga_drive_sa || ga_drive_stereocenters || ga_drive_pains || ga_drive_tpsa){
+    //    ga_start_at_gen = atoi(parm.query_param("ga_start_at_gen","1").c_str());
+    //} 
+
+    //if (!ga_drive_clogp && !ga_drive_esol && !ga_drive_qed &&
+    //    !ga_drive_sa && !ga_drive_stereocenters && !ga_drive_pains && !ga_drive_tpsa){
+    //    ga_drive_TURNED_OFF = true;
+    //} else {
+    //    ga_drive_TURNED_OFF = false;
+    //}
+
+    // These are required for dock.11. 
     ga_sa_fraglib_path = parm.query_param("sa_fraglib_path","sa_fraglib.dat");
     if (ga_fragMap.empty() == true){
         std::ifstream fin(ga_sa_fraglib_path);
@@ -130,6 +244,9 @@ GA_Recomb::input_parameters( Parameter_Reader & parm )
         }
         fin.close();
     }
+
+    rdkit_parm.set_fragMap(ga_fragMap);
+
     ga_PAINS_path = parm.query_param("PAINS_path","pains_table_2019_09_01.dat");
     std::vector<std::string> PAINStmp;
     if (PAINStmp.empty() == true){
@@ -145,6 +262,9 @@ GA_Recomb::input_parameters( Parameter_Reader & parm )
         ga_PAINSMap[PAINStmp[i]] = " " + PAINStmp[i + 1];
         i += 2; 
     }
+
+    rdkit_parm.set_PAINSmap(ga_PAINSMap);
+
     PAINStmp.clear();     
     #endif 
       
@@ -203,6 +323,112 @@ GA_Recomb::input_parameters( Parameter_Reader & parm )
         ga_mutate_deletion = (parm.query_param( "ga_mutate_deletion", "yes", "yes no" ) == "yes");
         ga_mutate_substitution = (parm.query_param( "ga_mutate_substitution", "yes", "yes no" ) == "yes");
         ga_mutate_replacement = (parm.query_param( "ga_mutate_replacement", "yes", "yes no" ) == "yes");
+
+	//BTB - if a mutation is on, ask the user to provide a coefficient to weight its frequency, by default it is an equal distribution
+	add_co = 0;
+	del_co = 0;
+	sub_co = 0;
+	rep_co = 0;
+
+
+	int num_muts = 0;
+	if (ga_mutate_addition){
+	    num_muts += 1;
+        }
+        if (ga_mutate_deletion){
+	    num_muts += 1;
+        }
+        if (ga_mutate_substitution){
+            num_muts += 1;
+        }
+        if (ga_mutate_replacement){
+	    num_muts += 1;
+        }
+	int weight; 
+	int init_weight = 100; //all weights must add up to 100
+	std::string default_weight;
+	//cur mut keeps track of how many mut rate params we have queiried, if we are on the last one we want to do some math to calculate a weight which sums to 100 with the previous weights
+        int cur_mut = 0;
+	int co_sum = 0; //running sum of the mut cofactors
+	bool choose_weight = true; //set this to false to remove the weights from the input file 
+
+	if (ga_mutate_addition){
+	    //calculate a weight based on prior mutation weights
+            weight = (init_weight - co_sum)/(num_muts-cur_mut);
+            if (cur_mut == num_muts-1 && ( co_sum + weight < init_weight) ){
+                weight = (init_weight-co_sum);
+            }
+            default_weight = std::to_string(weight);
+	    if (choose_weight){
+	        add_co = atoi(parm.query_param( "ga_add_rate", default_weight).c_str());
+	    }
+	    else{
+	        add_co = std::stoi(default_weight);
+	    }
+	    co_sum += add_co;
+	    cur_mut += 1;
+	}
+
+	if (ga_mutate_deletion){
+	    //calculate a weight based on prior mutation weights
+	    weight = (init_weight - co_sum)/(num_muts-cur_mut);
+            if (cur_mut == num_muts-1 && ( co_sum + weight < init_weight) ){
+                weight = (init_weight-co_sum);
+            }
+            default_weight = std::to_string(weight);
+            if (choose_weight){
+                del_co = atoi(parm.query_param( "ga_del_rate", default_weight).c_str());
+	    }
+	    else{
+	        del_co = std::stoi(default_weight);
+	    }
+	    co_sum += del_co;
+	    cur_mut += 1;
+        }
+
+
+	if (ga_mutate_substitution){
+	    //calculate a weight based on prior mutation weights
+            weight = (init_weight - co_sum)/(num_muts-cur_mut);
+            if (cur_mut == num_muts-1 && ( co_sum + weight < init_weight) ){
+                weight = (init_weight-co_sum);
+            }
+            default_weight = std::to_string(weight);
+	    if (choose_weight){
+                sub_co = atoi(parm.query_param( "ga_sub_rate", default_weight).c_str());
+	    }
+	    else{
+	        sub_co = std::stoi(default_weight);
+	    }
+	    co_sum += sub_co;
+	    cur_mut += 1;
+        }
+	if (ga_mutate_replacement){
+	    //calculate a weight based on prior mutation weights
+            weight = (init_weight - co_sum)/(num_muts-cur_mut);
+            if (cur_mut == num_muts-1 && ( co_sum + weight < init_weight) ){
+                weight = (init_weight-co_sum);
+            }
+            default_weight = std::to_string(weight);
+	    if (choose_weight){
+                rep_co = atoi(parm.query_param( "ga_rep_rate", default_weight).c_str());
+	    }
+	    else{
+	        rep_co = std::stoi(default_weight);
+	    }
+	    co_sum += rep_co;
+	    cur_mut += 1;
+        }
+	//check to see see if the mut rates sum is 100 for 100%, if not exit
+	if (co_sum != 100){
+	    cout << "ERROR: mutation rate frequencies must sum to 100" << endl;
+	    exit(0);
+	}
+	if (add_co < 0 || del_co < 0 || sub_co < 0 || rep_co < 0){
+	    cout << "ERROR: mutation rate frequencies may not be negative!" << endl;
+	    exit(0);
+	}
+
         // use dn roulette - LEP
         //if (ga_mutate_addition || ga_mutate_deletion || ga_mutate_substitution || ga_mutate_replacement){
             //ga_use_dn_roulette = (parm.query_param("ga_use_dn_roulette", "no", "yes no") == "yes");
@@ -221,6 +447,10 @@ GA_Recomb::input_parameters( Parameter_Reader & parm )
             // Set offspring mutation rate
             if ( ga_xover_sampling_method_rand == true ){
                 ga_omut_rate = atof(parm.query_param( "ga_omut_rate", "0.7" ).c_str());
+                if ( ga_omut_rate >= 1){
+                    cout << "ERROR: Offspring Mutation Rate must be a less than 1" << endl;
+                    exit(0);
+                }
             }
 
             // Set number of mutation cycle 
@@ -278,11 +508,26 @@ GA_Recomb::input_parameters( Parameter_Reader & parm )
 
     // RMSD horizontal pruning heuristic using Hungarian algorithm
     ga_heur_unmatched_num = atoi(parm.query_param("ga_heur_unmatched_num", "1").c_str());
-    ga_heur_matched_rmsd = atof(parm.query_param("ga_heur_matched_rmsd", "0.5").c_str());
+
+    ga_heur_matched_rmsd = atof(parm.query_param("ga_heur_matched_rmsd", "2.0").c_str());
+
+    // replacement tolerance for du du distances between
+    // ref mol and selected frag
+    //ga_rplcmnt_inter_du_du_dist = atof(parm.query_param("ga_rplcmnt_inter_du_du_dist", "0.25").c_str());
+    ga_rplcmnt_inter_du_du_dist = 0.25;
+
+
+    // soft or hard filter for mw?
+    ga_MW_cutoff_type = parm.query_param("ga_mol_wt_cutoff_type", "hard", "hard | soft");
 
     // Based on Leeson et al, Nature., 2012, 481, pp 455-456
     // Upper bounds for molecular weight
-    ga_constraint_mol_wt = atoi(parm.query_param("ga_constraint_mol_wt", "500").c_str());
+    ga_constraint_upper_mol_wt = atof(parm.query_param("ga_constraint_upper_mol_wt", "500.0").c_str());
+    ga_constraint_lower_mol_wt = atof(parm.query_param("ga_constraint_lower_mol_wt", "0").c_str());
+ 
+    if ( ga_MW_cutoff_type.compare("soft") == 0 ) {
+       ga_constraint_mol_wt_std_dev = atof(parm.query_param("ga_constraint_mol_wt_std_dev", "35.0").c_str());
+    }
 
     // Based on Veber et al, J. Med. Chem., 2002, 45(12), pp 2615-2623
     // Upper bounds for rotatable bonds
@@ -392,6 +637,9 @@ GA_Recomb::input_parameters( Parameter_Reader & parm )
     ga_name_identifier = parm.query_param( "ga_name_identifier", "ga" );
 
     ga_output_prefix = parm.query_param("ga_output_prefix", "ga_output"); //2018.01.23 - LEP 
+  
+    //ga_compart_subst_id = parm.query_param("ga_compart_subst_id", "no", "yes | no");
+    ga_compart_subst_id = "no";
 
      //max change btb 2023.06.07
     //use_limit_max_change = (parm.query_param("ga_limit_change","no", " no | yes") == "yes");
@@ -483,6 +731,47 @@ GA_Recomb::initialize()
     cout << " Reading the molecule library from " << ga_molecule_file <<"...";
     read_library( parents, ga_molecule_file );
     cout << "Done (#=" << parents.size() <<")\n";
+
+    //#ifdef BUILD_DOCK_WITH_RDKIT
+    #if 0
+    cout << " Reading in RDKit input parameters"<< endl;
+
+    rdkit_parm.set_createsmiles(true);
+    rdkit_parm.set_drive_stereocenter( ga_drive_stereocenters );
+    rdkit_parm.set_upper_stereocenter( ga_upper_stereocenter );
+
+    rdkit_parm.set_drive_tpsa( ga_drive_tpsa );
+    rdkit_parm.set_lower_tpsa( ga_lower_tpsa );
+    rdkit_parm.set_upper_tpsa( ga_upper_tpsa );
+    rdkit_parm.set_tpsa_std_dev( ga_tpsa_std_dev );
+
+    rdkit_parm.set_drive_clogp( ga_drive_clogp );
+    rdkit_parm.set_lower_clogp( ga_lower_clogp );
+    rdkit_parm.set_upper_clogp( ga_upper_clogp );
+    rdkit_parm.set_clogp_std_dev( ga_clogp_std_dev );
+
+    rdkit_parm.set_drive_esol( ga_drive_esol );
+    rdkit_parm.set_lower_esol( ga_lower_esol );
+    rdkit_parm.set_upper_esol( ga_upper_esol );
+    rdkit_parm.set_esol_std_dev( ga_esol_std_dev );
+
+    rdkit_parm.set_drive_qed( ga_drive_qed );
+    rdkit_parm.set_lower_qed( ga_lower_qed );
+    rdkit_parm.set_qed_std_dev( ga_qed_std_dev );
+
+    rdkit_parm.set_drive_sa( ga_drive_sa );
+    rdkit_parm.set_upper_sa( ga_upper_sa );
+    rdkit_parm.set_sa_std_dev( ga_sa_std_dev );
+
+    rdkit_parm.set_drive_pains( ga_drive_pains ); 
+    rdkit_parm.set_upper_pains( ga_upper_pains); 
+
+    #endif
+
+    if (ga_num_iso_picks>0){
+
+        iso_parm.set_iso_fraglib(true,ga_iso_fraglib_dir);
+    }
 
     // Set DNM booleans, determine if DNM present for this run
     set_DNM_bools_start( parents );
@@ -662,6 +951,10 @@ GA_Recomb::max_breeding( Master_Score & score, Simplex_Minimizer & simplex, AMBE
     Trace trace( "GA_Recomb::max_breeding()" );
     double start_time;
     double stop_time;
+ 
+    if (ga_num_iso_picks > 0 ) {
+        prepare_isolibrary( );
+    }
 
     // The following if statement will seg fault if prepare_molecule is not called first to initialize the values.
     c_typer.prepare_molecule( parents[0], true, score.use_chem, score.use_ph4, score.use_volume );
@@ -760,6 +1053,10 @@ GA_Recomb::max_breeding( Master_Score & score, Simplex_Minimizer & simplex, AMBE
     //-------------------------------------------------------------------------
     // STEP 1: Iterate over user specified number of generations
     for (int i=0; i<max_generations; i++){  
+	current_generation = i;
+	generated_molecule_counter.push_back(0);
+	valid_torenv_molecule_counter.push_back(0);
+	unpruned_molecule_counter.push_back(0);
     //cout << "GA random seed: " << lauren_rand << endl;	
 	//Pass some variables to simplex for debugging LEP
 	simplex.ga_gen = i;
@@ -818,7 +1115,8 @@ GA_Recomb::max_breeding( Master_Score & score, Simplex_Minimizer & simplex, AMBE
             
                    calc_descriptors(parents[m]);
 
-                   if (parents[m].mol_wt > ga_constraint_mol_wt ){
+                   //if (parents[m].mol_wt > ga_constraint_mol_wt ){
+                   if ( !mw_cutoff( parents[m] ) ){
                        cout << "Parent " << m<< " did not pass MW check." << endl;
                    }
                    if ( (parents[m].rot_bonds > ga_constraint_rot_bon) ){
@@ -920,31 +1218,31 @@ GA_Recomb::max_breeding( Master_Score & score, Simplex_Minimizer & simplex, AMBE
                vecpnstmp = parents[j].pns_name;
                std::string molpns_name = std::accumulate(vecpnstmp.begin(), vecpnstmp.end(), std::string(""));
 
-               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "num_arom_rings:"
+               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_num_arom_rings:"
                               << setw(FLOAT_WIDTH) << parents[j].num_arom_rings << endl;
-               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "num_alip_rings:"
+               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_num_alip_rings:"
                               << setw(FLOAT_WIDTH) << parents[j].num_alip_rings << endl;
-               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "num_sat_rings:"
+               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_num_sat_rings:"
                               << setw(FLOAT_WIDTH) << parents[j].num_sat_rings << endl;
-               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Stereocenters:"
+               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_Stereocenters:"
                               << setw(FLOAT_WIDTH) << parents[j].num_stereocenters << endl;
-               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Spiro_atoms:"
+               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_Spiro_atoms:"
                               << setw(FLOAT_WIDTH) << parents[j].num_spiro_atoms << endl;
-               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "TPSA:"
+               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_TPSA:"
                               << setw(FLOAT_WIDTH) << parents[j].tpsa << endl;
-               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "cLogP:"
+               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_cLogP:"
                               << setw(FLOAT_WIDTH) << parents[j].clogp << endl;
-               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "ESOL:"
+               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_ESOL:"
                               << setw(FLOAT_WIDTH) << parents[j].esol << endl;
-               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "QED:"
+               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_QED:"
                               << setw(FLOAT_WIDTH) << parents[j].qed_score << endl;
-               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "SA_Score:"
+               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_SA_Score:"
                               << setw(FLOAT_WIDTH) << parents[j].sa_score << endl;
-               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "SMILES: "
+               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_SMILES: "
                               << setw(FLOAT_WIDTH) << parents[j].smiles << endl;
-               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "num_of_PAINS:"
+               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_num_of_PAINS:"
                               << setw(FLOAT_WIDTH) << parents[j].pns << endl;
-               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "PAINS_names:"
+               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_PAINS_names:"
                               << setw(FLOAT_WIDTH) << molpns_name << endl;
                #endif
 	       // Calculate the fitness score for the initial ensemble if niching is being used
@@ -1102,10 +1400,151 @@ GA_Recomb::max_breeding( Master_Score & score, Simplex_Minimizer & simplex, AMBE
                   }
                }
            }
+
+           //#ifdef BUILD_DOCK_WITH_RDKIT
+           #if 0
+           //RDkit filtering is here
+
+           if ( ga_drive_stdev_ramp && i+1 >= ga_start_at_gen ){
+               std::cout << "###### RDKIT stddev ramp start #####" << std::endl;
+               std::pair<float,float> std_changes_clogp =
+                   get_stddev_changes( ga_lower_clogp, ga_upper_clogp,
+                                       ga_clogp_std_dev, "clogp",i+1 );
+
+               std::pair<float,float> std_changes_tpsa  =
+                   get_stddev_changes( ga_lower_tpsa,  ga_upper_tpsa, 
+                                       ga_tpsa_std_dev, "tpsa" ,i+1 );
+
+               std::pair<float,float> std_changes_esol  =
+                   get_stddev_changes( ga_lower_esol,  ga_upper_esol, 
+                                       ga_esol_std_dev, "esol" ,i+1 );
+
+               std::pair<float,float> std_changes_qed   =
+                   get_stddev_changes( ga_lower_qed,   1.0, 
+                                       ga_qed_std_dev, "qed"  ,i+1 );
+
+               std::pair<float,float> std_changes_sa    =
+                   get_stddev_changes( 1.0,    ga_upper_sa,   
+                                       ga_sa_std_dev, "sa"   ,i+1 );
+
+               if (ga_drive_clogp){
+                   std::cout << "clogp stddev changed: "<<std_changes_clogp.first << std::endl;
+                   rdkit_parm.set_clogp_std_dev( std_changes_clogp.first );     
+               }
+               if (ga_drive_tpsa){
+                   std::cout << "tpsa stddev changed: "<<std_changes_tpsa.first << std::endl;
+                   rdkit_parm.set_tpsa_std_dev( std_changes_tpsa.first );     
+               }
+               if (ga_drive_esol){
+                   std::cout << "esol stddev changed: "<<std_changes_esol.first << std::endl;
+                   rdkit_parm.set_esol_std_dev( std_changes_esol.first );     
+               }
+               if (ga_drive_qed){
+                   std::cout << "qed stddev changed: "<<std_changes_qed.first << std::endl;
+                   rdkit_parm.set_qed_std_dev( std_changes_qed.first );     
+               }
+               if (ga_drive_sa){
+                   std::cout << "sa stddev changed: "<<std_changes_sa.first << std::endl;
+                   rdkit_parm.set_sa_std_dev( std_changes_sa.first   );
+               }
+               std::cout << "###### RDKIT stddev ramp end #####" << std::endl;
+           }
+
+           // regardless what happens,
+           // the last generation will have
+           // user-defined paramters (ramp or not)
+           if (i+1 == max_generations){
+               std::cout << "###### RDKIT stddev ramped to target stddev ######" << std::endl;
+               rdkit_parm.set_tpsa_std_dev( ga_tpsa_std_dev );
+               rdkit_parm.set_clogp_std_dev( ga_clogp_std_dev );
+               rdkit_parm.set_esol_std_dev( ga_esol_std_dev );
+               rdkit_parm.set_qed_std_dev( ga_qed_std_dev );
+               rdkit_parm.set_sa_std_dev( ga_sa_std_dev );
+           }
+
+           
+           // list to hold acc mols tempor
+           std::vector <DOCKMol> scored_gen_acc {};
+
+           if ( i+1 >= ga_start_at_gen && !ga_drive_TURNED_OFF){
+
+               cout << "\n##### RDKIT drive start at generation "<< i+1 <<" #####" << endl;;
+               cout << "N of scored_generation: "<< scored_generation.size() 
+                    << endl << endl;
+               for ( int it = 0; it < scored_generation.size(); it++){
+
+                   cout <<"#######################################" << std::endl;
+                   cout << "Testing mol type " << scored_generation[it].energy << endl;
+
+                   if ( rdkit_drive.drive( scored_generation[it], rdkit_parm ) == false ){
+                       cout << "  Mol type " << scored_generation[it].energy << " got rejected by rdkit" << endl;
+                       rdkit_rejected_mols.push_back( scored_generation[it] );
+
+                   } else {
+                       cout << "  Mol type " << scored_generation[it].energy << " got accepted by rdkit" << endl;
+                       scored_gen_acc.push_back( scored_generation[it] );
+                   }
+               }
+ 
+               // clear out the working vector so it can be replaced with accepted rdkit molecules
+               scored_generation.clear();
+
+               for (int it = 0; it < scored_gen_acc.size(); it++){ 
+                   scored_generation.push_back( scored_gen_acc[it] );
+               }
+
+               cout << "##### RDKIT drive end #####\n" << endl;
+               cout << "##### RDKIT summary: " << endl;
+               cout << "# rejected mols: " << rdkit_rejected_mols.size() << endl;
+               cout << "# accepted mols: " << scored_gen_acc.size() << endl;
+               cout << "####################" << endl;
+           } else{
+               std::cout <<"#######################################" << std::endl;
+               if ( !ga_drive_TURNED_OFF ) {
+                   std::cout << "At Generation " <<  i+1  << ", RDKit driving is ignored." << std::endl;
+                   std::cout << "RDKit driving starts at Generation: "  << ga_start_at_gen << std::endl;
+               }
+               cout << "##### RDKIT calc start #####\n" << endl; 
+
+               for (int it = 0; it < scored_generation.size(); it++){ 
+                   rdkit_calc_des.calc_des( scored_generation[it], rdkit_parm);
+               }
+
+               cout << "##### RDKIT calc end #####\n" << endl;
+           }
+ 
+
+ 
+
+
+           scored_gen_acc.clear(); 
+
+           #endif
+          
+
         
 
            // STEP 3: Print to screen
            // STEP 3A: Save offspring information
+	   // STEP 3A.1: Print out vector sizes for mem debug
+           //cout << "shitty_molecules_go_here size :" << shitty_molecules_go_here.size() << endl;
+           //cout << "good_molecules_go_here size :" << good_molecules_go_here.size() << endl;
+           //cout << "prunemol size :" << prunemol.size() << endl;
+           //cout << "parents size :" << parents.size() << endl;
+           //cout << "xover_parents size :" << xover_parents.size() << endl;
+           //cout << "tmp_parents size :" << tmp_parents.size() << endl;
+           //cout << "saved_parents size :" << saved_parents.size() << endl;
+           //cout << "mutated_parents size :" << mutated_parents.size() << endl;
+           //cout << "children size :" << children.size() << endl;
+           //cout << "tmp_children size :" << tmp_children.size() << endl;
+           //cout << "pruned_children size :" << pruned_children.size() << endl;
+           //cout << "scored_generation size :" << scored_generation.size() << endl;
+           //cout << "mutants size :" << mutants.size() << endl;
+           //cout << "divergent_children size :" << divergent_children.size() << endl;
+           //cout << "pruned_parents size :" << pruned_parents.size() << endl;
+           //cout << "filtered_mols size :" << filtered_mols.size() << endl;
+           //cout << "rdkit_rejected_mols  size :" << rdkit_rejected_mols .size() << endl;
+
            if ( scored_generation.size() > 0 ){
               float score_counter = 0.00;
               score_counter = 0.00;
@@ -1113,13 +1552,20 @@ GA_Recomb::max_breeding( Master_Score & score, Simplex_Minimizer & simplex, AMBE
                   score_counter = score_counter + scored_generation[j].current_score;
               }
               float ave_score = score_counter/scored_generation.size();
+
+              //#ifdef BUILD_DOCK_WITH_RDKIT
+              #if 0
+              cout << "Average Score of accepted offspring gen " << i+1 << ": " << ave_score << endl;
+              #else
               cout << "Average Score offspring gen " << i+1 << ": " << ave_score << endl;
+              #endif
            }
            else{
 	      if ( i >= ga_no_xover_exit_gen){
                   if (limit_max_change_ramp_gens > 0 ){
                       cout << "WARNING: THERE ARE NO OFFSPRING (from pruning and crossover) AND THE PROGRAM WILL EXIT)"<<endl;
-                      exit(0);
+                      return;
+                      //exit(0);
                   }
                   else{
                       limit_max_change_ramp_gens += 1;
@@ -1222,7 +1668,7 @@ GA_Recomb::max_breeding( Master_Score & score, Simplex_Minimizer & simplex, AMBE
                  if (verbose) cout << "\n" "-----------------------------------" "\n";
                  if (verbose) cout << " Elapsed time selection:\t" << stop_time_selection - start_time_selection
                       << " seconds for GA Generation "<< i+1<< "\n\n";
-                 if (verbose )cout <<endl << " #### " << parents.size() << " molecules in new ensemble " << i+1 << " of GA" <<endl;
+                 if (verbose )cout <<endl << " #### " << parents.size() << " molecules in new ensemble " << current_generation+1 << " of GA" <<endl;
 
 
                  // STEP 4C: Print average survivor score to screen
@@ -1235,105 +1681,94 @@ GA_Recomb::max_breeding( Master_Score & score, Simplex_Minimizer & simplex, AMBE
                  float ave_parent_score = score_ensemble/parents.size();
                  cout << "Average score survivors gen " << i+1 << ": " << ave_parent_score << endl;
                  cout << "\n" "-----------------------------------" "\n";
-
                  // STEP 5: Print molecules to file 
                  // Survivors
-                 /*
-                 ostringstream fout_molecules_name69;
-                 fstream fout_molecules69;
-                 fout_molecules69.open (fout_molecules_name69.str().c_str(), fstream::out|fstream::app);
-                 for (int j=0; j<some_molecules_go_here.size(); j++){
-                     calc_descriptors(some_molecules_go_here[j]);
-                     fout_molecules69 << DELIMITER << setw(STRING_WIDTH) << "Name:"
-                                    << setw(FLOAT_WIDTH) << some_molecules_go_here[j].title <<endl;
-                     fout_molecules69 << DELIMITER << setw(STRING_WIDTH) << "Generation:"
-                                    << setw(FLOAT_WIDTH) << i+1 << endl;
-                     fout_molecules69 << DELIMITER << setw(STRING_WIDTH) << "Molecular_Weight:"
-                                    << setw(FLOAT_WIDTH) << fixed << setprecision(3) << some_molecules_go_here[j].mol_wt <<endl;
-                     fout_molecules69 << DELIMITER << setw(STRING_WIDTH) << "DOCK_Rotatable_Bonds:"
-                                    << setw(FLOAT_WIDTH) << some_molecules_go_here[j].rot_bonds <<endl;
-                     fout_molecules69 << DELIMITER << setw(STRING_WIDTH) << "Hydrogen_Acceptors:"
-                                    << setw(FLOAT_WIDTH) << some_molecules_go_here[j].hb_acceptors <<endl;
-                     fout_molecules69 << DELIMITER << setw(STRING_WIDTH) << "Hydrogen_Donors:"
-                                    << setw(FLOAT_WIDTH) << some_molecules_go_here[j].hb_donors <<endl;
-                     fout_molecules69 << DELIMITER << setw(STRING_WIDTH) << "Formal_Charge:"
-                                    << setw(FLOAT_WIDTH) << fixed << setprecision(3) << round(some_molecules_go_here[j].formal_charge) <<endl;
-                     fout_molecules69 << DELIMITER << setw(STRING_WIDTH) << "Type:"
-                                   << setw(FLOAT_WIDTH) << some_molecules_go_here[j].energy <<endl;
-                     fout_molecules69 << some_molecules_go_here[j].current_data << endl;
-                     Write_Mol2(some_molecules_go_here[j], fout_molecules69);
-                 }
-                 fout_molecules69.close();
-                 fout_molecules_name69.clear();*/
-                 //some_molecules_go_here.clear();
-                 //if (lauren_var) { some_molecules_go_here.clear();}
-                   
-             /*    ostringstream fout_molecules_name699;
-                 fout_molecules_name699 << ga_output_prefix << ".good_molecule" <<i+1 <<".mol2";
-                 fstream fout_molecules699;
-                 fout_molecules699.open (fout_molecules_name699.str().c_str(), fstream::out|fstream::app);
-                 for (int j=0; j<good_molecules_go_here.size(); j++){
-                     calc_descriptors(good_molecules_go_here[j]);
-                     fout_molecules699 << DELIMITER << setw(STRING_WIDTH) << "Name:"
-                                    << setw(FLOAT_WIDTH) << good_molecules_go_here[j].title <<endl;
-                     fout_molecules699 << DELIMITER << setw(STRING_WIDTH) << "Generation:"
-                                    << setw(FLOAT_WIDTH) << i+1 << endl;
-                     fout_molecules699 << DELIMITER << setw(STRING_WIDTH) << "Molecular_Weight:"
-                                    << setw(FLOAT_WIDTH) << fixed << setprecision(3) << good_molecules_go_here[j].mol_wt <<endl;
-                     fout_molecules699 << DELIMITER << setw(STRING_WIDTH) << "DOCK_Rotatable_Bonds:"
-                                    << setw(FLOAT_WIDTH) << good_molecules_go_here[j].rot_bonds <<endl;
-                     fout_molecules699 << DELIMITER << setw(STRING_WIDTH) << "Hydrogen_Acceptors:"
-                                    << setw(FLOAT_WIDTH) << good_molecules_go_here[j].hb_acceptors <<endl;
-                     fout_molecules699 << DELIMITER << setw(STRING_WIDTH) << "Hydrogen_Donors:"
-                                    << setw(FLOAT_WIDTH) << good_molecules_go_here[j].hb_donors <<endl;
-                     fout_molecules699 << DELIMITER << setw(STRING_WIDTH) << "Formal_Charge:"
-                                    << setw(FLOAT_WIDTH) << fixed << setprecision(3) << round(good_molecules_go_here[j].formal_charge) <<endl;
-                     fout_molecules699 << DELIMITER << setw(STRING_WIDTH) << "Parents:"
-                                   << setw(FLOAT_WIDTH) << good_molecules_go_here[j].energy <<endl;
-                     fout_molecules699 << good_molecules_go_here[j].current_data << endl;
-                     Write_Mol2(good_molecules_go_here[j], fout_molecules699);
-                 }
-                 fout_molecules699.close();
-                 fout_molecules_name699.clear();
-                 good_molecules_go_here.clear();
-               */  
 
                  ostringstream fout_molecules_name;
                   // "I want the files to be listed in numerical order on my laptop" - Rob //LEP
                  std::ostringstream gen;
-                 gen << std::setw(4) << std::setfill('0') << i+1;
+                 gen << std::setw(4) << std::setfill('0') << current_generation+1;
                  fout_molecules_name << ga_output_prefix << ".restart" << gen.str() <<".mol2";
                  fstream fout_molecules;
 
-                 print_molecules(fout_molecules_name.str().c_str(), parents, i, "");
+                 print_molecules(fout_molecules_name.str().c_str(), parents, current_generation, "");
                  fout_molecules_name.str(std::string());
                  if (Parameter_Reader::verbosity_level() > 1) {
                      //print molecules pruned do to being too similar to other molecules (parents only right now)
                     fout_molecules_name << ga_output_prefix << ".pruned" << gen.str() <<".mol2";
 
-                    print_molecules(fout_molecules_name.str().c_str(), pruned_parents, i, "pruned_");
+                    print_molecules(fout_molecules_name.str().c_str(), pruned_parents, current_generation, "pruned_");
                     fout_molecules_name.str(std::string());
                  }//end printing pruned
+
+
+
+                
+                
+                 // print out filtered mols
+                 if ( Parameter_Reader::verbosity_level() > 1 ) {
+                     fout_molecules_name << ga_output_prefix << ".filtered_" << gen.str() <<".mol2"; 
+
+                     //charge the filtered mols
+                     for(int i = 0; i<filtered_mols.size(); i++){
+                        double total_charge = 0;
+                        total_charge = compute_gast_charges( filtered_mols[i] );
+                     }
+                     print_molecules(fout_molecules_name.str().c_str(), filtered_mols, current_generation , "filtered_"); 
+                 }
+                 filtered_mols.clear();
+                 fout_molecules_name.str(std::string());
+
+  
+                 
+                 // end print out filtered mols
+
+                 //#ifdef BUILD_DOCK_WITH_RDKIT
+                 #if 0
+                 //rdkit_rejected_mols
+                 if ( Parameter_Reader::verbosity_level() > 1 ) {
+                     fout_molecules_name << ga_output_prefix << ".rdkit_rej" << gen.str() <<".mol2"; 
+                     print_molecules(fout_molecules_name.str().c_str(), rdkit_rejected_mols, current_generation, "rdkit_rej_");
+                 }
+ 
+                 rdkit_rejected_mols.clear();
+                 fout_molecules_name.str(std::string());
+                 #endif
+ 
                  fout_molecules_name << ga_output_prefix << ".rejected" << gen.str() <<".mol2";
 
                  if (use_limit_max_change){
-                      print_molecules(fout_molecules_name.str().c_str(), divergent_children, i, "rejected_");
+                      print_molecules(fout_molecules_name.str().c_str(), divergent_children, current_generation, "rejected_");
                  }
                  fout_molecules_name.clear();
                  gen.clear();
                  divergent_children.clear();
+		 
                  pruned_parents.clear();
 
               }//if check only
 
+	      // Print mutation stats
+	      cout << "Num successful additions: " << total_muts[ADDITION_TYPE] << " out of " << total_mut_attempts[ADDITION_TYPE] << endl;
+	      cout << "Num successful deletions: " << total_muts[DELETION_TYPE] << " out of " << total_mut_attempts[DELETION_TYPE] << endl;
+	      cout << "Num successful replacements: " << total_muts[REPLACEMENT_TYPE] << " out of " << total_mut_attempts[REPLACEMENT_TYPE] << endl;
+	      cout << "Num successful substitutions: " << total_muts[SUBSTITUTION_TYPE] << " out of " << total_mut_attempts[SUBSTITUTION_TYPE] << endl;
+
               // STEP 6: Print Generation timing to screen
               stop_time = time_seconds();
               if (verbose) cout << "\n" "-----------------------------------" "\n";
-              if (verbose) cout << " Elapsed time:\t" << stop_time - start_time 
+              if (verbose) {
+		   cout << " Elapsed time:\t" << stop_time - start_time 
                    << " seconds for GA Generation " << i+1 << "\n\n";
+		   print_molecule_counts(current_generation);
+	      }
+
         }// if
         // If less than two parents, exit
-        else { exit(0); }
+        else { 
+            return;
+            //exit(0); 
+        }
 
         // Reset the random seed so that it is the same for every anchor
         // This behavior is quasi-consistent with A&G
@@ -1346,7 +1781,14 @@ GA_Recomb::max_breeding( Master_Score & score, Simplex_Minimizer & simplex, AMBE
     return;
 } // end GA_Recomb::max_generations()
 
-
+void
+GA_Recomb::print_molecule_counts(int generation){
+   Trace trace( "GA_Recomb::print_molecule_counts()" );
+   //cout << "survived_molecule_counter" << survived_molecule_counter[generation] << endl;
+   cout << "generated_molecule_counter" << generated_molecule_counter[generation] << endl;
+   cout << "valid_torenv_molecule_counter" << valid_torenv_molecule_counter[generation] << endl;
+   cout << "unpruned_molecule_counter" << unpruned_molecule_counter[generation] << endl;
+}
 
 // +++++++++++++++++++++++++++++++++++++++++
 // Determine the molecules with overlapping bonds and returns the set as reference 
@@ -1396,7 +1838,7 @@ GA_Recomb::check_exhaustive( Master_Score & score, Simplex_Minimizer & simplex, 
     // Reset the parents comments (energy)
     for ( int i=0; i<parents.size(); i++ ){
         ostringstream new_energy;
-        new_energy << "parent";
+        new_energy << PARENT_TAG;
         parents[i].energy = new_energy.str();
         parents[i].parent = 1;
     }
@@ -1662,7 +2104,7 @@ GA_Recomb::breeding_exhaustive( Master_Score & score, Simplex_Minimizer & simple
     // Reset the parents comments (energy)
     for ( int i=0; i<parents.size(); i++ ){
         ostringstream new_energy;
-        new_energy << "parent";
+        new_energy << PARENT_TAG;
         parents[i].energy = new_energy.str();
         parents[i].parent = 1;
     }
@@ -2103,7 +2545,6 @@ GA_Recomb::breeding_exhaustive( Master_Score & score, Simplex_Minimizer & simple
     for (int i=0; i<parents.size(); i++){
         parents[i].used = false;
     }
-
     // Search through the comments of each molecule
     for ( int i=0; i<scored_generation.size(); i++ ){
         int p1 = 0;
@@ -2240,6 +2681,7 @@ GA_Recomb::breeding_exhaustive( Master_Score & score, Simplex_Minimizer & simple
            }
         }
 
+
         // Clear necessary vectors
         mutated_parents.clear();
         if (use_limit_max_change){
@@ -2306,7 +2748,7 @@ GA_Recomb::breeding_rand( Master_Score & score, Simplex_Minimizer & simplex, AMB
     // Reset the parents comments (energy)
     for ( int i=0; i<parents.size(); i++ ){
         ostringstream new_energy;
-        new_energy << "parent";
+        new_energy << PARENT_TAG;
         parents[i].energy    = new_energy.str();
     }
 
@@ -2342,7 +2784,7 @@ GA_Recomb::breeding_rand( Master_Score & score, Simplex_Minimizer & simplex, AMB
         int hungarian_similarity_prune = 0;
 
     	while ((pair < pair_max) & (children.size() < ga_xover_max)){
-    
+            
        	    // Select two parents for breeding randomly
        	    int index_p1 = (rand() % parents.size()); 
        	    int index_p2 = (rand() % parents.size());
@@ -2828,6 +3270,7 @@ GA_Recomb::breeding_rand( Master_Score & score, Simplex_Minimizer & simplex, AMB
               }
            }
         }
+	
 
 	// Time for pruning from crossover CS LEP
         double stop_time_step3 = time_seconds();
@@ -2859,6 +3302,9 @@ GA_Recomb::breeding_rand( Master_Score & score, Simplex_Minimizer & simplex, AMB
     }
     // Search through the comments of each molecule
     for ( int i=0; i<scored_generation.size(); i++ ){
+	if (scored_generation[i].energy==PARENT_TAG){
+	  continue;
+	}
         int p1 = 0;
         int p2 = 0;
         istringstream tmp(scored_generation[i].energy);
@@ -2872,6 +3318,7 @@ GA_Recomb::breeding_rand( Master_Score & score, Simplex_Minimizer & simplex, AMB
         // Save parent index information 
         //ostringstream new_comment;
         //new_comment << p1 << "_" << p2;
+	//Setting Default Mut type
         scored_generation[i].energy = p11 + "_X_" + p22;
         //new_comment.clear();
     }
@@ -2920,6 +3367,8 @@ GA_Recomb::breeding_rand( Master_Score & score, Simplex_Minimizer & simplex, AMB
        }
        pmuts.clear();
 
+       //
+
        double stop_time_step4 = time_seconds();
        //cout << "\n" "-----------------------------------" "\n";
        if (verbose) cout << " Elapsed time Parents Mutations:\t" << stop_time_step4 - start_time_step4
@@ -2949,6 +3398,7 @@ GA_Recomb::breeding_rand( Master_Score & score, Simplex_Minimizer & simplex, AMB
     }
 
     // STEP 4B: Mutate offspring
+    // BTB - There should probably be an additional check here so we don't mutate parents twice - 2024.06.03
     if (scored_generation.size() > 0){
        double start_time_step6 = time_seconds();
        cout<< endl <<  "#### Entering Random Offspring mutations ####" << endl;
@@ -4058,7 +4508,6 @@ GA_Recomb::replace_combine_mols( DOCKMol & mol1, int mol1o, int mol1t, DOCKMol &
     }
 
 
-
     // STEP 2: Translate dummy2 of frag2 to the origin
 
     // Figure out what translation is required to move the dummy atom to the origin
@@ -4070,7 +4519,6 @@ GA_Recomb::replace_combine_mols( DOCKMol & mol1, int mol1o, int mol1t, DOCKMol &
 
     // Use the dockmol function to translate the fragment so the dummy atom is at the origin
     mol2.translate_mol(trans1);
-
 
     // STEP 3: Calculate dot product to determine theta (theta = angle between vec1 and vec2)
 
@@ -4338,14 +4786,8 @@ GA_Recomb::replace_combine_mols( DOCKMol & mol1, int mol1o, int mol1t, DOCKMol &
     renumber1.clear();
     renumber2.clear();
  
-    //MARK - DELETE
-    /*fstream fout_molecules;
-    fout_molecules.open ( "zzz.replace_combine.mol2", fstream::out|fstream::app );
-    fout_molecules <<combined_mol.current_data << endl;
-    Write_Mol2(combined_mol, fout_molecules);
-    fout_molecules.close();*/
-
     keep.push_back( combined_mol );
+
 
     return renumbered_du_heavy;
 } // end GA_Recomb::replace_combine_mols()
@@ -4537,7 +4979,7 @@ GA_Recomb::master_mut_exhaustive( std::vector <DOCKMol> & start, std::vector <DO
     while (output.size() < start.size()){
 
        // For each molecule
-       for ( int i=0; i<start.size(); i++ ){
+       for ( int i=0; i<start.size(); i++ ){ //begin 
           
           num_picks++;
           // Copy the molecule for safe keeping
@@ -4558,27 +5000,26 @@ GA_Recomb::master_mut_exhaustive( std::vector <DOCKMol> & start, std::vector <DO
           mutation_selection( start[i], output, score, simplex, c_typer, orient, gen_num, num_picks);
           //cout << "in master_mut_exhaustive output size: " << output.size() << endl; 
           //cout << "in master_mut_exhaustive start size: " << start.size() << endl;
-            // Delete the molecule from the vector
-          start.erase(start.begin()+i);
-            
+
+          // Delete the molecule from the vector
+           start.erase(start.begin()+i);
+
           // Only one offspring is kept from each parent regardless
           // of how many mutations or mutation rounds - LEP
-
-          // If there was not a successful mutation
+	  // If there was not a successful mutation
           if (output.size() == prev_size){
-             // Add the molecule to the end of the vector
-             start.push_back(copy_mol);
+              // Add the molecule to the end of the vector
+              start.push_back(copy_mol);
           }
-
           // Delete the copy
           copy_mol.clear_molecule();
 
           // If we have reached the expected size, then break
           if (output.size() == start.size()){break;
-            cout << "we have reached the expected size - break" << endl;
+                cout << "we have reached the expected size - break" << endl;
             }
             //LEP wtf is this
-       }
+       } //end inner lop
        // Increment num cycles
        mut_cycles++;
 
@@ -4588,11 +5029,18 @@ GA_Recomb::master_mut_exhaustive( std::vector <DOCKMol> & start, std::vector <DO
         cout << "output size: " << output.size() << endl;
     }
 
+    master_mut_counter(parents, output.size(), save.size(), mut_cycles);
+    return;
+} // end GA_Recomb::master_mut_exhaustive()
+
+//function to print/track mutation success rates
+void 
+GA_Recomb::master_mut_counter(bool parents, int output, int save, int mut_cycles){
     // If mutated parents
     if (parents == true){
        // Replace start with original saved molecules
-       cout << "For this generation, parents' mutations: " << output.size() << endl;
-       cout <<"Expected number of parent mutations: " << save.size() << ", mut cycles " << mut_cycles<<endl;
+       cout << "For this generation, parents' mutations: " << output << endl;
+       cout <<"Expected number of parent mutations: " << save << ", mut cycles " << mut_cycles<<endl;
 
        //Print mutation success rates
        int dels = 0;
@@ -4601,6 +5049,8 @@ GA_Recomb::master_mut_exhaustive( std::vector <DOCKMol> & start, std::vector <DO
               dels++;
            }
        }
+       total_muts[DELETION_TYPE] += dels;
+       total_mut_attempts[DELETION_TYPE] += success_del.size();
        cout << setw(STRING_WIDTH) << "Successful parent deletions: " << dels << " / " << success_del.size() <<endl;
 
        int add = 0;
@@ -4611,6 +5061,8 @@ GA_Recomb::master_mut_exhaustive( std::vector <DOCKMol> & start, std::vector <DO
        }
        //string add_make_pretty;
        //string add_make_pretty  = add.str() /*<< " / " << string(success_add.size()) << endl*/; 
+       total_muts[ADDITION_TYPE] += add;
+       total_mut_attempts[ADDITION_TYPE] += success_add.size();
        cout << setw(STRING_WIDTH) << "Successful parent additions: " << add<< " / " << success_add.size()  <<endl;
        //add_make_pretty.clear();
        int subsit = 0;
@@ -4619,6 +5071,8 @@ GA_Recomb::master_mut_exhaustive( std::vector <DOCKMol> & start, std::vector <DO
               subsit++;
            }
        }
+       total_muts[SUBSTITUTION_TYPE] += subsit;
+       total_mut_attempts[SUBSTITUTION_TYPE] += success_sub.size();
        cout << setw(STRING_WIDTH) << "Successful parent substitutions: " << subsit << " / " << success_sub.size() <<endl;
 
        int replace = 0;
@@ -4627,12 +5081,14 @@ GA_Recomb::master_mut_exhaustive( std::vector <DOCKMol> & start, std::vector <DO
               replace++;
            }
        }
+       total_muts[REPLACEMENT_TYPE] += replace;
+       total_mut_attempts[REPLACEMENT_TYPE] += success_replace.size();
        cout << setw(STRING_WIDTH) << "Successful parent replacements: " << replace << " / " << success_replace.size() <<endl;
     }
     else {
        // Replace start with original saved molecules
-       cout << "For this generation, offspring mutations: " << output.size() << endl;
-       cout <<"Expected number of offspring mutations: " << save.size() << " mut cycles " << mut_cycles<<endl;
+       cout << "For this generation, offspring mutations: " << output << endl;
+       cout <<"Expected number of offspring mutations: " << save << " mut cycles " << mut_cycles<<endl;
 
        //Print mutation success rates
        int dels = 0;
@@ -4641,6 +5097,9 @@ GA_Recomb::master_mut_exhaustive( std::vector <DOCKMol> & start, std::vector <DO
               dels++;
            }
        }
+       total_muts[DELETION_TYPE] += dels;
+       total_mut_attempts[DELETION_TYPE] += success_del.size();
+
        cout << setw(STRING_WIDTH)<< "Successful offspring deletions: " << dels << " / " << success_del.size() <<endl;
 
        int add = 0;
@@ -4649,6 +5108,9 @@ GA_Recomb::master_mut_exhaustive( std::vector <DOCKMol> & start, std::vector <DO
               add++;
            }
        }
+       total_muts[ADDITION_TYPE] += add;
+       total_mut_attempts[ADDITION_TYPE] += success_add.size();
+
        cout <<setw(STRING_WIDTH)<< "Successful offspring additions: " << add << " / " << success_add.size() <<endl;
 
        int subsit = 0;
@@ -4657,6 +5119,10 @@ GA_Recomb::master_mut_exhaustive( std::vector <DOCKMol> & start, std::vector <DO
               subsit++;
            }
        }
+
+       total_muts[SUBSTITUTION_TYPE] += subsit;
+       total_mut_attempts[SUBSTITUTION_TYPE] += success_sub.size();
+
        cout <<setw(STRING_WIDTH)<< "Successful offspring substitutions: " << subsit << " / " << success_sub.size() <<endl;
 
        int replace = 0;
@@ -4665,6 +5131,9 @@ GA_Recomb::master_mut_exhaustive( std::vector <DOCKMol> & start, std::vector <DO
               replace++;
            }
        }
+       total_muts[REPLACEMENT_TYPE] += replace;
+       total_mut_attempts[REPLACEMENT_TYPE] += success_replace.size();
+
        cout <<setw(STRING_WIDTH)<< "Successful offspring replacements: " << replace << " / " << success_replace.size() <<endl;
     }
     // Clear vectors that hold mutation success rate information
@@ -4672,9 +5141,9 @@ GA_Recomb::master_mut_exhaustive( std::vector <DOCKMol> & start, std::vector <DO
     success_add.clear();
     success_sub.clear();
     success_replace.clear();
-    return;
-} // end GA_Recomb::master_mut_exhaustive()
 
+
+}
 
 
 // +++++++++++++++++++++++++++++++++++++++++
@@ -4752,7 +5221,7 @@ GA_Recomb::master_mut_rand( std::vector <DOCKMol> & start, std::vector <DOCKMol>
     
        // Initialize segment size
        int num_segments = 0;
-
+ 
        // Prepare molecule for segment id
        segment_id( start[index_mut], c_typer );
   
@@ -4784,89 +5253,9 @@ GA_Recomb::master_mut_rand( std::vector <DOCKMol> & start, std::vector <DOCKMol>
           // Clear the num picks
           num_picks = 0;
        }
-       if (mut_cycles > ga_max_mut_cycles){break;}
+       if (mut_cycles > ga_max_mut_cycles){ break; }
     }
-
-    if (parents == true){
-       cout <<"For this generation, parent mutations: " << output.size() << endl;
-       cout <<"Expected number of parent mutations: " << expected_muts <<  " size " <<output.size() << " mut cycle " << mut_cycles<<endl;
-
-       //Print mutation success rates
-       int dels = 0;
-       for (int i=0; i<success_del.size(); i++){
-           if (success_del[i] == 1){
-              dels++;
-           }
-       }
-       cout << setw(STRING_WIDTH)<< "Successful parent deletions: " << dels << " / " << success_del.size() <<endl;
-
-       int add = 0;
-       for (int i=0; i<success_add.size(); i++){
-           if (success_add[i] == 1){
-              add++;
-           }
-       }
-       cout << setw(STRING_WIDTH)<< "Successful parent additions: " << add << " / " << success_add.size() <<endl;
-
-       int subsit = 0;
-       for (int i=0; i<success_sub.size(); i++){
-           if (success_sub[i] == 1){
-              subsit++;
-           }
-       }
-       cout << setw(STRING_WIDTH)<< "Successful parent substitutions: " << subsit << " / " << success_sub.size() <<endl;
-
-       int replace = 0;
-       for (int i=0; i<success_replace.size(); i++){
-           if (success_replace[i] == 1){
-              replace++;
-           }
-       }
-       cout << setw(STRING_WIDTH)<< "Successful parent replacements: " << replace << " / " << success_replace.size() <<endl;
-    }
-    else{
-       cout <<"For this generation, offspring mutations: " << output.size() << endl;
-       cout <<"Expected number of offspring mutations: " << expected_muts <<  " size " <<output.size() << " mut cycle " << mut_cycles<<endl;
-
-       //Print mutation success rates
-       int dels = 0;
-       for (int i=0; i<success_del.size(); i++){
-           if (success_del[i] == 1){
-              dels++;
-           }
-       }
-       cout << setw(STRING_WIDTH)<< "Successful offspring deletions: " << dels << " / " << success_del.size() <<endl;
-
-       int add = 0;
-       for (int i=0; i<success_add.size(); i++){
-           if (success_add[i] == 1){
-              add++;
-           }
-       }
-       cout << setw(STRING_WIDTH)<< "Successful offspring additions: " << add << " / " << success_add.size() <<endl;
-
-       int subsit = 0;
-       for (int i=0; i<success_sub.size(); i++){
-           if (success_sub[i] == 1){
-              subsit++;
-           }
-       }
-       cout << setw(STRING_WIDTH)<< "Successful offspring substitutions: " << subsit << " / " << success_sub.size() <<endl;
-
-       int replace = 0;
-       for (int i=0; i<success_replace.size(); i++){
-           if (success_replace[i] == 1){
-              replace++;
-           }
-       }
-       cout << setw(STRING_WIDTH)<< "Successful offspring replacements: " << replace << " / " << success_replace.size() <<endl;
-    }
-
-    // Clear vectors that hold mutation success rate information
-    success_del.clear();
-    success_add.clear();
-    success_sub.clear();
-    success_replace.clear();
+    master_mut_counter(parents, output.size(), save.size(), mut_cycles);
     return;
 } // end GA_Recomb::master_mut_rand()
 
@@ -4990,9 +5379,6 @@ GA_Recomb::segment_id( DOCKMol & gen, AMBER_TYPER & typer )
 }//end GA_Recomb:segment_id()
 
 
-
-
-
 // +++++++++++++++++++++++++++++++++++++++++
 // This function will randomly select the mutation type, identify bond (& atoms) for mutation,
 // and call the appropriate mutation functions (delete, replace, insert, or substitute)
@@ -5005,24 +5391,65 @@ GA_Recomb::mutation_selection( DOCKMol & gen, std::vector <DOCKMol> & mfinal, Ma
    // cout << "Picking a mutation type" << endl;
     // STEP 1: Randomly select a mutation type (from 4 options)
     // MARK : need other mutation selection types and to make a user parameter to choose one
-    int mutation_type = (rand() % (int)(4));
+    vector<int> mutation_types;
+
+    /*probability modifiers for mutations
+    int del_co = 5;
+    int rep_co = 5;
+    int add_co = 1;
+    int sub_co = 1;
+    */
+
+    /*cout << "add_co : " << add_co << endl;
+    cout << "rep_co : " << rep_co << endl;
+    cout << "del_co : " << del_co << endl;
+    cout << "sub_co : " << sub_co << endl;
+    */
+
+    if (ga_mutate_deletion){
+	for(int i = 0; i < del_co; i++){
+            mutation_types.push_back(DELETION_TYPE);
+	}
+    }
+    if (ga_mutate_addition){
+	for(int i = 0; i < add_co; i++){
+            mutation_types.push_back(ADDITION_TYPE);
+	}
+    }
+    if (ga_mutate_substitution){
+	for(int i = 0; i < sub_co; i++){
+            mutation_types.push_back(SUBSTITUTION_TYPE);
+	}
+    }
+    if (ga_mutate_replacement){
+	for(int i = 0; i < rep_co; i++){
+            mutation_types.push_back(REPLACEMENT_TYPE);
+	}
+    }
+    int mutations_size = mutation_types.size();
+    if (mutations_size == 0){
+        cout << "Warning! No mutation types are enabled! Exiting!!" << endl;
+	exit(1);
+    }
+    int sel_val = (rand() % (int)(mutations_size));
+    int mutation_type = mutation_types[sel_val];
+
     cout << "Random number - mutation_type (mutation_selection): " << mutation_type << endl; 
     //cout << "Mutation type " <<mutation_type <<endl;
-    if (mutation_type == 0){
+    if (mutation_type == DELETION_TYPE){
         cout << "Trying mutation type: deletion" << endl;
     }
-    if (mutation_type == 1){
+    if (mutation_type == ADDITION_TYPE){
         cout << "Trying mutation type: addition" << endl;
     }
     
-    if (mutation_type == 2){
+    if (mutation_type == SUBSTITUTION_TYPE){
         cout << "Trying mutation type: substitution" << endl;
     }
-    if (mutation_type == 3){
+    if (mutation_type == REPLACEMENT_TYPE){
         cout << "Trying mutation type: replacement" << endl;
     }
     //mutation_type = 1;
-
 
     //-------------------------------------------------------------------------
     // STEP 2: Pick a scaffolds, linkers, and sidechains of the molecule
@@ -5031,6 +5458,7 @@ GA_Recomb::mutation_selection( DOCKMol & gen, std::vector <DOCKMol> & mfinal, Ma
     INTVec linker_ids;
     INTVec scaffold_ids;
     INTVec rigid_ids;
+
     //for (int i=0; i<num_segments; i++){
     //    for (int atom_num=0; atom_num<orig_segments[i].num_atoms; ++atom_num){
     //        //checks all atoms to see if they are mutatable
@@ -5057,26 +5485,28 @@ GA_Recomb::mutation_selection( DOCKMol & gen, std::vector <DOCKMol> & mfinal, Ma
               //if true, add to counter and exclude for all mutations but addition
               seg_exclude=true;
               dna_counter+=1;
+	      orig_segments[i].DNM_present=true;
             }
           }
             //if all atoms are marked as not mutatable, exclude for addition
           if (orig_segments[i].num_atoms == dna_counter){
             seg_exclude_add=true;
+	    orig_segments[i].ALL_DNM=true;
           } 
 
           //if excluded for addition and addition selected
-          if ((seg_exclude_add == true) && (mutation_type == 1)){
+          if ((seg_exclude_add == true) && (mutation_type == ADDITION_TYPE)){
             cout << "Will not select segment " << i << " as all atoms are labeled for no mutation."<< endl;
             seg_exclude_indices.push_back(i);
             seg_exclude_add = false;
             seg_exclude = false;
 
           //if excluded for all but addition and addition is selected
-          } else if ((seg_exclude == true) && (mutation_type == 1)) { 
+          } else if ((seg_exclude == true) && (mutation_type == ADDITION_TYPE)) { 
             cout << "Segment " << i << " labeled for no mutation, but addition still possible."<< endl;
 
           //if excluded for all but addition and something other than addition chosen
-          } else if ((seg_exclude == true) && (mutation_type != 1)) {
+          } else if ((seg_exclude == true) && (mutation_type != ADDITION_TYPE)) {
             cout << "Segment " << i << " labeled for no mutation." << endl;
             seg_exclude_indices.push_back(i);
             seg_exclude=false;
@@ -5087,14 +5517,22 @@ GA_Recomb::mutation_selection( DOCKMol & gen, std::vector <DOCKMol> & mfinal, Ma
 
     // For all segments in mol
     for (int i=0; i<num_segments; i++){
-        // If the segment has 1 attachment point
+        // If the segment is all DNM, skip this fragment/segment
+	if (orig_segments[i].ALL_DNM){
+	   continue;
+	}
+	// If the segment has 1 attachment point
         if (orig_segments[i].num_aps == 1){
-           // Save to vector
-          sidechain_ids.push_back(i);
-          terminal_seg.push_back(i); // This is the global version needed to speed up deletions
+           // Save to vector, but only if it will actually be usable in the mutation (i.e. a fragment with DNM cannot be used substitution or replacement or deletion
+	  if (!orig_segments[i].DNM_present || mutation_type == ADDITION_TYPE){
+              sidechain_ids.push_back(i);
+              terminal_seg.push_back(i); // This is the global version needed to speed up deletions
+	  }
         }
         else if ( orig_segments[i].num_aps == 2 ){
-           linker_ids.push_back(i);   
+	   if (!orig_segments[i].DNM_present || mutation_type == ADDITION_TYPE){
+               linker_ids.push_back(i);   
+	   }
            /*  
            //JDB - Atom Names per segment debugging
             for (int x=0; x<orig_segments[i].num_atoms; x++){
@@ -5107,7 +5545,9 @@ GA_Recomb::mutation_selection( DOCKMol & gen, std::vector <DOCKMol> & mfinal, Ma
             cout << endl << endl;      */ 
         }
         else if ( orig_segments[i].num_aps >= 3 ){
-           scaffold_ids.push_back(i);
+	   if (!orig_segments[i].DNM_present || mutation_type == ADDITION_TYPE){
+             scaffold_ids.push_back(i);
+	   }
         }
         // If there are no attachment points
         else {
@@ -5118,49 +5558,56 @@ GA_Recomb::mutation_selection( DOCKMol & gen, std::vector <DOCKMol> & mfinal, Ma
     //if all segment ids are empty, then the molecule is invalid for any mutations. Program will exit with error.
     if ( (sidechain_ids.size() == 0) && (linker_ids.size() == 0) && (scaffold_ids.size() == 0) && \
       (terminal_seg.size()) == 0 && (rigid_ids.size() == 0) ){
-        cout << "No segments were kept as valid. Possible all segments were selected as DNM." << endl;
-        exit(1);
+        //if this happens in addition, exit immediately
+	if (mutation_type == ADDITION_TYPE){
+	    cout << "No segments were kept as valid. Possible all segments were selected as DNM." << endl;
+            exit(1);
+	}
+	//otherwise, go to the next mut_cycle
+	else{
+	    //cleanup
+	    cleanup_mutation_selection(sidechain_ids, linker_ids, scaffold_ids, rigid_ids);
+	    return;
+	}
     }
     // (2) Pick a random scaffold, sidechain and linker for mutation 
     int segment_types = 0;
     int final_segment_type = 0;
     // If the molecule is not rigid
     if ( (rigid_ids.size() == 0) ){
-       // If there are multiple segment types
-       if ( (sidechain_ids.size() > 0) && (linker_ids.size() > 0) && (scaffold_ids.size() > 0) ){
-          segment_types = 3;
-          // Randomly select a fragment type
-          final_segment_type = (rand() % (int)(segment_types));
-          //cout << "Random number - segment_type (mutation_selection): " << final_segment_type << endl;
+       vector<int> frag_types;
+       //if we have sidechains and are not doing replacement
+       if (sidechain_ids.size() > 0 && mutation_type != REPLACEMENT_TYPE){
+          //0 for sidechains (pre-processing directive, check conf_gen_ga.h file for SIDECHAIN_TYPE defn)
+          frag_types.push_back(SIDECHAIN_TYPE);
        }
-       // If only the sidechains and linkers are present
-       else if ( (sidechain_ids.size() > 0) && (linker_ids.size() > 0) ){
-          segment_types = 2; 
-          // Randomly select a fragment type
-          final_segment_type = (rand() % (int)(segment_types));
-          //cout << "Random number - segment_type (mutation_selection): " << final_segment_type << endl;  
+       //if we have linkers and are not doing substitution
+       if (linker_ids.size() > 0){
+          //1 for linkers
+          frag_types.push_back(LINKER_TYPE);
        }
-       // If only if sidechains and scaffolds
-       else if ( (sidechain_ids.size() > 0) && (scaffold_ids.size() > 0) ){
-           segment_types = 2;
-           final_segment_type = (rand() % (int)(segment_types));
-           //cout << "Random number - segment_type (mutation_selection): " << final_segment_type << endl;
-           // Here, option 0 = sidechains 7 option 1 = scaffolds
-           if ( final_segment_type == 1 ){ final_segment_type = 2; 
-                //cout << "changing segment type 1 to 2 because no linkers but there are scaffolds"<< endl; 
-           }
+       //if we have scaffolds and are not doing substitution
+       if (scaffold_ids.size() > 0){
+          //2 for sacaffolds
+          frag_types.push_back(SCAFFOLD_TYPE);
        }
-       // If there are only sidechains
-       else { final_segment_type = 0; 
-        cout << "there are only sidechains" << endl;
-        }
-       if (final_segment_type == 0){
+       segment_types = frag_types.size();
+       //select fragment type for mutation
+       if (segment_types == 0){
+          cout << "No valid fragments for selected mutation availabile, exiting mut cycle!" << endl;
+          cleanup_mutation_selection(sidechain_ids, linker_ids, scaffold_ids, rigid_ids);
+          return;
+       }
+       int sel_val = (rand() % (int)(segment_types));
+       final_segment_type = frag_types[sel_val];
+       
+       if (final_segment_type == SIDECHAIN_TYPE){
           cout << "Segment Type for Mutation: sidechains" << endl;
        }
-       if (final_segment_type == 1){
+       if (final_segment_type == LINKER_TYPE){
           cout << "Segment Type for Mutation: linkers" << endl;
        }
-       if (final_segment_type == 2){
+       if (final_segment_type == SCAFFOLD_TYPE){
           cout << "Segment Type for Mutation: scaffolds" << endl;
        }
        if (final_segment_type == 3){
@@ -5174,7 +5621,7 @@ GA_Recomb::mutation_selection( DOCKMol & gen, std::vector <DOCKMol> & mfinal, Ma
     }    
     // If rigid, do an addition
     else{
-       mutation_type = 1;
+       mutation_type = ADDITION_TYPE;
        cout << "Mutation type changed to addition because molecule is rigid" << endl;
        cout << " scaffolds " << scaffold_ids.size() << " linkers " << linker_ids.size() << " sidechain " << sidechain_ids.size() << " rigid " << rigid_ids.size() <<endl;
     }
@@ -5190,7 +5637,7 @@ GA_Recomb::mutation_selection( DOCKMol & gen, std::vector <DOCKMol> & mfinal, Ma
       int select_counter = 0;
 
       // If type = 0, select a sidechain
-      if ( final_segment_type == 0 ){
+      if ( final_segment_type == SIDECHAIN_TYPE ){
         //cout << "type = 0, select sidechain" << endl;
         index_seg = (rand() % (int)(sidechain_ids.size()));
         //cout << "Random number - index_seg (mutation_selection): " << index_seg << endl;
@@ -5229,13 +5676,13 @@ GA_Recomb::mutation_selection( DOCKMol & gen, std::vector <DOCKMol> & mfinal, Ma
         //     << " working segment " << final_seg <<endl;
  
         // If the mutation type was 3 (replacement), change the mutation type to 2 (subsit)
-        if ( mutation_type == 3 ){
-           mutation_type = 2;
+        if ( mutation_type == REPLACEMENT_TYPE ){
+           mutation_type = SUBSTITUTION_TYPE;
            cout << " Changed mutation type from replacement to substitution" <<endl;
         }
       }
       // If type = 1, select a linker
-      if ( final_segment_type == 1 ){
+      if ( final_segment_type == LINKER_TYPE ){
         //cout << "final segment type = 1, select a linker" << endl;
         index_seg = (rand() % (int)(linker_ids.size()));
         cout << "Random number - index_seg (mutation_selection): " << index_seg << endl;
@@ -5271,7 +5718,7 @@ GA_Recomb::mutation_selection( DOCKMol & gen, std::vector <DOCKMol> & mfinal, Ma
         //     << " working segment " << final_seg <<endl;
       }
       // If type = 2, select a scaffolds
-      if ( final_segment_type == 2 ){
+      if ( final_segment_type == SCAFFOLD_TYPE ){
         //cout << "final segment type = 2, select a scaffold" << endl;
         index_seg = (rand() % (int)(scaffold_ids.size()));
         cout << "Random number - index_seg (mutation_selection): " << index_seg << endl;
@@ -5314,17 +5761,7 @@ GA_Recomb::mutation_selection( DOCKMol & gen, std::vector <DOCKMol> & mfinal, Ma
         if (dna_selected == true) {
           cout << "Final segment for this attempt is not allowed for mutation type by user input. Moving to next attempt." << endl << endl;
 
-
-          orig_segments.clear();
-          bond_btwn_seg.clear();
-          no_seg_bonds.clear();
-          mutants.clear();
-
-          sidechain_ids.clear();
-          linker_ids.clear();
-          scaffold_ids.clear();
-          rigid_ids.clear();
-
+          cleanup_mutation_selection(sidechain_ids, linker_ids, scaffold_ids, rigid_ids);
           return;
          }
       }
@@ -5379,176 +5816,170 @@ GA_Recomb::mutation_selection( DOCKMol & gen, std::vector <DOCKMol> & mfinal, Ma
     //-------------------------------------------------------------------------
     // STEP 4: Call the appropriate mutation functions
     // (1) To delete a portion of the molecule and replace with a H - yields valid molecule, when applicable
-    if ( (mutation_type == 0) && (num_segments > 2) && (ga_mutate_deletion)){ 
+    if ( (mutation_type == DELETION_TYPE) && (num_segments > 2) ){ 
         cout << "Calling Mutation Function: Deletion" << endl;
+
         deletion_mutation(gen, working_bonds, atom_start, atom_term, false, score, simplex, typer );
+
         if (dnm_enabled) {
           if (dnm_encountered == true){
               cout << "DNM Encountered in Deletion step. Exiting substitution." << endl;
-              atom_start.clear();
-              atom_term.clear();
-              working_bonds.clear();
-              orig_segments.clear();
-              bond_btwn_seg.clear();
-              no_seg_bonds.clear();
-              mutants.clear();
-
-              sidechain_ids.clear();
-              linker_ids.clear();
-              scaffold_ids.clear();
-              rigid_ids.clear();
+	      cleanup_mutation_selection(sidechain_ids, linker_ids, scaffold_ids, rigid_ids);
               return;
           }
         }
-        //if (mutants.size() == 0){
-        //    cout << "no molecules made from deletion" << endl;
-        //}
+
+        // edit all moleucles in the mutant vector
+        for (DOCKMol & tmp_mol: mutants){
+            if (tmp_mol.energy == "parent"){
+                ostringstream parent_field;
+                parent_field << gen.title << DELETION_TAG;
+                tmp_mol.energy = parent_field.str();
+            }else{
+                ostringstream xover_parent_field;
+                xover_parent_field << tmp_mol.energy << DELETION_TAG;
+                tmp_mol.energy = xover_parent_field.str();
+            }
+        }
+
         if (mutants.size()>0){
             hard_filter(mutants); 
         }
+	generated_molecule_counter[current_generation] += mutants.size();
+	valid_torenv_molecule_counter[current_generation] += mutants.size();
         if ( mutants.size() > 0 ){ 
-            if (mutants[0].energy == "parent"){
-                ostringstream parent_field;
-                parent_field << gen.title << "-d";
-                mutants[0].energy = parent_field.str();
-            }else{
-                ostringstream xover_parent_field;
-                xover_parent_field << mutants[0].energy << "-d";
-                mutants[0].energy = xover_parent_field.str();
-            }
             success_del.push_back(1); 
-            //cout << "Lauren:" << gen.title << endl;
-        } 
-        else { success_del.push_back(0); }
-    }//else{
-     //   cout << "pushed to mutants" << endl;
-     //   mutants.push_back(gen);
-   // }
+        } else { success_del.push_back(0); }
+    }
   
     // (2) To add to the terminal of a molecule - yields a valid, minimized, and scored molecule every time
-    else if (( mutation_type == 1) && (ga_mutate_addition == true) ){
-       cout << "Calling Mutation Function: Addition" << endl;
-       ostringstream parent_field;
-        if (gen.energy == "parent"){
-           parent_field << gen.title << "-a";
+    // (2) But with isoswap you can gather even more.
+    else if (( mutation_type == ADDITION_TYPE) ){
+        cout << "Calling Mutation Function: Addition" << endl;
+        ostringstream parent_field;
+        if (gen.energy == PARENT_TAG){
+          parent_field << gen.title << ADDITION_TAG;
         } else {
-            parent_field << gen.energy << "-a";
+          parent_field << gen.energy << ADDITION_TAG;
         }
-       additions(gen, final_seg, score, simplex, typer, orient, false, gen_num, mut_attempt);
-       if (mutants.size()>0){
-            hard_filter(mutants); 
-       }
-       if ( mutants.size() > 0 ){
-           //if (mutants[0].energy == "parent"){
-             //   ostringstream parent_field;
-               // parent_field << gen.title << "-a";
-                mutants[0].energy = parent_field.str();
-           // }else{
-             //   ostringstream xover_parent_field;
-              //  xover_parent_field << mutants[0].energy << "-a";
-              //  mutants[0].energy = xover_parent_field.str();
-           // }
-            //cout << "Lauren:" << gen.title << endl;
-          for (int i=0; i<mutants[0].num_atoms; i++){
-              // Reset Atom residue numbers to prevent issues with DN minimization - rot bond initialization
-              ostringstream res_num;
-              res_num << "1";
-              mutants[0].atom_residue_numbers[i] = res_num.str(); 
-          }
-          success_add.push_back(1); 
-       } else{ success_add.push_back(0); }
-    }//else{
-     //   cout << "pushed to mutants" << endl;
-     //   mutants.push_back(gen);
-   // }      
 
-    // (3) To replace any portion of the molecule - yields a valid, minimized, and scored molecule (only tries twice)
-    else if (( mutation_type == 2) && (ga_mutate_substitution == true) ){
-      cout << "Calling Mutation Function: Substitution" << endl;
-      ostringstream parent_field;
+        additions(gen, final_seg, score, simplex, typer, orient, false, gen_num, mut_attempt);
 
-      if (gen.energy == "parent"){
-        parent_field << gen.title << "-s";
-      } else {
-        parent_field << gen.energy << "-s";
-      }
-
-      deletion_mutation(gen, working_bonds, atom_start, atom_term, true, score, simplex, typer );
-      if (dnm_enabled) {
-        if (dnm_encountered == true){
-          cout << "DNM Encountered in Deletion step. Exiting substitution." << endl;
-          atom_start.clear();
-          atom_term.clear();
-          working_bonds.clear();
-          orig_segments.clear();
-          bond_btwn_seg.clear();
-          no_seg_bonds.clear();
-          mutants.clear();
-
-          sidechain_ids.clear();
-          linker_ids.clear();
-          scaffold_ids.clear();
-          rigid_ids.clear();
-          return;
-        }
-      }
-       // Note this number is not entirely accurate should get number of deletions
-       //ostringstream parent_field;
-       //parent_field << gen.title << "-s";
-
-      // JDB - necessary change for DNM to check for mutant size before addition - otherwise it can
-      // pass an empty vector and seg fault
-      if (mutants.size() > 0) {
-        additions(mutants[0], final_seg, score, simplex, typer, orient, true, gen_num, mut_attempt);
-      }
-       
-       if (mutants.size()>0){
-            hard_filter(mutants); 
-       }
-       if ( mutants.size() > 0 ){
-                //parent_field << gen.title << "-s";
-                mutants[0].energy = parent_field.str();
-                //cout << "Lauren:" << gen.title << endl;
-                //ostringstream xover_parent_field;
-                //xover_parent_field << mutants[0].energy << "-s";
-                //mutants[0].energy = xover_parent_field.str();
-            for (int i=0; i<mutants[0].num_atoms; i++){
-                // Reset Atom residue numbers to prevent issues with DN minimization - rot bond initialization
+        // edit all moleucles in the mutant vector
+        for (DOCKMol & tmp_mol: mutants){
+            tmp_mol.energy = parent_field.str();
+            for (int i=0; i<tmp_mol.num_atoms; i++){
                 ostringstream res_num;
                 res_num << "1";
-                mutants[0].atom_residue_numbers[i] = res_num.str(); 
+                tmp_mol.atom_residue_numbers[i] = res_num.str(); 
             }
-            success_sub.push_back(1); 
-       } else { success_sub.push_back(0); }
-    }//else{
-      //  cout << "pushed to mutants" << endl;
-      //  mutants.push_back(gen);
-   // }
+        }
 
-    // (4) Replaces one fragment from a molecule, when applicable
-    else if (( mutation_type == 3 ) && (ga_mutate_replacement == true) ){
-       cout << "Calling Mutation Function: Replacement" << endl; 
-       replacement( gen, final_seg, working_bonds, atom_start, atom_term, score, simplex, typer, orient ); 
-        
-       if ( mutants.size() > 0 ){
-           if (mutants[0].energy == "parent"){
-                ostringstream parent_field;
-                parent_field << gen.title << "-r";
-                mutants[0].energy = parent_field.str();
-            } else {
-                ostringstream xover_parent_field;
-                xover_parent_field << mutants[0].energy << "-r";
-                mutants[0].energy = xover_parent_field.str();
+        if (mutants.size()>0){
+             hard_filter(mutants); 
+        }
+
+        if ( mutants.size() > 0 ){
+           success_add.push_back(1); 
+        } else{ success_add.push_back(0); }
+    }      
+    // (3) To replace any portion of the molecule - yields a valid, minimized, and scored molecule (only tries twice)
+    else if (( mutation_type == SUBSTITUTION_TYPE) ){
+        cout << "Calling Mutation Function: Substitution" << endl;
+        ostringstream parent_field;
+
+        // Location here is important. you have to grab
+        // the title and energy BEFORE you call deletion and addition fn
+        if (gen.energy == PARENT_TAG){
+          parent_field << gen.title << SUBSTITUTION_TAG;
+        } else {
+          parent_field << gen.energy << SUBSTITUTION_TAG;
+        }
+
+        deletion_mutation(gen, working_bonds, atom_start, atom_term, true, score, simplex, typer );
+        if (dnm_enabled) {
+          if (dnm_encountered == true){
+            cout << "DNM Encountered in Deletion step. Exiting substitution." << endl;
+            cleanup_mutation_selection(sidechain_ids, linker_ids, scaffold_ids, rigid_ids);
+            return;
+          }
+        }
+
+        // JDB - necessary change for DNM to check for mutant size before addition - otherwise it can
+        // pass an empty vector and seg fault
+        if (mutants.size() > 0) {
+          additions(mutants[0], final_seg, score, simplex, typer, orient, true, gen_num, mut_attempt);
+        }
+
+        // edit all moleucles in the mutant vector
+        for (DOCKMol & tmp_mol: mutants){
+
+            tmp_mol.energy = parent_field.str();
+
+            for (int i=0; i<tmp_mol.num_atoms; i++){
+                ostringstream res_num;
+                res_num << "1";
+                tmp_mol.atom_residue_numbers[i] = res_num.str(); 
             }
-          success_replace.push_back(1);
-       }
-       else{ success_replace.push_back(0); }
+        }
+
+        if (mutants.size()>0){
+             hard_filter(mutants); 
+        }
+
+        if (mutants.size() > 0){
+            success_sub.push_back(1); 
+        } else {
+            success_sub.push_back(0); 
+        }
+    }
+    // (4) Replaces one fragment from a molecule, when applicable
+    else if (( mutation_type == REPLACEMENT_TYPE ) ){
+        cout << "Calling Mutation Function: Replacement" << endl; 
+
+        replacement( gen, final_seg, working_bonds, atom_start, atom_term, score, simplex, typer, orient ); 
+        
+        // edit all moleucles in the mutant vector
+        for (DOCKMol & tmp_mol: mutants){
+            if (tmp_mol.energy == "parent"){
+                ostringstream parent_field;
+                parent_field << gen.title << REPLACEMENT_TAG;
+                tmp_mol.energy = parent_field.str();
+            }else{
+                ostringstream xover_parent_field;
+                xover_parent_field << tmp_mol.energy << REPLACEMENT_TAG;
+                tmp_mol.energy = xover_parent_field.str();
+            }
+        }
+
+        if( mutants.size() > 0 ){
+            hard_filter(mutants);
+        }
+
+        if ( mutants.size() > 0 ){
+           success_replace.push_back(1);
+        }
+        else{ success_replace.push_back(0); }
     }else{
         //cout << "pushed to mutants" << endl;
         mutants.push_back(gen);
     }
-    cout << "Offspring size: " << mutants.size() << ", only single best scoring offspring retained" << endl;
+
+    // print out num of offsprings created
+    cout << "Finished Mutations: Created " << mutants.size();
     
+    if ( ga_num_iso_picks > 0 ){
+        if ( mutation_type == ADDITION_TYPE ||
+             mutation_type == SUBSTITUTION_TYPE ) {
+            cout <<" offsprings. Since isoswap is on, will collect all mols" << endl;
+        } else if ( mutation_type == REPLACEMENT_TYPE ){ 
+            cout <<" offsprings. Since isoswap is on, will collect all mols" << endl;
+        } else if ( mutation_type == DELETION_TYPE ){ 
+            cout <<" offsprings, only single best scoring offspring retained" << endl;
+        }
+    } else {
+        cout <<" offsprings, only single best scoring offspring retained" << endl;
+    }
     if ( mutants.size() > 0 ){
         // If the molecules have not been minimized, then pass to minimization function
         //cout << "mutants size " << mutants.size() << " mutants score " << mutants[0].current_score << endl;
@@ -5561,7 +5992,21 @@ GA_Recomb::mutation_selection( DOCKMol & gen, std::vector <DOCKMol> & mfinal, Ma
         //for(int i=0; i<mutants[0].num_atoms; i++){
         //    cout << "POST MUTATION BOOL: " << mutants[0].atom_dnm_flag[i] << endl;
         //}
-        mfinal.push_back(mutants[0]);     
+        if ( ga_num_iso_picks > 0 ){
+            if ( mutation_type == ADDITION_TYPE ||
+                 mutation_type == SUBSTITUTION_TYPE ||
+                 mutation_type == REPLACEMENT_TYPE   
+               ) {
+
+                for (DOCKMol & iso_mol: mutants){ 
+                    mfinal.push_back(iso_mol);
+                }
+            } else if ( mutation_type == DELETION_TYPE ){ 
+                mfinal.push_back(mutants[0]);
+            }
+        } else {
+            mfinal.push_back(mutants[0]);     
+        }
     }
 
     //-------------------------------------------------------------------------
@@ -5577,19 +6022,7 @@ GA_Recomb::mutation_selection( DOCKMol & gen, std::vector <DOCKMol> & mfinal, Ma
     }*/
 
     // Clear all vectors
-    atom_start.clear();
-    atom_term.clear();
-    working_bonds.clear();
-    orig_segments.clear();
-    bond_btwn_seg.clear();
-    no_seg_bonds.clear();
-    mutants.clear();
-
-    sidechain_ids.clear();
-    linker_ids.clear();
-    scaffold_ids.clear();
-    rigid_ids.clear();
-
+    cleanup_mutation_selection(sidechain_ids, linker_ids, scaffold_ids, rigid_ids);
     double stop_time = time_seconds();
     if (verbose) cout << "\n" "-----------------------------------" "\n";
     if (verbose) cout << " Elapsed time mutation_selection:\t" << stop_time - start_time
@@ -5968,6 +6401,7 @@ GA_Recomb::deletion_mutation( DOCKMol & gen, INTVec bonds, INTVec origV, INTVec 
 
 // +++++++++++++++++++++++++++++++++++++++++
 // This function will prepare the molecule for the addition of a fragment by the DN code
+// Additions accepts a dockmol to mutate through anchor param, the index of which fragment the addition is occuring on via segment, the score setup through master score, the simplex minimizer, amber typer, and orienter, a bool describing whether this addition is in a substitution mutation or not, the current generation, and the current mutation attempt; this returns a single top scoring molecule after a round of de novo additions
 void
 GA_Recomb::additions ( DOCKMol & anchor, int segment, Master_Score & score, Simplex_Minimizer & simplex, 
                        AMBER_TYPER & typer, Orient & orient, bool subst, int gen_num, int mut_attempt )
@@ -5975,6 +6409,7 @@ GA_Recomb::additions ( DOCKMol & anchor, int segment, Master_Score & score, Simp
     Trace trace( "GA_Recomb::additions()" );
     double start_time = time_seconds();
 
+    
     DN_GA_Build c_dn;
     Fragment frag;
     // STEP 1: Generate a fragment with Du, if necessary
@@ -6020,6 +6455,7 @@ GA_Recomb::additions ( DOCKMol & anchor, int segment, Master_Score & score, Simp
     c_dn.dn_MW_cutoff_type_soft = false;
     c_dn.dn_ga_gen = gen_num;
     c_dn.dn_ga_mut_attempt = mut_attempt;
+    c_dn.dn_ga_name_identifier = ga_name_identifier;
 
     //------------------------------------------------------------------------
     // STEP 2: Pass necessary files and flags to DN
@@ -6091,7 +6527,7 @@ GA_Recomb::additions ( DOCKMol & anchor, int segment, Master_Score & score, Simp
     c_dn.dn_pruning_conformer_score_scaling_factor = 1.0;
 
     c_dn.dn_pruning_clustering_cutoff = 100.0;
-    c_dn.dn_constraint_mol_wt = ga_constraint_mol_wt;
+    c_dn.dn_constraint_mol_wt = ga_constraint_upper_mol_wt;
     c_dn.dn_constraint_rot_bon = ga_constraint_rot_bon;
     c_dn.dn_constraint_formal_charge = ga_constraint_formal_charge;
     //c_dn.dn_constraint_charge_groups = 4;
@@ -6102,7 +6538,8 @@ GA_Recomb::additions ( DOCKMol & anchor, int segment, Master_Score & score, Simp
     c_dn.dn_unique_anchors = ga_max_root_size;
     if ( subst ){
        c_dn.dn_max_grow_layers = num_segs_removed;
-       if (verbose) cout << "#### Number of attempted layers of DN growth " << num_segs_removed << " " << c_dn.dn_max_grow_layers <<endl;
+       // if (verbose) cout << "#### Number of attempted layers of DN growth " << num_segs_removed << " " << c_dn.dn_max_grow_layers <<endl;
+       cout << "#### Number of attempted layers of DN growth " << num_segs_removed << " " << c_dn.dn_max_grow_layers <<endl;
        c_dn.dn_max_root_size = ga_max_root_size;
     }
     else { 
@@ -6121,8 +6558,9 @@ GA_Recomb::additions ( DOCKMol & anchor, int segment, Master_Score & score, Simp
     c_dn.dn_write_prune_dump = 0;
     c_dn.dn_write_orients = 0;
     c_dn.dn_write_growth_trees = 0;
-    c_dn.dn_output_prefix = "output";
+    c_dn.dn_output_prefix = ga_output_prefix;
     c_dn.verbose = 0;
+    c_dn.dn_ga_verbose = Parameter_Reader::verbosity_level();
     
 
     c_dn.use_internal_energy = use_internal_energy;
@@ -6130,6 +6568,7 @@ GA_Recomb::additions ( DOCKMol & anchor, int segment, Master_Score & score, Simp
     c_dn.ie_rep_exp = ie_rep_exp;
     c_dn.ie_diel = ie_diel;
     c_dn.ie_cutoff = ie_cutoff;
+    c_dn.iso_picks = ga_num_iso_picks;
 
     // DELETE - REMOVE
     /*fstream fout_molecules;
@@ -6145,16 +6584,18 @@ GA_Recomb::additions ( DOCKMol & anchor, int segment, Master_Score & score, Simp
     // STEP 3: Complete addition (Enter DN function)
     double start_time2 = time_seconds();
     c_dn.build_molecules( score, simplex, typer, orient );
+    generated_molecule_counter[current_generation] += c_dn.tmp_mutants.size();
     double stop_time2 = time_seconds();
     if (verbose) cout << "\n" "-----------------------------------" "\n";
     if (verbose) cout << " Elapsed time in DN only:\t" << stop_time2 - start_time2
          << " seconds for GA Mutations\n\n";
 
-    // Clear vectors
-    c_dn.anchors.clear();
+    // get the std_frag_lib for isoswap
+    std::vector<Fragment> iso_scaf_link_sid;
+    iso_scaf_link_sid = c_dn.scaf_link_sid;
+    // Clear
     c_dn.scaf_link_sid.clear();
-    
-    // DELETE cout <<"number of tmp molecules " << c_dn.tmp_mutants.size()<<endl;
+    c_dn.anchors.clear();
 
     //------------------------------------------------------------------------
     // STEP 4: Maintain the best scored molecules 
@@ -6163,6 +6604,7 @@ GA_Recomb::additions ( DOCKMol & anchor, int segment, Master_Score & score, Simp
     bool found = false;
     int mol_counter = 0;
 
+    Fragment iso_selected_frag;
     // Sort molecules by score
     if (c_dn.tmp_mutants.size() > 0){
        if (c_dn.tmp_mutants.size() > 1){
@@ -6198,8 +6640,12 @@ GA_Recomb::additions ( DOCKMol & anchor, int segment, Master_Score & score, Simp
                   // Checking all rot bonds
 	          prepare_torenv_indices(c_dn.tmp_mutants[i]);
                   if ( c_dn.valid_torenv_multi( (c_dn.tmp_mutants[i]) )){
+
+		     valid_torenv_molecule_counter[current_generation] += 1; //BTB molecule counters
                      // Activate and retain
                      activate_mol(c_dn.tmp_mutants[i].mol);
+                     iso_selected_frag  = c_dn.tmp_mutants[i];
+                     
                      mutants.push_back(c_dn.tmp_mutants[i].mol);
                      found = true;
                   }
@@ -6210,6 +6656,7 @@ GA_Recomb::additions ( DOCKMol & anchor, int segment, Master_Score & score, Simp
                }
                // If not using torenv, save molecule
                else{
+                  iso_selected_frag  = c_dn.tmp_mutants[i];
                   mutants.push_back(c_dn.tmp_mutants[i].mol);
                   found = true;
                }
@@ -6222,9 +6669,65 @@ GA_Recomb::additions ( DOCKMol & anchor, int segment, Master_Score & score, Simp
            if (mol_counter == c_dn.tmp_mutants.size()-1){found = true;}
            if(found){break;}
         }
+
+        // Start isoswap process
+        if (ga_num_iso_picks > 0)  {
+            std::cout << "############################################\n";
+            std::cout << "Start the isoswap for the addition mutations for " << mutants.size() 
+                      << " molecule." << std::endl;
+            std::cout << "For the HEAD: torsion turned: " << iso_selected_frag.iso_tors_turned <<  
+                         " radians" << std::endl;
+            std::cout << "For the HEAD: orientation matrix: "<< std::endl; 
+            for (int i=0; i<3; i++){
+                std::cout << "[ ";
+                for(int j=0; j<3; j++){
+                    std::cout << setw(5)<< std::right << iso_selected_frag.iso_ori_mat[i][j] << " ";
+                }
+                std::cout << " ]"<<std::endl;
+            }
+            std::vector <Fragment> vec_isoswapped;
+            vec_isoswapped =  iso_addition_sidechain( tmp_frag, 
+                                                      iso_scaf_link_sid[iso_selected_frag.iso_head_attached_ind],
+                                                      iso_selected_frag.iso_ori_mat,
+                                                      iso_selected_frag.iso_frag_att_num_APs,
+                                                      iso_selected_frag.iso_targeted_AP,
+                                                      c_dn 
+                                                    );
+ 
+            // pass isoswapped fragments to the global mutant vec
+            std::cout << "------------------------\n";
+            std::cout << "Start minimization of: " << vec_isoswapped.size() << " molecules" << std::endl;
+            vector <Fragment> min_vec_isoswapped {};
+            if (vec_isoswapped.size() == 0){
+                std::cout << std::endl << "ISO_WARNING: HEAD fragment " << 
+                             iso_scaf_link_sid[iso_selected_frag.iso_head_attached_ind].mol.energy << 
+                             " does not have an isotable. Please generate if needed." << std::endl;
+            }
+            for (Fragment & isoswapped_frag: vec_isoswapped){
+               
+                std::cout << "Minimizing: " << isoswapped_frag.mol.title;
+                c_dn.sample_minimized_torsions( isoswapped_frag , min_vec_isoswapped,
+                                                score, simplex, typer, {true, iso_selected_frag.iso_tors_turned});
+                std::cout << std::endl;
+            }
+
+
+            std::cout << "End minimization of isoswapped molecules and" << std::endl;
+            std::cout << "received: "<< min_vec_isoswapped.size() << " / " << 
+                                        vec_isoswapped.size() << " molecule(s)." << std::endl;
+            std::cout << "------------------------\n";
+
+            for (Fragment & min_iso_frag: min_vec_isoswapped){
+                mutants.push_back( min_iso_frag.mol );
+            }
+            min_vec_isoswapped.clear();
+            vec_isoswapped.clear();
+
+            std::cout << "End Isoswap for addition mutation\n";
+            std::cout << "############################################\n";
+        }
      }
-     //cout << "mutants size " << mutants.size() << endl;// DELETE REMOVE
-            
+
     // If there are mutants
     //if (mutants.size() > 0 ){
        // DELETE - REMOVE
@@ -6543,7 +7046,8 @@ GA_Recomb::rand_replacement( Fragment & ref, int final_seg, std::vector <Fragmen
         //DELETE cout << "calc H rmsd = " << result.first << " unmatched = " << result.second <<endl;
         
         // Hard coded - so that we do not want to pick the same segment
-        if ((result.second < 1)) { 
+        // unless there is isoswap num picks on
+        if (result.second < 1 && ga_num_iso_picks == 0) { 
            compare_aps_bond_types.clear();
            // Delete the molecule from the vector
            frag_erase(tmp_fraglib, frag_index);
@@ -6675,9 +7179,32 @@ GA_Recomb::rand_replacement( Fragment & ref, int final_seg, std::vector <Fragmen
            // STEP 4: Complete recombination, keep mols with allowed bonds, and minimize
            // (3) Generate 
            //cout << "### Entering Replacement for aps: " << ref.aps.size() <<endl; 
-           //cout << "Number of molecules prior to replace_scaffold: " << final_orients.size() << endl;
+           cout << "Number of molecules prior to replace_scaffold: " << final_orients.size() << endl;
            recomb = replace_scaffold ( ref, aps_num, final_seg, allowed_results[0], allowed_results[1], 
                                        tmp_fraglib[frag_index], final_orients, typer, score );
+
+
+           //if isoswap is turned on
+           int num_isoswap_mols = 0; 
+           if ( ga_num_iso_picks > 0 ){
+              std::vector <DOCKMol> iso_recomb {};
+              iso_recomb = iso_replace(ref, tmp_fraglib[frag_index],
+                                       final_seg, aps_num, score,
+                                       typer, orient);
+              recomb.insert( recomb.end(),
+                             iso_recomb.begin(),
+                             iso_recomb.end()
+                           );
+
+              num_isoswap_mols = iso_recomb.size();
+              iso_recomb.clear();
+           }
+
+           cout << endl << "#### rplcmnt mols generated ###\n";
+           cout << "Num of reg     mols: " << recomb.size() - num_isoswap_mols << endl;
+           cout << "Num of isoswap mols: " << num_isoswap_mols << endl;
+           cout << "Reg  +  isoswap    :"  << recomb.size() << endl;
+
            //cout << "Number of molecules prior to multi torenv check: "<< recomb.size() << endl; 
            // (4) Check each rotatable bond's torenv
            for ( int k=0; k<recomb.size(); k++ ){
@@ -6698,8 +7225,10 @@ GA_Recomb::rand_replacement( Fragment & ref, int final_seg, std::vector <Fragmen
                   c_dn.verbose = 0;
                   c_dn.dn_MW_cutoff_type_hard = true;
                   c_dn.dn_MW_cutoff_type_soft = false;                  
+		  generated_molecule_counter[current_generation] += 1;
  
                   if ( c_dn.valid_torenv_multi( new_recomb ) ){
+		     valid_torenv_molecule_counter[current_generation] += 1;
                      // Minimize and save to mutants vector
                      //cout << "entering minimize children1" << endl;
                      activate_mol(recomb[k]);
@@ -6723,7 +7252,8 @@ GA_Recomb::rand_replacement( Fragment & ref, int final_seg, std::vector <Fragmen
                  //cout << "Number of molecules after minimization: " << mutants.size() << endl;
               }
            }
-           cout << "Number of molecules after minimization: " << mutants.size() << endl;
+           cout << "At this point, accumulated number of mutants after replacement: " << mutants.size() << endl;
+           cout << "###############################\n";
         }
         //cout << "Number of molecules after minimization: " << mutants.size() << endl;
         // Check ligand constraints (Mw, RB, etc)
@@ -6740,9 +7270,6 @@ GA_Recomb::rand_replacement( Fragment & ref, int final_seg, std::vector <Fragmen
         allowed_results.clear();
         frag_erase(tmp_fraglib, frag_index);
     } 
-    if (mutants.size() > 0){
-        hard_filter(mutants);
-    }
 
     //cout << "#### It took " << passes << " number of passes to reach " << current << " num molecules. Num picks: " << ga_num_random_picks <<endl;
     cout << "Number with invalid torenv " << invalid_torenv <<endl;
@@ -6974,13 +7501,18 @@ GA_Recomb::orient_frag_to_ref ( Fragment & ref, Fragment & frag, int final_seg,
                                 Master_Score & score, AMBER_TYPER & typer, Orient & orient )
 {
     Trace trace( "GA_Recomb::orient_frag_to_ref()" );
+  
+    if (Parameter_Reader::verbosity_level() > 1){
+        std::cout << "####### GA_Recomb::orient_frag_to_ref() ######" << std::endl;
+        std::cout << "####### For frag " << frag.mol.energy << "  ######" << std::endl;
+    }
 
     // STEP 1: Initialize default input parameters
     orient.use_chemical_matching = false;
     orient.orient_ligand = true;
     orient.automated_matching = true;
     orient.tolerance = 0.25;
-    orient.dist_min = 2.0;
+    orient.dist_min = 0.0; 
     orient.min_nodes = 3;
     orient.max_nodes = 10;
     orient.max_orients = 50;
@@ -6988,7 +7520,13 @@ GA_Recomb::orient_frag_to_ref ( Fragment & ref, Fragment & frag, int final_seg,
     orient.use_chemical_matching = false;
     // This refers othe the frag input sphere file
     orient.use_ligand_spheres = false;
-    orient.verbose = 0;   
+    int verbosity_level = 0;
+    if (verbosity_level >= 3){
+       orient.verbose = 1;
+    }
+    else{
+       orient.verbose = 0;   
+    }
 
     //------------------------------------------------------------------------
     // STEP 2: Prepare and conduct matching
@@ -7018,7 +7556,16 @@ GA_Recomb::orient_frag_to_ref ( Fragment & ref, Fragment & frag, int final_seg,
    
     // (c) Generate the spheres from the ref mol
     orient.get_lig_reference_spheres(ref.mol);
+    ostringstream fout_molecules_name;
 
+    std::ostringstream gen;
+    if (verbosity_level >= 3){
+        gen << std::setw(4) << std::setfill('0') << current_generation+1;
+        fout_molecules_name << ga_output_prefix << "." << gen.str() << "." << frag.mol.energy <<".sph";
+        write_spheres( fout_molecules_name.str(), orient.spheres, frag.mol.energy);
+        gen.clear();
+        fout_molecules_name.clear();
+    }
     // (d) Generate the orients
     // Generate the list of atom-sphere matches
     std::vector <DOCKMol> tmp;
@@ -7042,7 +7589,36 @@ GA_Recomb::orient_frag_to_ref ( Fragment & ref, Fragment & frag, int final_seg,
        fout_molecules.close();*/
 
        tmp.push_back(frag.mol);             
+
     }
+
+    if (verbosity_level >= 3){
+    //if (true){
+        //btb - print orients for debugging
+        gen << std::setw(4) << std::setfill('0') << current_generation+1;
+        fout_molecules_name << ga_output_prefix << ".orients" << gen.str() <<".mol2";
+        if (tmp.size() > 0){
+            print_molecules(fout_molecules_name.str(), tmp, current_generation, "");
+        }
+        else{
+            cout << "NO ORIENTS GENERATED" << endl;
+        }
+        fout_molecules_name.clear();
+        gen.clear();
+    }
+    std::vector <DOCKMol> refs;
+    refs.push_back(ref.mol);
+
+    if (verbosity_level >= 3){
+        //gen << std::setw(4) << std::setfill('0') << current_generation+1;
+        //fout_molecules_name << ga_output_prefix << ".orient_ref" << gen.str() <<".mol2";
+        //print_molecules(fout_molecules_name.str(), refs, current_generation, "");
+	fout_molecules_name.clear();
+        gen.clear();
+    }
+    //clear out debugging stuff
+    refs.clear();
+    
     // Clear orient vectors
     orient.clean_up();
 
@@ -7059,10 +7635,23 @@ GA_Recomb::orient_frag_to_ref ( Fragment & ref, Fragment & frag, int final_seg,
         for ( int j=0; j<ref.aps.size(); j++ ){
             used_aps.push_back(0);
         }
-
+        if (Parameter_Reader::verbosity_level() > 1){
+            std::cout <<"#### For oriented FRAG: "<< i <<" "<< tmp[i].energy << " ####" << std::endl;
+        } 
         // Compare with each aps of the reference
         for ( int j=0; j<ref.aps.size(); j++ ){
             std::vector <std::pair <int, float> > results =  overlapping_aps ( ref, j, frag, tmp[i], typer );
+
+            // check if there are any overlapping results
+            if (Parameter_Reader::verbosity_level() > 1){
+                std::cout  << std::endl<< "#### " << "For ref aps " << j << " Number of hrmsd results: " << 
+                               results.size() << "####"<<std::endl;
+                for (int t=0;t<results.size(); t++){
+                    std::cout << "index "<< t << " results: aps= " << results[t].first <<
+                              " hrmsd= " << results[t].second <<  std::endl << std::endl;;
+                }
+            }
+
             // If there are no matches
             if ( results.size() == 0 ){ break; }
             // If there was a match, check to see if it was used
@@ -7070,7 +7659,7 @@ GA_Recomb::orient_frag_to_ref ( Fragment & ref, Fragment & frag, int final_seg,
                // Update used set for all matches - usually only 1 match
                for ( int k=0; k<results.size(); k++ ){
                    // Hard-coded rmsd 
-                   if ( results[k].second < 0.25 ) {
+                   if ( results[k].second < ga_rplcmnt_inter_du_du_dist ) {
                       used_aps[results[k].first] = 1;
                    }
                }
@@ -7082,7 +7671,13 @@ GA_Recomb::orient_frag_to_ref ( Fragment & ref, Fragment & frag, int final_seg,
             if ( used_aps[j] == 1 ){ sum_aps++; }
         }
    
-        if ( sum_aps == ref.aps.size() ){ pruned_orients.push_back(tmp[i]);  }
+        if ( sum_aps == ref.aps.size() ){ 
+            if (Parameter_Reader::verbosity_level() > 1){
+                std::cout << "Index: " << i << " molecule has been accepted as good frag"
+                          << std::endl;
+            }
+            pruned_orients.push_back(tmp[i]);  
+        }
     }
 
     //cout << "Number of orients (post-pruning): " << pruned_orients.size() <<endl;
@@ -7140,15 +7735,20 @@ GA_Recomb::overlapping_aps ( Fragment & ref, int ref_aps, Fragment & fraglib, DO
        // Then compute rmsd and add to running total
        // DELETE - REMOVE
        //cout << " a " << ref.mol.x[i] << " " << ref.mol.y[i] << " " << ref.mol.z[i] << " b " <<  oriented_mol.x[fraglib.aps[i].dummy_atom] << " " << oriented_mol.y[fraglib.aps[i].dummy_atom] << " " <<  oriented_mol.z[fraglib.aps[i].dummy_atom] <<endl;
+
        rmsd += (((ref.mol.x[ref.aps[ref_aps].dummy_atom] - oriented_mol.x[fraglib.aps[i].dummy_atom])*(ref.mol.x[ref.aps[ref_aps].dummy_atom] - oriented_mol.x[fraglib.aps[i].dummy_atom])) 
               + ((ref.mol.y[ref.aps[ref_aps].dummy_atom] - oriented_mol.y[fraglib.aps[i].dummy_atom])*(ref.mol.y[ref.aps[ref_aps].dummy_atom] - oriented_mol.y[fraglib.aps[i].dummy_atom])) 
               + ((ref.mol.z[ref.aps[ref_aps].dummy_atom] - oriented_mol.z[fraglib.aps[i].dummy_atom])*(ref.mol.z[ref.aps[ref_aps].dummy_atom] - oriented_mol.z[fraglib.aps[i].dummy_atom]))); 
-        heavy_total++;
+       heavy_total++;
 
        // Make sure not to divide by 0, and compute final rmsd
        rmsd = sqrt(rmsd / (float) heavy_total);
        // DELETE - REMOVE
-       //cout << "overlap rmsd " << rmsd << " ref " << ref.mol.atom_names[ref.aps[ref_aps].dummy_atom] << " frag " << oriented_mol.atom_names[fraglib.aps[i].dummy_atom]<<endl;
+       if (verbose) {
+           cout << "overlap rmsd " << rmsd << 
+           " ref " << ref.mol.atom_names[ref.aps[ref_aps].dummy_atom] << 
+           " frag " << oriented_mol.atom_names[fraglib.aps[i].dummy_atom]<<endl;
+       }
 
        // Hard coded - only need to check distance and bond types
        if ((rmsd < 0.5)) { 
@@ -7175,6 +7775,11 @@ GA_Recomb::replace_scaffold ( Fragment & ref, int aps_num, int ref_seg, bool all
                               Fragment & frag, std::vector <DOCKMol> & orients, 
                               AMBER_TYPER & typer, Master_Score & score )
 {
+    if (verbose){
+        std::cout << " #############################" << std::endl;
+        std::cout << " ##### replace_scaffold ######" << std::endl;
+        std::cout << " #############################" << std::endl;
+    }
     Trace trace( "GA_Recomb::replace_scaffold()" );
     std::vector <DOCKMol> recomb;
     std::vector <DOCKMol> mol_results;
@@ -7267,10 +7872,18 @@ GA_Recomb::replace_scaffold ( Fragment & ref, int aps_num, int ref_seg, bool all
 
         // Skip the molecule if it does not lay in the plane with ref
         // MARK: There may be an issue if there are two fused rings
-        float cos_ref = exit_vector (ref.mol, ref.aps[0].heavy_atom, ref.aps[0].dummy_atom, ref.aps[1].heavy_atom);
-        float cos_frag = exit_vector (orients[i], frag.aps[0].heavy_atom, frag.aps[0].dummy_atom, frag.aps[1].heavy_atom);
+        float cos_ref = exit_vector (ref.mol, 
+                                     ref.aps[0].heavy_atom,
+                                     ref.aps[0].dummy_atom,
+                                     ref.aps[1].heavy_atom);
+        float cos_frag = exit_vector (orients[i],
+                                      frag.aps[0].heavy_atom,
+                                      frag.aps[0].dummy_atom,
+                                      frag.aps[1].heavy_atom);
         // DELETE cout << "The cos of the fragment " << cos_frag << " of the ref " << cos_ref <<endl;
-        if ( (cos_ref < 0.99) && (cos_frag > 0.99) ){ cout << "WARNING: would not have checked the frag aps" <<endl;}
+        if ( (cos_ref < 0.99) && (cos_frag > 0.99) ){ 
+            cout << "WARNING: would not have checked the frag aps" <<endl;
+        }
         if ( check_norm ){
            bool allowed  = compare_norm(ref, ref_seg, ref_norm, frag, orients[i]);
            if ( allowed == false ) { continue; }
@@ -7291,11 +7904,14 @@ GA_Recomb::replace_scaffold ( Fragment & ref, int aps_num, int ref_seg, bool all
         // For the pair, first is the aps index and second is the rmsd
         std::vector <std::pair <int, float> > overlapping_results = overlapping_aps ( ref, aps_num, 
                                                                          frag, orients[i], typer );
+
         // If there are no close matches 
         if ( overlapping_results.size() == 0 ){ continue; }
 
+
         // ID the fragment aps for attachment
         int frag_aps = compare_rmsd_bt ( ref, frag, all_same_bt, aps_num, overlapping_results );
+
         // Clear overlap vector
         overlapping_results.clear();
 
@@ -7352,6 +7968,9 @@ GA_Recomb::replace_scaffold ( Fragment & ref, int aps_num, int ref_seg, bool all
         // STEP 3: Since the new molecule was renumbered, find the dummy atom & aps bond
         // (a) For a linker of 1 heavy atom only:
         if ( (ref.aps.size() == 2) ){
+
+           bool cont_skip = false;
+
            // Need to use the aps of the orig ref that was not used
            for ( int j=0; j<ref.aps.size(); j++){
                // If the aps was not previously used
@@ -7404,10 +8023,17 @@ GA_Recomb::replace_scaffold ( Fragment & ref, int aps_num, int ref_seg, bool all
                         
                         invalid_torenv++;
                         cout << "invalid_torenv2: " << invalid_torenv << endl;
-                        continue;
+                        cont_skip = true;
+                        break;
                      }
                   }
                }
+           }
+           if (cont_skip) {
+               recomb.clear();
+               growing.mol.clear_molecule();
+               new_ref.mol.clear_molecule();
+               continue;
            }
         }
 
@@ -7419,6 +8045,11 @@ GA_Recomb::replace_scaffold ( Fragment & ref, int aps_num, int ref_seg, bool all
            std::vector <std::pair <int, int> > final_matches;
            std::pair <int, int> tmp_pair;
 
+        
+           if(Parameter_Reader::verbosity_level() > 1){
+               std::cout << std::endl <<"## #aps ref: " << ref.aps.size() << 
+                            " #aps frag: " << frag.aps.size() << std::endl;
+           }
            // For the remainder of the ref's aps
            for ( int j=0; j<ref.aps.size(); j++ ){
                // If the aps was not previously used
@@ -7428,8 +8059,22 @@ GA_Recomb::replace_scaffold ( Fragment & ref, int aps_num, int ref_seg, bool all
                   std::vector <std::pair <int, float> > overlapping_results = overlapping_aps ( ref, j, 
                                                                            growing, recomb[0], typer );
 
+                  // check if there are any overlapping results
+                  if (Parameter_Reader::verbosity_level() > 1){
+                      std::cout  << "#### " << "For orient: "<< i << 
+                                     " For ref aps " << j << " Number of hrmsd results: " << 
+                                     overlapping_results.size() << "####"<<std::endl;
+                      for (int t=0;t<overlapping_results.size(); t++){
+                          std::cout << "index "<< t << " results: aps= " << overlapping_results[t].first <<
+                                    " hrmsd= " << overlapping_results[t].second <<  std::endl << std::endl;;
+                      }
+                  }
                   // If there are no close matches 
                   if ( overlapping_results.size() == 0 ){ 
+
+                     if(Parameter_Reader::verbosity_level() > 1){
+                         std::cout << "For scf rplcmnt, can't find overlapping inter du du dist < 0.50"<< std::endl;
+                     }
                      // Clear new molecule
                      recomb.clear();
                      growing.mol.clear_molecule();
@@ -7439,10 +8084,15 @@ GA_Recomb::replace_scaffold ( Fragment & ref, int aps_num, int ref_seg, bool all
                   // ID the closest atom to the reference
                   frag_aps = compare_rmsd_bt ( ref, growing, all_same_bt, j, overlapping_results );
                   overlapping_results.clear();
-                  //cout << "overlapping " << overlapping_results.size() << " frag aps " << frag_aps <<endl;// DELETE
+                  if (Parameter_Reader::verbosity_level() > 1){
+                      cout << "overlapping " << overlapping_results.size() << " frag aps " << frag_aps <<endl ;
+                  }
                   
                   // If the closest did not work, continue
                   if ( frag_aps == -1 ){ 
+                     if(Parameter_Reader::verbosity_level() > 1){
+                         std::cout << "For scf rplcmnt, can't find closest atom to the ref"<< std::endl<< endl;
+                     }
                      recomb.clear();
                      growing.mol.clear_molecule();
                      break; 
@@ -7467,6 +8117,9 @@ GA_Recomb::replace_scaffold ( Fragment & ref, int aps_num, int ref_seg, bool all
                   // Else, add pair to final list
                   tmp_pair.first = j;
                   tmp_pair.second = frag_aps;
+                  if (Parameter_Reader::verbosity_level() > 1){
+                      std::cout << "For, ref aps"<<tmp_pair.first <<" found a match" << std::endl<< endl;
+                  }
                   final_matches.push_back(tmp_pair);
                } 
            }
@@ -7475,7 +8128,15 @@ GA_Recomb::replace_scaffold ( Fragment & ref, int aps_num, int ref_seg, bool all
            // (2) Attach the remaining portion of the ref to the growing ref using final_matches 
 
            // If the aps matches are correct
-           if ( final_matches.size() == ref.aps.size() ){
+           if(Parameter_Reader::verbosity_level() > 1){
+               std::cout << "final_matches.size(): " << final_matches.size() 
+                         << " growing.aps.size()" << growing.aps.size() << std::endl;
+               std::cout << " growing.title: " << growing.mol.title << std::endl;
+           }
+           if ( final_matches.size() == growing.aps.size() ){
+
+              bool cont_skip = false;
+
               // (2a) Make a vector of pairs for the dummy and heavy atoms that will 
               // be renumbered during attachment 
               std::vector < std::pair <int, int> > du_heavy;
@@ -7490,7 +8151,8 @@ GA_Recomb::replace_scaffold ( Fragment & ref, int aps_num, int ref_seg, bool all
               }
 
               // (2b) For each aps of the growing ref, attach a portion of ref
-              for ( int j=1; j<growing.aps.size()+1; j++ ){
+              for ( int j=0; j<growing.aps.size(); j++ ){
+                  
                   // Work with a ref copy so that it is not translated or rotated
                   DOCKMol tmp_ref;
                   copy_molecule( tmp_ref, ref.mol);
@@ -7499,111 +8161,114 @@ GA_Recomb::replace_scaffold ( Fragment & ref, int aps_num, int ref_seg, bool all
                   tmp_ref.clear_molecule();
 
                   // First, prepare recomb mol each time for activation
-                  //cout << "Entering Amber typer" << endl;
-                  recomb[j-1].prepare_molecule();
-
-                  // DELETE - REMOVE
-                  /*cout << "CHECK DU HEAVY index " << du_heavy[j].first << " type" << recomb[j-1].atom_types[du_heavy[j].first] << " names " << recomb[j-1].atom_names[du_heavy[j].first] <<endl; 
-                  cout << "CHECK DU HEAVY index " << du_heavy[j].second << " type" << recomb[j-1].atom_types[du_heavy[j].second] << " names " << recomb[j-1].atom_names[du_heavy[j].second] <<endl; 
-                  for ( int k=0; k<recomb[j-1].num_bonds; k++ ){
-                      if ( recomb[j-1].bonds_origin_atom[k] ==  du_heavy[j].first ){
-                          cout << "found dummy heavy is " << recomb[j-1].bonds_target_atom[k] <<endl;
-                      }
-                      if ( recomb[j-1].bonds_target_atom[k] ==  du_heavy[j].first ){
-                          cout << "found dummy heavy is " << recomb[j-1].bonds_origin_atom[k] <<endl;
-                      }
-                  }*/
+                  recomb[j].prepare_molecule();
 
                   // Second, activate the appropriate side of the growing ref & orig ref
-                  activate_half_mol( recomb[j-1], du_heavy[j].first, du_heavy[j].second, new_ref.mol, 
+                  activate_half_mol( recomb[j], du_heavy[j].first, du_heavy[j].second, new_ref.mol, 
                                      ref.aps[final_matches[j].first].dummy_atom, 
                                      ref.aps[final_matches[j].first].heavy_atom, true);
 
-                   // Third, creates a new bond between the halves
-                   // In this case, we are making a bond between the DU of growing and heavy of tmp
-                   // But, the dummy of growing has atom type Du, which has no radius
-                   // Adjust the atom type to that atom type of the heavy atom of orig ref
-                   recomb[j-1].atom_types[du_heavy[j].first] = 
-                                 ref.mol.atom_types[ref.aps[final_matches[j].first].heavy_atom];
+                  // Third, creates a new bond between the halves
+                  // In this case, we are making a bond between the DU of growing and heavy of tmp
+                  // But, the dummy of growing has atom type Du, which has no radius
+                  // Adjust the atom type to that atom type of the heavy atom of orig ref
+                  recomb[j].atom_types[du_heavy[j].first] = 
+                                ref.mol.atom_types[ref.aps[final_matches[j].first].heavy_atom];
 
-                   // Fourth, save the DU and heavy atoms for the remaining aps
-                   std::vector <std::pair <int, int> > remaining; 
-                   if ( j+1 < growing.aps.size()+1 ){
-                      std::pair <int, int> tmp_remain;
-                      tmp_remain.first = du_heavy[j+1].first;
-                      tmp_remain.second = du_heavy[j+1].second;
+                  // Fourth, save the DU and heavy atoms for the remaining aps
+                  std::vector <std::pair <int, int> > remaining; 
+
+                  for (int z =0; z<growing.aps.size(); z++){
+                      std::pair <int, int> tmp_remain {};
+                      tmp_remain.first = du_heavy[z].first;
+                      tmp_remain.second = du_heavy[z].second;
                       remaining.push_back(tmp_remain);
-                   } 
+                  }
 
-                   // Fifth, create a new molecule and return the renumbered DU and heavy atoms
-                   std::vector <std::pair <int, int> > new_du_heavy = 
-                   replace_combine_mols( recomb[j-1], du_heavy[j].first, du_heavy[j].second, 
-                                         new_ref.mol, ref.aps[final_matches[j].first].heavy_atom, 
-                                         ref.aps[final_matches[j].first].dummy_atom, remaining, recomb);
-                   // Clear previous atom index vector
-                   remaining.clear();
+                  // Fifth, create a new molecule and return the renumbered DU and heavy atoms
+                  std::vector <std::pair <int, int> > new_du_heavy = 
+                  replace_combine_mols( recomb[j], du_heavy[j].first, du_heavy[j].second, 
+                                        new_ref.mol, ref.aps[final_matches[j].first].heavy_atom, 
+                                        ref.aps[final_matches[j].first].dummy_atom, remaining, recomb);
+                  // Clear previous atom index vector
+                  remaining.clear();
 
-                   // Sixth, if using torenv, check bond environment
-                   if ( ga_use_torenv_table ){
-                      //cout << "Entering Amber typer" << endl;
-                      recomb[j].prepare_molecule();
-                      typer.skip_verbose_flag = true;
-                      typer.prepare_molecule( recomb[j], true, score.use_chem, score.use_ph4, score.use_volume );
-                      prepare_mol_torenv( recomb[j] );
-                      DN_GA_Build c_dn;
-                      Fragment new_result = mol_to_frag (recomb[j]);
-                      c_dn.dn_ga_flag = true;
-                      c_dn.dn_use_roulette = ga_use_dn_roulette;
-                      c_dn.dn_use_torenv_table = ga_use_torenv_table;
-                      c_dn.dn_torenv_table = ga_torenv_table; 
-                      c_dn.read_torenv_table(c_dn.dn_torenv_table);
-                      c_dn.verbose = 0;
-                      c_dn.dn_MW_cutoff_type_hard = true;
-                      c_dn.dn_MW_cutoff_type_soft = false;
+                  //for (int t=0;t<new_du_heavy.size(); t++){
+                  //    cout << "new_du_heavy.first: "<<
+                  //             new_du_heavy[t].first  <<
+                  //            " new_du_heavy.second: " <<
+                  //             new_du_heavy[t].second << std::endl;
+                  //}
+                  // Update dummy/heavy atoms for growing ref, if applicable
+                  // The list will include the current aps
+                  //cout << "new du heavy size " << new_du_heavy.size() <<endl; //DELETE
 
-                      if ( c_dn.valid_torenv( new_result ) == false ){ 
+                     // For the remaining aps
+                  // refresh the du_heavy aps 
+                  if ( new_du_heavy.size() > 0 ){
+                     int new_du_count = 0;
+                     for ( int z=0; z<growing.aps.size(); z++){
+                         du_heavy[z].first = new_du_heavy[z].first;
+                         du_heavy[z].second = new_du_heavy[z].second;
+                         new_du_count++;
+                     }
+
+                     new_du_heavy.clear();
+                  }
+
+              //    for (int t=0;t<du_heavy.size(); t++){
+              //        cout << "du_heavy.first: "<<
+              //                 du_heavy[t].first  <<
+              //                " du_heavy.second: " <<
+              //                 du_heavy[t].second << std::endl;
+              //    }
+                  // Sixth, if using torenv, check bond environment
+                  if ( ga_use_torenv_table ){
+                     recomb[j+1].prepare_molecule();
+                     typer.skip_verbose_flag = true;
+                     typer.prepare_molecule( recomb[j+1], 
+                                                  true, 
+                                        score.use_chem, 
+                                         score.use_ph4, 
+                                      score.use_volume );
+                     prepare_mol_torenv( recomb[j+1] );
+                     DN_GA_Build c_dn;
+                     Fragment new_result = mol_to_frag (recomb[j+1]);
+                     c_dn.dn_ga_flag = true;
+                     c_dn.dn_use_roulette = ga_use_dn_roulette;
+                     c_dn.dn_use_torenv_table = ga_use_torenv_table;
+                     c_dn.dn_torenv_table = ga_torenv_table; 
+                     c_dn.read_torenv_table(c_dn.dn_torenv_table);
+                     c_dn.verbose = 0;
+                     c_dn.dn_MW_cutoff_type_hard = true;
+                     c_dn.dn_MW_cutoff_type_soft = false;
+
+                     if ( c_dn.valid_torenv( new_result ) == false ){ 
                          new_result.mol.clear_molecule();
                          c_dn.torenv_vector.clear();
-                        new_result.torenv_recheck_indices.clear();
+                         new_result.torenv_recheck_indices.clear();
                          invalid_torenv++;
-                        continue;
-                      }
-                   }
+                         cont_skip = true;
+                         break;
+                     }
+                  }
 
-                   // Update dummy/heavy atoms for growing ref, if applicable
-                   // The list will include the current aps
-                   //cout << "new du heavy size " << new_du_heavy.size() <<endl; //DELETE
-                   if ( new_du_heavy.size() > 0 ){
-                      // For the remaining aps
-                      for ( int k=j+1; k<growing.aps.size()+1; k++ ){
-                          du_heavy[k].first = new_du_heavy[k-(j+1)].first;
-                          du_heavy[k].second = new_du_heavy[k-(j+1)].second;
-                      }
-                      new_du_heavy.clear();
-                   }
-                   // DELETE
-                   //cout << "end for growing aps number " << j << endl;
+              }
+
+              if (cont_skip){ 
+                  recomb.clear();
+                  growing.mol.clear_molecule();
+                  new_ref.mol.clear_molecule();
+                  continue; 
               }
            }
-           else{ continue; }
+           else{ 
+               recomb.clear();
+               growing.mol.clear_molecule();
+               new_ref.mol.clear_molecule();
+               continue; 
+           }
         }
-        // DELETE
-        /*fstream fout_molecules;
-        fout_molecules.open ( "zzz.final_recomb.mol2", fstream::out|fstream::app );
-        activate_mol(ref.mol);
-        fout_molecules << ref.mol.current_data << endl;
-        Write_Mol2( ref.mol, fout_molecules );
-        
-        activate_mol(orients[i]);
-        fout_molecules << orients[i].current_data << endl;
-        Write_Mol2( orients[i], fout_molecules );
-      
-        for ( int j=0; j<recomb.size(); j++){
-        activate_mol(recomb[j]);
-        fout_molecules << recomb[j].current_data << endl;
-        Write_Mol2( recomb[j], fout_molecules );
-        }
-        fout_molecules.close();*/
 
         // Save the complete molecule
         mol_results.push_back(recomb[recomb.size()-1]);
@@ -7619,6 +8284,7 @@ GA_Recomb::replace_scaffold ( Fragment & ref, int aps_num, int ref_seg, bool all
         // Exit if at end of orients file
         if ( i == orients.size() ){ break; }// DELETE
     }
+    if (verbose) cout << "#### For fragment " <<  frag.mol.energy << std::endl;
     if (verbose) cout << "#### Found " << current << " of " << expected << " expected orients for a segment of size " << frag.mol.num_atoms << " with " << frag.aps.size() << "aps. Total orients " << orients.size()<<endl;
     if (verbose) cout << "#### Number with invalid torenv " << invalid_torenv <<endl;
     return mol_results;
@@ -7941,7 +8607,7 @@ GA_Recomb::rand_H_to_Du ( DOCKMol & mol, int segment )
     for (int i=0; i<orig_segments[segment].num_atoms; i++){
         
         // make sure H isn't a DNM moiety LEP
-        if ( mol.atom_names[orig_segments[segment].atoms[i]] != "DNM"){
+        if ( mol.atom_names[orig_segments[segment].atoms[i]] != DNM_TAG){
         // Find the hydrogens and save the index  
             if ( mol.atom_types[orig_segments[segment].atoms[i]] == "H" ){
                 h_index.push_back(orig_segments[segment].atoms[i]);
@@ -8416,9 +9082,20 @@ GA_Recomb::add_H( DOCKMol & mol, int origin, int a, bool subst,  Master_Score & 
     
 } //end GA_Recomb::add_H()
 
+//BTB 2024.03
+//clear vectors between mutation_selection function calls
+void GA_Recomb::cleanup_mutation_selection(INTVec & sidechain_ids, INTVec & linker_ids, INTVec & scaffold_ids, INTVec & rigid_ids){
+    orig_segments.clear();
+    bond_btwn_seg.clear();
+    no_seg_bonds.clear();
+    mutants.clear();
 
-
-
+    sidechain_ids.clear();
+    linker_ids.clear();
+    scaffold_ids.clear();
+    rigid_ids.clear();  
+}
+//end GA_Recomb::cleanup_mutation_selection()
             //////////////////////////////////////////
             //****ENERGY MINIMIZATION FUNCTIONS*****//
             /////////////////////////////////////////
@@ -8548,6 +9225,8 @@ void GA_Recomb::uniqueness_prune_mut( std::vector <DOCKMol> & children, std::vec
          typer.skip_verbose_flag = true;
          typer.prepare_molecule(children[i], true, score.use_chem, score.use_ph4, score.use_volume);
          children[i].used = false;
+	 //added this because I think some molecules are getting pruned out without names - 2024.06.03
+	 //naming_function(children[i], current_generation, i, "pre_prune");
     }
 
     // Activate parents, there were deactivated at the top of breeding()
@@ -8565,7 +9244,6 @@ void GA_Recomb::uniqueness_prune_mut( std::vector <DOCKMol> & children, std::vec
 
     // If the two mols do not have the same number of atoms, rmsd is -1000
     double torsion_rmsd_cutoff = 2.0; //MARK: user-specified?
-
     // Compare offspring to parents
     for ( int i=0; i<parents.size(); i++ ){
         // For each molecule listed below it
@@ -8578,6 +9256,7 @@ void GA_Recomb::uniqueness_prune_mut( std::vector <DOCKMol> & children, std::vec
                   result = h.calc_Hungarian_RMSD_dissimilar( parents[i], children[j] );
                   //cout << "calc H rmsd = " << result.first <<endl;
                   //cout << "num unmatched = " << result.second << endl;
+
                   // If the two confomers are very similar, mark the one with higher energy as used
                   // If the two molecules do not have the same number of atoms than rmsd is -1000
                   if (result.first < ga_heur_matched_rmsd && result.second < ga_heur_unmatched_num) {
@@ -8605,6 +9284,7 @@ void GA_Recomb::uniqueness_prune_mut( std::vector <DOCKMol> & children, std::vec
             }
         }
     }
+
     // At this point, only cluster heads will not be flagged 'used', add those to scored_generation
     for (int i=0; i<children.size(); i++){
         if (!children[i].used){
@@ -8909,7 +9589,8 @@ GA_Recomb::hard_filter( vector <DOCKMol> & temp_vec )
         calc_descriptors(temp_vec[i]);
 
         // Prune if MW greater than constraint
-        if (temp_vec[i].mol_wt > ga_constraint_mol_wt ){
+        // if (temp_vec[i].mol_wt > ga_constraint_mol_wt ){
+        if ( !mw_cutoff( temp_vec[i] ) ){
            cout << "Did not pass MW check." << endl;
            invalid_mw++;
            binary[i] = 1;
@@ -8960,10 +9641,18 @@ GA_Recomb::hard_filter( vector <DOCKMol> & temp_vec )
         if ( binary[i] == 0){
            temp_vec.push_back(tmp[i]);
         }
-        else { erased++; }
+        else { 
+            erased++; 
+            #ifdef BUILD_DOCK_WITH_RDKIT
+            RDTYPER rdprops;
+            rdprops.calculate_descriptors( tmp[i], ga_fragMap, true, ga_PAINSMap );
+            #endif
+            //filtered_mols.push_back( tmp[i] );
+        }
     }
     // Print flags to show how many compounds would be removed if implementd
-    cout << endl << invalid_mw << " compounds exceeded MW cutoff of " << ga_constraint_mol_wt<<endl;
+    cout << endl << invalid_mw << " compounds exceeded MW cutoff of " << ga_constraint_lower_mol_wt
+                                << " - " << ga_constraint_upper_mol_wt<<endl;
     cout << invalid_rot << " compounds exceeded the rot bond cutoff of " << ga_constraint_rot_bon <<endl;
     cout << invalid_HA << " compounds exceeded the HA acceptor # of " << ga_constraint_H_accept <<endl;
     cout << invalid_HD << " compounds exceeded the HB donor # of " << ga_constraint_H_donor <<endl;
@@ -8976,6 +9665,84 @@ GA_Recomb::hard_filter( vector <DOCKMol> & temp_vec )
 
 
 
+// +++++++++++++++++++++++++++++++++++++++++
+// Prune a single molecule by ligand properties (MARK-HA/HD is commented out)
+bool
+GA_Recomb::hard_filter_mol_HA_HD( DOCKMol & temp_vec )
+{
+    Trace trace( "GA_Recomb::hard_filter_mol_HA_HD()" );
+    // Make binary vector to keep status of molecules
+    int binary = 0;
+
+    //counter for number that fit the qualifications
+    int invalid_mw = 0;
+    int invalid_rot = 0;
+    int invalid_HA = 0;
+    int invalid_HD = 0;
+    int invalid_formal = 0;
+
+
+    //All below functions will assign the appropriate values to the DOCKMol object
+    calc_descriptors(temp_vec);
+    
+    // Prune by MW 
+    //if (temp_vec.mol_wt > ga_constraint_mol_wt ){
+    if ( !mw_cutoff( temp_vec )){
+       invalid_mw++;
+       binary = 1;
+    }
+
+    // Prune by rot bonds
+    if ( (temp_vec.rot_bonds > ga_constraint_rot_bon) ){
+       invalid_rot++;
+       binary = 1;
+    }
+
+    // Prune by hydrogen donors
+    if ( (temp_vec.hb_acceptors > ga_constraint_H_accept) ){
+        invalid_HA++;
+        binary = 1;
+    }
+     
+    // Prune by hydrogen acceptors
+    if ( (temp_vec.hb_donors > ga_constraint_H_donor) ){
+       invalid_HD++;
+       binary = 1;
+    }
+
+    // Prune by formal charge range   
+    if (((temp_vec.formal_charge > ga_constraint_formal_charge) || (temp_vec.formal_charge < -ga_constraint_formal_charge)) ){
+       invalid_formal++;
+       binary = 1;
+    }
+
+    // DELETE REMOVE
+    /*cout << "MW " << temp_vec.mol_wt << " Rot bonds " << temp_vec.rot_bonds << 
+           " HA " << temp_vec.hb_acceptors << " HD " << temp_vec.hb_donors << 
+           " FC " << temp_vec.formal_charge <<endl;*/
+
+    // Print flags to show how many compounds would be removed if implementd
+    if (verbose) cout << endl << "#### " << invalid_mw << " compounds exceeded MW cutoff of " << ga_constraint_lower_mol_wt
+                                         << " - " << ga_constraint_upper_mol_wt <<endl;
+    if (verbose) cout << invalid_rot << " compounds exceeded the rot bond cutoff of " << ga_constraint_rot_bon <<endl;
+    if (verbose) cout << invalid_HA << " compounds exceeded the HA acceptor # of " << ga_constraint_H_accept <<endl;
+    if (verbose) cout << invalid_HD << " compounds exceeded the HB donor # of " << ga_constraint_H_donor <<endl;
+    if (verbose) cout << invalid_formal << " compounds exceeded the formal charge of " << ga_constraint_formal_charge <<endl;
+    //cout << erased << " compounds were removed " << endl;
+
+    // False means that the molecule exceeds the cutoffs
+    if ( binary == 1){ 
+
+        // calculate the rdkit mols
+        #ifdef BUILD_DOCK_WITH_RDKIT
+        RDTYPER rdprops;
+        rdprops.calculate_descriptors( temp_vec, ga_fragMap, true, ga_PAINSMap);
+        #endif
+        filtered_mols.push_back( temp_vec );
+        return false; 
+    }
+    return true;
+} // end GA_Recomb::hard_filter_mol_HA_HD()
 // +++++++++++++++++++++++++++++++++++++++++
 // Prune a single molecule by ligand properties (MARK-HA/HD is commented out)
 bool
@@ -8992,11 +9759,13 @@ GA_Recomb::hard_filter_mol( DOCKMol & temp_vec )
     int invalid_HD = 0;
     int invalid_formal = 0;
 
+
     //All below functions will assign the appropriate values to the DOCKMol object
     calc_descriptors(temp_vec);
     
     // Prune by MW 
-    if (temp_vec.mol_wt > ga_constraint_mol_wt ){
+    //if (temp_vec.mol_wt > ga_constraint_mol_wt ){
+    if ( !mw_cutoff( temp_vec )){
        invalid_mw++;
        binary = 1;
     }
@@ -9031,7 +9800,8 @@ GA_Recomb::hard_filter_mol( DOCKMol & temp_vec )
            " FC " << temp_vec.formal_charge <<endl;*/
 
     // Print flags to show how many compounds would be removed if implementd
-    if (verbose) cout << endl << "#### " << invalid_mw << " compounds exceeded MW cutoff of " << ga_constraint_mol_wt<<endl;
+    if (verbose) cout << endl << "#### " << invalid_mw << " compounds exceeded MW cutoff of " << ga_constraint_lower_mol_wt
+                                         << " - " << ga_constraint_upper_mol_wt <<endl;
     if (verbose) cout << invalid_rot << " compounds exceeded the rot bond cutoff of " << ga_constraint_rot_bon <<endl;
     if (verbose) cout << invalid_HA << " compounds exceeded the HA acceptor # of " << ga_constraint_H_accept <<endl;
     if (verbose) cout << invalid_HD << " compounds exceeded the HB donor # of " << ga_constraint_H_donor <<endl;
@@ -9039,7 +9809,16 @@ GA_Recomb::hard_filter_mol( DOCKMol & temp_vec )
     //cout << erased << " compounds were removed " << endl;
 
     // False means that the molecule exceeds the cutoffs
-    if ( binary == 1){ return false; }
+    if ( binary == 1){ 
+
+        // if exceed cutoff, just minimize and push into filtered_mols
+        #ifdef BUILD_DOCK_WITH_RDKIT
+        RDTYPER rdprops;
+        rdprops.calculate_descriptors( temp_vec, ga_fragMap, true, ga_PAINSMap);
+        #endif
+        //filtered_mols.push_back( temp_vec );
+        return false; 
+    }
     return true;
 } // end GA_Recomb::hard_filter_mol()
 
@@ -9236,6 +10015,7 @@ GA_Recomb::selection_method ( Master_Score & score, AMBER_TYPER & typer )
     // Print ensemble size of offspring
     cout <<"#### Final parent size before selection: " << tmp_parents.size() <<endl;
     cout <<"#### Final offspring size before selection: " << scored_generation.size() <<endl;
+    unpruned_molecule_counter[current_generation] = scored_generation.size();
     // Call the appropriate function
     if (ga_selection_method_elitism ){
        cout << "Selection Method: Elitism" <<endl;
@@ -11982,7 +12762,7 @@ GA_Recomb::renumber_atom_numbering( DOCKMol & mol , bool dna_flag )
         if ( mol.atom_types[i] == "H" )
         {     
               Hcounter++;
-              if ( mol.atom_names[i] != "DNM" || !dna_flag ){
+              if ( mol.atom_names[i] != DNM_TAG || !dna_flag ){
                 stringstream stuff;
                 stuff << "H"<< Hcounter;
                 mol.atom_names[i] = stuff.str();
@@ -11993,7 +12773,7 @@ GA_Recomb::renumber_atom_numbering( DOCKMol & mol , bool dna_flag )
         else if ( mol.atom_types[i] == "C.3" || mol.atom_types[i] == "C.2" || mol.atom_types[i] == "C.1" || mol.atom_types[i] == "C.ar" || mol.atom_types[i]  == "C.cat" )
         {     
               Ccounter++;
-              if ( mol.atom_names[i] != "DNM" || !dna_flag ){
+              if ( mol.atom_names[i] != DNM_TAG || !dna_flag ){
                 stringstream stuff;
                 stuff << "C"<< Ccounter;
                 mol.atom_names[i] = stuff.str();
@@ -12006,7 +12786,7 @@ GA_Recomb::renumber_atom_numbering( DOCKMol & mol , bool dna_flag )
               mol.atom_types[i] == "N.am" || mol.atom_types[i] == "N.pl3" )
         {     
               Ncounter++; 
-              if ( mol.atom_names[i] != "DNM" || !dna_flag ){
+              if ( mol.atom_names[i] != DNM_TAG || !dna_flag ){
                 stringstream stuff;
                 stuff << "N" << Ncounter;
                 mol.atom_names[i] = stuff.str();
@@ -12017,7 +12797,7 @@ GA_Recomb::renumber_atom_numbering( DOCKMol & mol , bool dna_flag )
         else if ( mol.atom_types[i] == "O.3" || mol.atom_types[i] == "O.2" || mol.atom_types[i] == "O.co2" )
         {     
               Ocounter++; 
-              if ( mol.atom_names[i] != "DNM" || !dna_flag ){
+              if ( mol.atom_names[i] != DNM_TAG || !dna_flag ){
                 stringstream stuff;
                 stuff << "O" << Ocounter;
                 mol.atom_names[i] = stuff.str();
@@ -12029,7 +12809,7 @@ GA_Recomb::renumber_atom_numbering( DOCKMol & mol , bool dna_flag )
               mol.atom_types[i] == "S.o2" )
         {     
               Scounter++; 
-              if ( mol.atom_names[i] != "DNM" || !dna_flag ){
+              if ( mol.atom_names[i] != DNM_TAG || !dna_flag ){
                 stringstream stuff;
                 stuff << "S" << Scounter;
                 mol.atom_names[i] = stuff.str();
@@ -12040,7 +12820,7 @@ GA_Recomb::renumber_atom_numbering( DOCKMol & mol , bool dna_flag )
         else if ( mol.atom_types[i] == "P.3" )
         {    
              Pcounter++; 
-             if ( mol.atom_names[i] != "DNM" || !dna_flag ){
+             if ( mol.atom_names[i] != DNM_TAG || !dna_flag ){
                 stringstream stuff;
                 stuff << "P" << Pcounter;
                 mol.atom_names[i] = stuff.str();
@@ -12051,7 +12831,7 @@ GA_Recomb::renumber_atom_numbering( DOCKMol & mol , bool dna_flag )
         else if ( mol.atom_types[i] == "F" )
         {    
              Fcounter++;
-             if ( mol.atom_names[i] != "DNM" || !dna_flag ){
+             if ( mol.atom_names[i] != DNM_TAG || !dna_flag ){
                 stringstream stuff;
                 stuff << "F" << Fcounter;
                 mol.atom_names[i] = stuff.str();
@@ -12062,7 +12842,7 @@ GA_Recomb::renumber_atom_numbering( DOCKMol & mol , bool dna_flag )
         else if ( mol.atom_types[i] == "Cl" )
         {    
              Clcounter++;
-             if ( mol.atom_names[i] != "DNM" || !dna_flag ){
+             if ( mol.atom_names[i] != DNM_TAG || !dna_flag ){
                 stringstream stuff;
                 stuff << "Cl" << Clcounter;
                 mol.atom_names[i] = stuff.str();
@@ -12072,7 +12852,7 @@ GA_Recomb::renumber_atom_numbering( DOCKMol & mol , bool dna_flag )
 
         else if ( mol.atom_types[i] == "Br" )
         {    Brcounter++; 
-             if ( mol.atom_names[i] != "DNM" || !dna_flag ){
+             if ( mol.atom_names[i] != DNM_TAG || !dna_flag ){
                 stringstream stuff;
                 stuff << "Br" << Brcounter;
                 mol.atom_names[i] = stuff.str();
@@ -12422,7 +13202,9 @@ GA_Recomb::naming_function( DOCKMol & mol, int gen, int loc, std::string prefix)
    /* Add generation and location
    new_title << "_g" << gen << "_" << loc;
    //cout << "new_title: " << new_title << endl;*/
-   mol.title = new_title.str();
+   if (mol.energy != PARENT_TAG){
+       mol.title = new_title.str();   
+   }
 
    // Clear new_energy
    new_title.str("");
@@ -12614,7 +13396,7 @@ void
 GA_Recomb::set_DNM_bools( DOCKMol & mol )
 {
     for (int i = 0; i < mol.num_atoms; i++){
-        if (mol.atom_names[i] == "DNM"){
+        if (mol.atom_names[i] == DNM_TAG){
             mol.atom_dnm_flag[i] = true;
             if (!mol.mol_dnm_flag){
                 mol.mol_dnm_flag=true;
@@ -12637,7 +13419,7 @@ GA_Recomb::set_DNM_bools_start( std::vector <DOCKMol> & parents)
     for (int par_id=0; par_id<parents.size(); par_id++){
         //all atoms in parent
         for (int atom_ind=0; atom_ind<parents[par_id].num_atoms; atom_ind++) {
-            if ( parents[par_id].atom_names[atom_ind] == "DNM"){ //DNM Case
+            if ( parents[par_id].atom_names[atom_ind] == DNM_TAG){ //DNM Case
                 parents[par_id].atom_dnm_flag[atom_ind] = true;
                 // sets DNM status for run to true on first instance
                 if (!dnm_enabled){ 
@@ -12676,7 +13458,7 @@ GA_Recomb::frag_erase(std::vector<Fragment> & vec_frag, int position){
 //BTB - print divergent molecules
 // file name, list of molecules, generation #
 void
-GA_Recomb::print_molecules(std::string fout_molecules_name, std::vector <DOCKMol> & parents, int i, std::string prefix){
+GA_Recomb::print_molecules(std::string fout_molecules_name, std::vector <DOCKMol> & parents, int gen, std::string prefix){
     fstream fout_molecules;
     fout_molecules.open (fout_molecules_name, fstream::out|fstream::app);
     for (int j=0; j<parents.size(); j++){
@@ -12686,14 +13468,54 @@ GA_Recomb::print_molecules(std::string fout_molecules_name, std::vector <DOCKMol
         // Only Update name if a new molecule
         // BTB - if limit max change is on then the molecule is already named in PDM
         if (parents[j].parent == 0){
-            naming_function(parents[j], i+1, j, prefix);
+            naming_function(parents[j], gen+1, j, prefix);
         }
 
+        // if you compartamaliz res nums, change the res id where
+        // every time there is a change in subst id change the 
+        // atom_res_num by incrementing by one. 
+        // This is PURELY for Chimera visual analysis. Nothing else
+        
+        std::vector <std::string> l_atom_res_subst {};
+        //l_atom_res_subst= parents[j].subst_names;
+        for (int z=0; z < parents[j].num_atoms; z++){
+            l_atom_res_subst.push_back(parents[j].subst_names[z]);
+        }
+
+        if ( ga_compart_subst_id.compare("yes") == 0){
+            std::vector <std::string> new_l_atom_nums {};
+
+            std::string string_holder = "";
+            int subst_id = 0;
+            for ( std::string res_n : l_atom_res_subst ){
+                if ( string_holder == "" || string_holder != res_n){
+                     subst_id++;
+                     string_holder = res_n; 
+                     new_l_atom_nums.push_back( std::to_string( subst_id ) );
+                } else{ new_l_atom_nums.push_back( std::to_string( subst_id ) ); }
+            }
+            for ( int z=0; z < parents[j].num_atoms; z++ ){
+                parents[j].atom_residue_numbers[z] = new_l_atom_nums[z];
+            }
+  
+        }
+ 
+        // sort and make the list of substance names unique 
+        // to write out to the header
+        std::sort(l_atom_res_subst.begin(), l_atom_res_subst.end());  
+        auto uniq_subt_name  = 
+            std::unique( l_atom_res_subst.begin(), l_atom_res_subst.end());
+        l_atom_res_subst.erase(uniq_subt_name, l_atom_res_subst.end());
+
+        std::stringstream frag_string_newname; 
+        for ( std::string str: l_atom_res_subst){
+            frag_string_newname << str << "**";
+        }
 
         fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Name:"
                        << setw(FLOAT_WIDTH) << parents[j].title <<endl;
         fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Generation:"
-                       << setw(FLOAT_WIDTH) << i+1 <<endl;
+                       << setw(FLOAT_WIDTH) << gen+1 <<endl;
         fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Molecular_Weight:"
                        << setw(FLOAT_WIDTH) << fixed << setprecision(3) << parents[j].mol_wt <<endl;
         fout_molecules << DELIMITER << setw(STRING_WIDTH) << "DOCK_Rotatable_Bonds:"
@@ -12713,32 +13535,51 @@ GA_Recomb::print_molecules(std::string fout_molecules_name, std::vector <DOCKMol
         vecpnstmp = parents[j].pns_name;
         std::string molpns_name = std::accumulate(vecpnstmp.begin(), vecpnstmp.end(), std::string(""));
 
-        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "num_arom_rings:"
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_num_arom_rings:"
                        << setw(FLOAT_WIDTH) << parents[j].num_arom_rings << endl;
-        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "num_alip_rings:"
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_num_alip_rings:"
                        << setw(FLOAT_WIDTH) << parents[j].num_alip_rings << endl;
-        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "num_sat_rings:"
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_num_sat_rings:"
                        << setw(FLOAT_WIDTH) << parents[j].num_sat_rings << endl;
-        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Stereocenters:"
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_Stereocenters:"
                        << setw(FLOAT_WIDTH) << parents[j].num_stereocenters << endl;
-        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Spiro_atoms:"
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_Spiro_atoms:"
                        << setw(FLOAT_WIDTH) << parents[j].num_spiro_atoms << endl;
-        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "TPSA:"
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_TPSA:"
                        << setw(FLOAT_WIDTH) << parents[j].tpsa << endl;
-        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "cLogP:"
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_cLogP:"
                        << setw(FLOAT_WIDTH) << parents[j].clogp << endl;
-        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "ESOL:"
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_ESOL:"
                        << setw(FLOAT_WIDTH) << parents[j].esol << endl;
-        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "QED:"
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_QED:"
                        << setw(FLOAT_WIDTH) << parents[j].qed_score << endl;
-        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "SA_Score:"
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_SA_Score:"
                        << setw(FLOAT_WIDTH) << parents[j].sa_score << endl;
-        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "SMILES: "
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_SMILES: "
                        << setw(FLOAT_WIDTH) << parents[j].smiles << endl;
-        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "num_of_PAINS:"
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_num_of_PAINS:"
                        << setw(FLOAT_WIDTH) << parents[j].pns << endl;
-        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "PAINS_names:"
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "RD_PAINS_names:"
                        << setw(FLOAT_WIDTH) << molpns_name << endl;
+
+        if (prefix == "rdkit_rej_" ) {
+            if (parents[j].fail_stereo) { fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Failed_stereo:" << setw(FLOAT_WIDTH) << "TRUE" << endl; }
+            else { fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Failed_stereo:" << setw(FLOAT_WIDTH) << "FALSE" << endl; }
+            if (parents[j].fail_clogp) { fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Failed_LogP:" << setw(FLOAT_WIDTH) << "TRUE" << endl; }
+            else { fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Failed_LogP:" << setw(FLOAT_WIDTH) << "FALSE" << endl; }      
+            if (parents[j].fail_tpsa) { fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Failed_TPSA:" << setw(FLOAT_WIDTH) << "TRUE" << endl; }
+            else { fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Failed_TPSA:" << setw(FLOAT_WIDTH) << "FALSE" << endl; }
+            if (parents[j].fail_sa) { fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Failed_SYNTHA:" << setw(FLOAT_WIDTH) << "TRUE" << endl; }
+            else { fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Failed_SYNTHA:" << setw(FLOAT_WIDTH) << "FALSE" << endl; }
+            if (parents[j].fail_qed) { fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Failed_QED:" << setw(FLOAT_WIDTH) << "TRUE" << endl; }
+            else { fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Failed_QED:" << setw(FLOAT_WIDTH) << "FALSE" << endl; }
+            if (parents[j].fail_esol) { fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Failed_LogS:" << setw(FLOAT_WIDTH) << "TRUE" << endl; }
+            else { fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Failed_LogS:" << setw(FLOAT_WIDTH) << "FALSE" << endl; }
+            if (parents[j].fail_pains) { fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Failed_numPains:" << setw(FLOAT_WIDTH) << "TRUE" << endl; }
+            else { fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Failed_numPains:" << setw(FLOAT_WIDTH) << "FALSE" << endl; }
+
+        }
+
         #endif
         // Calculate the fitness score for the initial ensemble if niching is being used
         if ( ga_niching ){
@@ -12755,11 +13596,1155 @@ GA_Recomb::print_molecules(std::string fout_molecules_name, std::vector <DOCKMol
         }
          fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Type:"
                         << setw(FLOAT_WIDTH) << parents[j].energy <<endl;
+   
+         fout_molecules << DELIMITER << setw(STRING_WIDTH) << "GA_Frag_String:"
+                        << setw(FLOAT_WIDTH)<<" " + frag_string_newname.str() << std::endl;
          //current _data may not be initialized on write out
          fout_molecules << parents[j].current_data << endl;
          Write_Mol2(parents[j], fout_molecules);
+       
+         // Reset the atom_residue_nums back to an array of "1"
+         if ( ga_compart_subst_id.compare("yes") == 0){
+            for ( int z=0; z < parents[j].num_atoms; z++ ){
+                parents[j].atom_residue_numbers[z] = "1";
+            }
+         }
     }
     fout_molecules.close();
 
 }
 
+
+
+// soft or hard cutoff
+// +++++++++++++++++++++++++++++++++++++++++
+// This function is used for a soft cutoff of MW and will accept molecules at a rate inversely proportional to how much they exceed the cutoff
+// true means it is within range or pseudo accepted
+// flase means rejected 
+bool GA_Recomb::mw_cutoff( DOCKMol &temp_molecule ){
+    // Define variables
+    float  rand_num{};
+    float  rand_num_dec{};
+    double excessMW{};
+    double Z_scoreExcess{};
+    double acceptRate{};
+    bool   result = true;
+
+   
+    if ( ga_MW_cutoff_type.compare("soft") == 0 ) {
+        // if exceeds upper boundary accept or reject with some probability
+        if ( temp_molecule.mol_wt > ga_constraint_upper_mol_wt  ){
+            rand_num = (rand() % 100 +1) ; // This generates a random number from 1 to 100
+            rand_num_dec = rand_num / 100; 
+            excessMW = temp_molecule.mol_wt - ga_constraint_upper_mol_wt; //How much the growing molecule exceeds cutoff by
+            Z_scoreExcess = excessMW / ga_constraint_mol_wt_std_dev; // Similar to a Z score (how many std dev the excess mw is from the cutoff)
+            acceptRate = exp(-1 * Z_scoreExcess * Z_scoreExcess); //e raised to the expression inside the parentheses (similar to Metropolis)
+            if (acceptRate < rand_num_dec ) {
+                result =  false;
+            } 
+        }
+
+        // if exceeds lower boundary accept or reject with some probability
+        if ( temp_molecule.mol_wt < ga_constraint_lower_mol_wt ){
+            rand_num = (rand() % 100 +1) ; // This generates a random number from 1 to 100
+            rand_num_dec = rand_num / 100;
+            excessMW = ga_constraint_lower_mol_wt - temp_molecule.mol_wt; //How much the growing molecule exceeds cutoff by
+            Z_scoreExcess = excessMW / ga_constraint_mol_wt_std_dev; // Similar to a Z score (how many std dev the excess mw is from the cutoff)
+            acceptRate = exp(-1 * Z_scoreExcess * Z_scoreExcess); //e raised to the expression inside the parentheses (similar to Metropolis)
+            if (acceptRate < rand_num_dec ) {
+                result =  false; 
+            } 
+        }
+    } else {
+
+        if ( temp_molecule.mol_wt > ga_constraint_upper_mol_wt){
+            result =  false;
+        }
+        
+        if ( temp_molecule.mol_wt < ga_constraint_lower_mol_wt){
+            result =  false;
+        }
+
+    }
+
+    return result;
+} // End GA_Recom::mw_cutoff()
+
+
+
+// Updated Read fragment libraries from file and save in appropriate vector of <Fragments>
+// planned to be the main function
+void
+GA_Recomb::read_frag_library( vector <Fragment> & frag_vec, string filename )
+{
+
+    // Create filehandle for reading mol2 library
+    ifstream fin_frags;
+
+    // Open the filehandle for reading a fragment library
+    fin_frags.open(filename.c_str());
+    if (fin_frags.fail()){
+        cout <<"Could not open " <<filename <<". Program will terminate." <<endl;
+        cout << strerror(errno);
+        exit(0);
+    }
+
+    bool stop_or_no = true;
+
+    DOCKMol mol;
+    while (stop_or_no==true){
+        char            line[1000];
+        int             count;
+        int             i;
+        int             n1;
+        bool            atom_line;
+        char            typ[100],
+                        col[100];
+
+        char            tmp1[100],
+                        tmp2[100],
+                        jwu_tmp4[100],
+                                jwu_tmp3[100],
+                        subst_name[100];
+        int             natoms,
+                        nbonds,
+                        nresidues; //defined by jwu
+        string          l1,
+                        l2,
+                        l3,
+                        l4,
+                        l5,
+                        l6;
+        float           f1,
+                        f2,
+                        f3,
+                        f4,
+                        f5;
+
+        int             freq        = 0;
+        float           iso_score   = 0.0;
+        std::string     three_pairs ="";
+
+        bool            found_solvation = false;
+        bool            found_color = false;
+        bool            found_amber = false;
+
+        bool            check_cols = false;
+        bool            seven_columns = false; // default @<TRIPOS>ATOM line has 9 columns. By GDRM
+        //int             bad_line{0}; // number of bad atom lines. By GDRM
+
+
+        // init state vars
+        atom_line = false;
+
+
+        // read forward until the tripos molecule tag is reached
+        for (;;) {
+            if (!fin_frags.getline(line, 1000)) {
+                mol.clear_molecule();
+                // cout << endl << "ERROR: Ligand file empty.  Program will
+                // terminate." << endl;
+                stop_or_no = false;
+                return;
+            }
+
+            if (!strncmp(line, "@<TRIPOS>MOLECULE", 17))
+                break;
+
+
+            std::string tmp_string = line;
+            if (tmp_string.find("Iso_Score:")!=string::npos){
+                std::istringstream iss (tmp_string);
+                std::vector<std::string> string_vec{};
+                std::string tmp_str;
+                while(iss >> tmp_str){
+                    string_vec.push_back(tmp_str);
+                }
+                if (string_vec.size() == 3) {
+                    iso_score = stof(string_vec[2]);
+                }
+            }
+
+            if (tmp_string.find("FREQ:")!=string::npos){
+                std::istringstream iss (tmp_string);
+                std::vector<std::string> string_vec{};
+                std::string tmp_str;
+                while(iss >> tmp_str){
+                    string_vec.push_back(tmp_str);
+                }
+
+                if (string_vec.size() == 3) {
+                    freq = stoi(string_vec[2]);
+                }
+
+            }
+
+            if (tmp_string.find("Three_pairs:")!=string::npos){
+                std::istringstream iss (tmp_string);
+                std::vector<std::string> string_vec{};
+                std::string tmp_str;
+                while(iss >> tmp_str){
+                    string_vec.push_back(tmp_str);
+                }
+
+                if (string_vec.size() == 3) {
+                    three_pairs = string_vec[2];
+                }
+
+            }
+        }
+
+
+        // loop over the header info
+        for (count = 0;; count++) {
+
+            if (!fin_frags.getline(line, 1000)) {
+                mol.clear_molecule();
+                cout << endl <<
+                    "ERROR:  Ligand file empty.  Program will terminate." << endl;
+                stop_or_no = false;
+                return;
+            }
+
+            if (!strncmp(line, "@<TRIPOS>ATOM", 13)) {
+                atom_line = true;
+                break;
+            }
+            // assign the first 5 header lines to the proper fields
+            switch (count) {
+
+            case 0:
+                l1 = line;
+                break;
+
+            case 1:
+                l2 = line;
+                break;
+
+            case 2:
+                l3 = line;
+                break;
+
+            case 3:
+                l4 = line;
+                break;
+
+            case 4:
+                l5 = line;
+                break;
+
+            case 5:
+                l6 = line;
+                break;
+            }
+
+        }
+
+        // if there are no atoms, throw error and return false
+        if (!atom_line) {
+            mol.clear_molecule();
+            cout <<
+                "ERROR: @<TRIPOS>ATOM indicator missing from ligand file.  Program will terminate."
+                << endl;
+            stop_or_no = false;
+            return;
+        }
+        // get # of atoms and bonds from mol info line
+        // sscanf(l2.c_str(), "%d %d", &natoms, &nbonds);
+        sscanf(l2.c_str(), "%d %d %d", &natoms, &nbonds, &nresidues);
+
+        // If nresidues is zero, DOCK6 needs to be told to read the @<TRIPOS>ATOM lines
+        // correctly. By GDRM
+        if (nresidues == 0){
+            check_cols = true;
+            nresidues = 1;
+        }
+
+        // initialize molecule vectors
+        // mol.allocate_arrays(natoms, nbonds);
+        mol.allocate_arrays(natoms, nbonds, nresidues);
+
+        mol.title = l1;
+        mol.mol_info_line = l2;
+        mol.comment1 = l3;
+        mol.comment2 = l4;
+        mol.energy = l5;
+        mol.comment3 = l6;
+        // loop over atoms and read in atom info
+        for (i = 0; i < mol.num_atoms; i++) {
+            if (!fin_frags.getline(line, 1000)) {
+                mol.clear_molecule();
+                cout <<
+                    "ERROR:  Atom information missing from ligand file.  Program will terminate."
+                    << endl;
+                stop_or_no = false;
+                return;
+            }
+            //jwu comment
+            // 1     N       15.2586  -59.3416   35.3528 N.4     1 PRO1  -0.2020
+            // GDRM comment:
+            // when nres = 0, @<TRIPOS>ATOM might contain 7 columns instead of 9:
+            // 1     N       15.2586  -59.3416   35.3528 N.4  -0.2020
+            if (check_cols){
+                // Test number of columns per line
+                stringstream string_test;
+                string_test << line;
+                int countCols{0};
+                double value{};
+                while(string_test >> value){
+                    ++countCols;
+                }
+                if (countCols == 7){
+                    seven_columns == true;
+                }
+            }
+            //  Read data from mol2 as a function of the number of columns
+            if (seven_columns){
+                sscanf(line, "%s %s %f %f %f %s %f", jwu_tmp4, tmp1, &mol.x[i], &mol.y[i],
+                       &mol.z[i], tmp2, &mol.charges[i]);
+                mol.atom_names[i] = tmp1;
+                mol.atom_types[i] = tmp2;
+                mol.atom_number[i] = jwu_tmp4;
+                mol.atom_residue_numbers[i] = "1";
+                mol.subst_names[i] = subst_name;//mol.title
+            } else {
+                sscanf(line, "%s %s %f %f %f %s %s %s %f", jwu_tmp4, tmp1, &mol.x[i], &mol.y[i],
+                       &mol.z[i], tmp2, jwu_tmp3, subst_name, &mol.charges[i]);
+                mol.atom_names[i] = tmp1;
+                mol.atom_types[i] = tmp2;
+                    mol.atom_number[i] = jwu_tmp4;
+                    mol.atom_residue_numbers[i] = jwu_tmp3;
+                mol.subst_names[i] = subst_name;//mol.title
+            }
+        }
+        // If all partial charges are zero, it is a bad molecule
+        int num_zeros = 0;
+        for (int i = 0; i < mol.num_atoms; ++i){
+            if (mol.charges[i] == 0.0){
+                num_zeros += 1;
+            }
+        }
+        // Is it a bad molecule?
+        if (num_zeros == mol.num_atoms){
+            mol.bad_molecule = true;
+        } else {
+            mol.bad_molecule = false;
+        }
+        // skip down to the bond section
+        for (;;) {
+            if (!fin_frags.getline(line, 1000)) {
+                mol.clear_molecule();
+                cout <<
+                    "ERROR: @<TRIPOS>BOND indicator missing from ligand file.  Program will terminate."
+                    << endl;
+                stop_or_no = false;
+                return;
+            }
+
+            if (!strncmp(line, "@<TRIPOS>BOND", 13))
+                break;
+        }
+
+        // loop over bonds and add them
+        for (i = 0; i < mol.num_bonds; i++) {
+            if (!fin_frags.getline(line, 1000)) {
+                mol.clear_molecule();
+                cout <<
+                    "ERROR: Bond information missing from ligand file.  Program will terminate."
+                    << endl;
+                stop_or_no = false;
+                return;
+            }
+
+
+            sscanf(line, "%*d %d %d %s", &mol.bonds_origin_atom[i],
+                   &mol.bonds_target_atom[i], tmp1);
+
+            // adjust bond atom #'s to start at 0
+            mol.bonds_origin_atom[i]--;
+            mol.bonds_target_atom[i]--;
+
+            mol.bond_types[i] = tmp1;
+
+        }
+
+
+        // ID ring atoms/bonds
+        mol.id_ring_atoms_bonds();
+
+        // Create a temporary Fragment object
+        Fragment tmp_frag;
+
+        // Copy the DOCKMol object into the DOCKMol member of Fragment object
+        tmp_frag.mol = mol;
+
+        // Create temporary vectors of atom indices
+        vector <int> tmp_dummy_atoms;
+        vector <int> tmp_heavy_atoms;
+
+        // Create temp pair for bond information - CS: 09/19/16
+        std::pair <int, std::string> bond_info;
+
+        // Loop over every bond in the dockmol object
+        for (int i=0; i<tmp_frag.mol.num_bonds; i++){
+
+            // Check if the bond origin is a dummy atom
+            if (tmp_frag.mol.atom_types[tmp_frag.mol.bonds_origin_atom[i]].compare("Du") == 0){
+
+                // if so, save origin as dummy_atom and target as heavy atom
+                tmp_dummy_atoms.push_back(tmp_frag.mol.bonds_origin_atom[i]);
+                tmp_heavy_atoms.push_back(tmp_frag.mol.bonds_target_atom[i]);
+
+
+                // Update the bond number and type - CS: 09/19/16
+                // TODO: update sampling methods to use stored bond info for fraf selection (LEP)
+                bond_info.first = i;
+                bond_info.second = tmp_frag.mol.bond_types[i];
+                tmp_frag.aps_bonds_type.push_back(bond_info);
+            }
+
+            // Check if the bond target is a dummy atom
+            if (tmp_frag.mol.atom_types[tmp_frag.mol.bonds_target_atom[i]].compare("Du") == 0){
+
+                // if so, save target as dummy atom and origin as heavy atom
+                tmp_dummy_atoms.push_back(tmp_frag.mol.bonds_target_atom[i]);
+                tmp_heavy_atoms.push_back(tmp_frag.mol.bonds_origin_atom[i]);
+
+                // Update the bond number and type - CS: 09/19/16
+                bond_info.first = i;
+                bond_info.second = tmp_frag.mol.bond_types[i];
+                tmp_frag.aps_bonds_type.push_back(bond_info);
+            }
+        }
+
+
+        // Create temporary attachment point object 
+        AttPoint tmp_ap;
+
+        // Loop over all of the dummy_atom / heavy_atom pairs
+        for (int i=0; i<tmp_dummy_atoms.size(); i++){
+
+             // Copy the heavy atom / dummy atom pairs onto the attachment point class
+             tmp_ap.heavy_atom = tmp_heavy_atoms[i];
+             tmp_ap.dummy_atom = tmp_dummy_atoms[i];
+             // And add that information to the attachment points (aps) vector of the scaffold
+             tmp_frag.aps.push_back(tmp_ap);
+        }
+        // JDB JDB JDB
+        for(int i=0; i<tmp_frag.aps.size(); i++){
+            tmp_frag.aps[i].frag_name = tmp_frag.mol.energy;
+        }
+        //fill in all information as much as possible for the frag clas
+        tmp_frag.set_iso_score(iso_score);
+        tmp_frag.freq_num    = freq;
+
+
+        if (!three_pairs.empty()){
+            //three_pair handling
+            std::replace(three_pairs.begin(), three_pairs.end(), '/', ' ');
+            vector<std::string> three_pairs_vec;
+            std::stringstream ss(three_pairs);
+            std::string temp;
+            while (ss >> temp) { three_pairs_vec.push_back(temp); }
+            //save the three pairs into the best_tri attribute
+            Iso_Acessory::A_Pair first_pair;
+            Iso_Acessory::A_Pair sec_pair;
+            Iso_Acessory::A_Pair third_pair;
+
+            first_pair.set_ref(std::stoi(three_pairs_vec[0]));
+            first_pair.set_test(std::stoi(three_pairs_vec[1]));
+
+            sec_pair.set_ref(std::stoi(three_pairs_vec[2]));
+            sec_pair.set_test(std::stoi(three_pairs_vec[3]));
+
+            third_pair.set_ref(std::stoi(three_pairs_vec[4]));
+            third_pair.set_test(std::stoi(three_pairs_vec[5]));
+
+            tmp_frag.best_tri.three_pairs.push_back(first_pair);
+            tmp_frag.best_tri.three_pairs.push_back(sec_pair);
+            tmp_frag.best_tri.three_pairs.push_back(third_pair);
+        }
+
+        // Add the complete Fragment object to the appropriate vector
+        frag_vec.push_back(tmp_frag);
+
+        // Clear temporary vectors
+        tmp_dummy_atoms.clear();
+        tmp_heavy_atoms.clear();
+
+        // Clear Molecules
+        mol.clear_molecule();
+    }
+
+    // Close the filehandle
+    fin_frags.close();
+
+    return;
+
+} // end GA_Recom::read_frag_library()
+
+
+void GA_Recomb::prepare_isolibrary( ){
+
+    std::cout << "Reading in iso tables\n Loading..."<< std::endl;
+    std::vector<std::string> filenames = iso_parm.get_iso_fraglib().second;
+    //This does not need to be fragsorted because it is vec of strings
+    std::sort(filenames.begin(),filenames.end(),[](std::string a, std::string b){
+
+        size_t pos_a = a.find( ".mol2" );
+        if ( pos_a != string::npos ) {
+           a.replace( pos_a, 4, "" ); 
+        }
+        size_t pos_b = b.find( ".mol2" );
+        if ( pos_b != string::npos ) {
+           b.replace( pos_b, 4, "" ); 
+        }
+        size_t last_index_a = a.find_last_not_of("0123456789");
+        int result_a = atoi(a.substr(last_index_a + 1).c_str());
+
+        size_t last_index_b = b.find_last_not_of("0123456789");
+        int result_b = atoi(b.substr(last_index_b + 1).c_str());
+        return result_a<result_b;
+    });
+
+    int progress = 0;
+
+    if( isatty(fileno(stdin)) && isatty(fileno(stdout)) ){
+        std::cout << "[";
+    }
+
+    for (unsigned int i = 0; i < filenames.size(); i++){ 
+        if (filenames[i] == "." || filenames[i] == ".."){
+            continue;
+        }
+            //cout <<" Reading library from " <<filenames[i]<<"..."<<std::endl;
+        std::stringstream path; 
+        std::vector<Fragment> tmp_vec {};
+        path << ga_iso_fraglib_dir << "/"<<filenames[i];
+        read_frag_library(tmp_vec, path.str());
+
+
+        //This is where we prepare the read in iso tail molecules
+        for (int j=0; j<tmp_vec.size(); j++) {
+            activate_mol(tmp_vec[j].mol);
+            Fingerprint temp_finger;
+            for (int z=0; z<tmp_vec[j].mol.num_atoms; z++){ 
+                 tmp_vec[j].mol.atom_envs[z] = temp_finger.return_environment(tmp_vec[j].mol, z);
+            }
+            tmp_vec[j].mol.prepare_molecule();
+            // Compute the charges, saving them on the mol object
+            float total_charges = 0;
+            total_charges = compute_gast_charges(tmp_vec[j].mol);
+            calc_mol_wt(tmp_vec[j].mol);
+            calc_formal_charge(tmp_vec[j].mol);
+            calc_rot_bonds(tmp_vec[j].mol);
+            tmp_vec[j].mol.rot_bonds = 0;
+
+        }
+    
+        ifstream fin_tmp;
+        fin_tmp.open(path.str());
+        if (fin_tmp.fail()){
+            cout <<"Could not open " <<path.str()<<". Program will terminate." <<endl;
+            cout << strerror(errno);
+            exit(0);
+        }
+        std::string line; 
+        std::string string_head;
+
+        while(getline(fin_tmp,line)){
+            if (line.find("#HEAD") != string::npos){
+                istringstream ss(line);
+                std::vector<std::string> head_vec{};
+                std::string word; 
+                while(ss >> word){
+                    head_vec.push_back(word);
+                }
+                if (head_vec.size() == 2){ 
+                    string_head = head_vec[1];
+                    string_head.insert(0,"iso_");
+                }else{
+                    std::cout << "You are using isoswap incompatible files. exiting..." << std::endl;
+                    exit(1); 
+                }
+            }
+        }
+        Fragment rep_head_frag; 
+        for (unsigned int i=0; i<tmp_vec.size();i++){
+            if (tmp_vec[i].mol.energy == string_head){
+                rep_head_frag = tmp_vec[i];
+                break;
+            }
+            if (i==tmp_vec.size()-1){
+                std::cout << "Your isoswap files don't have the head molecular structure. exiting..." << std::endl;
+                exit(1); 
+            }
+        }
+
+        iso_library.set(rep_head_frag,tmp_vec);
+
+        if( isatty(fileno(stdin)) && isatty(fileno(stdout)) ){
+            std::cout << "\r" << "[ "; 
+            float percentage = (float)(i+1)/(float)filenames.size();
+            int val = (int) (percentage * 100); 
+            int lpad = (int) (percentage * 50);
+            for (int z=0; z<lpad; z++){ 
+                std::cout << "|" ; 
+            }     
+            std::cout << " "<<std::fixed<<std::setprecision(2)<<(float)(percentage * 100) << "% ]";
+            std::cout.flush();
+        }  
+
+        if (i == filenames.size()-1){
+            std::cout << "\nFinished reading and loading up isolibrary"<<std::endl; 
+            std::cout << "Iso_Library All Heads Size: " << iso_library.get_size() << std::endl;
+            std::cout << "Iso_Library All Tails Size: " << iso_library.get_size_total() << std::endl;
+        }
+
+    }    
+
+}
+
+
+// this is the fragments where we are combining fragments toegher for 
+// the isoswap iteration
+Fragment
+GA_Recomb::iso_combine_fragments( Fragment & frag1, int attachment_point_1,
+                 Fragment  frag2, int attachment_point_2,
+                 double ori_mat [3][3], DN_GA_Build & c_dn){
+
+    //assign some variables from the input fragments
+    //frag1 is the fragment we are attaching TO, and frag2
+    //is the fragment we are trying to attach.
+    int dummy1 = frag1.aps[attachment_point_1].dummy_atom;
+    int dummy2 = frag2.aps[attachment_point_2].dummy_atom;
+    int heavy1 = frag1.aps[attachment_point_1].heavy_atom;
+    int heavy2 = frag2.aps[attachment_point_2].heavy_atom;
+
+    // frag1 is in the correct position - the objective is to translate / rotate frag2
+    // so that the bond from dummy2->heavy2 is overlapping the bond from heavy1->dummy1
+
+    // Step 1. Adjust the bond length of frag2 to match covalent radii of new pair
+
+    // Calculate the desired bond length and remember as 'new_rad'
+    float new_rad = calc_cov_radius(frag1.mol.atom_types[heavy1]) +
+                    calc_cov_radius(frag2.mol.atom_types[heavy2]);
+
+    // Calculate the x-y-z components of the current frag2 bond vector (bond_vec)
+    DOCKVector bond_vec;
+    bond_vec.x = frag2.mol.x[heavy2] - frag2.mol.x[dummy2];
+    bond_vec.y = frag2.mol.y[heavy2] - frag2.mol.y[dummy2];
+    bond_vec.z = frag2.mol.z[heavy2] - frag2.mol.z[dummy2];
+
+    // Normalize the bond vector then multiply each component by new_rad so that it is the desired
+    // length
+    bond_vec = bond_vec.normalize_vector();
+    bond_vec.x *= new_rad;
+    bond_vec.y *= new_rad;
+    bond_vec.z *= new_rad;
+
+    // Change the coordinates of the frag2 dummy atom so that the bond length is correct
+    frag2.mol.x[dummy2] = frag2.mol.x[heavy2] - bond_vec.x;
+    frag2.mol.y[dummy2] = frag2.mol.y[heavy2] - bond_vec.y;
+    frag2.mol.z[dummy2] = frag2.mol.z[heavy2] - bond_vec.z;
+
+
+    // Step 2. Translate dummy2 of frag2 to the origin
+
+    // Figure out what translation is required to move the dummy atom to the origin
+    DOCKVector trans1;
+    trans1.x = -frag2.mol.x[dummy2];
+    trans1.y = -frag2.mol.y[dummy2];
+    trans1.z = -frag2.mol.z[dummy2];
+
+    // Use the dockmol function to translate the fragment so the dummy atom is at the origin
+    frag2.mol.translate_mol(trans1);
+
+    // Step 4. Take the previously calculated matrix and apply to the new molecule
+    frag2.mol.rotate_mol(ori_mat);
+
+
+    // Step 4. Translate frag2 to frag1
+
+    // This is the translation vector to move dummy2 to heavy1 (dummy2 is at the origin)
+    DOCKVector trans2;
+    trans2.x = frag1.mol.x[heavy1];
+    trans2.y = frag1.mol.y[heavy1];
+    trans2.z = frag1.mol.z[heavy1];
+
+    // Use the dockmol function to translate frag2
+    frag2.mol.translate_mol(trans2);
+
+    // Step 6. Connect the two fragments and return one object
+    Fragment frag_combined = c_dn.attach(frag1, dummy1, heavy1, frag2, dummy2, heavy2);
+
+    return frag_combined;
+}
+
+
+// add isosteric sidechains to the GA base
+std::vector<Fragment>
+GA_Recomb::iso_addition_sidechain( Fragment tmp_frag, 
+                                            Fragment head_frag_attached,
+                                            double ori_mat [3][3],
+                                            int num_APs_prev_att,
+                                            int target_AP_tmp_frag,
+                                            DN_GA_Build & c_dn)
+{
+
+    std::vector<Fragment> return_vec_constr {};
+
+    if (num_APs_prev_att <=0 || tmp_frag.aps.size() != 1){
+
+        std::cout << "Something went wrong: " <<
+                     "num_APs_prev_att is 0 or less when it should be 1,2,3+" <<
+                  std::endl;
+
+        std::cout << "Or frag wanted to att to is not a sidechain" << std::endl;
+        exit(1);
+    }
+
+    // Get the fragment used for initial attacment
+    std::pair<std::vector<Iso_Acessory::Scored_Triangle>,
+          std::vector<Fragment>> vec_iso_frags = {}; 
+    
+    // Here we specify which ranking tail frags we want
+    if ( ga_iso_pick_meth == "top_rank" ) {
+
+        // get the TAIL fragments based on the top N tails
+        vec_iso_frags.second = iso_library.get( head_frag_attached, ga_num_iso_picks );
+
+    } else if (ga_iso_pick_meth == "worst_rank"){
+        std::vector<Fragment> tmp_vec_tails {};
+        tmp_vec_tails = iso_library.get( head_frag_attached, ga_iso_num_gets );
+
+        int size_of_gets = 0;
+
+        if ( tmp_vec_tails.size() < ga_num_iso_picks ){
+           size_of_gets = tmp_vec_tails.size();
+        } else { size_of_gets = ga_num_iso_picks; }
+  
+        for (int i = size_of_gets - 1; i >= 0; i--) {
+            vec_iso_frags.second.push_back( tmp_vec_tails[i] );
+        }
+    } else if (ga_iso_pick_meth == "rand"){
+        std::vector<Fragment> tmp_vec_tails {};
+        tmp_vec_tails = iso_library.get( head_frag_attached, ga_iso_num_gets );
+
+        std::vector<int> picked {};
+        for ( int rand_num = rand() % tmp_vec_tails.size();
+              vec_iso_frags.second.size() < ga_num_iso_picks; 
+              rand_num = rand() % tmp_vec_tails.size() ){
+
+            bool contorno = false; 
+            // Keep track of things we try so we don't try the same thing twice
+            for (int p=0; p<picked.size(); p++){ 
+                if ( rand_num == picked[p]){ contorno = true; break; }
+            }
+            if ( contorno ) { continue; }
+
+            vec_iso_frags.second.push_back( tmp_vec_tails[rand_num] );
+            picked.push_back( rand_num );
+        } 
+    }
+
+    // combine the fragments
+    for (Fragment iso_frag: vec_iso_frags.second){
+
+        if (iso_frag.aps.size() != 1) {
+            std::cout << "iso_frag isn't a sidechiain" << std::endl;
+            exit(1);
+        }
+
+        // if the du bonds types don't match skip
+        if ( !c_dn.compare_dummy_bonds(
+                 tmp_frag,
+                 tmp_frag.aps[target_AP_tmp_frag].dummy_atom, 
+                 tmp_frag.aps[target_AP_tmp_frag].heavy_atom, 
+                 iso_frag,
+                 iso_frag.aps[0].dummy_atom, 
+                 iso_frag.aps[0].heavy_atom
+             )){ continue;}
+
+
+        return_vec_constr.push_back(
+            iso_combine_fragments( tmp_frag, target_AP_tmp_frag, iso_frag, 0,
+                                   ori_mat, c_dn
+                                 )
+        );
+    }
+
+    return return_vec_constr;
+}
+
+
+// deals with replacements of scaffolds using iso fragments
+std::vector <DOCKMol>
+GA_Recomb::iso_replace( Fragment ref, Fragment head_frag,
+                        int final_seg, int aps_num, Master_Score & score, 
+                        AMBER_TYPER & typer, Orient & orient  ){
+
+    std::vector<Fragment> vec_tails {};
+
+    std::vector<DOCKMol> return_recomb {};
+
+    // Here we specify which ranking tail frags we want
+    if ( ga_iso_pick_meth == "top_rank" ) {
+
+        // get the TAIL fragments based on the top N tails
+        vec_tails = iso_library.get( head_frag, ga_num_iso_picks );
+
+    } else if (ga_iso_pick_meth == "worst_rank"){
+        std::vector<Fragment> tmp_vec_tails {};
+
+        // get the TAIL fragments based on the top N tails
+        tmp_vec_tails = iso_library.get( head_frag, ga_iso_num_gets );
+
+        int size_of_gets = 0;
+
+        if ( tmp_vec_tails.size() < ga_num_iso_picks ){
+           size_of_gets = tmp_vec_tails.size();
+        } else { size_of_gets = ga_num_iso_picks; }
+  
+        for (int i = size_of_gets - 1; i >= 0; i--) {
+            vec_tails.push_back( tmp_vec_tails[i] );
+        }
+    } else if (ga_iso_pick_meth == "rand"){
+        std::vector<Fragment> tmp_vec_tails {};
+        // get the TAIL fragments based on the top N tails
+        tmp_vec_tails = iso_library.get( head_frag, ga_iso_num_gets );
+
+        std::vector<int> picked {};
+        for ( int rand_num = rand() % tmp_vec_tails.size();
+              vec_tails.size() < ga_num_iso_picks; 
+              rand_num = rand() % tmp_vec_tails.size() ){
+
+            bool contorno = false; 
+            // Keep track of things we try so we don't try the same thing twice
+            for (int p=0; p<picked.size(); p++){ 
+                if ( rand_num == picked[p]){ contorno = true; break; }
+            }
+            if ( contorno ) { continue; }
+
+            vec_tails.push_back( tmp_vec_tails[rand_num] );
+            picked.push_back( rand_num );
+        } 
+    }
+
+
+    // Get the HEAD orients
+
+
+    // Get the head frag from the iso_library
+    Fragment iso_head_frag {};
+    iso_head_frag = iso_library.get_head( head_frag );
+
+    // Initialize default input parameters
+    orient.use_chemical_matching = false;
+    orient.orient_ligand = true;
+    orient.automated_matching = true;
+    orient.tolerance = 0.25;
+    orient.dist_min = 0.0; 
+    orient.min_nodes = 3;
+    orient.max_nodes = 10;
+    orient.max_orients = 50;
+    orient.critical_points = true; // Requires a DU atom be be in the sphere matches
+    orient.use_chemical_matching = false;
+    // This refers othe the frag input sphere file
+    orient.use_ligand_spheres = false;
+    int verbosity_level = 0;
+    if (verbosity_level >= 3){
+       orient.verbose = 1;
+    }
+    else{
+       orient.verbose = 0;   
+    }
+
+    // Prepare the iso_head_frag
+    iso_head_frag.mol.prepare_molecule();
+
+    // amber type the head frag
+    typer.skip_verbose_flag = true; 
+    typer.prepare_molecule( iso_head_frag.mol, true, score.use_chem, score.use_ph4, score.use_volume ); 
+    activate_mol(iso_head_frag.mol); 
+
+    // Activate the segment only
+    deactivate_mol(ref.mol);
+    for (int i=0; i<orig_segments[final_seg].num_atoms; i++){ 
+         ref.mol.atom_active_flags[orig_segments[final_seg].atoms[i]] = true; 
+    }
+    for (int i=0; i<orig_segments[final_seg].num_bonds; i++){ 
+        ref.mol.bond_active_flags[orig_segments[final_seg].bonds[i]] = true; 
+    }
+    // Also activate the aps and its dummy atoms
+    for (int i=0; i<ref.aps.size(); i++){ 
+        // Activate dummy
+        ref.mol.atom_active_flags[ref.aps[i].dummy_atom] = true; 
+        // Activate bond
+        ref.mol.bond_active_flags[ref.aps_bonds_type[i].first] = true; 
+    }  
+
+    orient.get_lig_reference_spheres(ref.mol);
+
+    // Gather the orientation matrix and linear transformation fothe iso_head_frag
+    orient.match_ligand(iso_head_frag.mol); 
+
+    std::vector <Fragment> vec_tmp {};
+
+    // Generate and save orients
+    while (orient.iso_new_next_orientation(iso_head_frag, true)){
+       vec_tmp.push_back( iso_head_frag );
+    }
+
+    // filter out the the pruned_iso_head fragments  based on 
+    // du to du distance
+    std::vector <Fragment> pruned_orients {};
+    for ( int i=0; i<vec_tmp.size(); i++ ){
+
+        // Initialize bool vec to detemine which aps overlap
+        INTVec used_aps;
+        for ( int j=0; j<ref.aps.size(); j++ ){
+            used_aps.push_back(0);
+        }
+        if (Parameter_Reader::verbosity_level() > 1){
+            std::cout <<"#### For oriented FRAG: "<< i <<" "<< vec_tmp[i].mol.energy << " ####" << std::endl;
+        } 
+        // Compare with each aps of the reference
+        for ( int j=0; j<ref.aps.size(); j++ ){
+            std::vector <std::pair <int, float> > results =  overlapping_aps ( ref, j, iso_head_frag, vec_tmp[i].mol, typer );
+
+            // check if there are any overlapping results
+            // check if there are any overlapping results
+            if (Parameter_Reader::verbosity_level() > 1){
+                std::cout  << std::endl<< "#### " << "For ref aps " << j << " Number of hrmsd results: " << 
+                               results.size() << "####"<<std::endl;
+                for (int t=0;t<results.size(); t++){
+                    std::cout << "index "<< t << " results: aps= " << results[t].first <<
+                              " hrmsd= " << results[t].second <<  std::endl << std::endl;;
+                }
+            }
+
+            // If there are no matches
+            if ( results.size() == 0 ){ break; }
+            // If there was a match, check to see if it was used
+            else {
+               // Update used set for all matches - usually only 1 match
+               for ( int k=0; k<results.size(); k++ ){
+                   // Hard-coded rmsd 
+                   if ( results[k].second < ga_rplcmnt_inter_du_du_dist ) {
+                      used_aps[results[k].first] = 1;
+                   } else {
+                       //PAKPAK
+                   }
+
+               }
+            }
+        }
+        // If all of the aps are used ( ie close to a ref du), then keep the orient for further analysis
+        int sum_aps = 0;
+        for ( int j=0; j<used_aps.size(); j++ ){
+            if ( used_aps[j] == 1 ){ sum_aps++; }
+        }
+   
+        if ( sum_aps == ref.aps.size() ){ 
+            if (Parameter_Reader::verbosity_level() > 1){
+                std::cout << "Index: " << i << " molecule has been accepted as good frag"
+                          << std::endl;
+            }
+            pruned_orients.push_back(vec_tmp[i]);  
+        }
+    }
+
+    orient.clean_up();
+
+    orient.use_chemical_matching = false;
+    orient.orient_ligand = false;
+    orient.automated_matching = false;
+    orient.critical_points = false;
+    orient.use_chemical_matching = false;
+    orient.use_ligand_spheres = false;
+    orient.verbose = 0;   
+
+    // Clear vectors in orient
+    orient.spheres.clear();
+    orient.centers.clear();
+
+    delete[]orient.sph_dist_mat;//Release memory
+    orient.sph_dist_mat = NULL; //Release memory from pointer
+    //FINSIHED THE ISO_HEAD orients 
+
+
+ 
+
+    // pruned orients contains the fragments with orientated head frag
+    for (Fragment ori_head : pruned_orients ){
+
+        for ( Fragment tail: vec_tails){
+            //  Will compare all combinations of bond types 
+            //  and save to as pair with aps number
+            std::vector<int> allowed_results{};
+            std::vector <std::vector <int> > compare_aps_bond_types 
+                = compare_bond_types( ref, tail );
+
+            // If the bond types not matching, remove fragment and skip
+            if ( compare_aps_bond_types.size() == 0 ){
+                allowed_results.clear();
+                compare_aps_bond_types.clear();
+                continue;
+            }
+
+            // Make sure that the allowed bond combinations 
+            //can result in a molecule
+            allowed_results = 
+                allowed_bond_combos ( ref,
+                                      tail, 
+                                      compare_aps_bond_types );
+
+            // If the allowed bool (third term) is false, 
+            // remove the fragment and continue
+            if ( allowed_results[2] == 0 ){
+                allowed_results.clear();
+                compare_aps_bond_types.clear();
+                continue;
+            }
+
+            // This is where we do the linear transformations
+            Fragment copy_tail = tail;
+            // this protocol is adapted from orient.cpp 
+            // from new_next_orientation
+            copy_tail.mol.translate_mol( -ori_head.iso_centers_com, true );
+            copy_tail.mol.rotate_mol( ori_head.iso_ori_mat, true );
+            copy_tail.mol.translate_mol( ori_head.iso_spheres_com, true );
+            std::vector<DOCKMol> input_tail {copy_tail.mol};
+      
+            // replace the actual tail frag and create 
+            // a working molecule 
+            std::vector<DOCKMol> tmp_return_recomb {};
+
+            tmp_return_recomb = replace_scaffold ( ref, aps_num, final_seg, 
+                                                   allowed_results[0], allowed_results[1], 
+                                                   tail, input_tail, typer, score );
+
+ 
+            // merge the single molecule into 
+            // the return vec
+            return_recomb.insert( return_recomb.end(), 
+                                  tmp_return_recomb.begin(), 
+                                  tmp_return_recomb.end()
+                                );
+ 
+            tmp_return_recomb.clear();
+            allowed_results.clear();
+            compare_aps_bond_types.clear();
+            input_tail.clear();
+        }
+
+    } 
+
+    if ( Parameter_Reader::verbosity_level() > 1 ){
+        ostringstream fout_molecules_name;
+        std::ostringstream gen;
+
+        gen << std::setw(4) << std::setfill('0') << current_generation+1;
+        fout_molecules_name << ga_output_prefix << ".isoswap_rplc" << gen.str() <<".mol2";
+        if (return_recomb.size() > 0){
+            print_molecules(fout_molecules_name.str(), return_recomb, current_generation, "");
+        }
+        
+        fout_molecules_name.clear();
+        gen.clear();
+    }
+
+    pruned_orients.clear();
+    vec_tmp.clear();
+
+    return return_recomb;
+}
+
+//#ifdef BUILD_DOCK_WITH_RDKIT
+#if 0
+std::pair<float,float>
+GA_Recomb::get_stddev_changes(float lower, float upper, float stddev_ref, string score, int gen_num){
+
+    std::pair<float,float> stdev_results{0.0,0.0};
+
+    float loose_max = 0.0;
+    float loose_min = 0.0;
+
+
+    if (score == "tpsa"){
+        loose_max = 9999;
+    }
+    if (score == "qed"){
+        loose_max = 1.0; 
+        loose_min = 0.0; 
+    }
+    if (score == "clogp" || score == "esol"){
+        loose_max = 20; 
+        loose_min = -20; 
+    } 
+    if (score == "sa"){
+        loose_max = 10.0; 
+        loose_min = 1.0; 
+    }
+
+
+    float equi_dist = (upper - lower) / 2;
+    
+    float midpoint = lower + equi_dist;  
+
+
+    float right_dist = loose_max - (midpoint + stddev_ref) ;
+    float left_dist  = (midpoint - stddev_ref) - loose_min;
+
+
+    // if the right dist or left dist went psat the 
+    // the borders of the loose parameters,
+    // choose the loose ranges
+    if (right_dist < 0){
+        right_dist = loose_min; 
+    }
+
+    if (left_dist < 0){
+        left_dist  = loose_max;
+    }
+
+    int drive_dist = max_generations - ga_start_at_gen;
+
+    // This is where we selection the std_dev to change
+
+    if ( gen_num < ga_start_at_gen){
+        std::cout << "get_stddev_changes: error at function" << std::endl;
+        exit(0);
+    }
+    int gen_n_new_c = gen_num - ga_start_at_gen;
+
+    float left_mark = (left_dist/drive_dist) * ( drive_dist - gen_n_new_c );
+    float right_mark = (right_dist/drive_dist) * ( drive_dist - gen_n_new_c );
+ 
+
+    if (score == "qed"){
+        stdev_results.first = left_mark;
+        stdev_results.second = left_mark;
+    } else if (score == "sa"){
+        stdev_results.first = right_mark;
+        stdev_results.second = right_mark;
+    } else {
+
+        if (left_mark < right_mark){
+            stdev_results.first  = right_mark;
+            stdev_results.second = right_mark;
+        } else if (left_mark > right_mark){
+            stdev_results.first  = left_mark;
+            stdev_results.second = left_mark;
+        } else {
+            stdev_results.first  = left_mark;
+            stdev_results.second = right_mark;
+        }
+    }
+
+
+    
+    return stdev_results;
+}
+#endif

@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.12
+DOCK v6.13
 
-Released September 2024
+Released July 2025
 Copyright UCSF
 --------------------------------------
 
@@ -65,7 +65,8 @@ Molecule Library Output Parameters
 ligand_outfile_prefix                                        database
 write_mol_solvation                                          no
 write_orientations                                           no
-num_scored_conformers                                        1
+num_final_scored_poses                                       1
+num_preclustered_conformers                                  1
 score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
@@ -179,7 +180,7 @@ Filter Rejected: Too many hydrogen bond acceptors: 10
  Formal_Charge:   	1.00
 
 
- Elapsed time for docking:	0.001 seconds
+ Elapsed time for docking:	0.002 seconds
 
  Anchors:		1
  Orientations:		1
@@ -196,7 +197,7 @@ Filter Rejected: Too many hydrogen bond acceptors: 10
  Formal_Charge:   	1.00
 
 
- Elapsed time for docking:	0.001 seconds
+ Elapsed time for docking:	0.002 seconds
 
  Anchors:		1
  Orientations:		1
@@ -1929,7 +1930,7 @@ Filter Rejected: Too many hydrogen bond donors: 5
  Formal_Charge:   	-1.00
 
 
- Elapsed time for docking:	0.001 seconds
+ Elapsed time for docking:	0.000 seconds
 
  Anchors:		1
  Orientations:		1
@@ -2411,7 +2412,7 @@ Filter Rejected: Too many hydrogen bond donors: 2
 
 
 164 Molecules Processed
-Total elapsed time:	0.163 seconds
-Number of molecules per second:	1006.111
-Virtual memory used for this process: 83612 kilobytes
-Physical memory used for this process: 11816 kilobytes
+Total elapsed time:	0.191 seconds
+Number of molecules per second:	859.973
+Virtual memory used for this process: 88676 kilobytes
+Physical memory used for this process: 11936 kilobytes

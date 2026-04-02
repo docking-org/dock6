@@ -1,3 +1,5 @@
+#ifndef CONF_GEN_GA_H
+#define CONF_GEN_GA_H
 #include <algorithm>
 #include <fstream>
 #include <iostream>
@@ -15,6 +17,8 @@
 #include "master_score.h"
 #include "simplex.h"
 #include "utils.h"
+#include "iso_align.h"
+#include "conf_gen_dn_ga.h"
 
 // These covalent radii are defined according to the CRC Handbook
 // of Chemistry and Physics, 94th Ed., 2013-2014, pp 9-49 to 9-50
@@ -28,6 +32,28 @@
 #define COV_RADII_CL 1.00
 #define COV_RADII_BR 1.17
 
+#ifdef BUILD_DOCK_WITH_RDKIT
+#include "rddrive.h"
+#endif
+
+// GA Definitions
+#define DNM_TAG "DNM"
+// Segment/fragment types
+#define SIDECHAIN_TYPE 0
+#define LINKER_TYPE 1
+#define SCAFFOLD_TYPE 2
+#define RIGID_TYPE 3
+// Mutation types
+#define DELETION_TYPE 0
+#define ADDITION_TYPE 1
+#define SUBSTITUTION_TYPE 2
+#define REPLACEMENT_TYPE 3
+// Mutation tags - what will show up in the names and types of GA molecules
+#define ADDITION_TAG "-a"
+#define DELETION_TAG "-d"
+#define REPLACEMENT_TAG "-r"
+#define SUBSTITUTION_TAG "-s"
+#define PARENT_TAG "parent"
 
 // +++++++++++++++++++++++++++++++++++++++++
 // Torsion Environments: A data structure that remembers an atom enviroment (as string) and a vector
@@ -64,6 +90,8 @@ class           SEGMENTS {
     INTVec    atoms;                      // atoms in a segment
     INTVec    bonds;                      // bonds in a segment
     INTVec    interseg_bonds;             // bond index associated with aps
+    bool      DNM_present = false;        // if DNM has been encountered, default as false
+    bool      ALL_DNM = false;            // if every atom is DNM
 };
 
 
@@ -139,7 +167,15 @@ class           GA_Recomb {
     int                      ga_energy_cutoff;                   // upper bounds for energy pruning
     int                      ga_heur_unmatched_num;              // num of unmatched atoms for H. RMSD pruning
     float                    ga_heur_matched_rmsd;               // rmsd of matched atoms for H. RMSD pruning
-    int                      ga_constraint_mol_wt;               // upper bound for mol wt
+
+    float                    ga_rplcmnt_inter_du_du_dist;        // inter du du distance between ref and frag
+
+      // molecular weight
+    std::string              ga_MW_cutoff_type;                  // for soft or hard MW filtering
+    float                    ga_constraint_upper_mol_wt;               // upper bound for mol wt
+    float                    ga_constraint_lower_mol_wt;               // upper bound for mol wt
+    float                    ga_constraint_mol_wt_std_dev;       // std_dev choice for soft
+    
     int                      ga_constraint_rot_bon;              // upper bound for # rot bonds
     int                      ga_constraint_H_accept;             // upper bound for # hydrogen acceptors
     int                      ga_constraint_H_donor;              // upper bound for # hydrogen donors
@@ -188,6 +224,10 @@ class           GA_Recomb {
     int                      ga_no_xover_exit_gen; //2018.02.24 - YZ - user defined parameter for when to kill a ga
                                                    //run when there is no crossover
     bool                     verbose;              //output verbose statistics - LEP 2018.02.27
+    std::string              ga_compart_subst_id;
+
+    //Global vars
+    int current_generation = 0;
 
     // Global vectors for fragment libraries
     std::vector  <Fragment>  tmp_scaffolds;
@@ -226,6 +266,8 @@ class           GA_Recomb {
 
     std::vector  <Tor_Env>   torenv_vector;                      // Torenv - should switch to DN version 
     std::vector  <int>       bond_tors_vectors;                  // holds mol torsions for minimization
+    
+    std::vector <DOCKMol>    filtered_mols;
 
     DOCKMol tmp_parent1;                                         // DOCKMols holders
     DOCKMol tmp_parent2;
@@ -249,6 +291,11 @@ class           GA_Recomb {
     INTVec                   no_seg_bonds;                       // list of intersegment bonds
     std::vector <INTPair>    bond_btwn_seg;                      // segment index associated with the bonds
     INTVec                   terminal_seg;                       // terminal segment index
+    //BTB mutation rate coefficients
+    int del_co;
+    int rep_co;
+    int add_co;
+    int sub_co;
 
 
     // Vectors for success rates
@@ -256,7 +303,9 @@ class           GA_Recomb {
     INTVec                   success_del;
     INTVec                   success_sub;
     INTVec                   success_replace;
-
+    vector<int>              total_muts;
+    vector<int>              total_mut_attempts;
+    void                     master_mut_counter(bool parents, int output, int save, int mut_cycles);
 
     // Variable for selection
     float                    new_temp;                           // updated Metropolis temp; Tf = Ti(1-R)^(generation)
@@ -264,6 +313,16 @@ class           GA_Recomb {
 
     // Miscellaneous variables
     bool                     used;                               // used was added to dockmol.cpp 
+
+    // Isoswap
+    Iso_Parm                 iso_parm;
+    Iso_Table::Iso_Tab       iso_library;
+    std::string              ga_iso_pick_meth;
+    int                      ga_num_iso_picks;
+    std::string              ga_iso_print_out;
+    std::string              ga_iso_output_verbose_path;
+    std::string              ga_iso_fraglib_dir;
+    int                      ga_iso_num_gets;
     
 
 
@@ -343,6 +402,8 @@ class           GA_Recomb {
     bool                    rand_H_to_Du (DOCKMol &, int );
     void                    H_to_Du (DOCKMol &, int );
     void                    add_H(DOCKMol &, int, int, bool, Master_Score &, Simplex_Minimizer &, AMBER_TYPER & );
+    void                    cleanup_mutation_selection(INTVec & sidechain_ids, INTVec & linker_ids, INTVec & scaffold_ids, INTVec & rigid_ids);
+    //since we used a bunch of global variables which need to be cleanuped before exiting the function, and there are multiple function exit points
 
     // Functions for sampling torsions, computing energy, and minimizing
     void                    score_parents( std::vector <DOCKMol> &, Master_Score &, AMBER_TYPER & );
@@ -358,11 +419,13 @@ class           GA_Recomb {
     void                    fitness_pruning( std::vector <DOCKMol> &, std::vector <DOCKMol> &, Master_Score &, Simplex_Minimizer &, AMBER_TYPER & );
     void                    hard_filter( std::vector <DOCKMol> & ); // COMMENT
     bool                    hard_filter_mol( DOCKMol & ); // COMMENT
+    bool                    hard_filter_mol_HA_HD( DOCKMol & ); // COMMENT
     void                    calc_descriptors( DOCKMol & ); // COMMENT
     void                    calc_mol_wt( DOCKMol & );
     void                    calc_rot_bonds ( DOCKMol & );
     void                    num_HA_HD( DOCKMol & );
     void                    calc_formal_charge( DOCKMol & );
+    bool                    mw_cutoff(DOCKMol &);
 
 
     // Selection functions
@@ -396,7 +459,8 @@ class           GA_Recomb {
     void                    is_active_vec( std::vector <DOCKMol> & );
     void                    print_torenv( std::vector <Tor_Env>  );
 
-    void                   print_molecules(std::string fout_molecules_name, std::vector <DOCKMol> & parents, int i, std::string); //BTB - save on space/redundant code
+    // Printing Functions
+    void                    print_molecules(std::string fout_molecules_name, std::vector <DOCKMol> & parents, int gen, std::string); //BTB - save on space/redundant code
 
     //Counters
     double                  time_seconds();
@@ -418,7 +482,13 @@ class           GA_Recomb {
     void                   set_DNM_bools_start( std::vector <DOCKMol> & ); //Start of run DNM check
     /** Archived Functions and Related Variables **/
     //void                     read_torenv_table( std::string ); //
-    //int                      molecule_counter;                   // for counting molecules
+    //BTB molecule counters
+    void                           print_molecule_counts(int generation);
+    vector<int>                    generated_molecule_counter;  //all molecules generated
+    vector<int>                    valid_torenv_molecule_counter; //molecules generated w/ valid torenv
+    vector<int>                    unpruned_molecule_counter; //molecules generated which were not pruned
+    
+
     //bool                     valid_torenv( DOCKMol  );
     //bool                     compare_atom_environments( std::string, std::string );
     // bool                    compare_dummy_bonds( Fragment, int, int, Fragment &, int, int );
@@ -426,7 +496,71 @@ class           GA_Recomb {
     //float                   calc_rmsd( DOCKMol &, DOCKMol & ); //REMOVE
     //void                    child_torsion_drive( int,std::vector <DOCKMol> & );
     //void                    rmsd_prune( Master_Score &, Simplex_Minimizer &, AMBER_TYPER & );
+
+    // fragment utiltieis
+ 
+
+    void read_frag_library(vector <Fragment> &, std::string);
+    void prepare_isolibrary( );
+    Fragment iso_combine_fragments( Fragment &, int, Fragment, int, double[3][3], DN_GA_Build &);
+    Fragment iso_attach_frags( Fragment &, int, int, Fragment &, int, int);
+    std::vector<Fragment> iso_addition_sidechain( Fragment,
+                                     Fragment,
+                                     double[3][3],
+                                     int, int, DN_GA_Build &
+                                     );
+    DOCKMol iso_valid_tors_check(Fragment &, DN_GA_Build &, 
+                             Master_Score &,
+                             AMBER_TYPER &);
+    std::vector <DOCKMol> iso_replace(
+                                       Fragment, Fragment,
+                                       int, int, Master_Score &, 
+                                       AMBER_TYPER &, Orient &
+                                     );
+    std::pair <float,float> get_stddev_changes( float, 
+                                                float, 
+                                                float,
+                                                string,
+                                                int
+                                                );
+
     #ifdef BUILD_DOCK_WITH_RDKIT
+
+    std::vector <DOCKMol> rdkit_rejected_mols;
+
+    RD_Parm::RD_Drive_Parm      rdkit_parm;
+    RD_Drive           rdkit_drive;
+    RD_Calc::Calc      rdkit_calc_des;            
+
+    bool               ga_drive_stdev_ramp;
+    bool               ga_drive_clogp;
+    bool               ga_drive_esol;
+    bool               ga_drive_tpsa;
+    bool               ga_drive_qed;
+    bool               ga_drive_sa;
+    bool               ga_drive_stereocenters;
+    bool               ga_drive_pains;
+    bool               ga_calc_pains;
+    bool               ga_drive_TURNED_OFF;
+
+    // Driving attributes
+    double             ga_lower_clogp;
+    double             ga_upper_clogp;
+    double             ga_clogp_std_dev;
+    double             ga_lower_esol;
+    double             ga_upper_esol;
+    double             ga_esol_std_dev;
+    double             ga_lower_tpsa;
+    double             ga_upper_tpsa;
+    double             ga_tpsa_std_dev;
+    double             ga_lower_qed;
+    double             ga_qed_std_dev;
+    double             ga_upper_sa;
+    double             ga_sa_std_dev;
+    int                ga_upper_stereocenter;
+    int                ga_upper_pains;
+
+    int                ga_start_at_gen;
     std::string        ga_sa_fraglib_path;
     std::string        ga_PAINS_path;
     std::map<unsigned int, double> ga_fragMap;
@@ -456,3 +590,4 @@ class           GA_Recomb {
     bool                   compare_rank(DOCKMol , DOCKMol );
     
 //
+#endif // CONF_GEN_GA_H

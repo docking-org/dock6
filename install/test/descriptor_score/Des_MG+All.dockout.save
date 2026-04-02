@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.12
+DOCK v6.13
 
-Released September 2024
+Released July 2025
 Copyright UCSF
 --------------------------------------
 
@@ -222,7 +222,8 @@ ligand_outfile_prefix                                        Des_MG+All
 write_mol_solvation                                          no
 write_footprints                                             no
 write_orientations                                           no
-num_scored_conformers                                        1
+num_final_scored_poses                                       1
+num_preclustered_conformers                                  1
 score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
@@ -305,7 +306,7 @@ Initializing typer for Volume Overlap Score within Descriptor Score...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.464 seconds
+ Elapsed time for docking:	0.409 seconds
 
  Anchors:		1
  Orientations:		1
@@ -347,7 +348,7 @@ Molecule: 1M17.lig
 
 
 1 Molecules Processed
-Total elapsed time:	0.498 seconds
-Number of molecules per second:	2.007
-Virtual memory used for this process: 131028 kilobytes
-Physical memory used for this process: 61276 kilobytes
+Total elapsed time:	0.462 seconds
+Number of molecules per second:	2.165
+Virtual memory used for this process: 136080 kilobytes
+Physical memory used for this process: 50340 kilobytes

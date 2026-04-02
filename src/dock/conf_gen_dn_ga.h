@@ -1,3 +1,5 @@
+#ifndef CONF_GEN_DN_GA_H
+#define CONF_GEN_DN_GA_H
 #include <algorithm>
 #include <fstream>
 #include <iostream>
@@ -134,6 +136,10 @@ class           DN_GA_Build {
     bool               dn_ga_flag;                  // for mutation, make sure 1 valid molecule is produced
     int                dn_ga_gen;                   // keep track of what gen we're
     int                dn_ga_mut_attempt;           // keep track of what mutation attempt
+    int                dn_ga_verbose; 
+
+    std::string        dn_ga_name_identifier;
+   
     // Vectors of fragments and other important things
     std::vector <Fragment>     scaffolds;
     std::vector <Fragment>     linkers;
@@ -150,6 +156,9 @@ class           DN_GA_Build {
     int                ie_rep_exp;             // repulsive VDW exponent (12 by default, can change in input file)
     float              ie_diel;                // dielectric constant (4.0 by default)
     float              ie_cutoff;              //BCF internal energy cutoff
+  
+    // isoswap
+    int                iso_picks; 
 
     // Miscellaneous
     int                molecule_counter;       // for counting molecules
@@ -199,9 +208,13 @@ class           DN_GA_Build {
     bool            roulette_valid_torenv ( Fragment & );
     // Functions for sampling torsions, computing energy, and minimizing
     void            sample_minimized_torsions( Fragment &, std::vector <Fragment> &, Master_Score &,
-                                               Simplex_Minimizer &, AMBER_TYPER & );
+                                               Simplex_Minimizer &, AMBER_TYPER &, 
+                                               std::pair<bool,float> = {false, 0.0}
+                                             );
     float           calc_fragment_rmsd( Fragment &, Fragment & );
-    void            frag_torsion_drive( Fragment &, std::vector <Fragment> & );
+    void            frag_torsion_drive( Fragment &, std::vector <Fragment> &, 
+                                        std::pair<bool,float> = {false, 0.0}
+                                      );
     void            prepare_internal_energy( Fragment &, Master_Score & );
 
     // Horizontal pruning functions specific to denovo
@@ -223,6 +236,10 @@ class           DN_GA_Build {
     void            frag_sort(std::vector< std::pair <Fragment, int>> &,
                               std::function<bool(const std::pair<Fragment, int> &, const std::pair <Fragment, int> &)>);
 
+
+    // print mols
+    void print_molecules( std::string, std::vector<DOCKMol> &, int, std::string );
+    void naming_function(DOCKMol & , int , int , std::string );
     // Functions that are turned off right now
     //bool            prune_molecular_weight( DOCKMol & );
     //bool            prune_rotatable_bonds( DOCKMol & );
@@ -250,3 +267,6 @@ bool            ga_roulette_sort_order_frequencies( const vector<double>& vect1,
 bool            ga_roulette_sort_order_torsions(const vector<double>& vect1, const vector<double>& vect2);    
 
 //double time_seconds();
+
+
+#endif // CONF_GEN_DN_GA_H

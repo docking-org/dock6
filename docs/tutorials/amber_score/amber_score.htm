@@ -24,7 +24,7 @@ style='font-size:27.0pt'>Amber Score in DOCK6</span></b></span></p>
 
 <p class=style4style10 align=center style='text-align:center'><span
 style='font-family:Arial'>Author: Devleena Shivakumar<br>
-Last updated November 14, 2023 by Scott Brozell<o:p></o:p></span></p>
+Last updated June 6, 2025 by Scott Brozell<o:p></o:p></span></p>
 
 <p class=style4> This tutorial introduces DOCK Amber score
 and describes the preparation of input files for DOCK Amber rescoring.
@@ -51,9 +51,9 @@ that both the ligand and the active site(s) of the receptor can be flexible,
 allowing small structural rearrangements
 to reproduce the so-called "induced fit" while performing the scoring.</p>
 
-<p class=style4>When a user calls for Amber score, the program performs
-minimization, MD simulation, and more minimization
- on the individual ligand, the individual
+<p class=style4>Amber score performs
+minimization, molecular dynamics (MD) simulation, and more minimization
+on the individual ligand, the individual
 receptor, and the ligand-receptor complex,
 and calculates the score as follows: </p>
 <p align=center style='text-align:center'><span class=style2><b><span
@@ -330,7 +330,7 @@ small DISTANCE movable region might be sufficient.
 <p class=style4>
 The amount of minimization and MD is dependent on the preparation
 of the receptor.  If the receptor has been well equilibrated then
-it is expected that fewer min steps and md cycles will be needed
+it is expected that fewer min. steps and MD cycles will be needed
 to relax the complex, in general.  Other factors, such as the
 type and extent of changes upon binding, are also relevant.
 </p>

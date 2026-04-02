@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.12
+DOCK v6.13
 
-Released September 2024
+Released July 2025
 Copyright UCSF
 --------------------------------------
 
@@ -68,7 +68,8 @@ Molecule Library Output Parameters
 ligand_outfile_prefix                                        output
 write_mol_solvation                                          no
 write_orientations                                           no
-num_scored_conformers                                        1
+num_final_scored_poses                                       1
+num_preclustered_conformers                                  1
 score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
@@ -104,7 +105,7 @@ Lyr:2 Seg:0 1/6 retained, Pruning: 5-clustered  t=0.01s
 Lyr:3 Seg:0 Bond:1 : Sampling 6 dihedrals N(N.4)  C(C.3)  C(C.ar)  C(C.ar)
 Lyr:3 Seg:0 1/6 retained, Pruning: 5-clustered  t=0.01s
 Lyr:4 Seg:0 Bond:0 : Sampling 3 dihedrals C(C.ar)  C(C.3)  N(N.4)  C(C.3)
-Lyr:4 Seg:0 3/3 retained, Pruning:  t=0.01s
+Lyr:4 Seg:0 3/3 retained, Pruning:  t=0.02s
 # of anchor positions: 1
 -----------------------------------
 VERBOSE GROWTH STATS : ANCHOR #2
@@ -114,7 +115,7 @@ Lyr 1-1 Segs|Lyr 2-1 Segs|Lyr 3-1 Segs|Lyr 4-1 Segs|number of layers:5
 Lyr:1 Seg:0 Bond:0 : Sampling 3 dihedrals C(C.ar)  C(C.3)  N(N.4)  C(C.3)
 Lyr:1 Seg:0 1/3 retained, Pruning: 2-clustered  t=0s
 Lyr:2 Seg:0 Bond:1 : Sampling 6 dihedrals N(N.4)  C(C.3)  C(C.ar)  C(C.ar)
-Lyr:2 Seg:0 1/6 retained, Pruning: 5-clustered  t=0s
+Lyr:2 Seg:0 1/6 retained, Pruning: 5-clustered  t=0.01s
 Lyr:3 Seg:0 Bond:49 : Sampling 6 dihedrals C(C.ar)  C(C.ar)  C(C.3)  N(N.4)
 Lyr:3 Seg:0 1/6 retained, Pruning: 5-clustered  t=0.01s
 Lyr:4 Seg:0 Bond:51 : Sampling 3 dihedrals C(C.ar)  C(C.3)  N(N.4)  C(C.3)
@@ -126,19 +127,19 @@ VERBOSE GROWTH STATS : ANCHOR #3
 1/1 anchor orients retained (max 1) t=0s
 Lyr 1-2 Segs|Lyr 2-2 Segs|number of layers:3
 Lyr:1 Seg:0 Bond:1 : Sampling 6 dihedrals N(N.4)  C(C.3)  C(C.ar)  C(C.ar)
-Lyr:1 Seg:0 1/6 retained, Pruning: 5-clustered  t=0s
+Lyr:1 Seg:0 1/6 retained, Pruning: 5-clustered  t=0.01s
 Lyr:1 Seg:1 Bond:49 : Sampling 6 dihedrals C(C.ar)  C(C.ar)  C(C.3)  N(N.4)
-Lyr:1 Seg:1 1/6 retained, Pruning: 5-clustered  t=0.01s
+Lyr:1 Seg:1 1/6 retained, Pruning: 5-clustered  t=0.02s
 Lyr:2 Seg:0 Bond:0 : Sampling 3 dihedrals C(C.ar)  C(C.3)  N(N.4)  C(C.3)
-Lyr:2 Seg:0 3/3 retained, Pruning:  t=0.01s
+Lyr:2 Seg:0 3/3 retained, Pruning:  t=0.02s
 Lyr:2 Seg:1 Bond:51 : Sampling 3 dihedrals C(C.ar)  C(C.3)  N(N.4)  C(C.3)
-Lyr:2 Seg:1 4/9 retained, Pruning: 5-clustered  t=0.01s
+Lyr:2 Seg:1 4/9 retained, Pruning: 5-clustered  t=0.03s
 No more anchor fragments to be docked.
 
 -----------------------------------
 Molecule: CHEMBL543895
 
- Elapsed time for docking:	0.051 seconds
+ Elapsed time for docking:	0.069 seconds
 
  Anchors:		3
  Orientations:		3
@@ -147,7 +148,7 @@ Molecule: CHEMBL543895
 
 
 1 Molecules Processed
-Total elapsed time:	0.054 seconds
-Number of molecules per second:	18.682
-Virtual memory used for this process: 95520 kilobytes
-Physical memory used for this process: 17648 kilobytes
+Total elapsed time:	0.071 seconds
+Number of molecules per second:	14.045
+Virtual memory used for this process: 100584 kilobytes
+Physical memory used for this process: 7708 kilobytes

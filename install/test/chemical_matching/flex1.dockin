@@ -37,6 +37,6 @@ chem_defn_file                                               ../../../parameters
 ligand_outfile_prefix                                        flex1
 write_mol_solvation                                          no
 write_orientations                                           no
-num_scored_conformers                                        1
+num_final_scored_poses                                       1
 score_threshold                                              -10.0
 rank_ligands                                                 no

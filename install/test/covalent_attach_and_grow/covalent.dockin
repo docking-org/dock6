@@ -58,7 +58,8 @@ flex_drive_file                                              ../../../parameters
 ligand_outfile_prefix                                        covalent_output
 write_mol_solvation                                          no
 write_orientations                                           no
-num_scored_conformers                                        100
+num_final_scored_poses                                       100
+num_preclustered_conformers                                  100
 write_conformations                                          no
 cluster_conformations                                        yes
 cluster_rmsd_threshold                                       1.0

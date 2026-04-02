@@ -96,6 +96,7 @@ class           Library_File:public Base_MPI {
     int             high_position;
     float           high_score;
     int             num_scored_poses;
+    int             num_preclustered_conformers; //Owen 3/20
     int             num_secondary_scored_poses;
 
     bool            write_footprints;
@@ -122,6 +123,7 @@ class           Library_File:public Base_MPI {
     INTVec          cluster_assignments;  // maps ranked_poses to cluster size;
     float           cluster_rmsd_threshold;
     int             num_clusterheads_rescore;
+    int             num_poses_written; //Owen 3/20
 
     // secondary pose rescoring
     std::vector < DOCKMol > poses_for_rescore;
@@ -146,7 +148,7 @@ class           Library_File:public Base_MPI {
 
     bool            submit_orientation(DOCKMol &, Master_Score &, bool);
 //    void            submit_footprint(Master_Score &);
-    void            submit_conformation(Master_Score &);
+    void            submit_conformations(Master_Score &);
     void            submit_secondary_conformation(Master_Score &, Simplex_Minimizer & min);
     void            submit_scored_pose(DOCKMol &, Master_Score &,
                                        Simplex_Minimizer & min);

@@ -107,7 +107,7 @@ General Comments on Platform Differences.
 The .save files are from an x86_64 platform and with gfortran either:
 gcc version 7.5.0 (Ubuntu 7.5.0-3ubuntu1~18.04)
 or
-Linux 3.10.0-1160.76.1.el7.x86_64 #1 SMP Tue Jul 26 14:15:37 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+Linux 3.10.0-1160.133.1.el7.x86_64 #1 SMP Thu Mar 6 03:04:40 EST 2025 x86_64 x86_64 x86_64 GNU/Linux
 Red Hat Enterprise Linux Server release 7.9 (Maipo)
 gcc version 7.3.0 (GCC) 
 
@@ -118,5 +118,5 @@ in floating point arithmetic.
 binary file formats and memory layouts as well as floating point arithmetic.
 ------------------------------------------------------------------------------
 
-Last updated September 10, 2024.
+Last updated July 14, 2025.
 

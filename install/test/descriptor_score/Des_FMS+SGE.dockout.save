@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.12
+DOCK v6.13
 
-Released September 2024
+Released July 2025
 Copyright UCSF
 --------------------------------------
 
@@ -111,6 +111,7 @@ Descriptor Score Parameters
 ------------------------------------------------------------------------------------------
 descriptor_score_primary                                     yes
 descriptor_use_grid_score                                    yes
+descriptor_use_grid_lig_efficiency                           no
 descriptor_use_pharmacophore_score                           yes
 descriptor_use_tanimoto                                      no
 descriptor_use_hungarian                                     no
@@ -196,7 +197,8 @@ Molecule Library Output Parameters
 ligand_outfile_prefix                                        Des_FMS+SGE
 write_mol_solvation                                          no
 write_orientations                                           no
-num_scored_conformers                                        1
+num_final_scored_poses                                       1
+num_preclustered_conformers                                  1
 score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
@@ -216,7 +218,7 @@ Initializing typer for Pharmacophore Similarity Score within Descriptor Score...
 -----------------------------------
 Molecule:  C1 
 
- Elapsed time for docking:	1.969 seconds
+ Elapsed time for docking:	1.630 seconds
 
  Anchors:		1
  Orientations:		100
@@ -243,7 +245,7 @@ Molecule:  C1
 
 
 1 Molecules Processed
-Total elapsed time:	1.981 seconds
-Number of molecules per second:	0.505
-Virtual memory used for this process: 93824 kilobytes
-Physical memory used for this process: 21160 kilobytes
+Total elapsed time:	1.641 seconds
+Number of molecules per second:	0.609
+Virtual memory used for this process: 98888 kilobytes
+Physical memory used for this process: 13124 kilobytes

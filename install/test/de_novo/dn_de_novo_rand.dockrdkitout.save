@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.12
+DOCK v6.13
 
-Released April 2024
+Released July 2025
 Copyright UCSF
 --------------------------------------
 
@@ -20,9 +20,11 @@ dn_fraglib_linker_file                                       ./dn_generate_fragm
 dn_fraglib_sidechain_file                                    ./dn_generate_fragments_sidechain.mol2
 dn_user_specified_anchor                                     no
 dn_torenv_table                                              ./dn_generate_fragments_torenv.dat
+dn_bias_torsions                                             no
 dn_name_identifier                                           denovo
 dn_sampling_method                                           rand
 dn_num_random_picks                                          20
+dn_bias_with_fragments                                       no
 dn_pruning_conformer_score_cutoff                            100.0
 dn_pruning_conformer_score_scaling_factor                    2.0
 dn_pruning_clustering_cutoff                                 100.0
@@ -400,85 +402,85 @@ Reading in 31 grids
 ##### Now orienting anchor #1
   ##### Entering layer of growth #1
   Root size at the beginning of this layer = 40
-    Root [  0], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  91.91
+    Root [  0], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 130.66
         RDKIT: the number of rejected molecules is 0
-    Root [  1], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  95.25
+    Root [  1], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 152.74
         RDKIT: the number of rejected molecules is 0
-    Root [  2], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  81.64
+    Root [  2], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 126.77
         RDKIT: the number of rejected molecules is 0
-    Root [  3], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  84.74
+    Root [  3], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 133.09
         RDKIT: the number of rejected molecules is 0
-    Root [  4], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  84.79
+    Root [  4], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 135.64
         RDKIT: the number of rejected molecules is 0
-    Root [  5], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  70.48
+    Root [  5], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 111.45
         RDKIT: the number of rejected molecules is 0
-    Root [  6], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  71.04
+    Root [  6], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 113.32
         RDKIT: the number of rejected molecules is 0
-    Root [  7], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  73.80
+    Root [  7], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 119.43
         RDKIT: the number of rejected molecules is 0
-    Root [  8], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  77.94
+    Root [  8], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 124.39
         RDKIT: the number of rejected molecules is 0
-    Root [  9], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  71.16
+    Root [  9], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 110.86
         RDKIT: the number of rejected molecules is 0
-    Root [ 10], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  79.25
+    Root [ 10], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 126.01
         RDKIT: the number of rejected molecules is 0
-    Root [ 11], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  85.65
+    Root [ 11], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 135.95
         RDKIT: the number of rejected molecules is 0
-    Root [ 12], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  84.03
+    Root [ 12], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 131.99
         RDKIT: the number of rejected molecules is 0
-    Root [ 13], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  81.69
+    Root [ 13], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 127.87
         RDKIT: the number of rejected molecules is 0
-    Root [ 14], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  58.35
+    Root [ 14], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  90.69
         RDKIT: the number of rejected molecules is 0
-    Root [ 15], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  61.96
+    Root [ 15], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  96.68
         RDKIT: the number of rejected molecules is 0
-    Root [ 16], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  79.60
+    Root [ 16], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 126.97
         RDKIT: the number of rejected molecules is 0
-    Root [ 17], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  78.72
+    Root [ 17], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 127.65
         RDKIT: the number of rejected molecules is 0
-    Root [ 18], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  81.50
+    Root [ 18], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 133.40
         RDKIT: the number of rejected molecules is 0
-    Root [ 19], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  85.34
+    Root [ 19], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 139.28
         RDKIT: the number of rejected molecules is 0
-    Root [ 20], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  80.80
+    Root [ 20], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 132.11
         RDKIT: the number of rejected molecules is 0
-    Root [ 21], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  78.95
+    Root [ 21], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 129.97
         RDKIT: the number of rejected molecules is 0
-    Root [ 22], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  80.12
+    Root [ 22], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 129.93
         RDKIT: the number of rejected molecules is 0
-    Root [ 23], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  72.87
+    Root [ 23], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 116.55
         RDKIT: the number of rejected molecules is 0
-    Root [ 24], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  66.00
+    Root [ 24], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 103.93
         RDKIT: the number of rejected molecules is 0
-    Root [ 25], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  77.51
+    Root [ 25], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 125.57
         RDKIT: the number of rejected molecules is 0
-    Root [ 26], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  76.22
+    Root [ 26], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 123.06
         RDKIT: the number of rejected molecules is 0
-    Root [ 27], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  72.29
+    Root [ 27], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 117.25
         RDKIT: the number of rejected molecules is 0
-    Root [ 28], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  87.09
+    Root [ 28], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 141.77
         RDKIT: the number of rejected molecules is 0
-    Root [ 29], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  84.27
+    Root [ 29], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 133.72
         RDKIT: the number of rejected molecules is 0
-    Root [ 30], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  79.84
+    Root [ 30], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 132.42
         RDKIT: the number of rejected molecules is 0
-    Root [ 31], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  84.73
+    Root [ 31], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 127.24
         RDKIT: the number of rejected molecules is 0
-    Root [ 32], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  59.73
+    Root [ 32], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  92.62
         RDKIT: the number of rejected molecules is 0
-    Root [ 33], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  84.36
+    Root [ 33], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 134.59
         RDKIT: the number of rejected molecules is 0
-    Root [ 34], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  84.68
+    Root [ 34], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 135.44
         RDKIT: the number of rejected molecules is 0
-    Root [ 35], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  69.68
+    Root [ 35], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 111.33
         RDKIT: the number of rejected molecules is 0
-    Root [ 36], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  71.79
+    Root [ 36], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 113.96
         RDKIT: the number of rejected molecules is 0
-    Root [ 37], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  67.75
+    Root [ 37], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 107.07
         RDKIT: the number of rejected molecules is 0
-    Root [ 38], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  64.35
+    Root [ 38], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 100.80
         RDKIT: the number of rejected molecules is 0
-    Root [ 39], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  74.35
+    Root [ 39], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 117.10
         RDKIT: the number of rejected molecules is 0
       From all attachments events, 40 fragments were collected in layer 1 prior to all pruning/filtering.
       From accepted frags ( N= 0 ) in layer 1, 
@@ -494,17 +496,19 @@ Reading in 31 grids
           -------------------------------------------
           37   root frags intended for the next layer were further pruned via rmsd.
           0    candidate root frags intended for the next layer were ignored due to limit on root size.
+          For prune_rmsd_mw frags,    0 frags couldn't be written out due to failed H-capping protocol
+                                       37 frags couldn't be written out due to failed torsion checks on H-caps.
 
     Layer 1 completed! Moving on the next layer with 3 root fragments.
-    For Layer 1, time duration is: 3.30 seconds with 12.13 with attachments per second.
+    For Layer 1, time duration is: 1.35 seconds with 29.56 with attachments per second.
 
   ##### Entering layer of growth #2
   Root size at the beginning of this layer = 3
-    Root [  0], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  50.39
+    Root [  0], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  73.03
         RDKIT: the number of rejected molecules is 0
-    Root [  1], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.03 |A/S  37.89
+    Root [  1], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  54.16
         RDKIT: the number of rejected molecules is 0
-    Root [  2], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.03 |A/S  37.16
+    Root [  2], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  53.66
         RDKIT: the number of rejected molecules is 0
       From all attachments events, 3 fragments were collected in layer 2 prior to all pruning/filtering.
       From accepted frags ( N= 0 ) in layer 2, 
@@ -520,15 +524,17 @@ Reading in 31 grids
           -------------------------------------------
           1    root frags intended for the next layer were further pruned via rmsd.
           0    candidate root frags intended for the next layer were ignored due to limit on root size.
+          For prune_rmsd_mw frags,    0 frags couldn't be written out due to failed H-capping protocol
+                                        1 frags couldn't be written out due to failed torsion checks on H-caps.
 
     Layer 2 completed! Moving on the next layer with 2 root fragments.
-    For Layer 2, time duration is: 0.28 seconds with 10.66 with attachments per second.
+    For Layer 2, time duration is: 0.13 seconds with 23.52 with attachments per second.
 
   ##### Entering layer of growth #3
   Root size at the beginning of this layer = 2
-    Root [  0], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.06 |A/S  16.95
+    Root [  0], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.04 |A/S  24.00
         RDKIT: the number of rejected molecules is 0
-    Root [  1], sccf atts      1 |acc mols    2 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    2 |S     0.19 |A/S   5.27
+    Root [  1], sccf atts      1 |acc mols    2 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    2 |S     0.14 |A/S   7.08
         RDKIT: the number of rejected molecules is 0
       From all attachments events, 2 fragments were collected in layer 3 prior to all pruning/filtering.
       From accepted frags ( N= 0 ) in layer 3, 
@@ -546,15 +552,15 @@ Reading in 31 grids
           0    candidate root frags intended for the next layer were ignored due to limit on root size.
 
     Layer 3 completed! Moving on the next layer with 3 root fragments.
-    For Layer 3, time duration is: 0.46 seconds with 4.36 with attachments per second.
+    For Layer 3, time duration is: 0.26 seconds with 7.65 with attachments per second.
 
   ##### Entering layer of growth #4
   Root size at the beginning of this layer = 3
-    Root [  0], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  92.05
+    Root [  0], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 149.65
         RDKIT: the number of rejected molecules is 0
-    Root [  1], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 103.51
+    Root [  1], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 177.07
         RDKIT: the number of rejected molecules is 0
-    Root [  2], sccf atts      1 |acc mols    0 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    0 |S     0.03 |A/S  36.22
+    Root [  2], sccf atts      1 |acc mols    0 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    0 |S     0.02 |A/S  49.50
         RDKIT: the number of rejected molecules is 0
       From all attachments events, 3 fragments were collected in layer 4 prior to all pruning/filtering.
       From accepted frags ( N= 0 ) in layer 4, 
@@ -572,13 +578,13 @@ Reading in 31 grids
           0    candidate root frags intended for the next layer were ignored due to limit on root size.
 
     Layer 4 completed! Moving on the next layer with 2 root fragments.
-    For Layer 4, time duration is: 0.19 seconds with 15.89 with attachments per second.
+    For Layer 4, time duration is: 0.09 seconds with 35.05 with attachments per second.
 
   ##### Entering layer of growth #5
   Root size at the beginning of this layer = 2
-    Root [  0], sccf atts      1 |acc mols    1 |cmpd    1 |fltrd cmpd    0 |Prnd    0 |Kpt    0 |S     0.05 |A/S  20.03
+    Root [  0], sccf atts      1 |acc mols    1 |cmpd    1 |fltrd cmpd    0 |Prnd    0 |Kpt    0 |S     0.06 |A/S  16.18
         RDKIT: the number of rejected molecules is 0
-    Root [  1], sccf atts      1 |acc mols    1 |cmpd    1 |fltrd cmpd    0 |Prnd    0 |Kpt    0 |S     0.09 |A/S  11.44
+    Root [  1], sccf atts      1 |acc mols    1 |cmpd    1 |fltrd cmpd    0 |Prnd    0 |Kpt    0 |S     0.11 |A/S   8.77
         RDKIT: the number of rejected molecules is 0
       From all attachments events, 2 fragments were collected in layer 5 prior to all pruning/filtering.
       From accepted frags ( N= 2 ) in layer 5, 
@@ -593,7 +599,7 @@ Reading in 31 grids
           0    candidate root frags intended for the next layer were ignored due to limit on root size.
 
     Layer 5 completed! Moving on the next layer with 0 root fragments.
-    For Layer 5, time duration is: 0.14 seconds with 14.47 with attachments per second.
+    For Layer 5, time duration is: 0.18 seconds with 11.32 with attachments per second.
 
 Root is empty, continuing.
 
@@ -602,7 +608,7 @@ There are no more anchors. Exiting.
 
 
 50 Attachments Processed
-Total elapsed time:	11.442 seconds
-4.370 # atts / sec
-Virtual Memory Used for this process: 225036 KiloBytes
-Physical Memory Used for this process: 111900 KiloBytes
+Total elapsed time:	6.501 seconds
+Number of attachments per second:	7.691
+Virtual memory used for this process: 430748 kilobytes
+Physical memory used for this process: 243580 kilobytes

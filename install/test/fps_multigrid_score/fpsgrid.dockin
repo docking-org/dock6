@@ -62,6 +62,7 @@ ligand_outfile_prefix                                        fpsgrid
 write_mol_solvation                                          no
 write_footprints                                             no
 write_orientations                                           no
-num_scored_conformers                                        1
+num_final_scored_poses                                       1
+num_preclustered_conformers                                  1
 score_threshold                                              100.0
 rank_ligands                                                 no

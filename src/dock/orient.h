@@ -7,6 +7,7 @@
 #include "dockmol.h"
 #include "sphere.h"
 #include "utils.h"
+#include "fragment.h"
 class Parameter_Reader;
 
 
@@ -166,6 +167,7 @@ class           Orient {
     void            extract_coords_from_clique();       // extracts the spheres 
                                                         // and centers from a
                                                         // clique
+    bool            iso_new_next_orientation(Fragment &, bool);
     void            calculate_translations();
     void            translate_clique_to_origin();
     void            calculate_rotation();

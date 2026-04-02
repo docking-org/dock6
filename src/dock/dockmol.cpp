@@ -1404,8 +1404,9 @@ copy_molecule(DOCKMol & target, const DOCKMol & original)
     // for(i=0;i<original.num_atoms*original.num_atoms;i++)
     // target.ie_neighbor_list[i] = original.ie_neighbor_list[i];
 
-    for (i = 0; i < 2 * original.num_bonds; i++)
+    for (i = 0; i < 2 * original.num_bonds; i++){
         target.atom_child_list[i] = original.atom_child_list[i];
+    }
 }
 
 //DOCKMol::initialize_from_mol2(std::ifstream &)

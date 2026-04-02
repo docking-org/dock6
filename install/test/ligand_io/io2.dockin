@@ -13,7 +13,8 @@ score_molecules                                              no
 ligand_outfile_prefix                                        io2
 write_mol_solvation                                          no
 write_orientations                                           yes
-num_scored_conformers                                        1
+num_final_scored_poses                                       1
+num_preclustered_conformers                                  1
 score_threshold                                              100.0
 rank_ligands                                                 yes
 max_ranked_ligands                                           500

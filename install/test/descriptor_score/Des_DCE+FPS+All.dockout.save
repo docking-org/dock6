@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.12
+DOCK v6.13
 
-Released September 2024
+Released July 2025
 Copyright UCSF
 --------------------------------------
 
@@ -208,7 +208,8 @@ write_mol_solvation                                          no
 write_footprints                                             yes
 write_hbonds                                                 yes
 write_orientations                                           no
-num_scored_conformers                                        1
+num_final_scored_poses                                       1
+num_preclustered_conformers                                  1
 score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
@@ -228,7 +229,7 @@ Initializing typer for Volume Overlap Score within Descriptor Score...
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.124 seconds
+ Elapsed time for docking:	0.071 seconds
 
  Anchors:		1
  Orientations:		1
@@ -279,7 +280,7 @@ Molecule: MOL
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.119 seconds
+ Elapsed time for docking:	0.072 seconds
 
  Anchors:		1
  Orientations:		1
@@ -330,7 +331,7 @@ Molecule: MOL
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.118 seconds
+ Elapsed time for docking:	0.071 seconds
 
  Anchors:		1
  Orientations:		1
@@ -381,7 +382,7 @@ Molecule: MOL
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.129 seconds
+ Elapsed time for docking:	0.071 seconds
 
  Anchors:		1
  Orientations:		1
@@ -432,7 +433,7 @@ Molecule: MOL
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.070 seconds
 
  Anchors:		1
  Orientations:		1
@@ -483,7 +484,7 @@ Molecule: MOL
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.072 seconds
+ Elapsed time for docking:	0.070 seconds
 
  Anchors:		1
  Orientations:		1
@@ -534,7 +535,7 @@ Molecule: MOL
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.070 seconds
+ Elapsed time for docking:	0.072 seconds
 
  Anchors:		1
  Orientations:		1
@@ -586,7 +587,7 @@ WARNING: sum of squares close to zero in norm calculation.
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.071 seconds
+ Elapsed time for docking:	0.073 seconds
 
  Anchors:		1
  Orientations:		1
@@ -638,7 +639,7 @@ WARNING: sum of squares close to zero in norm calculation.
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.073 seconds
+ Elapsed time for docking:	0.071 seconds
 
  Anchors:		1
  Orientations:		1
@@ -689,7 +690,7 @@ Molecule: MOL
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.073 seconds
+ Elapsed time for docking:	0.069 seconds
 
  Anchors:		1
  Orientations:		1
@@ -739,7 +740,7 @@ Molecule: MOL
 
 
 10 Molecules Processed
-Total elapsed time:	3.054 seconds
-Number of molecules per second:	3.275
-Virtual memory used for this process: 90296 kilobytes
-Physical memory used for this process: 18472 kilobytes
+Total elapsed time:	2.878 seconds
+Number of molecules per second:	3.475
+Virtual memory used for this process: 95396 kilobytes
+Physical memory used for this process: 10464 kilobytes

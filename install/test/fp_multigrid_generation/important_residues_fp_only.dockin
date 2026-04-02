@@ -57,5 +57,5 @@ ligand_outfile_prefix                                        important_residues_
 write_footprints                                             no
 write_hbonds                                                 no
 write_orientations                                           no
-num_scored_conformers                                        1
+num_final_scored_poses                                       1
 rank_ligands                                                 no

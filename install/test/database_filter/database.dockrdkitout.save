@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.12
+DOCK v6.13
 
-Released April 2024
+Released July 2025
 Copyright UCSF
 --------------------------------------
 
@@ -82,7 +82,8 @@ Molecule Library Output Parameters
 ligand_outfile_prefix                                        database_rd_db
 write_mol_solvation                                          no
 write_orientations                                           no
-num_scored_conformers                                        1
+num_final_scored_poses                                       1
+num_preclustered_conformers                                  1
 score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
@@ -115,7 +116,7 @@ Initializing Library File Routines...
 
 Filter Rejected: Too many hydrogen bond donors: 2
 
- Elapsed time for docking:	0.098 seconds
+ Elapsed time for docking:	0.042 seconds
 
  Anchors:		1
  Orientations:		1
@@ -148,7 +149,7 @@ Filter Rejected: Too many hydrogen bond donors: 2
 
 Filter Rejected: Too many hydrogen bond donors: 2
 
- Elapsed time for docking:	0.077 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -179,7 +180,7 @@ Filter Rejected: Too many hydrogen bond donors: 2
  RD_MACCS:         	01111100101010010010011110000100000000010100111001000000100001000100011000100000010100010100000000000100000000000000010000000000100000000000000000000000000000000000000
 
 
- Elapsed time for docking:	0.079 seconds
+ Elapsed time for docking:	0.030 seconds
 
  Anchors:		1
  Orientations:		1
@@ -213,7 +214,7 @@ Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: Too many hydrogen bond acceptors: 10
 Filter Rejected: tpsa is too high: 122.65
 
- Elapsed time for docking:	0.077 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -247,7 +248,7 @@ Filter Rejected: tpsa is too high: 122.65
 Filter Rejected: Too many hydrogen bond acceptors: 10
 Filter Rejected: tpsa is too high: 122.65
 
- Elapsed time for docking:	0.077 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -283,7 +284,7 @@ Filter Rejected: Too many hydrogen bond acceptors: 10
 Filter Rejected: Formal charge too high: 2.00 > 1.00
 Filter Rejected: tpsa is too high: 123.90
 
- Elapsed time for docking:	0.077 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -317,7 +318,7 @@ Filter Rejected: tpsa is too high: 123.90
 Filter Rejected: Too many hydrogen bond acceptors: 10
 Filter Rejected: tpsa is too high: 105.81
 
- Elapsed time for docking:	0.077 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -350,7 +351,7 @@ Filter Rejected: tpsa is too high: 105.81
 
 Filter Rejected: tpsa is too high: 75.54
 
- Elapsed time for docking:	0.078 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -383,7 +384,7 @@ Filter Rejected: tpsa is too high: 75.54
 
 Filter Rejected: tpsa is too high: 66.31
 
- Elapsed time for docking:	0.078 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -416,7 +417,7 @@ Filter Rejected: tpsa is too high: 66.31
 
 Filter Rejected: Not enough heavy atoms: 9 < 10
 
- Elapsed time for docking:	0.068 seconds
+ Elapsed time for docking:	0.025 seconds
 
  Anchors:		1
  Orientations:		1
@@ -449,7 +450,7 @@ Filter Rejected: Not enough heavy atoms: 9 < 10
 
 Filter Rejected: tpsa is too high: 85.88
 
- Elapsed time for docking:	0.074 seconds
+ Elapsed time for docking:	0.027 seconds
 
  Anchors:		1
  Orientations:		1
@@ -483,7 +484,7 @@ Filter Rejected: tpsa is too high: 85.88
 Filter Rejected: Too many rotatable bonds: 6 > 5
 Filter Rejected: tpsa is too high: 86.14
 
- Elapsed time for docking:	0.074 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -517,7 +518,7 @@ Filter Rejected: tpsa is too high: 86.14
 Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: Molecular Weight too low: 184.20 < 200.00
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -548,7 +549,7 @@ Filter Rejected: Molecular Weight too low: 184.20 < 200.00
  RD_MACCS:         	01111101010010101000011100010100000000010100010000000000000001000101111000001100000000000010000000000100000000000000100000000000000000000000000000000000000000000000000
 
 
- Elapsed time for docking:	0.077 seconds
+ Elapsed time for docking:	0.030 seconds
 
  Anchors:		1
  Orientations:		1
@@ -579,7 +580,7 @@ Filter Rejected: Molecular Weight too low: 184.20 < 200.00
  RD_MACCS:         	01111101000010101000011100000110000000010100010000000000000001000100111000000100000000000000000000000100000000000000000000000000000000000000000000000000000000000000000
 
 
- Elapsed time for docking:	0.077 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -613,7 +614,7 @@ Filter Rejected: Molecular Weight too low: 184.20 < 200.00
 Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: Molecular Weight too low: 196.23 < 200.00
 
- Elapsed time for docking:	0.075 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -644,7 +645,7 @@ Filter Rejected: Molecular Weight too low: 196.23 < 200.00
  RD_MACCS:         	01111101001010101000011100000110000000010100010000000000000001000100111000000100000000000000000000000100100000000000000000000000000000000000000000000000000000000000000
 
 
- Elapsed time for docking:	0.077 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -677,7 +678,7 @@ Filter Rejected: Molecular Weight too low: 196.23 < 200.00
 
 Filter Rejected: Too many hydrogen bond donors: 2
 
- Elapsed time for docking:	0.079 seconds
+ Elapsed time for docking:	0.031 seconds
 
  Anchors:		1
  Orientations:		1
@@ -712,7 +713,7 @@ Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: Molecular Weight too high: 410.52 > 400.00
 Filter Rejected: too many stereocenters: 8
 
- Elapsed time for docking:	0.086 seconds
+ Elapsed time for docking:	0.032 seconds
 
  Anchors:		1
  Orientations:		1
@@ -747,7 +748,7 @@ Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: Molecular Weight too high: 410.52 > 400.00
 Filter Rejected: too many stereocenters: 8
 
- Elapsed time for docking:	0.086 seconds
+ Elapsed time for docking:	0.032 seconds
 
  Anchors:		1
  Orientations:		1
@@ -781,7 +782,7 @@ Filter Rejected: too many stereocenters: 8
 Filter Rejected: Too many hydrogen bond donors: 3
 Filter Rejected: tpsa is too high: 74.98
 
- Elapsed time for docking:	0.079 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -816,7 +817,7 @@ Filter Rejected: Too many hydrogen bond donors: 4
 Filter Rejected: Too many hydrogen bond acceptors: 10
 Filter Rejected: tpsa is too high: 129.80
 
- Elapsed time for docking:	0.074 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -852,7 +853,7 @@ Filter Rejected: Too many hydrogen bond donors: 3
 Filter Rejected: Formal charge too high: 2.00 > 1.00
 Filter Rejected: tpsa is too high: 86.88
 
- Elapsed time for docking:	0.075 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -888,7 +889,7 @@ Filter Rejected: Too many hydrogen bond donors: 3
 Filter Rejected: Formal charge too high: 2.00 > 1.00
 Filter Rejected: tpsa is too high: 86.88
 
- Elapsed time for docking:	0.075 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -924,7 +925,7 @@ Filter Rejected: Too many hydrogen bond donors: 3
 Filter Rejected: Formal charge too high: 2.00 > 1.00
 Filter Rejected: tpsa is too high: 86.88
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -957,7 +958,7 @@ Filter Rejected: tpsa is too high: 86.88
 
 Filter Rejected: Too many hydrogen bond donors: 2
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -988,7 +989,7 @@ Filter Rejected: Too many hydrogen bond donors: 2
  RD_MACCS:         	01111101101010111000011100000111001000010000011000000000000001000101011000010110000101000010000000000000100100000000100101000000001000000000000001000000000000000000000
 
 
- Elapsed time for docking:	0.077 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -1022,7 +1023,7 @@ Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: Too many hydrogen bond donors: 6
 Filter Rejected: tpsa is too high: 94.86
 
- Elapsed time for docking:	0.077 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -1056,7 +1057,7 @@ Filter Rejected: tpsa is too high: 94.86
 Filter Rejected: Too many hydrogen bond donors: 6
 Filter Rejected: tpsa is too high: 94.86
 
- Elapsed time for docking:	0.077 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -1089,7 +1090,7 @@ Filter Rejected: tpsa is too high: 94.86
 
 Filter Rejected: tpsa is too high: 63.07
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -1123,7 +1124,7 @@ Filter Rejected: tpsa is too high: 63.07
 Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: Molecular Weight too low: 189.24 < 200.00
 
- Elapsed time for docking:	0.074 seconds
+ Elapsed time for docking:	0.027 seconds
 
  Anchors:		1
  Orientations:		1
@@ -1156,7 +1157,7 @@ Filter Rejected: Molecular Weight too low: 189.24 < 200.00
 
 Filter Rejected: Molecular Weight too low: 139.22 < 200.00
 
- Elapsed time for docking:	0.072 seconds
+ Elapsed time for docking:	0.027 seconds
 
  Anchors:		1
  Orientations:		1
@@ -1190,7 +1191,7 @@ Filter Rejected: Molecular Weight too low: 139.22 < 200.00
 Filter Rejected: Too many rotatable bonds: 6 > 5
 Filter Rejected: tpsa is too high: 71.67
 
- Elapsed time for docking:	0.075 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -1225,7 +1226,7 @@ Filter Rejected: Too many hydrogen bond donors: 6
 Filter Rejected: Molecular Weight too high: 463.15 > 400.00
 Filter Rejected: tpsa is too high: 103.46
 
- Elapsed time for docking:	0.080 seconds
+ Elapsed time for docking:	0.030 seconds
 
  Anchors:		1
  Orientations:		1
@@ -1258,7 +1259,7 @@ Filter Rejected: tpsa is too high: 103.46
 
 Filter Rejected: tpsa is too high: 63.07
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -1292,7 +1293,7 @@ Filter Rejected: tpsa is too high: 63.07
 Filter Rejected: Too many hydrogen bond donors: 3
 Filter Rejected: tpsa is too high: 68.76
 
- Elapsed time for docking:	0.077 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -1326,7 +1327,7 @@ Filter Rejected: tpsa is too high: 68.76
 Filter Rejected: Too many hydrogen bond donors: 3
 Filter Rejected: tpsa is too high: 68.76
 
- Elapsed time for docking:	0.077 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -1360,7 +1361,7 @@ Filter Rejected: tpsa is too high: 68.76
 Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: tpsa is too high: 86.82
 
- Elapsed time for docking:	0.078 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -1395,7 +1396,7 @@ Filter Rejected: Too many hydrogen bond donors: 5
 Filter Rejected: Molecular Weight too low: 185.17 < 200.00
 Filter Rejected: tpsa is too high: 126.61
 
- Elapsed time for docking:	0.073 seconds
+ Elapsed time for docking:	0.027 seconds
 
  Anchors:		1
  Orientations:		1
@@ -1429,7 +1430,7 @@ Filter Rejected: tpsa is too high: 126.61
 Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: tpsa is too high: 83.30
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -1463,7 +1464,7 @@ Filter Rejected: tpsa is too high: 83.30
 Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: tpsa is too high: 74.85
 
- Elapsed time for docking:	0.081 seconds
+ Elapsed time for docking:	0.030 seconds
 
  Anchors:		1
  Orientations:		1
@@ -1496,7 +1497,7 @@ Filter Rejected: tpsa is too high: 74.85
 
 Filter Rejected: Too many hydrogen bond donors: 2
 
- Elapsed time for docking:	0.074 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -1530,7 +1531,7 @@ Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: Too many hydrogen bond donors: 3
 Filter Rejected: Molecular Weight too low: 185.21 < 200.00
 
- Elapsed time for docking:	0.077 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -1564,7 +1565,7 @@ Filter Rejected: Molecular Weight too low: 185.21 < 200.00
 Filter Rejected: Too many hydrogen bond donors: 4
 Filter Rejected: tpsa is too high: 100.08
 
- Elapsed time for docking:	0.079 seconds
+ Elapsed time for docking:	0.030 seconds
 
  Anchors:		1
  Orientations:		1
@@ -1600,7 +1601,7 @@ Filter Rejected: Too many hydrogen bond donors: 3
 Filter Rejected: Formal charge too high: 2.00 > 1.00
 Filter Rejected: tpsa is too high: 86.88
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -1635,7 +1636,7 @@ Filter Rejected: Too many hydrogen bond donors: 6
 Filter Rejected: Molecular Weight too high: 463.15 > 400.00
 Filter Rejected: tpsa is too high: 103.46
 
- Elapsed time for docking:	0.080 seconds
+ Elapsed time for docking:	0.030 seconds
 
  Anchors:		1
  Orientations:		1
@@ -1669,7 +1670,7 @@ Filter Rejected: tpsa is too high: 103.46
 Filter Rejected: Too many hydrogen bond donors: 3
 Filter Rejected: tpsa is too high: 112.95
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -1703,7 +1704,7 @@ Filter Rejected: tpsa is too high: 112.95
 Filter Rejected: Too many hydrogen bond donors: 4
 Filter Rejected: tpsa is too high: 117.79
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -1736,7 +1737,7 @@ Filter Rejected: tpsa is too high: 117.79
 
 Filter Rejected: Too many hydrogen bond donors: 3
 
- Elapsed time for docking:	0.085 seconds
+ Elapsed time for docking:	0.031 seconds
 
  Anchors:		1
  Orientations:		1
@@ -1773,7 +1774,7 @@ Filter Rejected: Too many hydrogen bond acceptors: 12
 Filter Rejected: Molecular Weight too high: 520.50 > 400.00
 Filter Rejected: tpsa is too high: 184.01
 
- Elapsed time for docking:	0.089 seconds
+ Elapsed time for docking:	0.033 seconds
 
  Anchors:		1
  Orientations:		1
@@ -1808,7 +1809,7 @@ Filter Rejected: Too many rotatable bonds: 6 > 5
 Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: tpsa is too high: 101.51
 
- Elapsed time for docking:	0.074 seconds
+ Elapsed time for docking:	0.027 seconds
 
  Anchors:		1
  Orientations:		1
@@ -1843,7 +1844,7 @@ Filter Rejected: Too many hydrogen bond donors: 5
 Filter Rejected: Formal charge too high: 2.00 > 1.00
 Filter Rejected: tpsa is too high: 68.72
 
- Elapsed time for docking:	0.079 seconds
+ Elapsed time for docking:	0.030 seconds
 
  Anchors:		1
  Orientations:		1
@@ -1878,7 +1879,7 @@ Filter Rejected: Too many rotatable bonds: 6 > 5
 Filter Rejected: Too many hydrogen bond donors: 3
 Filter Rejected: tpsa is too high: 114.53
 
- Elapsed time for docking:	0.074 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -1913,7 +1914,7 @@ Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: Molecular Weight too low: 156.14 < 200.00
 Filter Rejected: tpsa is too high: 74.95
 
- Elapsed time for docking:	0.069 seconds
+ Elapsed time for docking:	0.027 seconds
 
  Anchors:		1
  Orientations:		1
@@ -1948,7 +1949,7 @@ Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: Molecular Weight too low: 199.19 < 200.00
 Filter Rejected: tpsa is too high: 64.07
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -1982,7 +1983,7 @@ Filter Rejected: tpsa is too high: 64.07
 Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: tpsa is too high: 83.30
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -2016,7 +2017,7 @@ Filter Rejected: tpsa is too high: 83.30
 Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: Molecular Weight too low: 139.22 < 200.00
 
- Elapsed time for docking:	0.072 seconds
+ Elapsed time for docking:	0.027 seconds
 
  Anchors:		1
  Orientations:		1
@@ -2051,7 +2052,7 @@ Filter Rejected: Not enough heavy atoms: 9 < 10
 Filter Rejected: Too many hydrogen bond donors: 3
 Filter Rejected: Molecular Weight too low: 165.00 < 200.00
 
- Elapsed time for docking:	0.068 seconds
+ Elapsed time for docking:	0.025 seconds
 
  Anchors:		1
  Orientations:		1
@@ -2085,7 +2086,7 @@ Filter Rejected: Molecular Weight too low: 165.00 < 200.00
 Filter Rejected: Too many hydrogen bond donors: 7
 Filter Rejected: tpsa is too high: 169.94
 
- Elapsed time for docking:	0.077 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -2119,7 +2120,7 @@ Filter Rejected: tpsa is too high: 169.94
 Filter Rejected: Too many hydrogen bond donors: 8
 Filter Rejected: tpsa is too high: 171.19
 
- Elapsed time for docking:	0.077 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -2153,7 +2154,7 @@ Filter Rejected: tpsa is too high: 171.19
 Filter Rejected: Too many hydrogen bond donors: 3
 Filter Rejected: tpsa is too high: 77.75
 
- Elapsed time for docking:	0.078 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -2187,7 +2188,7 @@ Filter Rejected: tpsa is too high: 77.75
 Filter Rejected: Too many hydrogen bond donors: 3
 Filter Rejected: tpsa is too high: 79.69
 
- Elapsed time for docking:	0.074 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -2221,7 +2222,7 @@ Filter Rejected: tpsa is too high: 79.69
 Filter Rejected: Too many hydrogen bond donors: 3
 Filter Rejected: tpsa is too high: 68.76
 
- Elapsed time for docking:	0.077 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -2255,7 +2256,7 @@ Filter Rejected: tpsa is too high: 68.76
 Filter Rejected: Too many hydrogen bond donors: 3
 Filter Rejected: tpsa is too high: 68.76
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -2290,7 +2291,7 @@ Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: Molecular Weight too low: 169.12 < 200.00
 Filter Rejected: tpsa is too high: 114.29
 
- Elapsed time for docking:	0.069 seconds
+ Elapsed time for docking:	0.025 seconds
 
  Anchors:		1
  Orientations:		1
@@ -2325,7 +2326,7 @@ Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: Molecular Weight too low: 169.12 < 200.00
 Filter Rejected: tpsa is too high: 114.29
 
- Elapsed time for docking:	0.074 seconds
+ Elapsed time for docking:	0.027 seconds
 
  Anchors:		1
  Orientations:		1
@@ -2359,7 +2360,7 @@ Filter Rejected: tpsa is too high: 114.29
 Filter Rejected: Too many hydrogen bond donors: 4
 Filter Rejected: Formal charge too high: 2.00 > 1.00
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -2393,7 +2394,7 @@ Filter Rejected: Formal charge too high: 2.00 > 1.00
 Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: Molecular Weight too low: 182.61 < 200.00
 
- Elapsed time for docking:	0.070 seconds
+ Elapsed time for docking:	0.026 seconds
 
  Anchors:		1
  Orientations:		1
@@ -2427,7 +2428,7 @@ Filter Rejected: Molecular Weight too low: 182.61 < 200.00
 Filter Rejected: Too many hydrogen bond donors: 4
 Filter Rejected: Formal charge too high: 2.00 > 1.00
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -2461,7 +2462,7 @@ Filter Rejected: Formal charge too high: 2.00 > 1.00
 Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: tpsa is too high: 69.75
 
- Elapsed time for docking:	0.078 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -2494,7 +2495,7 @@ Filter Rejected: tpsa is too high: 69.75
 
 Filter Rejected: tpsa is too high: 72.30
 
- Elapsed time for docking:	0.078 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -2528,7 +2529,7 @@ Filter Rejected: tpsa is too high: 72.30
 Filter Rejected: Too many rotatable bonds: 7 > 5
 Filter Rejected: tpsa is too high: 68.12
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -2562,7 +2563,7 @@ Filter Rejected: tpsa is too high: 68.12
 Filter Rejected: Too many rotatable bonds: 7 > 5
 Filter Rejected: tpsa is too high: 68.12
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -2596,7 +2597,7 @@ Filter Rejected: tpsa is too high: 68.12
 Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: tpsa is too high: 103.78
 
- Elapsed time for docking:	0.074 seconds
+ Elapsed time for docking:	0.027 seconds
 
  Anchors:		1
  Orientations:		1
@@ -2630,7 +2631,7 @@ Filter Rejected: tpsa is too high: 103.78
 Filter Rejected: Too many rotatable bonds: 6 > 5
 Filter Rejected: tpsa is too high: 78.12
 
- Elapsed time for docking:	0.079 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -2665,7 +2666,7 @@ Filter Rejected: Too many rotatable bonds: 6 > 5
 Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: tpsa is too high: 79.37
 
- Elapsed time for docking:	0.079 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -2699,7 +2700,7 @@ Filter Rejected: tpsa is too high: 79.37
 Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: tpsa is too high: 77.17
 
- Elapsed time for docking:	0.077 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -2732,7 +2733,7 @@ Filter Rejected: tpsa is too high: 77.17
 
 Filter Rejected: tpsa is too high: 68.50
 
- Elapsed time for docking:	0.078 seconds
+ Elapsed time for docking:	0.030 seconds
 
  Anchors:		1
  Orientations:		1
@@ -2766,7 +2767,7 @@ Filter Rejected: tpsa is too high: 68.50
 Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: tpsa is too high: 60.05
 
- Elapsed time for docking:	0.078 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -2801,7 +2802,7 @@ Filter Rejected: Too many hydrogen bond donors: 3
 Filter Rejected: Formal charge too high: 2.00 > 1.00
 Filter Rejected: tpsa is too high: 61.30
 
- Elapsed time for docking:	0.078 seconds
+ Elapsed time for docking:	0.030 seconds
 
  Anchors:		1
  Orientations:		1
@@ -2836,7 +2837,7 @@ Filter Rejected: Too many hydrogen bond donors: 4
 Filter Rejected: Molecular Weight too low: 157.11 < 200.00
 Filter Rejected: tpsa is too high: 119.64
 
- Elapsed time for docking:	0.069 seconds
+ Elapsed time for docking:	0.025 seconds
 
  Anchors:		1
  Orientations:		1
@@ -2871,7 +2872,7 @@ Filter Rejected: Too many hydrogen bond donors: 4
 Filter Rejected: Molecular Weight too low: 157.11 < 200.00
 Filter Rejected: tpsa is too high: 119.64
 
- Elapsed time for docking:	0.072 seconds
+ Elapsed time for docking:	0.026 seconds
 
  Anchors:		1
  Orientations:		1
@@ -2902,7 +2903,7 @@ Filter Rejected: tpsa is too high: 119.64
  RD_MACCS:         	01111101111000101000011100010001010000010100000100000100000001000100010000000000000000001000000000000000000000000000010000000000000000000000000000000000000000000000000
 
 
- Elapsed time for docking:	0.080 seconds
+ Elapsed time for docking:	0.030 seconds
 
  Anchors:		1
  Orientations:		1
@@ -2933,7 +2934,7 @@ Filter Rejected: tpsa is too high: 119.64
  RD_MACCS:         	01011110101001000111011010001100010001100100111010110001000001000110100001000010110001010001000000000010100100000000000000000000001000000000000000010000000000000000000
 
 
- Elapsed time for docking:	0.085 seconds
+ Elapsed time for docking:	0.032 seconds
 
  Anchors:		1
  Orientations:		1
@@ -2964,7 +2965,7 @@ Filter Rejected: tpsa is too high: 119.64
  RD_MACCS:         	01011110101001010111011010001100010001100100111010110001000001100110100001010010110011010001000000000010100100000000010000000000001000000000000000010000000000000000000
 
 
- Elapsed time for docking:	0.085 seconds
+ Elapsed time for docking:	0.032 seconds
 
  Anchors:		1
  Orientations:		1
@@ -2995,7 +2996,7 @@ Filter Rejected: tpsa is too high: 119.64
  RD_MACCS:         	01011110101001000111011010001100010001100100111010110001000001000110100001000010110001010001000000000010100100000000000000000000001000000000000000010000000000000000000
 
 
- Elapsed time for docking:	0.085 seconds
+ Elapsed time for docking:	0.032 seconds
 
  Anchors:		1
  Orientations:		1
@@ -3026,7 +3027,7 @@ Filter Rejected: tpsa is too high: 119.64
  RD_MACCS:         	01011110101001010111011010001100010001100100111010110001000001100110100001010010110011010001000000000010100100000000010000000000001000000000000000010000000000000000000
 
 
- Elapsed time for docking:	0.085 seconds
+ Elapsed time for docking:	0.032 seconds
 
  Anchors:		1
  Orientations:		1
@@ -3061,7 +3062,7 @@ Filter Rejected: Too many hydrogen bond donors: 4
 Filter Rejected: Molecular Weight too low: 144.26 < 200.00
 Filter Rejected: Formal charge too high: 2.00 > 1.00
 
- Elapsed time for docking:	0.073 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -3095,7 +3096,7 @@ Filter Rejected: Formal charge too high: 2.00 > 1.00
 Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: tpsa is too high: 84.75
 
- Elapsed time for docking:	0.078 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -3129,7 +3130,7 @@ Filter Rejected: tpsa is too high: 84.75
 Filter Rejected: Too many hydrogen bond donors: 5
 Filter Rejected: tpsa is too high: 74.04
 
- Elapsed time for docking:	0.078 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -3163,7 +3164,7 @@ Filter Rejected: tpsa is too high: 74.04
 Filter Rejected: Too many hydrogen bond donors: 4
 Filter Rejected: tpsa is too high: 74.80
 
- Elapsed time for docking:	0.078 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -3197,7 +3198,7 @@ Filter Rejected: tpsa is too high: 74.80
 Filter Rejected: Too many hydrogen bond donors: 5
 Filter Rejected: tpsa is too high: 74.04
 
- Elapsed time for docking:	0.078 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -3231,7 +3232,7 @@ Filter Rejected: tpsa is too high: 74.04
 Filter Rejected: Too many hydrogen bond donors: 4
 Filter Rejected: tpsa is too high: 74.80
 
- Elapsed time for docking:	0.078 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -3268,7 +3269,7 @@ Filter Rejected: Molecular Weight too high: 427.41 > 400.00
 Filter Rejected: too many stereocenters: 7
 Filter Rejected: tpsa is too high: 143.11
 
- Elapsed time for docking:	0.091 seconds
+ Elapsed time for docking:	0.034 seconds
 
  Anchors:		1
  Orientations:		1
@@ -3299,7 +3300,7 @@ Filter Rejected: tpsa is too high: 143.11
  RD_MACCS:         	01111100111000101000011100000001010000010100000100000100000001000100010000000000000000001000000000000000000000000000010000000000000000000000000000000000000000000000000
 
 
- Elapsed time for docking:	0.079 seconds
+ Elapsed time for docking:	0.030 seconds
 
  Anchors:		1
  Orientations:		1
@@ -3330,7 +3331,7 @@ Filter Rejected: tpsa is too high: 143.11
  RD_MACCS:         	01111101111000101000011100010001010000010100000100000100000001000100010100000000000000001000000000000000000000000000010000000000000000000000000000000000000000000000000
 
 
- Elapsed time for docking:	0.084 seconds
+ Elapsed time for docking:	0.031 seconds
 
  Anchors:		1
  Orientations:		1
@@ -3361,7 +3362,7 @@ Filter Rejected: tpsa is too high: 143.11
  RD_MACCS:         	01010100101000010001010010000100000001100000011010000011000001100000001000011010000101010100010000001010000000000000010100000000100000000000000000000000000000000000000
 
 
- Elapsed time for docking:	0.077 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -3394,7 +3395,7 @@ Filter Rejected: tpsa is too high: 143.11
 
 Filter Rejected: Too many hydrogen bond donors: 2
 
- Elapsed time for docking:	0.077 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -3428,7 +3429,7 @@ Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: Too many hydrogen bond donors: 3
 Filter Rejected: tpsa is too high: 78.25
 
- Elapsed time for docking:	0.075 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -3459,7 +3460,7 @@ Filter Rejected: tpsa is too high: 78.25
  RD_MACCS:         	01111110001010110100001111000100000000010110011000000010000001000100011010000000000100100000100001001100000000000010000000000000000000000000000000000000000000000000000
 
 
- Elapsed time for docking:	0.078 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -3493,7 +3494,7 @@ Filter Rejected: tpsa is too high: 78.25
 Filter Rejected: Too many hydrogen bond donors: 3
 Filter Rejected: tpsa is too high: 103.54
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -3526,7 +3527,7 @@ Filter Rejected: tpsa is too high: 103.54
 
 Filter Rejected: Too many hydrogen bond donors: 3
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -3559,7 +3560,7 @@ Filter Rejected: Too many hydrogen bond donors: 3
 
 Filter Rejected: Too many hydrogen bond donors: 3
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -3593,7 +3594,7 @@ Filter Rejected: Too many hydrogen bond donors: 3
 Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: tpsa is too high: 79.63
 
- Elapsed time for docking:	0.075 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -3627,7 +3628,7 @@ Filter Rejected: tpsa is too high: 79.63
 Filter Rejected: Molecular Weight too low: 155.13 < 200.00
 Filter Rejected: tpsa is too high: 78.04
 
- Elapsed time for docking:	0.069 seconds
+ Elapsed time for docking:	0.025 seconds
 
  Anchors:		1
  Orientations:		1
@@ -3661,7 +3662,7 @@ Filter Rejected: tpsa is too high: 78.04
 Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: tpsa is too high: 84.75
 
- Elapsed time for docking:	0.074 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -3698,7 +3699,7 @@ Filter Rejected: Molecular Weight too high: 427.41 > 400.00
 Filter Rejected: too many stereocenters: 7
 Filter Rejected: tpsa is too high: 143.11
 
- Elapsed time for docking:	0.090 seconds
+ Elapsed time for docking:	0.034 seconds
 
  Anchors:		1
  Orientations:		1
@@ -3729,7 +3730,7 @@ Filter Rejected: tpsa is too high: 143.11
  RD_MACCS:         	01011110001101010001000010000100000000000110011010111000000001000100101010000010000101110100000001000110000100000010000100000000100000000000000000000000000000000000000
 
 
- Elapsed time for docking:	0.074 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -3763,7 +3764,7 @@ Filter Rejected: tpsa is too high: 143.11
 Filter Rejected: Too many hydrogen bond donors: 3
 Filter Rejected: tpsa is too high: 109.00
 
- Elapsed time for docking:	0.085 seconds
+ Elapsed time for docking:	0.032 seconds
 
  Anchors:		1
  Orientations:		1
@@ -3797,7 +3798,7 @@ Filter Rejected: tpsa is too high: 109.00
 Filter Rejected: Too many hydrogen bond donors: 3
 Filter Rejected: tpsa is too high: 102.48
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -3828,7 +3829,7 @@ Filter Rejected: tpsa is too high: 102.48
  RD_MACCS:         	01011100001101010000010010000100000000000100011000000000000011000100101000001010000101110100000000000110000100000000000100000000100000000000000000000000000000000000000
 
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -3859,7 +3860,7 @@ Filter Rejected: tpsa is too high: 102.48
  RD_MACCS:         	01011100001101000000010010000100000000000100011000000000000011000100101000000010000101110100000000000110000100000000010100000000100000000000000000000000000000000000000
 
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -3892,7 +3893,7 @@ Filter Rejected: tpsa is too high: 102.48
 
 Filter Rejected: tpsa is too high: 70.59
 
- Elapsed time for docking:	0.089 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -3926,7 +3927,7 @@ Filter Rejected: tpsa is too high: 70.59
 Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: tpsa is too high: 71.84
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -3960,7 +3961,7 @@ Filter Rejected: tpsa is too high: 71.84
 Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: tpsa is too high: 71.84
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -3993,7 +3994,7 @@ Filter Rejected: tpsa is too high: 71.84
 
 Filter Rejected: tpsa is too high: 70.59
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -4024,7 +4025,7 @@ Filter Rejected: tpsa is too high: 70.59
  RD_MACCS:         	01111110001111011000011110000100100000010100011001000100100110010000110000101011000001100100000000000110000100000000000100000000000000000000000000000000000000000000000
 
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -4058,7 +4059,7 @@ Filter Rejected: tpsa is too high: 70.59
 Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: tpsa is too high: 80.84
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -4093,7 +4094,7 @@ Filter Rejected: Too many rotatable bonds: 7 > 5
 Filter Rejected: Too many hydrogen bond donors: 5
 Filter Rejected: tpsa is too high: 113.02
 
- Elapsed time for docking:	0.078 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -4128,7 +4129,7 @@ Filter Rejected: Too many rotatable bonds: 9 > 5
 Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: tpsa is too high: 93.31
 
- Elapsed time for docking:	0.077 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -4162,7 +4163,7 @@ Filter Rejected: tpsa is too high: 93.31
 Filter Rejected: Too many rotatable bonds: 9 > 5
 Filter Rejected: tpsa is too high: 96.40
 
- Elapsed time for docking:	0.077 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -4197,7 +4198,7 @@ Filter Rejected: Too many hydrogen bond donors: 5
 Filter Rejected: Molecular Weight too low: 158.22 < 200.00
 Filter Rejected: tpsa is too high: 71.73
 
- Elapsed time for docking:	0.073 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -4228,7 +4229,7 @@ Filter Rejected: tpsa is too high: 71.73
  RD_MACCS:         	01111111011111010100000110001100000000011000011001101101110010000000110101110010100001100100000000000110000100000000000100000000000000000000000000000000000000000000000
 
 
- Elapsed time for docking:	0.073 seconds
+ Elapsed time for docking:	0.027 seconds
 
  Anchors:		1
  Orientations:		1
@@ -4262,7 +4263,7 @@ Filter Rejected: tpsa is too high: 71.73
 Filter Rejected: Too many hydrogen bond donors: 5
 Filter Rejected: tpsa is too high: 100.13
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -4295,7 +4296,7 @@ Filter Rejected: tpsa is too high: 100.13
 
 Filter Rejected: tpsa is too high: 88.09
 
- Elapsed time for docking:	0.077 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -4328,7 +4329,7 @@ Filter Rejected: tpsa is too high: 88.09
 
 Filter Rejected: Molecular Weight too low: 196.21 < 200.00
 
- Elapsed time for docking:	0.077 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -4359,7 +4360,7 @@ Filter Rejected: Molecular Weight too low: 196.21 < 200.00
  RD_MACCS:         	01111100001000110000010000000100000000000100011001000000100011000100001100000010000101000000010000000110100101000000000100000000000000000000000000000000000000000000000
 
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -4394,7 +4395,7 @@ Filter Rejected: Too many hydrogen bond donors: 6
 Filter Rejected: Molecular Weight too high: 463.15 > 400.00
 Filter Rejected: tpsa is too high: 103.46
 
- Elapsed time for docking:	0.080 seconds
+ Elapsed time for docking:	0.030 seconds
 
  Anchors:		1
  Orientations:		1
@@ -4428,7 +4429,7 @@ Filter Rejected: tpsa is too high: 103.46
 Filter Rejected: Too many hydrogen bond donors: 5
 Filter Rejected: tpsa is too high: 90.90
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -4461,7 +4462,7 @@ Filter Rejected: tpsa is too high: 90.90
 
 Filter Rejected: tpsa is too high: 78.04
 
- Elapsed time for docking:	0.073 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -4498,7 +4499,7 @@ Filter Rejected: Too many hydrogen bond acceptors: 10
 Filter Rejected: Molecular Weight too high: 431.23 > 400.00
 Filter Rejected: tpsa is too high: 117.19
 
- Elapsed time for docking:	0.082 seconds
+ Elapsed time for docking:	0.031 seconds
 
  Anchors:		1
  Orientations:		1
@@ -4534,7 +4535,7 @@ Filter Rejected: Too many hydrogen bond donors: 3
 Filter Rejected: Molecular Weight too low: 183.21 < 200.00
 Filter Rejected: tpsa is too high: 82.70
 
- Elapsed time for docking:	0.073 seconds
+ Elapsed time for docking:	0.027 seconds
 
  Anchors:		1
  Orientations:		1
@@ -4565,7 +4566,7 @@ Filter Rejected: tpsa is too high: 82.70
  RD_MACCS:         	01011110101001000101010000000100000000000000011110110011000000000001100000000010000001001000100000001000000000000000000100000000001000000000000000000000000000000000000
 
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -4599,7 +4600,7 @@ Filter Rejected: tpsa is too high: 82.70
 Filter Rejected: Formal charge too low: -3.00 < -1.00
 Filter Rejected: tpsa is too high: 138.33
 
- Elapsed time for docking:	0.081 seconds
+ Elapsed time for docking:	0.031 seconds
 
  Anchors:		1
  Orientations:		1
@@ -4633,7 +4634,7 @@ Filter Rejected: tpsa is too high: 138.33
 Filter Rejected: Formal charge too low: -2.00 < -1.00
 Filter Rejected: tpsa is too high: 135.50
 
- Elapsed time for docking:	0.081 seconds
+ Elapsed time for docking:	0.031 seconds
 
  Anchors:		1
  Orientations:		1
@@ -4664,7 +4665,7 @@ Filter Rejected: tpsa is too high: 135.50
  RD_MACCS:         	01111100111001101011011110001101110001110100110110000101000100000010110000000001110000001001000000000000100000000000010010000000000000000000000000000000000000000000000
 
 
- Elapsed time for docking:	0.080 seconds
+ Elapsed time for docking:	0.030 seconds
 
  Anchors:		1
  Orientations:		1
@@ -4695,7 +4696,7 @@ Filter Rejected: tpsa is too high: 135.50
  RD_MACCS:         	01111100111001101011011110001101110001110100110110000101000100000010110000000001110000001001000000000000100000000000010010000000000000000000000000000000000000000000000
 
 
- Elapsed time for docking:	0.080 seconds
+ Elapsed time for docking:	0.030 seconds
 
  Anchors:		1
  Orientations:		1
@@ -4729,7 +4730,7 @@ Filter Rejected: tpsa is too high: 135.50
 Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: tpsa is too high: 74.69
 
- Elapsed time for docking:	0.070 seconds
+ Elapsed time for docking:	0.026 seconds
 
  Anchors:		1
  Orientations:		1
@@ -4763,7 +4764,7 @@ Filter Rejected: tpsa is too high: 74.69
 Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: tpsa is too high: 117.57
 
- Elapsed time for docking:	0.078 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -4798,7 +4799,7 @@ Filter Rejected: Too many rotatable bonds: 7 > 5
 Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: tpsa is too high: 127.22
 
- Elapsed time for docking:	0.079 seconds
+ Elapsed time for docking:	0.030 seconds
 
  Anchors:		1
  Orientations:		1
@@ -4832,7 +4833,7 @@ Filter Rejected: tpsa is too high: 127.22
 Filter Rejected: Too many rotatable bonds: 7 > 5
 Filter Rejected: tpsa is too high: 130.31
 
- Elapsed time for docking:	0.079 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -4866,7 +4867,7 @@ Filter Rejected: tpsa is too high: 130.31
 Filter Rejected: Too many rotatable bonds: 8 > 5
 Filter Rejected: tpsa is too high: 98.35
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -4899,7 +4900,7 @@ Filter Rejected: tpsa is too high: 98.35
 
 Filter Rejected: tpsa is too high: 75.77
 
- Elapsed time for docking:	0.081 seconds
+ Elapsed time for docking:	0.030 seconds
 
  Anchors:		1
  Orientations:		1
@@ -4933,7 +4934,7 @@ Filter Rejected: tpsa is too high: 75.77
 Filter Rejected: Too many hydrogen bond donors: 3
 Filter Rejected: tpsa is too high: 74.78
 
- Elapsed time for docking:	0.079 seconds
+ Elapsed time for docking:	0.030 seconds
 
  Anchors:		1
  Orientations:		1
@@ -4967,7 +4968,7 @@ Filter Rejected: tpsa is too high: 74.78
 Filter Rejected: Too many hydrogen bond donors: 3
 Filter Rejected: tpsa is too high: 74.78
 
- Elapsed time for docking:	0.079 seconds
+ Elapsed time for docking:	0.030 seconds
 
  Anchors:		1
  Orientations:		1
@@ -5001,7 +5002,7 @@ Filter Rejected: tpsa is too high: 74.78
 Filter Rejected: Too many rotatable bonds: 6 > 5
 Filter Rejected: Molecular Weight too high: 465.30 > 400.00
 
- Elapsed time for docking:	0.085 seconds
+ Elapsed time for docking:	0.032 seconds
 
  Anchors:		1
  Orientations:		1
@@ -5034,7 +5035,7 @@ Filter Rejected: Molecular Weight too high: 465.30 > 400.00
 
 Filter Rejected: Too many hydrogen bond donors: 3
 
- Elapsed time for docking:	0.076 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -5068,7 +5069,7 @@ Filter Rejected: Too many hydrogen bond donors: 3
 Filter Rejected: Too many hydrogen bond donors: 3
 Filter Rejected: tpsa is too high: 81.50
 
- Elapsed time for docking:	0.079 seconds
+ Elapsed time for docking:	0.030 seconds
 
  Anchors:		1
  Orientations:		1
@@ -5102,7 +5103,7 @@ Filter Rejected: tpsa is too high: 81.50
 Filter Rejected: Too many hydrogen bond donors: 3
 Filter Rejected: tpsa is too high: 81.24
 
- Elapsed time for docking:	0.079 seconds
+ Elapsed time for docking:	0.030 seconds
 
  Anchors:		1
  Orientations:		1
@@ -5136,7 +5137,7 @@ Filter Rejected: tpsa is too high: 81.24
 Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: tpsa is too high: 84.33
 
- Elapsed time for docking:	0.079 seconds
+ Elapsed time for docking:	0.030 seconds
 
  Anchors:		1
  Orientations:		1
@@ -5170,7 +5171,7 @@ Filter Rejected: tpsa is too high: 84.33
 Filter Rejected: Too many hydrogen bond donors: 3
 Filter Rejected: tpsa is too high: 81.50
 
- Elapsed time for docking:	0.079 seconds
+ Elapsed time for docking:	0.030 seconds
 
  Anchors:		1
  Orientations:		1
@@ -5204,7 +5205,7 @@ Filter Rejected: tpsa is too high: 81.50
 Filter Rejected: Too many hydrogen bond donors: 3
 Filter Rejected: tpsa is too high: 81.24
 
- Elapsed time for docking:	0.079 seconds
+ Elapsed time for docking:	0.030 seconds
 
  Anchors:		1
  Orientations:		1
@@ -5238,7 +5239,7 @@ Filter Rejected: tpsa is too high: 81.24
 Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: tpsa is too high: 84.33
 
- Elapsed time for docking:	0.079 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -5274,7 +5275,7 @@ Filter Rejected: Too many hydrogen bond acceptors: 12
 Filter Rejected: Formal charge too low: -2.00 < -1.00
 Filter Rejected: tpsa is too high: 189.58
 
- Elapsed time for docking:	0.079 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -5310,7 +5311,7 @@ Filter Rejected: Too many hydrogen bond acceptors: 12
 Filter Rejected: Formal charge too low: -2.00 < -1.00
 Filter Rejected: tpsa is too high: 189.58
 
- Elapsed time for docking:	0.079 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -5344,7 +5345,7 @@ Filter Rejected: tpsa is too high: 189.58
 Filter Rejected: Molecular Weight too high: 403.24 > 400.00
 Filter Rejected: tpsa is too high: 74.53
 
- Elapsed time for docking:	0.084 seconds
+ Elapsed time for docking:	0.033 seconds
 
  Anchors:		1
  Orientations:		1
@@ -5379,7 +5380,7 @@ Filter Rejected: Molecular Weight too high: 400.22 > 400.00
 Filter Rejected: Formal charge too low: -2.00 < -1.00
 Filter Rejected: tpsa is too high: 80.85
 
- Elapsed time for docking:	0.086 seconds
+ Elapsed time for docking:	0.033 seconds
 
  Anchors:		1
  Orientations:		1
@@ -5414,7 +5415,7 @@ Filter Rejected: Molecular Weight too high: 400.22 > 400.00
 Filter Rejected: Formal charge too low: -2.00 < -1.00
 Filter Rejected: tpsa is too high: 80.85
 
- Elapsed time for docking:	0.086 seconds
+ Elapsed time for docking:	0.032 seconds
 
  Anchors:		1
  Orientations:		1
@@ -5448,7 +5449,7 @@ Filter Rejected: tpsa is too high: 80.85
 Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: tpsa is too high: 86.52
 
- Elapsed time for docking:	0.078 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -5482,7 +5483,7 @@ Filter Rejected: tpsa is too high: 86.52
 Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: tpsa is too high: 86.52
 
- Elapsed time for docking:	0.078 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -5516,7 +5517,7 @@ Filter Rejected: tpsa is too high: 86.52
 Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: tpsa is too high: 86.52
 
- Elapsed time for docking:	0.078 seconds
+ Elapsed time for docking:	0.029 seconds
 
  Anchors:		1
  Orientations:		1
@@ -5550,7 +5551,7 @@ Filter Rejected: tpsa is too high: 86.52
 Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: tpsa is too high: 86.52
 
- Elapsed time for docking:	0.078 seconds
+ Elapsed time for docking:	0.030 seconds
 
  Anchors:		1
  Orientations:		1
@@ -5585,7 +5586,7 @@ Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: Molecular Weight too low: 171.24 < 200.00
 Filter Rejected: Formal charge too high: 2.00 > 1.00
 
- Elapsed time for docking:	0.073 seconds
+ Elapsed time for docking:	0.027 seconds
 
  Anchors:		1
  Orientations:		1
@@ -5619,7 +5620,7 @@ Filter Rejected: Formal charge too high: 2.00 > 1.00
 Filter Rejected: Too many hydrogen bond donors: 2
 Filter Rejected: tpsa is too high: 90.44
 
- Elapsed time for docking:	0.075 seconds
+ Elapsed time for docking:	0.028 seconds
 
  Anchors:		1
  Orientations:		1
@@ -5628,7 +5629,7 @@ Filter Rejected: tpsa is too high: 90.44
 
 
 164 Molecules Processed
-Total elapsed time:	14.198 seconds
-11.551 # mols / sec
-Virtual Memory Used for this process: 178640 KiloBytes
-Physical Memory Used for this process: 65156 KiloBytes
+Total elapsed time:	5.498 seconds
+Number of molecules per second:	29.831
+Virtual memory used for this process: 385808 kilobytes
+Physical memory used for this process: 198512 kilobytes

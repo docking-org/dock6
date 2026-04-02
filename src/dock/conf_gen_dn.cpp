@@ -99,53 +99,53 @@ DN_Build::input_parameters( Parameter_Reader & parm )
     dn_mode = "sample";
     //dn_mode = parm.query_param("dn_mode", "sample", "sample | utilities");    
 
-    //if (dn_mode.compare("utilities") == 0){ 
+    if (dn_mode.compare("utilities") == 0){ 
 
-    //    dn_ult_file   = parm.query_param( "dn_utl_file",
-    //                                                  "input.mol2" );
-    //    dn_ult_method = parm.query_param("dn_ult_method", "best_first", "best_first");
+        dn_ult_file   = parm.query_param( "dn_utl_file",
+                                                      "input.mol2" );
+        dn_ult_method = parm.query_param("dn_ult_method", "best_first", "best_first");
   
-    //    if ( dn_ult_method.compare("best_first") == 0 ){
+        if ( dn_ult_method.compare("best_first") == 0 ){
 
-    //        dn_ult_bf_anc_diverse = parm.query_param("dn_ult_bf_anc_diverse", "no", "yes no") == "yes";
-    //        dn_ult_score = 
-    //            parm.query_param("dn_ult_score", "hungarian", "hungarian | volume");
-    //  
-    //        if (dn_ult_score.compare("hungarian") == 0){
+            dn_ult_bf_anc_diverse = parm.query_param("dn_ult_bf_anc_diverse", "no", "yes no") == "yes";
+            dn_ult_score = 
+                parm.query_param("dn_ult_score", "hungarian", "hungarian | volume");
+      
+            if (dn_ult_score.compare("hungarian") == 0){
 
-    //            dn_ult_hun_matching_coeff = 
-    //                atof(parm.query_param("dn_ult_hun_matching_coeff", "-5").c_str());
-    //            dn_ult_hun_rmsd_coeff = 
-    //                atof(parm.query_param("dn_ult_hun_rmsd_coeff", "1").c_str());
-    //            dn_ult_clust_tol = 
-    //                atof(parm.query_param("dn_ult_clust_tol", "-3.0").c_str());
-    //        } 
-    //      
-    //        if (dn_ult_score.compare("volume") == 0) {
-    //            dn_ult_vol_type  = 
-    //                parm.query_param("dn_ult_vol_type", "volume_heavy", "volume_heavy");
-    //            dn_ult_clust_tol = 
-    //                atof(parm.query_param("dn_ult_clust_tol", "0.80").c_str());
-    //        }
+                dn_ult_hun_matching_coeff = 
+                    atof(parm.query_param("dn_ult_hun_matching_coeff", "-5").c_str());
+                dn_ult_hun_rmsd_coeff = 
+                    atof(parm.query_param("dn_ult_hun_rmsd_coeff", "1").c_str());
+                dn_ult_clust_tol = 
+                    atof(parm.query_param("dn_ult_clust_tol", "-3.0").c_str());
+            } 
+          
+            if (dn_ult_score.compare("volume") == 0) {
+                dn_ult_vol_type  = 
+                    parm.query_param("dn_ult_vol_type", "volume_heavy", "volume_heavy");
+                dn_ult_clust_tol = 
+                    atof(parm.query_param("dn_ult_clust_tol", "0.80").c_str());
+            }
 
-    //        dn_ult_clust_size_lim = 
-    //            atoi(parm.query_param("dn_ult_clust_size_lim", "2").c_str());
-    //        dn_ult_num_clusters = 
-    //            atoi(parm.query_param("dn_ult_num_clusters", "10000").c_str()); 
-    //    }
+            dn_ult_clust_size_lim = 
+                atoi(parm.query_param("dn_ult_clust_size_lim", "2").c_str());
+            dn_ult_num_clusters = 
+                atoi(parm.query_param("dn_ult_num_clusters", "10000").c_str()); 
+        }
 
-    //    dn_sampling_method_ex = false;
-    //    dn_sampling_method_rand = false;
-    //    dn_sampling_method_graph = false;
-    //    dn_sampling_method_matrix = false;
-    //    dn_sampling_method_isoswap = false;
-    //    dn_unique_anchors = 0; 
-    //    verbose = false;
-    //    dn_user_specified_anchor = false; 
-    //    dn_max_grow_layers = 0;
+        dn_sampling_method_ex = false;
+        dn_sampling_method_rand = false;
+        dn_sampling_method_graph = false;
+        dn_sampling_method_matrix = false;
+        dn_sampling_method_isoswap = false;
+        dn_unique_anchors = 0; 
+        verbose = false;
+        dn_user_specified_anchor = false; 
+        dn_max_grow_layers = 0;
  
-    //    return;
-    //}
+        return;
+    }
 
     dn_fraglib_scaffold_file  = parm.query_param( "dn_fraglib_scaffold_file",
                                                   "fraglib_scaffold.mol2" );
@@ -183,8 +183,7 @@ DN_Build::input_parameters( Parameter_Reader & parm )
     if (dn_use_torenv_table){
         dn_torenv_table = parm.query_param("dn_torenv_table", "fraglib_torenv.dat");
 
-        //dn_use_roulette = parm.query_param("dn_use_roulette", "no", "yes no") == "yes";
-        dn_use_roulette = false;
+        dn_use_roulette = parm.query_param("dn_bias_torsions", "no", "yes no") == "yes";
     }
     
     denovo_name = parm.query_param( "dn_name_identifier", "denovo" );
@@ -193,10 +192,10 @@ DN_Build::input_parameters( Parameter_Reader & parm )
     // ex = exhaustive (slow)
     // rand = random (user specified limit)
     // graph = sample from graph of related fragments
-    //dn_sampling_method = parm.query_param("dn_sampling_method", "graph", "ex | rand | graph | matrix | isoswap");
+    //dn_sampling_method = parm.query_param("dn_sampling_method", "graph", "ex | rand | graph | isoswap");
+    dn_sampling_method = parm.query_param("dn_sampling_method", "graph", "ex | rand | graph");
     //JDB removed matrix being displayed here for 6.12
     //dn_sampling_method = parm.query_param("dn_sampling_method", "graph", "ex | rand | graph | matrix ");
-    dn_sampling_method = parm.query_param("dn_sampling_method", "graph", "ex | rand | graph");
     dn_sampling_method_ex = false;
     dn_sampling_method_rand = false;
     dn_sampling_method_graph = false;
@@ -248,18 +247,12 @@ DN_Build::input_parameters( Parameter_Reader & parm )
     if (dn_sampling_method_ex){
         dn_num_random_picks = atoi(parm.query_param("dn_num_ex_picks", "200").c_str());
     }
-
+    // JDB - biasing enabled in 6.13
     if (!dn_sampling_method_isoswap){
-        dn_bias_with_fraglib = false;
-        //dn_bias_with_fraglib = parm.query_param("dn_bias_with_fragments", "no", "yes | no") == "yes";
+        dn_bias_with_fraglib = parm.query_param("dn_bias_with_fragments", "no", "yes | no") == "yes";
         if ( dn_bias_with_fraglib && !dn_sampling_method_isoswap) {
             dn_sel_frag_by_freq_bool = parm.query_param("dn_sel_frag_by_freq", "no", "yes | no") == "yes";
             dn_acc_frag_by_freq_bool = parm.query_param("dn_accept_frag_by_freq", "no", "yes | no") == "yes";
-            if ((dn_sel_frag_by_freq_bool) || (dn_acc_frag_by_freq_bool)) {
-                dn_frag_frequency_file = parm.query_param("dn_frag_frequency_file", "frag_freqs.dat");
-            } else {
-                cout << "Warning: Biasing with fragment selected, but no method specified.\nFile not read in and no biasing will be performed." << std::endl;
-            }
         } else {
             dn_sel_frag_by_freq_bool = false;
             dn_acc_frag_by_freq_bool = false;
@@ -278,15 +271,15 @@ DN_Build::input_parameters( Parameter_Reader & parm )
 	    dn_iso_rank           = parm.query_param("dn_iso_rank", "yes", "yes no").c_str();
             if (dn_iso_rank.compare("yes")==0) {
 	        dn_iso_reverse        = parm.query_param("dn_iso_reverse", "no", "yes no").c_str();
-                dn_iso_rank_score_sel = parm.query_param("dn_iso_rank_score_sel", "heavy_atom_component").c_str();
+                dn_iso_rank_score_sel = parm.query_param("dn_iso_rank_score_sel","hms_score","hms_score | heavy_atom_component").c_str();
                 dn_iso_num_top        = atoi(parm.query_param("dn_iso_num_top_rank", "100").c_str());
             } else {
                 dn_iso_reverse        = "";
                 dn_iso_rank_score_sel = "";
                 dn_iso_num_top        = atoi(parm.query_param("dn_iso_num_top","100").c_str());
             }
-            dn_iso_score_sel      = parm.query_param("dn_iso_score_sel", "heavy_atom_component",
-                                                     "heavy_atom_component | hms_score").c_str();
+            dn_iso_score_sel      = parm.query_param("dn_iso_score_sel", "hms_score",
+                                                     "hms_score | heavy_atom_component | tanimoto").c_str();
             dn_iso_output_path_libraries  = parm.query_param("dn_iso_output_path_libraries", "./").c_str();
 
             dn_fraglib_iso_scaffold_file  = parm.query_param("dn_fraglib_iso_scaffold_file",
@@ -319,8 +312,7 @@ DN_Build::input_parameters( Parameter_Reader & parm )
             dn_iso_freq_cutoff            = atoi(parm.query_param("dn_iso_freq_cutoff", "130").c_str());
             dn_iso_cos_score_cutoff       = atof(parm.query_param("dn_iso_cos_score_cutoff", "0.0").c_str());
         } else if (dn_iso_write_libraries.compare("no") == 0){
-            dn_num_rand_head_picks        = atoi(parm.query_param("dn_num_rand_head_picks", "20").c_str());
-            dn_iso_fraglib                = parm.query_param( "dn_iso_fraglib", "almade", "almade | onthefly ").c_str();
+            dn_num_iso_head_picks        = atoi(parm.query_param("dn_num_iso_head_picks", "20").c_str());
             dn_iso_pick_meth              = parm.query_param("dn_iso_pick_meth", "top_rank", "top_rank | rand | worst_rank").c_str();
             dn_iso_skip                   = parm.query_param("dn_iso_skip", "yes", "yes | no").c_str();
             dn_num_iso_picks              = atoi(parm.query_param("dn_num_iso_picks", "20").c_str());
@@ -329,46 +321,8 @@ DN_Build::input_parameters( Parameter_Reader & parm )
                 dn_iso_output_verbose_path =  parm.query_param("dn_iso_output_verbose_path", "./").c_str();
             }
 
-            if (dn_iso_fraglib.compare("almade")==0){
-                dn_iso_fraglib_dir    = parm.query_param("dn_iso_fraglib_dir", "isofrags").c_str();
-                dn_iso_num_gets       = atoi(parm.query_param("dn_iso_num_gets","100").c_str());
-
-            } else if (dn_iso_fraglib.compare("onthefly")==0){
-                dn_iso_rank           = "yes";
-
-                dn_iso_reverse        = parm.query_param("dn_iso_reverse", "no", "yes no").c_str();
-                dn_iso_rank_score_sel = parm.query_param("dn_iso_rank_score_sel","heavy_atom_component").c_str();
-                dn_iso_score_sel      = parm.query_param("dn_iso_score_sel","heavy_atom_component", 
-                                                         "heavy_atom_component | hms_score").c_str();
-                dn_iso_num_top        = atoi(parm.query_param("dn_iso_num_top_rank","100").c_str());
-
-                dn_fraglib_iso_scaffold_file  = parm.query_param("dn_fraglib_iso_scaffold_file",
-                                                                  "fraglib_iso_iso_scaffold.mol2");
-                dn_fraglib_iso_linker_file    = parm.query_param("dn_fraglib_iso_linker_file",
-                                                                  "fraglib_iso_linker.mol2");
-                dn_fraglib_iso_sidechain_file = parm.query_param("dn_fraglib_iso_sidechain_file",
-                                                                      "fraglib_iso_sidechain.mol2");
-                dn_iso_bond_angle_tol_sid     = atof(parm.query_param("dn_iso_bond_angle_tol_sid",
-                                                                        "5.0" ).c_str());
-                dn_iso_bond_angle_tol_lnk     = atof(parm.query_param("dn_iso_bond_angle_tol_lnk",
-                                                                        "5.0" ).c_str());
-                dn_iso_bond_angle_tol_scf     = atof(parm.query_param("dn_iso_bond_angle_tol_scf",
-                                                                        "5.0" ).c_str());
-                dn_iso_dist_du_du_inter       = atof(parm.query_param("dn_iso_dist_du_du_inter",
-                                                                        "0.25" ).c_str());
-                dn_iso_dist_tol_sid           = atof(parm.query_param("dn_iso_dist_tol_sid",
-                                                                        "1.0" ).c_str());
-                dn_iso_dist_tol_lnk           = atof(parm.query_param("dn_iso_dist_tol_lnk",
-                                                                        "1.0" ).c_str());
-                dn_iso_dist_du_du_lnk         = atof(parm.query_param("dn_iso_dist_du_du_lnk",
-                                                                        "1.0" ).c_str());
-                dn_iso_dist_du_du_scf         = atof(parm.query_param("dn_iso_dist_du_du_scf",
-                                                                        "1.0" ).c_str());
-                dn_iso_diff_num_atoms         = atoi(parm.query_param("dn_iso_diff_num_atoms",
-             							                                "5" ).c_str());
-                dn_iso_freq_cutoff            = atoi(parm.query_param("dn_iso_freq_cutoff", "130").c_str());
-                dn_iso_cos_score_cutoff       = atof(parm.query_param("dn_iso_cos_score_cutoff", "0.0").c_str());
-            }
+            dn_iso_fraglib_dir    = parm.query_param("dn_iso_fraglib_dir", "isofrags").c_str();
+            dn_iso_num_gets       = atoi(parm.query_param("dn_iso_num_gets","100").c_str());
         }
     }
 
@@ -827,40 +781,7 @@ DN_Build::initialize()
     	    cout <<"Done (#=" <<isosidechains.size() <<")" <<endl;
         } else if (dn_iso_write_libraries.compare("no")==0){
             iso_parm.set_write_libraries(false);
-
-            if (dn_iso_fraglib.compare("almade")==0){
-                iso_parm.set_iso_fraglib(true,dn_iso_fraglib_dir);
-            } else if (dn_iso_fraglib.compare("onthefly")==0){
-                std::string iso_fl_path(dn_iso_fraglib_dir);
-                iso_parm.set_iso_fraglib(false,iso_fl_path);
-                iso_parm.set_iso_num_top(dn_iso_num_top);
-                iso_parm.set_iso_score_sel(dn_iso_score_sel);
-	        iso_parm.set_bond_angle_tol_sid(dn_iso_bond_angle_tol_sid);
-    	        iso_parm.set_bond_angle_tol_lnk(dn_iso_bond_angle_tol_lnk);
-    	        iso_parm.set_bond_angle_tol_scf(dn_iso_bond_angle_tol_scf);
-    	        iso_parm.set_dist_du_du_inter(dn_iso_dist_du_du_inter);
-    	        iso_parm.set_dist_tol_sid(dn_iso_dist_tol_sid);
-    	        iso_parm.set_dist_tol_lnk(dn_iso_dist_tol_lnk);
-    	        iso_parm.set_dist_du_du_lnk(dn_iso_dist_du_du_lnk);
-    	        iso_parm.set_dist_du_du_scf(dn_iso_dist_du_du_scf);
-	        iso_parm.set_diff_num_atoms(dn_iso_diff_num_atoms);
-                iso_parm.set_iso_rank_score_sel(dn_iso_rank_score_sel);
-                iso_parm.set_iso_rank_reverse(dn_iso_reverse.compare("yes")==0);
-                iso_parm.set_iso_write_freq_cutoff(dn_iso_freq_cutoff);
-                iso_parm.set_iso_cos_score_cutoff(dn_iso_cos_score_cutoff);
-
-	        cout <<" Reading the iso_scaffold library from " <<dn_fraglib_iso_scaffold_file <<"...";
-    	        read_frag_library( isoscaffolds, dn_fraglib_iso_scaffold_file );
-    	        cout <<"Done (#=" <<isoscaffolds.size() <<")" <<endl;
-
-    	        cout <<" Reading the iso_linker library from " <<dn_fraglib_iso_linker_file <<"...";
-    	        read_frag_library( isolinkers, dn_fraglib_iso_linker_file );
-    	        cout <<"Done (#=" <<isolinkers.size() <<")" <<endl;
-
-    	        cout <<" Reading the iso_sidechain library from " <<dn_fraglib_iso_sidechain_file <<"...";
-    	        read_frag_library( isosidechains, dn_fraglib_iso_sidechain_file );
-    	        cout <<"Done (#=" <<isosidechains.size() <<")" <<endl;
-            }
+            iso_parm.set_iso_fraglib(true,dn_iso_fraglib_dir);
         }
 
     }
@@ -882,7 +803,7 @@ DN_Build::initialize()
         read_torenv_table(dn_torenv_table);
     }
     if (dn_use_roulette) {
-        cout << " Generating the roulette wheel from the torenv table ... ";
+        cout << " Generating the roulette wheel from the torenv table for torsion biasing... ";
         generate_roulette();
     }
     //JDB - reads in the fragment attachment matrix
@@ -946,7 +867,8 @@ DN_Build::initialize()
 
     if ((dn_sel_frag_by_freq_bool) || (dn_acc_frag_by_freq_bool)) {
         cout << "Reading in fragment frequencies..." << endl;
-        read_frag_frequencies(dn_frag_frequency_file);
+        //read_frag_frequencies(dn_frag_frequency_file);
+        read_frag_frequencies(scaf_link_sid);
         cout << "Fragment frequencies read in!" << endl;
         //The check is (-1) because of placeholder value @ beginning
         if ((ordered_fragments.size() - 1) < (scaffolds.size() + linkers.size() + sidechains.size())) {
@@ -1425,6 +1347,7 @@ DN_Build::read_frag_library( vector <Fragment> & frag_vec, string filename )
         mol.comment2 = l4;
         mol.energy = l5;
         mol.comment3 = l6;
+        
         // loop over atoms and read in atom info
         for (i = 0; i < mol.num_atoms; i++) {
             if (!fin_frags.getline(line, 1000)) {
@@ -1592,7 +1515,7 @@ DN_Build::read_frag_library( vector <Fragment> & frag_vec, string filename )
         //fill in all information as much as possible for the frag clas
         tmp_frag.set_iso_score(iso_score);
         tmp_frag.freq_num    = freq;
-
+        
 
         if (!three_pairs.empty()){
             //three_pair handling
@@ -1715,47 +1638,33 @@ DN_Build::read_torenv_table( string torenv_table )
 // number line for selection by frequency during growth.
 //JDB READ_THE_FRAGMENT_FREQUENCIES
 void
-DN_Build::read_frag_frequencies( string frequencies_file ){
-    //open some strings for recordkeeping
-    string filename, line, line_save_freq, line_save_frag, temp_line_save, freq_str;
-    long double total_values = 0; // the running total for this line
-    double freq; // the raw frequency
-    size_t found; //last position of "-" character
-    int line_number=1; // record the line number
-    ifstream fragment_freq_file; //ifstream for the file
-    fragment_freq_file.open(frequencies_file.c_str()); //freq file
-
+DN_Build::read_frag_frequencies( vector<Fragment> & all_fragments ) {
     //Put in placeholders at the start for proper logic later
     ordered_fragment_frequencies.push_back(0.0);
     ordered_fragments.push_back("PLACEHOLDER");
 
-    //Pulls all the lines from an input file
-    while( getline (fragment_freq_file,line)){
-        stringstream freq_convert;
-        found = line.find_last_of("-");
-        line_save_freq = line.substr(found+1);
-        freq_convert << line_save_freq;
-        freq_convert >> freq;
-
-        line_save_frag = line.substr(0,found);
-        //collects the 'running total' to generate bin right walls
-        total_values = total_values + freq;
-        
-        //save things
-        ordered_fragments.push_back(line_save_frag);
-        ordered_fragment_frequencies.push_back(total_values);
-        line_number++;
+    // Run through all of the sorted fragments and get the 
+    // relevant information for the number line.
+    int total = 0;
+    for(int i=0; i<all_fragments.size(); i++){
+        total += all_fragments[i].freq_num;
+        ordered_fragment_frequencies.push_back(total);
+        ordered_fragments.push_back(all_fragments[i].mol.energy);
     }
 
+    for(int i=0; i<ordered_fragment_frequencies.size(); i++){
+        ordered_fragment_frequencies[i] = ordered_fragment_frequencies[i]/total;
+    }
     //uncomment below to get output for the entire number line
     /*
     for(int i=0; i<ordered_fragments.size(); i++){
         cout << "Fragment:" << ordered_fragments[i] << endl;
         cout << "   Frequency:" << ordered_fragment_frequencies[i] << endl;
     }
-    cout << ordered_fragments.size() << endl;
-    cout << ordered_fragment_frequencies.size() << endl;
-    */ 
+    */
+    cout << "Number line of " << ordered_fragments.size() << " fragments and "
+        << ordered_fragment_frequencies.size() << " values for biasing generated." << endl;
+    
 } // end DN_Build::read_frag_frequencies
 
 
@@ -2526,25 +2435,23 @@ DN_Build::build_molecules( Master_Score & score, Simplex_Minimizer & simplex, AM
                 vec_iso_frags.first.clear();
                 vec_iso_frags.second.clear();
 
-
-                 
-                std::cout << "\r" << "[ "; 
-                float percentage = (float)(i+1)/(float)scaf_link_sid.size();
-                int val = (int) (percentage * 100);
-                int lpad = (int) (percentage * 50);
-                
-                for (int z=0; z<lpad; z++){
-                    std::cout << "|" ;
-                }
-                std::cout << " "<<std::fixed<<std::setprecision(2)<<(float)(percentage * 100) << "% ]";
+                if( isatty(fileno(stdin)) && isatty(fileno(stdout)) ){
+                    std::cout << "\r" << "[ "; 
+                    float percentage = (float)(i+1)/(float)scaf_link_sid.size();
+                    int val = (int) (percentage * 100); 
+                    int lpad = (int) (percentage * 50);
+                    for (int z=0; z<lpad; z++){ 
+                        std::cout << "|" ; 
+                    }     
+                    std::cout << " "<<std::fixed<<std::setprecision(2)<<(float)(percentage * 100) << "% ]";
+                    std::cout.flush();
+                }     
 
                 if (i == scaf_link_sid.size()-1){
                     std::cout << "\nFinished setting isotable"<<std::endl; 
                     std::cout << "Iso_Table All Heads Size: " << iso_table.get_size() << std::endl;
                     std::cout << "Iso_Table All Tails Size: " << iso_table.get_size_total() << std::endl;
                 }
-
-                std::cout.flush();
             }
 
             
@@ -2574,7 +2481,11 @@ DN_Build::build_molecules( Master_Score & score, Simplex_Minimizer & simplex, AM
             });
 
             int progress = 0;
-            std::cout << "[";
+
+            if( isatty(fileno(stdin)) && isatty(fileno(stdout)) ){
+                std::cout << "[";
+            }
+
             for (unsigned int i = 0; i < filenames.size(); i++){ 
                 if (filenames[i] == "." || filenames[i] == ".."){
                     continue;
@@ -2645,16 +2556,17 @@ DN_Build::build_molecules( Master_Score & score, Simplex_Minimizer & simplex, AM
 
                 iso_table.set(rep_head_frag,tmp_vec);
 
-                std::cout << "\r" << "[ "; 
-                float percentage = (float)(i+1)/(float)filenames.size();
-                int val = (int) (percentage * 100);
-                int lpad = (int) (percentage * 50);
-                
-                for (int z=0; z<lpad; z++){
-                    std::cout << "|" ;
+                if( isatty(fileno(stdin)) && isatty(fileno(stdout)) ){
+                    std::cout << "\r" << "[ "; 
+                    float percentage = (float)(i+1)/(float)filenames.size();
+                    int val = (int) (percentage * 100);
+                    int lpad = (int) (percentage * 50);
+                    
+                    for (int z=0; z<lpad; z++){
+                        std::cout << "|" ;
+                    }
+                    std::cout << " "<<std::fixed<<std::setprecision(2)<<(float)(percentage * 100) << "% ]";
                 }
-                std::cout << " "<<std::fixed<<std::setprecision(2)<<(float)(percentage * 100) << "% ]";
-
                 if (i == filenames.size()-1){
                     std::cout << "\nFinished reading and loading up isotable"<<std::endl; 
                     std::cout << "Iso_Table All Heads Size: " << iso_table.get_size() << std::endl;
@@ -2680,16 +2592,16 @@ DN_Build::build_molecules( Master_Score & score, Simplex_Minimizer & simplex, AM
              << "# DOCK now assumes that all scaffolds, linkers, and sidechains" << endl
              << "# provided are already oriented to the binding site." << endl << endl;
     }
-
+    /* THIS IS HOW MOLECULES WERE WRITTEN OUT PRIOR TO fout_completed
     // fout_molecules is the filestream for complete molecules
     ostringstream fout_molecules_name;
     fout_molecules_name << dn_output_prefix << ".denovo_build.mol2";
     fstream fout_molecules;
-
+    
     //LEP - 2018.06.20 
     fout_molecules.open(fout_molecules_name.str().c_str(), fstream::out|fstream::app);
     fout_molecules_name.clear();
-
+    */
     #ifdef BUILD_DOCK_WITH_RDKIT
     // fout_rejected is the filestream for complete molecules
     ostringstream fout_rejected_name;
@@ -2952,10 +2864,6 @@ DN_Build::build_molecules( Master_Score & score, Simplex_Minimizer & simplex, AM
     
                         // Sampling method = random
                         } else if (dn_sampling_method_rand){
-                            //select_frags_from_fraglib(scaf_link_sid, available_fragment_indices, selected_fragments,
-                            //                          dn_num_random_picks, last_layer);
-                            //attach_selected_frags( layer[k], j, scaf_link_sid, scaf_link_sid_graph,
-                            //                      growing, score, simplex, typer, selected_fragments, last_layer );
                             sample_fraglib_rand( layer[k], j, scaf_link_sid, growing,
                                                  score, simplex, typer, available_fragment_indices,
                                                  selected_fragments, last_layer );
@@ -2984,13 +2892,11 @@ DN_Build::build_molecules( Master_Score & score, Simplex_Minimizer & simplex, AM
 
                     // clear layer and get ready to copy growing onto layer
                     layer.clear();
-
                     frag_sort(growing,fragment_sort);
 
                     if ( !dn_legacy_prune_hrmsd ) {
                         prune_h_rmsd_and_mw(growing);
                     }
-
                     root_mol_counter += growing.size();
                     num_all_frags_layer += growing.size();
 //TODO these descriptors are now computed in sample_minimized torsions and filtering is done then
@@ -3042,6 +2948,11 @@ DN_Build::build_molecules( Master_Score & score, Simplex_Minimizer & simplex, AM
                             calc_rot_bonds(completed_molecules[x].mol);
                             calc_formal_charge(completed_molecules[x].mol);
                             calc_num_HA_HD(completed_molecules[x].mol);
+                            #ifdef BUILD_DOCK_WITH_RDKIT
+                             
+                            RDTYPER rdprops;
+                            rdprops.calculate_descriptors( completed_molecules[x].mol, fragMap, true, PAINSMap);
+                            #endif
 
                             if (completed_molecules[x].mol.rot_bonds <= dn_constraint_rot_bon && 
                                 fabs(completed_molecules[x].mol.formal_charge) <= (fabs(dn_constraint_formal_charge)+0.1) ){
@@ -3059,18 +2970,21 @@ DN_Build::build_molecules( Master_Score & score, Simplex_Minimizer & simplex, AM
                                 } else {
                                     num_filtered_comp += 1;
                                     filtered_comp_counter_prune +=1;
-                                    write_mol_to_file( dn_output_prefix, "filtered_comp",
-                                                       completed_molecules[x], a, counter);
-                                    //filtered_comp.push_back( completed_molecules[x] );
+                                    if (dn_write_prune_dump) {
+                                        write_mol_to_file( dn_output_prefix, "filtered_comp",
+                                                           completed_molecules[x], a, counter);
+                                        //filtered_comp.push_back( completed_molecules[x] );
+                                    }
                                 }
                                 continue;
                             }
 
                             num_filtered_comp += 1;
                             filtered_comp_counter_prune +=1;
-                            write_mol_to_file( dn_output_prefix, "filtered_comp",
-                                               completed_molecules[x], a, counter);
-                            
+                            if (dn_write_prune_dump) {
+                                write_mol_to_file( dn_output_prefix, "filtered_comp",
+                                                   completed_molecules[x], a, counter);
+                            } 
                         }
                         completed_molecules.clear();
                         for(int x=0; x < tmp_completed.size(); x++) {
@@ -3114,27 +3028,32 @@ DN_Build::build_molecules( Master_Score & score, Simplex_Minimizer & simplex, AM
                                 } else {
                                     num_pruned_roots+=1;
                                     prune_root_counter_prune +=1;
-
+                                    if (dn_write_prune_dump) {
+                                        write_mol_to_file( dn_output_prefix,
+                                                           "prune_root",
+                                                           growing[x],
+                                                           a, counter );
+                                    }
+                                }
+                            } else {
+                                num_pruned_roots+=1;
+                                prune_root_counter_prune +=1;
+                                if (dn_write_prune_dump) {
                                     write_mol_to_file( dn_output_prefix,
                                                        "prune_root",
                                                        growing[x],
                                                        a, counter );
                                 }
-                            } else {
-                                num_pruned_roots+=1;
-                                prune_root_counter_prune +=1;
+                            }
+                        } else {
+                            num_pruned_roots+=1;
+                            prune_root_counter_prune +=1;
+                            if (dn_write_prune_dump) {
                                 write_mol_to_file( dn_output_prefix,
                                                    "prune_root",
                                                    growing[x],
                                                    a, counter );
                             }
-                        } else {
-                            num_pruned_roots+=1;
-                            prune_root_counter_prune +=1;
-                            write_mol_to_file( dn_output_prefix,
-                                               "prune_root",
-                                               growing[x],
-                                               a, counter );
                         }
                     }
 
@@ -3146,7 +3065,7 @@ DN_Build::build_molecules( Master_Score & score, Simplex_Minimizer & simplex, AM
                 root_TIME_END = std::chrono::system_clock::now();
                 std::chrono::duration<double> root_elapsed_seconds = root_TIME_END - root_TIME_START;
 
- 
+                
                 // THIS IS A WELL FORMATTED COUT STATEMENT
                 cout <<"    Root ["   << setw(3) << std::right << i <<"],"
                      <<" sccf atts "  << setw(6) << std::right << num_att_root 
@@ -3359,6 +3278,7 @@ DN_Build::build_molecules( Master_Score & score, Simplex_Minimizer & simplex, AM
                 make_unique(completed_molecules, duplicate_dump);
             }
 
+
             // fout_completed_name is the filestream for complete molecules
             ostringstream fout_completed_name;
             fout_completed_name << dn_output_prefix<<".completed.denovo_build.mol2";
@@ -3371,6 +3291,8 @@ DN_Build::build_molecules( Master_Score & score, Simplex_Minimizer & simplex, AM
                 fout_completed.open(fout_completed_name.str().c_str(), fstream::out);
             }
 */
+
+
             fout_completed.open(fout_completed_name.str().c_str(), fstream::out|fstream::app);
             fout_completed_name.clear();
 
@@ -3423,54 +3345,54 @@ DN_Build::build_molecules( Master_Score & score, Simplex_Minimizer & simplex, AM
                         } else {
                            molpns_name = "ERROR_IN_PAINS_MATCHING_PLEASE_INVESTIGATE";
                         }
-                        fout_molecules << fixed << DELIMITER << setw(STRING_WIDTH) 
+                        fout_completed << fixed << DELIMITER << setw(STRING_WIDTH) 
                                        << "RD_num_arom_rings:" << setw(FLOAT_WIDTH) 
                                        << completed_molecules[i].mol.num_arom_rings << endl;
 
-                        fout_molecules << fixed << DELIMITER << setw(STRING_WIDTH) 
+                        fout_completed << fixed << DELIMITER << setw(STRING_WIDTH) 
                                        << "RD_num_alip_rings:" << setw(FLOAT_WIDTH) 
                                        << completed_molecules[i].mol.num_alip_rings << endl;
 
-                        fout_molecules << fixed << DELIMITER << setw(STRING_WIDTH) 
+                        fout_completed << fixed << DELIMITER << setw(STRING_WIDTH) 
                                        << "RD_num_sat_rings:" << setw(FLOAT_WIDTH) 
                                        << completed_molecules[i].mol.num_sat_rings << endl;
 
-                        fout_molecules << fixed << DELIMITER << setw(STRING_WIDTH) 
+                        fout_completed << fixed << DELIMITER << setw(STRING_WIDTH) 
                                        << "RD_Stereocenters:" << setw(FLOAT_WIDTH) 
                                        << completed_molecules[i].mol.num_stereocenters << endl;
 
-                        fout_molecules << fixed << DELIMITER << setw(STRING_WIDTH) 
+                        fout_completed << fixed << DELIMITER << setw(STRING_WIDTH) 
                                        << "RD_Spiro_atoms:" << setw(FLOAT_WIDTH) 
                                        << completed_molecules[i].mol.num_spiro_atoms << endl;
 
-                        fout_molecules << DELIMITER << setw(STRING_WIDTH) 
+                        fout_completed << DELIMITER << setw(STRING_WIDTH) 
                                        << "RD_LogP:" << setw(FLOAT_WIDTH) 
                                        << completed_molecules[i].mol.clogp << endl;
 
-                        fout_molecules << fixed << DELIMITER << setw(STRING_WIDTH) 
+                        fout_completed << fixed << DELIMITER << setw(STRING_WIDTH) 
                                        << "RD_TPSA:" << setw(FLOAT_WIDTH) 
                                        << completed_molecules[i].mol.tpsa << endl;
 
-                        fout_molecules << DELIMITER << setw(STRING_WIDTH) 
+                        fout_completed << DELIMITER << setw(STRING_WIDTH) 
                                        << "RD_SYNTHA:" << setw(FLOAT_WIDTH) 
                                        << completed_molecules[i].mol.sa_score << endl;
 
-                        fout_molecules << DELIMITER << setw(STRING_WIDTH) 
+                        fout_completed << DELIMITER << setw(STRING_WIDTH) 
                                        << "RD_QED:" << setw(FLOAT_WIDTH) 
                                        << completed_molecules[i].mol.qed_score << endl;
 
-                        fout_molecules << DELIMITER << setw(STRING_WIDTH)  
+                        fout_completed << DELIMITER << setw(STRING_WIDTH)  
                                        << "RD_LogS:" << setw(FLOAT_WIDTH) 
                                        << completed_molecules[i].mol.esol << endl;
 
-                        fout_molecules << DELIMITER << setw(STRING_WIDTH) 
+                        fout_completed << DELIMITER << setw(STRING_WIDTH) 
                                        << "RD_num_of_PAINS:" << setw(FLOAT_WIDTH)  
                                        << completed_molecules[i].mol.pns << endl; 
 
-                        fout_molecules << DELIMITER << setw(STRING_WIDTH) 
+                        fout_completed << DELIMITER << setw(STRING_WIDTH) 
                                        << "RD_PAINS_names:" << setw(FLOAT_WIDTH) << molpns_name << endl; 
 
-                        fout_molecules << DELIMITER << setw(STRING_WIDTH) 
+                        fout_completed << DELIMITER << setw(STRING_WIDTH) 
                                        << "RD_SMILES:" << setw(FLOAT_WIDTH) 
                                        << completed_molecules[i].mol.smiles << endl;
                     }// Descriptors (end)
@@ -3488,9 +3410,11 @@ DN_Build::build_molecules( Master_Score & score, Simplex_Minimizer & simplex, AM
                 } else {
                     mw_low_prune_counter++;
                     filtered_comp_counter_prune += 1;
-                    write_mol_to_file( dn_output_prefix, "filtered_comp",
-                                       completed_molecules[i], a, counter);
-                    //filtered_comp.push_back( completed_molecules[i] );
+                    if (dn_write_prune_dump) {
+                        write_mol_to_file( dn_output_prefix, "filtered_comp",
+                                           completed_molecules[i], a, counter);
+                        //filtered_comp.push_back( completed_molecules[i] );
+                    }
                 }
             }
             fout_completed.close();
@@ -3572,13 +3496,14 @@ DN_Build::build_molecules( Master_Score & score, Simplex_Minimizer & simplex, AM
                                        num)) == next_layer_sel_integers.end()){
    
                             cand_root_ign_counter_prune += 1;
-                            write_mol_to_file ( dn_output_prefix,
-                                                "cand_root_ign",
-                                                next_layer[num],
-                                                a, counter
-                                              );
-                            //cand_root_ign.push_back(next_layer[num]);
-
+                            if (dn_write_prune_dump) {
+                                write_mol_to_file ( dn_output_prefix,
+                                                    "cand_root_ign",
+                                                    next_layer[num],
+                                                    a, counter
+                                                  );
+                                //cand_root_ign.push_back(next_layer[num]);
+                            }
                         }
                     }
                 }
@@ -3591,11 +3516,13 @@ DN_Build::build_molecules( Master_Score & score, Simplex_Minimizer & simplex, AM
                          root.push_back(next_layer[i]);
                     } else {
                         cand_root_ign_counter_prune += 1;
-                        write_mol_to_file ( dn_output_prefix,
-                                            "cand_root_ign",
-                                            next_layer[i],
-                                            a, counter
-                                          );
+                        if (dn_write_prune_dump) {
+                            write_mol_to_file ( dn_output_prefix,
+                                                "cand_root_ign",
+                                                next_layer[i],
+                                                a, counter
+                                              );
+                        }
                     }
                 }
             }
@@ -3896,7 +3823,7 @@ DN_Build::build_molecules( Master_Score & score, Simplex_Minimizer & simplex, AM
 
 
     // clean up any filehandles
-    fout_molecules.close();
+    //fout_molecules.close();
 
     return;
 
@@ -4195,11 +4122,16 @@ DN_Build::select_frags_from_fraglib(vector <Fragment> & fraglib, vector<int> & a
         }
     }
 
-
     //selected_fragments is cleared anew each time, since we're pushing selections to it
     selected_fragments.clear();
+
     if (dn_sel_frag_by_freq_bool) {
-        new_select_frag_by_frequency( fraglib,  available_fragment_indices, selected_fragments, num_picks);
+        if (num_picks > available_fragment_indices.size()) {
+            int num_picks_ceil = available_fragment_indices.size();
+            new_select_frag_by_frequency( fraglib,  available_fragment_indices, selected_fragments, num_picks_ceil);
+        } else {
+            new_select_frag_by_frequency( fraglib,  available_fragment_indices, selected_fragments, num_picks);
+        }
     } else {
         //select num_picks worth of fragments and push them to the 
         for (int selection_loop_counter = 0; selection_loop_counter < num_picks;
@@ -4292,7 +4224,7 @@ DN_Build::sample_isofraglib_isoswap( Fragment & layer_frag, int j, vector <Fragm
 
 
     // For every fragment in the fragment library (i.e. sidechains, linkers, scaffolds)
-    while (choice < dn_num_rand_head_picks){
+    while (choice < dn_num_iso_head_picks){
   
         // The passes int counts every time we either keep or skip a fragment from the libary, so
         // once its size reaches the fraglib.size(), we have looked at everything
@@ -4322,7 +4254,7 @@ DN_Build::sample_isofraglib_isoswap( Fragment & layer_frag, int j, vector <Fragm
         // (1) Would create too many scaffolds per layer
         if ( fraglib[dnrn].aps.size() > 2 &&
              layer_frag.scaffolds_this_layer >= dn_max_scaffolds_per_layer ){ 
-           if (choice + 1 >= dn_num_rand_head_picks && 
+           if (choice + 1 >= dn_num_iso_head_picks && 
                        (growing_ref.size() == growing_ref_size_before_aps)){
                passes++;
                continue;
@@ -4336,7 +4268,7 @@ DN_Build::sample_isofraglib_isoswap( Fragment & layer_frag, int j, vector <Fragm
         // (2) Would give too many current attachment points
         int temp_aps = fraglib[dnrn].aps.size() + layer_frag.aps.size() - 2;
         if (temp_aps > dn_max_current_aps) { 
-           if (choice + 1 >= dn_num_rand_head_picks && 
+           if (choice + 1 >= dn_num_iso_head_picks && 
                        (growing_ref.size() == growing_ref_size_before_aps)){
                passes++;
                continue;
@@ -4353,7 +4285,7 @@ DN_Build::sample_isofraglib_isoswap( Fragment & layer_frag, int j, vector <Fragm
         // Floor for remaining rot_bonds if all remaining aps are capped with sidechains.
         int temp_rbs = layer_frag.mol.rot_bonds + temp_aps;
         if (temp_rbs > dn_constraint_rot_bon) { 
-           if (choice + 1 >= dn_num_rand_head_picks && 
+           if (choice + 1 >= dn_num_iso_head_picks && 
                        (growing_ref.size() == growing_ref_size_before_aps)){
                passes++;
                continue;
@@ -4370,7 +4302,7 @@ DN_Build::sample_isofraglib_isoswap( Fragment & layer_frag, int j, vector <Fragm
         // (5) Formal Charge Cutoff
         int temp_fc = fraglib[dnrn].mol.formal_charge + layer_frag.mol.formal_charge;
         if (fabs(float(temp_fc)) > (fabs(float(dn_constraint_formal_charge))+0.1)) { 
-           if (choice + 1 >= dn_num_rand_head_picks && 
+           if (choice + 1 >= dn_num_iso_head_picks && 
                        (growing_ref.size() == growing_ref_size_before_aps)){
                passes++;
                continue;
@@ -4392,8 +4324,7 @@ DN_Build::sample_isofraglib_isoswap( Fragment & layer_frag, int j, vector <Fragm
 
         // If frag doesn't exist in the iso_table
         // you must align and set them in the iso_table
-        if (!iso_table.check_if(fraglib[dnrn]) && 
-            dn_iso_fraglib.compare("onthefly")==0){
+        if (!iso_table.check_if(fraglib[dnrn])){
 	    vec_iso_frags =  frag_iso_align(fraglib[dnrn]);
             iso_table.set(fraglib[dnrn],vec_iso_frags.second);
 	} else {
@@ -4735,6 +4666,7 @@ DN_Build::sample_isofraglib_isoswap( Fragment & layer_frag, int j, vector <Fragm
                 if ( isostere.aps.size() > 2 &&
                      layer_frag.scaffolds_this_layer >= dn_max_scaffolds_per_layer ){ 
                     iso_passes++;
+                    c_for_topranked++;
                     continue; 
                 }
 
@@ -4742,6 +4674,7 @@ DN_Build::sample_isofraglib_isoswap( Fragment & layer_frag, int j, vector <Fragm
                 int temp_aps = isostere.aps.size() + layer_frag.aps.size() - 2;
                 if ( temp_aps > dn_max_current_aps ) { 
                     iso_passes++;
+                    c_for_topranked++;
                     continue; 
                 }
 
@@ -4753,6 +4686,7 @@ DN_Build::sample_isofraglib_isoswap( Fragment & layer_frag, int j, vector <Fragm
                 int temp_rbs = layer_frag.mol.rot_bonds + temp_aps;
                 if ( temp_rbs > dn_constraint_rot_bon ) { 
                     iso_passes++;
+                    c_for_topranked++;
                     continue; 
                 }
 
@@ -4760,6 +4694,7 @@ DN_Build::sample_isofraglib_isoswap( Fragment & layer_frag, int j, vector <Fragm
                 int temp_fc = isostere.mol.formal_charge + layer_frag.mol.formal_charge;
                 if ( fabs ( float( temp_fc ) ) > ( fabs ( float (dn_constraint_formal_charge ) )+0.1) ) { 
                     iso_passes++;
+                    c_for_topranked++;
                     continue; 
                 }
 
@@ -4776,6 +4711,8 @@ DN_Build::sample_isofraglib_isoswap( Fragment & layer_frag, int j, vector <Fragm
                 //if dummy_atom_head and heavy_atom_tar is not messed up, keep going
                 // and sample the isosteres
                 if ( dummy_atom_head < 0 && heavy_atom_tar < 0 ) {
+                    iso_passes++;
+                    c_for_topranked++;
                     continue;
                 }
 
@@ -5077,7 +5014,7 @@ DN_Build::sample_isofraglib_isoswap( Fragment & layer_frag, int j, vector <Fragm
 
         }//END ISOHEAD APS SAMPLING
 
-        if ( choice + 1 >= dn_num_rand_head_picks && 
+        if ( choice + 1 >= dn_num_iso_head_picks && 
             ( growing_ref.size() == growing_ref_size_before_aps ) ){
             passes++;
             continue;
@@ -5105,12 +5042,13 @@ DN_Build::sample_fraglib_rand( Fragment & layer_frag, int j, vector <Fragment> &
     //cout << "-sample_fraglib_rand-" << endl;
     // If the fragment library is empty, return without doing anything
     if (fraglib.size() == 0 || num_att_root > dn_max_sccful_att_per_root ) { return; }
+
     //BCF Calc MW RB and FC for pruning later
     calc_mol_wt(layer_frag.mol);
     calc_rot_bonds(layer_frag.mol);
     calc_formal_charge(layer_frag.mol);
-
     vector< pair <Fragment, int> > initial_ensemble;
+
     //select a number of fragments from the fragment library...
     select_frags_from_fraglib(scaf_link_sid, available_fragment_indices, selected_fragments,
                               dn_num_random_picks, true, last_layer);
@@ -5136,6 +5074,7 @@ DN_Build::sample_fraglib_rand( Fragment & layer_frag, int j, vector <Fragment> &
                                 number_of_picks, false, last_layer);
         attach_selected_frags( layer_frag, j, scaf_link_sid, selected_fragments, initial_ensemble);
     }
+
     //From here, a vector < pair < Fragment, int > > that pairs all of the growing fragments with
     //their attempted fraglib index has been generated. These have already been pruned for overlaps
     //if enabled.
@@ -9596,13 +9535,15 @@ DN_Build::prune_h_rmsd( vector <Fragment> & list_of_frags ,
             list_of_frags.push_back(temp_vec[i]);
         } else {
             prune_rmsd_mw_counter_prune += 1;
-            write_mol_to_file( dn_output_prefix,  
-                               "prune_rmsd_mw", 
-                               temp_vec[i], 
-                               anchor_num,
-                               lay_num
-                             ); 
-            //prune_rmsd_mw.push_back(temp_vec[i]);
+            if (dn_write_prune_dump) {
+                write_mol_to_file( dn_output_prefix,  
+                                   "prune_rmsd_mw", 
+                                   temp_vec[i], 
+                                   anchor_num,
+                                   lay_num
+                                 ); 
+                //prune_rmsd_mw.push_back(temp_vec[i]);
+            }
         }
     }
 
@@ -10131,6 +10072,7 @@ DN_Build::prune_molecular_weight( DOCKMol & mol )
 } // end DN_Build::prune_molecular_weight();
 */
 
+
 //By: Brock Boysan - 2022.07.26
 //Sorts the list by molecular weight, then ensures there is only one occurance of each molecular weight
 //This function will overwrite the first vector that is passed to it with the uniqufied vector, it will also return that vector
@@ -10348,7 +10290,7 @@ void DN_Build::write_mol_to_file ( string dn_output_prefix,
                                    Fragment & frag_mol, 
                                    int anchor_num, int counter ) {
 
-  if ( !dn_write_prune_dump || !dn_write_out_duplicates) { return; } 
+  //if ( !dn_write_prune_dump || !dn_write_out_duplicates) { return; } 
 
   // Filename for filehandle
   ostringstream fout_frag_mol_name;

@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.12
+DOCK v6.13
 
-Released September 2024
+Released July 2025
 Copyright UCSF
 --------------------------------------
 
@@ -21,12 +21,14 @@ dn_fraglib_sidechain_file                                    ./dn_generate_fragm
 dn_user_specified_anchor                                     yes
 dn_fraglib_anchor_file                                       dn_refinement.mol2
 dn_torenv_table                                              ./dn_generate_fragments_torenv.dat
+dn_bias_torsions                                             no
 dn_name_identifier                                           denovo
 dn_sampling_method                                           graph
 dn_graph_max_picks                                           30
 dn_graph_breadth                                             3
 dn_graph_depth                                               2
 dn_graph_temperature                                         100.0
+dn_bias_with_fragments                                       no
 dn_pruning_conformer_score_cutoff                            100.0
 dn_pruning_conformer_score_scaling_factor                    2.0
 dn_pruning_clustering_cutoff                                 100.0
@@ -379,7 +381,7 @@ Reading in 31 grids
 ##### Now growing from anchor #1
   ##### Entering layer of growth #1
   Root size at the beginning of this layer = 1
-    Root [  0], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  79.20
+    Root [  0], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  61.90
       From all attachments events, 1 fragments were collected in layer 1 prior to all pruning/filtering.
       From accepted frags ( N= 0 ) in layer 1, 
           Collected a total of 1 candidate root fragments, then that number goes down to 1 due to pruning by the RMSD heuristic.
@@ -396,11 +398,11 @@ Reading in 31 grids
           0    candidate root frags intended for the next layer were ignored due to limit on root size.
 
     Layer 1 completed! Moving on the next layer with 1 root fragments.
-    For Layer 1, time duration is: 0.01 seconds with 77.10 with attachments per second.
+    For Layer 1, time duration is: 0.02 seconds with 60.15 with attachments per second.
 
   ##### Entering layer of growth #2
   Root size at the beginning of this layer = 1
-    Root [  0], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 177.58
+    Root [  0], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 150.09
       From all attachments events, 1 fragments were collected in layer 2 prior to all pruning/filtering.
       From accepted frags ( N= 0 ) in layer 2, 
           Collected a total of 1 candidate root fragments, then that number goes down to 1 due to pruning by the RMSD heuristic.
@@ -417,11 +419,11 @@ Reading in 31 grids
           0    candidate root frags intended for the next layer were ignored due to limit on root size.
 
     Layer 2 completed! Moving on the next layer with 1 root fragments.
-    For Layer 2, time duration is: 0.01 seconds with 166.06 with attachments per second.
+    For Layer 2, time duration is: 0.01 seconds with 141.21 with attachments per second.
 
   ##### Entering layer of growth #3
   Root size at the beginning of this layer = 1
-    Root [  0], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.04 |A/S  27.96
+    Root [  0], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.04 |A/S  23.97
       From all attachments events, 1 fragments were collected in layer 3 prior to all pruning/filtering.
       From accepted frags ( N= 0 ) in layer 3, 
           Collected a total of 1 candidate root fragments, then that number goes down to 1 due to pruning by the RMSD heuristic.
@@ -438,11 +440,11 @@ Reading in 31 grids
           0    candidate root frags intended for the next layer were ignored due to limit on root size.
 
     Layer 3 completed! Moving on the next layer with 1 root fragments.
-    For Layer 3, time duration is: 0.04 seconds with 27.62 with attachments per second.
+    For Layer 3, time duration is: 0.04 seconds with 23.75 with attachments per second.
 
   ##### Entering layer of growth #4
   Root size at the beginning of this layer = 1
-    Root [  0], sccf atts      1 |acc mols    0 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    0 |S     0.02 |A/S  56.60
+    Root [  0], sccf atts      1 |acc mols    0 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    0 |S     0.02 |A/S  55.26
       From all attachments events, 1 fragments were collected in layer 4 prior to all pruning/filtering.
       From accepted frags ( N= 0 ) in layer 4, 
           Collected a total of 0 candidate root fragments, then that number goes down to 0 due to pruning by the RMSD heuristic.
@@ -456,7 +458,7 @@ Reading in 31 grids
           0    candidate root frags intended for the next layer were ignored due to limit on root size.
 
     Layer 4 completed! Moving on the next layer with 0 root fragments.
-    For Layer 4, time duration is: 0.02 seconds with 56.21 with attachments per second.
+    For Layer 4, time duration is: 0.02 seconds with 54.97 with attachments per second.
 
 Root is empty, continuing.
 
@@ -465,7 +467,7 @@ There are no more anchors. Exiting.
 
 
 4 Attachments Processed
-Total elapsed time:	0.098 seconds
-Number of attachments per second:	40.982
-Virtual memory used for this process: 117896 kilobytes
-Physical memory used for this process: 40752 kilobytes
+Total elapsed time:	0.125 seconds
+Number of attachments per second:	32.068
+Virtual memory used for this process: 121296 kilobytes
+Physical memory used for this process: 37412 kilobytes

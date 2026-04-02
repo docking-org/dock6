@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.12
+DOCK v6.13
 
-Released September 2024
+Released July 2025
 Copyright UCSF
 --------------------------------------
 
@@ -157,7 +157,8 @@ Molecule Library Output Parameters
 ligand_outfile_prefix                                        ligand3
 write_mol_solvation                                          no
 write_orientations                                           no
-num_scored_conformers                                        1
+num_final_scored_poses                                       1
+num_preclustered_conformers                                  1
 score_threshold                                              10.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
@@ -177,7 +178,7 @@ Exiting Chemgrid_Score::initialize
 -----------------------------------
 Molecule: ZINC00000113
 
- Elapsed time for docking:	2.360 seconds
+ Elapsed time for docking:	2.233 seconds
 
  Anchors:		1
  Orientations:		1000
@@ -204,7 +205,7 @@ Warning: desolvation scaling factor from grid exceeds 1.0:1.004
 -----------------------------------
 Molecule: ZINC00000250
 
- Elapsed time for docking:	1.510 seconds
+ Elapsed time for docking:	1.496 seconds
 
  Anchors:		1
  Orientations:		1000
@@ -222,7 +223,7 @@ Molecule: ZINC00000250
 -----------------------------------
 Molecule: ZINC00000257
 
- Elapsed time for docking:	3.309 seconds
+ Elapsed time for docking:	3.330 seconds
 
  Anchors:		1
  Orientations:		1000
@@ -239,7 +240,7 @@ Molecule: ZINC00000257
 
 
 3 Molecules Processed
-Total elapsed time:	7.266 seconds
-Number of molecules per second:	0.413
-Virtual memory used for this process: 148264 kilobytes
-Physical memory used for this process: 90420 kilobytes
+Total elapsed time:	7.151 seconds
+Number of molecules per second:	0.420
+Virtual memory used for this process: 148168 kilobytes
+Physical memory used for this process: 89316 kilobytes

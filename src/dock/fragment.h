@@ -86,6 +86,15 @@ class           Fragment {
        //
        int                              freq_num;
 
+       // Variables and data for isoswap_GA
+       double                           iso_ori_mat[3][3];
+       float                            iso_tors_turned;
+       int                              iso_targeted_AP;
+       int                              iso_frag_att_num_APs;
+       int                              iso_head_attached_ind;
+       DOCKVector                       iso_centers_com;
+       DOCKVector                       iso_spheres_com;
+
        // To debug issues w/ fragments
        void print(int index, std:: string label);
 

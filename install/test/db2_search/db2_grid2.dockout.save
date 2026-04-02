@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.12
+DOCK v6.13
 
-Released September 2024
+Released July 2025
 Copyright UCSF
 --------------------------------------
 
@@ -130,7 +130,8 @@ Molecule Library Output Parameters
 ligand_outfile_prefix                                        db2_grid2
 write_mol_solvation                                          no
 write_orientations                                           no
-num_scored_conformers                                        1
+num_final_scored_poses                                       1
+num_preclustered_conformers                                  1
 score_threshold                                              -10.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
@@ -177,7 +178,7 @@ VERBOSE ORIENTING STATS :
 
 Orienting 4 anchor heavy atom centers
 Sphere Center Matching Parameters:
-   tolerance: 0.3; dist_min: 0; min_nodes: 4; max_nodes: 4
+   tolerance: 0.3; dist_min: 0; min_nodes: 4; max_nodes: 4; max orients: 1000
 Num of cliques generated: 1830
  Residual Info:
    min residual:    0.5855
@@ -212,7 +213,7 @@ Molecule: ZINC6q0000000001
 
 
 1 Molecules Processed
-Total elapsed time:	0.099 seconds
-Number of molecules per second:	10.091
-Virtual memory used for this process: 91564 kilobytes
-Physical memory used for this process: 19604 kilobytes
+Total elapsed time:	0.124 seconds
+Number of molecules per second:	8.086
+Virtual memory used for this process: 96628 kilobytes
+Physical memory used for this process: 11572 kilobytes

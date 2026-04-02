@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.12
+DOCK v6.13
 
-Released September 2024
+Released July 2025
 Copyright UCSF
 --------------------------------------
 
@@ -131,7 +131,8 @@ Molecule Library Output Parameters
 ligand_outfile_prefix                                        orientflexiblemulti
 write_mol_solvation                                          no
 write_orientations                                           no
-num_scored_conformers                                        1
+num_final_scored_poses                                       1
+num_preclustered_conformers                                  1
 score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
@@ -149,7 +150,7 @@ Initializing Grid Score Routines...
 -----------------------------------
 Molecule: ZINC00158442
 
- Elapsed time for docking:	0.052 seconds
+ Elapsed time for docking:	0.069 seconds
 
  Anchors:		1
  Orientations:		100
@@ -162,7 +163,7 @@ Molecule: ZINC00158442
 -----------------------------------
 Molecule: ZINC00158751
 
- Elapsed time for docking:	0.014 seconds
+ Elapsed time for docking:	0.019 seconds
 
  Anchors:		1
  Orientations:		100
@@ -175,7 +176,7 @@ Molecule: ZINC00158751
 -----------------------------------
 Molecule: ZINC00013564
 
- Elapsed time for docking:	0.009 seconds
+ Elapsed time for docking:	0.014 seconds
 
  Anchors:		1
  Orientations:		100
@@ -188,7 +189,7 @@ Molecule: ZINC00013564
 -----------------------------------
 Molecule: ZINC01555236
 
- Elapsed time:	0.144 seconds
+ Elapsed time:	0.138 seconds
 
  ERROR:  Could not complete growth.
          Confirm that the grid box is large enough to contain the ligand,
@@ -197,7 +198,7 @@ Molecule: ZINC01555236
 -----------------------------------
 Molecule: ZINC00150863
 
- Elapsed time for docking:	0.007 seconds
+ Elapsed time for docking:	0.006 seconds
 
  Anchors:		1
  Orientations:		100
@@ -210,7 +211,7 @@ Molecule: ZINC00150863
 -----------------------------------
 Molecule: ZINC00152265
 
- Elapsed time for docking:	0.013 seconds
+ Elapsed time for docking:	0.011 seconds
 
  Anchors:		1
  Orientations:		100
@@ -223,7 +224,7 @@ Molecule: ZINC00152265
 -----------------------------------
 Molecule: ZINC00152280
 
- Elapsed time for docking:	0.073 seconds
+ Elapsed time for docking:	0.060 seconds
 
  Anchors:		1
  Orientations:		100
@@ -236,7 +237,7 @@ Molecule: ZINC00152280
 -----------------------------------
 Molecule: ZINC00157111
 
- Elapsed time for docking:	0.074 seconds
+ Elapsed time for docking:	0.059 seconds
 
  Anchors:		1
  Orientations:		100
@@ -249,7 +250,7 @@ Molecule: ZINC00157111
 -----------------------------------
 Molecule: ZINC00157152
 
- Elapsed time for docking:	0.014 seconds
+ Elapsed time for docking:	0.010 seconds
 
  Anchors:		1
  Orientations:		100
@@ -262,7 +263,7 @@ Molecule: ZINC00157152
 -----------------------------------
 Molecule: ZINC00157402
 
- Elapsed time for docking:	0.013 seconds
+ Elapsed time for docking:	0.011 seconds
 
  Anchors:		1
  Orientations:		100
@@ -275,7 +276,7 @@ Molecule: ZINC00157402
 -----------------------------------
 Molecule: ZINC00157467
 
- Elapsed time for docking:	0.080 seconds
+ Elapsed time for docking:	0.066 seconds
 
  Anchors:		1
  Orientations:		100
@@ -288,7 +289,7 @@ Molecule: ZINC00157467
 -----------------------------------
 Molecule: ZINC00157960
 
- Elapsed time for docking:	0.021 seconds
+ Elapsed time for docking:	0.014 seconds
 
  Anchors:		1
  Orientations:		100
@@ -300,7 +301,7 @@ Molecule: ZINC00157960
 
 
 12 Molecules Processed
-Total elapsed time:	0.538 seconds
-Number of molecules per second:	22.319
-Virtual memory used for this process: 97676 kilobytes
-Physical memory used for this process: 21148 kilobytes
+Total elapsed time:	0.486 seconds
+Number of molecules per second:	24.703
+Virtual memory used for this process: 102740 kilobytes
+Physical memory used for this process: 13536 kilobytes

@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.12
+DOCK v6.13
 
-Released September 2024
+Released July 2025
 Copyright UCSF
 --------------------------------------
 
@@ -159,7 +159,8 @@ Molecule Library Output Parameters
 ligand_outfile_prefix                                        covalent_trans_rot_output
 write_mol_solvation                                          no
 write_orientations                                           no
-num_scored_conformers                                        1
+num_final_scored_poses                                       1
+num_preclustered_conformers                                  1
 score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
@@ -201,25 +202,25 @@ bondlength D2--D1 = 1.8
 -----------------------------------
 VERBOSE GROWTH STATS : COVALENT_BOND_CONFIGURATION  #1
 
-33/36 anchor orients retained (max 100) t=0.07459s
+33/36 anchor orients retained (max 100) t=0.07435s
 Lyr 1-1 Segs|Lyr 2-2 Segs|Lyr 3-1 Segs|Lyr 4-1 Segs|Lyr 5-1 Segs|
 Lyr:1 Seg:0 Bond:0 : Sampling 4 dihedrals D2(Du)  D1(Du)  C26(C.3)  C25(C.2)
-Lyr:1 Seg:0 70/132 retained, Pruning: 1-score 61-clustered  t=0.513396s
+Lyr:1 Seg:0 70/132 retained, Pruning: 1-score 61-clustered  t=0.513221s
 Lyr:2 Seg:0 Bond:15 : Sampling 6 dihedrals C27(C.3)  C26(C.3)  C25(C.2)  N24(N.am)
-Lyr:2 Seg:0 75/420 retained, Pruning: 345-clustered  t=2.27393s
+Lyr:2 Seg:0 75/420 retained, Pruning: 345-clustered  t=2.27756s
 Lyr:2 Seg:1 Bond:16 : Sampling 3 dihedrals C25(C.2)  C26(C.3)  C27(C.3)  N28(N.4)
-Lyr:2 Seg:1 70/225 retained, Pruning: 155-clustered  t=3.22832s
+Lyr:2 Seg:1 70/225 retained, Pruning: 155-clustered  t=3.23304s
 Lyr:3 Seg:0 Bond:45 : Sampling 2 dihedrals C23(C.3)  N24(N.am)  C25(C.2)  C26(C.3)
-Lyr:3 Seg:0 96/140 retained, Pruning: 33-score 11-clustered  t=4.04384s
+Lyr:3 Seg:0 96/140 retained, Pruning: 33-score 11-clustered  t=4.04942s
 Lyr:4 Seg:0 Bond:9 : Sampling 2 dihedrals N19(N.ar)  C20(C.ar)  N21(N.pl3)  C22(C.3)
-Lyr:4 Seg:0 68/192 retained, Pruning: 64-outside grid 32-score 28-clustered  t=5.14758s
+Lyr:4 Seg:0 68/192 retained, Pruning: 64-outside grid 32-score 28-clustered  t=5.15465s
 Lyr:5 Seg:0 Bond:21 : Sampling 2 dihedrals C02(C.ar)  C03(C.ar)  C04(C.ar)  C12(C.ar)
-Lyr:5 Seg:0 45/136 retained, Pruning: 39-outside grid 36-score 16-clustered  t=6.35121s
+Lyr:5 Seg:0 45/136 retained, Pruning: 39-outside grid 36-score 16-clustered  t=6.37348s
 
 -----------------------------------
 Molecule: 5V6V
 
- Elapsed time for docking:	4.000 seconds
+ Elapsed time for docking:	6.000 seconds
 
  Anchors:		0
  Orientations:		36
@@ -230,7 +231,6 @@ Molecule: 5V6V
                       Grid_es_energy:          -11.195789
            Internal_energy_repulsive:           31.238340
                             bl;bl2;a:         1.8;1.8;103
-Total elapsed time:  4.443 seconds
-Virtual memory used for this process: 139888 kilobytes
-Physical memory used for this process: 54784 kilobytes
-
+Total elapsed time:	6.514 seconds
+Virtual Memory Used for this process: 153672 KiloBytes
+Physical Memory Used for this process: 75324 KiloBytes

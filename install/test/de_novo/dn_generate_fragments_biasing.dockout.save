@@ -1,0 +1,76 @@
+
+
+
+--------------------------------------
+DOCK v6.13
+
+Released July 2025
+Copyright UCSF
+--------------------------------------
+
+
+Conformational Sampling Parameters
+------------------------------------------------------------------------------------------
+conformer_search_type                                        flex
+write_fragment_libraries                                     yes
+fragment_library_prefix                                      dn_generate_fragments_biasing
+fragment_library_freq_cutoff                                 1
+fragment_library_sort_method                                 freq
+fragment_library_trans_origin                                yes
+
+Internal Energy Parameters
+------------------------------------------------------------------------------------------
+use_internal_energy                                          no
+
+Molecule Library Input Parameters
+------------------------------------------------------------------------------------------
+ligand_atom_file                                             dn_lig_biasing.mol2
+limit_max_ligands                                            no
+skip_molecule                                                no
+read_mol_solvation                                           no
+calculate_rmsd                                               no
+
+Database Filter Parameters
+------------------------------------------------------------------------------------------
+use_database_filter                                          no
+
+Orient Ligand Parameters
+------------------------------------------------------------------------------------------
+orient_ligand                                                no
+
+Bump Filter Parameters
+------------------------------------------------------------------------------------------
+bump_filter                                                  no
+
+Master Score Parameters
+------------------------------------------------------------------------------------------
+score_molecules                                              no
+
+Atom Typing Parameters
+------------------------------------------------------------------------------------------
+atom_model                                                   all
+vdw_defn_file                                                ../../../parameters/vdw_AMBER_parm99.defn
+flex_defn_file                                               ../../../parameters/flex.defn
+flex_drive_file                                              ../../../parameters/flex_drive.tbl
+
+Molecule Library Output Parameters
+------------------------------------------------------------------------------------------
+ligand_outfile_prefix                                        output
+write_mol_solvation                                          no
+write_orientations                                           no
+num_final_scored_poses                                       1
+num_preclustered_conformers                                  1
+score_threshold                                              100.0
+rank_ligands                                                 no
+------------------------------------------------------------------------------------------
+
+Initializing Conformer Generator Routines...
+Initializing Library File Routines...
+
+
+
+3 Molecules Processed
+Total elapsed time:	0.027 seconds
+Number of molecules per second:	111.243
+Virtual memory used for this process: 89532 kilobytes
+Physical memory used for this process: 4088 kilobytes

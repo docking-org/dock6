@@ -18,7 +18,7 @@
 <p align=center class="style2">Rigid and Flexible Ligand DOCKing </p>
 
 <p align=center class="style4style10" style='text-align:center'><span class="style5">Author: P. Therese Lang <br>
-Last updated August 16, 2024 by Scott Brozell</p>
+Last updated June 12, 2025 by Scott Brozell</p>
 
 <p align="left" class="style4">
 This tutorial describes rigid- and flexible-ligand
@@ -43,8 +43,7 @@ text file from the
 and the <a href="../grid_generation/grid.nrg">grid.nrg</a> and
 <a href="../grid_generation/grid.bmp">grid.bmp</a> binary files from the
 &quot;<a href="../grid_generation/generating_grid.html">Grid Generation Tutorial</a>.&quot;
-The program dock6 that is
-distributed and installed with DOCK is required.
+The program dock6 that is distributed and installed with DOCK is required.
 This ligand input file contains a single ligand, 
 but multiple ligands would be treated simply by including more
 ligands in the ligand input file.
@@ -57,11 +56,11 @@ ligands in the ligand input file.
 the ligand will be kept completely rigid during the orientation step.
 The purpose is to explore the matching and minimization algorithms.
 However, this type of docking could be applied in a scientific
-setting if you have a library of ligands that have already been
+setting to a library of ligands that have already been
 conformationally expanded outside of the DOCK suite of programs. </p>
 
 <p align="left" class=style4> The rigid body orienting code is written as a direct implementation of the isomorphous subgraph matching method of Crippen and Kuhl (Kuhl, et al. <em>J. Comput. Chem. </em>1984). 
-Conceptually, the algorithm matchings the centers of the ligand heavy atom to the centers of the receptor site spheres. The algorithm follows the steps below:
+Conceptually, the algorithm matches the centers of the ligand heavy atoms to the centers of the receptor site spheres. The algorithm follows the steps below:
 <p align="center" class=style4><img src="clique_match.JPG" width="391" height="310" align="left"> 
 <p align="left" class=style4>1) Generate node<br>
 2) Label as match if atom and sphere edges are equivalent<br>
@@ -201,9 +200,8 @@ grid scoring calculation.
 # The prefix that all output files will use </li>
     <li><span class="style4">write_orientations [no] (yes, no): <br>
   # Flag to write all anchor orientations</span> 
-    <li><span class="style4">num_scored_conformers [1] (int): <br>
-# The number of conformations scored for each ligand.<br>       
-  # For each ligand the top scoring pose is printed to outfile_scored.mol2</span>
+    <li><span class="style4">num_final_scored_poses [1] (int): <br>
+  # For each ligand the number of scored poses printed to outfile_scored.mol2</span>
     <li class="style4">rank_ligands [no] (yes, no): <br>
   # Flag to enable a ligand top-score list. These ligands will be written to <br>
   # outfile_ranked.mol2.</li>
@@ -392,9 +390,8 @@ grid scoring calculation.
   # The prefix that all output files will use </li>
     <li><span class="style4">write_orientations [no] (yes, no): <br>
   # Flag to write all anchor orientations</span>
-    <li><span class="style4">num_scored_conformers [1] (int): <br>
-# The number of conformations scored for each ligand.<br>       
-  # For each ligand the top scoring pose is printed to outfile_scored.mol2</span>
+    <li><span class="style4">num_final_scored_poses [1] (int):  br>
+  # For each ligand the number of scored poses printed to outfile_scored.mol2</span>
     <li class="style4">rank_ligands [no] (yes, no): <br>
   # Flag to enable a ligand top-score list. These ligands will be written to <br>
   # outfile_ranked.mol2.</li>

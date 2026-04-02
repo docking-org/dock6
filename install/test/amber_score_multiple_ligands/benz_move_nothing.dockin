@@ -41,5 +41,5 @@ amber_score_temperature                                      300.0
 amber_score_abort_on_unprepped_ligand                        yes
 ligand_outfile_prefix                                        benz_move_nothing
 write_orientations                                           no
-num_scored_conformers                                        1
+num_final_scored_poses                                       1
 rank_ligands                                                 no

@@ -51,6 +51,8 @@ DN_GA_Build::DN_GA_Build(){
     dn_ga_mut_attempt = 0;
     tmp_first_check = false;
     tmp_second_check = false; //temporary fix for uninitialized value, set to true to be conservative, takes extra time but checks both direction sof the torenv (?)
+    iso_picks=0;
+ dn_ga_verbose = 0;
 }
 DN_GA_Build::~DN_GA_Build(){
     scaffolds.clear();
@@ -58,6 +60,7 @@ DN_GA_Build::~DN_GA_Build(){
     sidechains.clear();
     anchors.clear();
     scaf_link_sid.clear();
+    dn_ga_verbose = 0;
 }
 
 
@@ -1702,7 +1705,6 @@ DN_GA_Build::sample_fraglib_exhaustive( Fragment & layer_frag, int j, vector <Fr
 							   fraglib[l].aps[m].dummy_atom,
                                                            fraglib[l].aps[m].heavy_atom);
 
-
                 // check growing_ref to see if it gets bigger
                 int growing_ref_size_before = growing_ref.size();        
 
@@ -1857,7 +1859,15 @@ DN_GA_Build::sample_fraglib_rand( Fragment & layer_frag, int j, vector <Fragment
             cout << "Do not want to sample anything with more than 1 attachment point." << endl;
             continue;
         }
-        
+
+        if (iso_picks>0){
+            std::stringstream newName;
+            newName << "h_"<< fraglib[dnrn].mol.energy;
+            for (int s =0; s<fraglib[dnrn].mol.num_atoms; s++){
+                fraglib[dnrn].mol.subst_names[s] = newName.str();
+            }
+        }
+
         cout << "Number of attachment points of frag: " << fraglib[dnrn].aps.size() << endl;
         // For each attachement point on that fragment
         for (int m=0; m<fraglib[dnrn].aps.size(); m++){
@@ -1878,6 +1888,22 @@ DN_GA_Build::sample_fraglib_rand( Fragment & layer_frag, int j, vector <Fragment
                                                            fraglib[dnrn],
                                                            fraglib[dnrn].aps[m].dummy_atom,
                                                            fraglib[dnrn].aps[m].heavy_atom);
+                if (frag_combined.iso_targeted_AP >= 0 
+                    || frag_combined.iso_frag_att_num_APs >= 0){
+                    std::cout << "ERROR: iso_targeted_AP is not -1" << std::endl;
+                    std::cout << "ERROR: iso_frag_att_num_APs is not -1" << std::endl;
+                    exit(1);
+                }
+
+                // get the attachemnt point that was targeted
+                frag_combined.iso_targeted_AP = j;
+ 
+                // get the num of AP for the frag that was recently attached
+                // for the isoswap_GA
+                frag_combined.iso_frag_att_num_APs = fraglib[dnrn].aps.size();
+  
+                // get the index of the fragment used
+                frag_combined.iso_head_attached_ind = dnrn;
 
                 // check growing_ref to see if it gets bigger
                 int growing_ref_size_before = growing_ref.size();        
@@ -2092,6 +2118,23 @@ DN_GA_Build::sample_fraglib_graph( Fragment & layer_frag, int j, vector <Fragmen
                                                                fraglib[this_dnrn.first].aps[m].dummy_atom,
                                                                fraglib[this_dnrn.first].aps[m].heavy_atom);
 
+                    if (frag_combined.iso_targeted_AP >= 0 
+                        || frag_combined.iso_frag_att_num_APs >= 0){
+                        std::cout << "ERROR: iso_targeted_AP is not -1" << std::endl;
+                        std::cout << "ERROR: iso_frag_att_num_APs is not -1" << std::endl;
+                        exit(1);
+                    }
+
+                    // get the attachemnt point that was targeted
+                    frag_combined.iso_targeted_AP = j;
+ 
+                    // get the num of AP for the frag that was recently attached
+                    // for the isoswap_GA
+                    frag_combined.iso_frag_att_num_APs = fraglib[dnrn].aps.size();
+  
+                    // get the index of the fragment used
+                    frag_combined.iso_head_attached_ind = dnrn;
+
                     // check growing_ref to see if it gets bigger
                     int growing_ref_size_before = growing_ref.size();        
 
@@ -2114,6 +2157,7 @@ DN_GA_Build::sample_fraglib_graph( Fragment & layer_frag, int j, vector <Fragmen
                             if (dn_ga_flag){
                                // Prepare the molecule using the amber_typer to assign bond types to each bond
                                frag_combined.mol.prepare_molecule();
+ 
                                typer.skip_verbose_flag = true;
                                typer.prepare_molecule(frag_combined.mol, true, score.use_chem, score.use_ph4, score.use_volume);
                                GA_Recomb c_ga;
@@ -2243,6 +2287,7 @@ Fragment
 DN_GA_Build::combine_fragments( Fragment & frag1, int dummy1, int heavy1,
                              Fragment frag2, int dummy2, int heavy2 )
 {
+    double finalmat[3][3];
     // frag1 is in the correct position - the objective is to translate / rotate frag2
     // so that the bond from dummy2->heavy2 is overlapping the bond from heavy1->dummy1
 
@@ -2343,8 +2388,13 @@ DN_GA_Build::combine_fragments( Fragment & frag1, int dummy1, int heavy1,
     if (cos_theta == -1){
 
         // Declare the rotation matrix and rotate frag2
-        double finalmat[3][3] = { { -1, 0, 0}, {0, -1, 0}, {0, 0, -1} };
+        //finalmat[3][3] = { { -1, 0, 0}, {0, -1, 0}, {0, 0, -1} };
+        finalmat[0][0]=-1; finalmat[0][1]=0;  finalmat[0][2]=0;
+        finalmat[1][0]=0;  finalmat[1][1]=-1; finalmat[1][2]=0;
+        finalmat[2][0]=0;  finalmat[2][1]=0;  finalmat[2][2]=-1;
+
         frag2.mol.rotate_mol(finalmat);
+  
     }
 
     // If cos_theta is 1, vec1 and vec2 are already parallel - only translation is needed.
@@ -2419,7 +2469,11 @@ DN_GA_Build::combine_fragments( Fragment & frag1, int dummy1, int heavy1,
 
         // (4) Multiply three matrices together:  [coorRot * planeRot * invcoorRot]
         float temp[3][3];
-        double finalmat[3][3];
+        //double finalmat[3][3];
+
+        finalmat[0][0]=1;  finalmat[0][1]=0;  finalmat[0][2]=0;
+        finalmat[1][0]=0;  finalmat[1][1]=1;  finalmat[1][2]=0;
+        finalmat[2][0]=0;  finalmat[2][1]=0;  finalmat[2][2]=1;
 
         // First multiply coorRot * planeRot, save as temp
         for (int i=0; i<3; i++){
@@ -2467,6 +2521,13 @@ DN_GA_Build::combine_fragments( Fragment & frag1, int dummy1, int heavy1,
             frag_combined.frag_growth_tree.push_back(frag1.frag_growth_tree[i]);
         }
     }
+
+    // Save the orientation mat for isoswap
+    for(int i=0;i<3;i++){
+        for( int j=0;j<3;j++){
+            frag_combined.iso_ori_mat[i][j] = finalmat[i][j];
+        }
+    }  
 
     return frag_combined;
 
@@ -3580,7 +3641,8 @@ DN_GA_Build::compare_dummy_bonds( Fragment frag1, int dummy1, int heavy1,
 void
 DN_GA_Build::sample_minimized_torsions( Fragment & frag1, vector <Fragment> & list_of_frags, 
                                      Master_Score & score, Simplex_Minimizer & simplex, 
-                                     AMBER_TYPER & typer )
+                                     AMBER_TYPER & typer, std::pair<bool,float> tors_spec
+ )
 {
     // Activate all atoms and bonds prior to any scoring
     activate_mol(frag1.mol);
@@ -3622,8 +3684,14 @@ DN_GA_Build::sample_minimized_torsions( Fragment & frag1, vector <Fragment> & li
     // if (total_charges > dn_constraint_charge_groups){ return; }
 
     // Sample torsions for frag1, move torsions onto tmp_list
-    frag_torsion_drive(frag1, tmp_list);
+    if (!tors_spec.first){
+        frag_torsion_drive(frag1, tmp_list);
+    } else{
+       frag_torsion_drive(frag1, tmp_list, tors_spec);
+    }
 
+
+    std::vector <DOCKMol> v_frag_writeout {};
 
     // For all of the torsions that were just generated for the most recent fragment addition,
     for (int i=0; i<tmp_list.size(); i++){
@@ -3663,6 +3731,11 @@ DN_GA_Build::sample_minimized_torsions( Fragment & frag1, vector <Fragment> & li
         if (dn_write_growth_trees){
             tmp_list[i].frag_growth_tree.push_back(tmp_list[i].mol);
         }
+   
+        // for verbose out
+        if ( dn_ga_verbose > 1 ){
+            v_frag_writeout.push_back(tmp_list[i].mol);
+        }
 
         // Flexible minimization
         simplex.minimize_flexible_growth(tmp_list[i].mol, score, bond_tors_vectors);
@@ -3700,6 +3773,24 @@ DN_GA_Build::sample_minimized_torsions( Fragment & frag1, vector <Fragment> & li
 // end BCF part
         bond_tors_vectors.clear();
     }
+
+
+    if ( dn_ga_verbose > 1 && iso_picks > 0 ){
+        ostringstream fout_molecules_name;
+        std::ostringstream gen;
+
+        gen << std::setw(4) << std::setfill('0') << dn_ga_gen+1;
+        fout_molecules_name << dn_output_prefix << ".isoswap_addtn" << gen.str() <<".mol2";
+        
+        print_molecules(
+            fout_molecules_name.str(),
+            v_frag_writeout,
+            dn_ga_gen,
+            ""
+        );
+    }
+
+    v_frag_writeout.clear();
 
     // Cluster post-minimization torsions by RMSD and remove those under a certain cutoff 
     float rmsd;
@@ -3797,7 +3888,10 @@ DN_GA_Build::calc_fragment_rmsd( Fragment & a, Fragment & b )
 // +++++++++++++++++++++++++++++++++++++++++
 // Populate a list of frags with different torsions. In A&G, this is called segment_torsion_drive
 void
-DN_GA_Build::frag_torsion_drive( Fragment & new_frag, vector <Fragment> & frag_list )
+DN_GA_Build::frag_torsion_drive( Fragment & new_frag, 
+                                 vector <Fragment> & frag_list, 
+                                 std::pair<bool,float> tors_spec
+                                 )
 {
     // Note: Every time two frags are combined into one, the last bond in the list is the new bond
     // between the two fragments. This is the bond about which torsions should be generated
@@ -3853,28 +3947,38 @@ DN_GA_Build::frag_torsion_drive( Fragment & new_frag, vector <Fragment> & frag_l
     }
 
 
-    // Number of torsions comes from amber_bt_torsion_total (returns a different number for a given
-    // bond type)
-    num_torsions = new_frag.mol.amber_bt_torsion_total[ new_frag.mol.num_bonds-1 ];
+    if ( tors_spec.first ) {
+        new_frag.iso_tors_turned = tors_spec.second;
+        new_frag.mol.set_torsion(atom1, atom2, atom3, atom4, tors_spec.second);
+        frag_list.push_back( new_frag ); 
+        return;
+    } else {
+        // Number of torsions comes from amber_bt_torsion_total (returns a different number for a given
+        // bond type)
+        num_torsions = new_frag.mol.amber_bt_torsion_total[ new_frag.mol.num_bonds-1 ];
 
-    // Create torsions at appropriate intervals
-    for (int i=0; i<num_torsions; i++){
+        // Create torsions at appropriate intervals
+        for (int i=0; i<num_torsions; i++){
 
-        // Figure out the angle for this torsion and convert it to radians
-        new_angle = new_frag.mol.amber_bt_torsions[ new_frag.mol.num_bonds-1 ][i];
-        new_angle = (PI / 180) * new_angle;
+            // Figure out the angle for this torsion and convert it to radians
+            new_angle = new_frag.mol.amber_bt_torsions[ new_frag.mol.num_bonds-1 ][i];
+            new_angle = (PI / 180) * new_angle;
 
-        if (verbose){
-            cout <<"FTD: amber_bt_torsions[" <<i <<"] = " 
-                 <<new_frag.mol.amber_bt_torsions[new_frag.mol.num_bonds-1][i] <<endl;
-            cout <<"FTD: new_angle = " <<new_angle <<endl;
+            if (verbose){
+                cout <<"FTD: amber_bt_torsions[" <<i <<"] = " 
+                     <<new_frag.mol.amber_bt_torsions[new_frag.mol.num_bonds-1][i] <<endl;
+                cout <<"FTD: new_angle = " <<new_angle <<endl;
+            }
+
+            // Push the fragment onto the end of the frag_list vector
+            frag_list.push_back(new_frag);
+
+            // Then adjust the torsions of that fragment according to the angle at this iteration
+            frag_list[frag_list.size()-1].mol.set_torsion(atom1, atom2, atom3, atom4, new_angle);
+ 
+            // save the torsioned turned for isoswap
+            frag_list[frag_list.size()-1].iso_tors_turned = new_angle;
         }
-
-        // Push the fragment onto the end of the frag_list vector
-        frag_list.push_back(new_frag);
-
-        // Then adjust the torsions of that fragment according to the angle at this iteration
-        frag_list[frag_list.size()-1].mol.set_torsion(atom1, atom2, atom3, atom4, new_angle);
     }
 
     return;
@@ -4334,3 +4438,199 @@ void DN_GA_Build::frag_sort(std::vector< std::pair <Fragment, int> > & vec_frag,
 
 }
 
+
+void
+DN_GA_Build::print_molecules(std::string fout_molecules_name, std::vector <DOCKMol> & parents, int gen, std::string prefix){
+    fstream fout_molecules;
+    fout_molecules.open (fout_molecules_name, fstream::out|fstream::app);
+    for (int j=0; j<parents.size(); j++){
+        activate_mol(parents[j]);
+    
+        // calculate some ensemble properties
+        calc_mol_wt( parents[j] );
+        calc_rot_bonds( parents[j] );
+        calc_formal_charge( parents[j] );
+        calc_num_HA_HD( parents[j] );
+
+        // Only Update name if a new molecule
+        // BTB - if limit max change is on then the molecule is already named in PDM
+        if (parents[j].parent == 0){
+            naming_function(parents[j], gen+1, j, prefix);
+        }
+
+        // if you compartamaliz res nums, change the res id where
+        // every time there is a change in subst id change the 
+        // atom_res_num by incrementing by one. 
+        // This is PURELY for Chimera visual analysis. Nothing else
+
+        std::vector <std::string> l_atom_res_subst {};
+        //l_atom_res_subst= parents[j].subst_names;
+        for (int z=0; z < parents[j].num_atoms; z++){
+            l_atom_res_subst.push_back(parents[j].subst_names[z]);
+        }
+
+        std::vector <std::string> new_l_atom_nums {};
+
+        std::string string_holder = "";
+        int subst_id = 0;
+        for ( std::string res_n : l_atom_res_subst ){
+            if ( string_holder == "" || string_holder != res_n){
+                 subst_id++;
+                 string_holder = res_n;
+                 new_l_atom_nums.push_back( std::to_string( subst_id ) );
+            } else{ new_l_atom_nums.push_back( std::to_string( subst_id ) ); }
+        }
+        for ( int z=0; z < parents[j].num_atoms; z++ ){
+            parents[j].atom_residue_numbers[z] = new_l_atom_nums[z];
+        }
+
+
+        // sort and make the list of substance names unique 
+        // to write out to the header
+        std::sort(l_atom_res_subst.begin(), l_atom_res_subst.end());
+        auto uniq_subt_name  =
+            std::unique( l_atom_res_subst.begin(), l_atom_res_subst.end());
+        l_atom_res_subst.erase(uniq_subt_name, l_atom_res_subst.end());
+
+        std::stringstream frag_string_newname;
+        for ( std::string str: l_atom_res_subst){
+            frag_string_newname << str << "**";
+        }
+
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Name:"
+                       << setw(FLOAT_WIDTH) << parents[j].title <<endl;
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Generation:"
+                       << setw(FLOAT_WIDTH) << gen+1 <<endl;
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Molecular_Weight:"
+                       << setw(FLOAT_WIDTH) << fixed << setprecision(3) << parents[j].mol_wt <<endl;
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "DOCK_Rotatable_Bonds:"
+                       << setw(FLOAT_WIDTH) << parents[j].rot_bonds <<endl;
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Hydrogen_Acceptors:"
+                       << setw(FLOAT_WIDTH) << parents[j].hb_acceptors <<endl;
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Hydrogen_Donors:"
+                       << setw(FLOAT_WIDTH) << parents[j].hb_donors <<endl;
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Formal_Charge:"
+                      << setw(FLOAT_WIDTH) << fixed << setprecision(3) << round(parents[j].formal_charge) <<endl;
+
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Type:"
+                       << setw(FLOAT_WIDTH) << parents[j].energy <<endl;
+
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "GA_Frag_String:"
+                       << setw(FLOAT_WIDTH)<<" " + frag_string_newname.str() << std::endl;
+        //current _data may not be initialized on write out
+        fout_molecules << parents[j].current_data << endl;
+        Write_Mol2(parents[j], fout_molecules);
+
+        // Reset the atom_residue_nums back to an array of "1"
+        for ( int z=0; z < parents[j].num_atoms; z++ ){
+            parents[j].atom_residue_numbers[z] = "1";
+        }
+    }
+    fout_molecules.close();
+
+}
+
+
+// ++++++++++++++++++++++++++++++++++++++++++++
+// Create a unique name with the parents, generation number, and location in file
+// If mol from all new, name is dn_gennum_loc
+void
+DN_GA_Build::naming_function( DOCKMol & mol, int gen, int loc, std::string prefix)
+{
+
+   //cout << "inside NAMING FUNCTION" <<endl;
+   // Place holder for Name list
+   vector <string> list; 
+   
+   list.push_back(mol.subst_names[0]);
+
+   // Search through the substrate names
+   for ( int i=1; i<mol.num_atoms; i++ ){
+       // If the next substrate name is equal to the previous
+       //cout <<" name " << mol.subst_names[i] <<endl;
+       if ( (mol.subst_names[i] != mol.subst_names[i-1])){
+          // Check to see if it is already in the list
+          size_t found = mol.subst_names[i].find_first_of("p");
+          //cout << "NAMING FUNCTION " <<found <<endl;
+ 
+          // If the atoms are from a parent and not in the list already
+          if ( found == 0 && ( find ( list.begin(), list.end(), mol.subst_names[i] ) == list.end() )){
+             // Add the parent name to the list
+             list.push_back(mol.subst_names[i]);
+          }     
+       }     
+   }
+
+
+   // Add the items in list to the subst name
+   ostringstream new_title;
+
+   //BTB 2022.10.24 - provide additional context for the molecule in the name
+   new_title << prefix;
+   
+   // Add gen first  
+   if ( gen < 10 ){ 
+       new_title << dn_ga_name_identifier << "_g000" << gen ; 
+   }
+   else if ( gen < 100 ){
+       new_title << dn_ga_name_identifier << "_g00" << gen ; 
+   }
+   else if ( gen < 1000 ){
+       new_title << dn_ga_name_identifier << "_g0" << gen ; 
+   }
+   else {
+       new_title << dn_ga_name_identifier << "_g" << gen ; 
+   }
+
+   //cout << "new_title: " << new_title << endl;
+   //mol.title = new_title.str();
+   
+   // Add the items in list to new_energy as a string
+   /*for (int i=0; i<list.size(); i++){
+
+       //Check to make sure that the first in the list is not <0>
+       if (i == 0){
+          size_t found = list[i].find_first_of("p");
+          // If the atoms are from a parent and not in the list already
+          if ( found == 0 ){
+             new_title << list[i];
+          }
+       }
+       else{
+           new_title << "_" << list[i];
+       }
+   }
+
+
+   // If list is empty, all new molecule
+   if (list.size() == 0){
+      new_title << "dn";  
+   }*/
+   //Add location
+   if ( loc < 10 ){ 
+       new_title << "_i000" << loc;
+   }
+   else if ( loc < 100 ){
+       new_title << "_i00" << loc;
+   }
+   else if ( loc < 1000 ){
+       new_title << "_i" << loc;
+   }
+   else {
+       new_title << "_i" << loc;
+   }
+
+   //new_title << "_r" << loc;
+   /* Add generation and location
+   new_title << "_g" << gen << "_" << loc;
+   //cout << "new_title: " << new_title << endl;*/
+   if (mol.energy != PARENT_TAG){
+       mol.title = new_title.str();   
+   }
+
+   // Clear new_energy
+   new_title.str("");
+   list.clear();
+
+   return;
+}//end GA_Recomb::naming_function()

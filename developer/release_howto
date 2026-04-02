@@ -18,7 +18,7 @@ Steps (for everyone) to finalize development:
    functions and parameters.  Remember to include any new images in the
    docs/images folder.
 
-.  Generate release notes for the web site, eg, docs/new_in_6.12.txt.
+.  Generate release notes for the web site, eg, docs/new_in_6.13.txt.
 
 
 Steps to get the repository ready:
@@ -63,7 +63,7 @@ Steps to get the repository ready:
 
 .  Update FAQ current release question to new release.
 
-.  Create new bug fixes file, eg, docs/bugfixes612/6.12_bugfixes.htm
+.  Create new bug fix patches file, eg, docs/bugfixes613/6.13_bugfixes.htm
    and update docs/bugfixes.htm
 
 .  Update docs/index.htm
@@ -71,43 +71,54 @@ Steps to get the repository ready:
 
 Steps to make the tarballs from the repository and to post on the server:
 
-.  Update the DISTRIBUTION_TAG in install/Makefile, eg, dock6-12-beta.
+.  Update the DISTRIBUTION_TAG in install/Makefile, eg, dock6-13-beta.
 
 .  Generate tarballs for beta testing.  In install/ directory, Makefile target
    archive_export creates tarballs for the distribution and the web site.  Add
    a special license qualification to the README, eg:
 
    This beta release of DOCK 6 has a special testing-only license that is valid
-   for the month of November 2023.
+   for the month of June 2025.
 
    Put the tarballs on the web, eg, ambermd.org or docking.org, and request
    testing via a private email to friendly users.
    Incorporate feedback per stages above and then proceed to the next step.
 
-.  Update the DISTRIBUTION_TAG in install/Makefile, eg, dock6-12-release.
+.  Tag repository; as of 6.13 use annotated tags for prereleases since
+   lightweight tags (no -a in command below) are not permanent:
+   git tag -a dock6-13-beta
+   git push -u origin dock6-13-beta
+   
+.  Update the DISTRIBUTION_TAG in install/Makefile, eg, dock6-13-release.
 
 .  Generate tarballs for distribution:  cd install/; make archive_export;
 
-.  Move code tarball to dock.compbio.ucsf.edu /var/www/html/distributions;
-   rename file to dock.6.X_source.tar.gz for consistency with the web site
-   script  (NOTE:  Consider removing the previous version from this directory
-   to another location if dock.compbio does not have lots of free disk space.)
-   Note that a linux named tar ball is probably Not necessary :
+.  Move code tarball to dock.compbio.ucsf.edu /nfs/soft/dock/packages;
+   rename file to dock.6.X_source.tar.gz and create symbolic link to
+   dock6-latest.tgz for consistency with the web site script.
 
-   cd /var/www/html/distributions
-   df
-   tar zcf /tmp/var.www.html.distributions.pre612partialbackup.tgz \
-      retrieve_dock_distribution.html
-   chmod 400 /tmp/var.www.html.distributions.pre612partialbackup.tgz
-   mv -i ~/tmp/dock6.dock6-12-release.tgz ./dock.6.12_source.tar.gz
-   chmod 644 dock.6.12_source.tar.gz
+   scp -p dock6.dock6-13-release.tgz to-ucsf
+   ssh to-ucsf
+   scp -p ~/tmp/dock6.dock6-13-release.tgz inside-ucsf
+   mv -i ~/tmp/dock6.dock6-13-release.tgz dock
+   ssh inside-ucsf
+   mv -i ~/tmp/dock6.dock6-13-release.tgz dock/dock.6.13_source.tar.gz
+   cd /nfs/soft/dock/packages
+   cp -ip ~/dock/dock.6.13_source.tar.gz .
+   chmod 644 dock.6.13_source.tar.gz
+   ln -s dock.6.13_source.tar.gz dock6-latest.tgz
 
-.  Enter /var/www/html/distributions on dock.  Update (1 line) version
+.  The following web site changes occur, as of 6.13, in the ucsf website gitlab:
+   git clone https://gitlab.docking.org/kylep/dock.git
+   Create a branch then a merge request.
+
+.  Enter dock/html/distributions in the repo.  Update (1 line) version
    number in retrieve_dock_distribution.html :
 
+   cd html/distributions
    vi retrieve_dock_distribution.html
 
-.  Enter /var/www/cgi-bin/distributions on dock.
+.  Enter dock/cgi-bin/distributions in the repo.
    Open file retrieve_dock_distribution.py.  Change the following line:
 
       if dock_version[:6] == 'dock_6':
@@ -121,32 +132,28 @@ Steps to make the tarballs from the repository and to post on the server:
 
       where X = newest version
 
-   cd /var/www/cgi-bin/distributions
-   tar zcf /tmp/var.www.cgi-bin.distributions.pre612partialbackup.tgz \
-      retrieve_dock_distribution.py retrieve_industry_distribution.py
-   chmod 400 /tmp/var.www.cgi-bin.distributions.pre612partialbackup.tgz
+   cd ../../cgi-bin/distributions
    vi retrieve_dock_distribution.py retrieve_industry_distribution.py
 
-.  Move to /var/www/html/kuntz.  Accommodate recent hacks to release process.
-   Update (1 line) index.html to current version :
+.  Move to dock/html/kuntz.  Update (1 line) index.html to current version :
 
-   cd /var/www/html/kuntz
-   df
-   tar zcf /tmp/var.www.html.kuntz.pre612partialbackup.tgz index.html
-   chmod 400 /tmp/var.www.html.kuntz.pre612partialbackup.tgz
-   ln -s ../distributions/dock.6.12_source.tar.gz
-   ln -s ../distributions/dock.6.12_source.tar.gz dock.6.12_linux.tar.gz
+   cd ../../html/kuntz
    vi index.html
 
-.  Enter /var/www/html/kuntz/DOCK_6.  This directory tree is doc/ in the
-   repository.  Unwrap the web tarball to update the manual, faq, tutorials, ...
-   Accommodate recent weirdness of .htm and .html files via linking.
-   Remember to double check that the updates are now live on the web site :
+.  Check the diff with the main branch; commit changes.
 
-   cd /var/www/html/kuntz/DOCK_6
-   tar zxf ~/tmp/webarchiveexport.dock6-12-release.tgz
-   ln -s dock6_manual.html dock6_manual.htm
-   ln -s index.htm index.html
+.  Enter dock/html/kuntz/DOCK_6.  This directory tree is doc/ in our
+   repository.  Unwrap the web tarball to update the manual, faq, tutorials, ...
+   Check recent weirdness of .htm and .html files and linking.
+
+   cd html/kuntz/DOCK_6
+   tar zxf ~/tmp/webarchiveexport.dock6-13-release.tgz
+   ll dock6_manual.html dock6_manual.htm
+   ll index.htm index.html
+
+.  Check the diff with the main branch; commit changes; push the branch.
+   Create a merge request.  For 6.13 I merged my own request.
+   Check that the updates are now live on the web site.
 
 .  Test for academic distribution by applying for fake license and going
    through downloading process.  Have an independent third party attempt to
@@ -160,28 +167,19 @@ Steps to make the tarballs from the repository and to post on the server:
 Misc. final steps:
 
 .  Send announcements to dock-fans and maybe developers without release notes:
-   Subject: Announcement: Release of DOCK 6.10
+   Subject: Announcement: Release of DOCK 6.13
    Templates:
    https://groups.google.com/g/dock_fans/c/p0zgZoOQTks
 
 .  Send an ad to the Amber reflector, Chimera-users, and CCL.
    For CCL it is best to have two empty lines at the head of the message.
 
+.  Branch repository: Annotated tags are not as convenient for releases.
+   So create a branch for archival purposes and plan to use it for bugfixes:
+   git checkout -b dock6-13-release
+   git push -u origin dock6-13-release
+
 .  Celebrate!
 
-.  Branch repository; plan to use lightweight tags for prereleases, eg;
-   git tag dock6-12-beta
-   For the next release consider switching from lightweight to annotated tags
-   for prereleases for better documentation.
-   Annotated tags don't seem useful for releases, eg:
-   git tag -a dock6-12-release
-   So shortly after the release create a branch and plan to use it for bugfixes:
-   git checkout -b dock6-12-release
-   git push -u origin dock6-12-release
-
-.  Archive backups:
-   cd ~/dock/backup
-   scptopit var.www.cgi-bin.distributions.pre612partialbackup.tgz
-   scptopit var.www.html.distributions.pre612partialbackup.tgz
-   scptopit var.www.html.kuntz.pre612partialbackup.tgz
+.  Backups are now essentially all in git, but save the dock6 tarballs.
 

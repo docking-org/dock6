@@ -957,7 +957,7 @@ Library_File::input_parameters_output(Parameter_Reader & parm, Master_Score & sc
     cluster_ranked_poses = false;
     write_conformers = false;
     write_secondary_conformers = false;
-    num_scored_poses = 1;
+    num_preclustered_conformers = 1;
     num_clusterheads_rescore = 1;
     score_thres = 10000.0;
     write_solv_mol2 = false;
@@ -1013,17 +1013,17 @@ Library_File::input_parameters_output(Parameter_Reader & parm, Master_Score & sc
         }
     } 
 
-    if(score.use_secondary_score){
-        num_scored_poses =
+    if (score.use_secondary_score) {
+        num_preclustered_conformers =
             atoi(parm.query_param("num_primary_scored_conformers_rescored", "1").
                  c_str());
-        if (num_scored_poses <= 0) {
+        if (num_preclustered_conformers <= 0) {
             cout <<
                 "ERROR:  Parameter must be an integer greater than zero.  Program will terminate."
                 << endl;
             exit(0);
         }
-        if (num_scored_poses > 1) {
+        if (num_preclustered_conformers > 1) {
                 
             write_conformers =  (parm.query_param("write_primary_conformations", "yes", "yes no") ==
                  "yes") ? true : false;
@@ -1052,7 +1052,7 @@ Library_File::input_parameters_output(Parameter_Reader & parm, Master_Score & sc
             }
 
         } 
-        if(!rank_secondary_ligands) {
+        if (!rank_secondary_ligands) {
             num_secondary_scored_poses =
                 atoi(parm.query_param("num_secondary_scored_conformers", "1").c_str());
             if(num_secondary_scored_poses > 1){
@@ -1066,7 +1066,7 @@ Library_File::input_parameters_output(Parameter_Reader & parm, Master_Score & sc
                     }
                 }
 
-                if(num_secondary_scored_poses > num_scored_poses){
+                if(num_secondary_scored_poses > num_preclustered_conformers){
                     cout << "ERROR:  Number of secondary poses written cannot exceed number of primary ";
                     cout << "poses rescored.  Program will terminate." << endl;
                     exit(0);
@@ -1080,17 +1080,22 @@ Library_File::input_parameters_output(Parameter_Reader & parm, Master_Score & sc
         }
     } else {
         num_secondary_scored_poses = 0;
-        num_scored_poses = atoi(parm.query_param("num_scored_conformers", "1")
-                                .c_str());
+        num_scored_poses = atoi(parm.query_param("num_final_scored_poses", "1").c_str());
         if (num_scored_poses <= 0) {
             cout << "ERROR:  Parameter must be an integer greater than zero."
                     "  Program will terminate."
                  << endl;
             exit(0);
         }
-        if (num_scored_poses > 1) {
-            write_conformers = (parm.query_param("write_conformations", "yes",
-                    "yes no") == "yes");
+        num_preclustered_conformers = atoi(parm.query_param("num_preclustered_conformers", to_string(num_scored_poses)).c_str());
+        if (num_preclustered_conformers <= 0) {
+            cout << "ERROR:  Parameter must be an integer greater than zero."
+                    "  Program will terminate."
+                 << endl;
+            exit(0);
+        }
+        if (num_preclustered_conformers > 1) {
+            write_conformers = (parm.query_param("write_conformations", "no", "yes no") == "yes");
             if (write_conformers){ 
                  if (USE_MPI){
                       cout << "ERROR:  To protect against filling up the disk, DOCK cannot write ";
@@ -1761,7 +1766,7 @@ void Library_File::sort_write(bool USE_FILT, bool USE_MPI, Master_Score & score,
         write_scored_poses(USE_FILT,USE_MPI, score, min);
         
         //analyze and write data for secondary scored conformers
-        if(num_scored_poses > 1)
+        if(num_preclustered_conformers > 1)
             submit_secondary_conformation(score, min);
     }
 
@@ -1941,7 +1946,7 @@ Library_File::submit_orientation(DOCKMol & mol, Master_Score & score, bool orien
 
 /************************************************/
 void
-Library_File::submit_conformation(Master_Score & score)
+Library_File::submit_conformations(Master_Score & score)
 {
 
     if (write_conformers) {
@@ -2084,7 +2089,7 @@ Library_File::submit_scored_pose(DOCKMol & mol, Master_Score & score,
     }
 
     // Multi-pose output
-    if (ranked_poses.size() < num_scored_poses) {
+    if (ranked_poses.size() < num_preclustered_conformers) {
 
         // Add the molecule
         ranked_poses.push_back(tmp_rankmol);
@@ -2172,10 +2177,9 @@ Library_File::write_scored_poses(bool USE_FILT, bool USE_MPI, Master_Score & sco
                     cout.flush();
                 }
             }
-
+        num_poses_written = 0;
         if (cluster_ranked_poses) {
-
-            for (i = 0; i < ranked_poses.size(); i++) {
+            for (i = 0; (i < ranked_poses.size() && num_poses_written < num_scored_poses); i++) {
                 //PAK
                 calc_num_HBA_HBD(ranked_poses[i].mol);
 
@@ -2281,6 +2285,7 @@ Library_File::write_scored_poses(bool USE_FILT, bool USE_MPI, Master_Score & sco
                             << setw(FLOAT_WIDTH) << fixed << cluster_assignments[i] << "\n";
                         ligand_out_scored << ranked_poses[i].data << "\n";
                         write_mol(ranked_poses[i].mol, ligand_out_scored);
+                        num_poses_written++;
                         if (write_footprints)
                            write_footprint_file(ranked_poses[i].mol, score, ligand_out_footprint_scored);
                         if (write_hbonds)
@@ -2290,7 +2295,7 @@ Library_File::write_scored_poses(bool USE_FILT, bool USE_MPI, Master_Score & sco
             } 
         } else {
 
-            for (i = 0; i < ranked_poses.size(); i++) {
+            for (i = 0; (i < ranked_poses.size() && num_poses_written < num_scored_poses); i++) {
                  calc_num_HBA_HBD(ranked_poses[i].mol); 
               
                  // GDRM, October 2020
@@ -2416,6 +2421,7 @@ Library_File::write_scored_poses(bool USE_FILT, bool USE_MPI, Master_Score & sco
                             ligand_out_scored << calc_rmsd_string(ranked_poses[i].mol); 
                         ligand_out_scored << ranked_poses[i].mol.current_data << "\n";
                         write_mol(ranked_poses[i].mol, ligand_out_scored);
+                        num_poses_written++;
                         if (write_footprints)
                            write_footprint_file(ranked_poses[i].mol, score, ligand_out_footprint_scored);
                         if (write_hbonds)
@@ -2448,7 +2454,7 @@ Library_File::write_scored_poses(bool USE_FILT, bool USE_MPI, Master_Score & sco
 
             }
         }
-        if(num_scored_poses < 2){
+        if(num_preclustered_conformers < 2){
             if(use_secondary_score){
                 if(ranked_poses[0].mol.num_atoms > 0) {
                     copy_molecule(tmp_dockmol, ranked_poses[0].mol);
@@ -2835,7 +2841,7 @@ Library_File::secondary_rescore_poses(Master_Score & score, Simplex_Minimizer & 
     
     for(i=0; i < poses_for_rescore.size(); ++i){
 
-        if (num_scored_poses < 2){
+        if (num_preclustered_conformers < 2){
             //collect data from primary scoring function
             if (calc_rmsd) 
                 text << calc_rmsd_string(poses_for_rescore[i]);
@@ -2854,7 +2860,7 @@ Library_File::secondary_rescore_poses(Master_Score & score, Simplex_Minimizer & 
 
         } else {
             //rescore if simply rescoring molecules
-            if(num_scored_poses < 2){
+            if(num_preclustered_conformers < 2){
                 if(min.secondary_min_pose){
                     min.secondary_minimize_pose(poses_for_rescore[i], score);
                 } else {
@@ -2886,7 +2892,7 @@ Library_File::secondary_rescore_poses(Master_Score & score, Simplex_Minimizer & 
 
     //rescore pruned list
     for(i=0; i < ranked_secondary_list.size(); ++i){
-        if(num_scored_poses < 2){ 
+        if(num_preclustered_conformers < 2){ 
             if(min.secondary_min_pose){
                 min.secondary_minimize_pose(ranked_secondary_list[i].second, score);
             } else {

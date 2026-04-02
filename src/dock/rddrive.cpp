@@ -84,6 +84,7 @@ RD_Calc::Calc::~Calc(){
     defFragMap       = {};
 }
 
+// where we calcualte descriptors for a molecule
 void 
 RD_Calc::Calc::calc_des( DOCKMol & mol, RD_Parm::RD_Drive_Parm  RD_parm = RD_Parm::RD_Drive_Parm()) {
 
@@ -91,23 +92,31 @@ RD_Calc::Calc::calc_des( DOCKMol & mol, RD_Parm::RD_Drive_Parm  RD_parm = RD_Par
                                           RD_parm.get_fragMap(),
                                           RD_parm.get_createsmiles(),
                                           RD_parm.get_PAINSmap());
-
+    std::cout << "  RDKIT descriptors:" << "\n" 
+              << "  clogp: "   << mol.clogp              
+              << "   esol: "    << mol.esol               
+              << "   tpsa: "    << mol.tpsa               
+              << "   qed: "     << mol.qed_score    << "\n" 
+              << "   #stereo: " << mol.num_stereocenters 
+              << "   sa_score: "<< mol.sa_score           
+              << "   #pains: "  << mol.pns << "\n"
+              << "  ------------------------------"<< std::endl;
     return;
 }
 
 
 // bool drive_clogp, bool drive_esol, bool drive_qed, bool _drive_sa, 
 // and bool drive_stereocenters are attributes of the DN_Build object
-bool RD_Calc::Drive::drive_growth( DOCKMol temp_molecule, 
+bool RD_Calc::Drive::drive_growth( DOCKMol  & temp_molecule, 
                                    RD_Parm::RD_Drive_Parm  RD_parm = RD_Parm::RD_Drive_Parm() ){
     //Initialize LOCAL variables    
-    bool drive_clogp;
-    bool drive_esol;
-    bool drive_qed;
-    bool drive_sa;
-    bool drive_stereocenters;
-    bool drive_pains;
-    bool drive_tpsa;
+    bool drive_clogp = true;
+    bool drive_esol = true;
+    bool drive_qed = true;
+    bool drive_sa = true;
+    bool drive_stereocenters = true;
+    bool drive_pains = true;
+    bool drive_tpsa= true;
 
     // Does temp_molecule passes filters?
     //    
@@ -116,40 +125,54 @@ bool RD_Calc::Drive::drive_growth( DOCKMol temp_molecule,
     // should be always true. Remember of TRUTH TABLES.
     //    
     // STEREOCENTERS
-    drive_stereocenters = stereocenter_cutoff( temp_molecule, RD_parm.get_upper_stereocenter() );
-    temp_molecule.fail_stereo = !drive_stereocenters;
+    if (RD_parm.get_drive_stereocenter()){
+        drive_stereocenters = stereocenter_cutoff( temp_molecule, RD_parm.get_upper_stereocenter() );
+        temp_molecule.fail_stereo = !drive_stereocenters;
+    }
 
     // TPSA
-    drive_tpsa = tpsa_cutoff( temp_molecule, RD_parm.get_lower_tpsa(),
-                                             RD_parm.get_upper_tpsa(), 
-                                             RD_parm.get_tpsa_std_dev());
-    temp_molecule.fail_tpsa = !drive_tpsa;
+    if (RD_parm.get_drive_tpsa()){
+        drive_tpsa = tpsa_cutoff( temp_molecule, RD_parm.get_lower_tpsa(),
+                                                 RD_parm.get_upper_tpsa(), 
+                                                 RD_parm.get_tpsa_std_dev());
+        temp_molecule.fail_tpsa = !drive_tpsa;
+    }
 
     // CLOGP
-    drive_clogp = clogp_cutoff( temp_molecule, RD_parm.get_lower_clogp(),
-                                               RD_parm.get_upper_clogp(),
-                                               RD_parm.get_clogp_std_dev());
-    temp_molecule.fail_clogp = !drive_clogp;
+    if (RD_parm.get_drive_clogp()){
+        drive_clogp = clogp_cutoff( temp_molecule, RD_parm.get_lower_clogp(),
+                                                   RD_parm.get_upper_clogp(),
+                                                   RD_parm.get_clogp_std_dev());
+        temp_molecule.fail_clogp = !drive_clogp;
+    } 
 
     // ESOL
-    drive_esol = esol_cutoff( temp_molecule, RD_parm.get_lower_esol(),
-                                             RD_parm.get_upper_esol(),
-                                             RD_parm.get_esol_std_dev());
-    temp_molecule.fail_esol = !drive_esol;
+    if (RD_parm.get_drive_esol()){
+        drive_esol = esol_cutoff( temp_molecule, RD_parm.get_lower_esol(),
+                                                 RD_parm.get_upper_esol(),
+                                                 RD_parm.get_esol_std_dev());
+        temp_molecule.fail_esol = !drive_esol;
+    }
 
     // QED
-    drive_qed = qed_cutoff( temp_molecule, RD_parm.get_lower_qed(), 
-                                           RD_parm.get_qed_std_dev());
-    temp_molecule.fail_qed = !drive_qed;
+    if (RD_parm.get_drive_qed()) {
+        drive_qed = qed_cutoff( temp_molecule, RD_parm.get_lower_qed(), 
+                                               RD_parm.get_qed_std_dev());
+        temp_molecule.fail_qed = !drive_qed;
+    }
 
     // SA 
-    drive_sa = sa_cutoff( temp_molecule, RD_parm.get_upper_sa(),
-                                         RD_parm.get_sa_std_dev());
-    temp_molecule.fail_sa = !drive_sa;
+    if (RD_parm.get_drive_sa()){
+        drive_sa = sa_cutoff( temp_molecule, RD_parm.get_upper_sa(),
+                                             RD_parm.get_sa_std_dev());
+        temp_molecule.fail_sa = !drive_sa;
+    }
 
     // PAINS
-    drive_pains = pains_cutoff( temp_molecule, RD_parm.get_upper_pains() );
-    temp_molecule.fail_pains = !drive_pains;
+    if (RD_parm.get_drive_pains()){
+        drive_pains = pains_cutoff( temp_molecule, RD_parm.get_upper_pains() );
+        temp_molecule.fail_pains = !drive_pains;
+    }
 
     // Analyze truth value and return result
     if (drive_clogp && drive_esol && drive_tpsa && drive_qed &&
@@ -157,7 +180,18 @@ bool RD_Calc::Drive::drive_growth( DOCKMol temp_molecule,
         // These are AND operations. If a single one of these booleans is
         // `false,` this method returns `false.`
         return true; 
-    } else { return false; }
+    } else { 
+        std::cout << "  FAILURE SUMMARY: \n"
+                  << "   fail_clogp: "  << temp_molecule.fail_clogp 
+                  << "   fail_esol: "   << temp_molecule.fail_esol
+                  << "   fail_tpsa: "   << temp_molecule.fail_tpsa 
+                  << "   fail_qed: "    << temp_molecule.fail_qed  << "\n"
+                  << "   fail_stereo: " << temp_molecule.fail_stereo
+                  << "   fail_sa: "     << temp_molecule.fail_sa 
+                  << "   fail_pains: "  << temp_molecule.fail_pains  <<std::endl;
+        return false; 
+    }
+    return true;
 } // End  RD_Calc::Drive::drive_growth()
 
 bool RD_Calc::Drive::stereocenter_cutoff( DOCKMol temp_molecule , int upper_stereocenter ){ 
@@ -192,7 +226,7 @@ bool RD_Calc::Drive::tpsa_cutoff( DOCKMol temp_molecule, float lower_tpsa, float
     double acceptRate{};
 
     // soft cutoff
-    if (temp_molecule.tpsa > lower_tpsa) {
+    if (temp_molecule.tpsa >= lower_tpsa) {
 
         // Check if value is higher than upper boundary
         if (temp_molecule.tpsa > upper_tpsa) {
@@ -550,6 +584,10 @@ RD_Parm::RD_Drive_Parm::get_PAINSmap( ){
 
 // STEREOCENTER
 void
+RD_Parm::RD_Drive_Parm::set_drive_stereocenter( bool drive ) {
+   this->drive_stereocenter = drive;
+}
+void
 RD_Parm::RD_Drive_Parm::set_upper_stereocenter( int input_upper_stereocenter ) {
    this->upper_stereocenter = input_upper_stereocenter ;
 }
@@ -559,8 +597,18 @@ RD_Parm::RD_Drive_Parm::get_upper_stereocenter(){
     return this->upper_stereocenter;
 }
 
+bool
+RD_Parm::RD_Drive_Parm::get_drive_stereocenter(){
+    return this->drive_stereocenter;
+}
+
 
 // TPSA
+void
+RD_Parm::RD_Drive_Parm::set_drive_tpsa( bool drive ) {
+   this->drive_tpsa = drive;
+}
+
 void
 RD_Parm::RD_Drive_Parm::set_lower_tpsa( float input_lower_tpsa ) {
    this->lower_tpsa = input_lower_tpsa ;
@@ -591,7 +639,15 @@ RD_Parm::RD_Drive_Parm::get_tpsa_std_dev(){
     return this->tpsa_std_dev;
 }
 
+bool
+RD_Parm::RD_Drive_Parm::get_drive_tpsa(){
+    return this->drive_tpsa;
+}
 // CLOGP
+void
+RD_Parm::RD_Drive_Parm::set_drive_clogp( bool drive ) {
+   this->drive_clogp = drive;
+}
 void
 RD_Parm::RD_Drive_Parm::set_lower_clogp( float input_lower_clogp ) {
    this->lower_clogp = input_lower_clogp ;
@@ -622,7 +678,15 @@ RD_Parm::RD_Drive_Parm::get_clogp_std_dev(){
     return this->clogp_std_dev;
 }
 
+bool
+RD_Parm::RD_Drive_Parm::get_drive_clogp(){
+    return this->drive_clogp;
+}
 // ESOL
+void
+RD_Parm::RD_Drive_Parm::set_drive_esol( bool drive ) {
+   this->drive_esol = drive;
+}
 void
 RD_Parm::RD_Drive_Parm::set_lower_esol( float input_lower_esol ) {
    this->lower_esol = input_lower_esol ;
@@ -652,7 +716,15 @@ RD_Parm::RD_Drive_Parm::get_esol_std_dev(){
     return this->esol_std_dev;
 }
 
+bool
+RD_Parm::RD_Drive_Parm::get_drive_esol(){
+    return this->drive_esol;
+}
 // QED
+void
+RD_Parm::RD_Drive_Parm::set_drive_qed( bool drive ) {
+   this->drive_qed = drive;
+}
 void
 RD_Parm::RD_Drive_Parm::set_lower_qed( float input_lower_qed ) {
    this->lower_qed = input_lower_qed ;
@@ -673,7 +745,15 @@ RD_Parm::RD_Drive_Parm::get_qed_std_dev(){
     return this->qed_std_dev;
 }
 
+bool
+RD_Parm::RD_Drive_Parm::get_drive_qed(){
+    return this->drive_qed;
+}
 // SYNTHA
+void
+RD_Parm::RD_Drive_Parm::set_drive_sa( bool drive ) {
+   this->drive_sa = drive;
+}
 void
 RD_Parm::RD_Drive_Parm::set_upper_sa( float input_upper_sa ) {
    this->upper_sa = input_upper_sa ;
@@ -694,8 +774,16 @@ RD_Parm::RD_Drive_Parm::get_sa_std_dev(){
     return this->sa_std_dev;
 }
 
+bool
+RD_Parm::RD_Drive_Parm::get_drive_sa(){
+    return this->drive_sa;
+}
 // PAINS
 
+void
+RD_Parm::RD_Drive_Parm::set_drive_pains( bool drive ) {
+   this->drive_pains = drive;
+}
 void
 RD_Parm::RD_Drive_Parm::set_upper_pains( int input_upper_pains ) {
    this->upper_pains = input_upper_pains ;
@@ -706,10 +794,16 @@ RD_Parm::RD_Drive_Parm::get_upper_pains(){
     return this->upper_pains;
 }
 
+bool
+RD_Parm::RD_Drive_Parm::get_drive_pains(){
+    return this->drive_pains;
+}
 //// End RD_Drive_Parm
 
 
 
+// driving mechanism without the speciifc parameters
+// defaulted with default parameters
 bool
 RD_Drive::drive( DOCKMol test_mol ){
 
@@ -722,16 +816,17 @@ RD_Drive::drive( DOCKMol test_mol ){
     return this->drive_des.drive_growth( copy_mol );
 }
 
+// This is the driving mechanism if there are specific parameters
 bool
-RD_Drive::drive( DOCKMol test_mol, RD_Parm::RD_Drive_Parm& RD_parm ){
+RD_Drive::drive( DOCKMol & test_mol, RD_Parm::RD_Drive_Parm& RD_parm ){
 
-    DOCKMol copy_mol;
+    //DOCKMol copy_mol;
 
-    copy_molecule( copy_mol, test_mol );
+    //copy_molecule( copy_mol, test_mol );
 
-    this->calc_des.calc_des( copy_mol );
+    this->calc_des.calc_des( test_mol );
 
-    return this->drive_des.drive_growth( copy_mol, RD_parm );
+    return this->drive_des.drive_growth( test_mol, RD_parm );
 }
 #else
   // Configured to Not BUILD_DOCK_WITH_RDKIT

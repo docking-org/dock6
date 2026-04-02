@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.12
+DOCK v6.13
 
-Released September 2024
+Released July 2025
 Copyright UCSF
 --------------------------------------
 
@@ -111,6 +111,7 @@ Descriptor Score Parameters
 ------------------------------------------------------------------------------------------
 descriptor_score_primary                                     yes
 descriptor_use_grid_score                                    yes
+descriptor_use_grid_lig_efficiency                           no
 descriptor_use_pharmacophore_score                           no
 descriptor_use_tanimoto                                      yes
 descriptor_use_hungarian                                     no
@@ -178,7 +179,8 @@ Molecule Library Output Parameters
 ligand_outfile_prefix                                        Des_Tan+SGE
 write_mol_solvation                                          no
 write_orientations                                           no
-num_scored_conformers                                        1
+num_final_scored_poses                                       1
+num_preclustered_conformers                                  1
 score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
@@ -198,7 +200,7 @@ Initializing Fingerprint computation within Descriptor Score...
 -----------------------------------
 Molecule:  C1 
 
- Elapsed time for docking:	0.414 seconds
+ Elapsed time for docking:	0.386 seconds
 
  Anchors:		1
  Orientations:		100
@@ -213,7 +215,7 @@ Molecule:  C1
 
 
 1 Molecules Processed
-Total elapsed time:	0.422 seconds
-Number of molecules per second:	2.368
-Virtual memory used for this process: 93344 kilobytes
-Physical memory used for this process: 20568 kilobytes
+Total elapsed time:	0.395 seconds
+Number of molecules per second:	2.532
+Virtual memory used for this process: 98412 kilobytes
+Physical memory used for this process: 12532 kilobytes

@@ -1,6 +1,16 @@
 5/98 te
 11/98 kb, ags, mll
 3/0 kb
+# For isoswap in the 6.13 release:
+# "sulfite-N_planar" and "sulfite-N_am" were added because
+# these are required for fragmenting what DOCK_DN can build
+
+# In 6.12 release:
+# "disulf with dummy", "dummy-sulf", "dummy(C)-dummy(S)-C", "dummy(C)-dummy(S)-S"
+# were added for "attach-and-grow"
+# "amide", "Amidine", "Guanidine", "Dicarbonyl" were added for flex.defn
+# definitions for improving the behavior of these groups
+
 ______________________________________________________________________
 name		sp3-sp3
 drive_id	3
@@ -236,6 +246,20 @@ minimize	0
 
 definition	S ( 3 O [ * ] )
 definition	.2 [ 2 H ]
+______________________________________________________________________
+name            sulfite-N_planar
+drive_id        3
+minimize        1
+
+definition      S.o2 ( 2 O.2 [ * ] ) ( O.3 [ * ] )
+definition      N.pl3
+______________________________________________________________________
+name            sulfite-N_am
+drive_id        3
+minimize        1
+
+definition      S.o2 ( 2 O.2 [ * ] ) ( O.3 [ * ] )
+definition      N.am
 ______________________________________________________________________
 name		sulfonamide
 drive_id	3

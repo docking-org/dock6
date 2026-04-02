@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.12
+DOCK v6.13
 
-Released September 2024
+Released July 2025
 Copyright UCSF
 --------------------------------------
 
@@ -17,5 +17,59 @@ Internal Energy Parameters
 ------------------------------------------------------------------------------------------
 use_internal_energy                                          yes
 internal_energy_rep_exp                                      12
-internal_energy_cutoff                                       -1.0
-ERROR: internal_energy_cutoff needs to be positive
+internal_energy_cutoff                                       1.0
+Note: Internal energy only includes repulsive VDW for growth and/or minimization.
+
+Molecule Library Input Parameters
+------------------------------------------------------------------------------------------
+ligand_atom_file                                             lig.mol2
+limit_max_ligands                                            no
+skip_molecule                                                no
+read_mol_solvation                                           no
+calculate_rmsd                                               no
+
+Database Filter Parameters
+------------------------------------------------------------------------------------------
+use_database_filter                                          no
+
+Orient Ligand Parameters
+------------------------------------------------------------------------------------------
+orient_ligand                                                no
+
+Bump Filter Parameters
+------------------------------------------------------------------------------------------
+bump_filter                                                  no
+
+Master Score Parameters
+------------------------------------------------------------------------------------------
+score_molecules                                              no
+
+Molecule Library Output Parameters
+------------------------------------------------------------------------------------------
+ligand_outfile_prefix                                        output
+write_mol_solvation                                          no
+write_orientations                                           no
+num_final_scored_poses                                       1
+num_preclustered_conformers                                  1
+score_threshold                                              100.0
+rank_ligands                                                 no
+------------------------------------------------------------------------------------------
+Initializing Library File Routines...
+
+
+-----------------------------------
+Molecule:  C1 
+
+ Elapsed time for docking:	0.003 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+
+1 Molecules Processed
+Total elapsed time:	0.005 seconds
+Number of molecules per second:	208.545
+Virtual memory used for this process: 88676 kilobytes
+Physical memory used for this process: 3632 kilobytes

@@ -99,6 +99,12 @@ Descriptor_Energy_Score::input_parameters(Parameter_Reader & parm, bool & primar
         //    and SASA are not mutually exclusive and can be combined with anything.
 
         desc_use_nrg = parm.query_param("descriptor_use_grid_score", "yes", "yes no") == "yes";
+	if (desc_use_nrg){
+	   desc_use_grid_lig_efficiency = parm.query_param("descriptor_use_grid_lig_efficiency", "no", "yes no") == "yes";
+
+	}
+
+
 
         if (!desc_use_nrg){
             desc_use_mg_nrg = parm.query_param("descriptor_use_multigrid_score", "yes", "yes no") == "yes";
@@ -124,6 +130,12 @@ Descriptor_Energy_Score::input_parameters(Parameter_Reader & parm, bool & primar
         // of the Energy_Score class.
         if (desc_use_nrg){
 	    desc_score_valid = true;
+	    if (desc_use_grid_lig_efficiency){
+	        desc_c_nrg.grid_lig_efficiency = true;
+	    }
+	    else{
+	        desc_c_nrg.grid_lig_efficiency = false;
+	    }
 
             cout <<"\n--- Descriptor Score Parameters: Grid Score ---" <<endl;
           
@@ -351,6 +363,9 @@ Descriptor_Energy_Score::input_parameters(Parameter_Reader & parm, bool & primar
         if (desc_use_nrg){
             desc_weight_nrg = atoi(parm.query_param("descriptor_weight_grid_score", "1").c_str());
         }
+	if (desc_use_nrg && desc_use_grid_lig_efficiency){
+	    desc_weight_nrg_lig_eff = atoi(parm.query_param("descriptor_weight_grid_lig_eff", "15").c_str());
+	}
 
         if (desc_use_mg_nrg){
 
@@ -402,6 +417,7 @@ Descriptor_Energy_Score::input_parameters(Parameter_Reader & parm, bool & primar
         // Count the number of functions that are being used
         int num=0;
         if (desc_use_nrg){ num++; }
+	if (desc_use_grid_lig_efficiency) {num++;} 
         if (desc_use_mg_nrg){ num++; }
         if (desc_use_cont_nrg){ num++; }
         if (desc_use_fps){ num++; }
@@ -420,6 +436,11 @@ Descriptor_Energy_Score::input_parameters(Parameter_Reader & parm, bool & primar
             function <<"(" <<desc_weight_nrg <<" * Grid_Score)";
             num--; 
             if (num>0 && num!=orig_num){function <<" + "; }
+        }
+	if (desc_use_grid_lig_efficiency){ 
+	    function << "(" <<desc_weight_nrg_lig_eff << " * Grid_Efficiency_Score)";
+	    num--;
+	    if (num > 0 && num!=orig_num){function <<" + "; }
         }
 
         if (desc_use_mg_nrg){
@@ -580,6 +601,7 @@ Descriptor_Energy_Score::compute_score(DOCKMol & mol)
 {
     // Function here to compute components of score
     temp_nrg_score = 0;
+    temp_nrg_lig_eff = 0;
     temp_mg_nrg_score = 0;
     temp_cont_nrg_score = 0;
     temp_fps_score = 0;
@@ -598,9 +620,15 @@ Descriptor_Energy_Score::compute_score(DOCKMol & mol)
         // Returns valid_orient value from grid or multi-grid through 
         // descriptor score wapper function.
         if (!desc_c_nrg.compute_score(mol)) return false;
-        temp_nrg_score = mol.current_score;
-        mol.score_nrg = mol.current_score; 
-        temp_desc_score += temp_nrg_score * desc_weight_nrg;
+        temp_nrg_score = desc_c_nrg.grid_total; 
+        mol.score_nrg = temp_nrg_score;
+	temp_desc_score += temp_nrg_score * desc_weight_nrg;
+        	
+        //BTB 2024.10.30 - add lig_eff computation
+	if (desc_c_nrg.grid_lig_efficiency){
+	    temp_nrg_lig_eff = desc_c_nrg.total_eff;  
+	    temp_desc_score += temp_nrg_lig_eff * desc_weight_nrg_lig_eff;
+	}
     }
 
     if (desc_use_mg_nrg){
@@ -696,16 +724,30 @@ Descriptor_Energy_Score::output_score_summary(DOCKMol & mol)
         text << DELIMITER << setw(STRING_WIDTH) << "Descriptor_Score:"
              << setw(FLOAT_WIDTH) << fixed << mol.current_score << endl;
 
- 
         if (desc_use_nrg){
-            text << DELIMITER << setw(STRING_WIDTH) << "Grid_Score:"
-                 << setw(FLOAT_WIDTH) << fixed << temp_nrg_score << endl
-                 << DELIMITER << setw(STRING_WIDTH) << "desc_Grid_vdw_energy:"
-                 << setw(FLOAT_WIDTH) << fixed << desc_c_nrg.vdw_component << endl
-                 << DELIMITER << setw(STRING_WIDTH) << "desc_Grid_es_energy:"
-                 << setw(FLOAT_WIDTH) << fixed << desc_c_nrg.es_component  << endl;
+	    if (desc_use_grid_lig_efficiency) {
+                text << DELIMITER << setw(STRING_WIDTH) << "Grid_Efficiency_Score:" //Put in underscore to be consistent. Yuchen 10/24/2016
+                     << setw(FLOAT_WIDTH) << fixed << temp_nrg_lig_eff << endl;
+                text << DELIMITER << setw(STRING_WIDTH) << "desc_Grid_vdw_efficiency:"
+                     << setw(FLOAT_WIDTH) << fixed << desc_c_nrg.vdw_eff << endl
+                     << DELIMITER << setw(STRING_WIDTH) << "desc_Grid_es_efficiency:"
+                     << setw(FLOAT_WIDTH) << fixed << desc_c_nrg.es_eff  << endl
+                     << DELIMITER << setw(STRING_WIDTH) << "Grid_Score:"
+                     << setw(FLOAT_WIDTH) << fixed << temp_nrg_score  << endl
+                     << DELIMITER << setw(STRING_WIDTH) << "desc_Grid_vdw_energy:"
+                     << setw(FLOAT_WIDTH) << fixed << desc_c_nrg.vdw_component << endl
+                     << DELIMITER << setw(STRING_WIDTH) << "desc_Grid_es_energy:"
+                     << setw(FLOAT_WIDTH) << fixed << desc_c_nrg.es_component  << endl;
+            }
+	    else {
+                text << DELIMITER << setw(STRING_WIDTH) << "Grid_Score:"
+                     << setw(FLOAT_WIDTH) << fixed << temp_nrg_score << endl
+                     << DELIMITER << setw(STRING_WIDTH) << "desc_Grid_vdw_energy:"
+                     << setw(FLOAT_WIDTH) << fixed << desc_c_nrg.vdw_component << endl
+                     << DELIMITER << setw(STRING_WIDTH) << "desc_Grid_es_energy:"
+                     << setw(FLOAT_WIDTH) << fixed << desc_c_nrg.es_component  << endl;
+            }
         }
-
 
         if (desc_use_mg_nrg){
             text << DELIMITER << setw(STRING_WIDTH) << "MultiGrid_Score:"

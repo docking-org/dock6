@@ -1529,7 +1529,8 @@ Orient::id_all_cliques()
                 <<"   tolerance: "<<tolerance 
                 <<"; dist_min: "<< dist_min
                 <<"; min_nodes: "<<min_nodes
-                <<"; max_nodes: "<<max_nodes<< endl;
+                <<"; max_nodes: "<<max_nodes
+		<<"; max orients: "<<max_orients<< endl; //BTB`
     }
     // Loop over automated matching loop &&(am_iteration_num < 2)
     while ((cliques.size() <= max_orients)
@@ -1558,26 +1559,26 @@ Orient::id_all_cliques()
         while (new_level > -1) {
             // find next true in candset
             next_cand = -1;
-            for (i = new_state[new_level] + 1; (i < size) && (next_cand == -1);
-                 i++) {
+            for (i = new_state[new_level] + 1; (i < size) && (next_cand == -1); i++) {
                 index = new_level * size + i;
 
-                if ((new_candset[index] == true)
-                    && (new_notset[index] == false))
+                if ((new_candset[index] == true) && (new_notset[index] == false)) {
                     next_cand = i;
-
+		}
                 // compute residuals
                 if (next_cand != -1) {
 
                     // compute residuals
-                    if (new_level > 0)
+                    if (new_level > 0){
                         new_level_residuals[new_level] =
                             new_level_residuals[new_level - 1];
-                    else if (new_level == 0)
+		    }
+                    else if (new_level == 0){
                         new_level_residuals[new_level] = 0.0;
-                    else 
+		    }
+                    else { 
                         cout << "ERROR new_level is negative." << endl;
-
+                    }
                     for (j = new_level - 1; j > -1; j--) {
                         k = next_cand * size + new_state[j];
                         // sum total resid method
@@ -1982,6 +1983,75 @@ Orient::new_next_orientation(DOCKMol & mol, bool all_atoms)
 
 }
 
+bool
+//Orient::new_next_orientation(DOCKMol & mol)
+Orient::iso_new_next_orientation(Fragment & iso_frag, bool all_atoms)
+{
+    //cout << "new_next_orientation" << endl;
+    if (orient_ligand) {
+
+        // in case no cliques could be found
+        if (cliques.size() == 0) {
+	    if (verbose) cout << "No orients found for current anchor" << endl;
+            return false;
+	}
+
+        if (last_orient_flag) {
+	    if (verbose) cout << "Current clique:" << current_clique << endl;
+	    if (verbose) cout << "(last_orient_flag==true)Current clique:" << current_clique << endl;
+            clean_up();
+	    if (verbose) cout << "(last_orient_flag==true)Current clique:" << current_clique << endl;
+            return false;
+        }
+
+        new_extract_coords_from_clique(cliques[current_clique]);
+        calculate_translations();
+        translate_clique_to_origin();
+        calculate_rotation();
+
+        copy_molecule(iso_frag.mol, original);
+
+
+        // grab rotataion matrx info for reference
+        for(int i =0; i<3; i++){
+            for(int j =0; j<3; j++){
+                iso_frag.iso_ori_mat[i][j] = rotation_matrix[i][j];
+            }
+        }
+        iso_frag.iso_centers_com = centers_com;
+        iso_frag.iso_spheres_com = spheres_com;
+ 
+
+        iso_frag.mol.translate_mol(-centers_com,all_atoms);
+        iso_frag.mol.rotate_mol(rotation_matrix,all_atoms);
+        iso_frag.mol.translate_mol(spheres_com,all_atoms);
+
+        current_clique++;
+
+        // DTM - change this line to ensure all cliques are examined as orients (stop skipping the last one) - 1/30/07
+        if ((current_clique == max_orients) || (current_clique == cliques.size())){
+	    if (verbose) cout << "Current clique:" << current_clique << endl;
+            last_orient_flag = true;
+        } else{
+            last_orient_flag = false;
+            
+        }
+
+        return true;
+
+    } else {
+        // code to return the input mol once, and then return false after that
+        // (allow one pass through the loop)
+        if (!last_orient_flag) {
+            last_orient_flag = true;
+            return true;
+        } else {
+            return false;
+        }
+    }
+    return false;
+
+}
 
 /************************************************/
 // Called in hdb search routine to orient each segement before scorring

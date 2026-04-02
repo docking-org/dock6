@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.12
+DOCK v6.13
 
-Released September 2024
+Released July 2025
 Copyright UCSF
 --------------------------------------
 
@@ -74,7 +74,8 @@ Molecule Library Output Parameters
 ligand_outfile_prefix                                        flex3
 write_mol_solvation                                          no
 write_orientations                                           no
-num_scored_conformers                                        1
+num_final_scored_poses                                       1
+num_preclustered_conformers                                  1
 score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
@@ -102,7 +103,7 @@ VERBOSE ORIENTING STATS :
 
 Orienting 21 anchor heavy atom centers
 Sphere Center Matching Parameters:
-   tolerance: 0.25; dist_min: 0; min_nodes: 3; max_nodes: 10
+   tolerance: 0.25; dist_min: 0; min_nodes: 3; max_nodes: 10; max orients: 50
 Num of cliques generated: 5487
  Residual Info:
    min residual:    0.0128
@@ -119,10 +120,10 @@ Current clique:50
 -----------------------------------
 VERBOSE GROWTH STATS : ANCHOR #1
 
-10/10 anchor orients retained (max 10) t=0.01s
+10/10 anchor orients retained (max 10) t=0.02s
 Lyr 1-1 Segs|number of layers:2
 Lyr:1 Seg:0 Bond:25 : Sampling 6 dihedrals C16(C.3)  C17(C.3)  C20(C.2)  C21(C.3)
-Lyr:1 Seg:0 11/60 retained, Pruning: 49-clustered  t=0.05s
+Lyr:1 Seg:0 11/60 retained, Pruning: 49-clustered  t=0.07s
 Current clique:50
 (last_orient_flag==true)Current clique:50
 (last_orient_flag==true)Current clique:0
@@ -131,7 +132,7 @@ No more anchor fragments to be docked.
 -----------------------------------
 Molecule: LIG1
 
- Elapsed time for docking:	0.099 seconds
+ Elapsed time for docking:	0.164 seconds
 
  Anchors:		1
  Orientations:		50
@@ -140,7 +141,7 @@ Molecule: LIG1
 
 
 1 Molecules Processed
-Total elapsed time:	0.101 seconds
-Number of molecules per second:	9.921
-Virtual memory used for this process: 93916 kilobytes
-Physical memory used for this process: 21080 kilobytes
+Total elapsed time:	0.167 seconds
+Number of molecules per second:	5.982
+Virtual memory used for this process: 98952 kilobytes
+Physical memory used for this process: 12900 kilobytes

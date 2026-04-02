@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.12
+DOCK v6.13
 
-Released September 2024
+Released July 2025
 Copyright UCSF
 --------------------------------------
 
@@ -20,12 +20,14 @@ dn_fraglib_linker_file                                       ./dn_generate_fragm
 dn_fraglib_sidechain_file                                    ./dn_generate_fragments_sidechain.mol2
 dn_user_specified_anchor                                     no
 dn_torenv_table                                              ./dn_generate_fragments_torenv.dat
+dn_bias_torsions                                             no
 dn_name_identifier                                           denovo
 dn_sampling_method                                           graph
 dn_graph_max_picks                                           30
 dn_graph_breadth                                             3
 dn_graph_depth                                               2
 dn_graph_temperature                                         100.0
+dn_bias_with_fragments                                       no
 dn_pruning_conformer_score_cutoff                            100.0
 dn_pruning_conformer_score_scaling_factor                    2.0
 dn_pruning_clustering_cutoff                                 100.0
@@ -379,46 +381,46 @@ Reading in 31 grids
 ##### Now orienting anchor #1
   ##### Entering layer of growth #1
   Root size at the beginning of this layer = 40
-    Root [  0], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  93.26
-    Root [  1], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  75.97
-    Root [  2], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  83.18
-    Root [  3], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  68.07
-    Root [  4], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  93.27
-    Root [  5], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  83.04
-    Root [  6], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  81.35
-    Root [  7], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  76.76
-    Root [  8], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  73.83
-    Root [  9], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  68.76
-    Root [ 10], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  84.62
-    Root [ 11], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  94.82
-    Root [ 12], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  88.54
-    Root [ 13], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  91.38
-    Root [ 14], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  68.52
-    Root [ 15], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  67.79
-    Root [ 16], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  81.63
-    Root [ 17], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  84.65
-    Root [ 18], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  88.09
-    Root [ 19], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  94.63
-    Root [ 20], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  79.48
-    Root [ 21], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  76.33
-    Root [ 22], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  80.89
-    Root [ 23], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  80.17
-    Root [ 24], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  74.87
-    Root [ 25], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  83.69
-    Root [ 26], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  78.34
-    Root [ 27], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  70.32
-    Root [ 28], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 101.33
-    Root [ 29], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  87.34
-    Root [ 30], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  70.43
-    Root [ 31], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  79.96
-    Root [ 32], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.02 |A/S  60.47
-    Root [ 33], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  85.33
-    Root [ 34], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  90.55
-    Root [ 35], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.02 |A/S  65.77
-    Root [ 36], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  80.95
-    Root [ 37], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.02 |A/S  53.54
-    Root [ 38], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.02 |A/S  66.26
-    Root [ 39], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  69.30
+    Root [  0], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 128.84
+    Root [  1], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 115.31
+    Root [  2], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 124.56
+    Root [  3], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  93.46
+    Root [  4], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 130.65
+    Root [  5], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 115.88
+    Root [  6], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 113.50
+    Root [  7], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 111.90
+    Root [  8], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 113.19
+    Root [  9], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  99.60
+    Root [ 10], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 124.20
+    Root [ 11], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 141.34
+    Root [ 12], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 138.83
+    Root [ 13], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 136.90
+    Root [ 14], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 100.28
+    Root [ 15], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 103.27
+    Root [ 16], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 122.52
+    Root [ 17], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 128.19
+    Root [ 18], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 125.97
+    Root [ 19], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 141.23
+    Root [ 20], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 112.40
+    Root [ 21], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 111.25
+    Root [ 22], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 114.70
+    Root [ 23], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 112.03
+    Root [ 24], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 104.88
+    Root [ 25], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 121.47
+    Root [ 26], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 114.34
+    Root [ 27], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 103.86
+    Root [ 28], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 149.67
+    Root [ 29], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 125.96
+    Root [ 30], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 103.39
+    Root [ 31], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 113.96
+    Root [ 32], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  89.40
+    Root [ 33], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 124.04
+    Root [ 34], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 136.15
+    Root [ 35], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  96.63
+    Root [ 36], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S 112.98
+    Root [ 37], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  78.53
+    Root [ 38], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  93.44
+    Root [ 39], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  99.86
       From all attachments events, 40 fragments were collected in layer 1 prior to all pruning/filtering.
       From accepted frags ( N= 0 ) in layer 1, 
           Collected a total of 120 candidate root fragments, then that number goes down to 4 due to pruning by the RMSD heuristic.
@@ -436,14 +438,14 @@ Reading in 31 grids
           0    candidate root frags intended for the next layer were ignored due to limit on root size.
 
     Layer 1 completed! Moving on the next layer with 4 root fragments.
-    For Layer 1, time duration is: 0.53 seconds with 75.66 with attachments per second.
+    For Layer 1, time duration is: 0.36 seconds with 110.67 with attachments per second.
 
   ##### Entering layer of growth #2
   Root size at the beginning of this layer = 4
-    Root [  0], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.02 |A/S  65.33
-    Root [  1], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.03 |A/S  38.18
-    Root [  2], sccf atts      1 |acc mols    2 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    2 |S     0.03 |A/S  30.50
-    Root [  3], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.03 |A/S  37.69
+    Root [  0], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.01 |A/S  92.42
+    Root [  1], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.02 |A/S  56.35
+    Root [  2], sccf atts      1 |acc mols    2 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    2 |S     0.02 |A/S  41.45
+    Root [  3], sccf atts      1 |acc mols    3 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    3 |S     0.02 |A/S  50.18
       From all attachments events, 4 fragments were collected in layer 2 prior to all pruning/filtering.
       From accepted frags ( N= 0 ) in layer 2, 
           Collected a total of 11 candidate root fragments, then that number goes down to 3 due to pruning by the RMSD heuristic.
@@ -461,13 +463,13 @@ Reading in 31 grids
           0    candidate root frags intended for the next layer were ignored due to limit on root size.
 
     Layer 2 completed! Moving on the next layer with 3 root fragments.
-    For Layer 2, time duration is: 0.10 seconds with 38.75 with attachments per second.
+    For Layer 2, time duration is: 0.07 seconds with 54.09 with attachments per second.
 
   ##### Entering layer of growth #3
   Root size at the beginning of this layer = 3
-    Root [  0], sccf atts      1 |acc mols    6 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    6 |S     0.06 |A/S  16.96
-    Root [  1], sccf atts      1 |acc mols    6 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    6 |S     0.09 |A/S  11.54
-    Root [  2], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.13 |A/S   7.84
+    Root [  0], sccf atts      1 |acc mols    6 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    6 |S     0.05 |A/S  22.07
+    Root [  1], sccf atts      1 |acc mols    6 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    6 |S     0.06 |A/S  16.08
+    Root [  2], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.10 |A/S   9.75
       From all attachments events, 3 fragments were collected in layer 3 prior to all pruning/filtering.
       From accepted frags ( N= 0 ) in layer 3, 
           Collected a total of 13 candidate root fragments, then that number goes down to 4 due to pruning by the RMSD heuristic.
@@ -485,14 +487,14 @@ Reading in 31 grids
           0    candidate root frags intended for the next layer were ignored due to limit on root size.
 
     Layer 3 completed! Moving on the next layer with 4 root fragments.
-    For Layer 3, time duration is: 0.28 seconds with 10.85 with attachments per second.
+    For Layer 3, time duration is: 0.21 seconds with 14.16 with attachments per second.
 
   ##### Entering layer of growth #4
   Root size at the beginning of this layer = 4
-    Root [  0], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  81.32
-    Root [  1], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  73.21
-    Root [  2], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  52.83
-    Root [  3], sccf atts      1 |acc mols    0 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    0 |S     0.02 |A/S  52.77
+    Root [  0], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 133.10
+    Root [  1], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 115.29
+    Root [  2], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  70.79
+    Root [  3], sccf atts      1 |acc mols    0 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    0 |S     0.02 |A/S  65.76
       From all attachments events, 4 fragments were collected in layer 4 prior to all pruning/filtering.
       From accepted frags ( N= 0 ) in layer 4, 
           Collected a total of 3 candidate root fragments, then that number goes down to 3 due to pruning by the RMSD heuristic.
@@ -510,13 +512,13 @@ Reading in 31 grids
           0    candidate root frags intended for the next layer were ignored due to limit on root size.
 
     Layer 4 completed! Moving on the next layer with 3 root fragments.
-    For Layer 4, time duration is: 0.07 seconds with 61.14 with attachments per second.
+    For Layer 4, time duration is: 0.05 seconds with 86.11 with attachments per second.
 
   ##### Entering layer of growth #5
   Root size at the beginning of this layer = 3
-    Root [  0], sccf atts      1 |acc mols    6 |cmpd    6 |fltrd cmpd    0 |Prnd    0 |Kpt    0 |S     0.08 |A/S  11.81
-    Root [  1], sccf atts      1 |acc mols    3 |cmpd    3 |fltrd cmpd    0 |Prnd    0 |Kpt    0 |S     0.11 |A/S   9.13
-    Root [  2], sccf atts      1 |acc mols    2 |cmpd    2 |fltrd cmpd    0 |Prnd    0 |Kpt    0 |S     0.08 |A/S  11.90
+    Root [  0], sccf atts      1 |acc mols    6 |cmpd    6 |fltrd cmpd    0 |Prnd    0 |Kpt    0 |S     0.06 |A/S  17.23
+    Root [  1], sccf atts      1 |acc mols    3 |cmpd    3 |fltrd cmpd    0 |Prnd    0 |Kpt    0 |S     0.08 |A/S  13.14
+    Root [  2], sccf atts      1 |acc mols    2 |cmpd    2 |fltrd cmpd    0 |Prnd    0 |Kpt    0 |S     0.07 |A/S  14.92
       From all attachments events, 3 fragments were collected in layer 5 prior to all pruning/filtering.
       From accepted frags ( N= 11 ) in layer 5, 
           Collected a total of 0 candidate root fragments, then that number goes down to 0 due to pruning by the RMSD heuristic.
@@ -531,7 +533,7 @@ Reading in 31 grids
           0    candidate root frags intended for the next layer were ignored due to limit on root size.
 
     Layer 5 completed! Moving on the next layer with 0 root fragments.
-    For Layer 5, time duration is: 0.28 seconds with 10.68 with attachments per second.
+    For Layer 5, time duration is: 0.20 seconds with 14.80 with attachments per second.
 
 Root is empty, continuing.
 
@@ -540,7 +542,7 @@ There are no more anchors. Exiting.
 
 
 98 Attachments Processed
-Total elapsed time:	7.051 seconds
-Number of attachments per second:	13.898
-Virtual memory used for this process: 123416 kilobytes
-Physical memory used for this process: 46236 kilobytes
+Total elapsed time:	5.390 seconds
+Number of attachments per second:	18.181
+Virtual memory used for this process: 126524 kilobytes
+Physical memory used for this process: 42668 kilobytes

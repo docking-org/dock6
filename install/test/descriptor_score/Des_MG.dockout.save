@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.12
+DOCK v6.13
 
-Released September 2024
+Released July 2025
 Copyright UCSF
 --------------------------------------
 
@@ -184,7 +184,8 @@ ligand_outfile_prefix                                        Des_MG
 write_mol_solvation                                          no
 write_footprints                                             no
 write_orientations                                           no
-num_scored_conformers                                        1
+num_final_scored_poses                                       1
+num_preclustered_conformers                                  1
 score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
@@ -262,7 +263,7 @@ Reading in 15 grids
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.297 seconds
+ Elapsed time for docking:	0.260 seconds
 
  Anchors:		1
  Orientations:		1
@@ -279,7 +280,7 @@ Molecule: 1M17.lig
 
 
 1 Molecules Processed
-Total elapsed time:	0.334 seconds
-Number of molecules per second:	2.990
-Virtual memory used for this process: 130448 kilobytes
-Physical memory used for this process: 58076 kilobytes
+Total elapsed time:	0.296 seconds
+Number of molecules per second:	3.374
+Virtual memory used for this process: 135564 kilobytes
+Physical memory used for this process: 49680 kilobytes

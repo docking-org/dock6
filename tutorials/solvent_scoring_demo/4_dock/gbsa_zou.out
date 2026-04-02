@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.12
+DOCK v6.13
 
-Released September 2024
+Released July 2025
 Copyright UCSF
 --------------------------------------
 
@@ -120,7 +120,8 @@ Molecule Library Output Parameters
 ligand_outfile_prefix                                        gbsa_zou
 write_mol_solvation                                          no
 write_orientations                                           no
-num_scored_conformers                                        1
+num_final_scored_poses                                       1
+num_preclustered_conformers                                  1
 score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
@@ -147,7 +148,7 @@ Done Initializing Zou GB/SA Score Routines.
 -----------------------------------
 Molecule: UNNAMED
 
- Elapsed time for docking:	0.007 seconds
+ Elapsed time for docking:	0.008 seconds
 
  Anchors:		1
  Orientations:		1
@@ -161,7 +162,7 @@ Molecule: UNNAMED
 
 
 1 Molecules Processed
-Total elapsed time:	0.130 seconds
-Number of molecules per second:	7.710
-Virtual memory used for this process: 107544 kilobytes
-Physical memory used for this process: 31804 kilobytes
+Total elapsed time:	0.217 seconds
+Number of molecules per second:	4.610
+Virtual memory used for this process: 107116 kilobytes
+Physical memory used for this process: 21892 kilobytes

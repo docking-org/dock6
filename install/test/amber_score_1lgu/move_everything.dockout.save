@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.12
+DOCK v6.13
 
-Released September 2024
+Released July 2025
 Copyright UCSF
 --------------------------------------
 
@@ -116,7 +116,8 @@ Molecule Library Output Parameters
 ligand_outfile_prefix                                        move_everything
 write_mol_solvation                                          no
 write_orientations                                           no
-num_scored_conformers                                        1
+num_final_scored_poses                                       1
+num_preclustered_conformers                                  1
 score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
@@ -126,7 +127,7 @@ Initializing Library File Routines...
 -----------------------------------
 Molecule: AAH
 
- Elapsed time for docking:	2.647 seconds
+ Elapsed time for docking:	2.231 seconds
 
  Anchors:		1
  Orientations:		1
@@ -139,7 +140,7 @@ Molecule: AAH
 
 
 1 Molecules Processed
-Total elapsed time:	5.276 seconds
-Number of molecules per second:	0.190
-Virtual memory used for this process: 117760 kilobytes
-Physical memory used for this process: 36220 kilobytes
+Total elapsed time:	4.522 seconds
+Number of molecules per second:	0.221
+Virtual memory used for this process: 122824 kilobytes
+Physical memory used for this process: 46620 kilobytes

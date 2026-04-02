@@ -256,16 +256,16 @@ main(int argc, char **argv)
     
     //added this if statement and line so that we have the information from these parm files available for delta_max, the else portion was what was there originally
     if ( (c_master_conf.method==4 && c_master_conf.c_ga_recomb.use_limit_max_change) ){
-	bool use_volume = true;
-	bool use_ph4 = true;
-	bool use_chemical_matching = true;
-	bool use_vdw = true;
-	c_master_score.use_ph4 = use_ph4;
-	c_master_score.use_volume = use_volume; 
-	c_orient.use_chemical_matching = use_chemical_matching;
-	c_master_score.read_vdw = use_vdw;
+        bool use_volume = true;
+        bool use_ph4 = true;
+        bool use_chemical_matching = true;
+        bool use_vdw = true;
+        c_master_score.use_ph4 = use_ph4;
+        c_master_score.use_volume = use_volume; 
+        c_orient.use_chemical_matching = use_chemical_matching;
+        c_master_score.read_vdw = use_vdw;
         c_typer.input_parameters(c_parm, use_vdw, use_chemical_matching, use_ph4, use_volume);
-	cout << "MODIFYING C_TYPER" << endl;
+        cout << "MODIFYING C_TYPER" << endl;
     }
     else{
         c_typer.input_parameters(c_parm, c_master_score.read_vdw,
@@ -334,7 +334,7 @@ main(int argc, char **argv)
         //if (c_master_conf.c_dn_build.simple_build_flag)
         //    c_master_conf.c_dn_build.simple_build(c_master_score, c_simplex, c_typer);
         //else
-	    c_master_conf.c_dn_build.build_molecules(c_master_score, c_simplex, c_typer, c_orient);
+            c_master_conf.c_dn_build.build_molecules(c_master_score, c_simplex, c_typer, c_orient);
 
     } else if (c_master_conf.method == 3) { // this is covalent
     while (c_library.get_mol(mol,false, USE_MPI, c_master_score.amber, c_typer, c_master_score, c_simplex)) { 
@@ -344,7 +344,7 @@ main(int argc, char **argv)
  
         // keep track of time for individual molecules
         double          mol_start_time = wall_clock_seconds();
-	//int             mol_start_ntime = wall_clock_nseconds();
+        //int             mol_start_ntime = wall_clock_nseconds();
 
         //seed random number generator
         c_simplex.initialize();
@@ -504,7 +504,7 @@ main(int argc, char **argv)
                                                 c_library.submit_scored_pose(mol, c_master_score, c_simplex);
                                         }
                                         //write out list of final conformations
-                                        c_library.submit_conformation(c_master_score);
+                                        c_library.submit_conformations(c_master_score);
                                     }
                                 }
                             }
@@ -516,14 +516,14 @@ main(int argc, char **argv)
         //print error messages if orienting or growth has failed
         if (c_library.num_orients == 0) {
             double          mol_stop_time = wall_clock_seconds();
-//	    int             mol_stop_ntime = wall_clock_nseconds();
+//          int             mol_stop_ntime = wall_clock_nseconds();
 
             cout << "\n" "-----------------------------------" "\n";
             cout << "Molecule: " << mol.title << "\n\n";
             cout << " Elapsed time:\t" << fixed << setprecision(3)
                  << mol_stop_time - mol_start_time << " seconds\n\n";
-	    //cout << " Elapsed time:\t" << mol_stop_ntime - mol_start_ntime
-          //       << " nseconds\n\n";
+            //cout << " Elapsed time:\t" << mol_stop_ntime - mol_start_ntime
+            //     << " nseconds\n\n";
             cout << " ERROR:  Could not find a valid orientation." << endl;
             cout << "         (For rigid docking the sought orientation is "
                     "the whole ligand;\n"
@@ -534,13 +534,13 @@ main(int argc, char **argv)
                     "an orientation.\n";
         } else if (c_library.num_confs == 0) {
             double          mol_stop_time = wall_clock_seconds();
-	   // int             mol_stop_ntime = wall_clock_nseconds();
+            // int             mol_stop_ntime = wall_clock_nseconds();
             cout << "\n" "-----------------------------------" "\n";
             cout << "Molecule: " << mol.title << "\n\n";
             cout << " Elapsed time:\t" << fixed << setprecision(3)
                  << mol_stop_time - mol_start_time << " seconds\n\n";
-	    //cout << " Elapsed time:\t" << mol_stop_ntime - mol_start_ntime
-        //         << " nseconds\n\n";
+            //cout << " Elapsed time:\t" << mol_stop_ntime - mol_start_ntime
+            //     << " nseconds\n\n";
             cout << " ERROR:  Could not complete growth." << endl;
             cout << "         Confirm that the grid box is large enough to "
                     "contain the ligand,\n"
@@ -549,13 +549,13 @@ main(int argc, char **argv)
         // End individual molecule timing
         if (c_library.num_orients > 0 && c_library.num_confs > 0) {
             double          mol_stop_time = wall_clock_seconds();
-	    //int             mol_stop_ntime = wall_clock_nseconds();
+            //int             mol_stop_ntime = wall_clock_nseconds();
             cout << "\n" "-----------------------------------" "\n";
             cout << "Molecule: " << mol.title << "\n\n";
             cout << " Elapsed time for docking:\t" << fixed << setprecision(3)
                  << mol_stop_time - mol_start_time << " seconds\n\n";
-	    //cout << " Elapsed time for docking:\t" << mol_stop_ntime - mol_start_ntime
-          //       << " nseconds\n\n";
+            //cout << " Elapsed time for docking:\t" << mol_stop_ntime - mol_start_ntime
+            //     << " nseconds\n\n";
 
         }
                         
@@ -732,7 +732,7 @@ main(int argc, char **argv)
 
                   //delete top_X;
                   //delete[] top_X;
-                  c_library.submit_conformation(c_master_score);
+                  c_library.submit_conformations(c_master_score);
                
                   //cout << "debug all_poses.size() = " << c_master_conf.c_hdb_conf.all_poses.size() << endl;
                   if (c_library.num_orients == 0) {
@@ -792,7 +792,7 @@ main(int argc, char **argv)
 #endif
 #ifdef TIME_PRECISION
         struct timespec mol_start_time;
-	    timespec_get(&mol_start_time, TIME_UTC);
+        timespec_get(&mol_start_time, TIME_UTC);
 #endif
         //seed random number generator
         c_simplex.initialize();
@@ -931,20 +931,21 @@ main(int argc, char **argv)
                                 c_library.submit_scored_pose(mol, c_master_score, c_simplex);
                             }
 
-                            //write out list of final conformations
-                            c_library.submit_conformation(c_master_score);
                         }
                     }
                 }
             }
         }
+        //write out list of final conformations
+        c_library.submit_conformations(c_master_score);
+        
 #ifdef TIME_PRECISION
         //print error messages if orienting or growth has failed
             if (c_library.num_orients == 0) {
                 //double          mol_stop_time = wall_clock_seconds();
-	        struct timespec mol_stop_time;
-	        timespec_get(&mol_stop_time, TIME_UTC);
-	        double          time_per_mol = calculate_simulation_time(mol_start_time, mol_stop_time);
+                struct timespec mol_stop_time;
+                timespec_get(&mol_stop_time, TIME_UTC);
+                double          time_per_mol = calculate_simulation_time(mol_start_time, mol_stop_time);
                 cout << "\n" "-----------------------------------" "\n";
                 cout << "Molecule: " << mol.title << "\n\n";
                 cout << " Elapsed time:\t";
@@ -959,9 +960,9 @@ main(int argc, char **argv)
                         "an orientation.\n";
             } else if (c_library.num_confs == 0) {
             //double          mol_stop_time = wall_clock_seconds();
-	        struct timespec mol_stop_time;
-	        timespec_get(&mol_stop_time, TIME_UTC);
-	        double          time_per_mol = calculate_simulation_time(mol_start_time, mol_stop_time);
+                struct timespec mol_stop_time;
+                timespec_get(&mol_stop_time, TIME_UTC);
+                double          time_per_mol = calculate_simulation_time(mol_start_time, mol_stop_time);
                 cout << "\n" "-----------------------------------" "\n";
                 cout << "Molecule: " << mol.title << "\n\n";
                 cout << " Elapsed time:\t";
@@ -975,9 +976,9 @@ main(int argc, char **argv)
             if (!c_filter.use_database_filter){
                 if (c_library.num_orients > 0 && c_library.num_confs > 0) {
                 //double          mol_stop_time = wall_clock_seconds();
-	            struct timespec mol_stop_time;
-	            timespec_get(&mol_stop_time, TIME_UTC);
-	            double          time_per_mol = calculate_simulation_time(mol_start_time, mol_stop_time);
+                    struct timespec mol_stop_time;
+                    timespec_get(&mol_stop_time, TIME_UTC);
+                    double          time_per_mol = calculate_simulation_time(mol_start_time, mol_stop_time);
                     cout << "\n" "-----------------------------------" "\n";
                     cout << "Molecule: " << mol.title << "\n\n";
                     cout << " Elapsed time for docking:\t";
@@ -1076,8 +1077,9 @@ main(int argc, char **argv)
     // End timing
 #ifndef TIME_PRECISION
     double          stop_time = wall_clock_seconds();
+    double          total_time = stop_time - start_time;
     cout << "Total elapsed time:\t";
-    cout << fixed << setprecision(3) << stop_time - start_time << " seconds\n";
+    cout << fixed << setprecision(3) << total_time << " seconds\n";
 #endif
 #ifdef TIME_PRECISION
     struct timespec stop_time;
@@ -1193,7 +1195,7 @@ timespec.tv_sec + static_cast<double>(timespec.tv_nsec) / 1000000000.0
     long nsec_diff = t_end.tv_nsec - t_start.tv_nsec;
     if (nsec_diff < 0){
         sec_diff = sec_diff - 1.0;
-	nsec_diff = 1000000000 + nsec_diff;
+        nsec_diff = 1000000000 + nsec_diff;
     }
     double sec_fraction = static_cast<double>(nsec_diff) / 1000000000.0;
     double simulation_time = sec_diff + sec_fraction;

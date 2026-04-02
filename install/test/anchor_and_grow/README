@@ -15,7 +15,8 @@ FILES USED:
 	flex2.dockin		#anchor and grow with clash overlap
 	flex3.dockin		#anchor and grow with no internal check
 	flex4.dockin		#anchor and grow with internal energy (library)
-    flex5.dockin        #anchor and grow with dock 6 pruning algorithm
+        flex5.dockin            #anchor and grow with dock 6 pruning algorithm
+        flex7.dockin            #anchor and grow with multiple scored poses and clustering (library)
 	lig.mol2		#ligand structure file
 	struct.sph		#receptor sphere file
 	chem.defn		#chem parameter input file

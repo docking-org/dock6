@@ -6,7 +6,7 @@ RDKITLIB = $${LD_LIBRARY_PATH}
 install: rdkit
 
 getdepend:
-	wget -c -nv https://boostorg.jfrog.io/artifactory/main/release/1.71.0/source/boost_1_71_0.tar.gz
+	wget -c -nv https://archives.boost.io/release/1.71.0/source/boost_1_71_0.tar.gz
 	wget -c -nv https://github.com/rdkit/rdkit/archive/Release_2019_09_1.tar.gz
 	wget -c -nv https://gitlab.com/libeigen/eigen/-/archive/3.3.9/eigen-3.3.9.tar.gz
 	mv Release_2019_09_1.tar.gz rdkit-Release_2019_09_1.tar.gz

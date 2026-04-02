@@ -34,6 +34,7 @@ class           Descriptor_Energy_Score:public Base_Score {
 
     // Input parameters
     bool            desc_use_nrg;
+    bool            desc_use_grid_lig_efficiency;
     bool            desc_use_mg_nrg;
     bool            desc_use_cont_nrg;
     bool            desc_use_fps;
@@ -77,6 +78,7 @@ class           Descriptor_Energy_Score:public Base_Score {
 
     // Weights
     int             desc_weight_nrg;
+    int             desc_weight_nrg_lig_eff;
     int             desc_weight_mg_nrg;
     int             desc_weight_cont_nrg;
     int             desc_weight_fps;
@@ -89,6 +91,7 @@ class           Descriptor_Energy_Score:public Base_Score {
 
     // Temp scores
     float     temp_nrg_score,
+	      temp_nrg_lig_eff,
               temp_mg_nrg_score,
               temp_cont_nrg_score,
               temp_fps_score,

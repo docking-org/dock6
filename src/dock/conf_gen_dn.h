@@ -198,7 +198,6 @@ class           DN_Build {
     std::string        dn_fraglib_iso_sidechain_file;
     std::string        dn_iso_write_libraries;
     std::string        dn_iso_output_path_libraries;
-    std::string        dn_iso_fraglib;
     std::string        dn_iso_fraglib_dir;
     float              dn_iso_bond_angle_tol_sid; 
     float              dn_iso_bond_angle_tol_lnk; 
@@ -215,7 +214,7 @@ class           DN_Build {
     int                dn_iso_num_top;
     std::string        dn_iso_score_sel;
     std::string        dn_iso_rank_score_sel;
-    int                dn_num_rand_head_picks;
+    int                dn_num_iso_head_picks;
     std::string        dn_iso_pick_meth;
     std::string        dn_iso_skip;
     std::string        dn_iso_print_out;
@@ -301,7 +300,7 @@ class           DN_Build {
     std::string                 dn_frag_frequency_file;
     std::vector< std::string >  ordered_fragments;
     std::vector< float >        ordered_fragment_frequencies;
-    void                        read_frag_frequencies( std::string frequencies_file );
+    void                        read_frag_frequencies( std::vector <Fragment> & );
     void                        sample_fraglib_frequency( Fragment &, int, std::vector <Fragment> &, std::vector <Fragment> &,
                                          Master_Score &, Simplex_Minimizer &, AMBER_TYPER &, bool );    
     int                         select_frag_by_frequency( vector <Fragment> & fraglib );

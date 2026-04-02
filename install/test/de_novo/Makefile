@@ -1,8 +1,10 @@
 include ../default_targets.h
 
 test:   MkGrids dn_generate_fragments.dockout dn_de_novo_graph.dockout \
+		dn_generate_fragments_biasing.dockout \
 	dn_de_novo_ex.dockout dn_de_novo_rand.dockout dn_refinement.dockout \
-	dn_de_novo_graph_no_pruning.dockout dn_de_novo_graph_pruning_no_sampling.dockout
+	dn_de_novo_graph_no_pruning.dockout dn_de_novo_graph_pruning_no_sampling.dockout \
+	dn_de_novo_graph_biasing.dockout dn_de_novo_rand_biasing.dockout
 
 rdkittest:
 	@# run this test only if the dock rdkit executable exists

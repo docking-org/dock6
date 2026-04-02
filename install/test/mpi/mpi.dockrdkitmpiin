@@ -35,6 +35,7 @@ grid_score_es_scale                                          1
 grid_lig_efficiency                                          no
 grid_score_grid_prefix                                       ../grid_generation/grid
 minimize_ligand                                              no
+simplex_final_min                                            no
 atom_model                                                   all
 vdw_defn_file                                                ../../../parameters/vdw_AMBER_parm99.defn
 flex_defn_file                                               ../../../parameters/flex.defn
@@ -42,7 +43,8 @@ flex_drive_file                                              ../../../parameters
 ligand_outfile_prefix                                        mpi_rd
 write_mol_solvation                                          no
 write_orientations                                           no
-num_scored_conformers                                        1
+num_final_scored_poses                                       1
+num_preclustered_conformers                                  1
 score_threshold                                              100
 rank_ligands                                                 yes
 max_ranked_ligands                                           500

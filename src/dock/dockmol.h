@@ -94,7 +94,7 @@ class           DOCKMol {
     std::string     comment2;
     std::string     comment3;
     std::string     score_text_data;
-    std::string     energy;
+    std::string     energy = ""; //default value for energy
     std::string     simplex_text;
     std::string     mol_data;   // misc data
     std::string     hdb_data;   // hdb data to store internal energy 

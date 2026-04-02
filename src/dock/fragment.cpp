@@ -48,7 +48,22 @@ Fragment::Fragment(){
             num_du = 0;
             freq_num = 0;
             aps = {};
+
+            iso_ori_mat[0][0]=1; iso_ori_mat[0][1]=0; iso_ori_mat[0][2]=0;
+            iso_ori_mat[1][0]=0; iso_ori_mat[1][1]=1; iso_ori_mat[1][2]=0;
+            iso_ori_mat[2][0]=0; iso_ori_mat[2][1]=0; iso_ori_mat[2][2]=1;
+
+            iso_tors_turned = 0.0;
+            iso_targeted_AP = -1;
+            iso_frag_att_num_APs = -1;
             
+            iso_centers_com.x = 0;
+            iso_centers_com.y = 0;
+            iso_centers_com.z = 0;
+
+            iso_spheres_com.x = 0;
+            iso_spheres_com.y = 0;
+            iso_spheres_com.z = 0;
        };
 Fragment::~Fragment(){
             mol.clear_molecule();
@@ -65,6 +80,21 @@ Fragment::~Fragment(){
             freq_num = 0;
             aps = {};
 
+            iso_ori_mat[0][0]=1; iso_ori_mat[0][1]=0; iso_ori_mat[0][2]=0;
+            iso_ori_mat[1][0]=0; iso_ori_mat[1][1]=1; iso_ori_mat[1][2]=0;
+            iso_ori_mat[2][0]=0; iso_ori_mat[2][1]=0; iso_ori_mat[2][2]=1;
+
+            iso_tors_turned = 0.0;
+            iso_targeted_AP = -1;
+            iso_frag_att_num_APs = -1;
+
+            iso_centers_com.x = 0;
+            iso_centers_com.y = 0;
+            iso_centers_com.z = 0;
+
+            iso_spheres_com.x = 0;
+            iso_spheres_com.y = 0;
+            iso_spheres_com.z = 0;
        };
 
 
@@ -127,6 +157,19 @@ void Fragment::operator=(const Fragment & original){
     mut_type              = original.mut_type;
     freq_num              = original.freq_num;
 
+    for(int i=0;i<3;i++){
+        for( int j=0;j<3;j++){
+            iso_ori_mat[i][j] = original.iso_ori_mat[i][j];
+        }
+    }
+ 
+    iso_tors_turned = original.iso_tors_turned;
+    iso_targeted_AP = original.iso_targeted_AP;
+    iso_frag_att_num_APs = original.iso_frag_att_num_APs;
+    iso_head_attached_ind = original.iso_head_attached_ind;
+
+    iso_centers_com = original.iso_centers_com;
+    iso_spheres_com = original.iso_spheres_com;
 }
 
 
@@ -185,6 +228,19 @@ Fragment::Fragment(const Fragment & original){
     mut_type              = original.mut_type;
     freq_num              = original.freq_num;
 
+    for(int i=0;i<3;i++){
+        for( int j=0;j<3;j++){
+            iso_ori_mat[i][j] = original.iso_ori_mat[i][j];
+        }
+    }
+ 
+    iso_tors_turned = original.iso_tors_turned;
+    iso_targeted_AP = original.iso_targeted_AP;
+    iso_frag_att_num_APs = original.iso_frag_att_num_APs;
+    iso_head_attached_ind = original.iso_head_attached_ind;
+
+    iso_centers_com = original.iso_centers_com;
+    iso_spheres_com = original.iso_spheres_com;
 }
 
 void Fragment::set_radial_dist_distri(int atom_num, std::vector<float> radial){

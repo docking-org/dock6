@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.12
+DOCK v6.13
 
-Released September 2024
+Released July 2025
 Copyright UCSF
 --------------------------------------
 
@@ -32,6 +32,10 @@ ga_mutate_addition                                           yes
 ga_mutate_deletion                                           yes
 ga_mutate_substitution                                       yes
 ga_mutate_replacement                                        yes
+ga_add_rate                                                  25
+ga_del_rate                                                  25
+ga_sub_rate                                                  25
+ga_rep_rate                                                  25
 ga_mutate_parents                                            yes
 ga_pmut_rate                                                 0.3
 ga_omut_rate                                                 0.7
@@ -42,7 +46,9 @@ ga_max_root_size                                             5
 ga_energy_cutoff                                             100
 ga_heur_unmatched_num                                        1
 ga_heur_matched_rmsd                                         0.5
-ga_constraint_mol_wt                                         500
+ga_mol_wt_cutoff_type                                        hard
+ga_constraint_upper_mol_wt                                   500.0
+ga_constraint_lower_mol_wt                                   0
 ga_constraint_rot_bon                                        10
 ga_constraint_H_accept                                       10
 ga_constraint_H_don                                          5
@@ -122,6 +128,7 @@ Descriptor Score Parameters
 ------------------------------------------------------------------------------------------
 descriptor_score_primary                                     yes
 descriptor_use_grid_score                                    yes
+descriptor_use_grid_lig_efficiency                           no
 descriptor_use_pharmacophore_score                           no
 descriptor_use_tanimoto                                      no
 descriptor_use_hungarian                                     no
@@ -299,16 +306,29 @@ Final Offspring Ensemble Size: 40
 Parent Ensemble Size: 3
 
 Gen 1: Mutation Attempt 1: Mutating Molecule #0
-Random number - mutation_type (mutation_selection): 1
-Trying mutation type: addition
-Segment Type for Mutation: sidechains
-Atoms of segment for mutation: O3,H12
-Calling Mutation Function: Addition
-H is being turned into a Du: H12
+Random number - mutation_type (mutation_selection): 3
+Trying mutation type: replacement
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 4
+Atoms of segment for mutation: C11,C12,H10,C13,H11,C14,C15,H13,C16,H14
+Calling Mutation Function: Replacement
+Selecting frag: lnk.285
+Deleted frag because of distance cutoff
+Number with invalid torenv 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
 
-DN random number: 156
+Gen 1: Mutation Attempt 2: Mutating Molecule #1
+Random number - mutation_type (mutation_selection): 2
+Trying mutation type: substitution
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 1
+Atoms of segment for mutation: C11,C12,H7,C13,H8,C14,C15,H9,C16,H10
+Calling Mutation Function: Substitution
+#### Number of attempted layers of DN growth 1 1
 
-De novo fragment selection: sid.297
+DN random number: 129
+
+De novo fragment selection: sid.253
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
@@ -317,580 +337,73 @@ Passed single torenv check.
 Checking multi torenv...
 Passed multi torenv check
 Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
+Did not pass internal energy cutoff.
+Molecules prior to clustering: 6
 Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
+Molecules retained: 4
 Sorting molecules made after denovo
 
-Molecules made after denovo: 0
+Molecules made after denovo: 4
 
-Number of molecules in next_layer: 0
+Number of molecules in next_layer: 1
 Sorting denovo molecules based on score.
 Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
+Number of molecules before Hungarian RMSD pruning: 1
+Number of molecules after Hungarian RMSD pruning: 1
+Number of molecules being sent to GA: 1
 
-Gen 1: Mutation Attempt 2: Mutating Molecule #1
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+output size: 1
+
+Gen 1: Mutation Attempt 3: Mutating Molecule #0
 Random number - mutation_type (mutation_selection): 0
 Trying mutation type: deletion
-Segment Type for Mutation: sidechains
-Atoms of segment for mutation: O1,H11
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C13,C14,H12,C15,H13,C16,C17,H15,C18,H16
 Calling Mutation Function: Deletion
-Offspring size: 0, only single best scoring offspring retained
 
-Gen 1: Mutation Attempt 3: Mutating Molecule #2
-Random number - mutation_type (mutation_selection): 1
-Trying mutation type: addition
-Segment Type for Mutation: sidechains
-Atoms of segment for mutation: O2,H13
-Calling Mutation Function: Addition
-H is being turned into a Du: H13
-
-DN random number: 171
-
-De novo fragment selection: sid.316
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Did not pass multi torenv check.
-Sorting molecules made after denovo
-
-Molecules made after denovo: 0
-
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-output size: 0
-
-Gen 1: Mutation Attempt 4: Mutating Molecule #0
-Random number - mutation_type (mutation_selection): 3
-Trying mutation type: replacement
-Segment Type for Mutation: scaffolds
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C1,C2,H1,C3,C4,O1,C5,H2,C6,H3,C7,H4,H5,C8,H6,H7,C9,H8,H9,C10,H10,C11,C12,H11
-Calling Mutation Function: Replacement
-Selecting frag: scf.209
-Deleted frag from vector because no ring
-Number with invalid torenv 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 5: Mutating Molecule #1
-Random number - mutation_type (mutation_selection): 1
-Trying mutation type: addition
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C1,H1,C2,H2,C3,H3,C4,C5,C6,H4,C7,C8,H5,C9,H6,C10
-Calling Mutation Function: Addition
-H is being turned into a Du: H3
-
-DN random number: 149
-
-De novo fragment selection: sid.284
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Did not pass multi torenv check.
-Sorting molecules made after denovo
-
-Molecules made after denovo: 0
-
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 6: Mutating Molecule #2
-Random number - mutation_type (mutation_selection): 2
-Trying mutation type: substitution
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C1,H1,C2,H2,C3,H3,C4,C5,C6,H4,C7,C8,H5,C9,H6,C10
-Calling Mutation Function: Substitution
-
-DN random number: 45
-
-De novo fragment selection: sid.87
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-Sorting molecules made after denovo
-
-Molecules made after denovo: 0
-
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-For this generation, parents' mutations: 0
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+For this generation, parents' mutations: 2
 Expected number of parent mutations: 3, mut cycles 2
-Successful parent deletions:        0 / 1
-Successful parent additions:        0 / 3
-Successful parent substitutions:    0 / 1
+Successful parent deletions:        1 / 1
+Successful parent additions:        0 / 0
+Successful parent substitutions:    1 / 1
 Successful parent replacements:     0 / 1
+Initial Ensemble Size: 2
+Number pruned for poor score: 0
+Number pruned for poor internal energy: 0
+Size after score/internal energy pruning: 2
+Number pruned for Hungarian similarity: 0
+Final Offspring Ensemble Size: 2
+### Offspring_size_before_parents_pruning 2 offspring_size_after_pruning 2
+### Parents size before P-O pruning 25 Parents size after pruning 25
+
+-----------------------------------
 
 #### Entering Random Offspring mutations ####
 Offspring Ensemble Size: 40
 
-Gen 1: Mutation Attempt 1: Mutating Molecule #12
-Random number - mutation_type (mutation_selection): 3
-Trying mutation type: replacement
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C1,C2,H1,C3,C4,C5,H2,C6,H3,O1,N1,C7
-Calling Mutation Function: Replacement
-Selecting frag: lnk.134
-Deleted fragment because not matching bondtypes
-Number with invalid torenv 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 2: Mutating Molecule #15
-Random number - mutation_type (mutation_selection): 3
-Trying mutation type: replacement
-Segment Type for Mutation: sidechains
- Changed mutation type from replacement to substitution
-Atoms of segment for mutation: O2,H4
-Calling Mutation Function: Substitution
-
-DN random number: 42
-
-De novo fragment selection: sid.84
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-Sorting molecules made after denovo
-
-Molecules made after denovo: 0
-
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 3: Mutating Molecule #32
-Random number - mutation_type (mutation_selection): 3
-Trying mutation type: replacement
-Segment Type for Mutation: sidechains
- Changed mutation type from replacement to substitution
-Atoms of segment for mutation: O1,H5
-Calling Mutation Function: Substitution
-
-DN random number: 134
-
-De novo fragment selection: sid.263
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-Sorting molecules made after denovo
-
-Molecules made after denovo: 0
-
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 4: Mutating Molecule #24
-Random number - mutation_type (mutation_selection): 3
-Trying mutation type: replacement
-Segment Type for Mutation: sidechains
- Changed mutation type from replacement to substitution
-Atoms of segment for mutation: O3,H7
-Calling Mutation Function: Substitution
-
-DN random number: 18
-
-De novo fragment selection: sid.38
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-Sorting molecules made after denovo
-
-Molecules made after denovo: 0
-
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 5: Mutating Molecule #0
+Gen 1: Mutation Attempt 1: Mutating Molecule #17
 Random number - mutation_type (mutation_selection): 1
 Trying mutation type: addition
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 2
-Atoms of segment for mutation: O1
+Segment Type for Mutation: scaffolds
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C8,C9,C10,H4,C11,C12,H5,C13,H6
 Calling Mutation Function: Addition
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 6: Mutating Molecule #2
-Random number - mutation_type (mutation_selection): 2
-Trying mutation type: substitution
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C1,H1,C2,H2,C3,C4,H4,C5,C6,H5,H6,C7,H7,H8,C8,H9,C9,H10,C10,C11,H11,H12,C12,H13,H14,C13,C14,H15,C15,H16,H17,C16,H18,H19,C17,H20,C18,H22,H23,H24
-Calling Mutation Function: Substitution
-
-DN random number: 106
-
-De novo fragment selection: sid.216
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-Sorting molecules made after denovo
-
-Molecules made after denovo: 0
-
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 7: Mutating Molecule #0
-Random number - mutation_type (mutation_selection): 1
-Trying mutation type: addition
-Segment Type for Mutation: sidechains
-Atoms of segment for mutation: O2,H21
-Calling Mutation Function: Addition
-H is being turned into a Du: H21
-
-DN random number: 66
-
-De novo fragment selection: sid.136
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-Sorting molecules made after denovo
-
-Molecules made after denovo: 0
-
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 8: Mutating Molecule #38
-Random number - mutation_type (mutation_selection): 2
-Trying mutation type: substitution
-Segment Type for Mutation: sidechains
-Atoms of segment for mutation: O3,H8
-Calling Mutation Function: Substitution
-
-DN random number: 183
-
-De novo fragment selection: sid.332
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 6
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-Sorting molecules made after denovo
-
-Molecules made after denovo: 0
-
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 9: Mutating Molecule #23
-Random number - mutation_type (mutation_selection): 3
-Trying mutation type: replacement
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C1,H1,C2,H2,C3,C4,C5,H3,C6,O1,C7,C8,H4
-Calling Mutation Function: Replacement
-Selecting frag: lnk.101
-Deleted frag because of distance cutoff
-Number with invalid torenv 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 10: Mutating Molecule #38
-Random number - mutation_type (mutation_selection): 2
-Trying mutation type: substitution
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C1,H1,C2,H2,C3,C4,H4,C5,C6,H5,H6,C7,H7,H8,C8,H9,C9,H10,C10,C11,H11,H12,C12,H13,H14,C13,C14,H15,C15,H16,H17,C16,H18,H19,C17,H20,C18,H22,H23,H24
-Calling Mutation Function: Substitution
-
-DN random number: 359
-
-De novo fragment selection: lnk.376
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 84
-
-De novo fragment selection: sid.164
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Did not pass bond order compatibility check.
-Sorting molecules made after denovo
-
-Molecules made after denovo: 0
-
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 11: Mutating Molecule #21
-Random number - mutation_type (mutation_selection): 3
-Trying mutation type: replacement
-Segment Type for Mutation: sidechains
- Changed mutation type from replacement to substitution
-Atoms of segment for mutation: C5,C6,H4,C7,H5,C8,H6,C9,H7,C10,H8
-Calling Mutation Function: Substitution
-
-DN random number: 168
-
-De novo fragment selection: sid.310
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 2
-Sorting molecules made after denovo
-
-Molecules made after denovo: 2
-
-Number of molecules in next_layer: 1
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 1
-Number of molecules after Hungarian RMSD pruning: 1
-Number of molecules being sent to GA: 1
-
-0 compounds exceeded MW cutoff of 500
-0 compounds exceeded the rot bond cutoff of 10
-0 compounds exceeded the HA acceptor # of 10
-0 compounds exceeded the HB donor # of 5
-0 compounds exceeded the formal charge of 2.1
-0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 12: Mutating Molecule #17
-Random number - mutation_type (mutation_selection): 2
-Trying mutation type: substitution
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C8,C9,H3,C10,H4,C11,C12,C13,H5,F1
-Calling Mutation Function: Substitution
-
-DN random number: 257
-
-De novo fragment selection: lnk.94
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 99
-
-De novo fragment selection: sid.188
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 2
-Sorting molecules made after denovo
-
-Molecules made after denovo: 2
-
-Number of molecules in next_layer: 1
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 1
-Number of molecules after Hungarian RMSD pruning: 1
-Number of molecules being sent to GA: 1
-
-0 compounds exceeded MW cutoff of 500
-0 compounds exceeded the rot bond cutoff of 10
-0 compounds exceeded the HA acceptor # of 10
-0 compounds exceeded the HB donor # of 5
-0 compounds exceeded the formal charge of 2.1
-0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 13: Mutating Molecule #35
-Random number - mutation_type (mutation_selection): 1
-Trying mutation type: addition
-Segment Type for Mutation: sidechains
-Atoms of segment for mutation: O2,H21
-Calling Mutation Function: Addition
-H is being turned into a Du: H21
-
-DN random number: 154
-
-De novo fragment selection: sid.295
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-Sorting molecules made after denovo
-
-Molecules made after denovo: 0
-
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 14: Mutating Molecule #36
-Random number - mutation_type (mutation_selection): 2
-Trying mutation type: substitution
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C1,H1,C2,H2,C3,C4,H4,C5,C6,H5,H6,C7,H7,H8,C8,H9,C9,H10,C10,C11,H11,H12,C12,H13,H14,C13,C14,H15,C15,H16,H17,C16,H18,H19,C17,H20,C18,H22,H23,H24
-Calling Mutation Function: Substitution
-
-DN random number: 286
-
-De novo fragment selection: lnk.151
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 88
-
-De novo fragment selection: sid.171
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 2
-Sorting molecules made after denovo
-
-Molecules made after denovo: 2
-
-Number of molecules in next_layer: 1
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 1
-Number of molecules after Hungarian RMSD pruning: 1
-Number of molecules being sent to GA: 1
-
-0 compounds exceeded MW cutoff of 500
-0 compounds exceeded the rot bond cutoff of 10
-0 compounds exceeded the HA acceptor # of 10
-0 compounds exceeded the HB donor # of 5
-0 compounds exceeded the formal charge of 2.1
-0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 15: Mutating Molecule #11
-Random number - mutation_type (mutation_selection): 0
-Trying mutation type: deletion
-Segment Type for Mutation: sidechains
-Atoms of segment for mutation: O3,H16
-Calling Mutation Function: Deletion
-
-0 compounds exceeded MW cutoff of 500
-0 compounds exceeded the rot bond cutoff of 10
-0 compounds exceeded the HA acceptor # of 10
-0 compounds exceeded the HB donor # of 5
-0 compounds exceeded the formal charge of 2.1
-0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 16: Mutating Molecule #8
-Random number - mutation_type (mutation_selection): 3
-Trying mutation type: replacement
-Segment Type for Mutation: sidechains
- Changed mutation type from replacement to substitution
-Atoms of segment for mutation: O5,H8
-Calling Mutation Function: Substitution
+H is being turned into a Du: H6
 
 DN random number: 165
 
@@ -907,44 +420,148 @@ Sorting denovo molecules based on score.
 Entering Hungarian RMSD heuristic pruning.
 Number of molecules before Hungarian RMSD pruning: 0
 Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
 
-Gen 1: Mutation Attempt 17: Mutating Molecule #3
-Random number - mutation_type (mutation_selection): 3
-Trying mutation type: replacement
-Segment Type for Mutation: scaffolds
+Gen 1: Mutation Attempt 2: Mutating Molecule #16
+Random number - mutation_type (mutation_selection): 0
+Trying mutation type: deletion
+Segment Type for Mutation: linkers
 Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C1,C2,H2,C3,H3,C4,C5,C6,H4,C7,H5,N1,C14,H11,H12,C15,H13,H14
-Calling Mutation Function: Replacement
-Selecting frag: scf.209
-Deleted frag from vector because no ring
-Number with invalid torenv 0
-Offspring size: 0, only single best scoring offspring retained
+Atoms of segment for mutation: C8,C9,H3,C10,H4,C11,C12,C13,H5,F1
+Calling Mutation Function: Deletion
 
-Gen 1: Mutation Attempt 18: Mutating Molecule #1
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 3: Mutating Molecule #6
+Random number - mutation_type (mutation_selection): 1
+Trying mutation type: addition
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C16,C17,H15,C18,H16,C19,C20,H17,C21,H18
+Calling Mutation Function: Addition
+H is being turned into a Du: H15
+
+DN random number: 141
+
+De novo fragment selection: sid.274
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 0
+Sorting molecules made after denovo
+
+Molecules made after denovo: 0
+
+Number of molecules in next_layer: 0
+Sorting denovo molecules based on score.
+Entering Hungarian RMSD heuristic pruning.
+Number of molecules before Hungarian RMSD pruning: 0
+Number of molecules after Hungarian RMSD pruning: 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 4: Mutating Molecule #30
+Random number - mutation_type (mutation_selection): 1
+Trying mutation type: addition
+Segment Type for Mutation: sidechains
+Atoms of segment for mutation: O1,H2
+Calling Mutation Function: Addition
+H is being turned into a Du: H2
+
+DN random number: 56
+
+De novo fragment selection: sid.118
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 0
+Sorting molecules made after denovo
+
+Molecules made after denovo: 0
+
+Number of molecules in next_layer: 0
+Sorting denovo molecules based on score.
+Entering Hungarian RMSD heuristic pruning.
+Number of molecules before Hungarian RMSD pruning: 0
+Number of molecules after Hungarian RMSD pruning: 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 5: Mutating Molecule #6
+Random number - mutation_type (mutation_selection): 1
+Trying mutation type: addition
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 1
+Atoms of segment for mutation: C8,C9,H5,C10,H6,C11,H7,C12,H8,C13
+Calling Mutation Function: Addition
+H is being turned into a Du: H6
+
+DN random number: 36
+
+De novo fragment selection: sid.71
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Did not pass single torenv check.
+Sorting molecules made after denovo
+
+Molecules made after denovo: 0
+
+Number of molecules in next_layer: 0
+Sorting denovo molecules based on score.
+Entering Hungarian RMSD heuristic pruning.
+Number of molecules before Hungarian RMSD pruning: 0
+Number of molecules after Hungarian RMSD pruning: 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 6: Mutating Molecule #3
 Random number - mutation_type (mutation_selection): 0
 Trying mutation type: deletion
 Segment Type for Mutation: sidechains
-Atoms of segment for mutation: C1,H1,C2,H2,C3,H3,C4,H4,C5,H5,C6
+Atoms of segment for mutation: O2,H21
 Calling Mutation Function: Deletion
-Offspring size: 0, only single best scoring offspring retained
 
-Gen 1: Mutation Attempt 19: Mutating Molecule #28
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 7: Mutating Molecule #16
 Random number - mutation_type (mutation_selection): 2
 Trying mutation type: substitution
 Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C1,C2,H1,C3,H2,C4,C5,H3,C6,H4
+Random number - index_seg (mutation_selection): 1
+Atoms of segment for mutation: C8,C9,H3,C10,H4,C11,C12,C13,H5,F1
 Calling Mutation Function: Substitution
+#### Number of attempted layers of DN growth 1 1
 
-DN random number: 348
+DN random number: 66
 
-De novo fragment selection: lnk.334
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 26
-
-De novo fragment selection: sid.52
+De novo fragment selection: sid.136
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
@@ -966,99 +583,26 @@ Number of molecules before Hungarian RMSD pruning: 1
 Number of molecules after Hungarian RMSD pruning: 1
 Number of molecules being sent to GA: 1
 
-0 compounds exceeded MW cutoff of 500
+0 compounds exceeded MW cutoff of 0 - 500
 0 compounds exceeded the rot bond cutoff of 10
 0 compounds exceeded the HA acceptor # of 10
 0 compounds exceeded the HB donor # of 5
 0 compounds exceeded the formal charge of 2.1
 0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
 
-Gen 1: Mutation Attempt 20: Mutating Molecule #10
-Random number - mutation_type (mutation_selection): 2
-Trying mutation type: substitution
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C1,H1,C2,C3,H2,C4,C5,H3,C9,H7,H8,C10,H9,H10,C11,H11,C12,H13,C13,O2,C14,H14,C18,H17,H18
-Calling Mutation Function: Substitution
-
-DN random number: 163
-
-De novo fragment selection: sid.304
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-Sorting molecules made after denovo
-
-Molecules made after denovo: 0
-
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 21: Mutating Molecule #14
-Random number - mutation_type (mutation_selection): 0
-Trying mutation type: deletion
-Segment Type for Mutation: scaffolds
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C1,H1,C2,C3,H3,C4,C5,C6,O3,C7,C8,H5,O4,C9
-Calling Mutation Function: Deletion
-
-0 compounds exceeded MW cutoff of 500
-0 compounds exceeded the rot bond cutoff of 10
-0 compounds exceeded the HA acceptor # of 10
-0 compounds exceeded the HB donor # of 5
-0 compounds exceeded the formal charge of 2.1
-0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 22: Mutating Molecule #6
+Gen 1: Mutation Attempt 8: Mutating Molecule #5
 Random number - mutation_type (mutation_selection): 1
 Trying mutation type: addition
 Segment Type for Mutation: linkers
 Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C7,C8,H5,C9,H6,C10,C11,H8,C12,H9
+Atoms of segment for mutation: C13,C14,H12,C15,H13,C16,C17,H15,C18,H16
 Calling Mutation Function: Addition
-H is being turned into a Du: H6
+H is being turned into a Du: H13
 
-DN random number: 143
+DN random number: 94
 
-De novo fragment selection: sid.276
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Did not pass bond order compatibility check.
-Sorting molecules made after denovo
-
-Molecules made after denovo: 0
-
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 23: Mutating Molecule #29
-Random number - mutation_type (mutation_selection): 2
-Trying mutation type: substitution
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C1,H1,C2,C3,H2,C4,C5,H3,C9,H7,H8,C10,H9,H10,C11,H11,C12,H13,C13,O2,C14,H14,C18,H17,H18
-Calling Mutation Function: Substitution
-
-DN random number: 297
-
-De novo fragment selection: lnk.187
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 31
-
-De novo fragment selection: sid.59
+De novo fragment selection: sid.181
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
@@ -1073,37 +617,21 @@ Sorting denovo molecules based on score.
 Entering Hungarian RMSD heuristic pruning.
 Number of molecules before Hungarian RMSD pruning: 0
 Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
 
-Gen 1: Mutation Attempt 24: Mutating Molecule #18
+Gen 1: Mutation Attempt 9: Mutating Molecule #15
 Random number - mutation_type (mutation_selection): 3
 Trying mutation type: replacement
 Segment Type for Mutation: linkers
 Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C13,C14,H12,C15,H13,C16,C17,H15,C18,H16
+Atoms of segment for mutation: C8,C9,H3,C10,H4,C11,C12,C13,H5,F1
 Calling Mutation Function: Replacement
-Selecting frag: lnk.375
-Deleted frag because of distance cutoff
+Selecting frag: lnk.2
+Deleted frag from vector because no ring
 Number with invalid torenv 0
-Offspring size: 0, only single best scoring offspring retained
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
 
-Gen 1: Mutation Attempt 25: Mutating Molecule #3
-Random number - mutation_type (mutation_selection): 0
-Trying mutation type: deletion
-Segment Type for Mutation: scaffolds
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C1,C2,H1,C3,C4,O1,C5,H2,C6,H3,C7,H4,H5,C8,H6,H7,C9,H8,H9,C10,H10,C11,C12,H11
-Calling Mutation Function: Deletion
-
-0 compounds exceeded MW cutoff of 500
-0 compounds exceeded the rot bond cutoff of 10
-0 compounds exceeded the HA acceptor # of 10
-0 compounds exceeded the HB donor # of 5
-0 compounds exceeded the formal charge of 2.1
-0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 26: Mutating Molecule #21
+Gen 1: Mutation Attempt 10: Mutating Molecule #31
 Random number - mutation_type (mutation_selection): 1
 Trying mutation type: addition
 Segment Type for Mutation: sidechains
@@ -1111,9 +639,9 @@ Atoms of segment for mutation: O3,H8
 Calling Mutation Function: Addition
 H is being turned into a Du: H8
 
-DN random number: 70
+DN random number: 51
 
-De novo fragment selection: sid.144
+De novo fragment selection: sid.104
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
@@ -1128,159 +656,20 @@ Sorting denovo molecules based on score.
 Entering Hungarian RMSD heuristic pruning.
 Number of molecules before Hungarian RMSD pruning: 0
 Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
 
-Gen 1: Mutation Attempt 27: Mutating Molecule #30
-Random number - mutation_type (mutation_selection): 3
-Trying mutation type: replacement
-Segment Type for Mutation: sidechains
- Changed mutation type from replacement to substitution
-Atoms of segment for mutation: O1,H12
-Calling Mutation Function: Substitution
-
-DN random number: 283
-
-De novo fragment selection: lnk.143
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 40
-
-De novo fragment selection: sid.77
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Did not pass bond order compatibility check.
-Sorting molecules made after denovo
-
-Molecules made after denovo: 0
-
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 28: Mutating Molecule #31
-Random number - mutation_type (mutation_selection): 2
-Trying mutation type: substitution
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C1,C2,H1,C3,C4,C5,H2,C6,H3,O1,N1,C7
-Calling Mutation Function: Substitution
-
-DN random number: 146
-
-De novo fragment selection: sid.280
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-Sorting molecules made after denovo
-
-Molecules made after denovo: 0
-
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 29: Mutating Molecule #24
-Random number - mutation_type (mutation_selection): 2
-Trying mutation type: substitution
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 1
-Atoms of segment for mutation: C8,C9,H3,C10,H4,C11,C12,C13,H5,F1
-Calling Mutation Function: Substitution
-
-DN random number: 125
-
-De novo fragment selection: sid.247
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 2
-Sorting molecules made after denovo
-
-Molecules made after denovo: 2
-
-Number of molecules in next_layer: 1
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 1
-Number of molecules after Hungarian RMSD pruning: 1
-Number of molecules being sent to GA: 1
-
-0 compounds exceeded MW cutoff of 500
-0 compounds exceeded the rot bond cutoff of 10
-0 compounds exceeded the HA acceptor # of 10
-0 compounds exceeded the HB donor # of 5
-0 compounds exceeded the formal charge of 2.1
-0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 30: Mutating Molecule #9
-Random number - mutation_type (mutation_selection): 3
-Trying mutation type: replacement
-Segment Type for Mutation: sidechains
- Changed mutation type from replacement to substitution
-Atoms of segment for mutation: O1,H2
-Calling Mutation Function: Substitution
-
-DN random number: 353
-
-De novo fragment selection: lnk.354
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 126
-
-De novo fragment selection: sid.249
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 6
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-Sorting molecules made after denovo
-
-Molecules made after denovo: 0
-
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 31: Mutating Molecule #8
+Gen 1: Mutation Attempt 11: Mutating Molecule #10
 Random number - mutation_type (mutation_selection): 1
 Trying mutation type: addition
-Segment Type for Mutation: sidechains
-Atoms of segment for mutation: C5,C6,H4,C7,H5,C8,H6,C9,H7,C10,H8
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C1,C2,H1,C3,H2,C4,C5,H3,C6,H4
 Calling Mutation Function: Addition
 H is being turned into a Du: H4
 
-DN random number: 88
+DN random number: 114
 
-De novo fragment selection: sid.171
+De novo fragment selection: sid.229
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
@@ -1295,9 +684,21 @@ Sorting denovo molecules based on score.
 Entering Hungarian RMSD heuristic pruning.
 Number of molecules before Hungarian RMSD pruning: 0
 Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
 
-Gen 1: Mutation Attempt 32: Mutating Molecule #11
+Gen 1: Mutation Attempt 12: Mutating Molecule #6
+Random number - mutation_type (mutation_selection): 3
+Trying mutation type: replacement
+Segment Type for Mutation: scaffolds
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C1,C2,H2,C3,C4,H4,C5,H5,C6
+Calling Mutation Function: Replacement
+Selecting frag: scf.289
+Deleted frag because of distance cutoff
+Number with invalid torenv 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 13: Mutating Molecule #20
 Random number - mutation_type (mutation_selection): 1
 Trying mutation type: addition
 Segment Type for Mutation: sidechains
@@ -1305,341 +706,9 @@ Atoms of segment for mutation: O3,H7
 Calling Mutation Function: Addition
 H is being turned into a Du: H7
 
-DN random number: 139
+DN random number: 16
 
-De novo fragment selection: sid.272
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 3
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-Sorting molecules made after denovo
-
-Molecules made after denovo: 0
-
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 33: Mutating Molecule #30
-Random number - mutation_type (mutation_selection): 0
-Trying mutation type: deletion
-Segment Type for Mutation: sidechains
-Atoms of segment for mutation: C10,N1
-Calling Mutation Function: Deletion
-
-0 compounds exceeded MW cutoff of 500
-0 compounds exceeded the rot bond cutoff of 10
-0 compounds exceeded the HA acceptor # of 10
-0 compounds exceeded the HB donor # of 5
-0 compounds exceeded the formal charge of 2.1
-0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 34: Mutating Molecule #7
-Random number - mutation_type (mutation_selection): 0
-Trying mutation type: deletion
-Segment Type for Mutation: sidechains
-Atoms of segment for mutation: O1,H3
-Calling Mutation Function: Deletion
-
-0 compounds exceeded MW cutoff of 500
-0 compounds exceeded the rot bond cutoff of 10
-0 compounds exceeded the HA acceptor # of 10
-0 compounds exceeded the HB donor # of 5
-0 compounds exceeded the formal charge of 2.1
-0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 35: Mutating Molecule #28
-Random number - mutation_type (mutation_selection): 0
-Trying mutation type: deletion
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: Cl1,C1,C2,C3,H1,C4,C5,H3,C6,H4,C7,N1,N2
-Calling Mutation Function: Deletion
-
-0 compounds exceeded MW cutoff of 500
-0 compounds exceeded the rot bond cutoff of 10
-0 compounds exceeded the HA acceptor # of 10
-0 compounds exceeded the HB donor # of 5
-0 compounds exceeded the formal charge of 2.1
-0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 36: Mutating Molecule #12
-Random number - mutation_type (mutation_selection): 3
-Trying mutation type: replacement
-Segment Type for Mutation: scaffolds
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C1,H1,C2,C3,H3,C4,C5,C6,O3,C7,C8,H5,O4,C9
-Calling Mutation Function: Replacement
-Selecting frag: scf.279
-Deleted frag because of distance cutoff
-Number with invalid torenv 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 37: Mutating Molecule #1
-Random number - mutation_type (mutation_selection): 0
-Trying mutation type: deletion
-Segment Type for Mutation: sidechains
-Atoms of segment for mutation: N2,C22,H19,H20,C23,H21,H22,N3,H23,C24,H24,C25,H25,H26,C26,H27,H28,C27,H29,H30,C28,H31,H32,C29,H33,H34
-Calling Mutation Function: Deletion
-
-0 compounds exceeded MW cutoff of 500
-0 compounds exceeded the rot bond cutoff of 10
-0 compounds exceeded the HA acceptor # of 10
-0 compounds exceeded the HB donor # of 5
-0 compounds exceeded the formal charge of 2.1
-0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 38: Mutating Molecule #18
-Random number - mutation_type (mutation_selection): 0
-Trying mutation type: deletion
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C19,H24,H25
-Calling Mutation Function: Deletion
-
-0 compounds exceeded MW cutoff of 500
-0 compounds exceeded the rot bond cutoff of 10
-0 compounds exceeded the HA acceptor # of 10
-0 compounds exceeded the HB donor # of 5
-0 compounds exceeded the formal charge of 2.1
-0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 39: Mutating Molecule #3
-Random number - mutation_type (mutation_selection): 0
-Trying mutation type: deletion
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C7,C8,C9,H6,C10,H7,C11,C12,H9,C13,N1,H10,N2
-Calling Mutation Function: Deletion
-
-0 compounds exceeded MW cutoff of 500
-0 compounds exceeded the rot bond cutoff of 10
-0 compounds exceeded the HA acceptor # of 10
-0 compounds exceeded the HB donor # of 5
-0 compounds exceeded the formal charge of 2.1
-0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 40: Mutating Molecule #1
-Random number - mutation_type (mutation_selection): 3
-Trying mutation type: replacement
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 1
-Atoms of segment for mutation: C8,C9,H5,C10,H6,C11,H7,C12,H8,C13
-Calling Mutation Function: Replacement
-Selecting frag: lnk.169
-Deleted fragment because not matching bondtypes
-Number with invalid torenv 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 41: Mutating Molecule #10
-Random number - mutation_type (mutation_selection): 0
-Trying mutation type: deletion
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C7,C8,H6,H7,H8,C9,H9,H10,H11
-Calling Mutation Function: Deletion
-
-0 compounds exceeded MW cutoff of 500
-0 compounds exceeded the rot bond cutoff of 10
-0 compounds exceeded the HA acceptor # of 10
-0 compounds exceeded the HB donor # of 5
-0 compounds exceeded the formal charge of 2.1
-0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 42: Mutating Molecule #13
-Random number - mutation_type (mutation_selection): 3
-Trying mutation type: replacement
-Segment Type for Mutation: sidechains
- Changed mutation type from replacement to substitution
-Atoms of segment for mutation: O3,H7
-Calling Mutation Function: Substitution
-
-DN random number: 88
-
-De novo fragment selection: sid.171
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-Sorting molecules made after denovo
-
-Molecules made after denovo: 0
-
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 43: Mutating Molecule #18
-Random number - mutation_type (mutation_selection): 3
-Trying mutation type: replacement
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C13,C14,H12,C15,H13,C16,C17,H15,C18,H16
-Calling Mutation Function: Replacement
-Selecting frag: lnk.377
-Deleted frag because of distance cutoff
-Number with invalid torenv 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 44: Mutating Molecule #15
-Random number - mutation_type (mutation_selection): 0
-Trying mutation type: deletion
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 2
-Atoms of segment for mutation: C24,H21
-Calling Mutation Function: Deletion
-WARNING: deletion was not conducted - bond type 2
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 45: Mutating Molecule #17
-Random number - mutation_type (mutation_selection): 1
-Trying mutation type: addition
-Segment Type for Mutation: sidechains
-Atoms of segment for mutation: O1,H12
-Calling Mutation Function: Addition
-H is being turned into a Du: H12
-
-DN random number: 99
-
-De novo fragment selection: sid.188
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-Sorting molecules made after denovo
-
-Molecules made after denovo: 0
-
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 46: Mutating Molecule #19
-Random number - mutation_type (mutation_selection): 0
-Trying mutation type: deletion
-Segment Type for Mutation: scaffolds
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C1,H1,C2,C3,H3,C4,C5,C6,O3,C7,C8,H5,O4,C9
-Calling Mutation Function: Deletion
-
-0 compounds exceeded MW cutoff of 500
-0 compounds exceeded the rot bond cutoff of 10
-0 compounds exceeded the HA acceptor # of 10
-0 compounds exceeded the HB donor # of 5
-0 compounds exceeded the formal charge of 2.1
-0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 47: Mutating Molecule #4
-Random number - mutation_type (mutation_selection): 2
-Trying mutation type: substitution
-Segment Type for Mutation: sidechains
-Atoms of segment for mutation: O2,H7
-Calling Mutation Function: Substitution
-
-DN random number: 123
-
-De novo fragment selection: sid.245
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 6
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-Sorting molecules made after denovo
-
-Molecules made after denovo: 0
-
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 48: Mutating Molecule #8
-Random number - mutation_type (mutation_selection): 1
-Trying mutation type: addition
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C9,C10,H5,C11,H6,C12,C13,H7,C14,H8
-Calling Mutation Function: Addition
-H is being turned into a Du: H7
-
-DN random number: 47
-
-De novo fragment selection: sid.92
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-Sorting molecules made after denovo
-
-Molecules made after denovo: 0
-
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 49: Mutating Molecule #0
-Random number - mutation_type (mutation_selection): 2
-Trying mutation type: substitution
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 1
-Atoms of segment for mutation: O1
-Calling Mutation Function: Substitution
-
-DN random number: 61
-
-De novo fragment selection: sid.125
+De novo fragment selection: sid.35
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
@@ -1661,76 +730,25 @@ Number of molecules before Hungarian RMSD pruning: 1
 Number of molecules after Hungarian RMSD pruning: 1
 Number of molecules being sent to GA: 1
 
-0 compounds exceeded MW cutoff of 500
+0 compounds exceeded MW cutoff of 0 - 500
 0 compounds exceeded the rot bond cutoff of 10
 0 compounds exceeded the HA acceptor # of 10
 0 compounds exceeded the HB donor # of 5
 0 compounds exceeded the formal charge of 2.1
 0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
 
-Gen 1: Mutation Attempt 50: Mutating Molecule #19
-Random number - mutation_type (mutation_selection): 3
-Trying mutation type: replacement
+Gen 1: Mutation Attempt 14: Mutating Molecule #19
+Random number - mutation_type (mutation_selection): 2
+Trying mutation type: substitution
 Segment Type for Mutation: sidechains
- Changed mutation type from replacement to substitution
-Atoms of segment for mutation: O2,H16
+Atoms of segment for mutation: O3,H7
 Calling Mutation Function: Substitution
+#### Number of attempted layers of DN growth 1 1
 
-DN random number: 340
+DN random number: 124
 
-De novo fragment selection: lnk.293
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 332
-
-De novo fragment selection: lnk.265
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 54
-
-De novo fragment selection: sid.114
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Did not pass bond order compatibility check.
-Sorting molecules made after denovo
-
-Molecules made after denovo: 0
-
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 51: Mutating Molecule #9
-Random number - mutation_type (mutation_selection): 0
-Trying mutation type: deletion
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 1
-Atoms of segment for mutation: C9,H5,H6
-Calling Mutation Function: Deletion
-
-0 compounds exceeded MW cutoff of 500
-0 compounds exceeded the rot bond cutoff of 10
-0 compounds exceeded the HA acceptor # of 10
-0 compounds exceeded the HB donor # of 5
-0 compounds exceeded the formal charge of 2.1
-0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 52: Mutating Molecule #18
-Random number - mutation_type (mutation_selection): 3
-Trying mutation type: replacement
-Segment Type for Mutation: sidechains
- Changed mutation type from replacement to substitution
-Atoms of segment for mutation: O5,H8
-Calling Mutation Function: Substitution
-
-DN random number: 181
-
-De novo fragment selection: sid.330
+De novo fragment selection: sid.246
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
@@ -1752,19 +770,87 @@ Sorting denovo molecules based on score.
 Entering Hungarian RMSD heuristic pruning.
 Number of molecules before Hungarian RMSD pruning: 0
 Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
 
-Gen 1: Mutation Attempt 53: Mutating Molecule #6
+Gen 1: Mutation Attempt 15: Mutating Molecule #10
+Random number - mutation_type (mutation_selection): 0
+Trying mutation type: deletion
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C1,H1,C2,H2,C3,C4,H4,C5,S1,C6,C13,C14,H10
+Calling Mutation Function: Deletion
+
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 16: Mutating Molecule #0
 Random number - mutation_type (mutation_selection): 1
 Trying mutation type: addition
 Segment Type for Mutation: sidechains
-Atoms of segment for mutation: O4,H22
+Atoms of segment for mutation: O3,H16
 Calling Mutation Function: Addition
-H is being turned into a Du: H22
+H is being turned into a Du: H16
 
-DN random number: 87
+DN random number: 22
 
-De novo fragment selection: sid.170
+De novo fragment selection: sid.47
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Molecules prior to clustering: 3
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 0
+Sorting molecules made after denovo
+
+Molecules made after denovo: 0
+
+Number of molecules in next_layer: 0
+Sorting denovo molecules based on score.
+Entering Hungarian RMSD heuristic pruning.
+Number of molecules before Hungarian RMSD pruning: 0
+Number of molecules after Hungarian RMSD pruning: 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 17: Mutating Molecule #9
+Random number - mutation_type (mutation_selection): 3
+Trying mutation type: replacement
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C1,H1,C2,C3,H2,C4,C5,H3,C9,H7,H8,C10,H9,H10,C11,H11,C12,H13,C13,O2,C14,H14,C18,H17,H18
+Calling Mutation Function: Replacement
+Selecting frag: lnk.97
+Deleted frag because of distance cutoff
+Number with invalid torenv 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 18: Mutating Molecule #26
+Random number - mutation_type (mutation_selection): 2
+Trying mutation type: substitution
+Segment Type for Mutation: sidechains
+Atoms of segment for mutation: O2,H9
+Calling Mutation Function: Substitution
+#### Number of attempted layers of DN growth 1 1
+
+DN random number: 231
+
+De novo fragment selection: lnk.21
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 191
+
+De novo fragment selection: sid.344
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
@@ -1779,23 +865,92 @@ Sorting denovo molecules based on score.
 Entering Hungarian RMSD heuristic pruning.
 Number of molecules before Hungarian RMSD pruning: 0
 Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
 
-Gen 1: Mutation Attempt 54: Mutating Molecule #4
+Gen 1: Mutation Attempt 19: Mutating Molecule #13
+Random number - mutation_type (mutation_selection): 0
+Trying mutation type: deletion
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 1
+Atoms of segment for mutation: C8,C9,H3,C10,H4,C11,C12,C13,H5,F1
+Calling Mutation Function: Deletion
+
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 20: Mutating Molecule #26
+Random number - mutation_type (mutation_selection): 3
+Trying mutation type: replacement
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 1
+Atoms of segment for mutation: C1,C2,H1,C3,C4,C5,H2,C6,H3,C7,C8,C9,O2,Br1
+Calling Mutation Function: Replacement
+Selecting frag: lnk.45
+Deleted frag because of distance cutoff
+Number with invalid torenv 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 21: Mutating Molecule #30
+Random number - mutation_type (mutation_selection): 0
+Trying mutation type: deletion
+Segment Type for Mutation: scaffolds
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C14,H20,N2,C15,H21,H22,C16,H23,H24,C17,C18,C19,H25,C20,H26,C21,C22,H27
+Calling Mutation Function: Deletion
+
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 22: Mutating Molecule #7
 Random number - mutation_type (mutation_selection): 2
 Trying mutation type: substitution
-Segment Type for Mutation: sidechains
-Atoms of segment for mutation: C11,C12,H11,C13,H12,C14,H13,C15,H14,C16,H15
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C7,C8,H5,C9,H6,C10,C11,H8,C12,H9
 Calling Mutation Function: Substitution
+#### Number of attempted layers of DN growth 1 1
 
-DN random number: 227
+DN random number: 118
 
-De novo fragment selection: lnk.16
-Do not want to sample anything with more than 1 attachment point.
+De novo fragment selection: sid.237
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Did not pass single torenv check.
+Sorting molecules made after denovo
 
-DN random number: 199
+Molecules made after denovo: 0
 
-De novo fragment selection: sid.355
+Number of molecules in next_layer: 0
+Sorting denovo molecules based on score.
+Entering Hungarian RMSD heuristic pruning.
+Number of molecules before Hungarian RMSD pruning: 0
+Number of molecules after Hungarian RMSD pruning: 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 23: Mutating Molecule #14
+Random number - mutation_type (mutation_selection): 2
+Trying mutation type: substitution
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C7,C8,H5,C9,H6,C10,C11,H8,C12,H9
+Calling Mutation Function: Substitution
+#### Number of attempted layers of DN growth 1 1
+
+DN random number: 4
+
+De novo fragment selection: sid.14
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
@@ -1817,38 +972,70 @@ Number of molecules before Hungarian RMSD pruning: 1
 Number of molecules after Hungarian RMSD pruning: 1
 Number of molecules being sent to GA: 1
 
-0 compounds exceeded MW cutoff of 500
+0 compounds exceeded MW cutoff of 0 - 500
 0 compounds exceeded the rot bond cutoff of 10
 0 compounds exceeded the HA acceptor # of 10
 0 compounds exceeded the HB donor # of 5
 0 compounds exceeded the formal charge of 2.1
 0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
 
-Gen 1: Mutation Attempt 55: Mutating Molecule #8
-Random number - mutation_type (mutation_selection): 1
-Trying mutation type: addition
+Gen 1: Mutation Attempt 24: Mutating Molecule #16
+Random number - mutation_type (mutation_selection): 3
+Trying mutation type: replacement
 Segment Type for Mutation: scaffolds
 Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C1,C2,H2,C3,H3,C4,C5,C6,H4,C7,H5,N1,C14,H11,H12,C15,H13,H14
+Atoms of segment for mutation: C1,C2,H1,C3,C4,O1,C5,H2,C6,H3,C7,H4,H5,C8,H6,H7,C9,H8,H9,C10,H10,C11,C12,H11
+Calling Mutation Function: Replacement
+Selecting frag: scf.335
+Deleted frag because of distance cutoff
+Number with invalid torenv 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 25: Mutating Molecule #20
+Random number - mutation_type (mutation_selection): 3
+Trying mutation type: replacement
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C16,C17,H15,C18,H16,C19,C20,H17,C21,H18
+Calling Mutation Function: Replacement
+Selecting frag: lnk.213
+Deleted frag because of distance cutoff
+Number with invalid torenv 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 26: Mutating Molecule #30
+Random number - mutation_type (mutation_selection): 0
+Trying mutation type: deletion
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C13,C14,H12,C15,H13,C16,C17,H15,C18,H16
+Calling Mutation Function: Deletion
+
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 27: Mutating Molecule #9
+Random number - mutation_type (mutation_selection): 1
+Trying mutation type: addition
+Segment Type for Mutation: sidechains
+Atoms of segment for mutation: O2,H7
 Calling Mutation Function: Addition
-H is being turned into a Du: H2
+H is being turned into a Du: H7
 
-DN random number: 51
+DN random number: 70
 
-De novo fragment selection: sid.104
+De novo fragment selection: sid.144
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
 Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
+Did not pass single torenv check.
 Sorting molecules made after denovo
 
 Molecules made after denovo: 0
@@ -1858,19 +1045,47 @@ Sorting denovo molecules based on score.
 Entering Hungarian RMSD heuristic pruning.
 Number of molecules before Hungarian RMSD pruning: 0
 Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
 
-Gen 1: Mutation Attempt 56: Mutating Molecule #12
-Random number - mutation_type (mutation_selection): 2
-Trying mutation type: substitution
+Gen 1: Mutation Attempt 28: Mutating Molecule #3
+Random number - mutation_type (mutation_selection): 0
+Trying mutation type: deletion
+Segment Type for Mutation: sidechains
+Atoms of segment for mutation: N2,C22,H19,H20,C23,H21,H22,N3,H23,C24,H24,C25,H25,H26,C26,H27,H28,C27,H29,H30,C28,H31,H32,C29,H33,H34
+Calling Mutation Function: Deletion
+
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 29: Mutating Molecule #8
+Random number - mutation_type (mutation_selection): 3
+Trying mutation type: replacement
+Segment Type for Mutation: scaffolds
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C1,H1,C2,C3,C4,C5,H2,C6,O1,C7,N1
+Calling Mutation Function: Replacement
+Selecting frag: scf.99
+Deleted frag because of distance cutoff
+Number with invalid torenv 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 30: Mutating Molecule #4
+Random number - mutation_type (mutation_selection): 1
+Trying mutation type: addition
 Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 1
-Atoms of segment for mutation: C8,C9,H5,C10,H6,C11,H7,C12,H8,C13
-Calling Mutation Function: Substitution
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C1,H1,C2,C3,H2,C4,C5,H3,C9,H7,H8,C10,H9,H10,C11,H11,C12,H13,C13,O2,C14,H14,C18,H17,H18
+Calling Mutation Function: Addition
+H is being turned into a Du: H11
 
-DN random number: 77
+DN random number: 3
 
-De novo fragment selection: sid.155
+De novo fragment selection: sid.8
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
@@ -1878,12 +1093,12 @@ Checking single torenv...
 Passed single torenv check.
 Checking multi torenv...
 Passed multi torenv check
-Molecules prior to clustering: 2
+Molecules prior to clustering: 3
 Entering clustering of post-min torsions by RMSD
-Molecules retained: 2
+Molecules retained: 3
 Sorting molecules made after denovo
 
-Molecules made after denovo: 2
+Molecules made after denovo: 3
 
 Number of molecules in next_layer: 1
 Sorting denovo molecules based on score.
@@ -1892,287 +1107,25 @@ Number of molecules before Hungarian RMSD pruning: 1
 Number of molecules after Hungarian RMSD pruning: 1
 Number of molecules being sent to GA: 1
 
-0 compounds exceeded MW cutoff of 500
+0 compounds exceeded MW cutoff of 0 - 500
 0 compounds exceeded the rot bond cutoff of 10
 0 compounds exceeded the HA acceptor # of 10
 0 compounds exceeded the HB donor # of 5
 0 compounds exceeded the formal charge of 2.1
 0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
 
-Gen 1: Mutation Attempt 57: Mutating Molecule #11
-Random number - mutation_type (mutation_selection): 1
-Trying mutation type: addition
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 1
-Atoms of segment for mutation: C8,C9,H3,C10,H4,C11,C12,C13,H5,F1
-Calling Mutation Function: Addition
-H is being turned into a Du: H3
-
-DN random number: 116
-
-De novo fragment selection: sid.231
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-Sorting molecules made after denovo
-
-Molecules made after denovo: 0
-
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 58: Mutating Molecule #16
-Random number - mutation_type (mutation_selection): 3
-Trying mutation type: replacement
-Segment Type for Mutation: sidechains
- Changed mutation type from replacement to substitution
-Atoms of segment for mutation: O1,H12
-Calling Mutation Function: Substitution
-
-DN random number: 323
-
-De novo fragment selection: lnk.241
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 74
-
-De novo fragment selection: sid.149
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-Sorting molecules made after denovo
-
-Molecules made after denovo: 0
-
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 59: Mutating Molecule #8
+Gen 1: Mutation Attempt 31: Mutating Molecule #7
 Random number - mutation_type (mutation_selection): 1
 Trying mutation type: addition
 Segment Type for Mutation: sidechains
-Atoms of segment for mutation: O1,H12
+Atoms of segment for mutation: O2,H4
 Calling Mutation Function: Addition
-H is being turned into a Du: H12
+H is being turned into a Du: H4
 
-DN random number: 181
+DN random number: 124
 
-De novo fragment selection: sid.330
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-Sorting molecules made after denovo
-
-Molecules made after denovo: 0
-
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 60: Mutating Molecule #16
-Random number - mutation_type (mutation_selection): 2
-Trying mutation type: substitution
-Segment Type for Mutation: scaffolds
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C1,C2,H2,C3,H3,C4,C5,C6,H4,C7,H5,N1,C14,H11,H12,C15,H13,H14
-Calling Mutation Function: Substitution
-
-DN random number: 329
-
-De novo fragment selection: lnk.257
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 313
-
-De novo fragment selection: lnk.213
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 174
-
-De novo fragment selection: sid.321
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 2
-Sorting molecules made after denovo
-
-Molecules made after denovo: 2
-
-Number of molecules in next_layer: 1
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 1
-Number of molecules after Hungarian RMSD pruning: 1
-Number of molecules being sent to GA: 1
-
-0 compounds exceeded MW cutoff of 500
-0 compounds exceeded the rot bond cutoff of 10
-0 compounds exceeded the HA acceptor # of 10
-0 compounds exceeded the HB donor # of 5
-0 compounds exceeded the formal charge of 2.1
-0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 61: Mutating Molecule #4
-Random number - mutation_type (mutation_selection): 0
-Trying mutation type: deletion
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 1
-Atoms of segment for mutation: C1,H1,C2,H2,C3,C4,H4,C5,S1,C6,C13,C14,H10
-Calling Mutation Function: Deletion
-
-0 compounds exceeded MW cutoff of 500
-0 compounds exceeded the rot bond cutoff of 10
-0 compounds exceeded the HA acceptor # of 10
-0 compounds exceeded the HB donor # of 5
-0 compounds exceeded the formal charge of 2.1
-0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 62: Mutating Molecule #16
-Random number - mutation_type (mutation_selection): 0
-Trying mutation type: deletion
-Segment Type for Mutation: sidechains
-Atoms of segment for mutation: O5,H8
-Calling Mutation Function: Deletion
-
-0 compounds exceeded MW cutoff of 500
-0 compounds exceeded the rot bond cutoff of 10
-0 compounds exceeded the HA acceptor # of 10
-0 compounds exceeded the HB donor # of 5
-0 compounds exceeded the formal charge of 2.1
-0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 63: Mutating Molecule #7
-Random number - mutation_type (mutation_selection): 1
-Trying mutation type: addition
-Segment Type for Mutation: sidechains
-Atoms of segment for mutation: C14,H8,C15,H9,H10
-Calling Mutation Function: Addition
-H is being turned into a Du: H10
-
-DN random number: 60
-
-De novo fragment selection: sid.123
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-Sorting molecules made after denovo
-
-Molecules made after denovo: 0
-
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 64: Mutating Molecule #1
-Random number - mutation_type (mutation_selection): 0
-Trying mutation type: deletion
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C1,C2,H1,C3,H2,C4,C5,H3,C6,H4
-Calling Mutation Function: Deletion
-
-0 compounds exceeded MW cutoff of 500
-0 compounds exceeded the rot bond cutoff of 10
-0 compounds exceeded the HA acceptor # of 10
-0 compounds exceeded the HB donor # of 5
-0 compounds exceeded the formal charge of 2.1
-0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 65: Mutating Molecule #13
-Random number - mutation_type (mutation_selection): 3
-Trying mutation type: replacement
-Segment Type for Mutation: sidechains
- Changed mutation type from replacement to substitution
-Atoms of segment for mutation: O1,H12
-Calling Mutation Function: Substitution
-
-DN random number: 229
-
-De novo fragment selection: lnk.18
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 300
-
-De novo fragment selection: lnk.191
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 122
-
-De novo fragment selection: sid.243
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-Sorting molecules made after denovo
-
-Molecules made after denovo: 0
-
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 66: Mutating Molecule #14
-Random number - mutation_type (mutation_selection): 1
-Trying mutation type: addition
-Segment Type for Mutation: sidechains
-Atoms of segment for mutation: C14,H8,C15,H9,H10
-Calling Mutation Function: Addition
-H is being turned into a Du: H10
-
-DN random number: 87
-
-De novo fragment selection: sid.170
+De novo fragment selection: sid.246
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
@@ -2195,29 +1148,34 @@ Number of molecules before Hungarian RMSD pruning: 1
 Number of molecules after Hungarian RMSD pruning: 1
 Number of molecules being sent to GA: 1
 
-0 compounds exceeded MW cutoff of 500
+0 compounds exceeded MW cutoff of 0 - 500
 0 compounds exceeded the rot bond cutoff of 10
 0 compounds exceeded the HA acceptor # of 10
 0 compounds exceeded the HB donor # of 5
 0 compounds exceeded the formal charge of 2.1
 0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
 
-Gen 1: Mutation Attempt 67: Mutating Molecule #3
+Gen 1: Mutation Attempt 32: Mutating Molecule #12
 Random number - mutation_type (mutation_selection): 2
 Trying mutation type: substitution
-Segment Type for Mutation: sidechains
-Atoms of segment for mutation: O1,H3
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C7,C8,H6,H7,H8,C9,H9,H10,H11
 Calling Mutation Function: Substitution
+#### Number of attempted layers of DN growth 1 1
 
-DN random number: 12
+DN random number: 315
 
-De novo fragment selection: sid.30
+De novo fragment selection: lnk.217
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 15
+
+De novo fragment selection: sid.34
 Number of attachment points of frag: 1
 Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
+Did not pass bond order compatibility check.
 Sorting molecules made after denovo
 
 Molecules made after denovo: 0
@@ -2227,79 +1185,19 @@ Sorting denovo molecules based on score.
 Entering Hungarian RMSD heuristic pruning.
 Number of molecules before Hungarian RMSD pruning: 0
 Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
 
-Gen 1: Mutation Attempt 68: Mutating Molecule #0
-Random number - mutation_type (mutation_selection): 0
-Trying mutation type: deletion
-Segment Type for Mutation: scaffolds
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C1,H1,C2,C3,C4,C5,H2,C6,O1,C7,C8,H3
-Calling Mutation Function: Deletion
-
-0 compounds exceeded MW cutoff of 500
-0 compounds exceeded the rot bond cutoff of 10
-0 compounds exceeded the HA acceptor # of 10
-0 compounds exceeded the HB donor # of 5
-0 compounds exceeded the formal charge of 2.1
-0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 69: Mutating Molecule #10
-Random number - mutation_type (mutation_selection): 2
-Trying mutation type: substitution
+Gen 1: Mutation Attempt 33: Mutating Molecule #7
+Random number - mutation_type (mutation_selection): 1
+Trying mutation type: addition
 Segment Type for Mutation: sidechains
-Atoms of segment for mutation: O3,C20,H19,H20,H21
-Calling Mutation Function: Substitution
+Atoms of segment for mutation: O2,H6
+Calling Mutation Function: Addition
+H is being turned into a Du: H6
 
-DN random number: 47
+DN random number: 97
 
-De novo fragment selection: sid.92
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Molecules prior to clustering: 3
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 3
-Sorting molecules made after denovo
-
-Molecules made after denovo: 3
-
-Number of molecules in next_layer: 1
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 1
-Number of molecules after Hungarian RMSD pruning: 1
-Number of molecules being sent to GA: 1
-
-0 compounds exceeded MW cutoff of 500
-0 compounds exceeded the rot bond cutoff of 10
-0 compounds exceeded the HA acceptor # of 10
-0 compounds exceeded the HB donor # of 5
-0 compounds exceeded the formal charge of 2.1
-0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 70: Mutating Molecule #7
-Random number - mutation_type (mutation_selection): 3
-Trying mutation type: replacement
-Segment Type for Mutation: sidechains
- Changed mutation type from replacement to substitution
-Atoms of segment for mutation: O3,H10
-Calling Mutation Function: Substitution
-
-DN random number: 242
-
-De novo fragment selection: lnk.60
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 96
-
-De novo fragment selection: sid.183
+De novo fragment selection: sid.185
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
@@ -2321,19 +1219,65 @@ Sorting denovo molecules based on score.
 Entering Hungarian RMSD heuristic pruning.
 Number of molecules before Hungarian RMSD pruning: 0
 Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
 
-Gen 1: Mutation Attempt 71: Mutating Molecule #11
+Gen 1: Mutation Attempt 34: Mutating Molecule #24
 Random number - mutation_type (mutation_selection): 2
 Trying mutation type: substitution
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C1,H1,C2,H2,C3,C4,H4,C5,S1,C6,C13,C14,H10
+Segment Type for Mutation: sidechains
+Atoms of segment for mutation: O2,H7
 Calling Mutation Function: Substitution
+#### Number of attempted layers of DN growth 1 1
 
-DN random number: 147
+DN random number: 285
 
-De novo fragment selection: sid.281
+De novo fragment selection: lnk.150
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 28
+
+De novo fragment selection: sid.54
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Molecules prior to clustering: 6
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 5
+Sorting molecules made after denovo
+
+Molecules made after denovo: 5
+
+Number of molecules in next_layer: 1
+Sorting denovo molecules based on score.
+Entering Hungarian RMSD heuristic pruning.
+Number of molecules before Hungarian RMSD pruning: 1
+Number of molecules after Hungarian RMSD pruning: 1
+Number of molecules being sent to GA: 1
+
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 35: Mutating Molecule #2
+Random number - mutation_type (mutation_selection): 2
+Trying mutation type: substitution
+Segment Type for Mutation: sidechains
+Atoms of segment for mutation: C1,H1,C2,H2,C3,H3,C4,H4,C5,H5,C6
+Calling Mutation Function: Substitution
+#### Number of attempted layers of DN growth 1 1
+
+DN random number: 31
+
+De novo fragment selection: sid.59
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
@@ -2355,54 +1299,962 @@ Number of molecules before Hungarian RMSD pruning: 1
 Number of molecules after Hungarian RMSD pruning: 1
 Number of molecules being sent to GA: 1
 
-0 compounds exceeded MW cutoff of 500
+0 compounds exceeded MW cutoff of 0 - 500
 0 compounds exceeded the rot bond cutoff of 10
 0 compounds exceeded the HA acceptor # of 10
 0 compounds exceeded the HB donor # of 5
 0 compounds exceeded the formal charge of 2.1
 0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 36: Mutating Molecule #4
+Random number - mutation_type (mutation_selection): 3
+Trying mutation type: replacement
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C7,C8,H6,C9,C10,O2,C11,H7,C12,C13,H8,C14,C15,N1
+Calling Mutation Function: Replacement
+Selecting frag: lnk.129
+Deleted frag because of distance cutoff
+Number with invalid torenv 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 37: Mutating Molecule #9
+Random number - mutation_type (mutation_selection): 3
+Trying mutation type: replacement
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C1,H1,C2,H2,C3,C4,H4,C5,S1,C6,C13,C14,H10
+Calling Mutation Function: Replacement
+Selecting frag: lnk.223
+Deleted frag because of distance cutoff
+Number with invalid torenv 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 38: Mutating Molecule #12
+Random number - mutation_type (mutation_selection): 2
+Trying mutation type: substitution
+Segment Type for Mutation: sidechains
+Atoms of segment for mutation: O2,H9
+Calling Mutation Function: Substitution
+#### Number of attempted layers of DN growth 1 1
+
+DN random number: 81
+
+De novo fragment selection: sid.161
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Did not pass single torenv check.
+Sorting molecules made after denovo
+
+Molecules made after denovo: 0
+
+Number of molecules in next_layer: 0
+Sorting denovo molecules based on score.
+Entering Hungarian RMSD heuristic pruning.
+Number of molecules before Hungarian RMSD pruning: 0
+Number of molecules after Hungarian RMSD pruning: 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 39: Mutating Molecule #24
+Random number - mutation_type (mutation_selection): 2
+Trying mutation type: substitution
+Segment Type for Mutation: sidechains
+Atoms of segment for mutation: O1,H3
+Calling Mutation Function: Substitution
+#### Number of attempted layers of DN growth 1 1
+
+DN random number: 118
+
+De novo fragment selection: sid.237
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Molecules prior to clustering: 6
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 0
+Sorting molecules made after denovo
+
+Molecules made after denovo: 0
+
+Number of molecules in next_layer: 0
+Sorting denovo molecules based on score.
+Entering Hungarian RMSD heuristic pruning.
+Number of molecules before Hungarian RMSD pruning: 0
+Number of molecules after Hungarian RMSD pruning: 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 40: Mutating Molecule #5
+Random number - mutation_type (mutation_selection): 3
+Trying mutation type: replacement
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C7,C8,H6,H7,H8,C9,H9,H10,H11
+Calling Mutation Function: Replacement
+Selecting frag: lnk.150
+Deleted frag from vector because it has a ring
+Number with invalid torenv 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 41: Mutating Molecule #15
+Random number - mutation_type (mutation_selection): 3
+Trying mutation type: replacement
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 1
+Atoms of segment for mutation: C8,C9,H5,C10,H6,C11,H7,C12,H8,C13
+Calling Mutation Function: Replacement
+Selecting frag: lnk.193
+Deleted frag because of distance cutoff
+Number with invalid torenv 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 42: Mutating Molecule #8
+Random number - mutation_type (mutation_selection): 2
+Trying mutation type: substitution
+Segment Type for Mutation: sidechains
+Atoms of segment for mutation: O1,H8
+Calling Mutation Function: Substitution
+#### Number of attempted layers of DN growth 1 1
+
+DN random number: 4
+
+De novo fragment selection: sid.14
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Molecules prior to clustering: 6
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 5
+Sorting molecules made after denovo
+
+Molecules made after denovo: 5
+
+Number of molecules in next_layer: 1
+Sorting denovo molecules based on score.
+Entering Hungarian RMSD heuristic pruning.
+Number of molecules before Hungarian RMSD pruning: 1
+Number of molecules after Hungarian RMSD pruning: 1
+Number of molecules being sent to GA: 1
+
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 43: Mutating Molecule #5
+Random number - mutation_type (mutation_selection): 0
+Trying mutation type: deletion
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C6,H4,C7,H5,C8,H6,C15,C16,H15,C17
+Calling Mutation Function: Deletion
+
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 44: Mutating Molecule #5
+Random number - mutation_type (mutation_selection): 3
+Trying mutation type: replacement
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 1
+Atoms of segment for mutation: C1,H1,C2,C3,H2,C4,C5,H3,C9,H7,H8,C10,H9,H10,C11,H11,C12,H13,C13,O2,C14,H14,C18,H17,H18
+Calling Mutation Function: Replacement
+Selecting frag: lnk.283
+Deleted frag because of distance cutoff
+Number with invalid torenv 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 45: Mutating Molecule #4
+Random number - mutation_type (mutation_selection): 2
+Trying mutation type: substitution
+Segment Type for Mutation: sidechains
+Atoms of segment for mutation: C10,N1
+Calling Mutation Function: Substitution
+#### Number of attempted layers of DN growth 1 1
+
+DN random number: 255
+
+De novo fragment selection: lnk.91
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 307
+
+De novo fragment selection: lnk.203
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 306
+
+De novo fragment selection: lnk.200
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 115
+
+De novo fragment selection: sid.230
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Molecules prior to clustering: 6
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 2
+Sorting molecules made after denovo
+
+Molecules made after denovo: 2
+
+Number of molecules in next_layer: 1
+Sorting denovo molecules based on score.
+Entering Hungarian RMSD heuristic pruning.
+Number of molecules before Hungarian RMSD pruning: 1
+Number of molecules after Hungarian RMSD pruning: 1
+Number of molecules being sent to GA: 1
+
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 46: Mutating Molecule #6
+Random number - mutation_type (mutation_selection): 2
+Trying mutation type: substitution
+Segment Type for Mutation: scaffolds
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C1,C2,H1,C3,C4,O1,C5,H2,C6,H3,C7,H4,H5,C8,H6,H7,C9,H8,H9,C10,H10,C11,C12,H11
+Calling Mutation Function: Substitution
+#### Number of attempted layers of DN growth 1 1
+
+DN random number: 233
+
+De novo fragment selection: lnk.36
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 112
+
+De novo fragment selection: sid.226
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Molecules prior to clustering: 6
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 6
+Sorting molecules made after denovo
+
+Molecules made after denovo: 6
+
+Number of molecules in next_layer: 1
+Sorting denovo molecules based on score.
+Entering Hungarian RMSD heuristic pruning.
+Number of molecules before Hungarian RMSD pruning: 1
+Number of molecules after Hungarian RMSD pruning: 1
+Number of molecules being sent to GA: 1
+
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 47: Mutating Molecule #8
+Random number - mutation_type (mutation_selection): 3
+Trying mutation type: replacement
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C1,H1,C2,H2,C3,C4,C5,H3,C6,O1,C7,C8,H4
+Calling Mutation Function: Replacement
+Selecting frag: lnk.203
+Deleted frag because of distance cutoff
+Number with invalid torenv 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 48: Mutating Molecule #18
+Random number - mutation_type (mutation_selection): 1
+Trying mutation type: addition
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 1
+Atoms of segment for mutation: C1,C2,H2,C3,H3,C4,H4,C5,H5,C6
+Calling Mutation Function: Addition
+H is being turned into a Du: H2
+
+DN random number: 174
+
+De novo fragment selection: sid.321
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 0
+Sorting molecules made after denovo
+
+Molecules made after denovo: 0
+
+Number of molecules in next_layer: 0
+Sorting denovo molecules based on score.
+Entering Hungarian RMSD heuristic pruning.
+Number of molecules before Hungarian RMSD pruning: 0
+Number of molecules after Hungarian RMSD pruning: 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 49: Mutating Molecule #7
+Random number - mutation_type (mutation_selection): 0
+Trying mutation type: deletion
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C7,C8,C9,H6,C10,H7,C11,C12,H9,C13,N1,H10,N2
+Calling Mutation Function: Deletion
+
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 50: Mutating Molecule #5
+Random number - mutation_type (mutation_selection): 0
+Trying mutation type: deletion
+Segment Type for Mutation: sidechains
+Atoms of segment for mutation: O1,H2
+Calling Mutation Function: Deletion
+
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 51: Mutating Molecule #4
+Random number - mutation_type (mutation_selection): 1
+Trying mutation type: addition
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 1
+Atoms of segment for mutation: C1,H1,C2,H2,C3,C4,C5,H3,C6,O1,C7,C8,H4
+Calling Mutation Function: Addition
+H is being turned into a Du: H1
+
+DN random number: 187
+
+De novo fragment selection: sid.338
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 0
+Sorting molecules made after denovo
+
+Molecules made after denovo: 0
+
+Number of molecules in next_layer: 0
+Sorting denovo molecules based on score.
+Entering Hungarian RMSD heuristic pruning.
+Number of molecules before Hungarian RMSD pruning: 0
+Number of molecules after Hungarian RMSD pruning: 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 52: Mutating Molecule #14
+Random number - mutation_type (mutation_selection): 1
+Trying mutation type: addition
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 1
+Atoms of segment for mutation: C8,C9,H3,C10,H4,C11,C12,C13,H5,F1
+Calling Mutation Function: Addition
+H is being turned into a Du: H5
+
+DN random number: 142
+
+De novo fragment selection: sid.275
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 1
+Sorting molecules made after denovo
+
+Molecules made after denovo: 1
+
+Number of molecules in next_layer: 1
+Sorting denovo molecules based on score.
+Entering Hungarian RMSD heuristic pruning.
+Number of molecules before Hungarian RMSD pruning: 1
+Number of molecules after Hungarian RMSD pruning: 1
+Number of molecules being sent to GA: 1
+
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 53: Mutating Molecule #6
+Random number - mutation_type (mutation_selection): 3
+Trying mutation type: replacement
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 1
+Atoms of segment for mutation: C1,C2,H1,C3,C4,C5,H2,C6,H3,C7,C8,C9,O2,Br1
+Calling Mutation Function: Replacement
+Selecting frag: lnk.175
+Deleted frag because of distance cutoff
+Number with invalid torenv 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 54: Mutating Molecule #14
+Random number - mutation_type (mutation_selection): 2
+Trying mutation type: substitution
+Segment Type for Mutation: sidechains
+Atoms of segment for mutation: O1,H12
+Calling Mutation Function: Substitution
+#### Number of attempted layers of DN growth 1 1
+
+DN random number: 66
+
+De novo fragment selection: sid.136
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Did not pass single torenv check.
+Sorting molecules made after denovo
+
+Molecules made after denovo: 0
+
+Number of molecules in next_layer: 0
+Sorting denovo molecules based on score.
+Entering Hungarian RMSD heuristic pruning.
+Number of molecules before Hungarian RMSD pruning: 0
+Number of molecules after Hungarian RMSD pruning: 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 55: Mutating Molecule #15
+Random number - mutation_type (mutation_selection): 1
+Trying mutation type: addition
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 1
+Atoms of segment for mutation: C1,C2,H2,C3,H3,C4,H4,C5,H5,C6
+Calling Mutation Function: Addition
+H is being turned into a Du: H2
+
+DN random number: 79
+
+De novo fragment selection: sid.158
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Did not pass single torenv check.
+Sorting molecules made after denovo
+
+Molecules made after denovo: 0
+
+Number of molecules in next_layer: 0
+Sorting denovo molecules based on score.
+Entering Hungarian RMSD heuristic pruning.
+Number of molecules before Hungarian RMSD pruning: 0
+Number of molecules after Hungarian RMSD pruning: 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 56: Mutating Molecule #17
+Random number - mutation_type (mutation_selection): 3
+Trying mutation type: replacement
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 1
+Atoms of segment for mutation: C1,H1,C2,C3,H2,C4,C5,H3,C9,H7,H8,C10,H9,H10,C11,H11,C12,H13,C13,O2,C14,H14,C18,H17,H18
+Calling Mutation Function: Replacement
+Selecting frag: lnk.94
+Deleted frag because of distance cutoff
+Number with invalid torenv 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 57: Mutating Molecule #15
+Random number - mutation_type (mutation_selection): 2
+Trying mutation type: substitution
+Segment Type for Mutation: sidechains
+Atoms of segment for mutation: O2,H9
+Calling Mutation Function: Substitution
+#### Number of attempted layers of DN growth 1 1
+
+DN random number: 153
+
+De novo fragment selection: sid.294
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Did not pass bond order compatibility check.
+Sorting molecules made after denovo
+
+Molecules made after denovo: 0
+
+Number of molecules in next_layer: 0
+Sorting denovo molecules based on score.
+Entering Hungarian RMSD heuristic pruning.
+Number of molecules before Hungarian RMSD pruning: 0
+Number of molecules after Hungarian RMSD pruning: 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 58: Mutating Molecule #3
+Random number - mutation_type (mutation_selection): 3
+Trying mutation type: replacement
+Segment Type for Mutation: scaffolds
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C8,C9,C10,H4,C11,C12,H5,C13,H6
+Calling Mutation Function: Replacement
+Selecting frag: scf.206
+Deleted frag because of distance cutoff
+Number with invalid torenv 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 59: Mutating Molecule #16
+Random number - mutation_type (mutation_selection): 2
+Trying mutation type: substitution
+Segment Type for Mutation: sidechains
+Atoms of segment for mutation: O1,H5
+Calling Mutation Function: Substitution
+#### Number of attempted layers of DN growth 1 1
+
+DN random number: 105
+
+De novo fragment selection: sid.215
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Molecules prior to clustering: 6
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 0
+Sorting molecules made after denovo
+
+Molecules made after denovo: 0
+
+Number of molecules in next_layer: 0
+Sorting denovo molecules based on score.
+Entering Hungarian RMSD heuristic pruning.
+Number of molecules before Hungarian RMSD pruning: 0
+Number of molecules after Hungarian RMSD pruning: 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 60: Mutating Molecule #14
+Random number - mutation_type (mutation_selection): 3
+Trying mutation type: replacement
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C8,C9,H3,C10,H4,C11,C12,C13,H5,F1
+Calling Mutation Function: Replacement
+Selecting frag: lnk.39
+Deleted frag because of distance cutoff
+Number with invalid torenv 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 61: Mutating Molecule #9
+Random number - mutation_type (mutation_selection): 2
+Trying mutation type: substitution
+Segment Type for Mutation: scaffolds
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C1,H1,C2,C3,C4,C5,H2,C6,O1,C7,N1
+Calling Mutation Function: Substitution
+#### Number of attempted layers of DN growth 1 1
+
+DN random number: 319
+
+De novo fragment selection: lnk.232
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 202
+
+De novo fragment selection: sid.358
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Molecules prior to clustering: 3
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 3
+Sorting molecules made after denovo
+
+Molecules made after denovo: 3
+
+Number of molecules in next_layer: 1
+Sorting denovo molecules based on score.
+Entering Hungarian RMSD heuristic pruning.
+Number of molecules before Hungarian RMSD pruning: 1
+Number of molecules after Hungarian RMSD pruning: 1
+Number of molecules being sent to GA: 1
+
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 62: Mutating Molecule #13
+Random number - mutation_type (mutation_selection): 2
+Trying mutation type: substitution
+Segment Type for Mutation: sidechains
+Atoms of segment for mutation: C11,C12,H11,C13,H12,C14,H13,C15,H14,C16,H15
+Calling Mutation Function: Substitution
+#### Number of attempted layers of DN growth 1 1
+
+DN random number: 171
+
+De novo fragment selection: sid.316
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Molecules prior to clustering: 6
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 6
+Sorting molecules made after denovo
+
+Molecules made after denovo: 6
+
+Number of molecules in next_layer: 1
+Sorting denovo molecules based on score.
+Entering Hungarian RMSD heuristic pruning.
+Number of molecules before Hungarian RMSD pruning: 1
+Number of molecules after Hungarian RMSD pruning: 1
+Number of molecules being sent to GA: 1
+
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 63: Mutating Molecule #6
+Random number - mutation_type (mutation_selection): 3
+Trying mutation type: replacement
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C16,C17,H15,C18,H16,C19,C20,H17,C21,H18
+Calling Mutation Function: Replacement
+Selecting frag: lnk.312
+Deleted frag because of distance cutoff
+Number with invalid torenv 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 64: Mutating Molecule #8
+Random number - mutation_type (mutation_selection): 0
+Trying mutation type: deletion
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 1
+Atoms of segment for mutation: C6,H4,C7,H5,C8,H6,C15,C16,H15,C17
+Calling Mutation Function: Deletion
+
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 65: Mutating Molecule #3
+Random number - mutation_type (mutation_selection): 3
+Trying mutation type: replacement
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 1
+Atoms of segment for mutation: C1,C2,H1,C3,C4,C5,H2,C6,H3,C7,C8,C9,O2,Br1
+Calling Mutation Function: Replacement
+Selecting frag: lnk.33
+Deleted fragment because not matching bondtypes
+Number with invalid torenv 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 66: Mutating Molecule #13
+Random number - mutation_type (mutation_selection): 2
+Trying mutation type: substitution
+Segment Type for Mutation: sidechains
+Atoms of segment for mutation: O3,H9
+Calling Mutation Function: Substitution
+#### Number of attempted layers of DN growth 1 1
+
+DN random number: 15
+
+De novo fragment selection: sid.34
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Did not pass bond order compatibility check.
+Sorting molecules made after denovo
+
+Molecules made after denovo: 0
+
+Number of molecules in next_layer: 0
+Sorting denovo molecules based on score.
+Entering Hungarian RMSD heuristic pruning.
+Number of molecules before Hungarian RMSD pruning: 0
+Number of molecules after Hungarian RMSD pruning: 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 67: Mutating Molecule #3
+Random number - mutation_type (mutation_selection): 0
+Trying mutation type: deletion
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C1,H1,C2,C3,H2,C4,C5,H3,C9,H7,H8,C10,H9,H10,C11,H11,C12,H13,C13,O2,C14,H14,C18,H17,H18
+Calling Mutation Function: Deletion
+
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 68: Mutating Molecule #6
+Random number - mutation_type (mutation_selection): 0
+Trying mutation type: deletion
+Segment Type for Mutation: sidechains
+Atoms of segment for mutation: O2,H9
+Calling Mutation Function: Deletion
+
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 69: Mutating Molecule #8
+Random number - mutation_type (mutation_selection): 1
+Trying mutation type: addition
+Segment Type for Mutation: sidechains
+Atoms of segment for mutation: O5,H8
+Calling Mutation Function: Addition
+H is being turned into a Du: H8
+
+DN random number: 62
+
+De novo fragment selection: sid.126
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Did not pass bond order compatibility check.
+Sorting molecules made after denovo
+
+Molecules made after denovo: 0
+
+Number of molecules in next_layer: 0
+Sorting denovo molecules based on score.
+Entering Hungarian RMSD heuristic pruning.
+Number of molecules before Hungarian RMSD pruning: 0
+Number of molecules after Hungarian RMSD pruning: 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 70: Mutating Molecule #8
+Random number - mutation_type (mutation_selection): 1
+Trying mutation type: addition
+Segment Type for Mutation: scaffolds
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C8,C9,C10,H4,C11,C12,H5,C13,H6
+Calling Mutation Function: Addition
+H is being turned into a Du: H6
+
+DN random number: 69
+
+De novo fragment selection: sid.142
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Did not pass single torenv check.
+Sorting molecules made after denovo
+
+Molecules made after denovo: 0
+
+Number of molecules in next_layer: 0
+Sorting denovo molecules based on score.
+Entering Hungarian RMSD heuristic pruning.
+Number of molecules before Hungarian RMSD pruning: 0
+Number of molecules after Hungarian RMSD pruning: 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 71: Mutating Molecule #6
+Random number - mutation_type (mutation_selection): 0
+Trying mutation type: deletion
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 1
+Atoms of segment for mutation: C8,C9,H5,C10,H6,C11,H7,C12,H8,C13
+Calling Mutation Function: Deletion
+
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 72: Mutating Molecule #3
+Random number - mutation_type (mutation_selection): 2
+Trying mutation type: substitution
+Segment Type for Mutation: scaffolds
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C1,H1,C2,C3,C4,C5,H2,C6,O1,C7,N1
+Calling Mutation Function: Substitution
+#### Number of attempted layers of DN growth 1 1
+
+DN random number: 89
+
+De novo fragment selection: sid.174
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 2
+Sorting molecules made after denovo
+
+Molecules made after denovo: 2
+
+Number of molecules in next_layer: 1
+Sorting denovo molecules based on score.
+Entering Hungarian RMSD heuristic pruning.
+Number of molecules before Hungarian RMSD pruning: 1
+Number of molecules after Hungarian RMSD pruning: 1
+Number of molecules being sent to GA: 1
+
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
 For this generation, offspring mutations: 28
-Expected number of offspring mutations: 28 size 28 mut cycle 1
-Successful offspring deletions:     16 / 18
-Successful offspring additions:     1 / 15
-Successful offspring substitutions: 11 / 31
-Successful offspring replacements:  0 / 7
+Expected number of offspring mutations: 40 mut cycles 1
+Successful offspring deletions:     14 / 14
+Successful offspring additions:     4 / 19
+Successful offspring substitutions: 10 / 20
+Successful offspring replacements:  0 / 19
 Initial Ensemble Size: 28
 Number pruned for poor score: 0
 Number pruned for poor internal energy: 0
 Size after score/internal energy pruning: 28
-Number pruned for Hungarian similarity: 0
-Final Offspring Ensemble Size: 28
+Number pruned for Hungarian similarity: 1
+Final Offspring Ensemble Size: 27
 
-0 compounds exceeded MW cutoff of 500
+0 compounds exceeded MW cutoff of 0 - 500
 0 compounds exceeded the rot bond cutoff of 10
 0 compounds exceeded the HA acceptor # of 10
 0 compounds exceeded the HB donor # of 5
 0 compounds exceeded the formal charge of 2.1
 0 compounds were removed 
-Initial Ensemble Size: 68
+Initial Ensemble Size: 67
 Number pruned for poor score: 0
 Number pruned for poor internal energy: 0
-Size after score/internal energy pruning: 68
-Number pruned for Hungarian similarity: 1
+Size after score/internal energy pruning: 67
+Number pruned for Hungarian similarity: 0
 Final Offspring Ensemble Size: 67
+### Offspring_size_before_parents_pruning 67 offspring_size_after_pruning 67
+### Parents size before P-O pruning 2 Parents size after pruning 2
+
+-----------------------------------
 scoredgen, parents
 ### Offspring_size_before_parents_pruning 67 offspring_size_after_pruning 60
 ### Parents size before P-O pruning 25 Parents size after pruning 13
 
 -----------------------------------
-Average Score offspring gen 1: -40.285
+Average Score offspring gen 1: -40.0744
 #### Final parent size before selection: 13
-#### Final offspring size before selection: 60
+#### Final offspring size before selection: 62
 Selection Method: Elitism
-Average score survivors gen 1: -58.3426
+Average score survivors gen 1: -58.7431
 
 -----------------------------------
+Num successful additions: 4 out of 19
+Num successful deletions: 15 out of 15
+Num successful replacements: 0 out of 20
+Num successful substitutions: 11 out of 21
 
 
 0 Molecules Processed
-Total elapsed time:	33.732 seconds
+Total elapsed time:	23.758 seconds
 Number of molecules per second:	0.000
-Virtual memory used for this process: 120140 kilobytes
-Physical memory used for this process: 50228 kilobytes
+Virtual memory used for this process: 125096 kilobytes
+Physical memory used for this process: 41140 kilobytes

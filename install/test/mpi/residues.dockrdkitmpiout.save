@@ -4,7 +4,7 @@
 --------------------------------------
 DOCK v6.12
 
-Released April 2024
+Released September 2024
 Copyright UCSF
 --------------------------------------
 Parallel dock running 2 MPI processes
@@ -119,8 +119,7 @@ Amber Score Parameters
 Simplex Minimization Parameters
 ------------------------------------------------------------------------------------------
 minimize_ligand                                              no
-Warning:  No legal value found for parameter simplex_final_min.
-  The default value of "no" will be used.
+simplex_final_min                                            no
 
 Atom Typing Parameters
 ------------------------------------------------------------------------------------------
@@ -134,7 +133,8 @@ Molecule Library Output Parameters
 ligand_outfile_prefix                                        residues_rd
 write_mol_solvation                                          no
 write_orientations                                           no
-num_scored_conformers                                        1
+num_final_scored_poses                                       1
+num_preclustered_conformers                                  1
 score_threshold                                              100
 rank_ligands                                                 yes
 max_ranked_ligands                                           500

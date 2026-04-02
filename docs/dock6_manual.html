@@ -3,7 +3,7 @@
 
 
 
-  <title>DOCK 6.12 User Manual</title>
+  <title>DOCK 6.13 User Manual</title>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
   <style type="text/css">
@@ -26,7 +26,7 @@ font-size: 36px;
 </head><body>
 
 
-<h1 class="style4" align="center">DOCK 6.12 Users Manual</h1>
+<h1 class="style4" align="center">DOCK 6.13 Users Manual</h1>
 <p class="style4" align="center">&nbsp; </p>
 <p class="style2" align="center"><strong>Principal contributors to the current code:</strong></p>
 
@@ -44,6 +44,7 @@ Guilherme D. R. Matos (SUNY-Stony Brook) <br>
 T. Dwight McGee Jr. (SUNY-Stony Brook) <br>
 Demetri Moustakas (Harvard) <br>
 Sudipto Mukherjee (Temple) <br>
+Owen O'Reilly (SUNY-Stony Brook <br>
 Steven Pak (SUNY-Stony Brook)<br>
 Lauren Prentis (SUNY-Stony Brook) <br>
 Courtney Singleton (SUNY-Stony Brook) <br>
@@ -63,7 +64,7 @@ For more information about previous contributors, please see the <a href="#Histo
 
 <p class="style1" align="center">&nbsp;</p>
 <p class="style1" align="center">&nbsp;</p>
-<p class="style2" align="center">Copyright &copy; 2006-2024<br>
+<p class="style2" align="center">Copyright &copy; 2006-2025<br>
 
 
 
@@ -73,7 +74,7 @@ All Rights Reserved <br>
 </p>
 
 
-<p class="style2" align="center">Last updated August 21, 2024 <br>
+<p class="style2" align="center">Last updated June 8, 2025 <br>
 </p>
 
 
@@ -400,10 +401,9 @@ Input Parameters</a></p>
   <p class="style2"><a href="#Minimization">2.12.  Minimization</a> </p>
 
 
-
-
   <p class="style2"><a href="#MiscellaneousParameters">2.13.
 Miscellaneous Parameters</a></p>
+
 
   <p class="style2"><a href="#ParameterFiles">2.14.
 Parameter Files</a></p>
@@ -1407,6 +1407,47 @@ to ease the process of generating Docker images. Further, the user can call the 
 and tools in interactive and non-interactive mode. Note that this feature can only be
 used if your local environment has the bash scripting environment and the Docker engine.
 Look at the installation section for more information. 
+
+<p class="style1">Version 6.13 </p>
+
+<p class="style2" align="left"><font face="Arial, Helvetica, sans-serif">
+New methodologies have been added to DOCK_DN that allow for users to bias
+  the selection of both fragments and torsions toward those of higher frequency
+  in the provided set. This provides users with finer control over the fragment and
+  torsion compositions of their final ensembles. This method can be enabled in a 
+  standard DOCK_DN run with no additional processing or input files, so long as
+  the libraries provided have associated frequencies that would be output with
+  standard fragment library generation in DOCK6.  
+  (<a href="#Bickeletal2025">Bickel, <i>J.Comput. Chem.</i> 2025</a>)
+</font></p>
+
+<p class="style2" align="left"><font face="Arial, Helvetica, sans-serif">
+Filtering molecules in DOCK_GA by a soft molecular weight cutoff has been added. 
+Now, users can allow a chance for molecules to be accepted beyond
+this cutoff, enabling some deviation around the cutoffs. Changes to mutation
+selection and how fragments are chosen for mutation have been modified such that 
+DOCK_GA will no longer select fragments incompatible with the attempted 
+mutation type.
+</font></p> 
+
+<p class="style2" align="left"><font face="Arial, Helvetica, sans-serif">
+
+Users can now toggle the use of Ligand Efficiency (introduced in DOCK6.12)
+when using Grid Score via Descriptor Score. This new feature can be used 
+alongside Grid Score and will be calculated as: Ligand Efficiency = 
+(Grid Score)/(# Active Heavy Atoms)
+
+</font></p>
+
+<p class="style2" align="left"><font face="Arial, Helvetica, sans-serif">
+Users now have explicit control over the number of conformers DOCK stores during
+anchor-and-grow docking prior to clustering.  The old parameter num_scored_conformers 
+has been removed and replaced with two new parameters num_final_scored_poses and 
+num_preclustered_conformers.  Previously, this control was grouped under a single 
+parameter that also controlled the final number of scored poses written out.
+</font></p>
+
+
 </blockquote>
 
 
@@ -2063,7 +2104,7 @@ Chem. Soc.</em>, 1999</a>)</p>
 
 
 
-  <p class="style2"><em>Version 6.0-6.11</em></p>
+  <p class="style2"><em>Version 6.0-6.13</em></p>
 <p class="style2">Authors: P. Therese Lang, Demetri Moustakas, Scott Brozell, 
 Noel Carrascal, Sudipto Mukherjee, Lauren Prentis, Courtney Singleton, Yuchen Zhou, 
 Brian Fochtman, Trent Balius, T. Dwight McGee Jr., 
@@ -2084,17 +2125,17 @@ desolvation. Finally, DOCK 6 introduces new code that allows access to
 the NAB library of functions such as receptor flexibility, the full
 AMBER molecular mechanics scoring function with implicit solvent,
 conjugate gradient minimization, and molecular dynamics simulation
-capabilities. The most recent version of DOCK 6 includes novel searching methods 
+capabilities. DOCK 6 includes searching methods 
 (DOCK_DN, DOCK_GA) and the ability to create fragment libraries. DOCK_D3N
-depends on an enhanced version of DOCK by integrating RDKit.
+depends on an enhanced version of DOCK by integrating RDKit. 
 See
 <a href="#LangRNA2009">Lang et al. <em>RNA</em>, 2009</a>,
-
 <a href="#brozell2012">Brozell et al., 2012</a>,
 <a href="#allenetal2015">Allen et al., 2015</a>,
 <a href="#allenetal2017">Allen et al., 2017</a>,
-and
-<a href="#prentisetal2022"> Prentis et al., 2022</a>.
+<a href="#prentisetal2022"> Prentis et al., 2022</a>,
+<a href="#Matos2023"> Matos and Pak et al. 2023</a>, and
+<a href="#Bickeletal2025">Bickel et al. 2025</a>
 </p>
 
 
@@ -3002,11 +3043,11 @@ De novo  Design </strong></p>
   their results. (see <a href="https://ringo.ams.stonybrook.edu/index.php/Make_Unique_script_usage">Make Unique Script Usage</a>).</p>
 
   <p class="style2">
-    WARNING: Use of de novo design methods, including the genetic algorithm, must include a vdw_defn file that contains parameters for dummy atoms or unintended clashes can occur during growth. This parameter file is included with DOCK6 as vdw_de_novo.defn. 
+    <b><u>WARNING:</u></b> Use of de novo design methods, including the genetic algorithm, must include a vdw_defn file that contains parameters for dummy atoms or unintended clashes can occur during growth. This parameter file is included with DOCK6 as vdw_de_novo.defn. 
   </p>
 
   <p class="style2">
-    WARNING: The final molecular output files of de novo design are not overwritten at runtime, but are instead appended to as molecules
+    <b><u>WARNING:</u></b> The final molecular output files of de novo design are not overwritten at runtime, but are instead appended to as molecules
     are built. Users should beware of duplicate structures if experiments are re-run without deletion of output files. 
   </p>
 
@@ -3073,9 +3114,12 @@ De novo  Design </strong></p>
 
 	</pre>
 
+  <p class='style2'><em> Fragment and Torsion Biasing</em></p>
+  <p class='style2'>
+  Added in DOCK6.13, methods for biasing the selection and acceptance of fragments as well as the acceptance of torsions was introduced (<a href="#Bickeletal2025">Bickel <i>J. Comp. Chem.</i>2025)</a>. So long as <a href="#FragmentLibraryGeneration">standard library fragmentation</a> is performed, which will result in the FREQ header entry in all fragments and the associated torsions for all torsions in the library, this method will use those frequencies to attempt to shift the ensemble's composition. For Fragment Selection, this will be attempted during selection of a fragment, attempting to select higher frequency fragments more often. For Fragment and Torsion Acceptance, this will be done after selection, providing a chance to "terminate" growth paths that may be less frequent (ie less important, in the case of this method). The below figure outlines how these selections are performed, with a random number deciding the selected fragment and the range of fragments/torsions that would be accepted.
+  </p>
 
-
-
+  <p class="style2" align="center"> <img src="images/dn_biasing_selection.jpg" align="middle"></p>
 	</blockquote>
 	 
   </blockquote>
@@ -3124,6 +3168,11 @@ De novo  Design </strong></p>
     <td style="border:1px solid black;">The path to the torsion environment (.dat)</td> 
     <td style="border:1px solid black;"> </td>
   </tr>
+    <tr>
+    <td style="border:1px solid black;">dn_bias_torsions</td>
+    <td style="border:1px solid black;">Determines if acceptance of torsions by relative frequency after attachment of a fragment will be performed.</td> 
+    <td style="border:1px solid black;">no</td>
+  </tr>
   <tr>
     <td style="border:1px solid black;">dn_sampling_method</td>
     <td style="border:1px solid black;">Choose which method to use when choosing fragments for each layer (exhaustive, random, graph)</td> 
@@ -3151,9 +3200,28 @@ De novo  Design </strong></p>
   </tr>
   <tr>
     <td style="border:1px solid black;">dn_num_random_picks</td>
-    <td style="border:1px solid black;">Number of fragments randomly chosen to add to anchor when random method is turned on </td> 
+    <td style="border:1px solid black;">Number of fragments randomly chosen to add to anchor when random method is turned on </td>
     <td style="border:1px solid black;"> </td>
   </tr>
+
+  <tr>
+    <td style="border:1px solid black;">dn_bias_with_fragments</td>
+    <td style="border:1px solid black;">Determines whether fragment-based biasing will be used. </td> 
+    <td style="border:1px solid black;">no </td>
+  </tr>
+
+  <tr>
+    <td style="border:1px solid black;">dn_sel_frag_by_freq</td>
+    <td style="border:1px solid black;">If fragment biasing is enabled, determines whether selection of fragments during growth will be performed.  </td> 
+    <td style="border:1px solid black;">no </td>
+  </tr>
+
+    <tr>
+    <td style="border:1px solid black;">dn_accept_frag_by_freq</td>
+    <td style="border:1px solid black;">If fragment biasing is enabled, determines whether acceptance of fragments after attachment will be performed.  </td> 
+    <td style="border:1px solid black;">no </td>
+  </tr>
+
   <tr>
     <td style="border:1px solid black;">dn_pruning_conformer_score_cutoff</td>
     <td style="border:1px solid black;">The max score allowed for fragment conformer addition to be accepted (kcal/mol) if that fragment is in the top (dn_max_layer_size) scoring of each layer.</td> 
@@ -3820,6 +3888,26 @@ DOCK_GA: Small Molecule Evolution using a Genetic Algorithm</strong></p>
     <td style="border:1px solid black;">no</td>
   </tr>
   <tr>
+    <td style="border:1px solid black;">ga_add_rate</td>
+    <td style="border:1px solid black;">% out of 100 of mutation attempts which will be additions</td>
+    <td style="border:1px solid black;">25</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">ga_del_rate</td>
+    <td style="border:1px solid black;">% out of 100 of mutation attempts which will be deletions</td>
+    <td style="border:1px solid black;">25</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">ga_sub_rate</td>
+    <td style="border:1px solid black;">% out of 100 of mutation attempts which will be substitutions</td>
+    <td style="border:1px solid black;">25</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">ga_rep_rate</td>
+    <td style="border:1px solid black;">% out of 100 of mutation attempts which will be replacements</td>
+    <td style="border:1px solid black;">25</td>
+  </tr>
+  <tr>
     <td style="border:1px solid black;">ga_mutate_parents</td>
     <td style="border:1px solid black;">Mutate the parents</td> 
     <td style="border:1px solid black;">no</td>
@@ -3865,9 +3953,25 @@ DOCK_GA: Small Molecule Evolution using a Genetic Algorithm</strong></p>
     <td style="border:1px solid black;">0.5</td>
   </tr>
   <tr>
-    <td style="border:1px solid black;">ga_constraint_mol_wt</td>
-    <td style="border:1px solid black;">The upper bound for mol wt</td> 
-    <td style="border:1px solid black;">500</td>
+    <td style="border:1px solid black;">ga_mol_wt_cutoff_type</td>
+    <td style="border:1px solid black;">Hard or soft MW fitering</td> 
+    <td style="border:1px solid black;">hard</td>
+  </tr>
+
+  <tr>
+    <td style="border:1px solid black;">ga_constraint_upper_mol_wt</td>
+    <td style="border:1px solid black;">Upper limit of MW filter</td> 
+    <td style="border:1px solid black;">500.0</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">ga_constraint_lower_mol_wt</td>
+    <td style="border:1px solid black;">Lower limit of MW filter</td> 
+    <td style="border:1px solid black;">0.0</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">ga_constraint_mol_wt_std_dev</td>
+    <td style="border:1px solid black;">If soft MW filter is set, set standard deviation</td> 
+    <td style="border:1px solid black;">35.0</td>
   </tr>
   <tr>
     <td style="border:1px solid black;">ga_constraint_rot_bon</td>
@@ -7547,6 +7651,11 @@ are roughly in the same range; this ensures that different properties are equall
     <td style="border:1px solid black;">yes</td>
   </tr>
   <tr>
+    <td style="border:1px solid black;">descriptor_use_grid_lig_efficiency</td>
+    <td style="border:1px solid black;">Flag to use grid ligand efficiency as a component of descriptor score, descriptor_use_grid_score must be yes to enable this.</td>
+    <td style="border:1px solid black;">no</td>
+  </tr>
+  <tr>
     <td style="border:1px solid black;">descriptor_use_multigrid_score</td>
     <td style="border:1px solid black;">Flag to use multigrid FPS score as a component of descriptor score.</td> 
     <td style="border:1px solid black;">yes</td>
@@ -8164,6 +8273,7 @@ Generic Minimizer Parameters</a> </em></p>
 </blockquote>
 
 
+
 <p align="center"><span class="style1"><a href="#TableofContents">RETURN TO TABLE OF CONTENTS</a></span></p>
 
 
@@ -8200,23 +8310,29 @@ Miscellaneous Parameters</strong></p>
     <td style="border:1px solid black;">no</td>
   </tr>
   <tr>
-    <td style="border:1px solid black;">num_scored_conformers</td>
-    <td style="border:1px solid black;">controls the number of conformers (poses) written out into the {ligand_outfile_prefix}_scored.mol2 file.</td>
+    <td style="border:1px solid black;">num_final_scored_poses</td>
+    <td style="border:1px solid black;">controls the number of conformers (poses) written out into the {ligand_outfile_prefix}_scored.mol2 file for each ligand docked.</td>
+    <td style="border:1px solid black;">1</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">num_preclustered_conformers</td>
+    <td style="border:1px solid black;">controls the maximum number of conformers that the Anchor and Grow algorithm saves for final clustering for each ligand. This defaults to the same number as the number of final scored poses requested.</td>
     <td style="border:1px solid black;">1</td>
   </tr>
   <tr>
     <td style="border:1px solid black;">write_conformations</td>
-    <td style="border:1px solid black;">This parameter only appears if num_scored_conformers greater than 1.  controls whether to write out conformers (poses) into the {ligand_outfile_prefix}_conformers.mol2 file. useful for debugging purposes</td>
-    <td style="border:1px solid black;">yes</td>
+    <td style="border:1px solid black;">This parameter only appears if num_preclustered_conformers is greater than 1.  It controls whether to write out conformers (poses) into the {ligand_outfile_prefix}_conformers.mol2 file. useful for debugging purposes</td>
+    <td style="border:1px solid black;">no</td>
   </tr>
   <tr>
     <td style="border:1px solid black;">cluster_conformations</td>
-    <td style="border:1px solid black;">This parameter only appears if num_scored_conformers greater than 1. This parameter controls whether to cluster the poses (conformers) and write out only conformationally divers poses to the {ligand_outfile_prefix}_scored.mol2 file.  If cluster_conformations is no, then {ligand_outfile_prefix}_conformers.mol2 and {ligand_outfile_prefix}_scored.mol2 will contain the same poses, if yes then {ligand_outfile_prefix}_scored.mol2 will contain only distinct poses, a subset of the poses in {ligand_outfile_prefix}_conformers.mol2. </td>
+    <td style="border:1px solid black;">This parameter only appears if num_preclustered_conformers is greater than 1. This parameter controls whether to cluster the poses (conformers) and write out only conformationally divers poses to the {ligand_outfile_prefix}_scored.mol2 file.  If cluster_conformations is no, then {ligand_outfile_prefix}_conformers.mol2 and {ligand_outfile_prefix}_scored.mol2 will contain the same poses, if yes then {ligand_outfile_prefix}_scored.mol2 will contain only distinct poses, a subset of the poses in {ligand_outfile_prefix}_conformers.mol2. </td>
     <td style="border:1px solid black;">yes</td>
   </tr>
   <tr>
     <td style="border:1px solid black;">cluster_rmsd_threshold</td>
-    <td style="border:1px solid black;"> defines the threshold used for the best-first clustering of poses (conformers) written to {ligand_outfile_prefix}_scored.mol2. It controls how distinct the poses are from one another. The larger the threshold the more encompassing the cluster (bigger clusters) and the fewer poses written out. </td>
+    <td style="border:1px solid black;"> This parameter only appears if cluster_conformations is yes.
+Defines the threshold used for the best-first clustering of poses (conformers) written to {ligand_outfile_prefix}_scored.mol2. It controls how distinct the poses are from one another. The larger the threshold the more encompassing the cluster (bigger clusters) and the fewer poses written out. </td>
     <td style="border:1px solid black;">2.0</td>
   </tr>
   <tr>
@@ -12259,11 +12375,11 @@ File Formats<span class="style2"></span></p>
 References<span class="style2"></span></p>
 
     <blockquote>
-      <p class="style2"><a name="allenetal2014"></a>Allen, W.J., Rizzo, R.C.
+  <p class="style2"><a name="allenetal2014"></a>Allen, W.J., Rizzo, R.C.
   Implementation of the Hungarian Algorithm to Account for Ligand Symmetry 
   and Similarity in Structure-Based Design. J. Chem. Inf. Model. 54:518-529, 2014. </p>
 
-      <p class="style2"><a name="allenetal2015"></a>Allen, W.J.; Balius, T.E.;
+  <p class="style2"><a name="allenetal2015"></a>Allen, W.J.; Balius, T.E.;
   Mukherjee, S.; Brozell, S. R.; Moustakas, D. T.; Lang, P. T.; Case, D. A.;
   Kuntz, I. D.; Rizzo, R. C.  DOCK 6: Impact of New Features and Current
   Docking Performance.  J. Comput. Chem. 36(15): 1132-1156, 2015. </p>
@@ -12272,214 +12388,249 @@ References<span class="style2"></span></p>
   Balius, T.E.; Rizzo, R.C. Customizable de novo design strategies for DOCK: Application to 
   HIVgp41 and other therapeutic targets J. Comput. Chem. 38(30): 2641-2663, 2017.</p>
 
-      <p class="style2"><a name="Baliusetal2011"></a>Balius, T.E., Mukherjee, S.,
+  <p class="style2"><a name="Baliusetal2011"></a>Balius, T.E., Mukherjee, S.,
   and Rizzo, R.C., Implementation and Evaluation of a Docking-Rescoring Method
   using Molecular Footprint Comparisons. J. Comput. Chem. 32(10): 2273-2289, 2011. </p>
 
-      <p class="style2"><a name="Baliusetal2013"></a>Balius, T.E., Allen, W.J., Mukherjee, S. and Rizzo, R.C. Grid-based Molecular Footprint Comparison Method for Docking and De Novo Design: Application to HIVgp41. J. Comput. Chem. 34(14): 1226-1240, 2013.</p>
+  <p class="style2"><a name="Baliusetal2013"></a>Balius, T.E., Allen, W.J., 
+  Mukherjee, S. and Rizzo, R.C. Grid-based Molecular Footprint Comparison 
+  Method for Docking and De Novo Design: Application to HIVgp41. J. Comput. 
+  Chem. 34(14): 1226-1240, 2013.</p>
 
-      <p class="style2"><a name="BaliusJComputChem2024"></a>Balius, T.E.,
+  <p class="style2"><a name="BaliusJComputChem2024"></a>Balius, T.E.,
   Tan, Y.S., Chakrabarti, M., DOCK 6: Incorporating hierarchical traversal
   through precomputed ligand conformations to enable large-scale docking.
   J. Comput. Chem. 45(1): 47-63, 2024.
   https://doi.org/10.1002/jcc.27218 </p>
 
-<p class="style2"><a name="BaliusPNAS2017"></a> Balius, T. E., Fischer, M., Stein, R. M., Adler, T. B., Nguyen C. N., Cruz A., Gilsonc M. K., Kurtzman, T., Shoichet, B. K., Testing inhomogeneous solvation theory in structure-based ligand discovery. Proc. Natl. Acad. Sci. USA., 114 (33): E6839-E6846,  2017</p>
+  <p class="style2"><a name="BaliusPNAS2017"></a> Balius, T. E., Fischer, M., 
+  Stein, R. M., Adler, T. B., Nguyen C. N., Cruz A., Gilsonc M. K., Kurtzman, 
+  T., Shoichet, B. K., Testing inhomogeneous solvation theory in structure-based 
+  ligand discovery. Proc. Natl. Acad. Sci. USA., 114 (33): E6839-E6846,  2017</p>
 
-      <p class="style2"><a name="benderetal2004"></a>Bender, A., Mussa, H.Y.,
+  <p class="style2"><a name="benderetal2004"></a>Bender, A., Mussa, H.Y.,
   Glen, R.C., Reiling, S. Similarity Searching of Chemical Databases Using 
   Atom Environment Descriptors (MOLPRINT 2D): Evaluation of Performance. 
   J. Chem. Inf. Comput. Sci. 2004, 44, 1708. </p>
 
-      <p class="style2"><a name="brozell2012"></a>Brozell, S.R., Mukherjee, S.,
+  <p class="style2"><a name="Bickeletal2025"></a>Bickel, J. D., Boysan, B. T., 
+  Rizzo, R. C. Fragment and torsion biasing algorithms for construction of small 
+  organic molecules in proteins using DOCK. J. Comput. Chem. 2025 46, e27508.</p> 
+
+  <p class="style2"><a name="brozell2012"></a>Brozell, S.R., Mukherjee, S.,
   Balius, T.E., Roe, D.R., Case, D.A., Rizzo, R.C., Evaluation of DOCK 6 as 
   a Pose Generation and Database Enrichment Tool. J. Comput. Aided Mol. Design.
   26(6): 749-773, 2012. </p>
 
-      <p class="style2"><a name="ColemanPlosOne2013"></a> Coleman, R.G., Carchia, M., Sterling, T., Irwin, J.J., Shoichet, B.K., Ligand Pose and Orientational Sampling in Molecular Docking. PLOS ONE 8(10): e75992, 2013.</p> 
+  <p class="style2"><a name="ColemanPlosOne2013"></a> Coleman, R.G., Carchia, M.,
+  Sterling, T., Irwin, J.J., Shoichet, B.K., Ligand Pose and Orientational 
+  Sampling in Molecular Docking. PLOS ONE 8(10): e75992, 2013.</p> 
 
-      <p class="style2"><a name="debetall2002"></a>Deb,
-  K.; Pratap, A.; Agarwal, S.; Meyarivan, T. A fast and elitist multiobjective genetic algorithm: NSGA-II. IEEE Transactions on Evolutionary Computation. 6: 182-97, 2002. </p>
+  <p class="style2"><a name="debetall2002"></a>Deb, K.; Pratap, A.; Agarwal, S.; 
+  Meyarivan, T. A fast and elitist multiobjective genetic algorithm: NSGA-II. 
+  IEEE Transactions on Evolutionary Computation. 6: 182-97, 2002. </p>
   
-      <p class="style2"><a name="DesJarlaisetalJComputAidedMolecDesign1994"></a>DesJarlais,
-  R.L. and Dixon, J.S. A Shape-and chemistry-based docking method and its
-  use in the design of HIV-1 protease inhibitors. J. Comput-Aided Molec.
+  <p class="style2"><a name="DesJarlaisetalJComputAidedMolecDesign1994"></a>
+  DesJarlais, R.L. and Dixon, J.S. A Shape-and chemistry-based docking method 
+  and its use in the design of HIV-1 protease inhibitors. J. Comput-Aided Molec.
   Design. 8: 231-242, 1994. </p>
 
-    <p class="style2"> <a name="EwingetalJCAMD2001"></a>
+  <p class="style2"> <a name="EwingetalJCAMD2001"></a>
   Ewing, T. J. A.; Makino, S.; Skillman, A. G.; Kuntz, I. D.
   DOCK 4.0: search strategies for automated molecular docking of
   flexible molecule databases.
   J. Comput-Aided Molec. Design. 15: 411-428 (2001). </p>
 
-    <p class="style2"> <a name="EwingKuntzJComputChem1997"></a>Ewing,
+  <p class="style2"> <a name="EwingKuntzJComputChem1997"></a>Ewing,
   T.J.A. and Kuntz, I.D., Critical evaluation of search algorithms for
   automated molecular docking and database screening. J. Comput. Chem.
   18: 1175-1189, 1997. </p>
 
-    <p class="style2"><a name="FerroetalActCrystA1977"></a>Ferro,
+  <p class="style2"><a name="FerroetalActCrystA1977"></a>Ferro,
   D.R. and Hermans, J. Different best rigid-body molecular fit routine.
   Acta. Cryst. A. 33: 345-347, 1977. </p>
 
-    <p class="style2"> <a name="GravesJMolBiol2008" id="GravesJMolBiol2008">   </a>Graves, A.P., Shivakumar, D.M., Boyce, S.E., Jacobson, M.P., Case, D.A. and Shoichet, B.K. Rescoring Docking Hit Lists for Model Cavity Sites: Predictions and Experimental Testing. J. Mol. Biol. 377:914-934, 2008.</p>
+  <p class="style2"> <a name="GravesJMolBiol2008" id="GravesJMolBiol2008"></a>
+  Graves, A.P., Shivakumar, D.M., Boyce, S.E., Jacobson, M.P., Case, D.A. and 
+  Shoichet, B.K. Rescoring Docking Hit Lists for Model Cavity Sites: Predictions 
+  and Experimental Testing. J. Mol. Biol. 377:914-934, 2008.</p>
 
-      <p class="style2"><a name="HawkinsetalChemPhysLett1995"></a>Hawkins,
-G. D.; Cramer, C. J.; Truhlar, D. G. Pairwise Solute Descreening of
-Solute Charges from a Dielectric Medium. Chem. Phys. Lett. 246:
-122-129, 1995</p>
-      <p class="style2"><a name="HawkinsetalJPhysChem1996"></a>Hawkins,
-G. D.; Cramer, C. J.; Truhlar, D. G. Parametrized models of aqueous
-free energies of solvation based on pairwise descreening of solute
-atomic charges from a dielectric medium. J. Phys. Chem. 100:
-19824-19839, 1996</p>
-      <p class="style2"><a name="IrwinetalJChemInfModel2005"></a>Irwin,
+  <p class="style2"><a name="HawkinsetalChemPhysLett1995"></a>Hawkins,
+  G. D.; Cramer, C. J.; Truhlar, D. G. Pairwise Solute Descreening of
+  Solute Charges from a Dielectric Medium. Chem. Phys. Lett. 246:
+  122-129, 1995</p>
+
+  <p class="style2"><a name="HawkinsetalJPhysChem1996"></a>Hawkins,
+  G. D.; Cramer, C. J.; Truhlar, D. G. Parametrized models of aqueous
+  free energies of solvation based on pairwise descreening of solute
+  atomic charges from a dielectric medium. J. Phys. Chem. 100:
+  19824-19839, 1996</p>
+
+  <p class="style2"><a name="IrwinetalJChemInfModel2005"></a>Irwin,
   J.J. and Shoichet, B.K. ZINC - A free database of commercially
   available compounds for virtual screening. J. Chem. Inf. Model. 45:
   177-182, 2005. </p>
 
-      <p class="style2"><a name="jiangetal2015"></a>Jiang, L.; Rizzo, R. C.
+  <p class="style2"><a name="jiangetal2015"></a>Jiang, L.; Rizzo, R. C.
   Pharmacophore-Based Similarity Scoring for DOCK.
   J. Phys. Chem. B, 119 (3), 1083-1102, 2015.</p>
 
-      <p class="style2"><a name="KollmanetalAccChemRes2000"></a>Kollman,
-P. A.; Massova, I.; Reyes, C.; Kuhn, B.; Huo, S.; Chong, L.; Lee, M.;
-Lee, T.; Duan, Y.; Wang, W.; Donini, O.; Cieplak, P.; Srinivasan, J.;
-Case, D. A.; Cheatham, T. E., Calculating structures and free energies
-of complex molecules: combining molecular mechanics and continuum
-models. Acc. Chem. Res. 33: 889-897, 2000</p>
+  <p class="style2"><a name="KollmanetalAccChemRes2000"></a>Kollman,
+  P. A.; Massova, I.; Reyes, C.; Kuhn, B.; Huo, S.; Chong, L.; Lee, M.;
+  Lee, T.; Duan, Y.; Wang, W.; Donini, O.; Cieplak, P.; Srinivasan, J.;
+  Case, D. A.; Cheatham, T. E., Calculating structures and free energies
+  of complex molecules: combining molecular mechanics and continuum
+  models. Acc. Chem. Res. 33: 889-897, 2000</p>
 
-    <p class="style2"><a name="KuhletalJComputChem1984"></a>Kuhl,
+  <p class="style2"><a name="KuhletalJComputChem1984"></a>Kuhl,
   F.S., Crippen, G.M., and Friesen, D.K. A Combinatorial Algorithm for
   Calculating Ligand Binding. J. Comput. Chem. 5:24-34, 1984. </p>
 
-    <p class="style2"><a name="KuhnNavResLogistQ1955"></a>Kuhn, H. W.
-The Hungarian method for the assignment problem. Nav. Res. Logist. Q.
-2:83-97, 1955.</p>
+  <p class="style2"><a name="KuhnNavResLogistQ1955"></a>Kuhn, H. W.
+  The Hungarian method for the assignment problem. Nav. Res. Logist. Q.
+  2:83-97, 1955.</p>
 
-    <p class="style2"> <a name="KuntzJMolBiol1982" id="KuntzJMolBiol1982"></a>Kuntz,
+  <p class="style2"> <a name="KuntzJMolBiol1982" id="KuntzJMolBiol1982"></a>Kuntz,
   I.D., Blaney, J.M., Oatley, S.J., Langridge, R. and Ferrin, T.E. A
   geometric approach to macromolecule-ligand interactions. J. Mol. Biol.
   161: 269-288, 1982. </p>
 
-    <p class="style2"><a name="LangRNA2009"></a>
+  <p class="style2"><a name="LangRNA2009"></a>
   Lang, P.T., Brozell, S.R., Mukherjee, S., Pettersen, E.T., Meng, E.C.,
   Thomas, V., Rizzo, R.C., Case, D.A., James, T.L., Kuntz, I.D.
   DOCK 6: Combining Techniques to Model RNA-Small Molecule Complexes.
   RNA 15:1219-1230, 2009. </p>
 
-    <p class="style2"> <a name="LiuetalJPhysChemB2004"></a>Liu, H.-Y.,
+  <p class="style2"> <a name="LiuetalJPhysChemB2004"></a>Liu, H.-Y.,
   Kuntz, I. D., and Zou, X. Pairwise GB/SA Scoring Function for
   Structure-based Drug Design. J. Phys. Chem. B. 108: 5453-5462, 2004. </p>
 
-    <p class="style2"><a name="LutyPWdesolJCC1995"></a>Luty,
-B. A.; Wasserman P.F.; Hodge C.N.; Zacharias M.; McCammon J.A. A
-Molecular Mechanics / Grid Method for Evaluation of Ligand-Receptor
-Interactions. J. Comput. Chem. 16:454-464, 1995.</p>
+  <p class="style2"><a name="LutyPWdesolJCC1995"></a>Luty,
+  B. A.; Wasserman P.F.; Hodge C.N.; Zacharias M.; McCammon J.A. A
+  Molecular Mechanics / Grid Method for Evaluation of Ligand-Receptor
+  Interactions. J. Comput. Chem. 16:454-464, 1995.</p>
 
-    <p class="style2"><a name="Matos2023"></a>
+  <p class="style2"><a name="Matos2023"></a>
   Matos, G.D.R., Pak, S., and Rizzo, R.C.
   Descriptor-Driven de Novo Design Algorithms for DOCK6 Using RDKit.
   J. Chem. Inf. Model., 63(18): 5803-5822, 2023.
   https://doi.org/10.1021/acs.jcim.3c01031 </p>
 
-    <p class="style2"> <a name="MengetalProteins1993"></a>Meng, E.C.,
+  <p class="style2"> <a name="MengetalProteins1993"></a>Meng, E.C.,
   Gschwend, D.A., Blaney, J.M. and Kuntz, I.D. Orientational sampling and
   rigid-body minimization in molecular docking. Proteins. 17(3): 266-278,
   1993. </p>
 
-      <p class="style2"><a name="MengetalJCompChem1992"></a>Meng, E.C.,
+  <p class="style2"><a name="MengetalJCompChem1992"></a>Meng, E.C.,
   Shoichet, B.K. and Kuntz, I.D. Automated docking with grid-based energy
   evaluation. J. Comp. Chem. 13: 505-524, 1992. </p>
 
-      <p class="style2"><a name="MilleretalJComputAidedMolDesign1994"></a>Miller,
+  <p class="style2"><a name="MilleretalJComputAidedMolDesign1994"></a>Miller,
   M.D., Kearsley, S.K., Underwood, D.J. and Sheridan, R.P. FLOG -A system
   to select quasi-flexible ligands complementary to a receptor of known
   three-dimensional structure. J. Comput. Aided Mol. Design. 8: 153-174,
   1994. </p>
 
-      <p class="style2"><a name="Moustakasetal2006"></a>Moustakas, D.T.,
+  <p class="style2"><a name="Moustakasetal2006"></a>Moustakas, D.T.,
   Lang, P.T., Pegg, S., Pettersen, E.T., Kuntz, I.D., Broojimans, N.,
   Rizzo, R.C. Development and Validation of a Modular, Extensible Docking
   Program: DOCK 5. J. Comput. Aided Mol. Design. 20:601-609, 2006. </p>
 
-      <p class="style2"><a name="Mukherjeeetal2010"></a>Mukherjee, S., Balius, T.E., and Rizzo, R.C., Docking Validation Resources: Protein Family and Ligand Flexibility Experiments. J. Chem. Inf. Model.,  50(11): 1986-2000, 2010. </p>
+  <p class="style2"><a name="Mukherjeeetal2010"></a>Mukherjee, S., 
+  Balius, T.E., and Rizzo, R.C., Docking Validation Resources: Protein Family 
+  and Ligand Flexibility Experiments. J. Chem. Inf. Model.,  50(11): 1986-2000, 
+  2010. </p>
 
-      <p class="style2"><a name="MunkresJSocIndustApplMath1957"></a>Munkres,
+  <p class="style2"><a name="MunkresJSocIndustApplMath1957"></a>Munkres,
 J. Algorithms for the assignment and transportation problems. J. Soc. Indust.
 Appl. Math. 5:32-38, 1957.</p>
 
-      <p class="style2"><a name="MySingerJChemInfModel2010"></a> MySinger, M.M., and Shoichet, B.K., Rapid context-dependent ligand desolvation in molecular docking. J. Chem. Inf. Model., 50(9): 1561-1573, 2010.  </p> 
+  <p class="style2"><a name="MySingerJChemInfModel2010"></a> MySinger, M.M., 
+  and Shoichet, B.K., Rapid context-dependent ligand desolvation in molecular 
+  docking. J. Chem. Inf. Model., 50(9): 1561-1573, 2010.  </p> 
 
-      <p class="style2"><a name="NelderetalComputerJournal1964"></a>Nelder, J.A. and Mead, R., A Simplex-Method for Function Minimization. Computer Journal, 7:  308-313, 1964. </p>
+  <p class="style2"><a name="NelderetalComputerJournal1964"></a>Nelder, J.A. 
+  and Mead, R., A Simplex-Method for Function Minimization. Computer Journal, 
+  7:  308-313, 1964. </p>
 
-      <p class="style2"><a name="OnufrievetalProteins2004"></a>Onufriev,
-A., Bashford, D., and Case, D.A. Exploring protein native states and
-large-scale conformational changes with a modified generalized Born
-model. Proteins. 55:383-394, 2004.</p>
-      <p class="style2"><a name="PearlmanetalCompPhysCommun1995"></a>Pearlman,
-D.A., Case, D.A.,Caldwell, J.W., Ross, W.S., Cheatham, III, T.E.,
-DeBolt, S., Ferguson, D., Seibel, G. and Kollman, P.A. AMBER, a package
-of computer programs for applying molecular mechanics, normal mode
-analysis, molecular dynamics and free energy calculations to simulate
-the structural and energetic properties of molecules. Comp. Phys.
-Commun. 91:1-41, 1995. </p>
+  <p class="style2"><a name="OnufrievetalProteins2004"></a>Onufriev,
+  A., Bashford, D., and Case, D.A. Exploring protein native states and
+  large-scale conformational changes with a modified generalized Born
+  model. Proteins. 55:383-394, 2004.</p>
 
-      <p class="style2"><a name="prentisetal2022"></a>Prentis, L.E.;
-Singleton, C.D.; Bickel, J.D.; Allen, W.J.; Rizzo, R.C.
-A Molecular Evolution Algorithm for Ligand Design in DOCK.
-J. Comput. Chem. 43(29):1942-1963, 2022.</p>
+  <p class="style2"><a name="PearlmanetalCompPhysCommun1995"></a>Pearlman,
+  D.A., Case, D.A.,Caldwell, J.W., Ross, W.S., Cheatham, III, T.E.,
+  DeBolt, S., Ferguson, D., Seibel, G. and Kollman, P.A. AMBER, a package
+  of computer programs for applying molecular mechanics, normal mode
+  analysis, molecular dynamics and free energy calculations to simulate
+  the structural and energetic properties of molecules. Comp. Phys.
+  Commun. 91:1-41, 1995. </p>
 
-      <p class="style2"><a name="RizzoetalJChemTheoryComput2006"></a>Rizzo,
-R. C.; Aynechi, T.; Case, D. A.; Kuntz, I. D. Estimation of Absolute
-Free Energies of Hydration Using Continuum Methods: Accuracy of Partial
-Charge Models and Optimization of Nonpolar Contributions. J. Chem.
-Theory Comput. 2: 128-139, 2006. </p>
+  <p class="style2"><a name="prentisetal2022"></a>Prentis, L.E.;
+  Singleton, C.D.; Bickel, J.D.; Allen, W.J.; Rizzo, R.C.
+  A Molecular Evolution Algorithm for Ligand Design in DOCK.
+  J. Comput. Chem. 43(29):1942-1963, 2022.</p>
 
-<p class="style2"><a name="sarenietal1998"></a>Sareni, B., 
-    Krahenbuhl, L., Fitness sharing and niching methods revisited. IEEE Transactions on Evolutionary Computation, Institute of Electrical and Electronics Engineers, 1998, 2, 8. </p>
+  <p class="style2"><a name="RizzoetalJChemTheoryComput2006"></a>Rizzo,
+  R. C.; Aynechi, T.; Case, D. A.; Kuntz, I. D. Estimation of Absolute
+  Free Energies of Hydration Using Continuum Methods: Accuracy of Partial
+  Charge Models and Optimization of Nonpolar Contributions. J. Chem.
+  Theory Comput. 2: 128-139, 2006. </p>
 
-      <p class="style2"><a name="sastryetal2015"></a>Sastry, G.M., 
-    Dixon, S.L., Sherman, W. Rapid Shape-Based Ligand Alignment and 
-    Virtual Screening Method Based on Atom/Feature-Pair Similarities
-    and Volume Overlap Scoring. J. Chem. Inf. Model, 2011, 51 (10): 2455-2466, 2015. </p>
+  <p class="style2"><a name="sarenietal1998"></a>Sareni, B., 
+  Krahenbuhl, L., Fitness sharing and niching methods revisited. IEEE 
+  Transactions on Evolutionary Computation, Institute of Electrical and 
+  Electronics Engineers, 1998, 2, 8. </p>
 
-      <p class="style2"><a name="ShoichetetalJCompChem1992"></a>Shoichet, B.K.,
+  <p class="style2"><a name="sastryetal2015"></a>Sastry, G.M., 
+  Dixon, S.L., Sherman, W. Rapid Shape-Based Ligand Alignment and 
+  Virtual Screening Method Based on Atom/Feature-Pair Similarities and Volume 
+  Overlap Scoring. J. Chem. Inf. Model, 2011, 51 (10): 2455-2466, 2015. </p>
+
+  <p class="style2"><a name="ShoichetetalJCompChem1992"></a>Shoichet, B.K.,
   Bodian, D.L. and Kuntz, I.D. Molecular docking using shape descriptors.
   J. Comp. Chem. 13(3): 380-397, 1992. </p>
-      <p class="style2"><a name="ShoichetetalJMolBiol1991"></a>Shoichet,
+
+  <p class="style2"><a name="ShoichetetalJMolBiol1991"></a>Shoichet,
   B.K. and Kuntz, I.D. Protein docking and complementarity. J. Mol. Biol.
   221: 327-346, 1991. </p>
 
-  <p class="style2"><a name="ShoichetetalJMolBiol1991"></a>Singleton, C.D. (2018). Computer-aided Design of Fusion Inhibitors Targeting 
-  Ebolavirus. Order No. 10746080, State University of New York at Stony Brook</p>
+  <p class="style2"><a name="ShoichetetalJMolBiol1991"></a>Singleton, C.D. (2018). 
+  Computer-aided Design of Fusion Inhibitors Targeting Ebolavirus. Order No. 
+  10746080, State University of New York at Stony Brook</p>
   
-      <p class="style2"><a name="SrinivasanetalJAmChemSoc1998" id="SrinivasanetalJAmChemSoc1998"></a>Srinivasan,
-J.; Cheatham, T. E.; Cieplak, P.; Kollman, P. A.; Case, D. A.,
-Continuum solvent studies of the stability of DNA, RNA, and
-phosphoramidate - DNA helices. J. Am. Chem. Soc. 120:9401-9409, 1998.</p>
-      <p class="style2"><a name="TrottandOlsonJComputChem2010"></a>Trott,
-O and Olson, A. J. AutoDock Vina: Improving the speed and accuracy of
-Docking with a new scoring function, efficient optimization, and
-multithreading. J. Comput. Chem. 31:455-461, 2010. </p>
-      <p class="style2"><a name="TsuietalBiopolymers2001"></a>Tsui,
-V. and Case,D.A. Theory and applications of the generalized solvation
-model in macromolecular simulations. Biopolymers. 56:275-291, 2001. </p>
-      <p class="style2"><a name="VerkPWDesolJMR1999"></a>Verkhiver,
-G.M.; Rejto, P.A.; Bouzida, D.; Arthur, S.; Colson, A.B.; et. al.
-Towards Understanding the Mechanisms of Molecular Recognition by
-Computer Simulation of Ligand-Protein Interactions. J. Mol. Recog.
-12:371-389 (1999)&nbsp; </p>
-      <p class="style2"><a name="WangetalJCompChem2004"></a>Wang,
-J., Wolf, R.M., Caldwell, J.W., Kollman, P.A. and Case, D.A.
-Development and testing of a general Amber force field. J. Comput.
-Chem. 25:1157-1174, 2004. </p>
-      <p class="style2"><a name="WeiseretalJCompChem1999"></a>Weiser,
-J., Shenkin, P.S., and Still, W.C. Approximate atomic surfaces from
-linear combinations of pairwise overlaps (LCPO). J. Comput. Chem.
-20:217-230, 1999.</p>
+  <p class="style2"><a name="SrinivasanetalJAmChemSoc1998" id="SrinivasanetalJAmChemSoc1998"></a>Srinivasan,
+  J.; Cheatham, T. E.; Cieplak, P.; Kollman, P. A.; Case, D. A.,
+  Continuum solvent studies of the stability of DNA, RNA, and
+  phosphoramidate - DNA helices. J. Am. Chem. Soc. 120:9401-9409, 1998.</p>
+
+  <p class="style2"><a name="TrottandOlsonJComputChem2010"></a>Trott,
+  O and Olson, A. J. AutoDock Vina: Improving the speed and accuracy of
+  Docking with a new scoring function, efficient optimization, and
+  multithreading. J. Comput. Chem. 31:455-461, 2010. </p>
+
+  <p class="style2"><a name="TsuietalBiopolymers2001"></a>Tsui,
+  V. and Case,D.A. Theory and applications of the generalized solvation
+  model in macromolecular simulations. Biopolymers. 56:275-291, 2001. </p>
+      
+  <p class="style2"><a name="VerkPWDesolJMR1999"></a>Verkhiver,
+  G.M.; Rejto, P.A.; Bouzida, D.; Arthur, S.; Colson, A.B.; et. al.
+  Towards Understanding the Mechanisms of Molecular Recognition by
+  Computer Simulation of Ligand-Protein Interactions. J. Mol. Recog.
+  12:371-389 (1999)&nbsp; </p>
+      
+  <p class="style2"><a name="WangetalJCompChem2004"></a>Wang,
+  J., Wolf, R.M., Caldwell, J.W., Kollman, P.A. and Case, D.A.
+  Development and testing of a general Amber force field. J. Comput.
+  Chem. 25:1157-1174, 2004. </p>
+      
+  <p class="style2"><a name="WeiseretalJCompChem1999"></a>Weiser,
+  J., Shenkin, P.S., and Still, W.C. Approximate atomic surfaces from
+  linear combinations of pairwise overlaps (LCPO). J. Comput. Chem.
+  20:217-230, 1999.</p>
 
 
-      <p class="style2"><a name="ZouetalJAmChemSoc1999"></a>Zou, X. Q.,
+  <p class="style2"><a name="ZouetalJAmChemSoc1999"></a>Zou, X. Q.,
   Sun, Y. X., and Kuntz, I. D. Inclusion of solvation in ligand binding
   free energy calculations using the generalized-born model. J. Am. Chem.
   Soc. 121 (35): 8033-8043, 1999. </p>

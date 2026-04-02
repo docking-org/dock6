@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.12
+DOCK v6.13
 
-Released September 2024
+Released July 2025
 Copyright UCSF
 --------------------------------------
 
@@ -109,6 +109,7 @@ Descriptor Score Parameters
 ------------------------------------------------------------------------------------------
 descriptor_score_primary                                     yes
 descriptor_use_grid_score                                    yes
+descriptor_use_grid_lig_efficiency                           no
 descriptor_use_pharmacophore_score                           no
 descriptor_use_tanimoto                                      no
 descriptor_use_hungarian                                     no
@@ -166,7 +167,8 @@ Molecule Library Output Parameters
 ligand_outfile_prefix                                        output_disc_grid_bgist_flex
 write_mol_solvation                                          no
 write_orientations                                           no
-num_scored_conformers                                        1
+num_final_scored_poses                                       1
+num_preclustered_conformers                                  1
 score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
@@ -223,7 +225,7 @@ VERBOSE ORIENTING STATS :
 
 Orienting 9 anchor heavy atom centers
 Sphere Center Matching Parameters:
-   tolerance: 0.25; dist_min: 0; min_nodes: 3; max_nodes: 10
+   tolerance: 0.25; dist_min: 0; min_nodes: 3; max_nodes: 10; max orients: 1000
 Num of cliques generated: 2086
  Residual Info:
    min residual:    0.0015
@@ -243,7 +245,7 @@ VERBOSE GROWTH STATS : ANCHOR #1
 Error scoring Anchor #1 Orient #738: ERROR:  Conformation could not be scored.
 Conformation not completely within grid box.
 
-94/739 anchor orients retained (max 1000) t=0.42s
+94/739 anchor orients retained (max 1000) t=0.33s
 number of layers:1
 Current clique:1000
 (last_orient_flag==true)Current clique:1000
@@ -253,7 +255,7 @@ No more anchor fragments to be docked.
 -----------------------------------
 Molecule: xtal-lig.pdb
 
- Elapsed time for docking:	1.745 seconds
+ Elapsed time for docking:	1.467 seconds
 
  Anchors:		1
  Orientations:		1000
@@ -268,7 +270,7 @@ Molecule: xtal-lig.pdb
 
 
 1 Molecules Processed
-Total elapsed time:	1.865 seconds
-Number of molecules per second:	0.536
-Virtual memory used for this process: 138612 kilobytes
-Physical memory used for this process: 68084 kilobytes
+Total elapsed time:	1.495 seconds
+Number of molecules per second:	0.669
+Virtual memory used for this process: 143684 kilobytes
+Physical memory used for this process: 57872 kilobytes

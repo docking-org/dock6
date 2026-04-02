@@ -1,5 +1,8 @@
-How To make a DOCK bugfix for release.
+How To make a DOCK bugfix patch file for web release.
 
+Descriptions of bugs fixed pre-release and thus distributed in release x go
+in file new_in_6.x.txt.  The file 6.x_bugfixes.htm is for bug fix patch files
+distributed post release.  This howto describes how to create those patches.
 
 Steps
 

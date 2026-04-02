@@ -2,6 +2,7 @@
 
 #ifndef SPHERE_H
 #define SPHERE_H
+#define BUFFER_SIZE 256 // Adjust the buffer size as needed
 
 #include <string>
 #include <vector>
@@ -29,7 +30,7 @@ class           Sphere {
     ~Sphere() {
         clear();
     };
-
+    std::string     write_to_buffer();
     void            clear();
     float           distance(Sphere &);
     Sphere & operator=(const Sphere & s) {
@@ -49,7 +50,7 @@ typedef         std::vector< Sphere > SphereVec;
 // input the spheres from sphere_file_name into vector spheres and
 // return the number of spheres read.
 int read_spheres( std::string sphere_file_name, SphereVec & spheres );
-
+void write_spheres( std::string sphere_file_name, SphereVec & spheres, std::string context);
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Class Active_Site_Spheres is the sphere list from the sphgen sphere file.

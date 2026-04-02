@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.12
+DOCK v6.13
 
-Released September 2024
+Released July 2025
 Copyright UCSF
 --------------------------------------
 
@@ -132,7 +132,8 @@ Molecule Library Output Parameters
 ligand_outfile_prefix                                        db2_grid3
 write_mol_solvation                                          no
 write_orientations                                           no
-num_scored_conformers                                        1
+num_final_scored_poses                                       1
+num_preclustered_conformers                                  1
 score_threshold                                              -10.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
@@ -179,7 +180,7 @@ VERBOSE ORIENTING STATS :
 
 Orienting 4 anchor heavy atom centers
 Sphere Center Matching Parameters:
-   tolerance: 0.3; dist_min: 0; min_nodes: 4; max_nodes: 4
+   tolerance: 0.3; dist_min: 0; min_nodes: 4; max_nodes: 4; max orients: 1000
 Num of cliques generated: 360
  Residual Info:
    min residual:    0.8231
@@ -213,7 +214,7 @@ score > score_thres:-2.332 > -10
 
 
 1 Molecules Processed
-Total elapsed time:	0.137 seconds
-Number of molecules per second:	7.326
-Virtual memory used for this process: 87744 kilobytes
-Physical memory used for this process: 16020 kilobytes
+Total elapsed time:	0.172 seconds
+Number of molecules per second:	5.828
+Virtual memory used for this process: 92808 kilobytes
+Physical memory used for this process: 7992 kilobytes

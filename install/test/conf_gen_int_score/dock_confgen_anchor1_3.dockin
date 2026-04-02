@@ -52,7 +52,7 @@ flex_drive_file                                              ../../../parameters
 ligand_outfile_prefix                                        output_anchor1
 write_mol_solvation                                          no
 write_orientations                                           no
-num_scored_conformers                                        5000
+num_final_scored_poses                                       5000
 write_conformations                                          no
 cluster_conformations                                        no
 score_threshold                                              100.0

@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.12
+DOCK v6.13
 
-Released September 2024
+Released July 2025
 Copyright UCSF
 --------------------------------------
 
@@ -115,7 +115,8 @@ Molecule Library Output Parameters
 ligand_outfile_prefix                                        output_blurry_trilin
 write_mol_solvation                                          no
 write_orientations                                           no
-num_scored_conformers                                        1
+num_final_scored_poses                                       1
+num_preclustered_conformers                                  1
 score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
@@ -152,7 +153,7 @@ VERBOSE MOLECULE STATS
 -----------------------------------
 Molecule: xtal-lig.pdb
 
- Elapsed time for docking:	0.000 seconds
+ Elapsed time for docking:	0.001 seconds
 
  Anchors:		1
  Orientations:		1
@@ -163,7 +164,7 @@ Molecule: xtal-lig.pdb
 
 
 1 Molecules Processed
-Total elapsed time:	0.025 seconds
-Number of molecules per second:	40.310
-Virtual memory used for this process: 83832 kilobytes
-Physical memory used for this process: 12140 kilobytes
+Total elapsed time:	0.020 seconds
+Number of molecules per second:	50.524
+Virtual memory used for this process: 88896 kilobytes
+Physical memory used for this process: 4108 kilobytes

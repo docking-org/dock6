@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.12
+DOCK v6.13
 
-Released September 2024
+Released July 2025
 Copyright UCSF
 --------------------------------------
 
@@ -58,7 +58,8 @@ Molecule Library Output Parameters
 ligand_outfile_prefix                                        output
 write_mol_solvation                                          no
 write_orientations                                           no
-num_scored_conformers                                        1
+num_final_scored_poses                                       1
+num_preclustered_conformers                                  1
 score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
@@ -69,7 +70,7 @@ Initializing Library File Routines...
 
 
 1 Molecules Processed
-Total elapsed time:	0.020 seconds
-Number of molecules per second:	49.332
-Virtual memory used for this process: 85724 kilobytes
-Physical memory used for this process: 6676 kilobytes
+Total elapsed time:	0.003 seconds
+Number of molecules per second:	374.367
+Virtual memory used for this process: 89136 kilobytes
+Physical memory used for this process: 3716 kilobytes

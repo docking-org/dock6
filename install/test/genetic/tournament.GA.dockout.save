@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.12
+DOCK v6.13
 
-Released September 2024
+Released July 2025
 Copyright UCSF
 --------------------------------------
 
@@ -32,6 +32,10 @@ ga_mutate_addition                                           yes
 ga_mutate_deletion                                           yes
 ga_mutate_substitution                                       yes
 ga_mutate_replacement                                        yes
+ga_add_rate                                                  25
+ga_del_rate                                                  25
+ga_sub_rate                                                  25
+ga_rep_rate                                                  25
 ga_mutate_parents                                            yes
 ga_pmut_rate                                                 0.3
 ga_omut_rate                                                 0.7
@@ -42,7 +46,9 @@ ga_max_root_size                                             5
 ga_energy_cutoff                                             100
 ga_heur_unmatched_num                                        1
 ga_heur_matched_rmsd                                         2.0
-ga_constraint_mol_wt                                         500
+ga_mol_wt_cutoff_type                                        hard
+ga_constraint_upper_mol_wt                                   500.0
+ga_constraint_lower_mol_wt                                   0
 ga_constraint_rot_bon                                        10
 ga_constraint_H_accept                                       10
 ga_constraint_H_don                                          5
@@ -121,6 +127,7 @@ Descriptor Score Parameters
 ------------------------------------------------------------------------------------------
 descriptor_score_primary                                     yes
 descriptor_use_grid_score                                    yes
+descriptor_use_grid_lig_efficiency                           no
 descriptor_use_pharmacophore_score                           no
 descriptor_use_tanimoto                                      no
 descriptor_use_hungarian                                     no
@@ -302,58 +309,81 @@ Final Offspring Ensemble Size: 13
 #### Parent Ensemble Size: 12
 
 Gen 1: Mutation Attempt 1: Mutating Molecule #4
-Random number - mutation_type (mutation_selection): 1
-Trying mutation type: addition
+Random number - mutation_type (mutation_selection): 2
+Trying mutation type: substitution
 Segment Type for Mutation: linkers
 Random number - index_seg (mutation_selection): 0
 Atoms of segment for mutation: C16,C17,H15,C18,H16,C19,C20,H17,C21,H18
-Calling Mutation Function: Addition
-H is being turned into a Du: H17
+Calling Mutation Function: Substitution
 
-DN random number: 167
+-----------------------------------
+#### Number of attempted layers of DN growth 1 1
 
-De novo fragment selection: sid.309
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
+DN random number: 196
 
-DN random number: 185
-
-De novo fragment selection: sid.336
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 69
-
-De novo fragment selection: sid.142
+De novo fragment selection: sid.350
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
 Checking single torenv...
 Did not pass single torenv check.
 
-DN random number: 156
+DN random number: 359
 
-De novo fragment selection: sid.297
+De novo fragment selection: lnk.376
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 361
+
+De novo fragment selection: lnk.378
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 265
+
+De novo fragment selection: lnk.108
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 276
+
+De novo fragment selection: lnk.130
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 246
+
+De novo fragment selection: lnk.65
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 260
+
+De novo fragment selection: lnk.97
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 213
+
+De novo fragment selection: sid.373
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Did not pass single torenv check.
+
+DN random number: 34
+
+De novo fragment selection: sid.68
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Did not pass single torenv check.
+
+DN random number: 268
+
+De novo fragment selection: lnk.112
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 46
+
+De novo fragment selection: sid.88
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
@@ -361,518 +391,18 @@ Checking single torenv...
 Passed single torenv check.
 Checking multi torenv...
 Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 79
-
-De novo fragment selection: sid.158
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 24
-
-De novo fragment selection: sid.50
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 216
-
-De novo fragment selection: sid.380
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
 Molecules prior to clustering: 6
 Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
+Molecules retained: 6
 
-DN random number: 83
+DN random number: 284
 
-De novo fragment selection: sid.163
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
+De novo fragment selection: lnk.146
+Do not want to sample anything with more than 1 attachment point.
 
-DN random number: 93
+DN random number: 94
 
-De novo fragment selection: sid.180
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 106
-
-De novo fragment selection: sid.216
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-Sorting molecules made after denovo
-
-Molecules made after denovo: 0
-
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 2: Mutating Molecule #3
-Random number - mutation_type (mutation_selection): 1
-Trying mutation type: addition
-Segment Type for Mutation: sidechains
-Atoms of segment for mutation: O1,H3
-Calling Mutation Function: Addition
-H is being turned into a Du: H3
-
-DN random number: 158
-
-De novo fragment selection: sid.299
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 96
-
-De novo fragment selection: sid.183
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 6
-
-De novo fragment selection: sid.22
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Molecules prior to clustering: 3
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 3
-
-DN random number: 181
-
-De novo fragment selection: sid.330
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 93
-
-De novo fragment selection: sid.180
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 156
-
-De novo fragment selection: sid.297
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 12
-
-De novo fragment selection: sid.30
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 49
-
-De novo fragment selection: sid.100
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 174
-
-De novo fragment selection: sid.321
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 208
-
-De novo fragment selection: sid.367
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-Sorting molecules made after denovo
-
-Molecules made after denovo: 3
-
-Number of molecules in next_layer: 3
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 3
-Number of molecules after Hungarian RMSD pruning: 1
-Number of molecules being sent to GA: 1
-
-0 compounds exceeded MW cutoff of 500
-0 compounds exceeded the rot bond cutoff of 10
-0 compounds exceeded the HA acceptor # of 10
-0 compounds exceeded the HB donor # of 5
-0 compounds exceeded the formal charge of 2.1
-0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 3: Mutating Molecule #10
-Random number - mutation_type (mutation_selection): 0
-Trying mutation type: deletion
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C16,C17,H15,C18,H16,C19,C20,H17,C21,H18
-Calling Mutation Function: Deletion
-
-0 compounds exceeded MW cutoff of 500
-0 compounds exceeded the rot bond cutoff of 10
-0 compounds exceeded the HA acceptor # of 10
-0 compounds exceeded the HB donor # of 5
-0 compounds exceeded the formal charge of 2.1
-0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 4: Mutating Molecule #6
-Random number - mutation_type (mutation_selection): 0
-Trying mutation type: deletion
-Segment Type for Mutation: sidechains
-Atoms of segment for mutation: O2,H13
-Calling Mutation Function: Deletion
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 5: Mutating Molecule #4
-Random number - mutation_type (mutation_selection): 3
-Trying mutation type: replacement
-Segment Type for Mutation: scaffolds
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C8,C9,C10,H4,C11,C12,H5,C13,H6
-Calling Mutation Function: Replacement
-Selecting frag: scf.209
-Deleted frag from vector because no ring
-Selecting frag: scf.206
-Deleted frag because of distance cutoff
-Selecting frag: scf.70
-Deleted frag from vector because no ring
-Selecting frag: scf.29
-Deleted fragment because its too similar to chosen segment
-Selecting frag: scf.167
-Deleted fragment because its too similar to chosen segment
-Selecting frag: scf.335
-Deleted frag because of distance cutoff
-Selecting frag: scf.289
-Deleted frag because of distance cutoff
-Selecting frag: scf.234
-Deleted frag because of distance cutoff
-Selecting frag: scf.9
-Deleted frag from vector because no ring
-Selecting frag: scf.198
-Deleted fragment because its too similar to chosen segment
-Number with invalid torenv 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 6: Mutating Molecule #2
-Random number - mutation_type (mutation_selection): 3
-Trying mutation type: replacement
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 2
-Atoms of segment for mutation: C23,H19,H20
-Calling Mutation Function: Replacement
-Selecting frag: lnk.1
-Deleted fragment because not matching bondtypes
-Selecting frag: lnk.293
-Deleted frag from vector because it has a ring
-Selecting frag: lnk.205
-Deleted frag from vector because it has a ring
-Selecting frag: lnk.21
-Deleted fragment because not matching bondtypes
-Selecting frag: lnk.254
-Deleted frag from vector because it has a ring
-Selecting frag: lnk.238
-Deleted frag from vector because it has a ring
-Selecting frag: lnk.291
-Deleted frag from vector because it has a ring
-Selecting frag: lnk.223
-Deleted frag from vector because it has a ring
-Selecting frag: lnk.378
-Deleted frag from vector because it has a ring
-Selecting frag: lnk.285
-Deleted frag from vector because it has a ring
-Number with invalid torenv 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 7: Mutating Molecule #6
-Random number - mutation_type (mutation_selection): 1
-Trying mutation type: addition
-there are only sidechains
-Segment Type for Mutation: sidechains
-Atoms of segment for mutation: C1,H1,C2,C3,C4,H2,H3,H4,C5,H5,C6,C7,H6,Cl1
-Calling Mutation Function: Addition
-H is being turned into a Du: H3
-
-DN random number: 121
-
-De novo fragment selection: sid.242
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 3
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 1
-
-DN random number: 125
-
-De novo fragment selection: sid.247
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 6
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 209
-
-De novo fragment selection: sid.369
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 6
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 1
-
-DN random number: 211
-
-De novo fragment selection: sid.371
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff.
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 6
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 2
-
-DN random number: 93
-
-De novo fragment selection: sid.180
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 6
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 83
-
-De novo fragment selection: sid.163
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 6
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 3
-
-DN random number: 118
-
-De novo fragment selection: sid.237
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 3
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 19
-
-De novo fragment selection: sid.41
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 3
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 1
-
-DN random number: 65
-
-De novo fragment selection: sid.133
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Molecules prior to clustering: 3
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 2
-
-DN random number: 158
-
-De novo fragment selection: sid.299
+De novo fragment selection: sid.181
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
@@ -885,30 +415,368 @@ Did not pass internal energy cutoff
 Molecules prior to clustering: 6
 Entering clustering of post-min torsions by RMSD
 Molecules retained: 4
+
+DN random number: 362
+
+De novo fragment selection: lnk.381
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 305
+
+De novo fragment selection: lnk.199
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 71
+
+De novo fragment selection: sid.145
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff.
+Did not pass internal energy cutoff.
+Molecules prior to clustering: 3
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 1
+
+DN random number: 189
+
+De novo fragment selection: sid.342
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff.
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Molecules prior to clustering: 6
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 1
+
+DN random number: 299
+
+De novo fragment selection: lnk.190
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 220
+
+De novo fragment selection: lnk.5
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 225
+
+De novo fragment selection: lnk.13
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 26
+
+De novo fragment selection: sid.52
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff.
+Did not pass internal energy cutoff.
+Did not pass internal energy cutoff.
+Molecules prior to clustering: 6
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 1
+
+DN random number: 138
+
+De novo fragment selection: sid.271
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff.
+Did not pass internal energy cutoff
+Molecules prior to clustering: 6
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 4
+
+DN random number: 223
+
+De novo fragment selection: lnk.11
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 305
+
+De novo fragment selection: lnk.199
+Tried this fragment before.
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 359
+
+De novo fragment selection: lnk.376
+Tried this fragment before.
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 144
+
+De novo fragment selection: sid.277
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff.
+Molecules prior to clustering: 6
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 4
 Sorting molecules made after denovo
 
-Molecules made after denovo: 14
+Molecules made after denovo: 21
 
 Number of molecules in next_layer: 10
 Sorting denovo molecules based on score.
 Entering Hungarian RMSD heuristic pruning.
 Number of molecules before Hungarian RMSD pruning: 10
-Number of molecules after Hungarian RMSD pruning: 7
-Number of molecules being sent to GA: 7
+Number of molecules after Hungarian RMSD pruning: 5
+Number of molecules being sent to GA: 5
 
-0 compounds exceeded MW cutoff of 500
+0 compounds exceeded MW cutoff of 0 - 500
 0 compounds exceeded the rot bond cutoff of 10
 0 compounds exceeded the HA acceptor # of 10
 0 compounds exceeded the HB donor # of 5
 0 compounds exceeded the formal charge of 2.1
 0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
-For this generation, parent mutations: 3
-Expected number of parent mutations: 3 size 3 mut cycle 0
-Successful parent deletions:        1 / 2
-Successful parent additions:        2 / 3
-Successful parent substitutions:    0 / 0
-Successful parent replacements:     0 / 2
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 2: Mutating Molecule #3
+Random number - mutation_type (mutation_selection): 0
+Trying mutation type: deletion
+Segment Type for Mutation: sidechains
+Atoms of segment for mutation: O2,H21
+Calling Mutation Function: Deletion
+
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 3: Mutating Molecule #1
+Random number - mutation_type (mutation_selection): 2
+Trying mutation type: substitution
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C19,H24,H25
+Calling Mutation Function: Substitution
+#### Number of attempted layers of DN growth 1 1
+
+DN random number: 144
+
+De novo fragment selection: sid.277
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff.
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 1
+
+DN random number: 1
+
+De novo fragment selection: sid.4
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Molecules prior to clustering: 3
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 3
+
+DN random number: 334
+
+De novo fragment selection: lnk.270
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 51
+
+De novo fragment selection: sid.104
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Did not pass single torenv check.
+
+DN random number: 68
+
+De novo fragment selection: sid.140
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff.
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 1
+
+DN random number: 72
+
+De novo fragment selection: sid.147
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Molecules prior to clustering: 3
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 3
+
+DN random number: 100
+
+De novo fragment selection: sid.192
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 2
+
+DN random number: 278
+
+De novo fragment selection: lnk.134
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 28
+
+De novo fragment selection: sid.54
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Molecules prior to clustering: 3
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 3
+
+DN random number: 327
+
+De novo fragment selection: lnk.254
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 286
+
+De novo fragment selection: lnk.151
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 259
+
+De novo fragment selection: lnk.96
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 173
+
+De novo fragment selection: sid.319
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff.
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 1
+
+DN random number: 261
+
+De novo fragment selection: lnk.101
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 55
+
+De novo fragment selection: sid.115
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 2
+
+DN random number: 34
+
+De novo fragment selection: sid.68
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Molecules prior to clustering: 3
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 3
+Sorting molecules made after denovo
+
+Molecules made after denovo: 19
+
+Number of molecules in next_layer: 10
+Sorting denovo molecules based on score.
+Entering Hungarian RMSD heuristic pruning.
+Number of molecules before Hungarian RMSD pruning: 10
+Number of molecules after Hungarian RMSD pruning: 6
+Number of molecules being sent to GA: 6
+
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+For this generation, parents' mutations: 3
+Expected number of parent mutations: 12, mut cycles 0
+Successful parent deletions:        1 / 1
+Successful parent additions:        0 / 0
+Successful parent substitutions:    2 / 2
+Successful parent replacements:     0 / 0
 Initial Ensemble Size: 3
 Number pruned for poor score: 0
 Number pruned for poor internal energy: 0
@@ -923,547 +791,47 @@ Final Offspring Ensemble Size: 3
 #### Entering Random Offspring mutations ####
 Offspring Ensemble Size: 13
 
-Gen 1: Mutation Attempt 1: Mutating Molecule #1
-Random number - mutation_type (mutation_selection): 1
-Trying mutation type: addition
-Segment Type for Mutation: sidechains
-Atoms of segment for mutation: O3,H16
-Calling Mutation Function: Addition
-H is being turned into a Du: H16
-
-DN random number: 49
-
-De novo fragment selection: sid.100
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 173
-
-De novo fragment selection: sid.319
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 86
-
-De novo fragment selection: sid.168
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 3
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 154
-
-De novo fragment selection: sid.295
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 194
-
-De novo fragment selection: sid.348
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 33
-
-De novo fragment selection: sid.67
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 193
-
-De novo fragment selection: sid.347
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 3
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 186
-
-De novo fragment selection: sid.337
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 3
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 88
-
-De novo fragment selection: sid.171
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 154
-
-De novo fragment selection: sid.295
-Tried this fragment before.
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-Sorting molecules made after denovo
-
-Molecules made after denovo: 0
-
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 2: Mutating Molecule #2
-Random number - mutation_type (mutation_selection): 1
-Trying mutation type: addition
-Segment Type for Mutation: sidechains
-Atoms of segment for mutation: O2,H4
-Calling Mutation Function: Addition
-H is being turned into a Du: H4
-
-DN random number: 52
-
-De novo fragment selection: sid.106
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 196
-
-De novo fragment selection: sid.350
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 127
-
-De novo fragment selection: sid.251
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 26
-
-De novo fragment selection: sid.52
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 149
-
-De novo fragment selection: sid.284
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 3
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 125
-
-De novo fragment selection: sid.247
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 128
-
-De novo fragment selection: sid.252
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 3
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 67
-
-De novo fragment selection: sid.138
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 132
-
-De novo fragment selection: sid.260
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 12
-
-De novo fragment selection: sid.30
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-Sorting molecules made after denovo
-
-Molecules made after denovo: 0
-
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 3: Mutating Molecule #9
-Random number - mutation_type (mutation_selection): 1
-Trying mutation type: addition
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C8,C9,H3,C10,H4,C11,C12,C13,H5,F1
-Calling Mutation Function: Addition
-H is being turned into a Du: H5
-
-DN random number: 148
-
-De novo fragment selection: sid.282
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 13
-
-De novo fragment selection: sid.31
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 127
-
-De novo fragment selection: sid.251
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 3
-
-De novo fragment selection: sid.8
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 2
-
-DN random number: 41
-
-De novo fragment selection: sid.81
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 107
-
-De novo fragment selection: sid.218
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 64
-
-De novo fragment selection: sid.131
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 62
-
-De novo fragment selection: sid.126
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Did not pass bond order compatibility check.
-
-DN random number: 181
-
-De novo fragment selection: sid.330
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 43
-
-De novo fragment selection: sid.85
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-Sorting molecules made after denovo
-
-Molecules made after denovo: 2
-
-Number of molecules in next_layer: 2
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 2
-Number of molecules after Hungarian RMSD pruning: 1
-Number of molecules being sent to GA: 1
-
-0 compounds exceeded MW cutoff of 500
-0 compounds exceeded the rot bond cutoff of 10
-0 compounds exceeded the HA acceptor # of 10
-0 compounds exceeded the HB donor # of 5
-0 compounds exceeded the formal charge of 2.1
-0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 4: Mutating Molecule #1
-Random number - mutation_type (mutation_selection): 0
-Trying mutation type: deletion
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C8,C9,H3,C10,H4,C11,C12,C13,H5,F1
-Calling Mutation Function: Deletion
-
-0 compounds exceeded MW cutoff of 500
-0 compounds exceeded the rot bond cutoff of 10
-0 compounds exceeded the HA acceptor # of 10
-0 compounds exceeded the HB donor # of 5
-0 compounds exceeded the formal charge of 2.1
-0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 5: Mutating Molecule #10
+Gen 1: Mutation Attempt 1: Mutating Molecule #2
 Random number - mutation_type (mutation_selection): 3
 Trying mutation type: replacement
-Segment Type for Mutation: scaffolds
+Segment Type for Mutation: linkers
 Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C1,H1,C2,C3,C4,C5,H2,C6,O1,C7,C8,H3
+Atoms of segment for mutation: C8,C9,H3,C10,H4,C11,C12,C13,H5,F1
 Calling Mutation Function: Replacement
-Selecting frag: scf.335
+Selecting frag: lnk.265
 Deleted frag because of distance cutoff
-Selecting frag: scf.194
-Deleted frag from vector because no ring
-Selecting frag: scf.221
+Selecting frag: lnk.354
+Deleted fragment because its too similar to chosen segment
+Selecting frag: lnk.326
+Deleted frag because of distance cutoff
+Selecting frag: lnk.20
+Deleted frag because of distance cutoff
+Selecting frag: lnk.94
+Deleted frag because of distance cutoff
+Selecting frag: lnk.62
 Deleted fragment because not matching bondtypes
-Selecting frag: scf.206
+Selecting frag: lnk.129
+Deleted fragment because its too similar to chosen segment
+Selecting frag: lnk.116
 Deleted frag because of distance cutoff
-Selecting frag: scf.99
+Selecting frag: lnk.293
 Deleted frag because of distance cutoff
-Selecting frag: scf.234
-Deleted frag because of distance cutoff
-Selecting frag: scf.74
-Deleted frag from vector because no ring
-Selecting frag: scf.258
-Deleted frag because of distance cutoff
-Selecting frag: scf.70
-Deleted frag from vector because no ring
-Selecting frag: scf.29
+Selecting frag: lnk.340
 Deleted frag because of distance cutoff
 Number with invalid torenv 0
-Offspring size: 0, only single best scoring offspring retained
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
 
-Gen 1: Mutation Attempt 6: Mutating Molecule #0
-Random number - mutation_type (mutation_selection): 0
-Trying mutation type: deletion
-Segment Type for Mutation: scaffolds
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C7
-Calling Mutation Function: Deletion
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 7: Mutating Molecule #8
-Random number - mutation_type (mutation_selection): 1
-Trying mutation type: addition
+Gen 1: Mutation Attempt 2: Mutating Molecule #8
+Random number - mutation_type (mutation_selection): 2
+Trying mutation type: substitution
 Segment Type for Mutation: sidechains
-Atoms of segment for mutation: C14,H8,C15,H9,H10
-Calling Mutation Function: Addition
-H is being turned into a Du: H9
+Atoms of segment for mutation: O1,H12
+Calling Mutation Function: Substitution
+#### Number of attempted layers of DN growth 1 1
 
-DN random number: 170
+DN random number: 103
 
-De novo fragment selection: sid.315
+De novo fragment selection: sid.210
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
@@ -1477,9 +845,47 @@ Molecules prior to clustering: 2
 Entering clustering of post-min torsions by RMSD
 Molecules retained: 0
 
-DN random number: 31
+DN random number: 321
 
-De novo fragment selection: sid.59
+De novo fragment selection: lnk.235
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 276
+
+De novo fragment selection: lnk.130
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 47
+
+De novo fragment selection: sid.92
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Did not pass single torenv check.
+
+DN random number: 319
+
+De novo fragment selection: lnk.232
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 61
+
+De novo fragment selection: sid.125
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Did not pass single torenv check.
+
+DN random number: 278
+
+De novo fragment selection: lnk.134
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 130
+
+De novo fragment selection: sid.256
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
@@ -1509,9 +915,66 @@ Molecules prior to clustering: 2
 Entering clustering of post-min torsions by RMSD
 Molecules retained: 0
 
-DN random number: 190
+DN random number: 252
 
-De novo fragment selection: sid.343
+De novo fragment selection: lnk.83
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 343
+
+De novo fragment selection: lnk.312
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 280
+
+De novo fragment selection: lnk.137
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 16
+
+De novo fragment selection: sid.35
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Did not pass single torenv check.
+
+DN random number: 13
+
+De novo fragment selection: sid.31
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Did not pass single torenv check.
+
+DN random number: 345
+
+De novo fragment selection: lnk.318
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 41
+
+De novo fragment selection: sid.81
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Did not pass single torenv check.
+
+DN random number: 238
+
+De novo fragment selection: lnk.45
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 359
+
+De novo fragment selection: lnk.376
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 147
+
+De novo fragment selection: sid.281
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
@@ -1524,6 +987,348 @@ Did not pass internal energy cutoff
 Molecules prior to clustering: 2
 Entering clustering of post-min torsions by RMSD
 Molecules retained: 0
+
+DN random number: 196
+
+De novo fragment selection: sid.350
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Molecules prior to clustering: 6
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 6
+Sorting molecules made after denovo
+
+Molecules made after denovo: 6
+
+Number of molecules in next_layer: 6
+Sorting denovo molecules based on score.
+Entering Hungarian RMSD heuristic pruning.
+Number of molecules before Hungarian RMSD pruning: 6
+Number of molecules after Hungarian RMSD pruning: 1
+Number of molecules being sent to GA: 1
+
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 3: Mutating Molecule #11
+Random number - mutation_type (mutation_selection): 0
+Trying mutation type: deletion
+Segment Type for Mutation: scaffolds
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C1,H1,C2,C3,C4,C5,H2,C6,O1,C7,C8,H3
+Calling Mutation Function: Deletion
+
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 4: Mutating Molecule #2
+Random number - mutation_type (mutation_selection): 2
+Trying mutation type: substitution
+Segment Type for Mutation: scaffolds
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C1,H1,C2,C3,C4,C5,H2,C6,O1,C7,C8,H3
+Calling Mutation Function: Substitution
+#### Number of attempted layers of DN growth 1 1
+
+DN random number: 254
+
+De novo fragment selection: lnk.90
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 286
+
+De novo fragment selection: lnk.151
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 139
+
+De novo fragment selection: sid.272
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Molecules prior to clustering: 3
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 3
+
+DN random number: 273
+
+De novo fragment selection: lnk.124
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 175
+
+De novo fragment selection: sid.322
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 2
+
+DN random number: 214
+
+De novo fragment selection: sid.374
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Did not pass single torenv check.
+
+DN random number: 183
+
+De novo fragment selection: sid.332
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Molecules prior to clustering: 3
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 3
+
+DN random number: 223
+
+De novo fragment selection: lnk.11
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 221
+
+De novo fragment selection: lnk.6
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 229
+
+De novo fragment selection: lnk.18
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 325
+
+De novo fragment selection: lnk.248
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 62
+
+De novo fragment selection: sid.126
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Did not pass bond order compatibility check.
+
+DN random number: 178
+
+De novo fragment selection: sid.327
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Did not pass single torenv check.
+
+DN random number: 101
+
+De novo fragment selection: sid.201
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Did not pass single torenv check.
+
+DN random number: 283
+
+De novo fragment selection: lnk.143
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 115
+
+De novo fragment selection: sid.230
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 2
+
+DN random number: 291
+
+De novo fragment selection: lnk.169
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 141
+
+De novo fragment selection: sid.274
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Did not pass single torenv check.
+
+DN random number: 65
+
+De novo fragment selection: sid.133
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Did not pass single torenv check.
+Sorting molecules made after denovo
+
+Molecules made after denovo: 10
+
+Number of molecules in next_layer: 10
+Sorting denovo molecules based on score.
+Entering Hungarian RMSD heuristic pruning.
+Number of molecules before Hungarian RMSD pruning: 10
+Number of molecules after Hungarian RMSD pruning: 7
+Number of molecules being sent to GA: 7
+
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 5: Mutating Molecule #0
+Random number - mutation_type (mutation_selection): 2
+Trying mutation type: substitution
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 3
+Atoms of segment for mutation: C10,C11,H12,C12,H13,C13,H14,C14,H15,C15
+Calling Mutation Function: Substitution
+
+-----------------------------------
+#### Number of attempted layers of DN growth 1 1
+
+DN random number: 29
+
+De novo fragment selection: sid.55
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Did not pass multi torenv check.
+
+DN random number: 344
+
+De novo fragment selection: lnk.314
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 237
+
+De novo fragment selection: lnk.44
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 222
+
+De novo fragment selection: lnk.10
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 99
+
+De novo fragment selection: sid.188
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff.
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 1
+
+DN random number: 331
+
+De novo fragment selection: lnk.264
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 108
+
+De novo fragment selection: sid.219
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 1
+
+DN random number: 16
+
+De novo fragment selection: sid.35
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Did not pass single torenv check.
+
+DN random number: 204
+
+De novo fragment selection: sid.360
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Did not pass multi torenv check.
+
+DN random number: 40
+
+De novo fragment selection: sid.77
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Did not pass bond order compatibility check.
+
+DN random number: 41
+
+De novo fragment selection: sid.81
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 1
 
 DN random number: 78
 
@@ -1541,9 +1346,25 @@ Molecules prior to clustering: 2
 Entering clustering of post-min torsions by RMSD
 Molecules retained: 0
 
-DN random number: 171
+DN random number: 117
 
-De novo fragment selection: sid.316
+De novo fragment selection: sid.236
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff.
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 0
+
+DN random number: 206
+
+De novo fragment selection: sid.364
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
@@ -1556,6 +1377,67 @@ Did not pass internal energy cutoff
 Molecules prior to clustering: 2
 Entering clustering of post-min torsions by RMSD
 Molecules retained: 0
+Sorting molecules made after denovo
+
+Molecules made after denovo: 3
+
+Number of molecules in next_layer: 3
+Sorting denovo molecules based on score.
+Entering Hungarian RMSD heuristic pruning.
+Number of molecules before Hungarian RMSD pruning: 3
+Number of molecules after Hungarian RMSD pruning: 3
+Number of molecules being sent to GA: 3
+
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 6: Mutating Molecule #1
+Random number - mutation_type (mutation_selection): 1
+Trying mutation type: addition
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 1
+Atoms of segment for mutation: C1,C2,H1,C3,C4,C5,H2,C6,H3,C7,C8,C9,O2,Br1
+Calling Mutation Function: Addition
+H is being turned into a Du: H3
+
+DN random number: 51
+
+De novo fragment selection: sid.104
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 0
+
+DN random number: 137
+
+De novo fragment selection: sid.269
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Did not pass single torenv check.
+
+DN random number: 127
+
+De novo fragment selection: sid.251
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Did not pass single torenv check.
 
 DN random number: 32
 
@@ -1564,126 +1446,16 @@ Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
 Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
+Did not pass single torenv check.
 
-DN random number: 184
+DN random number: 61
 
-De novo fragment selection: sid.333
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Did not pass bond order compatibility check.
-
-DN random number: 110
-
-De novo fragment selection: sid.222
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 143
-
-De novo fragment selection: sid.276
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Did not pass bond order compatibility check.
-Sorting molecules made after denovo
-
-Molecules made after denovo: 0
-
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 8: Mutating Molecule #4
-Random number - mutation_type (mutation_selection): 3
-Trying mutation type: replacement
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C7,C8,H6,H7,H8,C9,H9,H10,H11
-Calling Mutation Function: Replacement
-Selecting frag: lnk.63
-Deleted frag from vector because it has a ring
-Selecting frag: lnk.79
-Deleted frag from vector because it has a ring
-Selecting frag: lnk.248
-Deleted frag from vector because it has a ring
-Selecting frag: lnk.191
-Deleted frag from vector because it has a ring
-Selecting frag: lnk.208
-Deleted frag from vector because it has a ring
-Selecting frag: lnk.16
-Deleted frag from vector because it has a ring
-Selecting frag: lnk.326
-Deleted frag from vector because it has a ring
-Selecting frag: lnk.57
-Deleted frag from vector because it has a ring
-Selecting frag: lnk.173
-Deleted frag from vector because it has a ring
-Selecting frag: lnk.205
-Deleted frag from vector because it has a ring
-Number with invalid torenv 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 9: Mutating Molecule #5
-Random number - mutation_type (mutation_selection): 3
-Trying mutation type: replacement
-Segment Type for Mutation: sidechains
- Changed mutation type from replacement to substitution
-Atoms of segment for mutation: O2,H9
-Calling Mutation Function: Substitution
-
-DN random number: 274
-
-De novo fragment selection: lnk.127
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 177
-
-De novo fragment selection: sid.325
+De novo fragment selection: sid.125
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
 Checking single torenv...
 Did not pass single torenv check.
-
-DN random number: 112
-
-De novo fragment selection: sid.226
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 6
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
 
 DN random number: 214
 
@@ -1701,71 +1473,9 @@ Molecules prior to clustering: 2
 Entering clustering of post-min torsions by RMSD
 Molecules retained: 0
 
-DN random number: 8
+DN random number: 77
 
-De novo fragment selection: sid.24
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 286
-
-De novo fragment selection: lnk.151
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 20
-
-De novo fragment selection: sid.43
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 226
-
-De novo fragment selection: lnk.15
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 106
-
-De novo fragment selection: sid.216
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 1
-
-DN random number: 268
-
-De novo fragment selection: lnk.112
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 26
-
-De novo fragment selection: sid.52
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 328
-
-De novo fragment selection: lnk.255
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 70
-
-De novo fragment selection: sid.144
+De novo fragment selection: sid.155
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
@@ -1779,23 +1489,41 @@ Molecules prior to clustering: 2
 Entering clustering of post-min torsions by RMSD
 Molecules retained: 0
 
-DN random number: 272
+DN random number: 154
 
-De novo fragment selection: lnk.122
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 140
-
-De novo fragment selection: sid.273
+De novo fragment selection: sid.295
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
 Checking single torenv...
-Did not pass single torenv check.
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 0
 
-DN random number: 202
+DN random number: 141
 
-De novo fragment selection: sid.358
+De novo fragment selection: sid.274
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 0
+
+DN random number: 149
+
+De novo fragment selection: sid.284
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
@@ -1814,63 +1542,26 @@ Entering clustering of post-min torsions by RMSD
 Molecules retained: 0
 Sorting molecules made after denovo
 
-Molecules made after denovo: 1
+Molecules made after denovo: 0
 
-Number of molecules in next_layer: 1
+Number of molecules in next_layer: 0
 Sorting denovo molecules based on score.
 Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 1
-Number of molecules after Hungarian RMSD pruning: 1
-Number of molecules being sent to GA: 1
+Number of molecules before Hungarian RMSD pruning: 0
+Number of molecules after Hungarian RMSD pruning: 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
 
-0 compounds exceeded MW cutoff of 500
-0 compounds exceeded the rot bond cutoff of 10
-0 compounds exceeded the HA acceptor # of 10
-0 compounds exceeded the HB donor # of 5
-0 compounds exceeded the formal charge of 2.1
-0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 10: Mutating Molecule #1
-Random number - mutation_type (mutation_selection): 3
-Trying mutation type: replacement
+Gen 1: Mutation Attempt 7: Mutating Molecule #8
+Random number - mutation_type (mutation_selection): 1
+Trying mutation type: addition
 Segment Type for Mutation: sidechains
- Changed mutation type from replacement to substitution
-Atoms of segment for mutation: O1,H2
-Calling Mutation Function: Substitution
+Atoms of segment for mutation: O3,H9
+Calling Mutation Function: Addition
+H is being turned into a Du: H9
 
-DN random number: 182
+DN random number: 28
 
-De novo fragment selection: sid.331
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 359
-
-De novo fragment selection: lnk.376
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 226
-
-De novo fragment selection: lnk.15
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 307
-
-De novo fragment selection: lnk.203
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 259
-
-De novo fragment selection: lnk.96
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 207
-
-De novo fragment selection: sid.366
+De novo fragment selection: sid.54
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
@@ -1881,39 +1572,13 @@ Passed multi torenv check
 Did not pass internal energy cutoff
 Did not pass internal energy cutoff
 Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 6
+Molecules prior to clustering: 3
 Entering clustering of post-min torsions by RMSD
 Molecules retained: 0
 
-DN random number: 23
+DN random number: 162
 
-De novo fragment selection: sid.48
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 357
-
-De novo fragment selection: lnk.368
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 94
-
-De novo fragment selection: sid.181
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 208
-
-De novo fragment selection: sid.367
+De novo fragment selection: sid.303
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
@@ -1927,170 +1592,14 @@ Molecules prior to clustering: 2
 Entering clustering of post-min torsions by RMSD
 Molecules retained: 0
 
-DN random number: 6
+DN random number: 137
 
-De novo fragment selection: sid.22
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Molecules prior to clustering: 6
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 5
-
-DN random number: 117
-
-De novo fragment selection: sid.236
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 355
-
-De novo fragment selection: lnk.363
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 34
-
-De novo fragment selection: sid.68
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 6
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 115
-
-De novo fragment selection: sid.230
+De novo fragment selection: sid.269
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
 Checking single torenv...
 Did not pass single torenv check.
-
-DN random number: 257
-
-De novo fragment selection: lnk.94
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 115
-
-De novo fragment selection: sid.230
-Tried this fragment before.
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-Sorting molecules made after denovo
-
-Molecules made after denovo: 5
-
-Number of molecules in next_layer: 5
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 5
-Number of molecules after Hungarian RMSD pruning: 1
-Number of molecules being sent to GA: 1
-
-0 compounds exceeded MW cutoff of 500
-0 compounds exceeded the rot bond cutoff of 10
-0 compounds exceeded the HA acceptor # of 10
-0 compounds exceeded the HB donor # of 5
-0 compounds exceeded the formal charge of 2.1
-0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 11: Mutating Molecule #2
-Random number - mutation_type (mutation_selection): 3
-Trying mutation type: replacement
-Segment Type for Mutation: sidechains
- Changed mutation type from replacement to substitution
-Atoms of segment for mutation: C14,H8,C15,H9,H10
-Calling Mutation Function: Substitution
-
-DN random number: 340
-
-De novo fragment selection: lnk.293
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 275
-
-De novo fragment selection: lnk.129
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 206
-
-De novo fragment selection: sid.364
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 168
-
-De novo fragment selection: sid.310
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 125
-
-De novo fragment selection: sid.247
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 116
-
-De novo fragment selection: sid.231
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 1
-
-DN random number: 165
-
-De novo fragment selection: sid.306
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Did not pass bond order compatibility check.
 
 DN random number: 134
 
@@ -2108,9 +1617,9 @@ Molecules prior to clustering: 2
 Entering clustering of post-min torsions by RMSD
 Molecules retained: 0
 
-DN random number: 156
+DN random number: 170
 
-De novo fragment selection: sid.297
+De novo fragment selection: sid.315
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
@@ -2118,13 +1627,15 @@ Checking single torenv...
 Passed single torenv check.
 Checking multi torenv...
 Passed multi torenv check
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
 Molecules prior to clustering: 2
 Entering clustering of post-min torsions by RMSD
-Molecules retained: 2
+Molecules retained: 0
 
-DN random number: 132
+DN random number: 146
 
-De novo fragment selection: sid.260
+De novo fragment selection: sid.280
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
@@ -2132,72 +1643,130 @@ Checking single torenv...
 Passed single torenv check.
 Checking multi torenv...
 Passed multi torenv check
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
 Molecules prior to clustering: 2
 Entering clustering of post-min torsions by RMSD
-Molecules retained: 2
+Molecules retained: 0
 
-DN random number: 325
+DN random number: 87
 
-De novo fragment selection: lnk.248
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 139
-
-De novo fragment selection: sid.272
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 6
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 3
-
-DN random number: 240
-
-De novo fragment selection: lnk.56
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 12
-
-De novo fragment selection: sid.30
+De novo fragment selection: sid.170
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
 Checking single torenv...
 Did not pass single torenv check.
+
+DN random number: 186
+
+De novo fragment selection: sid.337
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Molecules prior to clustering: 3
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 0
+
+DN random number: 22
+
+De novo fragment selection: sid.47
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Molecules prior to clustering: 3
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 0
+
+DN random number: 135
+
+De novo fragment selection: sid.267
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 0
 Sorting molecules made after denovo
 
-Molecules made after denovo: 8
+Molecules made after denovo: 0
 
-Number of molecules in next_layer: 8
+Number of molecules in next_layer: 0
 Sorting denovo molecules based on score.
 Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 8
-Number of molecules after Hungarian RMSD pruning: 5
-Number of molecules being sent to GA: 5
+Number of molecules before Hungarian RMSD pruning: 0
+Number of molecules after Hungarian RMSD pruning: 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
 
-0 compounds exceeded MW cutoff of 500
-0 compounds exceeded the rot bond cutoff of 10
-0 compounds exceeded the HA acceptor # of 10
-0 compounds exceeded the HB donor # of 5
-0 compounds exceeded the formal charge of 2.1
-0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 12: Mutating Molecule #1
-Random number - mutation_type (mutation_selection): 1
-Trying mutation type: addition
+Gen 1: Mutation Attempt 8: Mutating Molecule #2
+Random number - mutation_type (mutation_selection): 2
+Trying mutation type: substitution
 Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C8,C9,H3,C10,H4,C11,C12,C13,H5,F1
-Calling Mutation Function: Addition
-H is being turned into a Du: H5
+Random number - index_seg (mutation_selection): 1
+Atoms of segment for mutation: C7,C8,H6,C9,C10,O2,C11,H7,C12,C13,H8,C14,C15,N1
+Calling Mutation Function: Substitution
+#### Number of attempted layers of DN growth 1 1
+
+DN random number: 300
+
+De novo fragment selection: lnk.191
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 306
+
+De novo fragment selection: lnk.200
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 169
+
+De novo fragment selection: sid.313
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Did not pass bond order compatibility check.
+
+DN random number: 361
+
+De novo fragment selection: lnk.378
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 340
+
+De novo fragment selection: lnk.293
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 57
+
+De novo fragment selection: sid.119
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Molecules prior to clustering: 3
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 3
 
 DN random number: 150
 
@@ -2206,9 +1775,318 @@ Number of attachment points of frag: 1
 Checking bond order compatibility...
 Did not pass bond order compatibility check.
 
-DN random number: 27
+DN random number: 159
 
-De novo fragment selection: sid.53
+De novo fragment selection: sid.300
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 2
+
+DN random number: 188
+
+De novo fragment selection: sid.341
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 2
+
+DN random number: 339
+
+De novo fragment selection: lnk.292
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 35
+
+De novo fragment selection: sid.69
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Did not pass single torenv check.
+
+DN random number: 124
+
+De novo fragment selection: sid.246
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 2
+
+DN random number: 308
+
+De novo fragment selection: lnk.204
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 301
+
+De novo fragment selection: lnk.193
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 113
+
+De novo fragment selection: sid.227
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Molecules prior to clustering: 3
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 3
+
+DN random number: 362
+
+De novo fragment selection: lnk.381
+Do not want to sample anything with more than 1 attachment point.
+
+DN random number: 79
+
+De novo fragment selection: sid.158
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 2
+
+DN random number: 103
+
+De novo fragment selection: sid.210
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Molecules prior to clustering: 6
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 6
+Sorting molecules made after denovo
+
+Molecules made after denovo: 20
+
+Number of molecules in next_layer: 10
+Sorting denovo molecules based on score.
+Entering Hungarian RMSD heuristic pruning.
+Number of molecules before Hungarian RMSD pruning: 10
+Number of molecules after Hungarian RMSD pruning: 7
+Number of molecules being sent to GA: 7
+
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 9: Mutating Molecule #6
+Random number - mutation_type (mutation_selection): 3
+Trying mutation type: replacement
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C7,C8,H6,H7,H8,C9,H9,H10,H11
+Calling Mutation Function: Replacement
+Selecting frag: lnk.224
+Deleted frag from vector because it has a ring
+Selecting frag: lnk.157
+Deleted frag from vector because it has a ring
+Selecting frag: lnk.169
+Deleted frag from vector because it has a ring
+Selecting frag: lnk.124
+Number of molecules prior to replace_scaffold: 2
+
+#### rplcmnt mols generated ###
+Num of reg     mols: 1
+Num of isoswap mols: 0
+Reg  +  isoswap    :1
+Invalid torenv
+At this point, accumulated number of mutants after replacement: 0
+###############################
+Selecting frag: lnk.153
+Deleted frag from vector because it has a ring
+Selecting frag: lnk.165
+Deleted frag from vector because it has a ring
+Selecting frag: lnk.151
+Deleted frag from vector because it has a ring
+Selecting frag: lnk.326
+Deleted frag from vector because it has a ring
+Selecting frag: lnk.193
+Deleted frag from vector because it has a ring
+Selecting frag: lnk.266
+Deleted frag from vector because it has a ring
+Number with invalid torenv 1
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 10: Mutating Molecule #1
+Random number - mutation_type (mutation_selection): 1
+Trying mutation type: addition
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C8,C9,H3,C10,H4,C11,C12,C13,H5,F1
+Calling Mutation Function: Addition
+H is being turned into a Du: H3
+
+DN random number: 105
+
+De novo fragment selection: sid.215
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Molecules prior to clustering: 6
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 0
+
+DN random number: 159
+
+De novo fragment selection: sid.300
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 2
+
+DN random number: 63
+
+De novo fragment selection: sid.128
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 0
+
+DN random number: 197
+
+De novo fragment selection: sid.351
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 0
+
+DN random number: 199
+
+De novo fragment selection: sid.355
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 1
+
+DN random number: 148
+
+De novo fragment selection: sid.282
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 0
+
+DN random number: 79
+
+De novo fragment selection: sid.158
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Did not pass single torenv check.
+
+DN random number: 164
+
+De novo fragment selection: sid.305
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 0
+
+DN random number: 69
+
+De novo fragment selection: sid.142
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Did not pass single torenv check.
+
+DN random number: 112
+
+De novo fragment selection: sid.226
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
@@ -2225,398 +2103,6 @@ Did not pass internal energy cutoff
 Molecules prior to clustering: 6
 Entering clustering of post-min torsions by RMSD
 Molecules retained: 0
-
-DN random number: 177
-
-De novo fragment selection: sid.325
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 55
-
-De novo fragment selection: sid.115
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 168
-
-De novo fragment selection: sid.310
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 146
-
-De novo fragment selection: sid.280
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 185
-
-De novo fragment selection: sid.336
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 150
-
-De novo fragment selection: sid.287
-Tried this fragment before.
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Did not pass bond order compatibility check.
-
-DN random number: 152
-
-De novo fragment selection: sid.290
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 36
-
-De novo fragment selection: sid.71
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-Sorting molecules made after denovo
-
-Molecules made after denovo: 0
-
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 13: Mutating Molecule #1
-Random number - mutation_type (mutation_selection): 2
-Trying mutation type: substitution
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 1
-Atoms of segment for mutation: C1,H1,C2,C3,H2,C4,C5,H3,C9,H7,H8,C10,H9,H10,C11,H11,C12,H13,C13,O2,C14,H14,C18,H17,H18
-Calling Mutation Function: Substitution
-
-DN random number: 216
-
-De novo fragment selection: sid.380
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Molecules prior to clustering: 6
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 5
-
-DN random number: 137
-
-De novo fragment selection: sid.269
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 128
-
-De novo fragment selection: sid.252
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Molecules prior to clustering: 6
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 6
-
-DN random number: 303
-
-De novo fragment selection: lnk.196
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 229
-
-De novo fragment selection: lnk.18
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 346
-
-De novo fragment selection: lnk.320
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 90
-
-De novo fragment selection: sid.176
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Molecules prior to clustering: 6
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 6
-
-DN random number: 191
-
-De novo fragment selection: sid.344
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 297
-
-De novo fragment selection: lnk.187
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 70
-
-De novo fragment selection: sid.144
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 2
-
-DN random number: 325
-
-De novo fragment selection: lnk.248
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 31
-
-De novo fragment selection: sid.59
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 327
-
-De novo fragment selection: lnk.254
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 224
-
-De novo fragment selection: lnk.12
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 341
-
-De novo fragment selection: lnk.307
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 63
-
-De novo fragment selection: sid.128
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 2
-
-DN random number: 213
-
-De novo fragment selection: sid.373
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 1
-
-De novo fragment selection: sid.4
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 2
-Sorting molecules made after denovo
-
-Molecules made after denovo: 23
-
-Number of molecules in next_layer: 10
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 10
-Number of molecules after Hungarian RMSD pruning: 3
-Number of molecules being sent to GA: 3
-
-0 compounds exceeded MW cutoff of 500
-0 compounds exceeded the rot bond cutoff of 10
-0 compounds exceeded the HA acceptor # of 10
-0 compounds exceeded the HB donor # of 5
-0 compounds exceeded the formal charge of 2.1
-0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 14: Mutating Molecule #0
-Random number - mutation_type (mutation_selection): 2
-Trying mutation type: substitution
-Segment Type for Mutation: linkers
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C8,C9,H3,C10,H4,C11,C12,C13,H5,F1
-Calling Mutation Function: Substitution
-
-DN random number: 64
-
-De novo fragment selection: sid.131
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 54
-
-De novo fragment selection: sid.114
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Did not pass bond order compatibility check.
-
-DN random number: 165
-
-De novo fragment selection: sid.306
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Did not pass bond order compatibility check.
-
-DN random number: 172
-
-De novo fragment selection: sid.317
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 2
-
-DN random number: 169
-
-De novo fragment selection: sid.313
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Did not pass bond order compatibility check.
-
-DN random number: 106
-
-De novo fragment selection: sid.216
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 216
-
-De novo fragment selection: sid.380
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 3
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 1
-
-DN random number: 318
-
-De novo fragment selection: lnk.228
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 273
-
-De novo fragment selection: lnk.124
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 328
-
-De novo fragment selection: lnk.255
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 39
-
-De novo fragment selection: sid.75
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Did not pass bond order compatibility check.
-
-DN random number: 35
-
-De novo fragment selection: sid.69
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 16
-
-De novo fragment selection: sid.35
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
 Sorting molecules made after denovo
 
 Molecules made after denovo: 3
@@ -2628,26 +2114,56 @@ Number of molecules before Hungarian RMSD pruning: 3
 Number of molecules after Hungarian RMSD pruning: 2
 Number of molecules being sent to GA: 2
 
-0 compounds exceeded MW cutoff of 500
+0 compounds exceeded MW cutoff of 0 - 500
 0 compounds exceeded the rot bond cutoff of 10
 0 compounds exceeded the HA acceptor # of 10
 0 compounds exceeded the HB donor # of 5
 0 compounds exceeded the formal charge of 2.1
 0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
 
-Gen 1: Mutation Attempt 15: Mutating Molecule #3
+Gen 1: Mutation Attempt 11: Mutating Molecule #3
+Random number - mutation_type (mutation_selection): 3
+Trying mutation type: replacement
+Segment Type for Mutation: linkers
+Random number - index_seg (mutation_selection): 0
+Atoms of segment for mutation: C1,H1,C2,H2,C3,C4,C5,H3,C6,O1,C7,C8,H4
+Calling Mutation Function: Replacement
+Selecting frag: lnk.250
+Deleted frag because of distance cutoff
+Selecting frag: lnk.102
+Deleted frag because of distance cutoff
+Selecting frag: lnk.5
+Deleted frag from vector because no ring
+Selecting frag: lnk.129
+Deleted frag because of distance cutoff
+Selecting frag: lnk.378
+Deleted frag because of distance cutoff
+Selecting frag: lnk.254
+Deleted frag because of distance cutoff
+Selecting frag: lnk.235
+Deleted fragment because not matching bondtypes
+Selecting frag: lnk.10
+Deleted frag because of distance cutoff
+Selecting frag: lnk.12
+Deleted frag from vector because no ring
+Selecting frag: lnk.17
+Deleted frag from vector because no ring
+Number with invalid torenv 0
+Finished Mutations: Created 0 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 12: Mutating Molecule #5
 Random number - mutation_type (mutation_selection): 1
 Trying mutation type: addition
 Segment Type for Mutation: linkers
 Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C6,H4,C7,H5,C8,H6,C15,C16,H15,C17
+Atoms of segment for mutation: C7,C8,H6,H7,H8,C9,H9,H10,H11
 Calling Mutation Function: Addition
-H is being turned into a Du: H15
+H is being turned into a Du: H11
 
-DN random number: 123
+DN random number: 45
 
-De novo fragment selection: sid.245
+De novo fragment selection: sid.87
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
@@ -2655,19 +2171,94 @@ Checking single torenv...
 Passed single torenv check.
 Checking multi torenv...
 Passed multi torenv check
+Did not pass internal energy cutoff.
+Did not pass internal energy cutoff.
+Did not pass internal energy cutoff.
 Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
+Molecules prior to clustering: 6
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 2
+
+DN random number: 20
+
+De novo fragment selection: sid.43
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Did not pass multi torenv check.
+
+DN random number: 27
+
+De novo fragment selection: sid.53
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Did not pass multi torenv check.
+
+DN random number: 86
+
+De novo fragment selection: sid.168
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Did not pass multi torenv check.
+
+DN random number: 25
+
+De novo fragment selection: sid.51
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff.
+Did not pass internal energy cutoff.
+Did not pass internal energy cutoff.
+Molecules prior to clustering: 6
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 3
+
+DN random number: 73
+
+De novo fragment selection: sid.148
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Did not pass multi torenv check.
+
+DN random number: 195
+
+De novo fragment selection: sid.349
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
 Did not pass internal energy cutoff
 Did not pass internal energy cutoff
 Molecules prior to clustering: 6
 Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
+Molecules retained: 4
 
-DN random number: 70
+DN random number: 14
 
-De novo fragment selection: sid.144
+De novo fragment selection: sid.32
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
@@ -2675,62 +2266,13 @@ Checking single torenv...
 Passed single torenv check.
 Checking multi torenv...
 Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
-
-DN random number: 13
-
-De novo fragment selection: sid.31
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 81
-
-De novo fragment selection: sid.161
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 122
-
-De novo fragment selection: sid.243
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 193
-
-De novo fragment selection: sid.347
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
 Molecules prior to clustering: 6
 Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
+Molecules retained: 6
 
-DN random number: 199
+DN random number: 171
 
-De novo fragment selection: sid.355
+De novo fragment selection: sid.316
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
@@ -2739,42 +2281,43 @@ Passed single torenv check.
 Checking multi torenv...
 Passed multi torenv check
 Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
+Did not pass internal energy cutoff.
+Molecules prior to clustering: 6
 Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
+Molecules retained: 4
 
-DN random number: 101
+DN random number: 131
 
-De novo fragment selection: sid.201
+De novo fragment selection: sid.259
 Number of attachment points of frag: 1
 Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
+Did not pass bond order compatibility check.
+Sorting molecules made after denovo
 
-DN random number: 144
+Molecules made after denovo: 19
 
-De novo fragment selection: sid.277
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Did not pass internal energy cutoff
-Did not pass internal energy cutoff
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 0
+Number of molecules in next_layer: 10
+Sorting denovo molecules based on score.
+Entering Hungarian RMSD heuristic pruning.
+Number of molecules before Hungarian RMSD pruning: 10
+Number of molecules after Hungarian RMSD pruning: 3
+Number of molecules being sent to GA: 3
+
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 13: Mutating Molecule #1
+Random number - mutation_type (mutation_selection): 1
+Trying mutation type: addition
+Segment Type for Mutation: sidechains
+Atoms of segment for mutation: C5,C6,H4,C7,H5,C8,H6,C9,H7,C10,H8
+Calling Mutation Function: Addition
+H is being turned into a Du: H6
 
 DN random number: 98
 
@@ -2795,214 +2338,10 @@ Did not pass internal energy cutoff
 Molecules prior to clustering: 6
 Entering clustering of post-min torsions by RMSD
 Molecules retained: 0
-Sorting molecules made after denovo
 
-Molecules made after denovo: 0
+DN random number: 187
 
-Number of molecules in next_layer: 0
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 0
-Number of molecules after Hungarian RMSD pruning: 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 16: Mutating Molecule #2
-Random number - mutation_type (mutation_selection): 1
-Trying mutation type: addition
-Segment Type for Mutation: sidechains
-Atoms of segment for mutation: C25,O1,O2
-Calling Mutation Function: Addition
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 17: Mutating Molecule #4
-Random number - mutation_type (mutation_selection): 3
-Trying mutation type: replacement
-Segment Type for Mutation: scaffolds
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C1,H1,C2,C3,C4,C5,H2,C6,O1,C7,N1
-Calling Mutation Function: Replacement
-Selecting frag: scf.78
-Deleted frag from vector because no ring
-Selecting frag: scf.335
-Deleted frag because of distance cutoff
-Selecting frag: scf.167
-Deleted frag because of distance cutoff
-Selecting frag: scf.99
-Deleted frag because of distance cutoff
-Selecting frag: scf.29
-Deleted frag because of distance cutoff
-Selecting frag: scf.74
-Deleted frag from vector because no ring
-Selecting frag: scf.9
-Deleted frag from vector because no ring
-Selecting frag: scf.289
-Deleted frag because of distance cutoff
-Selecting frag: scf.221
-Deleted fragment because not matching bondtypes
-Selecting frag: scf.194
-Deleted frag from vector because no ring
-Number with invalid torenv 0
-Offspring size: 0, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 18: Mutating Molecule #5
-Random number - mutation_type (mutation_selection): 2
-Trying mutation type: substitution
-Segment Type for Mutation: scaffolds
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C1,H1,C2,C3,C4,C5,H2,C6,O1,C7,N1
-Calling Mutation Function: Substitution
-
-DN random number: 249
-
-De novo fragment selection: lnk.79
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 186
-
-De novo fragment selection: sid.337
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Molecules prior to clustering: 6
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 6
-
-DN random number: 29
-
-De novo fragment selection: sid.55
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Molecules prior to clustering: 6
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 6
-
-DN random number: 269
-
-De novo fragment selection: lnk.113
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 214
-
-De novo fragment selection: sid.374
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 2
-
-DN random number: 219
-
-De novo fragment selection: lnk.2
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 145
-
-De novo fragment selection: sid.278
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Molecules prior to clustering: 6
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 6
-
-DN random number: 314
-
-De novo fragment selection: lnk.214
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 219
-
-De novo fragment selection: lnk.2
-Tried this fragment before.
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 148
-
-De novo fragment selection: sid.282
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 2
-
-DN random number: 225
-
-De novo fragment selection: lnk.13
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 179
-
-De novo fragment selection: sid.328
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 2
-
-DN random number: 356
-
-De novo fragment selection: lnk.365
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 198
-
-De novo fragment selection: sid.352
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 2
-
-DN random number: 76
-
-De novo fragment selection: sid.154
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 2
-
-DN random number: 185
-
-De novo fragment selection: sid.336
+De novo fragment selection: sid.338
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
@@ -3011,137 +2350,10 @@ Passed single torenv check.
 Checking multi torenv...
 Passed multi torenv check
 Did not pass internal energy cutoff
+Did not pass internal energy cutoff
 Molecules prior to clustering: 2
 Entering clustering of post-min torsions by RMSD
-Molecules retained: 1
-
-DN random number: 347
-
-De novo fragment selection: lnk.326
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 245
-
-De novo fragment selection: lnk.64
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 291
-
-De novo fragment selection: lnk.169
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 19
-
-De novo fragment selection: sid.41
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Molecules prior to clustering: 6
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 6
-Sorting molecules made after denovo
-
-Molecules made after denovo: 35
-
-Number of molecules in next_layer: 10
-Sorting denovo molecules based on score.
-Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 10
-Number of molecules after Hungarian RMSD pruning: 4
-Number of molecules being sent to GA: 4
-
-0 compounds exceeded MW cutoff of 500
-0 compounds exceeded the rot bond cutoff of 10
-0 compounds exceeded the HA acceptor # of 10
-0 compounds exceeded the HB donor # of 5
-0 compounds exceeded the formal charge of 2.1
-0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
-
-Gen 1: Mutation Attempt 19: Mutating Molecule #4
-Random number - mutation_type (mutation_selection): 2
-Trying mutation type: substitution
-Segment Type for Mutation: scaffolds
-Random number - index_seg (mutation_selection): 0
-Atoms of segment for mutation: C7
-Calling Mutation Function: Substitution
-
-DN random number: 225
-
-De novo fragment selection: lnk.13
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 358
-
-De novo fragment selection: lnk.375
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 57
-
-De novo fragment selection: sid.119
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Molecules prior to clustering: 6
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 6
-
-DN random number: 142
-
-De novo fragment selection: sid.275
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 2
-
-DN random number: 160
-
-De novo fragment selection: sid.301
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Did not pass bond order compatibility check.
-
-DN random number: 178
-
-De novo fragment selection: sid.327
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Did not pass single torenv check.
-
-DN random number: 228
-
-De novo fragment selection: lnk.17
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 116
-
-De novo fragment selection: sid.231
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 2
+Molecules retained: 0
 
 DN random number: 95
 
@@ -3152,104 +2364,152 @@ Passed bond order compatibility check.
 Checking single torenv...
 Did not pass single torenv check.
 
-DN random number: 289
+DN random number: 138
 
-De novo fragment selection: lnk.159
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 4
-
-De novo fragment selection: sid.14
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Molecules prior to clustering: 6
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 6
-
-DN random number: 3
-
-De novo fragment selection: sid.8
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 2
-
-DN random number: 310
-
-De novo fragment selection: lnk.207
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 101
-
-De novo fragment selection: sid.201
-Number of attachment points of frag: 1
-Checking bond order compatibility...
-Passed bond order compatibility check.
-Checking single torenv...
-Passed single torenv check.
-Checking multi torenv...
-Passed multi torenv check
-Molecules prior to clustering: 2
-Entering clustering of post-min torsions by RMSD
-Molecules retained: 2
-
-DN random number: 348
-
-De novo fragment selection: lnk.334
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 274
-
-De novo fragment selection: lnk.127
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 349
-
-De novo fragment selection: lnk.339
-Do not want to sample anything with more than 1 attachment point.
-
-DN random number: 16
-
-De novo fragment selection: sid.35
+De novo fragment selection: sid.271
 Number of attachment points of frag: 1
 Checking bond order compatibility...
 Passed bond order compatibility check.
 Checking single torenv...
 Did not pass single torenv check.
+
+DN random number: 73
+
+De novo fragment selection: sid.148
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Molecules prior to clustering: 6
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 0
+
+DN random number: 105
+
+De novo fragment selection: sid.215
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Molecules prior to clustering: 6
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 0
+
+DN random number: 138
+
+De novo fragment selection: sid.271
+Tried this fragment before.
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Did not pass single torenv check.
+
+DN random number: 37
+
+De novo fragment selection: sid.72
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 2
+
+DN random number: 197
+
+De novo fragment selection: sid.351
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Molecules prior to clustering: 2
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 0
+
+DN random number: 216
+
+De novo fragment selection: sid.380
+Number of attachment points of frag: 1
+Checking bond order compatibility...
+Passed bond order compatibility check.
+Checking single torenv...
+Passed single torenv check.
+Checking multi torenv...
+Passed multi torenv check
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Did not pass internal energy cutoff
+Molecules prior to clustering: 6
+Entering clustering of post-min torsions by RMSD
+Molecules retained: 0
 Sorting molecules made after denovo
 
-Molecules made after denovo: 20
+Molecules made after denovo: 2
 
-Number of molecules in next_layer: 10
+Number of molecules in next_layer: 2
 Sorting denovo molecules based on score.
 Entering Hungarian RMSD heuristic pruning.
-Number of molecules before Hungarian RMSD pruning: 10
-Number of molecules after Hungarian RMSD pruning: 4
-Number of molecules being sent to GA: 4
+Number of molecules before Hungarian RMSD pruning: 2
+Number of molecules after Hungarian RMSD pruning: 1
+Number of molecules being sent to GA: 1
 
-0 compounds exceeded MW cutoff of 500
+0 compounds exceeded MW cutoff of 0 - 500
 0 compounds exceeded the rot bond cutoff of 10
 0 compounds exceeded the HA acceptor # of 10
 0 compounds exceeded the HB donor # of 5
 0 compounds exceeded the formal charge of 2.1
 0 compounds were removed 
-Offspring size: 1, only single best scoring offspring retained
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
+
+Gen 1: Mutation Attempt 14: Mutating Molecule #3
+Random number - mutation_type (mutation_selection): 0
+Trying mutation type: deletion
+Segment Type for Mutation: sidechains
+Atoms of segment for mutation: O3,H7
+Calling Mutation Function: Deletion
+
+0 compounds exceeded MW cutoff of 0 - 500
+0 compounds exceeded the rot bond cutoff of 10
+0 compounds exceeded the HA acceptor # of 10
+0 compounds exceeded the HB donor # of 5
+0 compounds exceeded the formal charge of 2.1
+0 compounds were removed 
+Finished Mutations: Created 1 offsprings, only single best scoring offspring retained
 For this generation, offspring mutations: 9
-Expected number of offspring mutations: 9 size 9 mut cycle 1
-Successful offspring deletions:     1 / 2
-Successful offspring additions:     1 / 7
-Successful offspring substitutions: 7 / 7
+Expected number of offspring mutations: 13 mut cycles 1
+Successful offspring deletions:     2 / 2
+Successful offspring additions:     3 / 5
+Successful offspring substitutions: 4 / 4
 Successful offspring replacements:  0 / 3
 Initial Ensemble Size: 9
 Number pruned for poor score: 0
@@ -3258,7 +2518,7 @@ Size after score/internal energy pruning: 9
 Number pruned for Hungarian similarity: 0
 Final Offspring Ensemble Size: 9
 
-0 compounds exceeded MW cutoff of 500
+0 compounds exceeded MW cutoff of 0 - 500
 0 compounds exceeded the rot bond cutoff of 10
 0 compounds exceeded the HA acceptor # of 10
 0 compounds exceeded the HB donor # of 5
@@ -3275,21 +2535,25 @@ Final Offspring Ensemble Size: 22
 
 -----------------------------------
 scoredgen, parents
-### Offspring_size_before_parents_pruning 22 offspring_size_after_pruning 21
+### Offspring_size_before_parents_pruning 22 offspring_size_after_pruning 22
 ### Parents size before P-O pruning 24 Parents size after pruning 24
 
 -----------------------------------
-Average Score offspring gen 1: -37.5625
+Average Score offspring gen 1: -36.9218
 #### Final parent size before selection: 24
-#### Final offspring size before selection: 24
+#### Final offspring size before selection: 25
 Selection Method: Tournament
-Average score survivors gen 1: -52.2657
+Average score survivors gen 1: -52.0403
 
 -----------------------------------
+Num successful additions: 3 out of 5
+Num successful deletions: 3 out of 3
+Num successful replacements: 0 out of 3
+Num successful substitutions: 6 out of 6
 
 
 0 Molecules Processed
-Total elapsed time:	19.261 seconds
+Total elapsed time:	12.588 seconds
 Number of molecules per second:	0.000
-Virtual memory used for this process: 117900 kilobytes
-Physical memory used for this process: 47068 kilobytes
+Virtual memory used for this process: 125012 kilobytes
+Physical memory used for this process: 40536 kilobytes

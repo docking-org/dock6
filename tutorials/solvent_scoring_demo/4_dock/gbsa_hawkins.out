@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.12
+DOCK v6.13
 
-Released September 2024
+Released July 2025
 Copyright UCSF
 --------------------------------------
 
@@ -124,7 +124,8 @@ Molecule Library Output Parameters
 ligand_outfile_prefix                                        gbsa_hawkins
 write_mol_solvation                                          no
 write_orientations                                           no
-num_scored_conformers                                        1
+num_final_scored_poses                                       1
+num_preclustered_conformers                                  1
 score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
@@ -140,7 +141,7 @@ Initializing Grid Score Routines...
 -----------------------------------
 Molecule: UNNAMED
 
- Elapsed time for docking:	2.603 seconds
+ Elapsed time for docking:	2.606 seconds
 
  Anchors:		1
  Orientations:		1
@@ -154,7 +155,7 @@ Molecule: UNNAMED
 
 
 1 Molecules Processed
-Total elapsed time:	5.955 seconds
-Number of molecules per second:	0.168
-Virtual memory used for this process: 273560 kilobytes
-Physical memory used for this process: 197420 kilobytes
+Total elapsed time:	6.455 seconds
+Number of molecules per second:	0.155
+Virtual memory used for this process: 273092 kilobytes
+Physical memory used for this process: 188692 kilobytes

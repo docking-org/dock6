@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.12
+DOCK v6.13
 
-Released September 2024
+Released July 2025
 Copyright UCSF
 --------------------------------------
 
@@ -129,7 +129,8 @@ Molecule Library Output Parameters
 ligand_outfile_prefix                                        grid_rigid
 write_mol_solvation                                          no
 write_orientations                                           no
-num_scored_conformers                                        1
+num_final_scored_poses                                       1
+num_preclustered_conformers                                  1
 score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
@@ -145,7 +146,7 @@ Initializing Grid Score Routines...
 -----------------------------------
 Molecule: ZINC00158442
 
- Elapsed time for docking:	1.771 seconds
+ Elapsed time for docking:	2.101 seconds
 
  Anchors:		1
  Orientations:		1000
@@ -159,7 +160,7 @@ Molecule: ZINC00158442
 -----------------------------------
 Molecule: ZINC00158751
 
- Elapsed time for docking:	0.500 seconds
+ Elapsed time for docking:	0.590 seconds
 
  Anchors:		1
  Orientations:		1000
@@ -173,7 +174,7 @@ Molecule: ZINC00158751
 -----------------------------------
 Molecule: ZINC00013564
 
- Elapsed time for docking:	0.722 seconds
+ Elapsed time for docking:	0.798 seconds
 
  Anchors:		1
  Orientations:		1000
@@ -187,7 +188,7 @@ Molecule: ZINC00013564
 -----------------------------------
 Molecule: ZINC01555236
 
- Elapsed time for docking:	1.739 seconds
+ Elapsed time for docking:	1.971 seconds
 
  Anchors:		1
  Orientations:		1000
@@ -201,7 +202,7 @@ Molecule: ZINC01555236
 -----------------------------------
 Molecule: ZINC00150863
 
- Elapsed time for docking:	0.536 seconds
+ Elapsed time for docking:	0.617 seconds
 
  Anchors:		1
  Orientations:		1000
@@ -215,7 +216,7 @@ Molecule: ZINC00150863
 -----------------------------------
 Molecule: ZINC00152265
 
- Elapsed time for docking:	0.654 seconds
+ Elapsed time for docking:	0.767 seconds
 
  Anchors:		1
  Orientations:		1000
@@ -229,7 +230,7 @@ Molecule: ZINC00152265
 -----------------------------------
 Molecule: ZINC00152280
 
- Elapsed time for docking:	1.100 seconds
+ Elapsed time for docking:	1.275 seconds
 
  Anchors:		1
  Orientations:		1000
@@ -243,7 +244,7 @@ Molecule: ZINC00152280
 -----------------------------------
 Molecule: ZINC00157111
 
- Elapsed time for docking:	0.708 seconds
+ Elapsed time for docking:	0.826 seconds
 
  Anchors:		1
  Orientations:		1000
@@ -257,7 +258,7 @@ Molecule: ZINC00157111
 -----------------------------------
 Molecule: ZINC00157152
 
- Elapsed time for docking:	0.633 seconds
+ Elapsed time for docking:	0.726 seconds
 
  Anchors:		1
  Orientations:		1000
@@ -271,7 +272,7 @@ Molecule: ZINC00157152
 -----------------------------------
 Molecule: ZINC00157402
 
- Elapsed time for docking:	0.676 seconds
+ Elapsed time for docking:	0.780 seconds
 
  Anchors:		1
  Orientations:		1000
@@ -285,7 +286,7 @@ Molecule: ZINC00157402
 -----------------------------------
 Molecule: ZINC00157467
 
- Elapsed time for docking:	0.652 seconds
+ Elapsed time for docking:	0.754 seconds
 
  Anchors:		1
  Orientations:		1000
@@ -299,7 +300,7 @@ Molecule: ZINC00157467
 -----------------------------------
 Molecule: ZINC00157960
 
- Elapsed time for docking:	1.337 seconds
+ Elapsed time for docking:	1.519 seconds
 
  Anchors:		1
  Orientations:		1000
@@ -312,7 +313,7 @@ Molecule: ZINC00157960
 
 
 12 Molecules Processed
-Total elapsed time:	11.035 seconds
-Number of molecules per second:	1.087
-Virtual memory used for this process: 86412 kilobytes
-Physical memory used for this process: 9052 kilobytes
+Total elapsed time:	12.733 seconds
+Number of molecules per second:	0.942
+Virtual memory used for this process: 90816 kilobytes
+Physical memory used for this process: 5884 kilobytes

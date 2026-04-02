@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.12
+DOCK v6.13
 
-Released September 2024
+Released July 2025
 Copyright UCSF
 --------------------------------------
 
@@ -116,7 +116,8 @@ Molecule Library Output Parameters
 ligand_outfile_prefix                                        output
 write_mol_solvation                                          no
 write_orientations                                           no
-num_scored_conformers                                        1
+num_final_scored_poses                                       1
+num_preclustered_conformers                                  1
 score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
@@ -126,7 +127,7 @@ Initializing Library File Routines...
 -----------------------------------
 Molecule: BXW
 
- Elapsed time for docking:	1.052 seconds
+ Elapsed time for docking:	0.903 seconds
 
  Anchors:		1
  Orientations:		1
@@ -140,7 +141,7 @@ Molecule: BXW
 -----------------------------------
 Molecule: CIQ
 
- Elapsed time for docking:	1.055 seconds
+ Elapsed time for docking:	0.917 seconds
 
  Anchors:		1
  Orientations:		1
@@ -153,7 +154,7 @@ Molecule: CIQ
 
 
 2 Molecules Processed
-Total elapsed time:	3.102 seconds
-Number of molecules per second:	0.645
-Virtual memory used for this process: 122940 kilobytes
-Physical memory used for this process: 37676 kilobytes
+Total elapsed time:	2.733 seconds
+Number of molecules per second:	0.732
+Virtual memory used for this process: 128004 kilobytes
+Physical memory used for this process: 48968 kilobytes
