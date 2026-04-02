@@ -1,0 +1,12 @@
+#!/bin/sh
+#set -vx
+
+# Rescore ligand using GBSA Zou scoring function
+echo "Performing rescoring using Zou GBSA."
+../../../bin/dock6 -i gbsa_zou.in  -o gbsa_zou.out
+
+# Rescore ligand using GBSA Hawkins scoring function
+echo "Performing rescoring using Hawkins GBSA."
+../../../bin/dock6 -i gbsa_hawkins.in -o gbsa_hawkins.out
+
+exit

@@ -1,0 +1,40 @@
+ ***From SCHEMGRID, Version 4.0 ***
+ __________________________________
+ receptor pdb file:
+rec.pdb                                           
+ receptor parameters will be read from:
+prot.table.ambcrg.ambH                            
+ van der Waals parameter file:
+vdw.parms.amb                                     
+ input box file defining grid location:
+box.pdb                                           
+box center coordinates [x y z]:
+ 22.48900     11.77800     59.51600    
+box x-dimension =  13.98400    
+box y-dimension =  11.09700    
+box z-dimension =  20.50300    
+ grid spacing in angstroms
+  0.5000000    
+ grid points per side [x y z]:
+          29          24          43
+ total number of grid points =        29928
+ spacing of spherical grid on each atom:
+  0.5000000    
+ probe radius:
+ 1.400000    
+ SA terms will be calculated
+ cutoff of inter-atom distance for SAS evaluation:
+   8.000000    
+ cutoff distance for overlap marking:
+   4.000000    
+ output grid prefix name:
+zou_grid                                          
+ ***elapsed time before grid computation:   8.7986000E-02
+ total # of R atoms in the box =          167
+ total # of R atoms in consideration =         1114
+ total SAS =    294.7500    
+ nonpolar SAS =    204.7500    
+ polar SAS =    90.00000    
+ nonpolar SAS + polar =    294.7500    
+ ***elapsed time on grid computation:   5.8991008E-02
+ ***total elapsed time:   0.1899710    

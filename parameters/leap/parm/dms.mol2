@@ -1,0 +1,30 @@
+@<TRIPOS>MOLECULE
+DMS  DIMETHYL SULFOXIDE.  C2 H6 O S. 
+   10     9     1     0     0
+SMALL
+bcc via mopac
+****
+From PDBeChem: antechamber -fi pdb -fo mol2 -i DMS.pdb -o dms.mol2 -c bcc
+@<TRIPOS>ATOM
+      1 S           0.1540   -0.3710    0.0000 s4        1 DMS      0.270100
+      2 O           1.3900    0.3310    0.0010 o         1 DMS     -0.506700
+      3 C1         -0.8640    0.1960    1.3890 c3        1 DMS     -0.130900
+      4 C2         -0.8620    0.1960   -1.3900 c3        1 DMS     -0.130900
+      5 H11        -0.3810   -0.0730    2.3280 h1        1 DMS      0.088800
+      6 H12        -0.9780    1.2790    1.3370 h1        1 DMS      0.086600
+      7 H13        -1.8450   -0.2750    1.3360 h1        1 DMS      0.073800
+      8 H21        -0.3780   -0.0720   -2.3280 h1        1 DMS      0.088800
+      9 H22        -1.8430   -0.2750   -1.3390 h1        1 DMS      0.073800
+     10 H23        -0.9770    1.2790   -1.3380 h1        1 DMS      0.086600
+@<TRIPOS>BOND
+     1    1    2 2   
+     2    1    3 1   
+     3    1    4 1   
+     4    3    5 1   
+     5    3    6 1   
+     6    3    7 1   
+     7    4    8 1   
+     8    4    9 1   
+     9    4   10 1   
+@<TRIPOS>SUBSTRUCTURE
+     1 DMS         1 TEMP              0 ****  ****    0 ROOT

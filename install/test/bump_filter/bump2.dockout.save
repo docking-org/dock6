@@ -1,0 +1,211 @@
+
+
+
+--------------------------------------
+DOCK v6.10
+
+Released January 2023
+Copyright UCSF
+--------------------------------------
+
+
+Conformational Sampling Parameters
+------------------------------------------------------------------------------------------
+conformer_search_type                                        flex
+write_fragment_libraries                                     no
+
+Anchor & Grow Parameters
+------------------------------------------------------------------------------------------
+user_specified_anchor                                        no
+limit_max_anchors                                            no
+min_anchor_size                                              40
+pruning_use_clustering                                       yes
+pruning_max_orients                                          10
+pruning_clustering_cutoff                                    10
+pruning_conformer_score_cutoff                               25.0
+pruning_conformer_score_scaling_factor                       1.0
+use_clash_overlap                                            no
+write_growth_tree                                            no
+
+Internal Energy Parameters
+------------------------------------------------------------------------------------------
+use_internal_energy                                          no
+
+Molecule Library Input Parameters
+------------------------------------------------------------------------------------------
+ligand_atom_file                                             multi_lig.mol2
+limit_max_ligands                                            no
+skip_molecule                                                no
+read_mol_solvation                                           no
+calculate_rmsd                                               no
+
+Database Filter Parameters
+------------------------------------------------------------------------------------------
+use_database_filter                                          no
+
+Orient Ligand Parameters
+------------------------------------------------------------------------------------------
+orient_ligand                                                yes
+automated_matching                                           yes
+receptor_site_file                                           struct.sph
+max_orientations                                             50
+critical_points                                              no
+chemical_matching                                            no
+use_ligand_spheres                                           no
+
+Bump Filter Parameters
+------------------------------------------------------------------------------------------
+bump_filter                                                  yes
+bump_grid_prefix                                             ../grid_generation/grid
+max_bumps_anchor                                             2
+max_bumps_growth                                             2
+
+Master Score Parameters
+------------------------------------------------------------------------------------------
+score_molecules                                              no
+
+Atom Typing Parameters
+------------------------------------------------------------------------------------------
+atom_model                                                   all
+vdw_defn_file                                                ../../../parameters/vdw_AMBER_parm99.defn
+flex_defn_file                                               ../../../parameters/flex.defn
+flex_drive_file                                              ../../../parameters/flex_drive.tbl
+
+Molecule Library Output Parameters
+------------------------------------------------------------------------------------------
+ligand_outfile_prefix                                        bump2
+write_orientations                                           no
+num_scored_conformers                                        1
+rank_ligands                                                 no
+------------------------------------------------------------------------------------------
+
+Initializing Conformer Generator Routines...
+Initializing Library File Routines...
+Initializing Orienting Routines...
+Initializing Bump Filter Routines...
+ Reading the bump grid from ../grid_generation/grid.bmp
+ Done reading the bump grid.
+
+-----------------------------------
+Molecule: ZINC00158442
+
+ Elapsed time for docking:	0.051 seconds
+
+ Anchors:		1
+ Orientations:		22
+ Conformations:		13
+
+
+-----------------------------------
+Molecule: ZINC00158751
+
+ Elapsed time for docking:	0.013 seconds
+
+ Anchors:		1
+ Orientations:		50
+ Conformations:		15
+
+
+-----------------------------------
+Molecule: ZINC00013564
+
+ Elapsed time for docking:	0.013 seconds
+
+ Anchors:		1
+ Orientations:		42
+ Conformations:		10
+
+
+-----------------------------------
+Molecule: ZINC01555236
+
+ Elapsed time for docking:	0.062 seconds
+
+ Anchors:		1
+ Orientations:		40
+ Conformations:		4
+
+
+-----------------------------------
+Molecule: ZINC00150863
+
+ Elapsed time for docking:	0.007 seconds
+
+ Anchors:		1
+ Orientations:		50
+ Conformations:		10
+
+
+-----------------------------------
+Molecule: ZINC00152265
+
+ Elapsed time for docking:	0.011 seconds
+
+ Anchors:		1
+ Orientations:		46
+ Conformations:		14
+
+
+-----------------------------------
+Molecule: ZINC00152280
+
+ Elapsed time for docking:	0.028 seconds
+
+ Anchors:		1
+ Orientations:		46
+ Conformations:		8
+
+
+-----------------------------------
+Molecule: ZINC00157111
+
+ Elapsed time for docking:	0.022 seconds
+
+ Anchors:		1
+ Orientations:		50
+ Conformations:		6
+
+
+-----------------------------------
+Molecule: ZINC00157152
+
+ Elapsed time for docking:	0.009 seconds
+
+ Anchors:		1
+ Orientations:		47
+ Conformations:		15
+
+
+-----------------------------------
+Molecule: ZINC00157402
+
+ Elapsed time for docking:	0.008 seconds
+
+ Anchors:		1
+ Orientations:		50
+ Conformations:		16
+
+
+-----------------------------------
+Molecule: ZINC00157467
+
+ Elapsed time for docking:	0.023 seconds
+
+ Anchors:		1
+ Orientations:		50
+ Conformations:		8
+
+
+-----------------------------------
+Molecule: ZINC00157960
+
+ Elapsed time for docking:	0.010 seconds
+
+ Anchors:		1
+ Orientations:		42
+ Conformations:		11
+
+
+
+12 Molecules Processed
+Total elapsed time:	0.279 seconds

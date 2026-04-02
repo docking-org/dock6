@@ -1,0 +1,997 @@
+
+
+
+--------------------------------------
+DOCK v6.10
+
+Released January 2023
+Copyright UCSF
+--------------------------------------
+
+
+Conformational Sampling Parameters
+------------------------------------------------------------------------------------------
+conformer_search_type                                        rigid
+
+Internal Energy Parameters
+------------------------------------------------------------------------------------------
+use_internal_energy                                          no
+
+Molecule Library Input Parameters
+------------------------------------------------------------------------------------------
+ligand_atom_file                                             volume_multi_ligand.mol2
+limit_max_ligands                                            no
+skip_molecule                                                no
+read_mol_solvation                                           no
+calculate_rmsd                                               no
+
+Database Filter Parameters
+------------------------------------------------------------------------------------------
+use_database_filter                                          no
+
+Orient Ligand Parameters
+------------------------------------------------------------------------------------------
+orient_ligand                                                no
+
+Bump Filter Parameters
+------------------------------------------------------------------------------------------
+bump_filter                                                  no
+
+Master Score Parameters
+------------------------------------------------------------------------------------------
+score_molecules                                              yes
+
+Contact Score Parameters
+------------------------------------------------------------------------------------------
+contact_score_primary                                        no
+
+Grid Score Parameters
+------------------------------------------------------------------------------------------
+grid_score_primary                                           no
+
+MultiGrid Score Parameters
+------------------------------------------------------------------------------------------
+multigrid_score_primary                                      no
+
+Dock3.5 Score Parameters
+------------------------------------------------------------------------------------------
+dock3.5_score_primary                                        no
+
+Continuous Energy Score Parameters
+------------------------------------------------------------------------------------------
+continuous_score_primary                                     no
+
+Footprint Similarity Score Parameters
+------------------------------------------------------------------------------------------
+footprint_similarity_score_primary                           no
+
+Pharmacophore Similarity Score Parameters
+------------------------------------------------------------------------------------------
+pharmacophore_score_primary                                  no
+
+Hbond Energy Score Parameters
+------------------------------------------------------------------------------------------
+hbond_score_primary                                          no
+
+Internal Energy Score Parameters
+------------------------------------------------------------------------------------------
+internal_energy_score_primary                                no
+
+Descriptor Score Parameters
+------------------------------------------------------------------------------------------
+descriptor_score_primary                                     yes
+descriptor_use_grid_score                                    no
+descriptor_use_multigrid_score                               no
+descriptor_use_continuous_score                              no
+descriptor_use_footprint_similarity                          no
+descriptor_use_pharmacophore_score                           no
+descriptor_use_tanimoto                                      no
+descriptor_use_hungarian                                     no
+descriptor_use_volume_overlap                                yes
+
+--- Descriptor Score Parameters: Volume Overlap Score ---
+descriptor_volume_score_reference_mol2_filename              volume_ligand.mol2
+descriptor_volume_score_overlap_compute_method               grid
+descriptor_volume_score_number_of_layers_in_one_dimension    30
+descriptor_volume_score_maximum_grid_point_separation        0.3
+descriptor_volume_score_write_points_cloud                   no
+
+--- Descriptor Score Weights ---
+descriptor_weight_volume_overlap_score                       1
+
+Using these settings, the Descriptor Score function takes the form:
+Descriptor_Score = (1 * Volume_Score)
+
+Zou GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+
+Hawkins GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+
+SASA Score Parameters
+------------------------------------------------------------------------------------------
+
+Amber Score Parameters
+------------------------------------------------------------------------------------------
+
+Simplex Minimization Parameters
+------------------------------------------------------------------------------------------
+minimize_ligand                                              no
+
+Atom Typing Parameters
+------------------------------------------------------------------------------------------
+atom_model                                                   all
+vdw_defn_file                                                ../../../parameters/vdw_AMBER_parm99.defn
+flex_defn_file                                               ../../../parameters/flex.defn
+flex_drive_file                                              ../../../parameters/flex_drive.tbl
+chem_defn_file                                               ../../../parameters/chem.defn
+
+Molecule Library Output Parameters
+------------------------------------------------------------------------------------------
+ligand_outfile_prefix                                        Des_VOS
+write_orientations                                           no
+num_scored_conformers                                        1
+rank_ligands                                                 no
+------------------------------------------------------------------------------------------
+Initializing Library File Routines...
+Initializing typer for Volume Overlap Score within Descriptor Score...
+ Volume reference mol2 file was read in successfully
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.061 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.654650
+               Property_Volume_Score:            0.654650
+               desc_VOS_geometric_vo:            0.716153
+                desc_VOS_hvy_atom_vo:            0.743602
+            desc_VOS_pos_chrg_atm_vo:            0.502594
+            desc_VOS_neg_chrg_atm_vo:            0.624242
+         desc_VOS_hydrophobic_atm_vo:            0.786273
+         desc_VOS_hydrophilic_atm_vo:            0.555036
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.053 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.300333
+               Property_Volume_Score:            0.300333
+               desc_VOS_geometric_vo:            0.477826
+                desc_VOS_hvy_atom_vo:            0.487486
+            desc_VOS_pos_chrg_atm_vo:            0.258998
+            desc_VOS_neg_chrg_atm_vo:            0.298919
+         desc_VOS_hydrophobic_atm_vo:            0.163601
+         desc_VOS_hydrophilic_atm_vo:            0.115167
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.044 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.248166
+               Property_Volume_Score:            0.248166
+               desc_VOS_geometric_vo:            0.364393
+                desc_VOS_hvy_atom_vo:            0.372742
+            desc_VOS_pos_chrg_atm_vo:            0.164306
+            desc_VOS_neg_chrg_atm_vo:            0.272486
+         desc_VOS_hydrophobic_atm_vo:            0.253280
+         desc_VOS_hydrophilic_atm_vo:            0.061791
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.040 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.264595
+               Property_Volume_Score:            0.264595
+               desc_VOS_geometric_vo:            0.406571
+                desc_VOS_hvy_atom_vo:            0.412120
+            desc_VOS_pos_chrg_atm_vo:            0.218078
+            desc_VOS_neg_chrg_atm_vo:            0.219294
+         desc_VOS_hydrophobic_atm_vo:            0.132328
+         desc_VOS_hydrophilic_atm_vo:            0.199176
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.034 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.275694
+               Property_Volume_Score:            0.275694
+               desc_VOS_geometric_vo:            0.429800
+                desc_VOS_hvy_atom_vo:            0.425846
+            desc_VOS_pos_chrg_atm_vo:            0.257385
+            desc_VOS_neg_chrg_atm_vo:            0.243184
+         desc_VOS_hydrophobic_atm_vo:            0.213574
+         desc_VOS_hydrophilic_atm_vo:            0.084376
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.036 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.210670
+               Property_Volume_Score:            0.210670
+               desc_VOS_geometric_vo:            0.342976
+                desc_VOS_hvy_atom_vo:            0.349127
+            desc_VOS_pos_chrg_atm_vo:            0.185628
+            desc_VOS_neg_chrg_atm_vo:            0.190966
+         desc_VOS_hydrophobic_atm_vo:            0.078864
+         desc_VOS_hydrophilic_atm_vo:            0.116457
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.040 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.207900
+               Property_Volume_Score:            0.207900
+               desc_VOS_geometric_vo:            0.332203
+                desc_VOS_hvy_atom_vo:            0.316106
+            desc_VOS_pos_chrg_atm_vo:            0.235526
+            desc_VOS_neg_chrg_atm_vo:            0.175084
+         desc_VOS_hydrophobic_atm_vo:            0.076172
+         desc_VOS_hydrophilic_atm_vo:            0.112311
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.039 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.215438
+               Property_Volume_Score:            0.215438
+               desc_VOS_geometric_vo:            0.318375
+                desc_VOS_hvy_atom_vo:            0.305783
+            desc_VOS_pos_chrg_atm_vo:            0.201676
+            desc_VOS_neg_chrg_atm_vo:            0.216814
+         desc_VOS_hydrophobic_atm_vo:            0.177786
+         desc_VOS_hydrophilic_atm_vo:            0.072196
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.032 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.277522
+               Property_Volume_Score:            0.277522
+               desc_VOS_geometric_vo:            0.463665
+                desc_VOS_hvy_atom_vo:            0.455576
+            desc_VOS_pos_chrg_atm_vo:            0.283737
+            desc_VOS_neg_chrg_atm_vo:            0.200158
+         desc_VOS_hydrophobic_atm_vo:            0.058325
+         desc_VOS_hydrophilic_atm_vo:            0.203671
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.035 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.279762
+               Property_Volume_Score:            0.279762
+               desc_VOS_geometric_vo:            0.438288
+                desc_VOS_hvy_atom_vo:            0.440193
+            desc_VOS_pos_chrg_atm_vo:            0.255515
+            desc_VOS_neg_chrg_atm_vo:            0.240089
+         desc_VOS_hydrophobic_atm_vo:            0.208265
+         desc_VOS_hydrophilic_atm_vo:            0.096221
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.028 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.264953
+               Property_Volume_Score:            0.264953
+               desc_VOS_geometric_vo:            0.387511
+                desc_VOS_hvy_atom_vo:            0.385746
+            desc_VOS_pos_chrg_atm_vo:            0.230959
+            desc_VOS_neg_chrg_atm_vo:            0.247022
+         desc_VOS_hydrophobic_atm_vo:            0.239061
+         desc_VOS_hydrophilic_atm_vo:            0.099422
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.037 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.230299
+               Property_Volume_Score:            0.230299
+               desc_VOS_geometric_vo:            0.353756
+                desc_VOS_hvy_atom_vo:            0.351785
+            desc_VOS_pos_chrg_atm_vo:            0.231688
+            desc_VOS_neg_chrg_atm_vo:            0.166475
+         desc_VOS_hydrophobic_atm_vo:            0.076224
+         desc_VOS_hydrophilic_atm_vo:            0.201868
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.036 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.256894
+               Property_Volume_Score:            0.256894
+               desc_VOS_geometric_vo:            0.430129
+                desc_VOS_hvy_atom_vo:            0.417918
+            desc_VOS_pos_chrg_atm_vo:            0.263282
+            desc_VOS_neg_chrg_atm_vo:            0.191817
+         desc_VOS_hydrophobic_atm_vo:            0.116779
+         desc_VOS_hydrophilic_atm_vo:            0.121441
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.041 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.235947
+               Property_Volume_Score:            0.235947
+               desc_VOS_geometric_vo:            0.374350
+                desc_VOS_hvy_atom_vo:            0.369984
+            desc_VOS_pos_chrg_atm_vo:            0.208415
+            desc_VOS_neg_chrg_atm_vo:            0.242597
+         desc_VOS_hydrophobic_atm_vo:            0.160025
+         desc_VOS_hydrophilic_atm_vo:            0.060315
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.050 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.159212
+               Property_Volume_Score:            0.159212
+               desc_VOS_geometric_vo:            0.235966
+                desc_VOS_hvy_atom_vo:            0.227251
+            desc_VOS_pos_chrg_atm_vo:            0.153612
+            desc_VOS_neg_chrg_atm_vo:            0.146175
+         desc_VOS_hydrophobic_atm_vo:            0.112892
+         desc_VOS_hydrophilic_atm_vo:            0.079379
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.034 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.214148
+               Property_Volume_Score:            0.214148
+               desc_VOS_geometric_vo:            0.349107
+                desc_VOS_hvy_atom_vo:            0.335471
+            desc_VOS_pos_chrg_atm_vo:            0.255388
+            desc_VOS_neg_chrg_atm_vo:            0.144936
+         desc_VOS_hydrophobic_atm_vo:            0.038648
+         desc_VOS_hydrophilic_atm_vo:            0.161341
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.045 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.147101
+               Property_Volume_Score:            0.147101
+               desc_VOS_geometric_vo:            0.242941
+                desc_VOS_hvy_atom_vo:            0.236836
+            desc_VOS_pos_chrg_atm_vo:            0.159923
+            desc_VOS_neg_chrg_atm_vo:            0.109048
+         desc_VOS_hydrophobic_atm_vo:            0.038549
+         desc_VOS_hydrophilic_atm_vo:            0.095308
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.038 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.197672
+               Property_Volume_Score:            0.197672
+               desc_VOS_geometric_vo:            0.302901
+                desc_VOS_hvy_atom_vo:            0.296867
+            desc_VOS_pos_chrg_atm_vo:            0.218033
+            desc_VOS_neg_chrg_atm_vo:            0.132806
+         desc_VOS_hydrophobic_atm_vo:            0.062420
+         desc_VOS_hydrophilic_atm_vo:            0.173005
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.046 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.154448
+               Property_Volume_Score:            0.154448
+               desc_VOS_geometric_vo:            0.205929
+                desc_VOS_hvy_atom_vo:            0.201226
+            desc_VOS_pos_chrg_atm_vo:            0.116332
+            desc_VOS_neg_chrg_atm_vo:            0.139658
+         desc_VOS_hydrophobic_atm_vo:            0.182468
+         desc_VOS_hydrophilic_atm_vo:            0.081072
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.046 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.186261
+               Property_Volume_Score:            0.186261
+               desc_VOS_geometric_vo:            0.290369
+                desc_VOS_hvy_atom_vo:            0.284606
+            desc_VOS_pos_chrg_atm_vo:            0.219384
+            desc_VOS_neg_chrg_atm_vo:            0.128660
+         desc_VOS_hydrophobic_atm_vo:            0.025192
+         desc_VOS_hydrophilic_atm_vo:            0.169357
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.041 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.186478
+               Property_Volume_Score:            0.186478
+               desc_VOS_geometric_vo:            0.306302
+                desc_VOS_hvy_atom_vo:            0.290489
+            desc_VOS_pos_chrg_atm_vo:            0.190761
+            desc_VOS_neg_chrg_atm_vo:            0.135943
+         desc_VOS_hydrophobic_atm_vo:            0.081589
+         desc_VOS_hydrophilic_atm_vo:            0.113780
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.035 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.188895
+               Property_Volume_Score:            0.188895
+               desc_VOS_geometric_vo:            0.302861
+                desc_VOS_hvy_atom_vo:            0.288926
+            desc_VOS_pos_chrg_atm_vo:            0.203592
+            desc_VOS_neg_chrg_atm_vo:            0.134014
+         desc_VOS_hydrophobic_atm_vo:            0.085471
+         desc_VOS_hydrophilic_atm_vo:            0.118506
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.041 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.209771
+               Property_Volume_Score:            0.209771
+               desc_VOS_geometric_vo:            0.346711
+                desc_VOS_hvy_atom_vo:            0.328461
+            desc_VOS_pos_chrg_atm_vo:            0.267946
+            desc_VOS_neg_chrg_atm_vo:            0.132747
+         desc_VOS_hydrophobic_atm_vo:            0.033060
+         desc_VOS_hydrophilic_atm_vo:            0.149703
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.053 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.112219
+               Property_Volume_Score:            0.112219
+               desc_VOS_geometric_vo:            0.132896
+                desc_VOS_hvy_atom_vo:            0.131029
+            desc_VOS_pos_chrg_atm_vo:            0.070569
+            desc_VOS_neg_chrg_atm_vo:            0.128638
+         desc_VOS_hydrophobic_atm_vo:            0.210180
+         desc_VOS_hydrophilic_atm_vo:            0.000000
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.041 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.222751
+               Property_Volume_Score:            0.222751
+               desc_VOS_geometric_vo:            0.336782
+                desc_VOS_hvy_atom_vo:            0.322045
+            desc_VOS_pos_chrg_atm_vo:            0.191713
+            desc_VOS_neg_chrg_atm_vo:            0.209580
+         desc_VOS_hydrophobic_atm_vo:            0.185456
+         desc_VOS_hydrophilic_atm_vo:            0.090930
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.045 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.171607
+               Property_Volume_Score:            0.171607
+               desc_VOS_geometric_vo:            0.276041
+                desc_VOS_hvy_atom_vo:            0.260775
+            desc_VOS_pos_chrg_atm_vo:            0.196326
+            desc_VOS_neg_chrg_atm_vo:            0.124577
+         desc_VOS_hydrophobic_atm_vo:            0.049960
+         desc_VOS_hydrophilic_atm_vo:            0.121960
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.037 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.167767
+               Property_Volume_Score:            0.167767
+               desc_VOS_geometric_vo:            0.257707
+                desc_VOS_hvy_atom_vo:            0.241095
+            desc_VOS_pos_chrg_atm_vo:            0.172307
+            desc_VOS_neg_chrg_atm_vo:            0.136008
+         desc_VOS_hydrophobic_atm_vo:            0.086839
+         desc_VOS_hydrophilic_atm_vo:            0.112647
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.040 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.192953
+               Property_Volume_Score:            0.192953
+               desc_VOS_geometric_vo:            0.290660
+                desc_VOS_hvy_atom_vo:            0.280394
+            desc_VOS_pos_chrg_atm_vo:            0.167679
+            desc_VOS_neg_chrg_atm_vo:            0.168204
+         desc_VOS_hydrophobic_atm_vo:            0.145453
+         desc_VOS_hydrophilic_atm_vo:            0.105329
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.042 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.127930
+               Property_Volume_Score:            0.127930
+               desc_VOS_geometric_vo:            0.220701
+                desc_VOS_hvy_atom_vo:            0.197018
+            desc_VOS_pos_chrg_atm_vo:            0.174636
+            desc_VOS_neg_chrg_atm_vo:            0.077525
+         desc_VOS_hydrophobic_atm_vo:            0.000000
+         desc_VOS_hydrophilic_atm_vo:            0.097697
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.051 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.098533
+               Property_Volume_Score:            0.098533
+               desc_VOS_geometric_vo:            0.168542
+                desc_VOS_hvy_atom_vo:            0.156806
+            desc_VOS_pos_chrg_atm_vo:            0.121878
+            desc_VOS_neg_chrg_atm_vo:            0.081529
+         desc_VOS_hydrophobic_atm_vo:            0.013914
+         desc_VOS_hydrophilic_atm_vo:            0.048527
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.061 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.000098
+               Property_Volume_Score:            0.000098
+               desc_VOS_geometric_vo:            0.000356
+                desc_VOS_hvy_atom_vo:            0.000232
+            desc_VOS_pos_chrg_atm_vo:            0.000000
+            desc_VOS_neg_chrg_atm_vo:            0.000000
+         desc_VOS_hydrophobic_atm_vo:            0.000000
+         desc_VOS_hydrophilic_atm_vo:            0.000000
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.048 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.079053
+               Property_Volume_Score:            0.079053
+               desc_VOS_geometric_vo:            0.127295
+                desc_VOS_hvy_atom_vo:            0.127416
+            desc_VOS_pos_chrg_atm_vo:            0.087913
+            desc_VOS_neg_chrg_atm_vo:            0.049533
+         desc_VOS_hydrophobic_atm_vo:            0.000000
+         desc_VOS_hydrophilic_atm_vo:            0.082161
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.051 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.052235
+               Property_Volume_Score:            0.052235
+               desc_VOS_geometric_vo:            0.099039
+                desc_VOS_hvy_atom_vo:            0.081467
+            desc_VOS_pos_chrg_atm_vo:            0.095127
+            desc_VOS_neg_chrg_atm_vo:            0.016454
+         desc_VOS_hydrophobic_atm_vo:            0.000000
+         desc_VOS_hydrophilic_atm_vo:            0.021326
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.059 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.051710
+               Property_Volume_Score:            0.051710
+               desc_VOS_geometric_vo:            0.085459
+                desc_VOS_hvy_atom_vo:            0.078358
+            desc_VOS_pos_chrg_atm_vo:            0.079614
+            desc_VOS_neg_chrg_atm_vo:            0.019073
+         desc_VOS_hydrophobic_atm_vo:            0.000000
+         desc_VOS_hydrophilic_atm_vo:            0.047754
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.057 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.039049
+               Property_Volume_Score:            0.039049
+               desc_VOS_geometric_vo:            0.078949
+                desc_VOS_hvy_atom_vo:            0.065422
+            desc_VOS_pos_chrg_atm_vo:            0.067807
+            desc_VOS_neg_chrg_atm_vo:            0.013684
+         desc_VOS_hydrophobic_atm_vo:            0.000000
+         desc_VOS_hydrophilic_atm_vo:            0.008431
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.089 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.000000
+               Property_Volume_Score:            0.000000
+               desc_VOS_geometric_vo:            0.000000
+                desc_VOS_hvy_atom_vo:            0.000000
+            desc_VOS_pos_chrg_atm_vo:            0.000000
+            desc_VOS_neg_chrg_atm_vo:            0.000000
+         desc_VOS_hydrophobic_atm_vo:            0.000000
+         desc_VOS_hydrophilic_atm_vo:            0.000000
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.083 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.000000
+               Property_Volume_Score:            0.000000
+               desc_VOS_geometric_vo:            0.000000
+                desc_VOS_hvy_atom_vo:            0.000000
+            desc_VOS_pos_chrg_atm_vo:            0.000000
+            desc_VOS_neg_chrg_atm_vo:            0.000000
+         desc_VOS_hydrophobic_atm_vo:            0.000000
+         desc_VOS_hydrophilic_atm_vo:            0.000000
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.077 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.000072
+               Property_Volume_Score:            0.000072
+               desc_VOS_geometric_vo:            0.000178
+                desc_VOS_hvy_atom_vo:            0.000000
+            desc_VOS_pos_chrg_atm_vo:            0.000256
+            desc_VOS_neg_chrg_atm_vo:            0.000000
+         desc_VOS_hydrophobic_atm_vo:            0.000000
+         desc_VOS_hydrophilic_atm_vo:            0.000000
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.085 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.003092
+               Property_Volume_Score:            0.003092
+               desc_VOS_geometric_vo:            0.005593
+                desc_VOS_hvy_atom_vo:            0.003227
+            desc_VOS_pos_chrg_atm_vo:            0.003417
+            desc_VOS_neg_chrg_atm_vo:            0.005337
+         desc_VOS_hydrophobic_atm_vo:            0.000982
+         desc_VOS_hydrophilic_atm_vo:            0.000000
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.048 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.020540
+               Property_Volume_Score:            0.020540
+               desc_VOS_geometric_vo:            0.042485
+                desc_VOS_hvy_atom_vo:            0.035808
+            desc_VOS_pos_chrg_atm_vo:            0.027868
+            desc_VOS_neg_chrg_atm_vo:            0.017081
+         desc_VOS_hydrophobic_atm_vo:            0.000000
+         desc_VOS_hydrophilic_atm_vo:            0.000000
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.075 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.000044
+               Property_Volume_Score:            0.000044
+               desc_VOS_geometric_vo:            0.000178
+                desc_VOS_hvy_atom_vo:            0.000000
+            desc_VOS_pos_chrg_atm_vo:            0.000085
+            desc_VOS_neg_chrg_atm_vo:            0.000000
+         desc_VOS_hydrophobic_atm_vo:            0.000000
+         desc_VOS_hydrophilic_atm_vo:            0.000000
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.078 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.022616
+               Property_Volume_Score:            0.022616
+               desc_VOS_geometric_vo:            0.043388
+                desc_VOS_hvy_atom_vo:            0.037461
+            desc_VOS_pos_chrg_atm_vo:            0.031073
+            desc_VOS_neg_chrg_atm_vo:            0.023772
+         desc_VOS_hydrophobic_atm_vo:            0.000000
+         desc_VOS_hydrophilic_atm_vo:            0.000000
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.050 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.008682
+               Property_Volume_Score:            0.008682
+               desc_VOS_geometric_vo:            0.020925
+                desc_VOS_hvy_atom_vo:            0.015172
+            desc_VOS_pos_chrg_atm_vo:            0.015776
+            desc_VOS_neg_chrg_atm_vo:            0.000219
+         desc_VOS_hydrophobic_atm_vo:            0.000000
+         desc_VOS_hydrophilic_atm_vo:            0.000000
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.029 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.238113
+               Property_Volume_Score:            0.238113
+               desc_VOS_geometric_vo:            0.397265
+                desc_VOS_hvy_atom_vo:            0.388319
+            desc_VOS_pos_chrg_atm_vo:            0.196803
+            desc_VOS_neg_chrg_atm_vo:            0.233394
+         desc_VOS_hydrophobic_atm_vo:            0.204161
+         desc_VOS_hydrophilic_atm_vo:            0.008737
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.094 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.000000
+               Property_Volume_Score:            0.000000
+               desc_VOS_geometric_vo:            0.000000
+                desc_VOS_hvy_atom_vo:            0.000000
+            desc_VOS_pos_chrg_atm_vo:            0.000000
+            desc_VOS_neg_chrg_atm_vo:            0.000000
+         desc_VOS_hydrophobic_atm_vo:            0.000000
+         desc_VOS_hydrophilic_atm_vo:            0.000000
+
+
+45 Molecules Processed
+Total elapsed time:	2.271 seconds

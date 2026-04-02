@@ -1,0 +1,3 @@
+../../../bin/dock6 -i important_residues.in -o important_residues.out
+ 
+../../../bin/multigrid_fp_gen.py rec.mol2 resid grid.in `grep -A 1 range_union important_residues.out | sed -e'/range_union/d' -e'/--/d' -e's/ //g' | tr ',' '\n' | sort -nu`

@@ -1,0 +1,95 @@
+#!/bin/sh
+set -vx
+
+# Checkout, build, test, and benchmark Dock periodically
+# using the at batch queue.
+# Log files are created, eg, 
+# bench.out.2003-09-29, test.out.2003-09-29, build.out.2003-09-29
+#
+# Modify these variables for your platform:
+# base, scratch, archive, cvspath.
+# $archive - the location for the build, test, and benchmark logs.
+#            the default is $HOME/dock/qa/`hostname`
+# $base    - used in the definition of archive.
+# $scratch - the location for temporary storage of the Dock CVS tree.
+#            the default is /tmp
+# $cvspath - the location of the cvs command.
+#            the default is /usr/bin
+
+#
+# initialize
+#
+base=$HOME/dock
+if [ ! -d $base ]; then mkdir $base; fi
+scratch=/tmp
+dock=dock6
+archive=$base/qa/`hostname`
+if [ ! -d $base/qa ]; then mkdir $base/qa; fi
+if [ ! -d $archive ]; then mkdir $archive; fi
+bench_output=bench.out
+build_output=build.out
+search_tag='@@'
+script_name=nightly_test
+test_output=test.out
+export DOCK_HOME=$scratch/$dock
+export PATH="${DOCK_HOME}/bin:${PATH}"
+cvspath=/usr/bin
+export CVS_SERVER=$cvspath/cvs
+export CVSROOT=$USER@hamlet.compbio.ucsf.edu:/usr/local/cvsroot
+export CVS_RSH=ssh
+PATH="${PATH}:${cvspath}"
+export DOCKBUILDFLAGS=''
+echo "DOCKBUILDFLAGS = $DOCKBUILDFLAGS"
+#
+# build
+#
+cd $scratch
+cvs -Q checkout $dock
+cd $dock
+chmod -R go-rwx *
+echo $search_tag
+cd install/
+./configure gnu
+echo "DOCKBUILDFLAGS = $DOCKBUILDFLAGS" 1> $build_output 2>&1
+make -e -i install 1>> $build_output 2>&1
+# cat $build_output | mail -s "$script_name build output" $USER
+echo; grep Error $build_output
+cp -p $build_output $archive/$build_output.`date +%Y-%m-%d`
+#
+# test
+#
+#typeset +x DO_PARALLEL
+cd test/
+echo "DOCKBUILDFLAGS = $DOCKBUILDFLAGS" 1> $test_output 2>&1
+make -i all 1>> $test_output 2>&1
+make -i check 1>> $test_output
+# cat $test_output | mail -s  "$script_name test output" $USER
+# grep for lines with nonzero dif files and lines with error.
+echo; grep -E '^\.[^.]|error' $test_output
+cp -p $test_output $archive/$test_output.`date +%Y-%m-%d`
+#
+# benchmark
+#
+#cd ../benchmarks/
+#echo "DOCKBUILDFLAGS = $DOCKBUILDFLAGS" 1> ../$bench_output 2>&1
+#make -i all 1>> ../$bench_output 2>&1
+#make -i check 1>> ../$bench_output
+#make -i summary 1>> ../$bench_output
+# cat ../$bench_output | mail -s  "$script_name bench output" $USER
+#echo; grep -E 'Total time|^FAILURE' ../$bench_output
+#cp -p ../$bench_output $archive/$bench_output.`date +%Y-%m-%d`
+#
+# terminate
+#
+cd
+at -m -f $DOCK_HOME/developer/$script_name 2am tomorrow
+sleep 39600
+cd $scratch
+echo $search_tag
+cvs -Q release -d $dock << EOF
+y
+EOF
+rm -rf $dock
+
+exit
+

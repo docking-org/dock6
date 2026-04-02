@@ -1,0 +1,14 @@
+
+Before compiling for the first time, edit the PARAMETER_PATH
+variable in define.h.  Set it to the unix path for the directory
+containing the dock parameters.
+
+Existing setting:
+	#define PARAMETER_PATH "Error: path unknown; verify that this input parameter is correct/"
+
+Example setting:
+	#define PARAMETER_PATH "/applications/dock6/parameter/"
+
+Perform this update whenever the location of the parameter files is
+changed.
+

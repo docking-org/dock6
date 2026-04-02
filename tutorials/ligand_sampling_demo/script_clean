@@ -1,0 +1,14 @@
+#!/bin/sh
+
+cd 2_site
+./script_clean
+cd ..
+
+cd 3_grid
+./script_clean
+cd ..
+
+cd 4_dock
+./script_clean
+cd ..
+

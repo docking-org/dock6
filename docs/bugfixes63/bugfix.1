@@ -1,0 +1,71 @@
+********>Bugfix 1:
+Author:  Scott Brozell
+Date:  Jan 4, 2010
+
+Program:  dock
+
+Description:  the gnu.parallel.pbsa configuration file was not updated
+to Openeye ZAP version 2.1.0.
+
+Fix:  make the following changes to the file install/gnu.parallel.pbsa
+-------------------------------------------------------------------------
+*** gnu.parallel.pbsa	28 Aug 2008 02:48:59 -0000	1.17
+--- gnu.parallel.pbsa	4 Jan 2010 22:13:33 -0000	1.20
+***************
+*** 5,11 ****
+  
+  # REQUIREMENTS - define these environment variables:
+  # MPICH_HOME is the root directory of the MPICH2 MPI implementation
+! # ZAP_HOME is the root directory of the ZAP implementation
+  # END REQUIREMENTS
+  
+  # TROUBLESHOOTING
+--- 5,11 ----
+  
+  # REQUIREMENTS - define these environment variables:
+  # MPICH_HOME is the root directory of the MPICH2 MPI implementation
+! # ZAP_HOME is the root directory of the Openeye ZAP version 2.1.0 files.
+  # END REQUIREMENTS
+  
+  # TROUBLESHOOTING
+***************
+*** 33,49 ****
+  # LINK_WITHOUT_FORTRAN_MAIN is the flag for linking without Fortran's main
+  # LOAD is the command to invoke the linker
+  # MPICH_IGNORE_CXX_SEEK  see
+! #   http://www-unix.mcs.anl.gov/mpi/mpich2/faq.htm#cxxseek
+  # MPICH_SKIP_MPICXX  Dock does not use MPI C++ bindings; see
+  #   http://www-unix.mcs.anl.gov/mpi/mpi-standard/mpi-report-2.0/node227.htm
+  # DOCK_SUFFIX is the suffix for the dock executable
+  
+  CC=          gcc
+  CXX=         $(MPICH_HOME)/bin/mpicxx
+! CFLAGS=      -DBUILD_DOCK_WITH_MPI -DMPICH_IGNORE_CXX_SEEK -I$(MPICH_HOME)/include -DBUILD_DOCK_WITH_ZAP -I$(ZAP_HOME) -O2
+  FC=          g77
+  FFLAGS=      -O2 -fno-automatic -fno-second-underscore
+! LIBS=        -lm -L$(ZAP_HOME) -lOEZAP
+  LINK_WITHOUT_FORTRAN_MAIN=
+  LOAD=        $(MPICH_HOME)/bin/mpicxx
+  DOCK_SUFFIX= .pbsa_mpi
+--- 33,49 ----
+  # LINK_WITHOUT_FORTRAN_MAIN is the flag for linking without Fortran's main
+  # LOAD is the command to invoke the linker
+  # MPICH_IGNORE_CXX_SEEK  see
+! #   http://wiki.mcs.anl.gov/mpich2/index.php/Frequently_Asked_Questions#Q:_I_get_compile_errors_saying_.22SEEK_SET_is_.23defined_but_must_not_be_for_the_C.2B.2B_binding_of_MPI.22.
+  # MPICH_SKIP_MPICXX  Dock does not use MPI C++ bindings; see
+  #   http://www-unix.mcs.anl.gov/mpi/mpi-standard/mpi-report-2.0/node227.htm
+  # DOCK_SUFFIX is the suffix for the dock executable
+  
+  CC=          gcc
+  CXX=         $(MPICH_HOME)/bin/mpicxx
+! CFLAGS=      -DBUILD_DOCK_WITH_MPI -DMPICH_IGNORE_CXX_SEEK -DMPICH_SKIP_MPICXX -I$(MPICH_HOME)/include -DBUILD_DOCK_WITH_ZAP -I$(ZAP_HOME)/include -O2
+  FC=          g77
+  FFLAGS=      -O2 -fno-automatic -fno-second-underscore
+! LIBS=        -L$(ZAP_HOME)/lib -loezap -loegrid -loefizzchem -loechem -loesystem -loeplatform -lz -lm -lpthread -z muldefs
+  LINK_WITHOUT_FORTRAN_MAIN=
+  LOAD=        $(MPICH_HOME)/bin/mpicxx
+  DOCK_SUFFIX= .pbsa_mpi
+--------------------------------------------------------------------------
+
+Workaround:  none.
+

@@ -1,0 +1,7 @@
+#!/bin/sh
+
+rm -f OUTSPH rec.sph 
+rm -f selected_spheres.sph 
+rm -f selected_spheres.pdb
+rm -f sphgen_cluster.pdb
+rm -f temp*

@@ -1,0 +1,155 @@
+ *******************************************************************************
+ ** FRANK J. SEILER RES. LAB., U.S. AIR FORCE ACADEMY, COLO. SPGS., CO. 80840 **
+ *******************************************************************************
+
+                                 AM1 CALCULATION RESULTS
+
+
+ *******************************************************************************
+ *          MOPAC:  VERSION  6.00               CALC'D. 31-OCT-90               
+ *  SYMMETRY - SYMMETRY CONDITIONS TO BE IMPOSED
+ *   T=      - A TIME OF  3600.0 SECONDS REQUESTED
+ *  DUMP=N   - RESTART FILE WRITTEN EVERY  3600.0 SECONDS
+ *  AM1      - THE AM1 HAMILTONIAN TO BE USED
+ ***********************************************************************040BY040
+
+
+
+     PARAMETER DEPENDENCE DATA
+
+        REFERENCE ATOM      FUNCTION NO.    DEPENDENT ATOM(S)
+            2                  1             3
+
+             DESCRIPTIONS OF THE FUNCTIONS USED
+
+   1      BOND LENGTH    IS SET EQUAL TO THE REFERENCE BOND LENGTH   
+ AM1 SYMM
+ water. This calculation ensures that the information on formaldehyde is lost.
+ 
+
+    ATOM   CHEMICAL  BOND LENGTH    BOND ANGLE     TWIST ANGLE
+   NUMBER  SYMBOL    (ANGSTROMS)     (DEGREES)      (DEGREES)
+    (I)                  NA:I          NB:NA:I      NC:NB:NA:I     NA   NB   NC
+
+      1      O       
+      2      H         1.10000  *                                  1
+      3      H         1.10000        104.00000  *                 1    2
+
+
+          CARTESIAN COORDINATES 
+
+    NO.       ATOM         X         Y         Z
+
+     1         O        0.0000    0.0000    0.0000
+     2         H        1.1000    0.0000    0.0000
+     3         H       -0.2661    1.0673    0.0000
+  H: (AM1): M.J.S. DEWAR ET AL, J. AM. CHEM. SOC. 107 3902-3909 (1985)          
+  O: (AM1): M.J.S. DEWAR ET AL, J. AM. CHEM. SOC. 107 3902-3909 (1985)          
+
+
+          RHF CALCULATION, NO. OF DOUBLY OCCUPIED LEVELS =  4
+
+
+            INTERATOMIC DISTANCES
+0
+                  O  1       H  2       H  3
+ ------------------------------------------
+     O    1   0.000000
+     H    2   1.100000   0.000000
+     H    3   1.100000   1.733624   0.000000
+ CYCLE:   1 TIME:   0.35 TIME LEFT:   3599.1 GRAD.:    53.694 HEAT:-58.360516    
+ CYCLE:   2 TIME:   0.35 TIME LEFT:   3598.8 GRAD.:     2.485 HEAT:-59.216056    
+ CYCLE:   3 TIME:   0.19 TIME LEFT:   3598.6 GRAD.:     4.917 HEAT:-59.227918    
+ TEST ON GRADIENT SATISFIED
+ PETERS TEST SATISFIED 
+
+ -------------------------------------------------------------------------------
+ AM1 SYMM
+ water. This calculation ensures that the information on formaldehyde is lost.
+ 
+
+
+     PETERS TEST WAS SATISFIED IN BFGS OPTIMIZATION           
+     SCF FIELD WAS ACHIEVED                                   
+
+
+                                AM1    CALCULATION
+                                                       VERSION  6.00
+                                                       31-OCT-90               
+
+
+
+
+          FINAL HEAT OF FORMATION =        -59.24071 KCAL
+
+
+          TOTAL ENERGY            =       -348.56254 EV
+          ELECTRONIC ENERGY       =       -493.24251 EV
+          CORE-CORE REPULSION     =        144.67997 EV
+
+          IONIZATION POTENTIAL    =         12.46369
+          NO. OF FILLED LEVELS    =          4
+          MOLECULAR WEIGHT        =     18.015
+
+
+          SCF CALCULATIONS  =                8
+          COMPUTATION TIME =   1.750 SECONDS
+
+
+
+
+
+    ATOM   CHEMICAL  BOND LENGTH    BOND ANGLE     TWIST ANGLE
+   NUMBER  SYMBOL    (ANGSTROMS)     (DEGREES)      (DEGREES)
+    (I)                  NA:I          NB:NA:I      NC:NB:NA:I     NA   NB   NC
+
+      1      O       
+      2      H         0.96153  *                                  1
+      3      H         0.96153        103.52751  *                 1    2
+
+
+            INTERATOMIC DISTANCES
+0
+                  O  1       H  2       H  3
+ ------------------------------------------
+     O    1   0.000000
+     H    2   0.961531   0.000000
+     H    3   0.961531   1.510499   0.000000
+
+
+                  EIGENVALUES
+
+ -36.41981 -18.19682 -14.95215 -12.46369   4.41625   6.18903
+
+
+              NET ATOMIC CHARGES AND DIPOLE CONTRIBUTIONS
+
+         ATOM NO.   TYPE          CHARGE        ATOM  ELECTRON DENSITY
+           1          O          -0.3827          6.3827
+           2          H           0.1914          0.8086
+           3          H           0.1914          0.8086
+ DIPOLE           X         Y         Z       TOTAL
+ POINT-CHG.     0.677     0.859     0.000     1.094
+ HYBRID         0.475     0.602     0.000     0.767
+ SUM            1.152     1.461     0.000     1.861
+
+
+          CARTESIAN COORDINATES 
+
+    NO.       ATOM               X         Y         Z
+
+     1         O                  0.0000    0.0000    0.0000
+     2         H                  0.9615    0.0000    0.0000
+     3         H                 -0.2249    0.9349    0.0000
+
+
+          ATOMIC ORBITAL ELECTRON POPULATIONS
+
+   1.86284   1.24273   1.27715   2.00000   0.80864   0.80864
+  CHANNEL 12 OPENED
+
+
+
+ TOTAL CPU TIME:             2.08 SECONDS
+
+ == MOPAC DONE ==

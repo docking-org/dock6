@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# Calculate grids for Hawkins GB/SA
+echo "Calculating es grid for Hawkins GB/SA and vdw grid"
+../../../bin/showbox < box.in
+../../../bin/grid -i solvent_grid.in
+
+# Calculate grids for Zou GB 
+echo "Calculating GB grid for Zou GB/SA"
+cd nchemgrid_GB
+../../../../bin/nchemgrid_GB
+
+# Calculate grids for Zou SA
+echo "Calculating SA grid for Zou GB/SA"
+cd ../nchemgrid_SA
+../../../../bin/nchemgrid_SA
+

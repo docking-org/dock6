@@ -1,0 +1,11 @@
+This directory contains receptor and ligand coordinate files.
+Three small subsets of the ZINC library has been kindly provided by the Shoichet Laboratory for testing purposes
+See http://blaster.docking.org/zinc to obtain the entire library.
+
+1VRT.rec.mol2		   Reverse transcriptase 1VRT
+zinc_nci_0010.mol2	   zinc_nci_0010.mol2         (contains    9 molecules + ligand from crystal )	
+zinc_nci_0500.mol2	   zinc_nci_0500.mol2         (contains  500 molecules)
+zinc_nci_1000.mol2	   zinc_nci_1000.mol2         (contains 1000 molecules)
+1VRT.lig.1000copies.mol2   (contains 1000 copies of ligand from crystal to evaluate mpi timings)
+
+The MPI demo uses zinc_nci_0010.mol2 by default. Edit 4_dock/mpi.in to select one of the other ligand databses.

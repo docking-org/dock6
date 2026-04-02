@@ -1,0 +1,5 @@
+#!/bin/sh
+
+cd t4lys 
+./script_clean
+cd ..

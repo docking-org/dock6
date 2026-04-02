@@ -1,0 +1,10 @@
+TNT version 1.2.6
+Downloaded from http://math.nist.gov/tnt/index.html
+Modified to convert from namespace std C header files
+to standard C header files, ie, eg, from <cmath> to <math.h>
+because some old compilers still exist.
+In particular, on SGI IRIX the new form is supported with
+MIPSpro 7.4 C++ and IRIX 6.5.18 (m/f) or later:
+http://techpubs.sgi.com/library/tpl/cgi-bin/getdoc.cgi?coll=0650&db=relnotes&fname=/usr/relnotes/c%2B%2B_fe
+But many institutions still have, eg, MIPSpro Compilers: Version 7.3.1.2m
+

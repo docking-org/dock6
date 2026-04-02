@@ -1,0 +1,11 @@
+#!/bin/sh
+
+cd nchemgrid_GB
+rm gbsa_zou_grid.* inva OUTPARM screen.para NEG_INVA PDBCAV
+rm OUTCHEM PDBPARM
+
+cd ../nchemgrid_SA
+rm gbsa_zou_grid.* OUTCHEM  PDBPARM OUTPARM
+
+cd ..
+rm solvent_grid.bmp solvent_grid.nrg rec_box.pdb

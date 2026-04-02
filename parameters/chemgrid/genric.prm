@@ -1,0 +1,14 @@
+center(0,0,0)
+exteriordielectric = 78
+interiordielectric = 2
+ionicstrength = 0.100
+ionradius = 2.0
+proberadius = 1.40
+px = f
+py = f
+pz = f
+nonlineariteration = 0
+fcrg = f
+
+out(phi)
+out(modpdb)

@@ -1,0 +1,95 @@
+
+
+        UUUUUUU    CCCCCCCC    SSSSSSS/  FFFFFFFFF  
+      UU/    UU/  CC/    CC/     SS/     FF/    FF/ 
+     UU/         CCCCCCCC/      SS/     FF/    FF/  
+    UU/  UUUU/  CC/ CC\        SS/     FF/    FF/   
+   UU/    UU/  CC/   CC\      SS/     FF/    FF/    
+   UUUUUUU/   CC/     CC\  SSSSSS/  FFFFFFFFF/      
+
+
+University of California at San Francisco, DOCK 4.0.1
+
+__________________Job_Information_________________
+launch_time                    Thu Jun 23 18:46:29 2022
+host_name                      unknown
+memory_limit                   -1
+working_directory              /export/home/jbickel/builds/dock6/install/test/fp_multigrid_generation
+user_name                      jbickel
+
+________________General_Parameters________________
+compute_grids                  yes
+grid_spacing                   0.6
+output_molecule                yes
+
+________________Scoring_Parameters________________
+contact_score                  no
+energy_score                   yes
+energy_cutoff_distance         999
+atom_model                     a
+attractive_exponent            6
+repulsive_exponent             9
+distance_dielectric            yes
+dielectric_factor              4
+allow_non_integral_charges     yes
+bump_filter                    yes
+bump_overlap                   0.75
+
+____________________File_Input____________________
+receptor_file                  ./temp.mol2
+box_file                       ./box.pdb
+vdw_definition_file            ../../../parameters/vdw_AMBER_parm99.defn
+
+____________________File_Output___________________
+score_grid_prefix              ./temp.rec
+receptor_out_file              ./temp.rec.grid.mol2
+
+
+
+Reading in coordinates of receptor.
+CHARGED RESIDUE LYS                     :    1.000
+CHARGED RESIDUE LYS                     :    1.000
+CHARGED RESIDUE GLU                     :   -1.000
+CHARGED RESIDUE GLU                     :   -1.000
+CHARGED RESIDUE ASP                     :   -1.000
+CHARGED RESIDUE GLU                     :   -1.000
+CHARGED RESIDUE ARG                     :    1.000
+CHARGED RESIDUE ASP                     :   -1.000
+CHARGED RESIDUE ARG                     :    1.000
+CHARGED RESIDUE GLU                     :   -1.000
+CHARGED RESIDUE ASP                     :   -1.000
+CHARGED RESIDUE ARG                     :    1.000
+CHARGED RESIDUE LYS                     :    1.000
+CHARGED RESIDUE LYS                     :    1.000
+CHARGED RESIDUE ASP                     :   -1.000
+
+Total charge on remaining_residues      :   -1.000
+
+Writing out processed receptor.
+
+Reading in grid box information.
+Box center of mass                      :   20.561    1.039   52.792
+Box dimensions                          :   41.627   33.673   32.036
+Number of grid points per side [x y z]  :       71       58       55
+Total number of grid points             :   226490
+
+Generating scoring grids.
+Percent of protein atoms processed      :        0
+Percent of protein atoms processed      :       10
+Percent of protein atoms processed      :       20
+Percent of protein atoms processed      :       30
+Percent of protein atoms processed      :       40
+Percent of protein atoms processed      :       50
+Percent of protein atoms processed      :       60
+Percent of protein atoms processed      :       70
+Percent of protein atoms processed      :       80
+Percent of protein atoms processed      :       90
+Percent of protein atoms processed      :      100
+Writing general grid info to ./temp.rec.bmp
+Writing bump grid to ./temp.rec.bmp
+Writing energy grids to ./temp.rec.nrg
+  Writing attractive VDW energy grid
+  Writing repulsive VDW energy grid
+  Writing electrostatic energy grid
+
+Finished calculation.

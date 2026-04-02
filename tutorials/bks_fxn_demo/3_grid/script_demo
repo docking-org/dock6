@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# test delphi electrostatic score 
+../../../bin/chemgrid
+
+# create delphi electrostatic grid
+./delphi.com ~/delphi98/delphi >& delphi.log
+
+# test ligand desolvation score
+../../../bin/solvmap
+
+
+#  convert chemgrid and solvmap to dock6 grids
+../../../bin/grid-convert -i gconv.in >& gconv.out
+

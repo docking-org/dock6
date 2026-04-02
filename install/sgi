@@ -1,0 +1,35 @@
+# DOCK configuration file for SGI platforms (IRIX operating systems and
+# MIPSpro Compilers).  This platform is offcially unsupported, but DOCK
+# has been built with version 7.4 compilers on an Octane2 machine.
+
+# CC is the C compiler; for this platform c99 is another choice.
+# CFLAGS is the flags for the C compiler
+# CXX is the C++ compiler
+# CXXFLAGS is the flags for the C++ compiler
+# DOCK_SUFFIX is the suffix for the dock executable
+# FC is the Fortran compiler
+# FFLAGS is the flags for the Fortran compiler
+# LIBS is the flags for the linker
+# LINK_WITHOUT_FORTRAN_MAIN is the flag for linking without Fortran's main
+# LOAD is the command to invoke the linker
+
+CC=          cc
+CFLAGS=      -LANG:std -LANG:vla=on -O2
+CXX=         CC
+CXXFLAGS=    -LANG:std -LANG:vla=on -O2
+DOCK_SUFFIX=
+FC=          f77
+FFLAGS=      -O2 -static
+LIBS=        -lm -lpthread
+LINK_WITHOUT_FORTRAN_MAIN=
+LOAD=        CC
+
+# Macro definitions for NAB
+# AR is the library archiver
+# LEX is the lexical analyzer generator
+# OCFLAGS is the flags for the C compilers with high optimization
+# RANLIB is the library index generator
+AR=          ar rvs $(EMPTY)
+LEX=         lex
+OCFLAGS=     -O3
+RANLIB=      /bin/true

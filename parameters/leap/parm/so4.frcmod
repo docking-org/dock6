@@ -1,0 +1,15 @@
+Sulfate dianion from 1XPF: parmchk -f mol2 -i so4.mol2 -o so4.frcmod
+MASS
+
+BOND
+
+ANGLE
+
+DIHE
+
+IMPROPER
+
+NONBON
+
+
+

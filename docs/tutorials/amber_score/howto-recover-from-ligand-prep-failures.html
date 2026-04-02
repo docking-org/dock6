@@ -1,0 +1,122 @@
+<pre>
+Subject: Re: [Dock-fans] Dock AMBER "bad" mols
+
+Someone wrote:
+
+> using DOCK6.2 for research purposes. I am using ZINC7's "drug-like" and 
+> "lead-like" databases. While executing prepare_amber.pl, some compounds in    
+> some slices would fail to prepare correctly. I was wondering if you know
+> about this issue and possibly a solution? I've compiled all the output  
+> files of these compounds and a list of their ZINC IDs in 2 .tar.gz files.     
+
+Yes, a usually small fraction of almost all collections of ligands
+fails to prepare correctly because Amber score requires a complete
+force field.  In particular, Amber's GAFF is used for ligands.          
+The prepare_amber scripts call three amberization scripts.                
+The amberization scripts call several Amber programs - LEaP and           
+antechamber.  When things go wrong, detailed knowledge of all these         
+pieces may be necessary.  Preparation for Amber score is preparation        
+for an Amber molecular dynamics calculation - a much higher level of
+preparation than for other DOCK scores.
+
+In general, the two solutions are
+1) to ignore the errors from failing ligands which means
+ignoring the ligands in the Amber rescoring; set dock6 parameter
+amber_score_abort_on_unprepped_ligand to no, and
+2) to investigate, correct, and re-prepare for each ligand failure:
+Determine the failure by studying amberize_ligand.*.out -
+the most common failures are
+z] charge issues, such as mopac convergence failures, wrong total charge,...;
+y] Missing force field parameters;
+x] bond typing issues;
+w] atom typing issues;
+with cases w and x usually being much more troublesome than z and y;
+Determine a correction -
+z] sometimes the geometry is obviously bad and can be fixed, sometimes
+with detailed knowledge of mopac convergence can be attained and then
+detailed knowledge of antechamber is needed to use that mopac output,
+the simplest approach is to use the existing charges instead of
+generating new AM1-BCC charges (in 6.3 we shall have this automated);
+y] there is a recovery procedure described in the error message, manual,
+and here: https://dock.compbio.ucsf.edu/DOCK_6/new_in_6.2.txt;
+x] sometimes the geometry is obviously bad and can be fixed,
+sometimes antechamber's -j 5 for atom and part bond type instead of the
+default of -j 4 for atom and full bond type will work - detailed
+knowledge of antechamber and the amberization process is needed to
+employ this correction;
+w] usually the molecule is weird or the geometry is obviously bad...;
+Re-prepare - sometimes prepare_amber.pl can be rerun to implement
+corrections; if not then detailed knowledge of amberization is needed:
+read the dock manual and open up the amberize scripts.
+
+The antechamber home page
+https://ambermd.org/antechamber/ac.html
+and the Amber mailing list
+https://archive.ambermd.org/
+https://ambermd.org/MailingLists.php
+should be searched since most antechamber issues have been aired already.
+The dock fans archives should also be searched:
+https://dock.compbio.ucsf.edu/DOCK_6/index.htm#searchdockfans
+
+
+All your failures look troublesome.
+Typical examples from your failures:
+
+amberize_ligand.1018.out
+----
+Using ligand file prefix: 22_top.1018
+Using antechamber options: -nc -1 -c bcc
+Executing antechamber to generate the mol2 file with GAFF and charges.
+
+Info: Bond types are assigned for valence state 1 with penalty of 1
+
+Total number of electrons: 127; net charge: -1
+Number of electrons is odd: 127
+Please check the total charge and your -nc flag
+Running: /home/xhan/dock6/bin/bondtype -i ANTECHAMBER_BOND_TYPE.AC0 -o ANTECHAMBER_BOND_TYPE.AC -f ac
++-j full
+
+Running: /home/xhan/dock6/bin/atomtype -i ANTECHAMBER_AC.AC0 -o ANTECHAMBER_AC.AC -p gaff
+Error running antechamber!
+----
+
+This may look like case z, but is the more serious case w.
+Check the structure, geometry and total charge - an odd number of electrons
+indicates a non-closed shell molecule which is highly suspicious.
+If you give this one a serious attempt and fail then send the molecule
+and details to the Amber reflector; sometimes it's antechamber.
+
+
+amberize_ligand.237.out
+----
+Using ligand file prefix: 36_top.237
+Using antechamber options: -nc -2 -c bcc
+Executing antechamber to generate the mol2 file with GAFF and charges.
+
+Warning: the assigned bond types may be wrong, please :
+(1) double check the structure (the connectivity) and/or
+(2) adjust atom valence penalty parameters in APS.DAT, and/or
+(3) increase MAXVASTATE in define.h and recompile bondtype.C
+(4) increase PSCUTOFF in define.h and recompile bondtype.C
+    Be cautious, use a large value of PSCUTOFF (>10) will significantly increase the computer time
+Error: cannot run "/home/xhan/dock6/bin/bondtype -i ANTECHAMBER_BOND_TYPE.AC0 -o
++ANTECHAMBER_BOND_TYPE.AC -f ac -j full" in judgebondtype() of antechamber.c properly, exit
+Running: /home/xhan/dock6/bin/bondtype -i ANTECHAMBER_BOND_TYPE.AC0 -o ANTECHAMBER_BOND_TYPE.AC -f ac
++-j full
+Executing parmchk to generate the force field parameters.
+Cannot open file 36_top.237.gaff.mol2, exit
+grep: 36_top.237.frcmod: No such file or directory
+Executing LEaP to generate the Amber input files.
+----
+
+This starts out as case x, follow the advice after the warning;
+search the web pages above for help;
+try -j 5 - to rerun antechamber manually:
+antechamber -s 2 -i "input_mol2" -fi mol2 -o "output_mol2" -fo mol2 -nc -2 -c bcc -j 5
+
+good luck,
+Scott
+
+_______________________________________________
+Dock-fans mailing list
+</pre>

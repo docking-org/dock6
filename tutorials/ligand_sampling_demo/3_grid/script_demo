@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Construct box to enclose spheres
+../../../bin/showbox < box.in
+
+# Compute scoring grids
+../../../bin/grid -i grid.in
+

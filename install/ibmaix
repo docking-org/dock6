@@ -1,0 +1,34 @@
+# DOCK configuration file for IBM platforms (AIX operating systems and
+# XL Compilers).
+
+# CC is the C compiler
+# CFLAGS is the flags for the C compiler
+# CXX is the C++ compiler
+# CXXFLAGS is the flags for the C++ compiler
+# DOCK_SUFFIX is the suffix for the dock executable
+# FC is the Fortran compiler
+# FFLAGS is the flags for the Fortran compiler
+# LIBS is the flags for the linker
+# LINK_WITHOUT_FORTRAN_MAIN is the flag for linking without Fortran's main
+# LOAD is the command to invoke the linker
+
+CC=          xlc
+CFLAGS=      -O2 -DCLINK_PLAIN
+CXX=         xlC
+CXXFLAGS=    -O2 -DCLINK_PLAIN
+DOCK_SUFFIX=
+FC=          xlf
+FFLAGS=      -O2 -qextname=etime:flush
+LIBS=
+LINK_WITHOUT_FORTRAN_MAIN=
+LOAD=        xlC
+
+# Macro definitions for NAB
+# AR is the library archiver
+# LEX is the lexical analyzer generator
+# OCFLAGS is the flags for the C compilers with high optimization
+# RANLIB is the library index generator
+AR=          ar rvs $(EMPTY)
+LEX=         lex
+OCFLAGS=     -O3
+RANLIB=      /bin/true

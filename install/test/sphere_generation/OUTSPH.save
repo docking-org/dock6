@@ -1,0 +1,10 @@
+ density type = X
+ reading  struct.ms                                                                          type   R
+ # of atoms =    662   # of surf pts =  25594
+ finding spheres for   struct.ms                                                                       
+ dotlim =     0.000
+ radmax =    4.000
+ Minimum radius of acceptable spheres?
+   1.4000000    
+ output to  struct.sph                                                                      
+ clustering is complete     21  clusters

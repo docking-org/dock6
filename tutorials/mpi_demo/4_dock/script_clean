@@ -1,0 +1,4 @@
+#!/bin/sh
+
+rm -f mpi.out*
+rm -f 1VRT_ranked.mol2

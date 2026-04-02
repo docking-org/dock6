@@ -1,0 +1,18 @@
+@<TRIPOS>MOLECULE
+CO3  CARBONATE DIANION.  C O3. 
+    4     3     1     0     0
+SMALL
+bcc via mopac
+****
+From PDBeChem: antechamber -fi pdb -fo mol2 -i CO3.pdb -o co3.mol2 -c bcc -nc -2
+@<TRIPOS>ATOM
+      1 C           0.0000    0.0000   -0.0010 c         1 CO3      1.197300
+      2 O1         -1.3020    0.0180    0.0000 o         1 CO3     -1.065800
+      3 O2          0.6660    1.1180    0.0000 o         1 CO3     -1.065700
+      4 O3          0.6350   -1.1360    0.0000 o         1 CO3     -1.065800
+@<TRIPOS>BOND
+     1    1    2 1   
+     2    1    3 1   
+     3    1    4 1   
+@<TRIPOS>SUBSTRUCTURE
+     1 CO3         1 TEMP              0 ****  ****    0 ROOT

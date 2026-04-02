@@ -1,0 +1,3 @@
+#!/bin/sh
+
+rm -f chem* OUTCHEM OUTSOLV OUTPARM PDBPARM solvmap distmap.box rec+sph.phi fort* delphi.log

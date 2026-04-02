@@ -1,0 +1,254 @@
+___________________________________________________________________________
+
+
+ AMBER94-based Lennard-Jones parameters for van der Waals
+ energy potential (see vdwinfo).
+
+ The radius corresponds to half the equilibrium distance
+ (in Angstroms) between atoms.
+
+ The well depth corresponds to the energy (in kcal/mol)
+ at the equilibrium distance.
+
+ Lennard-Jones parameters are derived as follows:
+
+ sqrt(A) = sqrt [e * b/(a-b) * (2r)^a]
+ sqrt(B) = sqrt [e * a/(a-b) * (2r)^b]
+
+ where:
+	r = radius
+	e = well depth
+	a = repulsive exponent
+	b = attractive exponent
+
+ The ordering of atoms within a group of similar atoms is important.
+ Keep the most general definition first, ie. Nitrogen before all 
+ other nitrogen entries.
+
+ Todd Ewing (10/95)
+___________________________________________________________________________
+
+ (6/96 TE)  Added valence field to check for bad connectivity.
+ (9/98 MLL) Added vdw parameters for LP from Weiner et al.
+___________________________________________________________________________
+
+_____________________________________
+name		Carbon_sp/sp2
+atom_model	either
+radius		1.850
+well_depth	0.120
+heavy_flag  	1
+valence		4
+
+definition	C
+_____________________________________
+name		Carbon_All_sp3
+atom_model	all
+radius		1.800
+well_depth	0.060
+heavy_flag  	1
+valence		4
+
+definition	C.3
+_____________________________________
+name		Carbon_United_CH3
+atom_model	united
+radius		2.000
+well_depth	0.150
+heavy_flag  	1
+valence		4
+
+definition	C. ( 3 H )
+_____________________________________
+name		Carbon_United_CH2
+atom_model	united
+radius		1.925
+well_depth	0.120
+heavy_flag  	1
+valence		4
+
+definition	C. ( 2 H )
+_____________________________________
+name		Carbon_United_CH
+atom_model	united
+radius		1.850
+well_depth	0.090
+heavy_flag  	1
+valence		4
+
+definition	C. ( 1 H )
+_____________________________________
+name		Hydrogen_Polar
+atom_model	either
+radius		1.000
+well_depth	0.020
+heavy_flag  	0
+valence		1
+
+definition	H
+_____________________________________
+name		Hydrogen_United
+atom_model	united
+radius		0.000
+well_depth	0.000
+heavy_flag  	0
+valence		1
+
+definition	H ( C. )
+_____________________________________
+name		Hydrogen_All
+atom_model	all
+radius		1.540
+well_depth	0.010
+heavy_flag  	0
+valence		1
+
+definition	H ( C. )
+_____________________________________
+name		Nitrogen
+atom_model	either
+radius		1.750
+well_depth	0.160
+heavy_flag  	1
+valence		4
+
+definition	N
+_____________________________________
+name		Nitrogen_quaternary
+atom_model	either
+radius		1.850
+well_depth	0.080
+heavy_flag  	1
+valence		4
+
+definition	N.4
+_____________________________________
+name		Nitrogen_sp3
+atom_model	either
+radius		1.850
+well_depth	0.120
+heavy_flag  	1
+valence		3
+
+definition	N.3
+_____________________________________
+name		Oxygen
+atom_model	either
+radius		1.600
+well_depth	0.200
+heavy_flag  	1
+valence		2
+
+definition	O
+_____________________________________
+name		Oxygen_sp3
+atom_model	either
+radius		1.650
+well_depth	0.150
+heavy_flag  	1
+valence		2
+
+definition	O.3
+_____________________________________
+name		Sulfur
+atom_model	either
+radius		2.000
+well_depth	0.200
+heavy_flag  	1
+valence		6
+
+definition	S
+_____________________________________
+name		Phosphorus
+atom_model	either
+radius		2.100
+well_depth	0.200
+heavy_flag  	1
+valence		5
+
+definition	P
+_____________________________________
+name		Fluorine
+atom_model	either
+radius		1.550
+well_depth	0.080
+heavy_flag  	1
+valence		1
+
+definition	F
+_____________________________________
+name		Chlorine
+atom_model	either
+radius		2.030
+well_depth	0.240
+heavy_flag  	1
+valence		1
+
+definition	Cl
+_____________________________________
+name		Bromine/Silicon
+atom_model	either
+radius		2.180
+well_depth	0.320
+heavy_flag  	1
+valence		4
+
+definition	Br
+definition	Si
+_____________________________________
+name		Iodine
+atom_model	either
+radius		2.350
+well_depth	0.400
+heavy_flag  	1
+valence		1
+
+definition	I
+_____________________________________
+name		Sodium+/Potassium+
+atom_model	either
+radius		1.600
+well_depth	0.048
+heavy_flag  	1
+valence		0
+
+definition	Na
+definition	K
+_____________________________________
+name		Calcium++
+atom_model	either
+radius		1.600
+well_depth	0.100
+heavy_flag  	1
+valence		0
+
+definition	Ca
+_____________________________________
+name		Mg++/Li+/Al+++
+atom_model	either
+radius		1.170
+well_depth	0.100
+heavy_flag  	1
+valence		0
+
+definition	Mg
+definition	Li
+definition	Al
+_____________________________________
+name		Lone_Pair
+atom_model	either
+radius		1.200
+well_depth	0.016
+heavy_flag  	0
+valence		1
+
+definition	LP
+_____________________________________
+name		Dummy
+atom_model	either
+radius		0.000
+well_depth	0.000
+heavy_flag  	0
+valence		1
+
+definition	Du

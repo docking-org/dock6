@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# test delphi electrostatic score 
+../../../bin/dock6 -i dock.des
+
+
+# test ligand desolvation score
+../../../bin/dock6 -i dock.ldsol
+

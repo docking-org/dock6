@@ -1,0 +1,205 @@
+
+
+
+--------------------------------------
+DOCK v6.10
+
+Released January 2023
+Copyright UCSF
+--------------------------------------
+
+
+Conformational Sampling Parameters
+------------------------------------------------------------------------------------------
+conformer_search_type                                        flex
+write_fragment_libraries                                     no
+
+Anchor & Grow Parameters
+------------------------------------------------------------------------------------------
+user_specified_anchor                                        no
+limit_max_anchors                                            no
+min_anchor_size                                              40
+pruning_use_clustering                                       yes
+pruning_max_orients                                          10
+pruning_clustering_cutoff                                    100
+pruning_conformer_score_cutoff                               100.0
+pruning_conformer_score_scaling_factor                       1.0
+use_clash_overlap                                            no
+write_growth_tree                                            no
+
+Internal Energy Parameters
+------------------------------------------------------------------------------------------
+use_internal_energy                                          yes
+internal_energy_rep_exp                                      12
+internal_energy_cutoff                                       100.0
+Note: Internal energy only includes repulsive VDW for growth and/or minimization.
+
+Molecule Library Input Parameters
+------------------------------------------------------------------------------------------
+ligand_atom_file                                             ligand.mol2
+limit_max_ligands                                            no
+skip_molecule                                                no
+read_mol_solvation                                           no
+calculate_rmsd                                               yes
+use_rmsd_reference_mol                                       yes
+rmsd_reference_filename                                      ligand.mol2
+
+Database Filter Parameters
+------------------------------------------------------------------------------------------
+use_database_filter                                          no
+
+Orient Ligand Parameters
+------------------------------------------------------------------------------------------
+orient_ligand                                                yes
+automated_matching                                           yes
+receptor_site_file                                           struct.sph
+max_orientations                                             100
+critical_points                                              no
+chemical_matching                                            no
+use_ligand_spheres                                           no
+
+Bump Filter Parameters
+------------------------------------------------------------------------------------------
+bump_filter                                                  no
+
+Master Score Parameters
+------------------------------------------------------------------------------------------
+score_molecules                                              yes
+
+Contact Score Parameters
+------------------------------------------------------------------------------------------
+contact_score_primary                                        no
+
+Grid Score Parameters
+------------------------------------------------------------------------------------------
+grid_score_primary                                           no
+
+MultiGrid Score Parameters
+------------------------------------------------------------------------------------------
+multigrid_score_primary                                      no
+
+Dock3.5 Score Parameters
+------------------------------------------------------------------------------------------
+dock3.5_score_primary                                        no
+
+Continuous Energy Score Parameters
+------------------------------------------------------------------------------------------
+continuous_score_primary                                     no
+
+Footprint Similarity Score Parameters
+------------------------------------------------------------------------------------------
+footprint_similarity_score_primary                           no
+
+Pharmacophore Similarity Score Parameters
+------------------------------------------------------------------------------------------
+pharmacophore_score_primary                                  no
+
+Hbond Energy Score Parameters
+------------------------------------------------------------------------------------------
+hbond_score_primary                                          no
+
+Internal Energy Score Parameters
+------------------------------------------------------------------------------------------
+internal_energy_score_primary                                no
+
+Descriptor Score Parameters
+------------------------------------------------------------------------------------------
+descriptor_score_primary                                     yes
+descriptor_use_grid_score                                    yes
+descriptor_use_pharmacophore_score                           no
+descriptor_use_tanimoto                                      yes
+descriptor_use_hungarian                                     no
+descriptor_use_volume_overlap                                no
+
+--- Descriptor Score Parameters: Grid Score ---
+descriptor_grid_score_rep_rad_scale                          1
+descriptor_grid_score_vdw_scale                              1
+descriptor_grid_score_es_scale                               1
+descriptor_grid_score_grid_prefix                            grid
+
+--- Descriptor Score Parameters: Fingerprint / Tanimoto ---
+descriptor_fingerprint_ref_filename                          ligand.mol2
+
+--- Descriptor Score Weights ---
+descriptor_weight_grid_score                                 1
+descriptor_weight_fingerprint_tanimoto                       -50
+
+Using these settings, the Descriptor Score function takes the form:
+Descriptor_Score = (1 * Grid_Score) + (-50 * Tanimoto)
+
+Zou GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+
+Hawkins GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+
+SASA Score Parameters
+------------------------------------------------------------------------------------------
+
+Amber Score Parameters
+------------------------------------------------------------------------------------------
+
+Simplex Minimization Parameters
+------------------------------------------------------------------------------------------
+minimize_ligand                                              yes
+minimize_anchor                                              yes
+minimize_flexible_growth                                     yes
+use_advanced_simplex_parameters                              no
+minimize_flexible_growth_ramp                                no
+simplex_max_cycles                                           1
+simplex_score_converge                                       0.1
+simplex_cycle_converge                                       1.0
+simplex_trans_step                                           1.0
+simplex_rot_step                                             0.1
+simplex_tors_step                                            10.0
+simplex_anchor_max_iterations                                500
+simplex_grow_max_iterations                                  20
+simplex_grow_tors_premin_iterations                          0
+simplex_random_seed                                          0
+simplex_restraint_min                                        no
+
+Atom Typing Parameters
+------------------------------------------------------------------------------------------
+atom_model                                                   all
+vdw_defn_file                                                ../../../parameters/vdw_AMBER_parm99.defn
+flex_defn_file                                               ../../../parameters/flex.defn
+flex_drive_file                                              ../../../parameters/flex_drive.tbl
+
+Molecule Library Output Parameters
+------------------------------------------------------------------------------------------
+ligand_outfile_prefix                                        Des_Tan+SGE
+write_orientations                                           no
+num_scored_conformers                                        1
+rank_ligands                                                 no
+------------------------------------------------------------------------------------------
+
+Initializing Conformer Generator Routines...
+Initializing Library File Routines...
+Initializing Orienting Routines...
+Initializing typer for Grid Score within Descriptor Score...
+Initializing Grid Score Routines...
+ Reading the energy grid from grid.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from grid.bmp
+ Done reading the grid box quantifiers.
+Initializing Fingerprint computation within Descriptor Score...
+
+-----------------------------------
+Molecule:  C1 
+
+ Elapsed time for docking:	0.382 seconds
+
+ Anchors:		1
+ Orientations:		100
+ Conformations:		13
+
+                    Descriptor_Score:          -86.018173
+                          Grid_Score:          -36.018173
+                desc_Grid_vdw_energy:          -34.462059
+                 desc_Grid_es_energy:           -1.556116
+                      Tanimoto_Score:            1.000000
+           Internal_energy_repulsive:           36.041454
+
+
+1 Molecules Processed
+Total elapsed time:	0.391 seconds

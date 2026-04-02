@@ -1,0 +1,16 @@
+CARBONATE DIANION:  parmchk -f mol2 -i co3.mol2 -o co3.frcmod
+MASS
+
+BOND
+
+ANGLE
+
+DIHE
+
+IMPROPER
+o -o -c -o          1.1          180.0         2.0          General improper torsional angle (1 general atom type)
+
+NONBON
+
+
+

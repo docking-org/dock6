@@ -1,0 +1,89 @@
+
+
+
+--------------------------------------
+DOCK v6.10
+
+Released January 2023
+Copyright UCSF
+--------------------------------------
+
+
+Conformational Sampling Parameters
+------------------------------------------------------------------------------------------
+conformer_search_type                                        rigid
+
+Internal Energy Parameters
+------------------------------------------------------------------------------------------
+use_internal_energy                                          no
+
+Molecule Library Input Parameters
+------------------------------------------------------------------------------------------
+ligand_atom_file                                             multi_lig.mol2
+limit_max_ligands                                            yes
+max_ligands                                                  5
+skip_molecule                                                yes
+initial_skip                                                 2
+read_mol_solvation                                           no
+calculate_rmsd                                               no
+
+Database Filter Parameters
+------------------------------------------------------------------------------------------
+use_database_filter                                          no
+
+Orient Ligand Parameters
+------------------------------------------------------------------------------------------
+orient_ligand                                                no
+
+Bump Filter Parameters
+------------------------------------------------------------------------------------------
+bump_filter                                                  no
+
+Master Score Parameters
+------------------------------------------------------------------------------------------
+score_molecules                                              no
+
+Molecule Library Output Parameters
+------------------------------------------------------------------------------------------
+ligand_outfile_prefix                                        io3
+write_orientations                                           yes
+num_scored_conformers                                        1
+rank_ligands                                                 no
+------------------------------------------------------------------------------------------
+Initializing Library File Routines...
+ Skipped 2 ligands
+
+
+-----------------------------------
+Molecule: ZINC00013564
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+Molecule: ZINC01555236
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+Molecule: ZINC00150863
+
+ Elapsed time for docking:	0.000 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+
+3 Molecules Processed
+Total elapsed time:	0.004 seconds

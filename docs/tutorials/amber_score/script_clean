@@ -1,0 +1,6 @@
+#!/bin/sh
+
+rm -f lig.1.* test.complex.nab.pdb
+rm -f 1lgu.lig.1.* 1lgu.prmtop 1lgu.inpcrd 1lgu.amber.pdb 
+rm -f *.out *.log  output_scored.mol2
+rm -f initial* lig.amber_score.mol2

@@ -1,0 +1,24 @@
+PYRIDOXAL-5'-PHOSPHATE:  parmchk -f mol2 -i plp.mol2 -o plp.frcmod
+MASS
+
+BOND
+c -h4  348.60   1.084       same as c2-h4
+
+ANGLE
+nb-ca-c3   62.722     121.320   Calculated with empirical approach
+ca-c -h4   50.300     119.700   same as c2-c2-hc
+o -c -h4   55.400     120.000   same as hc-c -o 
+
+DIHE
+
+IMPROPER
+c3-ca-ca-nb         1.1          180.0         2.0          Using default value
+ca-ca-ca-oh         1.1          180.0         2.0          Using default value
+c -ca-ca-ca         1.1          180.0         2.0          Using default value
+ca-h4-c -o         10.5          180.0         2.0          General improper torsional angle (2 general atom types)
+ca-h4-ca-nb         1.1          180.0         2.0          Using default value
+
+NONBON
+
+
+

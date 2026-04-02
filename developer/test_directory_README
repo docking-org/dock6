@@ -1,0 +1,141 @@
+DOCK Software Testing & Quality Assurance
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Architecture
+
+    The $DOCK_HOME/install/test subdirectories are names of programs or
+names of tests in the case of multi-program tests.  The general structure
+and implementation is similar to that of the src build procedure and
+employs make files.  The main advantages are simplicity, clarity,
+localization of test information, and usage of ubiquitous tools.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dockdif
+
+    The output file diff-er is a simple script that eliminates common
+sources of trivial differences.  It indicates pass or possible failure
+on the standard output, and in the latter case creates a file of the
+differences that has a .dif extension.
+By convention, the .save extension denotes a reference output file.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Adding New Tests
+
+    Testing of the non-DOCK DOCK programs employ simple make rules.
+The file test/default_targets.h contains simple rules to test the
+programs grid, sphgen, etc.
+
+    To create a new test, copy the input files to an appropriate test
+subdirectory renaming the files if necessary to adhere to the standard
+input file names, copy the output files to the same subdirectory renaming
+the files both to adhere to the standard names and to append the .save
+extension, edit the Makefile to add a new target for the test and to
+add the new test to the test target.
+
+    Testing of the DOCK program employs make inference rules.
+A make inference rule lists a generic recipe that is controlled by
+file extensions.  For the DOCK program the inference rule gives an
+algorithm to create a file with extension .dockout from a file with
+extension .dockin.  To keep it simple this rule also runs the output
+file diff-er; an alternative would be another inference rule to create
+a .dif file from a .dockout file.  Consequently, the creation of an
+input file and a reference output file are sufficient to create a new
+test.  Such a new test would be run via make newtestname.  To place a
+new test into the QC suite one must edit the Makefile for the appropriate
+program and add newtestname to the test target.  If the new test requires
+non-.dockin inputs then a new target called newtestname must be added to
+specify the dependencies.
+
+Here's the recipe to create a DOCK test:
+1.  copy the dock input file to test/some_subdir/newtestname.dockin
+2.  edit test/some_subdir/Makefile and add to the test target
+    newtestname.dockout
+2a. if the new test requires other inputs, such as grid files that are
+    produced via another test, then create a new target called newtestname
+    and list the other inputs as dependencies; also list newtestname.dockout
+    as the last dependency and change the test target so that it contains
+    newtestname instead of newtestname.dockout
+3.  copy the reference output file to
+    test/some_subdir/newtestname.dockout.save
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Updating The Reference Outputs of Tests
+
+    $DOCK_HOME/install/test/update
+is a script that automates the copying of a fresh output to the reference
+output.  It takes a sed regular expression as an argument and searches
+all the .dif files for that rexp.  The gold-standard platform for
+reference outputs is hamlet with configuration file gnu.
+
+Naturally, the utmost care should be used when modifying the reference
+outputs.  One should verify their work not once, not twice, but thrice.
+Furthermore, detailed CVS log messages are required; they should include
+the reason for the modification.
+
+Using a platform other than hamlet to generate the reference outputs
+is strongly discouraged.  But if a different platform is used then the cvs
+log should contain the machine name, the config file,
+and the versions of any softwares employed, such as, the operating system,
+the compiler, libraries, etc.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Out of date Alphabetical Index of Tests
+
+	###anchor_and_grow###
+	TITLE:
+		Anchor and Grow
+	EXECUTABLES TESTED:
+        	dock6
+	FUNCTIONS TESTED:
+        	Flexible Ligand Parameters
+        	Anchor & Grow Parameters
+
+	###contact_score###
+	TITLE:
+		Contact Scoring
+	EXECUTABLES TESTED:
+        	dock6
+	FUNCTIONS TESTED:
+        	Master Score Parameters
+        	Contact Score Parameters
+
+	###gbsa_grid_generation###
+	TITLE:
+		GB/SA Grid generation
+	EXECUTABLES TESTED:
+        	grid
+        	nchemgrid_GB
+        	nchemgrid_SA
+
+	###grid_generation###
+	TITLE:
+		VDW/ES Grid generation
+	EXECUTABLES TESTED:
+        	showbox
+        	grid
+
+	###ligand_io###
+	TITLE:
+		Ligand Input/Output
+	EXECUTABLES TESTED:
+        	dock6
+	FUNCTIONS TESTED:
+       		Molecule Library Parameters
+
+	###ligand_orienting###
+	TITLE:
+		Orientation
+	EXECUTABLES TESTED:
+        	dock6
+	FUNCTIONS TESTED:
+        	Orient Ligand Parameters
+
+	###sphere_generation###
+	TITLE:
+		Site preparation/sphere generation
+	EXECUTABLES TESTED:
+        	sphgen
+        	sphere_selector
+        	showsphere
+
+

@@ -1,0 +1,235 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>Tutorial:  Prepping Molecules</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<style type="text/css">
+<!--
+.style2 {
+	font-size: 36px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+}
+.style4 {font-family: Arial, Helvetica, sans-serif; font-size: 18px;}
+.style5 {font-size: 12px}
+.style6 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14;
+}
+-->
+</style>
+</head>
+
+<body>
+<div align="center">
+<p class="style2">Preparing Molecules for DOCKing</p>
+<p align="center" class="style6">Author: P. Therese Lang<br>
+Last updated January 27, 2023 by Scott Brozell</p>
+
+<p align="left" class="style4">
+This tutorial describes the steps required to prepare receptor and ligand
+molecules as inputs for DOCK calculations that predict orientations of a ligand
+in a receptor active site.  We study the
+<a href="https://en.wikipedia.org/wiki/L-arabinose_operon#Regulation">
+AraC regulatory protein</a>
+in the form of the complex L-Arabinose-Binding Protein bound to
+  <a href="https://en.wikipedia.org/wiki/Arabinose ">L-Arabinose</a>
+(PDB ID
+  <a href="https://www.rcsb.org/pdb/explore/explore.do?structureId=1abe">1ABE</a>
+) as an example system.
+However, these techniques should be transferable to any protein-ligand system.
+</p>
+
+  <p align="left" class="style4">This tutorial uses the program Chimera (Snapshot Release 1.2309), which can be downloaded from the UCSF Computer Graphics Lab at
+<a href="https://www.cgl.ucsf.edu/chimera">https://www.cgl.ucsf.edu/chimera</a>. Chimera is freely available to academics and relatively simple for novice users to learn. However, a variety of other packaged programs and script libraries are available to perform these types of modifications to the structure files (see  <a href="../../../DOCK_Links/index.htm">DOCK Related Links</a> for more information). </p>
+
+  <p align="left" class="style4">
+For a receptor, an overview of the general procedure is to visualize the
+source file of the target, to remove extraneous atoms,
+such as alternate conformations, ligands, ions, solvent molecules, cofactors, etc.,
+to add missing atoms, such as, hydrogens, incomplete side chains, etc.,
+to assign atom types and partial charges, to create a final mol2 file,
+and to create a final pdb file without hydrogens.
+During all these steps, one should keep in mind one's scientific model.
+For assigning atom types and partial charges, Dock uses Sybyl atom type labels
+but Amber force field parameters.
+For a ligand, the general procedure is simpler but similar.
+  </p>
+
+  <p align="left" class="style4">STEP 0: Examine the pdb file. </p>
+  <p align="left" class="style4">A basic step in any docking project is selecting the file that will be used for the structure of the target.
+We shall use <a href="1ABE.pdb">1ABE.pdb</a>. A visualization of this file can be seen below:</p>
+  <p align="center" class="style4"><img src="pdb.jpg" width="522" height="373"></p>
+  <p align="center" class="style4 style5"><em>Image generated using Chimera (<a href="https://www.cgl.ucsf.edu/chimera/">https://www.cgl.ucsf.edu/chimera</a>) </em></p>
+  <p align="left" class="style4">This file contains Cartesian coordinates for the
+L-arabinose-binding protein (red ribbon), crystallographic waters (purple), and two conformations of the ligand L-arabinose (green and orange).
+Each of these components must be dealt with during preparation for DOCKing.</p>
+
+  <p align="left" class="style4">STEP 1: Prepare the receptor file. </p>
+  <blockquote>
+    <blockquote>
+      <p align="left" class="style4"> 1a)
+Open the 1ABE.pdb file in Chimera</p>
+      <p align="center" class="style4"><img src="open_files.jpg" width="563" height="539"></p>
+      <p align="left" class="style4"> 1b)
+Select and delete the ligands (L-arabinose) from the complex</p>
+    </blockquote>
+    <p align="center" class="style4"><img src="select_lig.jpg" width="534" height="464"><img src="delete_lig.jpg" width="536" height="466"></p>
+    <blockquote>
+
+      <p align="left" class="style4"> 1c)
+Use the Dock Prep tool
+to complete the receptor preparation.
+For more information on the Dock Prep module, see the
+<a href="https://www.cgl.ucsf.edu/chimera/1.2199/docs/UsersGuide/framecontrib.html">Chimera documentation</a>.
+Note that recent versions of Chimera provide additional features
+compared with those in the screen shot below. In particular,
+'Mutate residues with incomplete side chains to ALA (if CB present) or GLY'
+is a popular feature.
+      </p>
+      <p align="center" class="style4"><img src="dock_prep_nosave.jpg" width="646" height="670"></p>
+
+      <p align="left" class="style4"> 1d)
+Select the method for adding hydrogens;
+in this case we will allow the hydrogen to be optimized by the hydrogen bonding
+network, and we will allow the method to determine the protonation state </p>
+      <p><img src="dock_prep_hydrogen_method.gif" width="708" height="467"></p>
+      <p>&nbsp;</p>
+      <p align="left" class="style4"> 1e)
+Examine warnings from the Dock Prep procedure</p>
+      <p align="center" class="style4"><img src="dock_prep_warnings.jpg" width="704" height="715"></p>
+      <p align="left" class="style4"> 1f) <a name="step1f"></a>
+Resolve issues that are causing warnings in the Dock Prep procedure</p>
+      <p align="left" class="style4">As you can see, there are a few warnings about non-standard atoms for this receptor. You can use Chimera to take a closer look at the problem residues using the Command Line.</p>
+      <p align="center" class="style4"><img src="command_line.jpg" width="536" height="466"> </p>
+      <p align="left" class="style4">This action will open the Command Line interface. Type the following commands into the command line to isolate the first residue in the warning--LYS 306. </p>
+      <blockquote>
+        <blockquote>
+          <p align="left" class="style4">~display<br>
+		  display :306<br>
+		  focus<br>
+            color byelement<br>
+            linewidth 3<br>
+          rlabel</p>
+        </blockquote>
+      </blockquote>
+      <p align="left" class="style4">This series of commands will
+        1) undisplay the entire receptor,
+        2) display residue 306 only,
+        3) refocus the screen on residue 306,
+        4) color the atoms based on element,
+        5) increase the size of the bonds for easier viewing,
+        and 6) label the residue.
+        For more information on other Command Line options, see the
+        <a href="https://www.cgl.ucsf.edu/chimera/docs/UsersGuide/framecore.html">Chimera documentation</a>
+        for the Basic Function: Commands. </p>
+      <p align="left" class="style4">It should now be obvious that there is a problem with this lysine residue as compared to a normal lysine--LYS 300. </p>
+      <p align="center" class="style4"><img src="bad_lys.jpg" width="418" height="242"></p>
+      <p align="left" class="style4">Most likely, the crystallographer knew the terminal residue was a LYS, but did not see any electron density for the LYS 306 side chain. As a result, only the backbone was built into the structure. Because Chimera is being told  this residue is a LYS, the charges for the LYS template are being loaded resulting in non-integral charges for the residue and causing the warning message. </p>
+      <p align="left" class="style4">The best way to fix this situation is to mutate the incomplete LYS residue to a GLY residue. GLY residues have the appropriate number of atoms, which will result in an integral set of charges for the residue, and the structure will still comply with the experimental data. To mutate the LYS residue, type the following command into the Command Line:</p>
+      <p align="center" class="style4">swapaa gly :306</p>
+      <p align="left" class="style4">This command will change the LYS 306 to a GLY in the same orientation.</p>
+      <p align="center" class="style4"><img src="mutate_lys_gly.jpg" width="362" height="160"> </p>
+      <p align="left" class="style4">You need to repeat this procedure for the ASN 2 residue, which is the source of the remaining warnings. </p>
+      <p align="center" class="style4">swapaa gly :2</p>
+      <p align="left" class="style4"> 1g)
+Save the receptor in mol2 format</p>
+      <p align="left" class="style4">Once all the warnings have been resolved, the receptor can be saved in mol2 format. The Dock Prep procedure should be run again to incorporate the mutated residues (see STEP 1c). Make sure the Write Mol2 box is checked at this point. The final molecule can then be written to file, in this case as <a href="rec_charged.mol2">rec_charged.mol2</a>. </p>
+      <p class="style4"><img src="dock_prep_save.jpg" width="645" height="670"></p>
+      <p align="center" class="style4"><img src="save_rec_mol2.jpg" width="572" height="637"></p>
+      <p align="left" class="style4">NOTE: When saving, make sure all the boxes in the Save As dialog box are checked! </p>
+      <p align="left" class="style4"> 1h)
+Strip hydrogens from the mutated receptor and save in pdb format (this step is necessary for molecular surface generation in the <a href="../sphere_generation/generating_spheres.htm">Sphere Generation and Selection Tutorial</a>)</p>
+      <p align="left" class="style4">To perform this step, first select all the hydrogens from the molecule and then delete them. </p>
+      <p align="center" class="style4"><img src="receptor_select_h.jpg" width="524" height="514" align="bottom"><img src="receptor_delete_h.jpg" width="524" height="512"></p>
+      <p align="left" class="style4">The receptor should now be saved in pdb format:
+<a href="rec_noH.pdb">rec_noH.pdb</a>. </p>
+      <p align="center" class="style4"><img src="save_rec_pdb.jpg" width="570" height="636"></p>
+      <p align="left" class="style4">NOTE: When saving, make sure the
+&quot;Use untransformed coordinates &quot; box is checked in the Save As dialog box!</p>
+    </blockquote>
+  </blockquote>
+
+  <p align="left" class="style4">STEP 2: Prepare the ligand file. </p>
+  <p align="left" class="style4">We will only prepare the L-arabinose A
+conformation in the pdb file for simplicity.
+Selection of the conformation A over the conformation B was arbitrary. </p>
+  <blockquote>
+    <blockquote>
+      <p align="left" class="style4"> 2a)
+Open the 1ABE.pdb file in Chimera</p>
+      <p align="center" class="style4"><img src="open_files.jpg" width="563" height="539"></p>
+      <p align="left" class="style4"> 2b)
+Select and delete everything BUT the ligand from the complex</p>
+      <p align="center" class="style4"><img src="select_lig.jpg" width="534" height="464"> <img src="select_invert.jpg" width="522" height="464"><img src="delete_rec.jpg" width="524" height="468"></p>
+      <p align="left" class="style4"> 2c)
+Remove the B conformation of the ligand </p>
+      <p align="center" class="style4"><img src="select_first_ligand.jpg" width="524" height="466"><img src="delete_rec.jpg" width="524" height="468"></p>
+      <p align="left" class="style4"> 2d)
+Make the molecule easier to see;
+       use these Command Line (see <a href="#step1f">STEP 1f</a>)
+       commands or hunt and peck to perform the equivalent with the mouse</p>
+      <blockquote>
+        <blockquote>
+          <blockquote>
+            <p align="left" class="style4">focus<br>
+			color byelement<br>
+			linewidth 3</p>
+          </blockquote>
+        </blockquote>
+      </blockquote>
+      <p align="left" class="style4"> 2e)
+Add hydrogens</p>
+      <p align="center" class="style4"><img src="lig_add_h.jpg" width="526" height="537"> </p>
+      <p align="left" class="style4"> 2f)
+At this point,
+we recommend one of two options for completing preparing the
+ligand depending on your needs and application:</p>
+      <p align="left" class="style4">OPTION 1:
+Calculate charges using the Chimera Add Charge tool. </p>
+      <blockquote>
+        <p align="left" class="style4">The Add Charge tool is a call to the antechamber program. Antechamber is a set of auxiliary programs for molecular mechanics (MM) studies.
+This software package addresses the following issues in MM calculations: </p>
+        <blockquote>
+          <p align="left" class="style4">(1) recognizing the atom type<br>
+		    (2) recognizing the bond type <br>
+		    (3) judging the atomic equivalence<br>
+		    (4) generating the residue topology file <br>
+		    (5) finding missing force field parameters and supplying reasonable and similar substitutes</p>
+        </blockquote>
+        <p align="left" class="style4"> Antechamber can generate input automatically
+          for most organic molecules in a ligand database. </p>
+      </blockquote>
+      <p align="left" class="style4">(A)
+To complete this option, first activate the Add Charge tool </p>
+      <p class="style4"><img src="lig_add_charge.jpg" width="602" height="537"></p>
+      <p align="left" class="style4">(B)
+To seed the charge calculation, Chimera needs the formal charge of the molecule.
+Chimera will estimate the value based on the atom types and bonding. Here, Chimera has estimated accurately, so we will calculate AM1-BCC charges.</p>
+      <p align="left" class="style4"><img src="lig_formal_charge.jpg" width="704" height="521"></p>
+      <p align="left" class="style4">(C)
+Save the molecule in mol2 format </p>
+      <p align="center" class="style4"><img src="save_lig_mol2.jpg" width="543" height="638"> </p>
+      <p align="left" class="style4">OPTION 2:
+Prepare your ligand(s) using the ZINC database. </p>
+      <blockquote>
+        <p align="left" class="style4"> ZINC is a free database of
+commercially-available compounds for virtual screening.
+It contains over 35 million compounds in ready-to-dock, 3D formats
+(Irwin, Sterling, Mysinger, Bolstad and Coleman,
+<em>J.&nbsp; Chem.&nbsp; Inf.&nbsp; Model. </em>2012<em>. DOI: 10.1021/ci3001277). </em>
+We recommend this procedure if you have a large library of ligands to
+prepare or if you would like a protonation state or conformation expansion.
+If you utilize this option, be sure to save your ligand preparation work 
+from the previous parts of STEP 2:  save the ligand in Tripos mol2 format
+(see part C of OPTION 1 of STEP 2f immediately above).
+The ZINC web site is
+<a href="https://zinc.docking.org/">zinc.docking.org</a>.
+</p>
+      </blockquote>
+    </blockquote>
+  </blockquote>
+</div>
+</body>
+</html>

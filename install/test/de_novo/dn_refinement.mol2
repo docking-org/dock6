@@ -1,0 +1,23 @@
+##########                                TYPE:           Sidechain
+##########                             FR_NAME:               sid.4
+##########                                FREQ:                   1
+##########                            CONN_PTS:                   1
+########## 
+@<TRIPOS>MOLECULE
+1IK4.lig
+ 3 2 1 0 0
+SMALL
+bcc
+sid.4
+
+@<TRIPOS>ATOM
+      1 Du1        87.2920  -16.1290   65.5670 Du      1  LIG         0.0000
+      2 O1         87.7330  -17.0480   64.6530 O.3     1  LIG        -0.4571
+      3 H4         88.6120  -17.3600   64.9080 H       1  LIG         0.3830
+@<TRIPOS>BOND
+     1     2     1    1
+     2     3     2    1
+@<TRIPOS>SUBSTRUCTURE
+     1 LIG         1 TEMP              0 ****  ****    0 ROOT
+
+

@@ -1,0 +1,11 @@
+  pm3 oldens symmetry gnorm=0  pl  1scf
+  Formaldehyde  Check the PLS to ensure that the density matrix was read
+in correctly
+  O    0.0000000  0      0.000000  0      
+  C    1.2020463  1      0.000000  0      
+  H    1.0912524  1    121.774563  1      
+  H    1.0912524  0    121.774563  0    180.000000  0    2    1    3      
+
+   3  1    4
+   3  2    4
+

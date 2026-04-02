@@ -1,0 +1,41 @@
+REQUIREMENTS:
+	Because MPI usage is platform dependent, these environment variables
+	    are used:
+DOCK_PROCESSES  The number of MPI processes for DOCKing.
+MPI_HOME        The path of the MPI installation.
+	    If DOCK_PROCESSES is undefined then 2 is used.
+	    If MPI_HOME is defined then the mpirun from that MPI bin
+	    subdirectory is executed.
+	    If MPI_HOME is undefined then mpirun is assumed to be in the PATH;
+	    this is appropriate for platforms with native MPI.
+
+TITLE: Contact Scoring
+
+EXECUTABLES TESTED:
+	dock6.mpi
+
+FUNCTIONS TESTED:
+	MPI Function
+
+WALL CLOCK TIME:
+	seconds
+
+FILES USED:
+	mpi.dockin		#mpi function
+	multi_lig.mol2		#multiple ligand structure file
+	struct.sph		#receptor sphere file
+	chem.defn		#chem parameter input file
+	flex.defn		#flex atom definition file
+	flex_drive.tbl		#flex torsional drive file
+	vdw.defn		#vdw parameter file used to create grid
+
+	../grid_generation/	
+		grid.bmp	#bump grid
+		grid.nrg	#energy grid
+
+FILES GENERATED:
+        mpi.dockmpiout          #docking info file generated on master node
+        mpi.dockmpiout.1        #docking info file produced on worker node
+        mpi_ranked.mol2         #all ligand structures ranked by score
+
+NOTE:  grid_generation must be run first

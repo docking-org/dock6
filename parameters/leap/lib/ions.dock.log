@@ -1,0 +1,44 @@
+log started: Mon Jan 31 03:09:30 2011
+
+Log file: ./ions.dock.log
+>> 
+>> i = createAtom   SR  Sr  2.0
+>> set i    element Sr
+>> set i    position { 0 0 0 }
+>> r = createResidue SR
+>> add r i
+>> SR = createUnit SR
+>> add SR r
+>> saveOff SR ./ions.dock.lib
+ Creating ./ions.dock.lib
+Saving SR.
+Building topology.
+Building atom parameters.
+>> 
+>> 
+>> i = createAtom   HG  Hg  2.0
+>> set i    element Hg
+>> set i    position { 0 0 0 }
+>> r = createResidue HG
+>> add r i
+>> HG = createUnit HG
+>> add HG r
+>> saveOff HG ./ions.dock.lib
+Saving HG.
+Building topology.
+Building atom parameters.
+>> 
+>> i = createAtom   MN  Mn  2.0
+>> set i    element Mn
+>> set i    position { 0 0 0 }
+>> r = createResidue MN
+>> add r i
+>> MN = createUnit MN
+>> add MN r
+>> saveOff MN ./ions.dock.lib
+Saving MN.
+Building topology.
+Building atom parameters.
+>> 
+>> quit
+	Quit

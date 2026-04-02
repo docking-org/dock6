@@ -1,0 +1,10 @@
+This directory contains ligand and receptor coordinates extracted
+from the 1ABE entry in the Brookhaven Protein DataBase.
+
+                             --- * ---
+
+1ABE.pdb            Original pdb entry of complex
+lig_charged.mol2    ligand with AM1BCC charges calculated
+rec_noH.mol2	    receptor without hydrogens
+rec_charged.mol2    receptor with hydrogens added and AMBER parm94 charges
+

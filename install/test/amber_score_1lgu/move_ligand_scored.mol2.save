@@ -1,0 +1,52 @@
+
+##########                                Name:                 AAH
+##########                DOCK_Rotatable_Bonds:                   0
+##########                    Molecular_Weight:                   0
+##########                       Formal_Charge:                   0
+##########                     HBond_Acceptors:                   3
+##########                        HBond_Donors:                   2
+##########                         Amber_Score:            7.793837
+##########                Amber_complex_energy:        -4644.728695
+##########               Amber_receptor_energy:         4584.941716
+##########                 Amber_ligand_energy:           67.580816
+
+@<TRIPOS>MOLECULE
+AAH
+ 14 14 1 0 0
+SMALL
+No Charge or Current Charge
+
+
+@<TRIPOS>ATOM
+      1 C1         28.0387    7.2284    4.4517 C.ar    1  AAH         0.2023
+      2 C2         27.8785    6.7569    3.1617 C.ar    1  AAH        -0.2544
+      3 C3         27.2107    6.8919    5.4963 C.ar    1  AAH        -0.2550
+      4 N4         29.1293    8.0992    4.6968 N.pl3   1  AAH        -0.8263
+      5 C5         26.8203    5.8133    2.9358 C.ar    1  AAH         0.1917
+      6 C6         26.2138    5.9351    5.2460 C.ar    1  AAH         0.1920
+      7 C7         26.0065    5.4158    3.9956 C.ar    1  AAH        -0.2532
+      8 F8         26.6484    5.3296    1.7119 F       1  AAH        -0.1363
+      9 F9         25.4550    5.5091    6.2707 F       1  AAH        -0.1358
+     10 H10        28.4922    7.0508    2.3635 H       1  AAH         0.1523
+     11 H11        27.3703    7.2502    6.4819 H       1  AAH         0.1518
+     12 H12        29.6489    8.4550    3.9092 H       1  AAH         0.4032
+     13 H13        29.2137    8.5124    5.6024 H       1  AAH         0.4031
+     14 H14        25.2148    4.7088    3.8208 H       1  AAH         0.1647
+@<TRIPOS>BOND
+     1     1     2   ar
+     2     1     3   ar
+     3     1     4    1
+     4     2     5   ar
+     5     2    10    1
+     6     3     6   ar
+     7     3    11    1
+     8     4    12    1
+     9     4    13    1
+    10     5     7   ar
+    11     5     8    1
+    12     6     7   ar
+    13     6     9    1
+    14     7    14    1
+@<TRIPOS>SUBSTRUCTURE
+     1 AAH         1 TEMP              0 ****  ****    0 ROOT
+

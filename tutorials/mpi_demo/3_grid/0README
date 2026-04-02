@@ -1,0 +1,8 @@
+This directory contains files related to scoring grid construction.
+
+                             --- * ---
+
+script_demo     Script to perform demonstration
+box.in          SHOWBOX input file
+grid.in         GRID input file
+script_clean    Script to remove files made by script_demo

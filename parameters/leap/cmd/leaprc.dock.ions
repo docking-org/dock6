@@ -1,0 +1,82 @@
+# DOCK Amber Score Ion Library
+#  Scott Brozell March 2007
+#  Added ions.dock.lib and chloride; August 2008.
+
+# Use Amber's ions94 library.
+#  It creates residues and units for alkali metal ions using ff94
+#  atom types and parameters defined in parm94.
+#  The Li+..Cs+ series uses information derived from the work of Aqvist.
+#  This information is identical to DOCK's vdw_AMBER_parm99.defn.
+#  ions94 also creates divalent, monoatomic ions for Mg, Ca, and Zn,
+#  but complete atom types and parameters are not in parm94;
+#  sensibly, the names chosen, MG, CA, and ZN, correspond to the
+#  common names of these ions in pdb's.
+
+#  Make the common names of these ions in pdb's recognizable to LEaP.
+#  IMO Amber is broken here - these commands should be in leaprc.ff94
+addPdbResMap {
+  { "LI" "Li+" } { 0 "LI" "Li+" } { 1 "LI" "Li+" }
+  { "NA" "CIO" } { 0 "NA" "CIO" } { 1 "NA" "CIO" }
+  { "NA+" "CIO" } { 0 "NA+" "CIO" } { 1 "NA+" "CIO" }
+  { "K"  "K+"  } { 0 "K" "K+" }   { 1 "K" "K+" }
+  { "RB" "Rb+" } { 0 "RB" "Rb+" } { 1 "RB" "Rb+" }
+  { "CS" "Cs+" } { 0 "CS" "Cs+" } { 1 "CS" "Cs+" }
+  { "CL" "Cl-" } { 0 "CL" "Cl-" } { 1 "CL" "Cl-" }
+  { "CL-" "Cl-" } { 0 "CL-" "Cl-" } { 1 "CL-" "Cl-" }
+}
+addPdbAtomMap {
+  { "LI" "Li+" }
+  { "NA" "Na+" }
+  { "NA+" "Na+" }
+  { "K" "K+" }
+  { "RB" "Rb+" }
+  { "CS" "Cs+" }
+  { "CL" "Cl-" }
+  { "CL-" "Cl-" }
+}
+
+#  This merely prevents unknown atom type and maybe hybridization
+#  comments from LEaP.  The application of this command is not thorough.
+addAtomTypes {
+   { "Mg"  "Mg" "sp3" }
+   { "Ca"  "Ca" "sp3" }
+   { "Sr"  "Sr" "sp3" }
+   { "Ba"  "Ba" "sp3" }
+   { "V"   "V"  "sp3" }
+   { "Zn"  "Zn" "sp3" }
+}
+
+#  Define the atom types and parameters for the alkaline earth ions
+#  and others; residues and units for some of these have not been created.
+dock_ions = loadamberparams frcmod.dock.ions
+
+
+# Create residues and units for some non-ff94 alkaline earth ions.
+#  The atom types and parameters are defined in frcmod.dock.ions.
+#  This information is identical to DOCK's vdw_AMBER_parm99.defn.
+#  These are divalent, monoatomic ions for Sr
+#  sensibly, the names chosen, SR, correspond to the
+#  common names of these ions in pdb's.
+loadOff ions.dock.lib
+
+
+# Use Amber's GAFF via mol2 and frcmod files for non-atomic ions.
+#  ACT acetate -1
+ACT=loadmol2 act.mol2
+frcmod=loadamberparams act.frcmod
+#  CO3 carbonate -2
+CO3=loadmol2 co3.mol2
+frcmod=loadamberparams co3.frcmod
+#  PO4 phosphate -3
+PO4=loadmol2 po4.mol2
+frcmod=loadamberparams po4.frcmod
+#  SO4 sulfate -2
+SO4=loadmol2 so4.mol2
+frcmod=loadamberparams so4.frcmod
+
+
+# Treat magnesium with six waters as a single cation via water stripping.
+addPdbResMap {
+  { "MO6" "MG" } { 0 "MO6" "MG" } { 1 "MO6" "MG" }
+}
+

@@ -1,0 +1,26 @@
+Everything in this directory is posted to the web site.
+Everything in this directory is not distributed.
+
+
+The tutorials herein are the same as the ligand_sampling_demo.
+
+diff -s tutorials/ligand_sampling_demo/1_struct/ docs/tutorials/struct_prep/ | grep -v 'Only in' | grep -v CVS
+Files tutorials/ligand_sampling_demo/1_struct/1ABE.pdb and docs/tutorials/struct_prep/1ABE.pdb are identical
+Files tutorials/ligand_sampling_demo/1_struct/lig_charged.mol2 and docs/tutorials/struct_prep/lig_charged.mol2 are identical
+Files tutorials/ligand_sampling_demo/1_struct/rec_charged.mol2 and docs/tutorials/struct_prep/rec_charged.mol2 are identical
+Files tutorials/ligand_sampling_demo/1_struct/rec_noH.pdb and docs/tutorials/struct_prep/rec_noH.pdb are identical
+
+diff -s tutorials/ligand_sampling_demo/2_site/ docs/tutorials/sphere_generation/ | grep -v 'Only in' | grep -v CVS
+Files tutorials/ligand_sampling_demo/2_site/INSPH and docs/tutorials/sphere_generation/INSPH are identical
+Files tutorials/ligand_sampling_demo/2_site/rec.ms and docs/tutorials/sphere_generation/rec.ms are identical
+Files tutorials/ligand_sampling_demo/2_site/selected_spheres.in and docs/tutorials/sphere_generation/selected_spheres.in are identical
+Files tutorials/ligand_sampling_demo/2_site/sphgen_cluster.in and docs/tutorials/sphere_generation/sphgen_cluster.in are identical
+
+diff -s tutorials/ligand_sampling_demo/3_grid/ docs/tutorials/grid_generation/ | grep -v 'Only in' | grep -v CVS
+Files tutorials/ligand_sampling_demo/3_grid/box.in and docs/tutorials/grid_generation/box.in are identical
+Files tutorials/ligand_sampling_demo/3_grid/grid.in and docs/tutorials/grid_generation/grid.in are identical
+
+diff -s tutorials/ligand_sampling_demo/4_dock/ docs/tutorials/ligand_sampling_dock/ | grep -v 'Only in' | grep -v CVS
+Files tutorials/ligand_sampling_demo/4_dock/anchor_and_grow.in and docs/tutorials/ligand_sampling_dock/anchor_and_grow.in are identical
+Files tutorials/ligand_sampling_demo/4_dock/rigid.in and docs/tutorials/ligand_sampling_dock/rigid.in are identical
+

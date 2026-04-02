@@ -1,0 +1,57 @@
+*COMDECK SIZES                                                          
+************************************************************************
+*   THIS FILE CONTAINS ALL THE ARRAY SIZES FOR USE IN MOPAC.            
+*                                                                       
+*     THERE ARE ONLY 5 PARAMETERS THAT THE PROGRAMMER NEED SET:          
+*     MAXHEV = MAXIMUM NUMBER OF HEAVY ATOMS (HEAVY: NON-HYDROGEN ATOMS)
+*     MAXLIT = MAXIMUM NUMBER OF HYDROGEN ATOMS.                        
+*     MAXTIM = DEFAULT TIME FOR A JOB. (SECONDS)                        
+*     MAXDMP = DEFAULT TIME FOR AUTOMATIC RESTART FILE GENERATION (SECS)
+*     ISYBYL = 1 IF MOPAC IS TO BE USED IN THE SYBYL PACKAGE, =0 OTHERWISE
+*     SEE ALSO NMECI, NPULAY AND MESP AT THE END OF THIS FILE
+*                                                                       
+      PARAMETER (MAXHEV=100,   MAXLIT=100)
+      PARAMETER (MAXTIM=3600, MAXDMP=3600)
+      PARAMETER (ISYBYL=1)
+*                                                                       
+************************************************************************
+*                                                                       
+*   THE FOLLOWING CODE DOES NOT NEED TO BE ALTERED BY THE PROGRAMMER    
+*                                                                       
+************************************************************************
+*                                                                       
+*    ALL OTHER PARAMETERS ARE DERIVED FUNCTIONS OF THESE TWO PARAMETERS 
+*                                                                       
+*      NAME                   DEFINITION                                
+*     NUMATM         MAXIMUM NUMBER OF ATOMS ALLOWED.                   
+*     MAXORB         MAXIMUM NUMBER OF ORBITALS ALLOWED.                
+*     MAXPAR         MAXIMUM NUMBER OF PARAMETERS FOR OPTIMISATION.     
+*     N2ELEC         MAXIMUM NUMBER OF TWO ELECTRON INTEGRALS ALLOWED.  
+*     MPACK          AREA OF LOWER HALF TRIANGLE OF DENSITY MATRIX.     
+*     MORB2          SQUARE OF THE MAXIMUM NUMBER OF ORBITALS ALLOWED.  
+*     MAXHES         AREA OF HESSIAN MATRIX                             
+************************************************************************
+      PARAMETER (VERSON=6.00D0)                                         
+      PARAMETER (NUMATM=MAXHEV+MAXLIT)                                  
+      PARAMETER (MAXORB=4*MAXHEV+MAXLIT)                                
+      PARAMETER (MAXPAR=3*NUMATM)                                       
+      PARAMETER (MAXBIG=MAXORB*MAXORB*2)                                
+      PARAMETER (N2ELEC=2*(50*MAXHEV*(MAXHEV-1)+10*MAXHEV*MAXLIT        
+     +                     +(MAXLIT*(MAXLIT-1))/2))                     
+      PARAMETER (MAXHES=(MAXPAR*(MAXPAR+1))/2,MORB2=MAXORB**2)          
+      PARAMETER (MPACK=(MAXORB*(MAXORB+1))/2)                           
+      PARAMETER (MAXPR=6*MAXORB)                                          
+************************************************************************
+*   FOR SHORT VERSION USE LINE WITH NMECI=1, FOR LONG VERSION USE LINE  
+*   WITH NMECI=10                                                       
+************************************************************************
+      PARAMETER (NMECI=10,  NPULAY=MPACK, MMCI=60)                               
+C      PARAMETER (NMECI=1,   NPULAY=1, MMCI=1)                                   
+************************************************************************
+*   FOR SHORT VERSION USE LINE WITH MESP=1, FOR LONG VERSION USE LINE  
+*   WITH MESP=1000 OR GREATER 
+************************************************************************
+C       PARAMETER (MESP=1)                               
+      PARAMETER (MESP=50000)                                   
+************************************************************************
+*DECK MOPAC                                                             

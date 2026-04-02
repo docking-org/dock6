@@ -1,0 +1,135 @@
+
+
+
+--------------------------------------
+DOCK v6.10
+
+Released January 2023
+Copyright UCSF
+--------------------------------------
+
+
+Conformational Sampling Parameters
+------------------------------------------------------------------------------------------
+conformer_search_type                                        flex
+write_fragment_libraries                                     no
+
+Anchor & Grow Parameters
+------------------------------------------------------------------------------------------
+user_specified_anchor                                        no
+limit_max_anchors                                            no
+min_anchor_size                                              40
+pruning_use_clustering                                       yes
+pruning_max_orients                                          10
+pruning_clustering_cutoff                                    10
+pruning_conformer_score_cutoff                               25.0
+pruning_conformer_score_scaling_factor                       1.0
+use_clash_overlap                                            no
+write_growth_tree                                            no
+
+Internal Energy Parameters
+------------------------------------------------------------------------------------------
+use_internal_energy                                          yes
+internal_energy_rep_exp                                      12
+internal_energy_cutoff                                       100.0
+Note: Internal energy only includes repulsive VDW for growth and/or minimization.
+
+Molecule Library Input Parameters
+------------------------------------------------------------------------------------------
+ligand_atom_file                                             lig.mol2
+limit_max_ligands                                            no
+skip_molecule                                                no
+read_mol_solvation                                           no
+calculate_rmsd                                               no
+
+Database Filter Parameters
+------------------------------------------------------------------------------------------
+use_database_filter                                          no
+
+Orient Ligand Parameters
+------------------------------------------------------------------------------------------
+orient_ligand                                                yes
+automated_matching                                           yes
+receptor_site_file                                           struct.sph
+max_orientations                                             50
+critical_points                                              no
+chemical_matching                                            no
+use_ligand_spheres                                           no
+
+Bump Filter Parameters
+------------------------------------------------------------------------------------------
+bump_filter                                                  no
+
+Master Score Parameters
+------------------------------------------------------------------------------------------
+score_molecules                                              no
+
+Atom Typing Parameters
+------------------------------------------------------------------------------------------
+atom_model                                                   all
+vdw_defn_file                                                ../../../parameters/vdw_AMBER_parm99.defn
+flex_defn_file                                               ../../../parameters/flex.defn
+flex_drive_file                                              ../../../parameters/flex_drive.tbl
+
+Molecule Library Output Parameters
+------------------------------------------------------------------------------------------
+ligand_outfile_prefix                                        flex1
+write_orientations                                           no
+num_scored_conformers                                        1
+rank_ligands                                                 no
+------------------------------------------------------------------------------------------
+
+Initializing Conformer Generator Routines...
+Initializing Library File Routines...
+Initializing Orienting Routines...
+Read in 38 spheres for orienting.
+
+-----------------------------------
+VERBOSE MOLECULE STATS
+
+  Number of heavy atoms = 23
+  Number of rotatable bonds = 1
+  Formal Charge = 0.000
+  Molecular Weight = 314.468
+  Heavy Atoms = 23
+-----------------------------------
+-----------------------------------
+VERBOSE ORIENTING STATS :
+
+Orienting 21 anchor heavy atom centers
+Sphere Center Matching Parameters:
+   tolerance: 0.25; dist_min: 2; min_nodes: 3; max_nodes: 10
+Num of cliques generated: 5487
+ Residual Info:
+   min residual:    0.0128
+   median residual: 0.1979
+   max residual:    0.2500
+   mean residual:   0.1878
+   std residual:    0.0476
+ Node Sizes:
+   min nodes:    3
+   max nodes:    4
+   mean nodes:   3.0035
+# of anchor positions: 10
+-----------------------------------
+VERBOSE GROWTH STATS : ANCHOR #1
+
+10/10 anchor orients retained (max 10) t=0.01s
+Lyr 1-1 Segs|number of layers:2
+Lyr:1 Seg:0 Bond:25 : Sampling 6 dihedrals C16(C.3)  C17(C.3)  C20(C.2)  C21(C.3)
+Lyr:1 Seg:0 11/60 retained, Pruning: 49-clustered  t=0.07s
+No more anchor fragments to be docked.
+
+-----------------------------------
+Molecule: LIG1
+
+ Elapsed time for docking:	0.154 seconds
+
+ Anchors:		1
+ Orientations:		50
+ Conformations:		11
+
+
+
+1 Molecules Processed
+Total elapsed time:	0.157 seconds

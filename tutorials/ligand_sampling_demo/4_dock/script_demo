@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# Regenerate ligand:receptor complex with rigid ligand 
+../../../bin/dock6 -i rigid.in
+
+# Regenerate ligand:receptor complex with flex ligand
+../../../bin/dock6 -i anchor_and_grow.in 

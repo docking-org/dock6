@@ -1,0 +1,13 @@
+../../1_struct/rec.pdb
+cavity.pdb
+../../../../parameters/prot.table.ambcrg.ambH
+../../../../parameters/vdw.parms.amb
+../rec_box.pdb
+0.3
+2
+1
+8.0 8.0
+78.3 78.3
+2.3 2.8
+gbsa_zou_grid
+1

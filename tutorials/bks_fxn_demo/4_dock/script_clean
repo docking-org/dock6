@@ -1,0 +1,3 @@
+#!/bin/sh
+
+rm -f ligand_scored.mol2

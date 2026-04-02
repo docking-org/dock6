@@ -1,0 +1,49 @@
+#!/bin/sh
+#set -vx
+
+# Regenerate ligand:receptor complex with flexible ligand 
+
+# Define constants
+DOCK_COMMAND_FOR_MPI="../../../bin/dock6.mpi -i mpi.in -o mpi.out"
+
+# Assign number of MPI processes if necessary
+if [ -z "$DOCK_PROCESSES" ]
+then
+    echo "Environment variable DOCK_PROCESSES is not defined."
+    DOCK_PROCESSES=4
+fi
+echo "Using $DOCK_PROCESSES MPI processes for DOCK."
+
+if [ -n "$MPI_HOME" ]
+then
+    echo "Environment variable MPI_HOME is defined."
+    if [ -x "$MPI_HOME/bin/mpirun" ]
+    then
+        echo "    Using MPI mpirun from $MPI_HOME/bin"
+        echo "Starting MPI DOCK."
+        ${MPI_HOME}/bin/mpirun -np $DOCK_PROCESSES $DOCK_COMMAND_FOR_MPI
+    else
+        echo "Error!  $MPI_HOME/bin/mpirun is not executable !"
+        exit 1
+    fi
+elif [ -n "$MPICH_HOME" ]
+then
+    echo "Environment variable MPICH_HOME is defined."
+    if [ -x "$MPICH_HOME/bin/mpirun" ]
+    then
+        echo "    Using MPI mpirun from $MPICH_HOME/bin"
+        echo "Starting MPI DOCK."
+        ${MPICH_HOME}/bin/mpirun -np $DOCK_PROCESSES $DOCK_COMMAND_FOR_MPI
+    else
+        echo "Error!  $MPICH_HOME/bin/mpirun is not executable !"
+        exit 1
+    fi
+else
+    echo "Environment variables MPI_HOME and MPICH_HOME are not defined."
+    echo "    Assuming mpirun is in the PATH."
+    echo "Starting MPI DOCK."
+    mpirun -np $DOCK_PROCESSES $DOCK_COMMAND_FOR_MPI
+fi
+
+exit
+

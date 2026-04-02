@@ -1,0 +1,76 @@
+NEW FEATURES IN DOCK 6.1
+
+###New Pruning Algorithm for Anchor & Grow###
+	As a result of previous studies, we determined that the major sampling limitation for the flexible 
+ligand algorithm was the pruning.  After exploring several alternatives, we have added a new method.  Here,
+the goal was to bias the sampling toward conformations that are close to the correct binding mode (as 
+optimized using a test set of experimentally solved structures). Much as the older method, the algorithm ranks 
+the generated poses and conformations. Then, all poses that violate a user-defined score cutoff are removed. To 
+facilitate the speed of the calculation, the remaining list is additionally pared back to a user-defined length. 
+In this technique, the sampling is driven toward molecules that sample closer to the experimentally determined 
+binding site, but results in a significantly less diverse set of final poses. The original pruning algorithm is 
+still available and remains the default setting.
+
+###Ability to Perform Analysis with Primary Score Before Rescoring###
+	In previous versions, the user was able to perform both ranking and clustering on the dock runs for each
+ligand using the primary score.  However, if the user wanted to then apply a more advanced scoring function, the
+analyzed data needed to be save to a file and then rescored in a separate run.  The primary scoring, analysis, 
+and secondary scoring procedures can now all be performed in the same run.  
+
+###Finer Control Over Structural Output###
+	In a typical run, the best-scoring pose of each ligand in the library is written to a file called 
+XXX_scored.mol2. In addition, there are several more advanced output options:
+(1) Users can choose to write out anchor orientations to a file called XXX_orients.mol2. 
+(2) Users can also write out conformers after the final level of optimization to a file called 
+  XXX_conformers.mol2. If clustering is enabled, all conformations will be written to the 
+  XXX_conformers.mol2 file while the clusterheads will be written to the XXX_scored.mol2 file. This 
+  seemingly redundant writing is to ensure that no portion of the analysis is lost if a failure occurs. In
+  addition, both the number of ranked conformations and clusterheads can now be controlled by the user.
+(3) Users can write molecules ranked by score to a file called XXX_ranked.mol2.  Once again, the user can
+  control the number of ligands from a library are saved.  
+If secondary scoring is enabled, all of the above files will be generated for both primary and secondary scoring. 
+The secondary scoring files contain both the original primary score as well as the new secondary score. 
+
+###Amber Score Improvements###
+	Two new movable regions have been added: distance and nothing.
+In the distance movable region receptor residues that are within
+a cutoff of the ligand are flexible.  The nothing movable region is a
+mildly performance optimized method for freezing all atoms.
+The DOCK output has been reorganized; all scoring details are controlled
+by the -v verbose flag.  The ligand_outfile_prefix_scored.mol2 file contains
+the ligand coordinates extracted from the final structure of the complex
+Final structure pdb files are written for the receptor, ligand, and
+complex as necessary.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+DEPRECATED FEATURES
+
+1.  For a variety of reasons still under active development, amber_score cannot effectively be used as a 
+secondary_score.  This function has been temporarily deprecated, and using input parameter amber_score_secondary 
+causes program termination.  The recommended protocol is to perform two DOCK runs with the second run specifying 
+amber_score as the primary_score.
+
+2.  Due to the restructuring of the structure output files (see "Finer Control Over Structural Output," the 
+scored_conformer_output_override and write_conformations options are no longer available.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+BUG FIXES
+
+Several critical bugs have been identified and fixed since the last release. These bugs include:
+
+	For SHOWSPHERE:
+		• Tabs and open statement keywords have been removed to enable compiling on various platforms, 
+		in particular gfortran 4.1.1
+
+	For DOCK:
+		• The heavy atom RMSD reported after docking is now being properly calculated 
+		• The default values for missing input parameters are properly assigned in batch mode
+		• If primary_score is called with minimization and secondary_score is called without minimization, 
+		secondary_score is now being calculated
+		• Amber_score now properly writes the final pose of the complex and the ligand properly
+		• When final_min is called, all user defined iterations are now performed.
+		• The reported problems with the bump filter have been addressed.  The behavior for the anchor 
+		filtering now reproduces DOCK 5.  The behavior for the growth filtering has been tested more 
+		extensively.  

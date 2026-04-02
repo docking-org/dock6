@@ -1,0 +1,49 @@
+********>Bugfix 1:
+Author:  Scott Brozell
+Date:  Dec 29, 2010
+
+Program:  amberize_complex
+
+Description:  the .amber.pdb, .inpcrd, and .prmtop Amber score input
+filenames for neutralized and neutralized-solvated RNA complexes are
+missing the ligand name.  Thus, these filenames are incorrect because
+they duplicate the corresponding receptor only filenames.
+
+Fix:  make the following changes to the file src/accessories/amberize_complex
+and reinstall that script: cd src/accessories;
+patch -c amberize_complex bugfix.1; make install
+-------------------------------------------------------------------------
+*** amberize_complex	16 Oct 2009 19:50:22 -0000	1.16
+--- amberize_complex	30 Dec 2010 00:42:17 -0000
+***************
+*** 118,129 ****
+  output_pdb=$receptor_name.$ligand_name.amber.pdb
+  output_prmtop=$receptor_name.$ligand_name.prmtop
+  receptor_pdb_file_prefix=$receptor_name
+! outputna_inpcrd=$receptor_pdb_file_prefix.na.inpcrd
+! outputna_pdb=$receptor_pdb_file_prefix.na.amber.pdb
+! outputna_prmtop=$receptor_pdb_file_prefix.na.prmtop
+! outputnah2o_inpcrd=$receptor_pdb_file_prefix.na.h2o.inpcrd
+! outputnah2o_pdb=$receptor_pdb_file_prefix.na.h2o.amber.pdb
+! outputnah2o_prmtop=$receptor_pdb_file_prefix.na.h2o.prmtop
+  
+  if [ ! -f "$input_pdb" ]
+  then
+--- 118,129 ----
+  output_pdb=$receptor_name.$ligand_name.amber.pdb
+  output_prmtop=$receptor_name.$ligand_name.prmtop
+  receptor_pdb_file_prefix=$receptor_name
+! outputna_inpcrd=$receptor_pdb_file_prefix.na.$ligand_name.inpcrd
+! outputna_pdb=$receptor_pdb_file_prefix.na.$ligand_name.amber.pdb
+! outputna_prmtop=$receptor_pdb_file_prefix.na.$ligand_name.prmtop
+! outputnah2o_inpcrd=$receptor_pdb_file_prefix.na.h2o.$ligand_name.inpcrd
+! outputnah2o_pdb=$receptor_pdb_file_prefix.na.h2o.$ligand_name.amber.pdb
+! outputnah2o_prmtop=$receptor_pdb_file_prefix.na.h2o.$ligand_name.prmtop
+  
+  if [ ! -f "$input_pdb" ]
+  then
+--------------------------------------------------------------------------
+
+Workaround:  correct the filenames by hand via executing a modified
+prepare_rna_amber.pl twice; it will be a lot better to patch amberize_complex.
+

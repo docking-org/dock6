@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Generate input files for Amber score  
+../../../bin/prepare_amber.pl lig.mol2 1lgu.pdb
+
+# Run DOCK6 with Amber score 
+../../../bin/dock6 -i dock.in -o dock.out
+

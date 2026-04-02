@@ -1,0 +1,9 @@
+  CHARGE=2 OPEN(4,3) SINGLET ROOT=6 force 
+ Methane RHF dication, 6th singlet state (totally symmetric)
+  Check that vibrational frequencies are 1342(T) 2488(A) 2554(E) 4619(T) +/-1
+  H    
+  C    1.2298156  
+  H    1.2298156  0    109.471221  
+  H    1.2298156  0    109.471221  0   -120.000000  0    2    1    3
+  H    1.2298156  0    109.471221  0    120.000000  0    2    1    3
+

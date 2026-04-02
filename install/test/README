@@ -1,0 +1,90 @@
+DOCK Software Testing & Quality Assurance
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Introduction
+
+    This directory contains the DOCK quality control (QC) suite.
+It produces pass/fail results via fast regression tests.  The suite should
+complete in less than ten minutes; five minutes is typical.
+Un-passed tests should be examined to determine their significance.
+
+Run the QC suite:
+
+	cd install/test
+	make test
+
+Examine the .dif files of the possible failures:
+
+	make check
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Known Failures
+
+    install/test/KNOWN_FAILURES
+lists the known problems identified in the quality control suite.
+The list is alphabetical by subdirectory name and then by test name if
+multiple tests exist in a subdirectory.
+
+Additional information for determining the significance of failures is here:
+http://dock.compbio.ucsf.edu/DOCK_6/dock6_manual.htm#InstallationTesting
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Alphabetical Partial Index of Tests
+
+	###anchor_and_grow###
+	TITLE:
+		Anchor and Grow
+	EXECUTABLES TESTED:
+        	dock6
+	FUNCTIONS TESTED:
+        	Flexible Ligand Parameters
+        	Anchor & Grow Parameters
+
+	###contact_score###
+	TITLE:
+		Contact Scoring
+	EXECUTABLES TESTED:
+        	dock6
+	FUNCTIONS TESTED:
+        	Master Score Parameters
+        	Contact Score Parameters
+
+	###gbsa_grid_generation###
+	TITLE:
+		GB/SA Grid generation
+	EXECUTABLES TESTED:
+        	grid
+        	nchemgrid_GB
+        	nchemgrid_SA
+
+	###grid_generation###
+	TITLE:
+		VDW/ES Grid generation
+	EXECUTABLES TESTED:
+        	showbox
+        	grid
+
+	###ligand_io###
+	TITLE:
+		Ligand Input/Output
+	EXECUTABLES TESTED:
+        	dock6
+	FUNCTIONS TESTED:
+       		Molecule Library Parameters
+
+	###ligand_orienting###
+	TITLE:
+		Orientation
+	EXECUTABLES TESTED:
+        	dock6
+	FUNCTIONS TESTED:
+        	Orient Ligand Parameters
+
+	###sphere_generation###
+	TITLE:
+		Site preparation/sphere generation
+	EXECUTABLES TESTED:
+        	sphgen
+        	sphere_selector
+        	showsphere
+	

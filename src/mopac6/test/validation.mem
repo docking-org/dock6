@@ -1,0 +1,120 @@
+                   Validation Tests for MOPAC, Version 6.00
+
+
+                       +*+*  Public Domain Version +*+*
+
+
+
+        When MOPAC is converted for use on a new computer, validation tests
+   should  be run in order to confirm that no degradation in the quality of
+   results has occurred.  To assist with this validation,  a  set  of  test
+   cases  has  been  constructed.  While not exhaustive, these tests do put
+   MOPAC through its paces.  MOPAC Version 6.00 passes all tests when a VAX
+   computer is used.
+
+        After the conversion to allow  it  to  run  on  a  new  machine  is
+   complete, MOPAC should be run using the test-set.  Only the VAX COM file
+   is given.  Users with other machines should read this COM file, and  try
+   to  figure out what was done.  Essentially, each data set is run through
+   MOPAC.  In rare cases  intermediate  output  is  deliberately  corrupted
+   before the test is continued.
+
+        A fast way of checking the tests is to use the VAX SEARCH  or  UNIX
+   "grep" command to check the heat of formation.  The form of this test is
+
+   $SEARCH *.OUT HEAT
+   $SEARCH *.OUT "NT NO"  (short for "GRADIENT NORM")
+   >grep "HEAT" *.out
+   >grep "NT NO" *.out
+    Do not rely only on these tests, the charges printed may be quite wrong,
+   even when the heat of formation, etc, were correct.
+
+
+                             Stringency of Tests
+
+        1.  Timings are machine-specific, and are not important.
+
+        2.  Heats of formation should be accurate to within 0.001 Kcal/mol,
+            unless a lower precision is specified.
+
+        3.  All gradient norms (just below the  FINAL  HEAT  OF  FORMATION)
+            should be below 1.0 Kcal/mol unless specifically noted.
+
+        4.  All other quantities should be within 0.1% of the value given.
+
+
+
+
+                 Errors already encountered in porting MOPAC
+
+        1.  Heats of formation grossly in error -- conversion fault.
+
+        2.  Charges faulty in final output -- compiler error.
+
+        3.  Unexpected failure to go SCF -- mantissa too short.
+
+        4.  Unequal COMMON blocks -- double to single precision conversion.
+            (not important).
+
+
+                                      i
+        5.  Date or CPU time incorrect  --  local  function  not  correctly
+            installed.
+
+        6.  Restart function does not work  --  unformatted  files  wrongly
+            handled.
+
+        7.  More than one MOPAC job cannot be run -- COM file error.
+
+
+
+
+        If, after trying to correct all faults, MOPAC still does  not  pass
+   all  tests, and you think it should, then please give me a call at (719)
+   472-2655.  It might be that  our  tests  are  too  stringent,  and  that
+   relaxing  one  or  more  criteria  would  allow  a  modified MOPAC to be
+   validated.
+
+
+
+        Even when all tests are passed, hidden bugs may  still  exist.   If
+   extensive changes were necessary in order to shoehorn MOPAC into a given
+   machine, then the likelyhood of hidden bugs rises.   To  minimize  this,
+   make  only  the minimum changes necessary to get MOPAC to run.  Even the
+   master copy of MOPAC is not bug-free, the only assertion made is that it
+   passes  all  of  our  tests, and we have no reason to suspect any hidden
+   bugs exist.
+
+
+                             James J. P. Stewart.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      ii

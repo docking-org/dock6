@@ -1,0 +1,94 @@
+********>Bugfix 1:
+Authors:  Yuchen Zhou, Courtney Singleton, Sudipto Mukherjee, Lingling Jiang, 
+          Prajna Shanbhogue, Trent E. Balius, William Joseph Allen,
+          Scott Brozell, and Robert C. Rizzo
+Date:  May 26, 2015
+
+Program:  dock6
+
+Description:  this bugfix corrects three bugs.  The first change, in file
+amber_typer.cpp, fixes off-by-one atom indexing in the H-bond label assignment.
+This previously unknown bug is old, it prevented assigning the first atom of
+a molecule as a hydrogen-bond acceptor or donor, and it is active when input
+parameters descriptor_score_primary=yes or descriptor_score_secondary=yes.
+The other two bugs are in the recently added minimum-distance heavy-atom RMSD,
+HA_RMSDm, calculation which is active when input parameter calculate_rmsd=yes:
+http://dock.compbio.ucsf.edu/DOCK_6/dock6_manual.htm#LigandRMSD
+The second change, involving prepare_molecule in library_file.cpp, fixes
+division by zero when input parameter use_rmsd_reference_mol=no; in this case
+the potentially incorrect HA_RMSDm value is not an accurate maximum.
+The third change, involving mindist in library_file.cpp, fixes a
+reinitialization bug that can potentially produce an inaccurately small
+HA_RMSDm value.  This last bugfix was the only one that was applied in the
+Allen et al. reference paper for version 6.7:
+http://dock.compbio.ucsf.edu/DOCK_6/dock6_manual.htm#allenetal2015
+
+Fix:  make the following changes, most simply accomplished with the command
+cd $DOCK_HOME; patch -N -p0 < bugfix.1
+to the files:
+src/dock/amber_typer.cpp
+src/dock/library_file.cpp
+and reinstall dock6:
+cd install; make dock; make test
+-------------------------------------------------------------------------
+*** src/dock/amber_typer.cpp	16 Jul 2011 07:37:55 -0000	1.15
+--- src/dock/amber_typer.cpp	7 Apr 2015 19:46:20 -0000	1.16
+***************
+*** 856,862 ****
+  AMBER_TYPER::assign_hbond_labels( DOCKMol & mol )
+  {
+   // assign hbond labels
+!  for (int i=1;i<mol.num_atoms;i++){
+        stringstream ss;
+        stringstream ss1;
+        char atom_type_char[10];
+--- 856,862 ----
+  AMBER_TYPER::assign_hbond_labels( DOCKMol & mol )
+  {
+   // assign hbond labels
+!  for (int i=0;i<mol.num_atoms;i++){
+        stringstream ss;
+        stringstream ss1;
+        char atom_type_char[10];
+===================================================================
+*** src/dock/library_file.cpp	29 Aug 2013 02:16:08 -0000	1.67
+--- src/dock/library_file.cpp	21 May 2015 21:25:40 -0000	1.69
+***************
+*** 1747,1756 ****
+          // prepare_molecule(DOCKMol & mol, bool read_vdw, bool use_chem)
+          // the prepare_molecule function will assign heavy atom flag needed by the
+          // min RMSD function.
+!         typer.prepare_molecule(rmsd_reference,true,false);
+  
+      }
+  
+  }
+  
+  /************************************************/
+--- 1747,1758 ----
+          // prepare_molecule(DOCKMol & mol, bool read_vdw, bool use_chem)
+          // the prepare_molecule function will assign heavy atom flag needed by the
+          // min RMSD function.
+!         //typer.prepare_molecule(rmsd_reference,true,false);    WAS here in DOCK6.7 release
+  
+      }
+  
++     typer.prepare_molecule(rmsd_reference,true,false);    //Bugfix by YUCHEN 5/21/2015
++ 
+  }
+  
+  /************************************************/
+***************
+*** 1843,1848 ****
+--- 1845,1851 ----
+      float mindist = 100000;
+      int hcount = 0;
+      for (int i = 0; i < mol.num_atoms; i++) {
++         mindist = 100000;
+          if (mol.amber_at_heavy_flag[i]) {
+              for (int j = 0; j < refmol.num_atoms; j++) {
+                  //if ((mol.amber_at_heavy_flag[j]) && (refmol.atom_types[i]==mol.atom_types[j])) {
+--------------------------------------------------------------------------
+
+Workaround:  none.
+

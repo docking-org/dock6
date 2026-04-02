@@ -1,0 +1,342 @@
+##########                    Descriptor_Score:          -31.885460
+##########                     MultiGrid_Score:          -31.885460
+##########                 desc_MGS_vdw_energy:          -28.800240
+##########                  desc_MGS_es_energy:          -28.133211
+##########              desc_MGS_vdw+es_energy:          -56.933449
+##########                    desc_MGS_vdw_fps:           14.442741
+##########                     desc_MGS_es_fps:           10.605247
+##########                 desc_MGS_vdw+es_fps:           25.047989
+##########           Internal_energy_repulsive:            0.460299
+##########                                Name:     denovo_layer5_0
+##########                    Molecular_Weight:              169.03
+##########                DOCK_Rotatable_Bonds:                   5
+##########                       Formal_Charge:           -2.000000
+##########                     HBond_Acceptors:                   7
+##########                        HBond_Donors:                   2
+##########                     Layer_Completed:                   5
+##########                         Frag_String:sid.5--lnk.3--lnk.0--lnk.1--lnk.2--sid.4
+
+@<TRIPOS>MOLECULE
+denovo_layer5_0
+ 14 13 1 0 0
+SMALL
+bcc
+sid.5--lnk.3--lnk.0--lnk.1--lnk.2--sid.4
+
+@<TRIPOS>ATOM
+      1 O4         83.4924  -13.3292   67.5272 O.co2   1  sid.5      -0.6332
+      2 O5         85.8927  -13.6048   66.1608 O.co2   1  sid.5      -0.6332
+      3 O6         84.1740  -11.3428   66.0785 O.co2   1  sid.5      -0.6332
+      4 P1         84.3673  -12.9529   66.1463 P.3     1  sid.5       0.0599
+      5 O3         83.2685  -13.6308   64.9948 O.3     2  lnk.3      -0.3460
+      6 C2         82.8826  -14.9524   65.1866 C.3     3  lnk.0       0.1320
+      7 H1         82.0740  -15.0233   65.8665 H       3  lnk.0       0.0675
+      8 H2         83.6898  -15.5423   65.5350 H       3  lnk.0       0.0675
+      9 C1         82.4473  -15.4460   63.8387 C.2     4  lnk.1       0.2692
+     10 O2         82.7694  -16.6120   63.5627 O.2     4  lnk.1      -0.2700
+     11 N1         81.7167  -14.4562   63.0526 N.am    5  lnk.2      -0.2358
+     12 H3         81.5381  -13.5400   63.4356 H       5  lnk.2       0.1983
+     13 O1         81.3046  -14.8222   61.8202 O.3     6  sid.4      -0.2885
+     14 H4         81.9037  -15.4937   61.4663 H       6  sid.4       0.2456
+@<TRIPOS>BOND
+     1     4     1    1
+     2     4     2    1
+     3     4     3    1
+     4     4     5    1
+     5     7     6    1
+     6     8     6    1
+     7     5     6    1
+     8    10     9    2
+     9     6     9    1
+    10    12    11    1
+    11     9    11   am
+    12    14    13    1
+    13    11    13    1
+@<TRIPOS>SUBSTRUCTURE
+     1 sid.5        1 TEMP              0 ****  ****    0 ROOT
+
+##########                    Descriptor_Score:          -14.689172
+##########                     MultiGrid_Score:          -14.689172
+##########                 desc_MGS_vdw_energy:          -25.111227
+##########                  desc_MGS_es_energy:          -19.454958
+##########              desc_MGS_vdw+es_energy:          -44.566185
+##########                    desc_MGS_vdw_fps:           14.219386
+##########                     desc_MGS_es_fps:           15.657626
+##########                 desc_MGS_vdw+es_fps:           29.877012
+##########           Internal_energy_repulsive:            3.917108
+##########                                Name:     denovo_layer5_1
+##########                    Molecular_Weight:          169.030396
+##########                DOCK_Rotatable_Bonds:                   5
+##########                       Formal_Charge:           -2.000000
+##########                     HBond_Acceptors:                   7
+##########                        HBond_Donors:                   2
+##########                     Layer_Completed:                   5
+##########                         Frag_String:sid.5--lnk.3--lnk.0--lnk.1--lnk.2--sid.4
+
+@<TRIPOS>MOLECULE
+denovo_layer5_1
+ 14 13 1 0 0
+SMALL
+bcc
+sid.5--lnk.3--lnk.0--lnk.1--lnk.2--sid.4
+
+@<TRIPOS>ATOM
+      1 O4         84.7752  -13.2788   65.2137 O.co2   1  sid.5      -0.6332
+      2 O5         85.3754  -15.4626   66.8184 O.co2   1  sid.5      -0.6332
+      3 O6         85.0554  -15.5024   63.9948 O.co2   1  sid.5      -0.6332
+      4 P1         84.6082  -14.9316   65.4468 P.3     1  sid.5       0.0599
+      5 O3         82.8793  -14.9778   65.4841 O.3     2  lnk.3      -0.3460
+      6 C2         82.2459  -15.8060   64.5649 C.3     3  lnk.0       0.1320
+      7 H1         82.8816  -16.6181   64.3249 H       3  lnk.0       0.0675
+      8 H2         81.3454  -16.1740   64.9829 H       3  lnk.0       0.0675
+      9 C1         81.9789  -14.9476   63.3641 C.2     4  lnk.1       0.2692
+     10 O2         82.4552  -13.8026   63.4044 O.2     4  lnk.1      -0.2700
+     11 N1         81.1788  -15.6027   62.3334 N.am    5  lnk.2      -0.2358
+     12 H3         80.8691  -16.5540   62.4640 H       5  lnk.2       0.1983
+     13 O1         80.8837  -14.8871   61.2273 O.3     6  sid.4      -0.2885
+     14 H4         80.7961  -15.4838   60.4714 H       6  sid.4       0.2456
+@<TRIPOS>BOND
+     1     4     1    1
+     2     4     2    1
+     3     4     3    1
+     4     4     5    1
+     5     7     6    1
+     6     8     6    1
+     7     5     6    1
+     8    10     9    2
+     9     6     9    1
+    10    12    11    1
+    11     9    11   am
+    12    14    13    1
+    13    11    13    1
+@<TRIPOS>SUBSTRUCTURE
+     1 sid.5        1 TEMP              0 ****  ****    0 ROOT
+
+##########                    Descriptor_Score:           -9.825600
+##########                     MultiGrid_Score:           -9.825600
+##########                 desc_MGS_vdw_energy:          -18.569056
+##########                  desc_MGS_es_energy:          -18.555119
+##########              desc_MGS_vdw+es_energy:          -37.124176
+##########                    desc_MGS_vdw_fps:           13.389630
+##########                     desc_MGS_es_fps:           13.908947
+##########                 desc_MGS_vdw+es_fps:           27.298576
+##########           Internal_energy_repulsive:            7.649596
+##########                                Name:     denovo_layer5_2
+##########                    Molecular_Weight:          169.030396
+##########                DOCK_Rotatable_Bonds:                   5
+##########                       Formal_Charge:           -2.000000
+##########                     HBond_Acceptors:                   7
+##########                        HBond_Donors:                   2
+##########                     Layer_Completed:                   5
+##########                         Frag_String:sid.5--lnk.3--lnk.0--lnk.1--lnk.2--sid.4
+
+@<TRIPOS>MOLECULE
+denovo_layer5_2
+ 14 13 1 0 0
+SMALL
+bcc
+sid.5--lnk.3--lnk.0--lnk.1--lnk.2--sid.4
+
+@<TRIPOS>ATOM
+      1 O4         82.8226  -13.5849   65.3705 O.co2   1  sid.5      -0.6332
+      2 O5         84.8977  -15.4080   65.6434 O.co2   1  sid.5      -0.6332
+      3 O6         83.3907  -14.9339   63.2809 O.co2   1  sid.5      -0.6332
+      4 P1         83.4565  -15.0642   64.8974 P.3     1  sid.5       0.0599
+      5 O3         82.1109  -16.0441   65.3687 O.3     2  lnk.3      -0.3460
+      6 C2         81.8913  -17.2114   64.6467 C.3     3  lnk.0       0.1320
+      7 H1         82.8177  -17.5961   64.3074 H       3  lnk.0       0.0675
+      8 H2         81.4179  -17.9268   65.2673 H       3  lnk.0       0.0675
+      9 C1         81.0100  -16.8170   63.4987 C.2     4  lnk.1       0.2692
+     10 O2         80.6758  -17.7369   62.7360 O.2     4  lnk.1      -0.2700
+     11 N1         80.6947  -15.3921   63.4559 N.am    5  lnk.2      -0.2358
+     12 H3         81.0549  -14.7743   64.1677 H       5  lnk.2       0.1983
+     13 O1         79.9175  -14.9577   62.4412 O.3     6  sid.4      -0.2885
+     14 H4         79.2122  -14.3972   62.7925 H       6  sid.4       0.2456
+@<TRIPOS>BOND
+     1     4     1    1
+     2     4     2    1
+     3     4     3    1
+     4     4     5    1
+     5     7     6    1
+     6     8     6    1
+     7     5     6    1
+     8    10     9    2
+     9     6     9    1
+    10    12    11    1
+    11     9    11   am
+    12    14    13    1
+    13    11    13    1
+@<TRIPOS>SUBSTRUCTURE
+     1 sid.5        1 TEMP              0 ****  ****    0 ROOT
+
+##########                    Descriptor_Score:            5.318603
+##########                     MultiGrid_Score:            5.318603
+##########                 desc_MGS_vdw_energy:           -5.659238
+##########                  desc_MGS_es_energy:          -18.535313
+##########              desc_MGS_vdw+es_energy:          -24.194550
+##########                    desc_MGS_vdw_fps:           15.520627
+##########                     desc_MGS_es_fps:           13.992525
+##########                 desc_MGS_vdw+es_fps:           29.513153
+##########           Internal_energy_repulsive:            7.764511
+##########                                Name:     denovo_layer5_3
+##########                    Molecular_Weight:          169.030396
+##########                DOCK_Rotatable_Bonds:                   5
+##########                       Formal_Charge:           -2.000000
+##########                     HBond_Acceptors:                   7
+##########                        HBond_Donors:                   2
+##########                     Layer_Completed:                   5
+##########                         Frag_String:sid.5--lnk.3--lnk.0--lnk.1--lnk.2--sid.4
+
+@<TRIPOS>MOLECULE
+denovo_layer5_3
+ 14 13 1 0 0
+SMALL
+bcc
+sid.5--lnk.3--lnk.0--lnk.1--lnk.2--sid.4
+
+@<TRIPOS>ATOM
+      1 O4         81.7246  -15.5312   63.3115 O.co2   1  sid.5      -0.6332
+      2 O5         82.0959  -15.2000   66.0422 O.co2   1  sid.5      -0.6332
+      3 O6         82.7679  -13.3149   64.0244 O.co2   1  sid.5      -0.6332
+      4 P1         82.6676  -14.8560   64.5234 P.3     1  sid.5       0.0599
+      5 O3         84.1618  -15.6131   64.0909 O.3     2  lnk.3      -0.3460
+      6 C2         85.3171  -15.1293   64.6937 C.3     3  lnk.0       0.1320
+      7 H1         86.1071  -15.8189   64.5469 H       3  lnk.0       0.0675
+      8 H2         85.5768  -14.1977   64.2626 H       3  lnk.0       0.0675
+      9 C1         84.9829  -14.9827   66.1486 C.2     4  lnk.1       0.2692
+     10 O2         85.0168  -16.0277   66.8166 O.2     4  lnk.1      -0.2700
+     11 N1         84.6535  -13.6170   66.5463 N.am    5  lnk.2      -0.2358
+     12 H3         84.6758  -12.8739   65.8643 H       5  lnk.2       0.1983
+     13 O1         84.3264  -13.4080   67.8393 O.3     6  sid.4      -0.2885
+     14 H4         84.7599  -14.0719   68.3928 H       6  sid.4       0.2456
+@<TRIPOS>BOND
+     1     4     1    1
+     2     4     2    1
+     3     4     3    1
+     4     4     5    1
+     5     7     6    1
+     6     8     6    1
+     7     5     6    1
+     8    10     9    2
+     9     6     9    1
+    10    12    11    1
+    11     9    11   am
+    12    14    13    1
+    13    11    13    1
+@<TRIPOS>SUBSTRUCTURE
+     1 sid.5        1 TEMP              0 ****  ****    0 ROOT
+
+##########                    Descriptor_Score:            5.538302
+##########                     MultiGrid_Score:            5.538302
+##########                 desc_MGS_vdw_energy:           -7.674741
+##########                  desc_MGS_es_energy:          -17.561071
+##########              desc_MGS_vdw+es_energy:          -25.235813
+##########                    desc_MGS_vdw_fps:           16.252998
+##########                     desc_MGS_es_fps:           14.521117
+##########                 desc_MGS_vdw+es_fps:           30.774117
+##########           Internal_energy_repulsive:            0.652775
+##########                                Name:     denovo_layer5_4
+##########                    Molecular_Weight:          169.030396
+##########                DOCK_Rotatable_Bonds:                   5
+##########                       Formal_Charge:           -2.000000
+##########                     HBond_Acceptors:                   7
+##########                        HBond_Donors:                   2
+##########                     Layer_Completed:                   5
+##########                         Frag_String:sid.5--lnk.3--lnk.0--lnk.1--lnk.2--sid.4
+
+@<TRIPOS>MOLECULE
+denovo_layer5_4
+ 14 13 1 0 0
+SMALL
+bcc
+sid.5--lnk.3--lnk.0--lnk.1--lnk.2--sid.4
+
+@<TRIPOS>ATOM
+      1 O4         82.1852  -17.6620   64.8893 O.co2   1  sid.5      -0.6332
+      2 O5         82.1046  -15.1009   65.9565 O.co2   1  sid.5      -0.6332
+      3 O6         81.7564  -15.7816   63.2192 O.co2   1  sid.5      -0.6332
+      4 P1         82.4973  -16.0326   64.6413 P.3     1  sid.5       0.0599
+      5 O3         84.1867  -16.1791   64.2984 O.3     2  lnk.3      -0.3460
+      6 C2         84.9941  -15.0903   64.6061 C.3     3  lnk.0       0.1320
+      7 H1         85.5754  -14.8315   63.7597 H       3  lnk.0       0.0675
+      8 H2         84.3876  -14.2677   64.8829 H       3  lnk.0       0.0675
+      9 C1         85.8592  -15.5381   65.7468 C.2     4  lnk.1       0.2692
+     10 O2         85.5752  -15.0620   66.8568 O.2     4  lnk.1      -0.2700
+     11 N1         86.9191  -16.4641   65.3588 N.am    5  lnk.2      -0.2358
+     12 H3         87.0089  -16.7532   64.3963 H       5  lnk.2       0.1983
+     13 O1         87.7495  -16.9004   66.3297 O.3     6  sid.4      -0.2885
+     14 H4         88.5122  -16.3090   66.3913 H       6  sid.4       0.2456
+@<TRIPOS>BOND
+     1     4     1    1
+     2     4     2    1
+     3     4     3    1
+     4     4     5    1
+     5     7     6    1
+     6     8     6    1
+     7     5     6    1
+     8    10     9    2
+     9     6     9    1
+    10    12    11    1
+    11     9    11   am
+    12    14    13    1
+    13    11    13    1
+@<TRIPOS>SUBSTRUCTURE
+     1 sid.5        1 TEMP              0 ****  ****    0 ROOT
+
+##########                    Descriptor_Score:            6.217576
+##########                     MultiGrid_Score:            6.217576
+##########                 desc_MGS_vdw_energy:          -16.187588
+##########                  desc_MGS_es_energy:           -8.653803
+##########              desc_MGS_vdw+es_energy:          -24.841391
+##########                    desc_MGS_vdw_fps:           14.410434
+##########                     desc_MGS_es_fps:           16.648533
+##########                 desc_MGS_vdw+es_fps:           31.058968
+##########           Internal_energy_repulsive:            1.910161
+##########                                Name:     denovo_layer5_5
+##########                    Molecular_Weight:          169.030396
+##########                DOCK_Rotatable_Bonds:                   5
+##########                       Formal_Charge:           -2.000000
+##########                     HBond_Acceptors:                   7
+##########                        HBond_Donors:                   2
+##########                     Layer_Completed:                   5
+##########                         Frag_String:sid.5--lnk.3--lnk.0--lnk.1--lnk.2--sid.4
+
+@<TRIPOS>MOLECULE
+denovo_layer5_5
+ 14 13 1 0 0
+SMALL
+bcc
+sid.5--lnk.3--lnk.0--lnk.1--lnk.2--sid.4
+
+@<TRIPOS>ATOM
+      1 O4         81.8041  -18.7214   64.0893 O.co2   1  sid.5      -0.6332
+      2 O5         80.7567  -16.1677   64.3822 O.co2   1  sid.5      -0.6332
+      3 O6         81.7321  -17.3062   61.9678 O.co2   1  sid.5      -0.6332
+      4 P1         81.8461  -17.1248   63.5766 P.3     1  sid.5       0.0599
+      5 O3         83.5143  -16.8236   63.9222 O.3     2  lnk.3      -0.3460
+      6 C2         83.9653  -15.5159   63.7861 C.3     3  lnk.0       0.1320
+      7 H1         84.9724  -15.5221   63.4589 H       3  lnk.0       0.0675
+      8 H2         83.3665  -15.0079   63.0759 H       3  lnk.0       0.0675
+      9 C1         83.8369  -14.9001   65.1478 C.2     4  lnk.1       0.2692
+     10 O2         82.7717  -14.3041   65.3707 O.2     4  lnk.1      -0.2700
+     11 N1         85.0081  -15.0925   65.9981 N.am    5  lnk.2      -0.2358
+     12 H3         85.8015  -15.6119   65.6536 H       5  lnk.2       0.1983
+     13 O1         84.9735  -14.5530   67.2351 O.3     6  sid.4      -0.2885
+     14 H4         84.7827  -15.2448   67.8832 H       6  sid.4       0.2456
+@<TRIPOS>BOND
+     1     4     1    1
+     2     4     2    1
+     3     4     3    1
+     4     4     5    1
+     5     7     6    1
+     6     8     6    1
+     7     5     6    1
+     8    10     9    2
+     9     6     9    1
+    10    12    11    1
+    11     9    11   am
+    12    14    13    1
+    13    11    13    1
+@<TRIPOS>SUBSTRUCTURE
+     1 sid.5        1 TEMP              0 ****  ****    0 ROOT
+

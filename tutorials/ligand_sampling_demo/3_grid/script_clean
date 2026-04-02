@@ -1,0 +1,4 @@
+#!/bin/sh
+
+rm -f rec_box.pdb 
+rm -f grid.nrg grid.bmp

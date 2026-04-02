@@ -1,0 +1,32 @@
+This directory contains a docking example that will demonstrate pose
+rescoring of the experimental ligand orientation using Hawkins GB/SA,
+and Zou GB/SA. It will demonstrate sphere generation,
+grid creation, and ligand rescoring.  The demo is meant to provide
+an idea of how the dock programs work.  The values selected for the
+example are customized for this case, and may not be the best values
+for all dockings.
+
+Terry Lang 03/06
+
+                             --- * ---
+
+script_demo             This script executes the various steps in the
+                        demonstration.  The entire demonstration can
+                        take a while, especially the grid generation step.
+
+1_struc/                This directory contains receptor and ligand
+                        coordinate files.
+
+2_site/                 This directory contains sphere generation files.
+
+3_grid/                 This directory contains grid generation files.
+
+4_dock/                 This directory contains docking files.
+
+script_clean            This script cleans up (removes) the various files
+                        generated during the demonstration.
+
+For more information about the steps involved in generating these files,
+go to the tutorials located on the DOCK Web site at
+http://dock.compbio.ucsf.edu/DOCK_6/tutorials/index.htm
+

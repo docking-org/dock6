@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>Tutorial: DOCK6 Amber Score Custom Input Preparation</title>
+<style>
+.style2 {
+	font-size: 36px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+}
+.style4 {font-family: Arial, Helvetica, sans-serif; font-size: 18px;}
+.style6 {font-family: Arial, Helvetica, sans-serif}
+-->
+</style>
+</head>
+
+<body lang=EN-US link=blue vlink=blue style='tab-interval:.5in'>
+
+<div class=Section1>
+
+<p align=center style='text-align:center'><span class=style2><b><span
+style='font-size:27.0pt'>DOCK6 Amber Score Custom Input Preparation
+</span></b></span></p>
+
+<p class=style4style10 align=center style='text-align:center'><span
+style='font-family:Arial'>Author: Scott Brozell<br>
+Last updated January 27, 2023 by Scott Brozell<o:p></o:p></span></p>
+
+<p class=style4> This tutorial describes the preparation of
+DOCK Amber score input files for receptors containing custom residues.
+These techniques should be applicable to any receptor-ligand system.
+Docking and rescoring studies for a protein containing
+<a href="https://pubchem.ncbi.nlm.nih.gov/summary/summary.cgi?cid=30819">
+phosphotyrosine</a>
+are the basis.
+</p>
+
+<br>
+<p class=style4><b>Input files preparation.</b></p>
+<p class=style4><b>1) Ligand Preparation:</b>
+Follow the procedure described in Step 1) of the
+<a href="amber_score.htm">
+Overview and Input Preparation </a>
+Amber Score tutorial.
+</p>
+
+<p class=style4><b>2) Receptor Preparation:</b> </p>
+<p class=style4>
+Follow the procedure described in Step 2) of the
+<a href="amber_score.htm"> Overview and Input Preparation </a>
+Amber Score tutorial.
+</p>
+
+<p class=style4>
+There are additional steps for recognition of custom residues by 
+the command prepare_amber.pl.  In this tutorial the receptor has
+phosphotyrosine residues (named PTR in the PDB file) in its active site,
+and initially these are not recognized by the program. 
+</p>
+<!--
+show error message;
+( http://mailman.docking.org/pipermail/dock-fans/2010-October/002428.html )
+-->
+
+
+<p class=style4>
+The methodology for handling this type of situation was added in
+Dock 6.2.  The general procedure is to determine how one would
+recognize phosphotyrosine in Amber.  And then to add the appropriate
+commands into dock6/parameters/leap/cmd/leaprc.dock.user,
+which is a user library that is automatically processed; see the
+<a href="https://dock.compbio.ucsf.edu/DOCK_6/dock6_manual.htm#AMBERScoreInputs">
+Amber Score Inputs</a>
+documentation.
+</p>
+
+<p class=style4>
+Inserting phosphotyrosine into the
+<a href="https://ambermd.org/">
+Amber search bar</a>
+finds a gem:
+<a href="https://archive.ambermd.org/200707/0284.html">
+https://archive.ambermd.org/200707/0284.html</a>.
+The "contributed parameters" url is
+<a href="https://www.pharmacy.manchester.ac.uk/bryce/amber">
+https://www.pharmacy.manchester.ac.uk/bryce/amber</a>.
+Parameters for both phosphotyrosine with a single protonated phosphate group
+and phosphotyrosine with an unprotonated phosphate group are listed.
+</p>
+
+<p class=style4>
+As described in general in the
+<a href="amber_score.htm">
+Amber score tutorial</a>
+one must ensure that the phosphotyrosine residue names in the PDB file,
+in this case PTR, match those in the Amber parameter files, Y2P for
+the unprotonated one above; ie, edit your PDB and change PTR to eg, Y2P.
+</p>
+
+<p class=style4>
+Add the LEaP commands into
+dock6/parameters/leap/cmd/leaprc.dock.user:
+loadamberparam frmod_y2p
+loadOff Y2P.off
+</p>
+
+<p class=style4>
+prepare_amber.pl should now automatically recognize phosphotyrosine.
+Be sure to examine the amberize*.out and *.log files for warnings and errors;
+see the
+<a href="https://dock.compbio.ucsf.edu/DOCK_6/dock6_manual.htm#AMBERScorePractice">
+Amber Score in Practice</a>
+documentation.
+</p>
+
+</body>
+
+</html>

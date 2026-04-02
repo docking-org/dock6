@@ -1,0 +1,49 @@
+ ***From SCHEMGRID, Version 4.0 ***
+ __________________________________
+  
+ receptor pdb file:
+rec.pdb                                           
+ cavity pdb file:
+cavity.pdb                                        
+ receptor parameters will be read from:
+prot.table.ambcrg.ambH                            
+ van der Waals parameter file:
+vdw.parms.amb                                     
+ input box file defining grid location:
+box.pdb                                           
+box center coordinates [x y z]:
+ 22.48900     11.77800     59.51600    
+box x-dimension =  13.98400    
+box y-dimension =  11.09700    
+box z-dimension =  20.50300    
+ grid spacing in angstroms
+  0.500000000    
+ grid points per side [x y z]:
+          29          24          43
+ total number of grid points =        29928
+ Generalized Born polarization will be used
+the dielectric function will be multiplied by   1.00
+ cutoff distance for energy calculations:
+   8.00000000    
+ cutoff distance for receptors outside the box:
+   8.00000000    
+ cutoff distance for overlap marking:
+   3.00000000    
+ scale factor in exponent term of f_gb:
+   4.00000000    
+ dielectric contants of solvent and cavity:
+   78.3000031       78.3000031    
+ cav_scale:
+   0.00000000    
+ distances defining bumps with receptor atoms:
+receptor polar atoms  2.30
+receptor carbon atoms  2.80
+ output grid prefix name:
+zou_grid                                          
+ Use the pairwise formula to compute Born radii
+ ***elapsed time before grid computation:   0.100984000    
+ total # of R atoms in the box =          167
+ total # of R atoms for evaluation of Born radius =         1066
+solv_rec = -849.2684    
+ ***elapsed time on grid computation:   0.152976006    
+ ***total elapsed time:   0.266959012    

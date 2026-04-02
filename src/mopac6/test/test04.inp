@@ -1,0 +1,17 @@
+  gnorm=0    AIGIN
+ Ethane, showing use of Gaussian Z-matrix input (AIGIN is necessary in this run)
+ Check that heat of formation is -19.7220
+  C  
+  C     1     r21    
+  H     2     r32       1     a321   
+  H     2     r32       1     a321      3  120   0
+  H     2     r32       1     a321      3  240   0
+  H     1     r32       2     a321      3  d6321 0
+  H     1     r32       2     a321      3 -d6321 0
+  H     1     r32       2     a321      3  180   0
+
+     r21        1.5
+     r32        1.0
+     a321     109.0
+     d6321     60.0
+

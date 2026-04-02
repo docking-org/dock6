@@ -1,0 +1,61 @@
+DOCK Programmer's Manual
+
+
+Rules to live by
+================
+
+1.  Update your cvs sandbox frequently and commit your tested source
+    modifications as soon as possible.  See cvs_tree_README.
+
+2.  Test early, test often.  Be studious with respect to the Quality
+    Assurance suite.  See test_directory_README.
+
+3.  Update the documentation (manual, tutorials, release notes)
+    when you modify the source files.
+
+4.  Do not use tabs.  Tabs are platform dependent.  Use spaces for indenting.
+    Any decent editor can space fill.
+
+5.  80 characters per line maximum.
+
+6.  Write readable log messages.
+    The idea is to explain the change in a couple of lines in a way that
+    other people (even after long periods of time) will be able to understand.
+    For example: in function bla I removed a block of code that 
+    did this because yada;  see this publication for details.
+    In particular, it is rarely appropriate to include cvs diffs in cvs log
+    messages.  
+
+
+
+Style
+=====
+
+1.  Avoid large and/or many sections of commented out code. 
+    Commented blocks are occasionally useful during development,
+    but should be cleaned up quickly.  cvs is the place for old code.
+
+2.  Write simple Boolean expressions.
+    The == operator returns a boolean value, so this:
+         some_input = (parm.query_param("some_input", "no", "yes no") ==
+                       "yes") ? true : false;
+
+    should be:
+
+         some_input = parm.query_param("some_input", "no", "yes no") == "yes";
+
+
+
+Tracing
+=======
+
+  Tracing statements emit output for following the execution flow or
+  debugging.  These can be turned off for distribution.
+
+
+
+Singleton Pattern
+=================
+
+  A programming pattern for management of community resources.
+

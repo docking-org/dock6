@@ -1,0 +1,13 @@
+# DOCK Amber Score User Commands for LEaP
+#  This provides a hook into the amberization scripts.
+#  All these commands will be sourced by tleap in all the amberize scripts.
+#  For example, one could define a new atom type and load its parameters:
+#  This merely prevents unknown atom type and maybe hybridization
+#  comments from LEaP.
+#  addAtomTypes {
+#     { "Si"  "Si" "sp3" }
+#  }
+#  
+#  Define the atom types and parameters for Tetrahedrally Bonded Silicon.
+#  silicon = loadamberparams frcmod.dock.silicon
+

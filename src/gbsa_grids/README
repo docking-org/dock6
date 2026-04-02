@@ -1,0 +1,44 @@
+The nchemgrid_GB and nchemgrid_SA programs create the GB and SA receptor grids for use with DOCK 5's GB/SA scoring function.
+
+Both programs require that an INCHEM file be created in the working directory, which contains the parameters to control the program.  The INCHEM parameters for both the nchemgrid_GB and nchemgrid_SA programs are detailed below:
+
+for nchemgrid_GB:
+receptor.pdb                                      ; receptor pdb file
+cavity.pdb                                        ; cavity pdb file
+parms/prot.table.ambcrg.ambH                      ; charge parameter file
+parms/vdw.parms.amb                               ; VDW parameter file
+box.pdb                                           ; box pdb file
+0.4                                               ; grid spacing in angstroms
+2                                                 ; es type: GB 
+1                                                 ; es scale for ff scoring
+8.0 8.0                                           ; cutoff for es and outer box
+78.3 78.3                                         ; dielectric of solvent,cavity
+2.3 2.8                                           ; bumping distances
+output_prefix                                     ; output grid prefix name
+1                                                 ; pairwise calculation
+
+the cavity.pdb file should be an empty file- this feature is not frequently used, however the parameter must still be passed.  The pairwise calculation value must also always be 1.
+
+
+for nchemgrid_SA:
+receptor.pdb 	                                  ; receptor pdb file
+parms/prot.table.ambcrg.ambH                      ; charge parameter file
+parms/vdw.parms.amb                               ; VDW parameter file
+box.pdb                                           ; box pdb file
+0.4                                               ; grid spacing in angstroms
+1.4                                               ; probe radius for SA
+2                                                 ; scoring type: SA
+8.0                                               ; cutoff for SA calculations
+output_prefix                                     ; output grid prefix name
+
+In order to compile these Fortran programs on Linux systems, the following line was changed in Makefile.linux with respect to Makefile.sgi:
+
+in Makefile.sgi:
+FFLAGS = -O -u
+
+becomes:
+FFLAGS = -O -u  /usr/lib/gcc-lib/i386-redhat-linux/2.96/libg2c.a
+
+in Makefile.linux.  The path /usr/lib/gcc-lib/i386-redhat-linux/2.96/libg2c.a is a default path on our systems, however this may need to be 
+customized on your systems.
+

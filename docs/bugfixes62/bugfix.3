@@ -1,0 +1,398 @@
+********>Bugfix 3:
+Author:  Scott Brozell
+Date:  Nov 18, 2008
+
+Program:  dock.pbsa
+
+Description:  the PB/SA score PB component was in the OpenEye energy
+units of kT as opposed to the DOCK energy units of kcal/mol.
+This bug exists in all previous versions of PB/SA score.
+There are also small changes in the SA component that are due to
+differences in the significant figures of the old vs new conversion
+factors: 0.025 vs 0.0423 * 0.5961 = AREA_TO_ENERGY * kT_to_kcal/mol.
+
+Fix:  make the following changes, most simply accomplished with the command
+cd $DOCK_HOME; patch -N -p0 < bugfix.3
+to the files:
+install/test/pbsa_score/Makefile
+install/test/pbsa_score/flexible.dockpbsaout.save
+install/test/pbsa_score/flexible_scored.mol2.save
+install/test/pbsa_score/pbsa1.dockpbsaout.save
+install/test/pbsa_score/pbsa1_scored.mol2.save
+install/test/pbsa_score/pbsa2.dockpbsaout.save
+install/test/pbsa_score/pbsa2_secondary_scored.mol2.save
+src/dock/score_solvent.cpp
+install/test/pbsa_score/benzene.mol2
+-------------------------------------------------------------------------
+*** install/test/pbsa_score/Makefile	4 Feb 2008 21:48:36 -0000	1.7
+--- install/test/pbsa_score/Makefile	19 Nov 2008 02:13:26 -0000
+***************
+*** 18,22 ****
+  
+  clean: clean_dock
+  	/bin/rm -f pbsa1*mol2 pbsa2*mol2
+! 	/bin/rm -f pbsa1.dockpbsaout pbsa2.dockpbsaout
+  
+--- 18,22 ----
+  
+  clean: clean_dock
+  	/bin/rm -f pbsa1*mol2 pbsa2*mol2
+! 	/bin/rm -f pbsa1.dockpbsaout pbsa2.dockpbsaout flexible.dockpbsaout
+  
+===================================================================
+*** install/test/pbsa_score/flexible.dockpbsaout.save	4 Feb 2008 21:21:39 -0000	1.3
+--- install/test/pbsa_score/flexible.dockpbsaout.save	19 Nov 2008 02:13:26 -0000
+***************
+*** 2,10 ****
+  
+  
+  --------------------------------------
+! DOCK v6.2dev
+  
+! Released Unreleased
+  Copyright UCSF
+  --------------------------------------
+  
+--- 2,10 ----
+  
+  
+  --------------------------------------
+! DOCK v6.2
+  
+! Released March 2008
+  Copyright UCSF
+  --------------------------------------
+  
+***************
+*** 123,139 ****
+  -----------------------------------
+  Molecule: ADA 
+  
+!  Elapsed time for docking:	29 seconds
+  
+   Anchors:		1
+   Orientations:		5
+   Conformations:		2
+  
+!    PB/SA Score:          -14.715830
+             vdw:           -8.612719
+!             pb:            2.681000
+!             sa:           -8.784111
+  
+  
+  1 Molecules Processed
+! Total elapsed time:	33 seconds
+--- 123,139 ----
+  -----------------------------------
+  Molecule: ADA 
+  
+!  Elapsed time for docking:	24 seconds
+  
+   Anchors:		1
+   Orientations:		5
+   Conformations:		2
+  
+!    PB/SA Score:          -15.874229
+             vdw:           -8.612719
+!             pb:            1.598144
+!             sa:           -8.859654
+  
+  
+  1 Molecules Processed
+! Total elapsed time:	28 seconds
+===================================================================
+*** install/test/pbsa_score/flexible_scored.mol2.save	4 Feb 2008 21:49:41 -0000	1.1
+--- install/test/pbsa_score/flexible_scored.mol2.save	19 Nov 2008 02:13:26 -0000
+***************
+*** 1,9 ****
+  
+  ########## Name:		ADA 
+! ##########   PB/SA Score:          -14.715830
+  ##########           vdw:           -8.612719
+! ##########            pb:            2.681000
+! ##########            sa:           -8.784111
+  
+  @<TRIPOS>MOLECULE
+  ADA 
+--- 1,9 ----
+  
+  ########## Name:		ADA 
+! ##########   PB/SA Score:          -15.874229
+  ##########           vdw:           -8.612719
+! ##########            pb:            1.598144
+! ##########            sa:           -8.859654
+  
+  @<TRIPOS>MOLECULE
+  ADA 
+===================================================================
+*** install/test/pbsa_score/pbsa1.dockpbsaout.save	4 Mar 2008 03:34:10 -0000	1.14
+--- install/test/pbsa_score/pbsa1.dockpbsaout.save	19 Nov 2008 02:13:26 -0000
+***************
+*** 112,122 ****
+   Orientations:		1
+   Conformations:		1
+  
+!    PB/SA Score:          -37.486446
+!            vdw:          -32.735348
+!             pb:           13.194916
+!             sa:          -17.946014
+  
+  
+  1 Molecules Processed
+! Total elapsed time:	7 seconds
+--- 112,122 ----
+   Orientations:		1
+   Conformations:		1
+  
+!    PB/SA Score:          -42.970211
+!            vdw:          -32.735352
+!             pb:            7.865489
+!             sa:          -18.100349
+  
+  
+  1 Molecules Processed
+! Total elapsed time:	6 seconds
+===================================================================
+*** install/test/pbsa_score/pbsa1_scored.mol2.save	17 Nov 2006 04:52:12 -0000	1.2
+--- install/test/pbsa_score/pbsa1_scored.mol2.save	19 Nov 2008 02:13:26 -0000
+***************
+*** 1,9 ****
+  
+  ########## Name:		 C1 
+! ##########   PB/SA Score:          -37.486450
+  ##########           vdw:          -32.735352
+! ##########            pb:           13.194916
+! ##########            sa:          -17.946014
+  
+  @<TRIPOS>MOLECULE
+   C1 
+--- 1,9 ----
+  
+  ########## Name:		 C1 
+! ##########   PB/SA Score:          -42.970211
+  ##########           vdw:          -32.735352
+! ##########            pb:            7.865489
+! ##########            sa:          -18.100349
+  
+  @<TRIPOS>MOLECULE
+   C1 
+===================================================================
+*** install/test/pbsa_score/pbsa2.dockpbsaout.save	4 Mar 2008 03:34:11 -0000	1.15
+--- install/test/pbsa_score/pbsa2.dockpbsaout.save	19 Nov 2008 02:13:26 -0000
+***************
+*** 113,119 ****
+  
+   Anchors:		1
+   Orientations:		50
+!  Conformations:		49
+  
+   Primary Score
+   Contact Score:          -35.000000
+--- 113,119 ----
+  
+   Anchors:		1
+   Orientations:		50
+!  Conformations:		50
+  
+   Primary Score
+   Contact Score:          -35.000000
+***************
+*** 125,153 ****
+  
+   Anchors:		1
+   Orientations:		50
+!  Conformations:		46
+  
+   Primary Score
+!  Contact Score:          -46.000000
+  
+  -----------------------------------
+  Molecule: ZINC00158751
+  
+   Secondary Score
+!    PB/SA Score:          -10.401018
+!            vdw:           -6.890557
+!             pb:            5.476242
+!             sa:           -8.986703
+  
+  -----------------------------------
+  Molecule: ZINC00013564
+  
+   Secondary Score
+!    PB/SA Score:        23023.501953
+!            vdw:        23025.291016
+!             pb:            8.534439
+!             sa:          -10.323522
+  
+  
+  2 Molecules Processed
+! Total elapsed time:	10 seconds
+--- 125,153 ----
+  
+   Anchors:		1
+   Orientations:		50
+!  Conformations:		48
+  
+   Primary Score
+!  Contact Score:          -28.000000
+  
+  -----------------------------------
+  Molecule: ZINC00158751
+  
+   Secondary Score
+!    PB/SA Score:          -12.690160
+!            vdw:           -6.890559
+!             pb:            3.264388
+!             sa:           -9.063989
+  
+  -----------------------------------
+  Molecule: ZINC00013564
+  
+   Secondary Score
+!    PB/SA Score:          -17.994326
+!            vdw:           -9.296841
+!             pb:            2.826463
+!             sa:          -11.523949
+  
+  
+  2 Molecules Processed
+! Total elapsed time:	8 seconds
+===================================================================
+*** install/test/pbsa_score/pbsa2_secondary_scored.mol2.save	22 Nov 2006 23:01:11 -0000	1.1
+--- install/test/pbsa_score/pbsa2_secondary_scored.mol2.save	19 Nov 2008 02:13:26 -0000
+***************
+*** 1,10 ****
+  
+  ########## Name:		ZINC00158751
+  ########## SECONDARY SCORE
+! ##########   PB/SA Score:          -10.401020
+  ##########           vdw:           -6.890559
+! ##########            pb:            5.476242
+! ##########            sa:           -8.986703
+  ########## PRIMARY SCORE
+  ########## Contact Score:          -35.000000
+  
+--- 1,10 ----
+  
+  ########## Name:		ZINC00158751
+  ########## SECONDARY SCORE
+! ##########   PB/SA Score:          -12.690160
+  ##########           vdw:           -6.890559
+! ##########            pb:            3.264388
+! ##########            sa:           -9.063989
+  ########## PRIMARY SCORE
+  ########## Contact Score:          -35.000000
+  
+***************
+*** 45,54 ****
+  
+  ########## Name:		ZINC00013564
+  ########## SECONDARY SCORE
+! ##########   PB/SA Score:          -15.980936
+  ##########           vdw:           -9.296841
+! ##########            pb:            4.741592
+! ##########            sa:          -11.425688
+  ########## PRIMARY SCORE
+  ########## Contact Score:          -28.000000
+  
+--- 45,54 ----
+  
+  ########## Name:		ZINC00013564
+  ########## SECONDARY SCORE
+! ##########   PB/SA Score:          -17.994326
+  ##########           vdw:           -9.296841
+! ##########            pb:            2.826463
+! ##########            sa:          -11.523949
+  ########## PRIMARY SCORE
+  ########## Contact Score:          -28.000000
+  
+===================================================================
+*** src/dock/score_solvent.cpp	20 Mar 2007 02:13:44 -0000	1.35
+--- src/dock/score_solvent.cpp	19 Nov 2008 02:13:27 -0000
+***************
+*** 1,3 ****
+--- 1,4 ----
++ #include <time.h>
+  #include <iomanip>
+  #include <iostream>
+  #include <sstream>
+***************
+*** 1903,1919 ****
+          }
+  
+          if (verbose) {
+!             cout << "LIGAND\t PB=" << 0.5 * lig_solv << "\tSA=" << 0.025 *
+                  lig_area << endl;
+!             cout << "RECEPTOR PB=" << 0.5 * prot_solv << "\tSA=" << 0.025 *
+                  prot_area << endl;
+!             cout << "COMPLEX\t PB=" << 0.5 * comp_solv << "\tSA=" << 0.025 *
+                  comp_area << endl;
+          }
+  
+!         pb_component = (0.5 * comp_solv) - (0.5 * lig_solv) - (0.5 * prot_solv);
+          sa_component =
+!             (0.025 * comp_area) - (0.025 * lig_area) - (0.025 * prot_area);
+  
+          mol.current_score = vdw_component + pb_component + sa_component;
+          mol.current_data = output_score_summary(mol.current_score);
+--- 1904,1920 ----
+          }
+  
+          if (verbose) {
+!             cout << "LIGAND\t PB=" << 0.29805 * lig_solv << "\tSA=" << 0.025215 *
+                  lig_area << endl;
+!             cout << "RECEPTOR PB=" << 0.29805 * prot_solv << "\tSA=" << 0.025215 *
+                  prot_area << endl;
+!             cout << "COMPLEX\t PB=" << 0.29805 * comp_solv << "\tSA=" << 0.025215 *
+                  comp_area << endl;
+          }
+  
+!         pb_component = 0.29805 * (comp_solv - lig_solv - prot_solv);
+          sa_component =
+!             0.025215 * (comp_area - lig_area - prot_area);
+  
+          mol.current_score = vdw_component + pb_component + sa_component;
+          mol.current_data = output_score_summary(mol.current_score);
+===================================================================
+--- /dev/null	2004-06-24 14:04:38.000000000 -0400
++++ install/test/pbsa_score/benzene.mol2	2008-10-02 01:10:15.000000000 -0400
+@@ -0,0 +1,35 @@
++@<TRIPOS>MOLECULE
++ADA 
++   12    12     1     0     0
++SMALL
++bcc
++
++
++@<TRIPOS>ATOM
++      1 C1         26.7300    6.5760    6.0730 C.ar      1 ADA     -0.130100
++      2 C2         25.8430    5.5400    5.7540 C.ar      1 ADA     -0.130000
++      3 C3         27.5490    7.1270    5.0800 C.ar      1 ADA     -0.130200
++      4 C4         25.7750    5.0570    4.4400 C.ar      1 ADA     -0.130200
++      5 C5         27.4810    6.6440    3.7670 C.ar      1 ADA     -0.130100
++      6 C6         26.5940    5.6080    3.4480 C.ar      1 ADA     -0.130100
++      7 H7         26.7820    6.9420    7.0670 H         1 ADA      0.130200
++      8 H8         25.2230    5.1210    6.5060 H         1 ADA      0.130300
++      9 H9         28.2210    7.9120    5.3220 H         1 ADA      0.130000
++     10 H10        25.1040    4.2710    4.1990 H         1 ADA      0.130000
++     11 H11        28.1020    7.0620    3.0150 H         1 ADA      0.130200
++     12 H12        26.5430    5.2410    2.4530 H         1 ADA      0.130100
++@<TRIPOS>BOND
++     1    1    2 ar  
++     2    1    3 ar  
++     3    1    7 1   
++     4    2    4 ar  
++     5    2    8 1   
++     6    3    5 ar  
++     7    3    9 1   
++     8    4    6 ar  
++     9    4   10 1   
++    10    5    6 ar  
++    11    5   11 1   
++    12    6   12 1   
++@<TRIPOS>SUBSTRUCTURE
++     1 ADA         1 TEMP              0 ****  ****    0 ROOT
+--------------------------------------------------------------------------
+
+Workaround:  none.
+

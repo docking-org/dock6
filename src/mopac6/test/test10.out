@@ -1,0 +1,142 @@
+ *******************************************************************************
+ ** FRANK J. SEILER RES. LAB., U.S. AIR FORCE ACADEMY, COLO. SPGS., CO. 80840 **
+ *******************************************************************************
+
+                                MNDO CALCULATION RESULTS
+
+
+ *******************************************************************************
+ *          MOPAC:  VERSION  6.00               CALC'D. 31-OCT-90               
+ *   T=      - A TIME OF  3600.0 SECONDS REQUESTED
+ *  DUMP=N   - RESTART FILE WRITTEN EVERY  3600.0 SECONDS
+ *  OLDGEO   - PREVIOUS GEOMETRY TO BE USED
+ ***********************************************************************040BY040
+ OLDGEO MNDO
+ Water  The geometry used is that for the previous run (water)
+ 
+
+    ATOM   CHEMICAL  BOND LENGTH    BOND ANGLE     TWIST ANGLE
+   NUMBER  SYMBOL    (ANGSTROMS)     (DEGREES)      (DEGREES)
+    (I)                  NA:I          NB:NA:I      NC:NB:NA:I     NA   NB   NC
+
+      1      O       
+      2      H         0.96153  *                                  1
+      3      H         0.96153        103.52751  *                 1    2
+
+
+          CARTESIAN COORDINATES 
+
+    NO.       ATOM         X         Y         Z
+
+     1         O        0.0000    0.0000    0.0000
+     2         H        0.9615    0.0000    0.0000
+     3         H       -0.2249    0.9349    0.0000
+  H: (MNDO):  M.J.S. DEWAR, W. THIEL, J. AM. CHEM. SOC., 99, 4899, (1977)       
+  O: (MNDO):  M.J.S. DEWAR, W. THIEL, J. AM. CHEM. SOC., 99, 4899, (1977)       
+
+
+          RHF CALCULATION, NO. OF DOUBLY OCCUPIED LEVELS =  4
+
+
+            INTERATOMIC DISTANCES
+0
+                  O  1       H  2       H  3
+ ------------------------------------------
+     O    1   0.000000
+     H    2   0.961531   0.000000
+     H    3   0.961531   1.510499   0.000000
+ CYCLE:   1 TIME:   0.30 TIME LEFT:   3599.2 GRAD.:    10.415 HEAT:-60.741897    
+ CYCLE:   2 TIME:   0.16 TIME LEFT:   3599.1 GRAD.:     3.518 HEAT:-60.935971    
+ TEST ON GRADIENT SATISFIED
+ PETERS TEST SATISFIED 
+
+ -------------------------------------------------------------------------------
+ OLDGEO MNDO
+ Water  The geometry used is that for the previous run (water)
+ 
+
+
+     PETERS TEST WAS SATISFIED IN BFGS OPTIMIZATION           
+     SCF FIELD WAS ACHIEVED                                   
+
+
+                               MNDO    CALCULATION
+                                                       VERSION  6.00
+                                                       31-OCT-90               
+
+
+
+
+          FINAL HEAT OF FORMATION =        -60.93812 KCAL
+
+
+          TOTAL ENERGY            =       -351.42483 EV
+          ELECTRONIC ENERGY       =       -500.43256 EV
+          CORE-CORE REPULSION     =        149.00773 EV
+
+          IONIZATION POTENTIAL    =         12.19087
+          NO. OF FILLED LEVELS    =          4
+          MOLECULAR WEIGHT        =     18.015
+
+
+          SCF CALCULATIONS  =                6
+          COMPUTATION TIME =   1.260 SECONDS
+
+
+
+
+
+    ATOM   CHEMICAL  BOND LENGTH    BOND ANGLE     TWIST ANGLE
+   NUMBER  SYMBOL    (ANGSTROMS)     (DEGREES)      (DEGREES)
+    (I)                  NA:I          NB:NA:I      NC:NB:NA:I     NA   NB   NC
+
+      1      O       
+      2      H         0.94346  *                                  1
+      3      H         0.94346        106.78839  *                 1    2
+
+
+            INTERATOMIC DISTANCES
+0
+                  O  1       H  2       H  3
+ ------------------------------------------
+     O    1   0.000000
+     H    2   0.943461   0.000000
+     H    3   0.943461   1.514740   0.000000
+
+
+                  EIGENVALUES
+
+ -40.02967 -19.10767 -14.47059 -12.19087   5.43989   6.72216
+
+
+              NET ATOMIC CHARGES AND DIPOLE CONTRIBUTIONS
+
+         ATOM NO.   TYPE          CHARGE        ATOM  ELECTRON DENSITY
+           1          O          -0.3256          6.3256
+           2          H           0.1628          0.8372
+           3          H           0.1628          0.8372
+ DIPOLE           X         Y         Z       TOTAL
+ POINT-CHG.     0.525     0.706     0.000     0.880
+ HYBRID         0.539     0.725     0.000     0.903
+ SUM            1.063     1.431     0.000     1.783
+
+
+          CARTESIAN COORDINATES 
+
+    NO.       ATOM               X         Y         Z
+
+     1         O                  0.0000    0.0000    0.0000
+     2         H                  0.9435    0.0000    0.0000
+     3         H                 -0.2725    0.9032    0.0000
+
+
+          ATOMIC ORBITAL ELECTRON POPULATIONS
+
+   1.81326   1.21226   1.30003   2.00000   0.83722   0.83722
+  CHANNEL 12 OPENED
+
+
+
+ TOTAL CPU TIME:             1.54 SECONDS
+
+ == MOPAC DONE ==

@@ -1,0 +1,480 @@
+####################################
+###  Molecule: MOL
+####################################
+
+##########                    Descriptor_Score:          -51.671665
+##########                    Continuous_Score:          -49.921665
+##########          desc_Continuous_vdw_energy:          -46.669930
+##########           desc_Continuous_es_energy:           -3.251734
+##########          Footprint_Similarity_Score:            0.000000
+##########                 desc_FPS_vdw_energy:          -46.693863
+##########                  desc_FPS_es_energy:           -3.251703
+##########              desc_FPS_vdw+es_energy:          -49.945564
+##########                  desc_FPS_num_hbond:                   1
+##########                    desc_FPS_vdw_fps:            0.000000
+##########                     desc_FPS_es_fps:            0.000000
+##########                     desc_FPS_hb_fps:            0.000000
+##########              desc_FPS_vdw_fp_numres:                 293
+##########               desc_FPS_es_fp_numres:                 293
+##########               desc_FPS_hb_fp_numres:                 293
+##########                 Pharmacophore_Score:            1.250000
+##########              desc_FMS_num_match_tot:                   9
+##########              desc_FMS_max_match_ref:                  12
+##########              desc_FMS_max_match_mol:                  12
+##########                 desc_FMS_match_rate:            0.250000
+##########                desc_FMS_match_resid:            0.000000
+##########    desc_FMS_num_hydrophobic_matched:                   2
+##########          desc_FMS_num_donor_matched:                   1
+##########       desc_FMS_num_acceptor_matched:                   6
+##########       desc_FMS_num_aromatic_matched:                   0
+##########       desc_FMS_num_positive_matched:                   0
+##########       desc_FMS_num_negative_matched:                   0
+##########           desc_FMS_num_ring_matched:                   0
+##########                      Tanimoto_Score:            1.000000
+########## Hungarian_Matching_Similarity_Score:           -5.000000
+##########       desc_HMS_num_unmtchd_hvy_atms:                   0
+##########           desc_HMS_num_ref_hvy_atms:                  29
+##########        desc_HMS_rmsd_mtchd_hvy_atms:            0.000000
+##########               Property_Volume_Score:            1.000000
+##########               desc_VOS_geometric_vo:            1.000000
+##########                desc_VOS_hvy_atom_vo:            1.000000
+##########            desc_VOS_pos_chrg_atm_vo:            1.000000
+##########            desc_VOS_neg_chrg_atm_vo:            1.000000
+##########         desc_VOS_hydrophobic_atm_vo:            1.000000
+##########         desc_VOS_hydrophilic_atm_vo:            1.000000
+##########           Internal_energy_repulsive:            8.291633
+
+hbond detected: MET98 (98) N.am H---LIG1 (1) N.ar 2.06619 164.263
+
+####################################
+###  Molecule: MOL
+####################################
+
+##########                    Descriptor_Score:          -42.450020
+##########                    Continuous_Score:          -51.982956
+##########          desc_Continuous_vdw_energy:          -49.143032
+##########           desc_Continuous_es_energy:           -2.839923
+##########          Footprint_Similarity_Score:            1.477265
+##########                 desc_FPS_vdw_energy:          -49.165337
+##########                  desc_FPS_es_energy:           -2.839946
+##########              desc_FPS_vdw+es_energy:          -52.005283
+##########                  desc_FPS_num_hbond:                   1
+##########                    desc_FPS_vdw_fps:            0.360675
+##########                     desc_FPS_es_fps:            1.116590
+##########                     desc_FPS_hb_fps:            0.000000
+##########              desc_FPS_vdw_fp_numres:                 293
+##########               desc_FPS_es_fp_numres:                 293
+##########               desc_FPS_hb_fp_numres:                 293
+##########                 Pharmacophore_Score:            4.726183
+##########              desc_FMS_num_match_tot:                   2
+##########              desc_FMS_max_match_ref:                  12
+##########              desc_FMS_max_match_mol:                  12
+##########                 desc_FMS_match_rate:            0.833333
+##########                desc_FMS_match_resid:            0.559517
+##########    desc_FMS_num_hydrophobic_matched:                   0
+##########          desc_FMS_num_donor_matched:                   0
+##########       desc_FMS_num_acceptor_matched:                   2
+##########       desc_FMS_num_aromatic_matched:                   0
+##########       desc_FMS_num_positive_matched:                   0
+##########       desc_FMS_num_negative_matched:                   0
+##########           desc_FMS_num_ring_matched:                   0
+##########                      Tanimoto_Score:            1.000000
+########## Hungarian_Matching_Similarity_Score:            1.869555
+##########       desc_HMS_num_unmtchd_hvy_atms:                   0
+##########           desc_HMS_num_ref_hvy_atms:                  29
+##########        desc_HMS_rmsd_mtchd_hvy_atms:            6.869554
+##########               Property_Volume_Score:            0.459930
+##########               desc_VOS_geometric_vo:            0.630231
+##########                desc_VOS_hvy_atom_vo:            0.661902
+##########            desc_VOS_pos_chrg_atm_vo:            0.414878
+##########            desc_VOS_neg_chrg_atm_vo:            0.541097
+##########         desc_VOS_hydrophobic_atm_vo:            0.182312
+##########         desc_VOS_hydrophilic_atm_vo:            0.329161
+##########           Internal_energy_repulsive:            8.354062
+
+hbond detected: MET98 (98) N.am H---LIG1 (1) N.ar 2.41901 154.246
+
+####################################
+###  Molecule: MOL
+####################################
+
+##########                    Descriptor_Score:          -46.250935
+##########                    Continuous_Score:          -51.313019
+##########          desc_Continuous_vdw_energy:          -50.239635
+##########           desc_Continuous_es_energy:           -1.073385
+##########          Footprint_Similarity_Score:            1.627254
+##########                 desc_FPS_vdw_energy:          -50.263256
+##########                  desc_FPS_es_energy:           -1.073380
+##########              desc_FPS_vdw+es_energy:          -51.336636
+##########                  desc_FPS_num_hbond:                   1
+##########                    desc_FPS_vdw_fps:            0.415818
+##########                     desc_FPS_es_fps:            1.211436
+##########                     desc_FPS_hb_fps:            0.000000
+##########              desc_FPS_vdw_fp_numres:                 293
+##########               desc_FPS_es_fp_numres:                 293
+##########               desc_FPS_hb_fp_numres:                 293
+##########                 Pharmacophore_Score:            4.827562
+##########              desc_FMS_num_match_tot:                   2
+##########              desc_FMS_max_match_ref:                  12
+##########              desc_FMS_max_match_mol:                  12
+##########                 desc_FMS_match_rate:            0.833333
+##########                desc_FMS_match_resid:            0.660896
+##########    desc_FMS_num_hydrophobic_matched:                   0
+##########          desc_FMS_num_donor_matched:                   0
+##########       desc_FMS_num_acceptor_matched:                   2
+##########       desc_FMS_num_aromatic_matched:                   0
+##########       desc_FMS_num_positive_matched:                   0
+##########       desc_FMS_num_negative_matched:                   0
+##########           desc_FMS_num_ring_matched:                   0
+##########                      Tanimoto_Score:            1.000000
+########## Hungarian_Matching_Similarity_Score:           -3.084442
+##########       desc_HMS_num_unmtchd_hvy_atms:                   0
+##########           desc_HMS_num_ref_hvy_atms:                  29
+##########        desc_HMS_rmsd_mtchd_hvy_atms:            1.915558
+##########               Property_Volume_Score:            0.691706
+##########               desc_VOS_geometric_vo:            0.737842
+##########                desc_VOS_hvy_atom_vo:            0.762654
+##########            desc_VOS_pos_chrg_atm_vo:            0.629681
+##########            desc_VOS_neg_chrg_atm_vo:            0.692550
+##########         desc_VOS_hydrophobic_atm_vo:            0.733464
+##########         desc_VOS_hydrophilic_atm_vo:            0.594046
+##########           Internal_energy_repulsive:            4.184525
+
+hbond detected: MET98 (98) N.am H---LIG1 (1) N.ar 2.39322 150.529
+
+####################################
+###  Molecule: MOL
+####################################
+
+##########                    Descriptor_Score:          -40.905014
+##########                    Continuous_Score:          -49.027905
+##########          desc_Continuous_vdw_energy:          -45.612179
+##########           desc_Continuous_es_energy:           -3.415725
+##########          Footprint_Similarity_Score:            1.688152
+##########                 desc_FPS_vdw_energy:          -45.640125
+##########                  desc_FPS_es_energy:           -3.415743
+##########              desc_FPS_vdw+es_energy:          -49.055870
+##########                  desc_FPS_num_hbond:                   1
+##########                    desc_FPS_vdw_fps:            0.497391
+##########                     desc_FPS_es_fps:            1.190761
+##########                     desc_FPS_hb_fps:            1.414214
+##########              desc_FPS_vdw_fp_numres:                 293
+##########               desc_FPS_es_fp_numres:                 293
+##########               desc_FPS_hb_fp_numres:                 293
+##########                 Pharmacophore_Score:            5.513680
+##########              desc_FMS_num_match_tot:                   1
+##########              desc_FMS_max_match_ref:                  12
+##########              desc_FMS_max_match_mol:                  12
+##########                 desc_FMS_match_rate:            0.916667
+##########                desc_FMS_match_resid:            0.930347
+##########    desc_FMS_num_hydrophobic_matched:                   1
+##########          desc_FMS_num_donor_matched:                   0
+##########       desc_FMS_num_acceptor_matched:                   0
+##########       desc_FMS_num_aromatic_matched:                   0
+##########       desc_FMS_num_positive_matched:                   0
+##########       desc_FMS_num_negative_matched:                   0
+##########           desc_FMS_num_ring_matched:                   0
+##########                      Tanimoto_Score:            1.000000
+########## Hungarian_Matching_Similarity_Score:           -0.602449
+##########       desc_HMS_num_unmtchd_hvy_atms:                   0
+##########           desc_HMS_num_ref_hvy_atms:                  29
+##########        desc_HMS_rmsd_mtchd_hvy_atms:            4.397551
+##########               Property_Volume_Score:            0.523507
+##########               desc_VOS_geometric_vo:            0.571417
+##########                desc_VOS_hvy_atom_vo:            0.603790
+##########            desc_VOS_pos_chrg_atm_vo:            0.392299
+##########            desc_VOS_neg_chrg_atm_vo:            0.600049
+##########         desc_VOS_hydrophobic_atm_vo:            0.679963
+##########         desc_VOS_hydrophilic_atm_vo:            0.293526
+##########           Internal_energy_repulsive:            4.736934
+
+hbond detected: LIG1 (1) N.pl3 H---ASP160 (160) O.co2 1.96641 138.675
+
+####################################
+###  Molecule: MOL
+####################################
+
+##########                    Descriptor_Score:          -46.649212
+##########                    Continuous_Score:          -51.301750
+##########          desc_Continuous_vdw_energy:          -49.039024
+##########           desc_Continuous_es_energy:           -2.262726
+##########          Footprint_Similarity_Score:            1.304737
+##########                 desc_FPS_vdw_energy:          -49.063667
+##########                  desc_FPS_es_energy:           -2.262737
+##########              desc_FPS_vdw+es_energy:          -51.326405
+##########                  desc_FPS_num_hbond:                   1
+##########                    desc_FPS_vdw_fps:            0.470859
+##########                     desc_FPS_es_fps:            0.833878
+##########                     desc_FPS_hb_fps:            0.000000
+##########              desc_FPS_vdw_fp_numres:                 293
+##########               desc_FPS_es_fp_numres:                 293
+##########               desc_FPS_hb_fp_numres:                 293
+##########                 Pharmacophore_Score:            4.269422
+##########              desc_FMS_num_match_tot:                   3
+##########              desc_FMS_max_match_ref:                  12
+##########              desc_FMS_max_match_mol:                  12
+##########                 desc_FMS_match_rate:            0.750000
+##########                desc_FMS_match_resid:            0.519422
+##########    desc_FMS_num_hydrophobic_matched:                   0
+##########          desc_FMS_num_donor_matched:                   1
+##########       desc_FMS_num_acceptor_matched:                   2
+##########       desc_FMS_num_aromatic_matched:                   0
+##########       desc_FMS_num_positive_matched:                   0
+##########       desc_FMS_num_negative_matched:                   0
+##########           desc_FMS_num_ring_matched:                   0
+##########                      Tanimoto_Score:            1.000000
+########## Hungarian_Matching_Similarity_Score:           -2.548339
+##########       desc_HMS_num_unmtchd_hvy_atms:                   0
+##########           desc_HMS_num_ref_hvy_atms:                  29
+##########        desc_HMS_rmsd_mtchd_hvy_atms:            2.451661
+##########               Property_Volume_Score:            0.626719
+##########               desc_VOS_geometric_vo:            0.630465
+##########                desc_VOS_hvy_atom_vo:            0.708451
+##########            desc_VOS_pos_chrg_atm_vo:            0.434907
+##########            desc_VOS_neg_chrg_atm_vo:            0.702194
+##########         desc_VOS_hydrophobic_atm_vo:            0.770089
+##########         desc_VOS_hydrophilic_atm_vo:            0.514206
+##########           Internal_energy_repulsive:            4.325646
+
+hbond detected: MET98 (98) N.am H---LIG1 (1) N.ar 2.06706 158.405
+
+####################################
+###  Molecule: MOL
+####################################
+
+##########                    Descriptor_Score:          -38.544502
+##########                    Continuous_Score:          -48.532257
+##########          desc_Continuous_vdw_energy:          -43.531952
+##########           desc_Continuous_es_energy:           -5.000306
+##########          Footprint_Similarity_Score:            1.385176
+##########                 desc_FPS_vdw_energy:          -43.552505
+##########                  desc_FPS_es_energy:           -5.000184
+##########              desc_FPS_vdw+es_energy:          -48.552689
+##########                  desc_FPS_num_hbond:                   2
+##########                    desc_FPS_vdw_fps:            0.501988
+##########                     desc_FPS_es_fps:            0.883187
+##########                     desc_FPS_hb_fps:            0.765367
+##########              desc_FPS_vdw_fp_numres:                 293
+##########               desc_FPS_es_fp_numres:                 293
+##########               desc_FPS_hb_fp_numres:                 293
+##########                 Pharmacophore_Score:            5.092176
+##########              desc_FMS_num_match_tot:                   1
+##########              desc_FMS_max_match_ref:                  12
+##########              desc_FMS_max_match_mol:                  12
+##########                 desc_FMS_match_rate:            0.916667
+##########                desc_FMS_match_resid:            0.508842
+##########    desc_FMS_num_hydrophobic_matched:                   0
+##########          desc_FMS_num_donor_matched:                   0
+##########       desc_FMS_num_acceptor_matched:                   1
+##########       desc_FMS_num_aromatic_matched:                   0
+##########       desc_FMS_num_positive_matched:                   0
+##########       desc_FMS_num_negative_matched:                   0
+##########           desc_FMS_num_ring_matched:                   0
+##########                      Tanimoto_Score:            1.000000
+########## Hungarian_Matching_Similarity_Score:            2.110271
+##########       desc_HMS_num_unmtchd_hvy_atms:                   0
+##########           desc_HMS_num_ref_hvy_atms:                  29
+##########        desc_HMS_rmsd_mtchd_hvy_atms:            7.110271
+##########               Property_Volume_Score:            0.400136
+##########               desc_VOS_geometric_vo:            0.573795
+##########                desc_VOS_hvy_atom_vo:            0.613059
+##########            desc_VOS_pos_chrg_atm_vo:            0.369788
+##########            desc_VOS_neg_chrg_atm_vo:            0.486818
+##########         desc_VOS_hydrophobic_atm_vo:            0.121803
+##########         desc_VOS_hydrophilic_atm_vo:            0.235555
+##########           Internal_energy_repulsive:            6.513687
+
+hbond detected: THR95 (95) O.3 H---LIG1 (1) O.3 2.22504 125.093
+hbond detected: MET98 (98) N.am H---LIG1 (1) N.ar 2.36283 161.834
+
+####################################
+###  Molecule: MOL
+####################################
+
+##########                    Descriptor_Score:          -40.539814
+##########                    Continuous_Score:          -47.484188
+##########          desc_Continuous_vdw_energy:          -45.125500
+##########           desc_Continuous_es_energy:           -2.358689
+##########          Footprint_Similarity_Score:            1.962602
+##########                 desc_FPS_vdw_energy:          -45.149216
+##########                  desc_FPS_es_energy:           -2.358670
+##########              desc_FPS_vdw+es_energy:          -47.507885
+##########                  desc_FPS_num_hbond:                   1
+##########                    desc_FPS_vdw_fps:            0.695675
+##########                     desc_FPS_es_fps:            1.266926
+##########                     desc_FPS_hb_fps:            1.414214
+##########              desc_FPS_vdw_fp_numres:                 293
+##########               desc_FPS_es_fp_numres:                 293
+##########               desc_FPS_hb_fp_numres:                 293
+##########                 Pharmacophore_Score:            5.163627
+##########              desc_FMS_num_match_tot:                   2
+##########              desc_FMS_max_match_ref:                  12
+##########              desc_FMS_max_match_mol:                  12
+##########                 desc_FMS_match_rate:            0.833333
+##########                desc_FMS_match_resid:            0.996960
+##########    desc_FMS_num_hydrophobic_matched:                   0
+##########          desc_FMS_num_donor_matched:                   0
+##########       desc_FMS_num_acceptor_matched:                   2
+##########       desc_FMS_num_aromatic_matched:                   0
+##########       desc_FMS_num_positive_matched:                   0
+##########       desc_FMS_num_negative_matched:                   0
+##########           desc_FMS_num_ring_matched:                   0
+##########                      Tanimoto_Score:            1.000000
+########## Hungarian_Matching_Similarity_Score:           -1.654009
+##########       desc_HMS_num_unmtchd_hvy_atms:                   0
+##########           desc_HMS_num_ref_hvy_atms:                  29
+##########        desc_HMS_rmsd_mtchd_hvy_atms:            3.345991
+##########               Property_Volume_Score:            0.472156
+##########               desc_VOS_geometric_vo:            0.463237
+##########                desc_VOS_hvy_atom_vo:            0.537482
+##########            desc_VOS_pos_chrg_atm_vo:            0.240284
+##########            desc_VOS_neg_chrg_atm_vo:            0.597926
+##########         desc_VOS_hydrophobic_atm_vo:            0.685652
+##########         desc_VOS_hydrophilic_atm_vo:            0.308357
+##########           Internal_energy_repulsive:            3.368812
+
+hbond detected: CYS102 (102) N.am H---LIG1 (1) O.3 2.10228 151.334
+
+####################################
+###  Molecule: MOL
+####################################
+
+##########                    Descriptor_Score:          -34.840992
+##########                    Continuous_Score:          -45.856236
+##########          desc_Continuous_vdw_energy:          -41.710537
+##########           desc_Continuous_es_energy:           -4.145700
+##########          Footprint_Similarity_Score:            1.466826
+##########                 desc_FPS_vdw_energy:          -41.731178
+##########                  desc_FPS_es_energy:           -4.145655
+##########              desc_FPS_vdw+es_energy:          -45.876835
+##########                  desc_FPS_num_hbond:                   0
+##########                    desc_FPS_vdw_fps:            0.579831
+##########                     desc_FPS_es_fps:            0.886995
+##########                     desc_FPS_hb_fps:            1.000000
+##########              desc_FPS_vdw_fp_numres:                 293
+##########               desc_FPS_es_fp_numres:                 293
+##########               desc_FPS_hb_fp_numres:                 293
+##########                 Pharmacophore_Score:            5.690979
+##########              desc_FMS_num_match_tot:                   1
+##########              desc_FMS_max_match_ref:                  12
+##########              desc_FMS_max_match_mol:                  12
+##########                 desc_FMS_match_rate:            0.916667
+##########                desc_FMS_match_resid:            1.107645
+##########    desc_FMS_num_hydrophobic_matched:                   0
+##########          desc_FMS_num_donor_matched:                   0
+##########       desc_FMS_num_acceptor_matched:                   1
+##########       desc_FMS_num_aromatic_matched:                   0
+##########       desc_FMS_num_positive_matched:                   0
+##########       desc_FMS_num_negative_matched:                   0
+##########           desc_FMS_num_ring_matched:                   0
+##########                      Tanimoto_Score:            1.000000
+########## Hungarian_Matching_Similarity_Score:            2.505675
+##########       desc_HMS_num_unmtchd_hvy_atms:                   0
+##########           desc_HMS_num_ref_hvy_atms:                  29
+##########        desc_HMS_rmsd_mtchd_hvy_atms:            7.505675
+##########               Property_Volume_Score:            0.351761
+##########               desc_VOS_geometric_vo:            0.505803
+##########                desc_VOS_hvy_atom_vo:            0.550968
+##########            desc_VOS_pos_chrg_atm_vo:            0.309986
+##########            desc_VOS_neg_chrg_atm_vo:            0.466902
+##########         desc_VOS_hydrophobic_atm_vo:            0.109876
+##########         desc_VOS_hydrophilic_atm_vo:            0.167029
+##########           Internal_energy_repulsive:           11.654094
+
+
+####################################
+###  Molecule: MOL
+####################################
+
+##########                    Descriptor_Score:          -34.514736
+##########                    Continuous_Score:          -45.286522
+##########          desc_Continuous_vdw_energy:          -44.854660
+##########           desc_Continuous_es_energy:           -0.431864
+##########          Footprint_Similarity_Score:            1.358756
+##########                 desc_FPS_vdw_energy:          -44.874252
+##########                  desc_FPS_es_energy:           -0.431864
+##########              desc_FPS_vdw+es_energy:          -45.306118
+##########                  desc_FPS_num_hbond:                   0
+##########                    desc_FPS_vdw_fps:            0.283210
+##########                     desc_FPS_es_fps:            1.075545
+##########                     desc_FPS_hb_fps:            1.000000
+##########              desc_FPS_vdw_fp_numres:                 293
+##########               desc_FPS_es_fp_numres:                 293
+##########               desc_FPS_hb_fp_numres:                 293
+##########                 Pharmacophore_Score:            5.843579
+##########              desc_FMS_num_match_tot:                   1
+##########              desc_FMS_max_match_ref:                  12
+##########              desc_FMS_max_match_mol:                  12
+##########                 desc_FMS_match_rate:            0.916667
+##########                desc_FMS_match_resid:            1.260245
+##########    desc_FMS_num_hydrophobic_matched:                   0
+##########          desc_FMS_num_donor_matched:                   0
+##########       desc_FMS_num_acceptor_matched:                   1
+##########       desc_FMS_num_aromatic_matched:                   0
+##########       desc_FMS_num_positive_matched:                   0
+##########       desc_FMS_num_negative_matched:                   0
+##########           desc_FMS_num_ring_matched:                   0
+##########                      Tanimoto_Score:            1.000000
+########## Hungarian_Matching_Similarity_Score:            2.148748
+##########       desc_HMS_num_unmtchd_hvy_atms:                   0
+##########           desc_HMS_num_ref_hvy_atms:                  29
+##########        desc_HMS_rmsd_mtchd_hvy_atms:            7.148748
+##########               Property_Volume_Score:            0.420704
+##########               desc_VOS_geometric_vo:            0.646822
+##########                desc_VOS_hvy_atom_vo:            0.644065
+##########            desc_VOS_pos_chrg_atm_vo:            0.425784
+##########            desc_VOS_neg_chrg_atm_vo:            0.474400
+##########         desc_VOS_hydrophobic_atm_vo:            0.153640
+##########         desc_VOS_hydrophilic_atm_vo:            0.179510
+##########           Internal_energy_repulsive:            6.302218
+
+
+####################################
+###  Molecule: MOL
+####################################
+
+##########                    Descriptor_Score:          -40.679966
+##########                    Continuous_Score:          -48.217075
+##########          desc_Continuous_vdw_energy:          -45.985462
+##########           desc_Continuous_es_energy:           -2.231612
+##########          Footprint_Similarity_Score:            2.016798
+##########                 desc_FPS_vdw_energy:          -46.013573
+##########                  desc_FPS_es_energy:           -2.231609
+##########              desc_FPS_vdw+es_energy:          -48.245182
+##########                  desc_FPS_num_hbond:                   2
+##########                    desc_FPS_vdw_fps:            0.549758
+##########                     desc_FPS_es_fps:            1.467040
+##########                     desc_FPS_hb_fps:            0.765367
+##########              desc_FPS_vdw_fp_numres:                 293
+##########               desc_FPS_es_fp_numres:                 293
+##########               desc_FPS_hb_fp_numres:                 293
+##########                 Pharmacophore_Score:            4.854550
+##########              desc_FMS_num_match_tot:                   2
+##########              desc_FMS_max_match_ref:                  12
+##########              desc_FMS_max_match_mol:                  12
+##########                 desc_FMS_match_rate:            0.833333
+##########                desc_FMS_match_resid:            0.687883
+##########    desc_FMS_num_hydrophobic_matched:                   1
+##########          desc_FMS_num_donor_matched:                   0
+##########       desc_FMS_num_acceptor_matched:                   1
+##########       desc_FMS_num_aromatic_matched:                   0
+##########       desc_FMS_num_positive_matched:                   0
+##########       desc_FMS_num_negative_matched:                   0
+##########           desc_FMS_num_ring_matched:                   0
+##########                      Tanimoto_Score:            1.000000
+########## Hungarian_Matching_Similarity_Score:           -0.802303
+##########       desc_HMS_num_unmtchd_hvy_atms:                   0
+##########           desc_HMS_num_ref_hvy_atms:                  29
+##########        desc_HMS_rmsd_mtchd_hvy_atms:            4.197697
+##########               Property_Volume_Score:            0.468068
+##########               desc_VOS_geometric_vo:            0.528681
+##########                desc_VOS_hvy_atom_vo:            0.500295
+##########            desc_VOS_pos_chrg_atm_vo:            0.402090
+##########            desc_VOS_neg_chrg_atm_vo:            0.510081
+##########         desc_VOS_hydrophobic_atm_vo:            0.633075
+##########         desc_VOS_hydrophilic_atm_vo:            0.234188
+##########           Internal_energy_repulsive:            6.952624
+
+hbond detected: LYS50 (50) N.4 H---LIG1 (1) N.ar 2.48192 122.406
+hbond detected: MET98 (98) N.am H---LIG1 (1) O.3 2.31936 157.034
+

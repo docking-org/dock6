@@ -1,0 +1,58 @@
+# DOCK configuration file for Intel compilers with Intel MPI parallelism
+# (and for Intel 64 architectures, not Intel Many Integrated Core Architectures).
+
+# REQUIREMENTS - define these environment variables:
+# I_MPI_ROOT is the root directory of the Intel MPI implementation
+# END REQUIREMENTS
+
+# TROUBLESHOOTING
+# 1. Linking problems, such as undefined references, cannot find -lbla_bla,
+# and command not found errors:
+# ensure that mpiicpc exists;  ensure that the compiler invoked by mpiicpc exists
+# (for best results it should be icpc); in the worst case try manual linking:
+# change the CXX and LOAD definitions below to icpc, execute the command
+# $I_MPI_ROOT/bin/mpiicpc -show
+# and add to the LIBS definition below the output related to link flags, e.g
+# LIBS= -lm -Lyada -Lyada_yada -lbla -lbla_bla ...
+# 2. General advice: build a serial dock first then build a parallel
+# dock using a validated MPI implementation.
+# 3. Best practice advice:  the most straightforward route to successful
+# parallel executable building is to use the same compilers for building
+# the MPI implementation and dock.
+# END TROUBLESHOOTING
+
+# CC is the C compiler
+# CFLAGS is the flags for the C compiler
+# CXX is the C++ compiler
+# CXXFLAGS is the flags for the C++ compiler
+# DOCK_SUFFIX is the suffix for the dock executable
+# FC is the Fortran compiler
+# FFLAGS is the flags for the Fortran compiler
+# LIBS is the flags for the linker
+# LINK_WITHOUT_FORTRAN_MAIN is the flag for linking without Fortran's main
+# LOAD is the command to invoke the linker
+
+CC=          icc
+CFLAGS=      -DBUILD_DOCK_WITH_MPI -O3
+CXX=         $(I_MPI_ROOT)/bin/mpiicpc
+# Try this for old versions of intel compilers, eg, 19.0.5
+#CXX=         $(I_MPI_ROOT)/intel64/bin/mpiicpc
+CXXFLAGS=    -DBUILD_DOCK_WITH_MPI -O3
+DOCK_SUFFIX= .mpi
+FC=          ifort
+FFLAGS=      -O2
+LIBS=        -lm -lpthread
+LINK_WITHOUT_FORTRAN_MAIN= -nofor_main
+LOAD=        $(I_MPI_ROOT)/bin/mpiicpc
+# Try this for old versions of intel compilers, eg, 19.0.5
+#LOAD=        $(I_MPI_ROOT)/intel64/bin/mpiicpc
+
+# Macro definitions for NAB
+# AR is the library archiver
+# LEX is the lexical analyzer generator
+# OCFLAGS is the flags for the C compilers with high optimization
+# RANLIB is the library index generator
+AR=          ar rv
+LEX=         flex
+OCFLAGS=     -O3 -D_ANSI_SOURCE
+RANLIB=      ranlib

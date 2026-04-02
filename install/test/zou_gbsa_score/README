@@ -1,0 +1,43 @@
+TITLE: Contact Scoring
+
+EXECUTABLES TESTED:  
+	dock6
+
+FUNCTIONS TESTED:
+	Master Score Parameters
+	Zou GB/SA Score Parameters
+	
+WALL CLOCK TIME:
+	  secs
+
+FILES USED:
+	zou_gbsaprimary.dockin	#zou_gbsa primary scoring (single molecule)
+	verbosezou_gbsaprimary.dockin	#zou_gbsa primary scoring with verbose output (single)
+	orientflexiblezou_gbsaprimary.dockin	#flexible zou_gbsa score docking (single)
+	orientrigidcontactprimaryzou_gbsasecondarymulti.dockin	#rigid contact score docking and zou_gbsa rescoring (library)
+	benzene.mol2	#ligand structure file
+	lig.mol2		#ligand structure file
+	multi_lig.mol2		#multiple ligand structure file
+	rec.mol2		#receptor structure file
+	screen.in		#screening parameters for gbsa
+	chem.defn		#chem parameter input file
+	flex.defn		#flex atom definition file
+	flex_drive.tbl		#flex torsional drive file
+	vdw.defn		#vdw parameter file used to create grid
+
+	../gbsa_grid_generation
+		grid.nrg	#vdw values
+
+	../nchemgrid_GB_grid_generation
+		zou_grid.bmp	#bump grid
+		zou_grid.sol	#gb solvation values
+
+	../nchemgrid_SA_grid_generation
+		zou_grid.sas	#solvent accessible surface area information
+		zou_grid.sasmark#solvent accessible surface area flags
+
+FILES GENERATED:
+	XXX_scored.mol2		#best scoring pose from input file	
+
+NOTE:  gbsa_grid_generation, nchemgrid_GB_grid_generation, and nchemgrid_SA_grid_generation
+must be run first

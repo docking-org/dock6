@@ -1,0 +1,30 @@
+TITLE: Internal Energy
+
+EXECUTABLES TESTED:  
+	dock6
+
+FUNCTIONS TESTED:
+	Internal Energy
+
+WALL CLOCK TIME:
+	seconds
+
+FILES USED:
+	lig.mol2		#ligand structure file
+	rec.mol2		#receptor structure file
+	flex.defn		#flex atom definition file
+	flex_drive.tbl		#flex torsional drive file
+	vdw.defn		#vdw parameter file used to create grid
+
+FILES GENERATED:
+	XXX_scored.mol2		#best scoring pose from input file
+
+TESTS:
+These tests exercise the internal energy functionality.  They stem from
+the continuous_score tests.
+
+	cutoff0			#internal_energy_cutoff input validation
+	orient			#rigid ligand orienting without scoring
+	orientflex		#flexible ligand orienting without scoring
+	orientscore		#rigid ligand orienting with continuous score
+

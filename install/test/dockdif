@@ -1,0 +1,382 @@
+#!/bin/sh
+#set -vx
+
+# Amber test output filter and diff-er.
+#    Originally by George Seibel for Amber 3.0 Rev A
+#    4.0: added egrep -v and sed to screen irrelevant stuff -Bill Ross
+#    Modifications by Dave Case
+#    Rewritten in sh with floating point truncation, Scott Brozell, TSRI
+# Converted to DOCK test output filter and diff-er, SRB and DAC.
+
+# define variables with constant values
+dif_ext=dif
+
+# create usage statement
+usage()
+{
+cat << EOF
+Usage: $0 [-k] [-s] [-t {0,1,2,3,4,5,6,7,8}] [-v] [-w] [-z] original_file new_files
+
+Description
+       Strip irrelevant differences from all files and then diff
+       original_file with each new_file, sending diff's to new_file.$dif_ext
+
+Options
+       -k
+              keep temporary files; the default is to remove them.
+
+       -s
+              ignore the sign of floating point numbers.
+
+       -t n={0,1,2,3,4,5,6,7,8}
+              truncate the last n digits of floating point numbers.
+
+       -v
+              do not emit verbose messages that indicate the processing status.
+
+       -w
+              ignore whitespace.  Note that trailing whitespace and
+              blank lines are removed regardless of this option.
+
+       -z
+              do not strip trailing zeros from the fractional part of floating
+              point numbers; the default is to strip them; and this occurs after
+              truncation.
+EOF
+
+exit 1;
+}
+
+# parse options
+on='on'
+keep_temporary_files=''
+ignore_sign=''
+ignore_whitespace=''
+truncate=''
+verbose=$on
+zerostrip=$on
+
+# standardize command line options
+optionlist='kst:vw'
+
+# Most Unices have getopt, which is good enough for this script,
+# but some like Cygwin 1.5.22-1 have getopts instead.
+# Sigh.
+if [ -x /usr/bin/getopt ]
+then
+
+set -- `getopt "$optionlist" "$@"`
+while [ $# -gt 0 ]
+do
+    case "$1" in
+        -k)    keep_temporary_files=$on ;;
+        -s)    ignore_sign=$on ;;
+        -t)    truncate=$on; shift; digits=$1 ;;
+        -v)    verbose='' ;;
+        -w)    ignore_whitespace=$on ;;
+        -z)    zerostrip='' ;;
+        --)    shift; break ;;
+        -*)    usage ;;
+        *)     break ;;
+    esac
+    shift
+done
+
+else
+
+while getopts "$optionlist" option
+do
+    case "$option" in
+        k)    keep_temporary_files=$on ;;
+        s)    ignore_sign=$on ;;
+        t)    truncate=$on; shift; digits=$OPTARG ;;
+        v)    verbose='' ;;
+        w)    ignore_whitespace=$on ;;
+        z)    zerostrip='' ;;
+        ?)    usage ;;
+    esac
+    shift
+done
+
+fi
+
+# command requires at least 2 arguments
+if [ $# -lt 2 ]
+then
+    usage;
+fi
+
+# Perform the following transformations on all files:
+# ## denotes cut and pasted lines from example files
+# 
+# Dock transformations:
+#
+# Delete lines with timing info
+##Elapsed time:   24 seconds
+# 
+# Remove path specific information before dock{version} from lines, eg,
+##Running: /Users/sbrozell/dock/dock6/bin/teLeap -s -f tleap.in
+#
+# Remove time from stats, eg,
+## 10/10 anchor orients retained (max 10) t=0s
+## Lyr:1 Seg:0 12/60 retained, Pruning: 48-clustered  t=0.16s
+# 
+# grid transformations:
+#
+# Delete lines with timing info and other platform specific info
+##launch_time                    Wed May 10 10:51:19 2006
+##host_name                      rooster.compbio.ucsf.edu
+##memory_limit                   0
+##working_directory              /Users/sbrozell/dock/6/install/test/grid_generation
+##user_name                      sbrozell
+#
+# nchemgrid transformations:
+#
+# Delete lines with timing info
+## ***elapsed time before grid computation:   0.049999997
+## ***elapsed time on grid computation:   0.120000005
+## ***total elapsed time:   0.239999995
+#
+#
+# Amber transformations:
+#
+# Delete lines that begin with |
+##| Run on 12/26/2003 at 12:09:28
+##|  MDIN: gbin                                                                  
+##| Total time                 1.54 (100.0% of ALL  )
+#
+# Delete lines that contain VERSION
+##%VERSION  VERSION_STAMP = V0001.000  DATE = 08/06/01  11:44:33                  
+#
+# Remove path specific information before amber{version} from lines, eg,
+##-I: Adding /tmp/amber8/dat/leap/prep to search path.
+##----- Source: /tmp/amber8/dat/leap/cmd/leaprc.gaff
+##----- Source of /tmp/amber8/dat/leap/cmd/leaprc.gaff done
+##Loading parameters: /tmp/amber8/dat/leap/parm/gaff.dat
+# 
+# DelPhi transformations:
+#
+# Delete lines with timing info
+##  program started on Thu Nov 16 2006
+##              at 02:12:38
+#
+## time to read in and/or assign rad/chrg=  5.0000001E-02
+#
+## start vw surface at   5.0000001E-02
+## fill in re-entrant regions at   5.0000001E-02
+#
+## mkacc time =   0.1500000
+#
+## time to grow re-entrant surface =   0.1800000
+#
+## time taken =   4.9999997E-02
+#
+## time to turn everything in is  0.2300000
+#
+##  iepsmp to db, and charging done at  0.2700000
+#
+## setup time was (sec)   0.2600000
+#
+## now iterating at: 02:12:46
+#
+## finished qdiffx linear iterations
+## at                       : 02:12:46
+## total time elapsed so far:   0.5000000
+#
+## energy calculations done at   1.010000
+#
+## total cpu time was (sec)   0.5200000
+#
+## DelPhi exited at 02:12:46
+##0.520u 0.050s 0:00.52 109.6%  0+0k 0+0io 132pf+0w
+# 
+# General transformations:
+#
+# Convert lowercase floating point exponent delimiters to uppercase:
+#  e+  ->  E+
+#  e-  ->  E-
+# Delete useless floating point exponent fields, ie, 
+#  E+, E-, E+0, E-0, E+00, E-00, etc.
+# Delete leading zeros in floating point exponent fields, ie, 
+#  E+004 -> E+4
+#  E-005 -> E-5
+# Prepend zero to floating point numbers beginning with ., ie, convert:
+#    . -> 0.
+#   -. -> -0.
+# Convert all forms of floating point zero to 0., ie, 
+#  -0. ->  0., +0. ->  0., -0.0 ->  0.0, etc.
+#
+# Remove trailing whitespace
+#
+# Remove blank lines
+#
+# Optionally remove signs, truncate digits, and remove whitespace
+
+base='/tmp/'
+for path in $@
+do
+    file=`echo $path | sed 's@/@_@g'`  # convert pathname into unique filename
+    cat $path |
+    # use @ (or |) to delimit regular expressions to improve readability.
+    # this requires \@ for regular expression addresses.
+    # see UNIX Power Tools, 2nd ed., p617.
+    sed -e '\@[Ee]lapsed time[: ]@d' \
+        -e 's|[a-zA-Z0-9\._/]*dock[_/0-9]*[0-9]*/\([a-zA-Z0-9\._/]*\)|\1|' \
+        -e 's@ t=0s$@@' \
+        -e 's@ t=[0-9][0-9]*\.[0-9]*[0-9]s$@@' \
+        -e '\@^launch_time @d' \
+        -e '\@^host_name @d' \
+        -e '\@^memory_limit @d' \
+        -e '\@^user_name @d' \
+        -e '\@^|@d' \
+        -e '\@VERSION@d' \
+        -e 's|[a-zA-Z0-9\._/]*amber[1-9][0-9]*/\([a-zA-Z0-9\._/]*\)|\1|' \
+        -e '\@^  program started on [MTWTFSS][ouehrau][oeduitn] @{N;d;}' \
+        -e '\@^ time to read in and/or assign rad/chrg=@d' \
+        -e '\@^ start vw surface at@d' \
+        -e '\@^ fill in re-entrant regions at@d' \
+        -e '\@^ mkacc time =@d' \
+        -e '\@^ time to grow re-entrant surface =@d' \
+        -e '\@^ time taken =@d' \
+        -e '\@^ time to turn everything in is@d' \
+        -e '\@^ iepsmp to db, and charging done at@d' \
+        -e '\@^ setup time was (sec)@d' \
+        -e '\@^ now iterating at: [0-9][0-9]:[0-9][0-9]:[0-9][0-9]@d' \
+        -e '\@^ finished qdiffx linear iterations@{N;N;d;}' \
+        -e '\@^ energy calculations done at@d' \
+        -e '\@^ total cpu time was (sec)@d' \
+        -e '\@^ DelPhi exited at [0-9][0-9]:[0-9][0-9]:[0-9][0-9]@{N;d;}' \
+        -e 's@e+@E+@g' \
+        -e 's@e-@E-@g' \
+        -e 's@E[-+]0*\([^0-9]\)@\1@g' \
+        -e 's@E[-+]0*$@@g' \
+        -e 's@E\([-+]\)0*\([1-9]\)@E\1\2@g' \
+        -e 's@ \.@0.@g' \
+        -e 's@ -\.@-0.@g' \
+        -e 's@[-+ ]0\.\(0*[^0-9]\)@ 0.\1@g' \
+        -e 's@[-+ ]0\.\(0*\)$@ 0.\1@g' \
+        -e 's@ *$@@' \
+        -e '\@^$@d' \
+        > $base$file.$$
+    if [ "$ignore_sign" = "$on" ]
+    then
+        mv $base$file.$$ $base$file.$$.t
+        sed -e 's@[-+]\([0-9][0-9]*\.[0-9]*\)@ \1@g' \
+            $base$file.$$.t > $base$file.$$
+    fi
+    if [ "$truncate" = "$on" ]
+    then
+        mv $base$file.$$ $base$file.$$.t
+        case "$digits" in
+            0)    cat $base$file.$$.t > $base$file.$$ ;;
+            1)    sed -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      $base$file.$$.t > $base$file.$$ ;;
+            2)    sed -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      $base$file.$$.t > $base$file.$$ ;;
+            3)    sed -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      $base$file.$$.t > $base$file.$$ ;;
+            4)    sed -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      $base$file.$$.t > $base$file.$$ ;;
+            5)    sed -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      $base$file.$$.t > $base$file.$$ ;;
+            6)    sed -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      $base$file.$$.t > $base$file.$$ ;;
+            7)    sed -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      $base$file.$$.t > $base$file.$$ ;;
+            8)    sed -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      -e 's@\([-+]\{0,1\}[0-9][0-9]*\.[0-9]*\)[0-9]@\1@g' \
+                      $base$file.$$.t > $base$file.$$ ;;
+            *)    usage ;;
+        esac
+        if [ "$keep_temporary_files" != "$on" ]
+        then
+            rm $base$file.$$.t
+        fi
+    fi
+    if [ "$zerostrip" = "$on" ]
+    then
+        mv $base$file.$$ $base$file.$$.z
+        sed -e 's@\([0-9][0-9]*\.[0-9]*[1-9]\)0* @\1 @g' \
+            -e 's@\([0-9][0-9]*\.[0-9]*[1-9]\)0*$@\1@g' \
+            -e 's@\([0-9][0-9]*\.\)0* @\1 @g' \
+            -e 's@\([0-9][0-9]*\.\)0*$@\1@g' \
+            $base$file.$$.z > $base$file.$$
+        if [ "$keep_temporary_files" != "$on" ]
+        then
+            rm $base$file.$$.z
+        fi
+    fi
+done
+
+# get original file
+original=$1
+file=`echo $original | sed 's@/@_@g'`  # convert pathname into unique filename
+old=$base$file.$$
+shift
+
+# diff old with each new file storing diff's in file with extension dif_ext
+for path in $@
+do
+    file=`echo $path | sed 's@/@_@g'`  # convert pathname into unique filename
+    new=$base$file.$$
+    if [ "$verbose" = "$on" ]
+    then
+        echo "diffing $original with $path"
+    fi
+    if [ "$ignore_whitespace" = "$on" ]
+    then
+        diff -w $old $new > $path.$dif_ext
+    else
+        diff $old $new > $path.$dif_ext
+    fi
+    status=$?
+    if [ $status -eq 0 ]
+    then
+        if [ "$verbose" = "$on" ]
+        then
+            echo "PASSED"
+        fi
+        /bin/rm $path.$dif_ext
+    else
+        echo "possible FAILURE:  check $path.$dif_ext"
+    fi
+    echo "=============================================================="
+    if [ "$keep_temporary_files" != "$on" ]
+    then
+        rm $new
+    fi
+done
+
+if [ "$keep_temporary_files" != "$on" ]
+then
+    rm $old
+fi
+exit
+

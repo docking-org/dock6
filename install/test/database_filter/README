@@ -1,0 +1,22 @@
+TITLE: Contact Scoring
+
+EXECUTABLES TESTED:  
+	dock6
+
+FUNCTIONS TESTED:
+	MPI Function
+	
+WALL CLOCK TIME:
+	  secs
+
+FILES USED:
+	database.dockin		#database filter
+	ncidiv_p0.0.mol		#multiple ligand structure file
+	flex.defn		#flex atom definition file
+	flex_drive.tbl		#flex torsional drive file
+	vdw.defn		#vdw parameter file used to create grid
+
+FILES GENERATED:
+        database.dockout	#docking info file generated on master node
+	database_scored.mol2	#all ligand structures ranked by score
+

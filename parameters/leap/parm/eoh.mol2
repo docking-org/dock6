@@ -1,0 +1,28 @@
+@<TRIPOS>MOLECULE
+EOH  ETHANOL.  C2 H6 O. 
+    9     8     1     0     0
+SMALL
+bcc via mopac
+****
+From PDBeChem: antechamber -fi pdb -fo mol2 -i EOH.pdb -o eoh.mol2 -c bcc
+@<TRIPOS>ATOM
+      1 C1          0.5660    0.0000   -0.0110 c3        1 EOH      0.131100
+      2 C2         -0.2460    0.0000    1.2850 c3        1 EOH     -0.097000
+      3 O          -0.3220    0.0000   -1.1300 oh        1 EOH     -0.602300
+      4 H11         1.1940    0.8900   -0.0460 h1        1 EOH      0.018200
+      5 H12         1.1940   -0.8900   -0.0460 h1        1 EOH      0.018300
+      6 H21         0.4310    0.0000    2.1380 hc        1 EOH      0.037900
+      7 H22        -0.8740    0.8900    1.3200 hc        1 EOH      0.048200
+      8 H23        -0.8740   -0.8900    1.3200 hc        1 EOH      0.048100
+      9 HO          0.2280    0.0000   -1.9240 ho        1 EOH      0.397500
+@<TRIPOS>BOND
+     1    1    2 1   
+     2    1    3 1   
+     3    1    4 1   
+     4    1    5 1   
+     5    2    6 1   
+     6    2    7 1   
+     7    2    8 1   
+     8    3    9 1   
+@<TRIPOS>SUBSTRUCTURE
+     1 EOH         1 TEMP              0 ****  ****    0 ROOT

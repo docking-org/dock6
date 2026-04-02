@@ -1,0 +1,4 @@
+#!/bin/sh
+
+rm -f *.out
+rm -f *_scored.mol2  

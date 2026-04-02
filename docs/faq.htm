@@ -1,0 +1,714 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>DOCK 6 FAQ</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<style type="text/css">
+<!--
+.style0 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 36px;
+	font-weight: bold;
+}
+.style1 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 24px;
+}
+.style2 {font-size: 18px; font-family: Arial, Helvetica, sans-serif;}
+.style3 {font-weight: bold}
+.style4 {font-size: 18px; font-family: Arial, Helvetica, sans-serif; font-weight: bold; }
+-->
+</style>
+</head>
+
+<body>
+<div align="center">
+  <p class="style0">DOCK 6 FAQ </p>
+</div>
+
+<p class="style1" align="center"></p>
+<p align="center">Copyright &copy; 2006-2023<br>
+ Regents of the University of California<br>
+All Rights Reserved <br>
+</p>
+
+<p class="style2" align="center">Last updated
+January 30, 2023 <br>
+</p>
+
+
+<ul>
+  <li> <a href="#generalquestions">
+  <i>General Questions</i>
+  </a>
+   <ul>
+      <li> <a href="#currentrelease">
+  <strong>What is the current release of DOCK?</strong>
+  </a>
+      <li> <a href="#upgrade">
+  <strong>Should I upgrade to the current release? </strong>
+  </a>
+      <li> <a href="#whereisdms">
+  <strong>Where do I get the dms program, and how much does it cost?</strong>
+  </a>
+      <li> <a href="#dockfans">
+  <strong>What if I have a question that is not answered here or in the manual?</strong>
+  </a>
+   </ul>
+
+  <li> <a href="#installation">
+  <i>Installation Questions</i>
+  </a>
+   <ul>
+      <li> <a href="#dmsinstall">
+  <strong>How is dms installed ?</strong>
+  </a>
+      <li> <a href="#amberhome">
+  <strong> Should AMBERHOME be set ? </strong>
+  </a>
+      <li> <a href="#Error from amberize_ligand;">
+  <strong> Error from amberize_ligand; ...</strong>
+  </a>
+      <li> <a href="#yacc:Commandnotfound">
+  <strong> yacc: Command not found </strong>
+  </a>
+      <li> <a href="#_mmolex">
+  <strong> _mmolex Undefined symbols </strong>
+  </a>
+   </ul>
+
+  <li> <a href="#oldinstallation">
+  <i>Old Installation Questions</i>
+  </a>
+   <ul>
+      <li> <a href="#getpdb: can't open file lig.1.amber.pdb">
+  <strong> getpdb: can't open file lig.1.amber.pdb </strong>
+  </a>
+      <li> <a href="#mainmultipledefinition">
+  <strong> multiple definition of `main' </strong>
+  </a>
+      <li> <a href="#mpi syntax error before numeric constant">
+  <strong> /usr/include/mpi++.h: error: syntax error before numeric constant
+  </strong>
+  </a>
+   </ul>
+
+  <li> <a href="#platform">
+  <i>Platform Specific Questions</i>
+  </a>
+   <ul>
+      <li> <a href="#DOSLineTerminators">
+  <strong>What is the impact of Windows and DOS line terminators ?</strong>
+  </a>
+      <li> <a href="#macosx">
+  <strong>What are the prerequisites for installing on macOS ?</strong>
+  </a>
+      <li> <a href="#ubuntu">
+  <strong>What are the prerequisites for installing on Ubuntu ?</strong>
+  </a>
+      <li> <a href="#sgi">
+  <strong>What is the status of DOCK on SGI platforms ?</strong>
+  </a>
+      <li> <a href="#64bit">
+  <strong>What is the status of DOCK on 64 bit platforms ?</strong>
+  </a>
+   </ul>
+
+  <li> <a href="#energyquestions">
+  <i>Scoring Questions</i>
+  </a>
+   <ul>
+      <li> <a href="#whatisascore">
+  <strong>What is a DOCK Score ? </strong>
+  </a>
+   </ul>
+
+</ul>
+
+<hr>
+<hr>
+
+<br>
+  <a name="generalquestions"></a>
+  <p align="left" class="style1"><i>General Questions</i></p>
+<br>
+
+  <a name="currentrelease"></a>
+  <p align="left" class="style2"><strong>What is the current release of DOCK?</strong></p>
+  <blockquote>
+    <p align="left" class="style2">The current release is version 6.10
+     which was released in January 2023.
+    </p>
+  </blockquote>
+  <hr>
+
+  <a name="upgrade"></a>
+  <p align="left" class="style2"><strong>Should I upgrade to the current release? </strong></p>
+  <blockquote>
+    <p align="left" class="style2"> In general, yes.
+     In particular, bug fixes and basic improvements will make the upgrade
+     worthwhile even if the new functionalities are not desired.
+    </p>
+  </blockquote>
+  <hr>
+
+  <a name="whereisdms"></a>
+  <p align="left" class="style2"><strong>Where do I get the dms program, and how much does it cost?</strong></p>
+  <blockquote>
+    <p align="left" class="style2">
+<a href="https://www.cgl.ucsf.edu/chimera/">UCSF Chimera</a>'s Tool
+<a href="https://www.cgl.ucsf.edu/chimera/current/docs/UsersGuide/dms.html#writedms">Write DMS</a>
+(Chimera versions 1.3 and later) is a replacement for program dms; try it !
+The dms program is distributed by the Computer Graphics Lab at UCSF. It is free of charge. To download a copy of dms, go to this <a href="https://www.cgl.ucsf.edu/Overview/software.html#dms">link</a>. </p>
+  </blockquote>
+  <hr>
+
+  <a name="dockfans"></a>
+  <p align="left" class="style2"><strong>What if I have a question that 
+is not answered here or in the manual?</strong></p>
+  <blockquote>
+    <p align="left" class="style2">You can join the 
+<a href="https://groups.google.com/g/dock_fans/">DOCK-Fans</a>
+mailing list to meet and talk with other people who are also interested in DOCK.
+ Please
+ <a href="https://dock.compbio.ucsf.edu/DOCK_6/index.htm#searchdockfans"> search</a>
+ the archives before asking your question.
+  </p>
+  </blockquote>
+  <hr>
+
+<hr>
+
+<br>
+  <a name="installation"></a>
+  <p align="left" class="style1"><i>Installation Questions</i></p>
+<br>
+
+  <a name="dmsinstall"></a>
+  <p align="left" class="style2"><strong>How is dms installed ?</strong></p>
+  <blockquote>
+  <p align="left" class="style2"> 
+Note that
+<a href="https://www.cgl.ucsf.edu/chimera/">UCSF Chimera</a>'s Tool
+<a href="https://www.cgl.ucsf.edu/chimera/current/docs/UsersGuide/dms.html#writedms">Write DMS</a>
+(Chimera versions 1.3 and later) is a replacement for program dms; try it !
+  The dms program 
+  <a href="https://www.cgl.ucsf.edu/Overview/software.html#dms">description at the UCSF Computer Graphics Lab</a>
+  and the README file in the dms distribution provide details.
+  Here is a quick start example:
+  <br>
+  <code>
+sh < ./dms.shar
+  </code>
+  <br>
+  <code>
+cd dms
+  </code>
+  <br>
+  <code>
+# Edit GNUmakefile per the README: change LIBDIR and BINDIR
+  </code>
+  <br>
+  <code>
+vi GNUmakefile
+  </code>
+  <br>
+  <code>
+make install
+  </code>
+  <br>
+  Some reported problems are caused by invalid
+  <code>LIBDIR</code> and <code>BINDIR</code> definitions.
+  Ensure that these directories actually exist; create them
+  with <code>mkdir</code> if necessary.  
+  <a href="https://dock.compbio.ucsf.edu/DOCK_6/index.htm#searchdockfans">Search</a>
+  the DOCK-Fans mail archives before posting dms related questions.
+ </blockquote>
+ <hr>
+
+  <a name="amberhome"></a>
+  <p align="left" class="style2"><strong>Should AMBERHOME be set ? </strong></p>
+  <blockquote>
+  <p align="left" class="style2"> No.  In fact, for DOCK versions through
+  6.10 a defined <code>AMBERHOME</code> environment variable will cause
+  problems for the DOCK Amber score preparation procedure.
+  For examples on undefining <code>AMBERHOME</code> see the
+  <a href="#Error from amberize_ligand;"> next FAQ.</a>
+  </p>
+  </blockquote>
+  <hr>
+
+  <a name="Error from amberize_ligand;"></a>
+  <p align="left" class="style2"><strong>When I test or run DOCK with the amber_score,
+  I get Error from amberize_ligand; ...</strong><br><br>
+make[2]: Entering directory `/dock6/install/test/amber_score_181l'
+  <br>
+../../../bin/prepare_amber.pl lig.mol2 181l.pdb
+  <br>
+Coordinate and parameter files for the Receptor 181l generated.
+  <br>
+The AMBER score tagged mol2 file lig.amber_score.mol2 generated.
+  <br>
+Splitting the multiple Ligand mol2 file into single mol2 files.
+  <br>
+The single mol2 files will have the prefix: lig
+  <br>
+The number of single Ligand mol2 files generated is 1.
+  <br>
+Generating coordinate and parameter files for Ligands and Complexes.
+  <br>
+Generating AM1-BCC charges.  This may be time consuming.
+  <br>
+Ligand lig.1 has total charge 0
+  <br>
+Error from amberize_ligand; the name of the ligand is
+  <br>
+    ASL
+  <br>
+    Examine amberize_ligand.lig.1.out
+  <br>
+  <br>
+  <strong>What is causing the error, and how do I fix it?</strong></p>
+  <blockquote>
+  <p align="left" class="style2">
+  It is very likely that the <code>AMBERHOME</code> environment variable
+  is causing erroneous behavior in the DOCK antechamber.
+  Try undefining <code>AMBERHOME</code>:
+  <br>
+      <code>unset    AMBERHOME </code> (for the bash and similar shells)
+  <br>
+      <code>unsetenv AMBERHOME </code> (for the tcsh and similar shells).
+  <br>
+  If this does not fix the problem then read the rest of this FAQ.
+  </p>
+  <p align="left" class="style2">Known causes are
+  an incorrectly defined <code>AMBERHOME</code> environment variable,
+  a correctly defined <code>AMBERHOME</code> environment variable that
+  points to a faulty AMBER installation,
+  and a correctly defined <code>AMBERHOME</code> environment variable that
+  points to a correct AMBER9 through AMBER14 or AmberTools installation.  
+  The problem is usually that antechamber uses <code>AMBERHOME</code>
+  to determine which executables to run and to locate those executables.
+  This can cause antechamber to fail.
+<!--
+  (Note that this should be corrected in the 10 release of AMBER.)
+--> 
+  Thus, the amberize_ligand step of the DOCK amber preparation scripts
+  is failing.  The error is inside the
+  <code>amberize_ligand.lig.1.out</code> file.
+  The simplest patch is to undefine <code>AMBERHOME</code>;
+  the amber preparation scripts will then use the default DOCK supplied 
+  AMBER programs.  A possible cause is a faulty DOCK installation;
+  this cause has not been reported.
+  </p>
+  </blockquote>
+  <hr>
+
+  <a name="yacc:Commandnotfound"></a>
+  <p align="left" class="style2"><strong>When I build DOCK,
+  I get a yacc: Command not found error:</strong><br><br>
+  yacc parser.y
+  <br>
+  make[2]: yacc: Command not found
+  <br>
+  make[2]: *** [parser.c] Error 127
+  <br>
+  <br>
+  <strong>What is causing the error, and how do I fix it?</strong></p>
+  <blockquote>
+  <p align="left" class="style2"> The tleap program requires a
+  <a href="https://en.wikipedia.org/wiki/Compiler-compiler">parser generator</a>;
+  example Unix command names are yacc and bison.
+  All classical Unices have yacc. Linuces usually have yacc.
+  But this command not found error is caused by a missing parser generator.
+  (It may be that some users are not installing enough of their Linux.)
+ <br><br>
+  Here are some suggestions:
+ <div align="left" class="style2">
+ <ul> 
+ <li> Verify that <code>yacc</code> is missing.
+ <li> Look for a parser generator on your machine.
+      Likely candidates are <code>bison</code>.
+      If it is found then 
+      edit <code>dock6/install/config.h</code> and add a YACC definition
+      that is equal to bison, i.e <code>YACC='bison -y'</code>.
+      Restart the installation: <code>cd install; make install</code>
+ <li> Install a parser generator if one is not found.
+      The appropriate Linux package is usually named byacc.
+      The installation command 
+      <code> sudo apt-get install byacc </code>
+      works for
+      <a href="https://www.ubuntu.com/">Ubuntu</a>.
+      See also
+      <a href="https://www.gnu.org/software/bison/">Bison - GNU parser generator</a>
+      which is free software.
+ </ul>
+ </p>
+ </blockquote>
+ <hr>
+
+  <a name="_mmolex"></a>
+  <p align="left" class="style2"><strong>When I compile DOCK,
+  I get an _mmolex Undefined symbols error:</strong><br><br>
+  g++ -O2 -o dock6 amber_typer.o base_mpi.o base_score.o conf_gen.o dock.o dockmol.o library_file.o master_score.o orient.o score.o simplex.o utils.o score_solvent.o score_amber.o sasa.o score_chemgrid.o nab/nab.a -lm -lpthread<br>
+  ld: Undefined symbols:<br>
+  _mmolex<br>
+  make: *** [dock6] Error 1<br><br>
+  <strong>What is causing the error, and how do I fix it?</strong></p>
+  <blockquote>
+  <p align="left" class="style2">DOCK 6 requires a 
+  <a href="https://en.wikipedia.org/wiki/Lexical_analysis#Lexer_generator">lexical analyzer generator</a>;
+  example Unix command names are <code>lex</code> and <code>flex</code>.
+  All classical Unices have <code>lex</code>.
+  Linuces usually have <code>flex</code>.
+  But this undefined symbol is caused by a missing lexical analyzer generator.
+  (It may be that some users are not installing enough of their Linux.)
+  In particular, <code>dock6/src/dock/nab/lex.mm_options.c</code> either will
+  not exist or will have a size of zero if a lexical analyzer generator
+  is missing.
+  <br><br>
+  Here are some suggestions:
+ <div align="left" class="style2">
+ <ul> 
+ <li> Verify that <code>dock6/src/dock/nab/lex.mm_options.c</code> is broken or missing.
+ <li> Look for a lexical analyzer generator on your machine.
+ <li> Verify the definition of the macro <code>LEX</code> in the configuration
+      file, <code>dock6/install/config.h</code>; <code>LEX</code> should be
+      assigned the name of your lexical analyzer generator.
+ <li> Install a lexical analyzer generator if one is not found.
+      <a href="https://github.com/westes/flex">flex: The Fast Lexical Analyzer</a>
+      is free software.
+ <li> In DOCK 6.1 and later
+      try <code>dock6/src/dock/nab/flex.lex.mm_options.c</code>:
+      <br>
+      Change directory to <code>dock6/src/dock/nab</code> and execute
+      <code>make clean</code>.
+      Copy that file to <code>dock6/src/dock/nab/lex.mm_options.c</code>.
+      (This file was generated by flex version 2.5.4 on
+      Red Hat Enterprise Linux AS release 3 (Taroon Update 6).)
+      Edit <code>dock6/install/config.h</code> and make the LEX definition
+      equal to flex, i.e <code>LEX=         flex</code>.
+      Restart the installation: <code>cd install; make install</code>
+ <li> In DOCK 6.0 try our <code>dock6/src/dock/nab/lex.mm_options.c</code>:
+      <br>
+      Change directory to <code>dock6/src/dock/nab</code> and execute
+      <code>make clean</code>.
+      Download <a href="faq/lex.mm_options.c">lex.mm_options.c</a>.
+      (This file was generated by flex version 2.5.4 on
+      Red Hat Enterprise Linux AS release 3 (Taroon Update 6).)
+      Copy it to <code>dock6/src/dock/nab/lex.mm_options.c</code>.
+      Edit <code>dock6/install/config.h</code> and make the LEX definition
+      equal to flex, i.e <code>LEX=         flex</code>.
+      Restart the installation: <code>cd install; make install</code>
+ </ul>
+ </div>
+ </blockquote>
+ <hr>
+
+<hr>
+
+<br>
+  <a name="oldinstallation"></a>
+  <p align="left" class="style1"><i>Old Installation Questions</i></p>
+<br>
+
+  <a name="getpdb: can't open file lig.1.amber.pdb"></a>
+  <p align="left" class="style2"><strong>When I test or run DOCK with the amber_score,
+  I get a getpdb: can't open file lig.1.amber.pdb error:</strong><br><br>
+  cd test/amber_score_1lgu ; make move_ligand.dockout
+  <br>
+  Reading parm file (1lgu.lig.1.prmtop)
+  <br>
+  title:
+  <br>
+  getpdb: can't open file lig.1.amber.pdb
+  <br>
+  make: *** [move_everything.dockout] Error 1
+  <br>
+  <br>
+  <strong>What is causing the error, and how do I fix it?</strong></p>
+  <blockquote>
+  <p align="left" class="style2">Two categories of causes are known:
+  an incorrectly defined <code>AMBERHOME</code> environment variable,
+  a correctly defined <code>AMBERHOME</code> environment variable that
+  points to a faulty AMBER installation,
+  and
+  a correctly defined <code>AMBERHOME</code> environment variable that
+  points to a correct AMBER9 installation.  
+  The problem is usually that antechamber uses AMBERHOME to determine
+  which executables to run and to locate executables.
+  This can cause antechamber to fail.
+<!--
+  (Note that this should be corrected in the 10 release of AMBER.)
+--> 
+  Thus, one of the steps of the DOCK amber preparation scripts
+  is failing.  The error is buried inside one of the 
+  <code>amberize_bla.out</code> files.
+  The simplest patch is to undefine <code>AMBERHOME</code>;
+  the amber preparation scripts will then use the default DOCK supplied 
+  AMBER programs.  The other category of known causes is a faulty program in
+  the DOCK installation.  Once again investigating the output files should
+  lead to the culprit.  Here is an example from the tutorials.  File
+  <code>amberize_ligand.lig.1.out</code> contained:
+  <code>/dock6/bin/mopac: error while loading shared libraries: libgfortran.so.4: cannot open shared object file: No such file or directory</code>
+  This executable was built under a different environment.  Both updating the
+  environment or rebuilding the DOCK installation resolved the problem.
+  </p>
+  </blockquote>
+  <hr>
+
+  <a name="mainmultipledefinition"></a>
+  <p align="left" class="style2"><strong>When I compile DOCK with Intel compilers,
+  I get a multiple definition of `main' error:</strong><br><br>
+  ifort -O2 grid.o score.o score_grid.o grid point.o define.o io.o io_grid.o io_gridf.o mol_prep.o io_receptor.o io_mol2.o io_pdb.o io_ptr.o io_sph.o label.o label_node.o label_chem.o label_vdw.o label_flex.o mol.o search.o transform.o transformf.o parm.o parm_grid.o rotrans.o utility.o vector.o -lm -lpthread -o grid
+  <br>
+  grid.o(.text+0x0): In function `main':
+  <br>
+  : multiple definition of `main'
+  <br>
+  /usr/local/intel-8.0-20040412/lib/for_main.o(.text+0x0): first defined here
+  <br>
+  /usr/local/intel-8.0-20040412/lib/for_main.o(.text+0x42): In function `main':
+  <br>
+  : undefined reference to `MAIN__'
+  <br>
+  make[2]: *** [grid] Error 1
+  <br>
+  <br>
+  <strong>What is causing the error, and how do I fix it?</strong></p>
+  <blockquote>
+  <p align="left" class="style2">When mixing C and Fortran some compilers
+  automatically give preference to a user defined C main function.
+  Some do not, such as Intel compilers, and that results in link errors
+  for multiple definitions of main.
+  The solution for Intel compilers is to include 
+  <code>-nofor_main</code> in the link step.
+  The can be done via <code>DOCKBUILDFLAGS</code> or by modifying
+  the <code>Makefile</code>.
+  In release 6.3 we added a new make macro,
+  <code>LINK_WITHOUT_FORTRAN_MAIN</code>, to implement a simple
+  configuration file approach. 
+  </p>
+  </blockquote>
+  <hr>
+
+  <a name="mpi syntax error before numeric constant"></a>
+  <p align="left" class="style2"><strong>When I compile DOCK,
+  I get syntax error before numeric constant:</strong><br><br>
+  g++ -c  -DBUILD_DOCK_WITH_MPI -DMPICH_IGNORE_CXX_SEEK -I/include -O2 -o amber_typer.o  amber_typer.cpp
+  <br>
+  In file included from /usr/include/mpi.h:1081,
+  <br>
+                   from dock.h:28,
+  <br>
+                   from amber_typer.cpp:1:
+  <br>
+/usr/include/mpi++.h:1473: error: syntax error before numeric constant
+  <br>
+  <br>
+  <strong>What is causing the error, and how do I fix it?</strong></p>
+  <blockquote>
+  <p align="left" class="style2">This error is due to an incompatibility
+  between the configuration of the MPICH2 installation and the
+  configuration of DOCK 6.
+  Because DOCK 6 does not use the MPI C++ bindings, this issue can be
+  avoided by defining the macro <code>MPICH_SKIP_MPICXX</code>.
+  This can be done on the command line via:
+  <code>make -e DOCKBUILDFLAGS='-DMPICH_SKIP_MPICXX'</code>
+  or by modifying the DOCK 6 configuration file <code>config.h</code>
+  directly via an addition to the macro <code>CFLAGS</code>, e.g.,
+  <code>CFLAGS=      -DBUILD_DOCK_WITH_MPI -DMPICH_IGNORE_CXX_SEEK -DMPICH_SKIP_MPICXX -I$(MPICH_HOME)/include -O2</code>.
+  In release 6.1 we modified the DOCK 6 configuration files as above.
+  See <a href="https://www.mpi-forum.org/docs/mpi-2.0/mpi-20-html/node300.htm">MPI C++ Bindings</a> for background information.
+  Note that DOCK 6 does use some MPI C bindings and does not use any MPI
+  Fortran bindings.
+  </p>
+  </blockquote>
+  <hr>
+
+<hr>
+
+<br>
+  <a name="platform"></a>
+  <p align="left" class="style1"><i>Platform Specific Questions</i></p>
+<br>
+
+  <a name="DOSLineTerminators"></a>
+  <p align="left" class="style2"><strong>What is the impact of Windows and DOS line terminators ?
+  </strong></p>
+  <blockquote>
+  <p align="left" class="style2">
+    dms and sphgen cannot read files that are created under the
+    Disk Operating System (DOS) which underlies Windows.
+    One can translate the DOS line terminators to UNIX
+    line terminators using command dos2unix in
+    <a href="https://www.cygwin.com/cygwin-ug-net/using-effectively.html">
+    Cygwin's cygutils</a> package or using a web service.
+    Alternatively, some editors can change line terminators:
+    For example, to change the line terminators in the rec.pdb file,
+    type the following commands in the cygwin window:
+  </p>
+    <blockquote>
+      <code>vi rec.pdb<br>
+          :set fileformat=unix<br>
+          :wq</code>
+    </blockquote>
+  <p align="left" class="style2">
+    Note that the Write DMS tools in pre June 3, 2009 Chimera versions
+    produce a molecular surface file that is not readable by sphgen because it
+    contains DOS line terminators.  Use a later Chimera version or translate
+    using the approaches above.
+  </p>
+ </blockquote>
+ <hr>
+
+  <a name="macosx"></a>
+  <p align="left" class="style2">
+  <strong>What are the prerequisites for installing on macOS ?</strong>
+  </p>
+  <blockquote>
+  <p align="left" class="style2">
+    Versions 6 of DOCK officially support
+    <a href="https://en.wikipedia.org/wiki/MacOS">macOS</a>
+    platforms.  GNU compilers and thus configuration files are recommended.
+    However, the main effort is setting up your macOS for building
+    computational chemistry software.  There are various schools of thought. 
+    As of 
+    <a href="https://en.wikipedia.org/wiki/MacOS_Monterey">macOS Monterey</a>
+    (version 12) and
+    <a href="https://en.wikipedia.org/wiki/MacOS_Ventura">macOS Ventura</a>
+    (version 13) installing prerequisites natively is generally possible; see the
+    <a href="https://ambermd.org/InstMacOS.php">Amber instructions</a> for
+    installing Xcode and gfortran.  However, employing a package management
+    system may still be the most prudent path.
+    <a href="https://jswails.wikidot.com/mac-os-x">Here</a>
+    is one approach using MacPorts, and another using Homebrew is
+    <a href="https://macinchem.org/reviews/cheminfo/cheminfoMac.php">here.</a>
+    The most frequent user issue is compilation errors caused by stale GNU
+    compilers (e.g., gcc 4.2.1).
+    <a href="https://dock.compbio.ucsf.edu/DOCK_6/index.htm#searchdockfans">Search</a>
+    the DOCK-Fans mail archives for the latest user experiences.
+ </blockquote>
+ <hr>
+
+  <a name="ubuntu"></a>
+  <p align="left" class="style2">
+  <strong>What are the prerequisites for installing on Ubuntu ?</strong>
+  </p>
+  <blockquote>
+  <p align="left" class="style2">
+    As of version 6.3 DOCK officially supports 
+    <a href="https://www.ubuntu.com/">Ubuntu</a>
+    Linux platforms.  We recommend a full operating system (OS) installation.
+    However, for disk space misers here is the list of packages that
+    we had to install on a fresh 14.10 Ubuntu OS:
+  </p>
+    <blockquote>
+      <code> sudo apt-get install build-essential byacc 
+             <br>
+             sudo apt-get install flex gfortran </code>
+<!--
+    We used GNU version 4.3.2 g++ and gfortran.
+--> 
+    </blockquote>
+  </p>
+  <p align="left" class="style2">
+    Ubuntu command to get OS version:
+      <code> cat /etc/lsb-release </code>
+    <br>
+    GNU command to get compiler version:
+      <code> g++ -v </code>
+  </p>
+ </blockquote>
+ <hr>
+
+  <a name="sgi"></a>
+  <p align="left" class="style2"><strong>What is the status of DOCK on SGI platforms ?</strong></p>
+  <blockquote>
+  <p align="left" class="style2">
+    As of version 6.3 DOCK officially stopped supporting SGI platforms
+    because we no longer have access to SGI machines.
+    However, user interest has continued, and we are cooperating in 
+    updating sgi configuration files when we receive patches from users.
+    The latest input from our user community dated January 2014 reports
+    that DOCK version 6.6 was built on SGI machines running IRIX 6.5.23 and
+    MIPSpro compiler version 7.4 from 2003.
+    The sgi configuration files for DOCK versions 6.7 and later have been
+    updated appropriately.
+ </blockquote>
+ <hr>
+
+  <a name="64bit"></a>
+  <p align="left" class="style2"><strong>What is the status of DOCK on 64 bit platforms ?</strong></p>
+  <blockquote>
+  <p align="left" class="style2">
+    As of version 6.3 DOCK officially supports 64 bit platforms.
+    (However, there is one known problem - namely, with ChemGrid Score's 
+     grid-convert.)
+    As of version 6.4 the test suite contains reference outputs
+    from a 64 bit platform (x86_64). This can cause false positives on
+    32 bit platforms; in particular, there may be differing numbers of
+    Orientations or Conformations which can cause different scores, but tests
+    that only do rescoring generally show only very slightly different scores.
+    Apply common sense and good judgment to determine
+    the significance of a possible failure, and
+    note that a small number of failures is
+    rarely an indication of real problems, but if almost
+    every test fails with significant differences then something is amiss.
+ </blockquote>
+ <hr>
+
+<hr>
+
+<br>
+  <a name="energyquestions"> </a>
+  <p align="left" class="style1"><i>Scoring Questions</i></p>
+<br>
+
+  <a name="whatisascore"></a>
+  <p align="left" class="style2">
+  <strong>What is a DOCK Score ? </strong>
+  </p>
+  <blockquote>
+  <p align="left" class="style2"> 
+    DOCK scores are not absolute binding free energies.
+    DOCK scores are approximate binding energies.
+    The level of approximation varies across the scores.
+    <a href="https://dock.compbio.ucsf.edu/DOCK_6/dock6_manual.htm#OverviewoftheDOCKSuiteofPrograms">The overview in the manual</a>
+    describes the calculation of the main basic DOCK scores.
+<!--
+    These posts elaborate:
+<br>
+http://mailman.docking.org/pipermail/dock-fans/2005-February/000035.html
+<br>
+http://mailman.docking.org/pipermail/dock-fans/2007-March/000973.html
+<br>
+http://mailman.docking.org/pipermail/dock-fans/2007-August/001156.html
+<br>
+
+http://mailman.docking.org/pipermail/dock-fans/2005-September/000375.html
+<br>
+-->
+    Here is part of a DOCK-Fans post by developer P. Therese Lang that
+    provides context:
+<br>
+DOCK and 
+other docking algorithms are designed to rank libraries of molecules 
+with respect to each other.  If this is the level of accuracy you need, 
+DOCK should work fine.  If you would like to calculate the absolute 
+binding free energy, you will need to move to much more sophisticated 
+(and time intensive) calculations.  Some of the more commonly used of 
+these types of calculations include MM/PBSA, Free Energy Perturbation 
+(FEP), and Thermodynamic Integration (TI).  You should be able to find 
+some literature reviews that cover the strengths and weaknesses of each 
+technique.
+  </p>
+ </blockquote>
+ <hr>
+
+<hr>
+
+</body>
+</html>
+

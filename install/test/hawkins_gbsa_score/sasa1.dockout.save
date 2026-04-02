@@ -1,0 +1,145 @@
+
+
+
+--------------------------------------
+DOCK v6.10
+
+Released January 2023
+Copyright UCSF
+--------------------------------------
+
+
+Conformational Sampling Parameters
+------------------------------------------------------------------------------------------
+conformer_search_type                                        rigid
+
+Internal Energy Parameters
+------------------------------------------------------------------------------------------
+use_internal_energy                                          no
+
+Molecule Library Input Parameters
+------------------------------------------------------------------------------------------
+ligand_atom_file                                             lig.mol2
+limit_max_ligands                                            no
+skip_molecule                                                no
+read_mol_solvation                                           no
+calculate_rmsd                                               no
+
+Database Filter Parameters
+------------------------------------------------------------------------------------------
+use_database_filter                                          no
+
+Orient Ligand Parameters
+------------------------------------------------------------------------------------------
+orient_ligand                                                no
+
+Bump Filter Parameters
+------------------------------------------------------------------------------------------
+bump_filter                                                  no
+
+Master Score Parameters
+------------------------------------------------------------------------------------------
+score_molecules                                              yes
+
+Contact Score Parameters
+------------------------------------------------------------------------------------------
+contact_score_primary                                        no
+
+Grid Score Parameters
+------------------------------------------------------------------------------------------
+grid_score_primary                                           no
+
+MultiGrid Score Parameters
+------------------------------------------------------------------------------------------
+multigrid_score_primary                                      no
+
+Dock3.5 Score Parameters
+------------------------------------------------------------------------------------------
+dock3.5_score_primary                                        no
+
+Continuous Energy Score Parameters
+------------------------------------------------------------------------------------------
+continuous_score_primary                                     no
+
+Footprint Similarity Score Parameters
+------------------------------------------------------------------------------------------
+footprint_similarity_score_primary                           no
+
+Pharmacophore Similarity Score Parameters
+------------------------------------------------------------------------------------------
+pharmacophore_score_primary                                  no
+
+Hbond Energy Score Parameters
+------------------------------------------------------------------------------------------
+hbond_score_primary                                          no
+
+Internal Energy Score Parameters
+------------------------------------------------------------------------------------------
+internal_energy_score_primary                                no
+
+Descriptor Score Parameters
+------------------------------------------------------------------------------------------
+descriptor_score_primary                                     no
+
+Zou GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+gbsa_zou_score_primary                                       no
+
+Hawkins GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+gbsa_hawkins_score_primary                                   no
+
+SASA Score Parameters
+------------------------------------------------------------------------------------------
+SASA_score_primary                                           yes
+SASA_score_rec_filename                                      rec.mol2
+
+Amber Score Parameters
+------------------------------------------------------------------------------------------
+
+Simplex Minimization Parameters
+------------------------------------------------------------------------------------------
+minimize_ligand                                              no
+
+Atom Typing Parameters
+------------------------------------------------------------------------------------------
+atom_model                                                   all
+vdw_defn_file                                                ../../../parameters/vdw_AMBER_parm99.defn
+flex_defn_file                                               ../../../parameters/flex.defn
+flex_drive_file                                              ../../../parameters/flex_drive.tbl
+
+Molecule Library Output Parameters
+------------------------------------------------------------------------------------------
+ligand_outfile_prefix                                        sasa1
+write_orientations                                           no
+num_scored_conformers                                        1
+rank_ligands                                                 no
+------------------------------------------------------------------------------------------
+Initializing Library File Routines...
+Initializing SASA Score Routines...
+
+-----------------------------------
+Molecule:  C1 
+
+ Elapsed time for docking:	1.650 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                          SASA_Score:               0.000
+               SASA_com_lig_sasa_tot:               0.000
+                   SASA_lig_sasa_tot:             540.479
+           SASA_%_phobic_lig_exposed:               0.000
+            SASA_com_lig_sasa_phobic:               0.000
+                SASA_lig_sasa_phobic:             466.060
+           SASA_%_philic_lig_exposed:               0.000
+            SASA_com_lig_sasa_philic:               0.000
+                SASA_lig_sasa_philic:              74.419
+            SASA_%_other_lig_exposed:               0.000
+             SASA_com_lig_sasa_other:               0.000
+                 SASA_lig_sasa_other:               0.000
+
+
+1 Molecules Processed
+Total elapsed time:	3.864 seconds

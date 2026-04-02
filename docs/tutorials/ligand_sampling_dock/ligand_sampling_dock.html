@@ -1,0 +1,415 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<title>Tutorial: Rigid and Flexible Ligand Sampling</title>
+<style>
+.style2 {
+	font-size: 27.0pt;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	text-align: center;
+}
+.style4 {font-family: Arial, Helvetica, sans-serif; font-size: 18px;}
+.style5 {font-family: Arial, Helvetica, sans-serif}
+-->
+</style>
+</head>
+
+
+<p align=center class="style2">Rigid and Flexible Ligand DOCKing </p>
+
+<p align=center class="style4style10" style='text-align:center'><span class="style5">Author: P. Therese Lang <br>
+Last updated January 30, 2023 by Scott Brozell</p>
+
+<p align="left" class="style4">
+This tutorial describes rigid- and flexible-ligand
+DOCKing to a rigid receptor with grid-based scoring.
+We study the complex L-Arabinose-Binding Protein bound to L-Arabinose
+(PDB ID 
+  <a href="https://www.rcsb.org/pdb/explore/explore.do?structureId=1abe">1ABE</a>
+) as an example system.
+However, these techniques should be transferable to any protein-ligand system.
+</p>
+
+<p class=style4>To start this tutorial, obtain the
+<a href="../struct_prep/lig_charged.mol2">lig_charged.mol2</a>
+text file from the
+&quot;<a href="../struct_prep/prepping_molecules.htm">Structure Preparation Tutorial</a>,&quot;
+the <a href="../sphere_generation/selected_spheres.sph">selected_spheres.sph</a>
+text file from the
+&quot;<a href="../sphere_generation/generating_spheres.htm">Sphere Generation and Selection  Tutorial</a>,&quot;
+and the <a href="../grid_generation/grid.nrg">grid.nrg</a> and
+<a href="../grid_generation/grid.bmp">grid.bmp</a> binary files from the
+&quot;<a href="../grid_generation/generating_grid.html">Grid Generation Tutorial</a>.&quot;
+The program dock6 that is
+distributed and installed with DOCK is required.
+This ligand input file contains a single ligand, 
+but multiple ligands would be treated simply by including more
+ligands in the ligand input file.
+</p>
+
+
+<p class=style4>OPTION 1: Rigid Ligand DOCKing. </p>
+
+<p class=style4>In this first case,
+the ligand will be kept completely rigid during the orientation step.
+The purpose is to explore the matching and minimization algorithms.
+However, this type of docking could be applied in a scientific
+setting if you have a library of ligands that have already been
+conformationally expanded outside of the DOCK suite of programs. </p>
+
+<p align="left" class=style4> The rigid body orienting code is written as a direct implementation of the isomorphous subgraph matching method of Crippen and Kuhl (Kuhl, et al. <em>J. Comput. Chem. </em>1984). 
+Conceptually, the algorithm matchings the centers of the ligand heavy atom to the centers of the receptor site spheres. The algorithm follows the steps below:
+<p align="center" class=style4><img src="clique_match.JPG" width="391" height="310" align="left"> 
+<p align="left" class=style4>1) Generate node<br>
+2) Label as match if atom and sphere edges are equivalent<br>
+3) Extend match by adding more nodes<br>
+4) Exhaustively generate set of non-degenerate matches<br>
+5) Use matches to create transformation matrices to move the entire molecule
+<p align="left" class=style4><em>node</em> = pairing of one heavy atom and one sphere center
+<p align="left" class=style4><em>edge length</em> = Euclidean distance between atom or sphere centers
+<p class="style4">&nbsp;</p>
+<p class="style4">Once an orientation has been generated, the interaction between the ligand and the receptor can be energetically optimized, in this case using a simplex minimizer (Nelder, et al. <em>Computer Journal</em> 1965). During minimization, the ligand is allowed to be flexible, but the receptor remains rigid. The final score in the output file is the best pose generated from the orienting and minimization procedure. </p>
+
+<p class="style4">To actually run the docking calculation, you need to use the program dock6 that is distributed with DOCK in the /bin directory. You need to generate an input file--<a href="rigid.in">rigid.in</a> in this case--either interactively by answering questions or by hand in a text file. </p>
+<blockquote>
+  <p class="style4"> USAGE:  dock6 -i input_file [-o output_file] [-v] </p>
+  <p class="style4"> OPTIONS:<br>
+        <strong>-i input_file</strong> #Input parameters extracted from input_file, or dock.in if not specified <br>
+        <strong>-o output_file</strong> #Output written to output_file, or dock.out if not specified<br>
+        <strong>-v</strong> #Increased output verbosity </p>
+</blockquote>
+<p class="style4">  DOCK may be executed in either interactive or batch mode, depending on whether output is written to a file. In interactive mode, the user is requested only for parameters relevant to the particular run and default values are provided. This mode is recommended for the initial construction of the input file and for short calculations. In batch mode, input parameters are read in from the input file and all output is written to the output file. This mode is recommended for long calculations once an input file has been generated interactively.
+dock.in and dock.out are the default input/output names, but you may specify others. For more information on various ways to run the dock6 executable, see the <a href="../../dock6_manual.htm">DOCK 6</a> manual. </p>
+<blockquote>
+  <p class="style4">
+Below are some typical parameters that may be declared for this type of
+grid scoring calculation.
+  </p>
+</blockquote>
+<blockquote>
+  <p class="style4">NOTE: The following parameter definitions will use the format below: </p>
+  <blockquote>
+    <p class="style4">parameter_name [default] (value):<br>
+      #description </p>
+  </blockquote>
+  <p align="left" class="style4">In some cases, parameters are only needed (questions will only be asked) if the parameter above is enforced. These parameters are indicated below by additional indentation. </p>
+  <ul>
+    <li><span class="style4">conformer_search_type [flex] (rigid | flex): <br>
+    # Flag to perform ligand conformational searching</span>
+    <li class="style4">use_internal_energy [yes] (yes, no): <br>
+  # Flag to use internal energy (only repulsive VDW) for growth and/or minimization
+    </li>
+    <ul>
+        <li class="style4"> internal_energy_rep_exp [12] (int):<br>
+		  # The repulsive VDW exponent </li>
+    </ul>
+    <li><span class="style4">ligand_atom_file [database.mol2] (string): <br>
+    # The ligand input filename</span>    
+    <li><span class="style4">limit_max_ligands [no] (yes, no): <br>
+      # Limit the number of ligands to be read in from a library
+    </span>
+    <li>    <span class="style4">skip_molecule [no] (yes, no): <br>
+# Skip some number of molecules at the beginning of a library </span>
+    <li class="style4">read_mol_solvation [no] (yes, no): <br>
+      # Flag to read atomic desolvation information from ligand file</li>
+    <li><span class="style4">calculate_rmsd [no] (yes, no): <br>
+  # Flag to perform an RMSD calculation between the final molecule pose <br>
+# and its initial structure.
+    </span>
+    <li><span class="style4">orient_ligand [yes] (yes, no): <br>
+  # Flag to orient ligand to spheres
+    </span>
+    <li><span class="style4">automated_matching [yes] (yes, no): <br>
+  # Flag to perform automated matching instead of manual matching    
+    </span>
+    <li><span class="style4">receptor_site_file [receptor.sph] (string): <br>
+  # The file containing the receptor spheres
+    </span>
+    <li><span class="style4">max_orientations [500] (int): <br>
+  # The maximum number of orientations that will be cycled through
+    </span>
+    <li><span class="style4">critical_points [no] (yes, no): <br>
+  # Flag to use critical point sphere labeling to target orientations to particular spheres
+    </span>
+    <li><span class="style4">chemical_matching [no] (yes, no): <br>
+  # Flag to use chemical coloring of spheres to match chemical labels on ligand atoms    
+    </span>
+    <li class="style4">use_ligand_spheres [no] (yes/no): <br>
+  # Flag to enable a sphere file representing ligand heavy atoms to be used to orient the ligand </li>
+    <li class="style4">bump_filter [yes] (yes, no): <br>
+  # Flag to perform bump filtering </li>
+    <li class="style4">score_molecules [yes] (yes, no):<br>
+# Flag to use a scoring function</li>
+    <li><span class="style4">contact_score_primary [no] (yes, no): <br>
+  # Flag to perform contact scoring as the primary scoring function
+    </span> </li>
+    <li><span class="style4">grid_score_primary [yes] (yes, no): <br>
+  # Flag to perform grid-based energy scoring as the primary scoring function
+    </span>
+      <ul>
+        <li class="style4">        grid_score_rep_rad_scale [1] (float):<br>
+		  # Scalar multiplier of the VDW radii for the repulsive portion of the <br>
+		  # Lennard-Jones potential
+        <li><span class="style4">grid_score_vdw_scale [1] (float): <br>
+          # Scalar multiplier of the VDW energy component      
+          </span>
+        <li><span class="style4">grid_score_es_scale [1] (float): <br>
+          # The prefix to the grid files containing the desired energy grid
+          </span>
+        <li class="style4">grid_score_grid_prefix [grid] (string): <br>
+          # The prefix to the grid files containing the desired nrg grid </li>
+      </ul>
+    </li>
+    <li><span class="style4"> minimize_ligand [yes] (yes, no): <br>
+  # Flag to perform score optimization </span>
+    <li><span class="style4">simplex_max_iterations [50] (int): <br>
+    # Maximum number of minimization cycles     
+    </span>
+    <li><span class="style4">simplex_max_cycles [1] (int): <br>
+  # Maximum number of minimization cycles
+    </span>
+    <li><span class="style4">simplex_score_converge [0.1] (float): <br>
+  # Exit cycle at when energy converges at cutoff
+    </span>
+    <li><span class="style4">simplex_cycle_converge [1.0] (float): <br>
+  # Exit minimization when cycles converge at cutoff
+    </span>
+    <li><span class="style4">simplex_trans_step [1.0] (float): <br>
+  # Initial translation step size
+    </span>
+    <li><span class="style4">simplex_rot_step [0.1] (float): <br>
+  # Initial rotation step size
+    </span>
+    <li class="style4">simplex_tors_step [10.0] (float): <br>
+  # Initial torsion angle step size </li>
+    <li class="style4">simplex_random_seed [0] (int): <br>
+  # Seed for random number generator </li>
+    <li><span class="style4">atom_model [all] (all, united): <br>
+  # Choice of all atom or united atom models
+    </span>
+    <li><span class="style4">vdw_defn_file [vdw.defn] (string): <br>
+  # File containing VDW parameters for atom types
+    </span>
+    <li class="style4">flex_defn_file [flex.defn] (string): <br>
+  # File containing conformational search parameters </li>
+    <li class="style4">flex_drive_file [flex_drive.defn] (string):<br>
+	# File containing conformational search parameters </li>
+    <li class="style4">ligand_outfile_prefix [output] (string): <br>
+# The prefix that all output files will use </li>
+    <li><span class="style4">write_orientations [no] (yes, no): <br>
+  # Flag to write all anchor orientations</span> 
+    <li><span class="style4">num_scored_conformers [1] (int): <br>
+# The number of conformations scored for each ligand.<br>       
+  # For each ligand the top scoring pose is printed to outfile_scored.mol2</span>
+    <li class="style4">rank_ligands [no] (yes, no): <br>
+  # Flag to enable a ligand top-score list. These ligands will be written to <br>
+  # outfile_ranked.mol2.</li>
+  </ul>
+</blockquote>
+<p class=style4>NOTE: You should specify the
+    full paths for the ligand file, sphere file, the grid file, and vdw and conformational search definition files. 
+A more detailed explanation of the scoring functions and the input parameters
+can be found in the <a href="../../dock6_manual.htm#DOCK">DOCK 6 Manual</a>.
+</p>
+
+<p class=style4>The program will generate an output file,
+<a href="rigid.out">rigid.out</a>.
+It lists the parameters utilized in the run,
+any warning or error messages,
+and summary information about the best scoring pose.
+DOCK will also produce a structure file,
+<a href="rigid_scored.mol2">rigid_scored.mol2</a>,
+containing the geometric coordinates of the best pose
+as well as a summary of the interaction energy of that pose.
+These files are human readable and should be examined carefully.
+<a name="ChimeraViewDock"></a>
+<a href="https://www.cgl.ucsf.edu/chimera/">UCSF's Chimera</a>
+has a 
+<a href="https://www.cgl.ucsf.edu/chimera/docs/ContributedSoftware/viewdock/framevd.html">
+ViewDock</a>
+facility for visualizing DOCK output.
+See also the 
+<a href="https://www.cgl.ucsf.edu/chimera/docs/UsersGuide/tutorials/vdtut.html">
+ViewDock Tutorial</a>.
+</p>
+
+
+<p class=style4>OPTION 2: Flexible Ligand DOCKing. </p>
+<p class=style4>In this second case,
+the ligand will be allowed to be flexible. This type of docking allows the ligand to structurally rearrange in response to the receptor.</p>
+<p class="style4">First, the largest rigid substructure of the ligand (the anchor)
+is identified (see the first bold arrow in the figure below).
+All bonds within molecular rings are treated as rigid. This classification scheme is a first-order approximation of molecular flexibility, since some amount of flexibility can exist in non-aromatic rings. To treat such phenomena as sugar puckering and chair-boat hexane conformations, the user needs to supply each ring conformation as a separate input molecule. If the molecule does not have a ring, the largest rigid segment is specified as the anchor. Additional bonds may be specified as rigid by the user. </p>
+<p class="style4">Next the flexible layers of the ligand are identified
+(see the first bold arrow in the figure below).
+Each flexible bond is associated with a label defined in an editable file. The parameter file is identified with the flex_definition_file parameter. Each label in the file contains a definition based on the atom types and chemical environment of the bonded atoms. Typically, bonds with some degree of double bond character are excluded from minimization so that planarity is preserved. Each label is also associated with a set of preferred torsion positions. The location of each flexible bond is used to partition the molecule into rigid segments. A segment is the largest local set of atoms that contains only non-flexible bonds. </p>
+<p class="style4"><img src="anchor_and_grow.jpg" width="760" height="575"></p>
+<p align="center" class="style4"><em>Cartoon of Anchor-and-Grow Algorithm</em></p>
+<p class="style4">In the second stage of the Anchor-and-Grow Algorithm
+the anchor is rigidly oriented in the active site
+(see the second bold arrow in the figure above)
+using the same method described in Option 1.
+The anchor orientations are evaluated and optimized using the scoring function
+and the simplex minimizer, also described in Option 1.
+The orientations are then ranked according to their score,
+spatially clustered by heavy atom root mean squared deviation (RMSD),
+and prioritized (pruning).
+</p>
+<p class="style4"> Finally, in the growth stage
+(see the third through the sixth bold arrows in the figure above)
+the flexible layers of the ligand are built onto the
+best anchor orientations within the context of the receptor.
+It is assumed that the shape of the binding site will help restrict
+the sampling of ligand conformations to those that are most relevant
+for the receptor geometry
+(see the red X in the figure above).
+</p>
+<p class=style4>To actually run the docking calculation, you need to use the program dock6 that is distributed with DOCK in the /bin directory. You need to generate an input file--<a href="anchor_and_grow.in">anchor_and_grow.in</a> in this case--either interactively by answering questions or by hand in a text file. </p>
+<blockquote>
+  <p class="style4">dock6 -i dock.in [-o dock.out] [-v] </p>
+</blockquote>
+<p class="style4"> As described in Option 1, DOCK may be executed in either interactive or batch mode, depending on whether output is written to a file. </p>
+<blockquote>
+  <p class="style4">
+Below are some typical parameters that may be declared for this type of
+grid scoring calculation.
+  </p>
+  <p class="style4">NOTE: The following parameter definitions will use the format below: </p>
+  <blockquote>
+    <p class="style4">parameter_name [default] (value):<br>
+      #description </p>
+  </blockquote>
+  <p align="left" class="style4">In some cases, parameters are only needed (questions will only be asked) if the parameter above is enforced. These parameters are indicated below by additional indentation. </p>
+  <ul>
+    <li><span class="style4">conformer_search_type [flex] (rigid | flex): <br>
+    # Flag to perform ligand conformational searching</span>
+    <li><span class="style4">min_anchor_size [40] (int): <br>
+  # The minimum number of heavy atoms for an anchor segment
+</span>    
+    <li class="style4">pruning_use_clustering [yes] (yes, no): <br>
+	# Flag to perform clustering between anchor generation and growth <br>
+	# and between each layer of growth   
+    <li class="style4">pruning_max_orients [100] (int):<br>
+	# The maximum number of anchor orientations promoted to the growth phase    
+    <li class="style4">pruning_clustering_cutoff [100] (int): <br>
+	# The clustering cutoff value defined as the rank divided by the RMSD between <br>
+	# the current conformation and the next conformation in the list (previously <br> 
+	# num_confs_for_next_growth)    
+    <li class="style4">use_clash_overlap [no] (yes, no): <br>
+  # Flag to check for overlapping atom volumes during anchor and grow</li>
+    <li class="style4">use_internal_energy [yes] (yes, no): <br>
+  # Flag to use internal energy (only repulsive VDW) for growth and/or minimization
+    </li>
+    <ul>
+        <li class="style4"> internal_energy_rep_exp [12] (int):<br>
+		  # The repulsive VDW exponent </li>
+    </ul>
+    <li><span class="style4">ligand_atom_file [database.mol2] (string): <br>
+  # The ligand input filename</span>
+    <li><span class="style4">limit_max_ligands [no] (yes, no): <br>
+  # Limit the number of ligands to be read in from a library </span>
+    <li> <span class="style4">skip_molecule [no] (yes, no): <br>
+  # Skip some number of molecules at the beginning of a library </span>
+    <li class="style4">read_mol_solvation [no] (yes, no): <br>
+  # Flag to read atomic desolvation information from ligand file</li>
+    <li><span class="style4">calculate_rmsd [no] (yes, no): <br>
+  # Flag to perform an RMSD calculation between the final molecule pose and its <br>
+  # initial structure. </span>
+    <li><span class="style4">orient_ligand [yes] (yes, no): <br>
+  # Flag to orient ligand to spheres </span>
+    <li><span class="style4">automated_matching [yes] (yes, no): <br>
+  # Flag to perform automated matching instead of manual matching </span>
+    <li><span class="style4">receptor_site_file [receptor.sph] (string): <br>
+  # The file containing the receptor spheres </span>
+    <li><span class="style4">max_orientations [500] (int): <br>
+  # The maximum number of orientations that will be cycled through </span>
+    <li><span class="style4">critical_points [no] (yes, no): <br>
+  # Flag to use critical point sphere labeling to target orientations to particular spheres </span>
+    <li><span class="style4">chemical_matching [no] (yes, no): <br>
+  # Flag to use chemical coloring of spheres to match chemical labels on ligand atoms </span>
+    <li class="style4">use_ligand_spheres [no] (yes/no): <br>
+  # Flag to enable a sphere file representing ligand heavy atoms to be used to orient the ligand </li>
+    <li class="style4">bump_filter [yes] (yes, no): <br>
+  # Flag to perform bump filtering </li>
+    <li class="style4">score_molecules [yes] (yes, no):<br>
+	# Flag to use a scoring function</li>
+    <li><span class="style4">contact_score_primary [no] (yes, no): <br>
+  # Flag to perform contact scoring as the primary scoring function </span> </li>
+    <li><span class="style4">grid_score_primary [yes] (yes, no): <br>
+  # Flag to perform grid-based energy scoring as the primary scoring function </span>
+      <ul>
+        <li class="style4">grid_score_rep_rad_scale [1] (float):<br>
+          # Scalar multiplier of the VDW radii for the repulsive portion of the <br>
+          # Lennard-Jones potential
+        <li><span class="style4">grid_score_vdw_scale [1] (float): <br>
+          # Scalar multiplier of the VDW energy component </span>
+        <li><span class="style4">grid_score_es_scale [1] (float): <br>
+          # The prefix to the grid files containing the desired energy grid </span>
+        <li class="style4">grid_score_grid_prefix [grid] (string): <br>
+          # The prefix to the grid files containing the desired nrg grid </li>
+      </ul>
+    </li>
+    <li><span class="style4">minimize_ligand [yes] (yes, no): <br>
+  # Flag to perform score optimization </span>    
+    <li><span class="style4"> minimize_anchor [yes] (yes, no): <br>
+# Flag to perform rigid optimization of the anchor
+    </span>
+    <li class="style4"> minimize_flexible_growth [yes] (yes, no): <br>
+# Flag to perform complete optimization during conformational search 
+    <li class="style4">use_advanced_simplex_parameters [no] (yes, no): <br>
+  # Flag to use a simplified set of common minimization parameters for each of the <br>
+  # minimization steps listed above</li>
+    <li><span class="style4">simplex_max_cycles [1] (int): <br>
+  # Maximum number of minimization cycles </span>
+    <li><span class="style4">simplex_score_converge [0.1] (float): <br>
+  # Exit cycle at when energy converges at cutoff </span>
+    <li><span class="style4">simplex_cycle_converge [1.0] (float): <br>
+  # Exit minimization when cycles converge at cutoff </span>
+    <li><span class="style4">simplex_trans_step [1.0] (float): <br>
+  # Initial translation step size </span>
+    <li><span class="style4">simplex_rot_step [0.1] (float): <br>
+  # Initial rotation step size </span>
+    <li class="style4">simplex_tors_step [10.0] (float): <br>
+  # Initial torsion angle step size </li>
+    <li class="style4"> simplex_anchor_max_iterations [500] (int): <br>
+# Maximum number of iterations per cycle per anchor </li>
+    <li class="style4">simplex_grow_max_iterations [500] (int): <br>
+  # Maximum number of iterations per cycle per growth step </li>
+    <li class="style4">simplex_random_seed [0] (int): <br>
+  # Seed for random number generator </li>
+    <li><span class="style4">atom_model [all] (all, united): <br>
+  # Choice of all atom or united atom models </span>
+    <li><span class="style4">vdw_defn_file [vdw.defn] (string): <br>
+  # File containing VDW parameters for atom types </span>
+    <li class="style4">flex_defn_file [flex.defn] (string): <br>
+  # File containing conformational search parameters </li>
+    <li class="style4">flex_drive_file [flex_drive.defn] (string):<br>
+  # File containing conformational search parameters</li>
+    <li class="style4">ligand_outfile_prefix [output] (string): <br>
+  # The prefix that all output files will use </li>
+    <li><span class="style4">write_orientations [no] (yes, no): <br>
+  # Flag to write all anchor orientations</span>
+    <li><span class="style4">num_scored_conformers [1] (int): <br>
+# The number of conformations scored for each ligand.<br>       
+  # For each ligand the top scoring pose is printed to outfile_scored.mol2</span>
+    <li class="style4">rank_ligands [no] (yes, no): <br>
+  # Flag to enable a ligand top-score list. These ligands will be written to <br>
+  # outfile_ranked.mol2.</li>
+  </ul>
+</blockquote>
+<p class="style4">NOTE: You should specify the full paths for the ligand file, sphere file, the grid file, and vdw and conformational search definition files.
+A more detailed explanation of the scoring functions and the input parameters
+can be found in the <a href="../../dock6_manual.htm#DOCK">DOCK 6 Manual</a>.
+</p>
+
+<p class="style4">The program will generate an output file,
+<a href="anchor_and_grow.out">anchor_and_grow.out</a>, summarizing the parameters utilized in the run, any warning or error messages, and summary information about the best scoring pose. It will also produce a structure file,
+<a href="anchor_and_grow_scored.mol2">anchor_and_grow_scored.mol2</a>, containing the geometric coordinates of the best pose as well as a summary of the interaction energy of that pose.
+These files are human readable and should be examined carefully.
+See also the previous comments on
+<a href="#ChimeraViewDock">Chimera ViewDock</a>.
+</p>
+
+</body>
+
+</html>

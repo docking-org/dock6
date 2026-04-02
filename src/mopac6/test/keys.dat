@@ -1,0 +1,50 @@
+ 1SCF  C.I.=2 MECI LARGE VECTORS DENSITY & HCORE FOCK ENPART  ITRY=40 
+ MULLIK LOCAL PI BONDS 1electron DEBUG GRADIENTS COMPFG denout
+   CALCULATED HEAT OF FORMATION SHOULD BE = -32.995 KCAL
+  XX    0.000000  0    0.000000  0    0.000000  0    0    0    0
+   H    1.000000  0    0.000000  0    0.000000  0    1    0    0      -0.0009
+   C    1.106060  1  180.000000  0  180.000000  0    2    1    0       0.2921
+   H    1.106071  1  112.948031  1  180.000000  0    3    2    1      -0.0010
+   O    1.216607  1  123.532498  1  180.000000  0    3    2    4      -0.2902
+  XX    0.978174  1  118.749470  1  180.000000  0    3    2    4
+   0    0.000000  0    0.000000  0    0.000000  0    0    0    0
+  1SCF T=23M GRADIENTS MOLDAT PL EIGS ITER TIMES C.I.=3 MECI VECTORS ENPART +
+     setup=mnrsk3.key  DEBUG large
+      1SCF - TEST MNDO CALCULATION OF FORMALDEHYDE +large
+   CALCULATED HEAT OF FORMATION SHOULD BE = -39.819 KCAL
+   H    0.0000000  0      0.000000  0      0.000000  0    0    0    0      0.0033
+   C    1.1038875  1      0.000000  0      0.000000  0    1    0    0      0.2397
+   H    1.1038853  1    113.887246  1      0.000000  0    2    1    0      0.0033
+   O    1.2268927  1    123.055522  1   -179.999565  1    2    1    3     -0.2463
+ 
+ SPIN LOCAL ENPART UHF TRIPLET
+      1SCF - UHF TRIPLET TEST MNDO CALCULATION OF FORMALDEHYDE
+    CALCULATED HEAT OF FORMATION SHOULD BE = 15.712
+  XX    0.000000  0    0.000000  0    0.000000  0    0    0    0
+   H    1.000000  0    0.000000  0    0.000000  0    1    0    0       0.1199
+   C    1.087803  1  180.000000  0  180.000000  0    2    1    0      -0.1975
+   H    1.086619  1  121.677600  1 -179.315636  1    3    2    1       0.1190
+   O    1.298843  1  119.396428  1  177.755070  1    3    2    4      -0.0413
+  XX    0.960000  1  117.708168  1  179.427042  1    3    2    4
+   0    0.000000  0    0.000000  0    0.000000  0    0    0    0
+   0scf aigout symmetry
+  Formaldehyde                             
+   Verify that Gaussian Z-matrix is correct in the output
+   o
+   c 1.2 1
+   h 1.1 1 120 1
+   h 1.1 0 120 0 180 0 2 1 3
+ 
+   3 1 4
+   3 2 4
+ 
+  POLAR DEBUG ANALYT GNORM=0.02 T=30M LINMIN EXTERNAL=PARAS.DAT PM3 &
+     graph search dep 
+ External param's turn PM3 into AM1 HEAT:  -31.4977
+  XX    0.000000  0    0.000000  0    0.000000  0    0    0    0
+   H    1.000000  0    0.000000  0    0.000000  0    1    0    0      -0.0011
+   C    1.106118  1  180.000000  0  180.000000  0    2    1    0       0.2923
+   H    1.106135  1  112.894927  1  180.000000  0    3    2    1      -0.0011
+   O    1.216395  1  123.560741  1  180.000000  0    3    2    4      -0.2901
+  XX    2.166435  0  150.770198  0    0.000000  0    3    2    4
+   0    0.000000  0    0.000000  0    0.000000  0    0    0    0

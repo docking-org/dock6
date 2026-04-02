@@ -1,0 +1,30 @@
+MPI Dock Demo
+
+The demo is an example for how to use dock with MPI (Message Passing Interface). This is the standard protocol for parallel communication between nodes in a cluster. In order to run the demo, MPI needs to be installed. The latest version of MPI can be obtained from http://www-unix.mcs.anl.gov/mpi/
+
+Prior to running the demo, set MPI_HOME to your MPI installation e.g. /opt/mpich-1.2.7
+
+The contents of the current directory are
+
+script_demo             This script executes dock. It needs to be edited to set the install 
+			directories for DOCK, MPI and the list of available nodes. The script 
+			assumes that the MPI installation has been verified to work.
+
+script_clean            This script cleans up (removes) the various files
+                        generated during the demonstration
+
+1_struc/                This directory contains receptor and ligand coordinate files.
+                        Three small ZINC libraries kindly provided by the Shoichet Laboratory 
+                        (http://blaster.docking.org/zinc) are included for testing purposes.
+			   zinc_nci_0010.mol2         (contains    9 molecules + ligand from crystal )
+			   zinc_nci_0500.mol2         (contains  500 molecules)
+			   zinc_nci_1000.mol2         (contains 1000 molecules)
+			   1VRT.lig.1000copies.mol2   (contains 1000 copies of ligand from crystal to evaluate mpi timings)
+
+2_site/                 This directory contains sphere generation files.
+
+3_grid/                 This directory contains grid generation files.
+
+4_dock/                 This directory contains docking files.
+			Note that "mpi.in" specifies which library will be docked.
+			The library is set to zinc_nci_0010.mol2 (default)

@@ -1,0 +1,30 @@
+TITLE: Bump Filter
+
+EXECUTABLES TESTED:  
+	dock6
+
+FUNCTIONS TESTED:
+	Bump Filter Parameters
+	
+WALL CLOCK TIME:
+	 6.14 secs
+
+FILES USED:
+	bump1.in		#bump filter (single)
+	bump2.in		#bump filter (library)
+	lig.mol2		#ligand structure file
+	multi_lig.mol2		#multiple ligand structure file
+	struct.sph		#receptor sphere file
+	chem.defn		#chem parameter input file
+	flex.defn		#flex atom definition file
+	flex_drive.tbl		#flex torsional drive file
+	vdw.defn		#vdw parameter file used to create grid
+
+	../grid_generation/	
+		grid.bmp	#bump grid
+
+FILES GENERATED:
+	XXX_conformers.mol2	#conformations from input file
+	XXX_scored.mol2		#best scoring pose from input file	
+
+NOTE:  grid_generation must be run first

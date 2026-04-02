@@ -1,0 +1,428 @@
+DOCK 6.8
+
+This is a release of DOCK with updated scoring functions including the
+new pharmacophore matching similarity score as described in reference [1]
+and a completely revamped Descriptor Score that allows for different
+combinations of various scoring functions to be used simultaneously
+(users should note that "descriptor score" in earlier versions of DOCK
+only allowed for footprint scoring).
+
+
+NEW IN DOCK 6.8
+
+###New Scoring Functions###
+
+   Two new scoring functions were added: pharmacophore score [1], and
+descriptor score [see the manual].
+
+Pharmacophore:
+   Calculates the pharmacophore overlap between a candidate and a reference
+   molecule.  In addition, the python wrapper, mol2bild.py, can be employed
+   to visualize the pharmacophores.
+
+Descriptor Score:
+   Descriptor Score was completely overhauled. Presently, descriptor
+   score is now a wrapper that allows multiple scoring functions to be employed
+   simultaneously. Please refer to the manual for the complete list of scoring
+   functions supported by descriptor score.
+
+   Four similarity-based scoring functions were added as part of descriptor
+   score: pharmacophore score, Tanimoto score, Hungarian matching similarity
+   score, and volume overlap score.  Hungarian matching similarity score,
+   Tanimoto score and volume overlap score, new to DOCK, can only be called
+   using descriptor score.
+
+
+###Internal Energy Scoring Function###
+
+Optimization of the internal energy scoring function code and the addition
+of two parameters:
+
+a) The code has been optimized for calculating the repulsive VDW term.
+   "internal_energy_rep_exp", when set to its default value of 12, results
+   in a significant speedup in certain cases.  Values other than 12 are
+   computed as in previous versions of DOCK.
+
+b) The term "internal_energy_cutoff" has been added such that all
+   conformers with an internal energy greater than the cutoff are pruned.
+
+c) The addition of the term "pruning_conformer_score_scaling_factor", a
+   divisor of the pruning_conformer_score_cutoff, ensures that pruning
+   becomes more stringent as flexibly-grown molecules proceed layer-by-layer.
+
+
+###Miscellaneous###
+
+   DOCK now supports builds using Intel compilers with either MPICH2 or
+Intel MPI parallelism.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+DEPRECATED FEATURES
+
+1.  For a variety of reasons still under active development,
+amber_score cannot effectively be used as a secondary_score.
+This function was temporarily deprecated in 6.1, and using input parameter
+amber_score_secondary causes program termination.
+The recommended protocol is to perform two sequential DOCK runs where the
+output ligand poses from the first run are rescored specifying amber_score
+as the primary_score in the second run.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+BUG FIXES
+
+Some bug reports have not yet been processed, but several important bugs have
+been fixed since the last release.
+
+For DOCK:
+
+   Incorrect H-bond label assignment.  This prevented assigning the first atom
+of a molecule as a hydrogen-bond acceptor or donor.
+
+   Incorrect HA_RMSDm in some situations.  In one case this could potentially
+produce an inaccurately small HA_RMSDm value.  In another case if input parameter
+use_rmsd_reference_mol=no division by zero was possible leading to an HA_RMSDm
+value that was not an accurate maximum.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+INPUT PARAMETER CHANGES AND THEIR DEFAULT VALUES
+
+Changed:
+
+   The order of input parameters has changed, the first question now is
+   "conformer_search_type [flex] (rigid | flex):", which is equivalent to the
+   parameter "flexible_ligand [yes] (yes no):" in earlier versions.
+
+   The input parameters, "multigrid_score_use_euc [yes] (yes no):" and
+   "multigrid_score_use_cor [no] (yes no):" have been combined into one question:
+   "multigrid_score_foot_compare_type [Euclidean] (Pearson Euclidean):".
+
+   "multigrid_score_use_norm_euc [no] (yes no):" was changed to
+   "multigrid_score_normalize_foot [no] (yes no):" and is now only asked if
+   multigrid_score_foot_compare_type is set to "Euclidean".
+
+   A number of input parameters have been renamed.  The bulk of these stem from
+   Descriptor Score:
+
+   Old Name                                New Name
+   descriptor_score_primary                footprint_similarity_score_primary
+   descriptor_score_secondary              footprint_similarity_score_secondary
+   desc_use_footprint_reference_mol2       fps_score_use_footprint_reference_mol2      
+   desc_footprint_reference_mol2_filename  fps_score_footprint_reference_mol2_filename
+   desc_use_footprint_reference_txt        fps_score_use_footprint_reference_txt
+   desc_footprint_reference_txt_filename   fps_score_footprint_reference_txt_filename
+   desc_foot_compare_type                  fps_score_foot_compare_type
+   desc_normalize_foot                     fps_score_normalize_foot
+   desc_foot_comp_all_residue              fps_score_foot_comp_all_residue
+   desc_choose_foot_range_type             fps_score_choose_foot_range_type
+   desc_range                              fps_score_range
+   desc_vdw_threshold                      fps_score_vdw_threshold
+   desc_es_threshold                       fps_score_es_threshold
+   desc_hb_threshold                       fps_score_hb_threshold
+   desc_use_remainder                      fps_score_use_remainder
+   desc_score_rec_filename                 fps_score_receptor_filename
+   desc_score_att_exp                      fps_score_vdw_att_exp
+   desc_score_rep_exp                      fps_score_vdw_rep_exp
+   desc_score_rep_rad_scale                fps_score_vdw_rep_rad_scale
+   desc_use_distance_dependent_dielectric  fps_score_use_distance_dependent_dielectric
+   desc_score_dielectric                   fps_score_dielectric
+   desc_score_vdw_scale                    fps_score_vdw_fp_scale
+   desc_score_es_scale                     fps_score_es_fp_scale
+   desc_score_hb_scale                     fps_score_hb_fp_scale
+   distance_tolerence                      distance_tolerance
+   multigrid_vdw_norm_scale                multigrid_score_vdw_norm_scale
+   multigrid_es_norm_scale                 multigrid_score_es_norm_scale
+   multigrid_vdw_euc_scale                 multigrid_score_vdw_euc_scale
+   multigrid_es_euc_scale                  multigrid_score_es_euc_scale
+   multigrid_vdw_cor_scale                 multigrid_score_vdw_cor_scale
+   multigrid_es_cor_scale                  multigrid_score_es_cor_scale
+   SASA_descriptor_score_primary           SASA_score_primary 
+   SASA_descriptor_score_secondary         SASA_score_secondary 
+   SASA_descriptor_score_rec_filename      SASA_score_rec_filename 
+
+Added:
+
+For Internal Energy Calculation:
+   internal_energy_cutoff:                                       [100.0] ():
+   pruning_conformer_score_scaling_factor:                       [1.0] ():
+
+For Pharmacophore Matching Similarity Score:
+   pharmacophore_score_primary                                   [no] (yes no):
+   pharmacophore_score_secondary                                 [no] (yes no):
+   fms_score_use_ref_mol2                                        [no] (yes no):
+   fms_score_use_ref_txt                                         [no] (yes no):
+   fms_score_ref_mol2_filename                                   [Ph4.mol2] ():
+   fms_score_ref_txt_filename                                    [Ph4.txt] ():
+   fms_score_write_reference_pharmacophore_mol2                  [no] (yes no):
+   fms_score_write_reference_pharmacophore_txt                   [no] (yes no):
+   fms_score_reference_output_mol2_filename                      [ref_ph4.mol2] ():
+   fms_score_reference_output_txt_filename                       [ref_ph4.txt] ():
+   fms_score_write_candidate_pharmacophore                       [no] (yes no):
+   fms_score_candidate_output_filename                           [cad_ph4.mol2] ():
+   fms_score_write_matched_pharmacophore                         [no] (yes no):
+   fms_score_matched_output_filename                             [mat_ph4.mol2] ():
+   fms_score_compare_type                                        [overlap] (overlap compatible):
+   fms_score_full_match                                          [yes] (yes no):
+   fms_score_match_rate_weight                                   [5.0] ():
+   fms_score_match_dist_cutoff                                   [1.0] ():
+   fms_score_match_proj_cutoff                                   [0.7071] ():
+   fms_score_max_score                                           [20] ():
+
+For Descriptor Score:
+   descriptor_score_primary                                      [no] (yes no):
+   descriptor_score_secondary                                    [no] (yes no):
+   descriptor_use_grid_score                                     [yes] (yes no):
+   descriptor_use_multigrid_score                                [yes] (yes no):
+   descriptor_use_continuous_score                               [yes] (yes no):
+   descriptor_use_footprint_similarity                           [yes] (yes no):
+   descriptor_use_pharmacophore_score                            [no] (yes no):
+   descriptor_use_tanimoto                                       [no] (yes no):
+   descriptor_use_hungarian                                      [no] (yes no):
+   descriptor_use_volume_overlap                                 [no] (yes no):
+   descriptor_grid_score_rep_rad_scale                           [1] ():
+   descriptor_grid_score_vdw_scale                               [1] ():
+   descriptor_grid_score_es_scale                                [1] ():
+   descriptor_grid_score_grid_prefix                             [grid] ():
+   descriptor_multigrid_score_rep_rad_scale                      [1] ():
+   descriptor_multigrid_score_vdw_scale                          [1] ():
+   descriptor_multigrid_score_es_scale                           [1] ():
+   descriptor_multigrid_score_number_of_grids                    [20] ():
+   descriptor_multigrid_score_grid_prefix0                       [multigrid0] ():
+   descriptor_multigrid_score_grid_prefix1                       [multigrid1] ():
+   descriptor_multigrid_score_grid_prefix2                       [multigrid2] ():
+   descriptor_multigrid_score_grid_prefix3                       [multigrid3] ():
+   descriptor_multigrid_score_grid_prefix4                       [multigrid4] ():
+            .
+            .
+            .
+   descriptor_multigrid_score_grid_prefix17                      [multigrid17] ():
+   descriptor_multigrid_score_grid_prefix18                      [multigrid18] ():
+   descriptor_multigrid_score_grid_prefix19                      [multigrid19] ():
+   descriptor_multigrid_score_fp_ref_mol                         [yes] (yes no):
+   descriptor_multigrid_score_footprint_ref                      [reference.mol2] ():
+   descriptor_multigrid_score_use_euc                            [no] (yes no):
+   descriptor_multigrid_score_vdw_euc_scale                      [1] ():
+   descriptor_multigrid_score_es_euc_scale                       [1] ():
+   descriptor_multigrid_score_use_norm_euc                       [yes] (yes no):
+   descriptor_multigrid_score_vdw_norm_scale                     [10] ():
+   descriptor_multigrid_score_es_norm_scale                      [10] ():
+   descriptor_multigrid_score_use_cor                            [no] (yes no):
+   descriptor_multigrid_score_vdw_cor_scale                      [-10] ():
+   descriptor_multigrid_score_es_cor_scale                       [-10] ():
+   descriptor_cont_score_rec_filename                            [receptor.mol2] ():
+   descriptor_cont_score_att_exp                                 [6] ():
+   descriptor_cont_score_rep_exp                                 [12] ():
+   descriptor_cont_score_rep_rad_scale                           [1] ():
+   descriptor_cont_score_use_dist_dep_dielectric                 [yes] (yes no):
+   descriptor_cont_score_dielectric                              [4.0] ():
+   descriptor_cont_score_vdw_scale                               [1] ():
+   descriptor_cont_score_es_scale                                [1] ():
+   descriptor_fps_score_use_footprint_reference_mol2             [no] (yes no):
+   descriptor_fps_score_footprint_reference_mol2_filename        [ligand_footprint.mol2] ():
+   descriptor_fps_score_use_footprint_reference_txt              [no] (yes no):
+   descriptor_fps_score_footprint_reference_txt_filename         [ligand_footprint.txt] ():
+   descriptor_fps_score_foot_compare_type                        [Euclidean] (Pearson, Euclidean):
+   descriptor_fps_score_normalize_foot                           [no] (yes no):
+   descriptor_fps_score_foot_comp_all_residue                    [yes] (yes no):
+   descriptor_fps_score_choose_foot_range_type                   [specify_range] (specify_range threshold):
+   descriptor_fps_score_range                                    [20-40,60-80] ():
+   descriptor_fps_score_vdw_threshold                            [1] ():
+   descriptor_fps_score_es_threshold                             [1] ():
+   descriptor_fps_score_hb_threshold                             [0.5] ():
+   descriptor_fps_score_use_remainder                            [yes] (yes no):
+   descriptor_fps_score_receptor_filename                        [receptor.mol2] ():
+   descriptor_fps_score_vdw_att_exp                              [6] ():
+   descriptor_fps_score_vdw_rep_exp                              [12] ():
+   descriptor_fps_score_vdw_rep_rad_scale                        [1] ():
+   descriptor_fps_score_use_distance_dependent_dielectric        [yes] (yes no):
+   descriptor_fps_score_dielectric                               [4.0] ():
+   descriptor_fps_score_vdw_fp_scale                             [1] ():
+   descriptor_fps_score_es_fp_scale                              [1] ():
+   descriptor_fps_score_hb_fp_scale                              [0] ():
+   descriptor_fms_score_use_ref_mol2                             [no] (yes no):
+   descriptor_fms_score_use_ref_txt                              [no] (yes no):
+   descriptor_fms_score_ref_mol2_filename                        [Ph4.mol2] ():
+   descriptor_fms_score_ref_txt_filename                         [Ph4.txt] ():
+   descriptor_fms_score_write_reference_ph4_mol2                 [no] (yes no):
+   descriptor_fms_score_write_reference_ph4_txt                  [no] (yes no):
+   descriptor_fms_score_reference_output_mol2_filename           [ref_ph4.mol2] ():
+   descriptor_fms_score_reference_output_txt_filename            [ref_ph4.txt] ():
+   descriptor_fms_score_write_candidate_ph4                      [no] (yes no):
+   descriptor_fms_score_candidate_output_filename                [cad_ph4.mol2] ():
+   descriptor_fms_score_write_matched_ph4                        [no] (yes no):
+   descriptor_fms_score_matched_output_filename                  [mat_ph4.mol2] ():
+   descriptor_fms_score_compare_type                             [overlap] (overlap compatible):
+   descriptor_fms_score_full_match                               [yes] (yes no):
+   descriptor_fms_score_match_rate_weight                        [5.0] ():
+   descriptor_fms_score_match_dist_cutoff                        [1.0] ():
+   descriptor_fms_score_match_proj_cutoff                        [0.7071] ():
+   descriptor_fms_score_max_score                                [20] ():
+   descriptor_fingerprint_ref_filename                           [fing_ref.mol2] ():
+   descriptor_hms_score_ref_filename                             [hun_ref.mol2] ():
+   descriptor_hms_score_matching_coeff                           [-5] ():
+   descriptor_hms_score_rmsd_coeff                               [1] ():
+   descriptor_volume_score_reference_mol2_filename               [volume_reference.mol2] ():
+   descriptor_volume_score_overlap_compute_method                [analytical] (analytical grid):
+   descriptor_volume_score_number_of_layers_in_one_dimension     [30] ():
+   descriptor_volume_score_maximum_grid_point_separation         [0.3] ():
+   descriptor_volume_score_write_points_cloud                    [no] (yes no]:
+   descriptor_weight_grid_score                                  [1] ():
+   descriptor_weight_multigrid_score                             [1] ():
+   descriptor_weight_cont_score                                  [1] ():
+   descriptor_weight_fps_score                                   [1] ():
+   descriptor_weight_pharmacophore_score                         [1] ():
+   descriptor_weight_fingerprint_tanimoto                        [-1] ():
+   descriptor_weight_hms_score                                   [1] ():
+   descriptor_weight_volume_overlap_score                        [-1] ():
+
+Removed:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+FILE FORMAT CHANGES
+
+For DOCK:
+   In mol2 files, residue numbers as opposed to literal "1"s are now
+emitted in the subst_id field of the @<TRIPOS>ATOM data record.
+Here is an example from install/test/mpi:
+      1 C1         23.6660   11.3403   56.9386 C.3     1  <0>        -0.0897
+to
+      1 C1         23.6660   11.3403   56.9386 C.3     7  <0>        -0.0897
+
+   A new BILD file format is introduced, see section 4.3 in the manual.
+
+   A new parameter file ph4.defn is included for pharmacophore score.
+
+For Multgrid Score:
+ The grid arrays are no longer printed in the header of the mol2 but printed
+ to the text file specified by the user.
+
+FOR DOCK Output Components:
+
+ To increase the clarity of different output components a new naming convention
+ has been adopted. Each output component has the prefix of the scoring function
+ used to compute it. In addition the spacing of the output components has changed
+ in the mol2 header file in order to accommodate addition of new output components
+
+Internal Energy:
+Int_energy              Internal_energy_repulsive
+
+AMBER Score:
+Amber Score             Amber_Score
+complex                 Amber_complex_energy
+receptor                Amber_receptor_energy
+ligand                  Amber_ligand_energy
+
+Footprint Similarity Score:
+FPS_Score               Footprint_Similarity_Score
+vdw                     FPS_vdw_energy
+es                      FPS_es_energy
+hbond                   FPS_num_hbond
+vdw+es                  FPS_vdw+es_energy
+vdw_fp                  FPS_vdw_fps
+es_fp                   FPS_es_fps
+hb_fp                   FPS_hb_fps
+vdw_fp_numres           FPS_vdw_fp_numres
+es_fp_numres            FPS_es_fp_numres
+hb_fp_numres            FPS_hb_fp_numres
+
+Continuous Energy Score:
+Energy Score            Continuous_Score
+vdw                     Continuous_vdw_energy
+es                      Continuous_es_energy
+
+Grid Score:
+Grid Score              Grid_Score
+Grid_vdw                Grid_vdw_energy
+Grid_es                 Grid_es_energy
+
+Contact Score:
+Contact Score           Contact_Score
+
+DOCK3.5 Score:
+Energy Score            Chemgrid_Score
+vdw                     Chemgrid_vdw_energy
+ele                     Chemgrid_es_energy
+polsol                  Chemgrid_polsol
+apolsol                 Chemgrid_apolsol
+
+MultiGrid Footprint Similarity Score:
+MultiGrid Score         MultiGrid_Score
+MultiGrid_vdw           MGS_vdw_energy
+MultiGrid_es            MGS_es_energy
+vdwcor                  MGS_vdw_fps
+escor                   MGS_es_fps
+vdweuc                  MGS_vdw_fps
+eseuc                   MGS_es_fps
+vdwnorm                 MGS_vdw_fps
+esnorm                  MGS_es_fps
+
+Zou GB/SA score:
+GB/SA Score             Zou_GBSA_Score
+vdw                     Zou_GBSA_vdw_energy
+gb                      Zou_GBSA_gb_energy
+sa                      Zou_GBSA_sa_energy
+del_SAS_hp              Zou_GBSA_delta_SAS_hp_energy
+
+Hawkins GB/SA score:
+GB/SA Score             Hawkins_GBSA_Score
+vdw                     Hawkins_GBSA_vdw_energy
+es                      Hawkins_GBSA_es_energy
+gb                      Hawkins_GBSA_gb_energy
+sa                      Hawkins_GBSA_sa_energy
+
+PB/SA score:
+PB/SA Score             PBSA_Score
+vdw                     PBSA_vdw_energy
+pb                      PBSA_pb_energy
+sa                      PBSA_sa_energy
+
+Sasa Score:
+SASA Score              SASA_Score
+com_sasa_lig_tot        SASA_com_lig_sasa_tot
+lig_sasa_tot            SASA_lig_sasa_tot
+com_sasa_lig_phobic     SASA_com_lig_sasa_phobic
+lig_sasa_phobic         SASA_lig_sasa_phobic
+com_sasa_lig_philic     SASA_com_lig_sasa_philic
+lig_sasa_philic         SASA_lig_sasa_philic
+com_sasa_lig_other      SASA_com_lig_sasa_other
+lig_sasa_other          SASA_lig_sasa_other
+
+The following output components have been removed from the mol2 header file.
+If necessary they can be reprinted in the mol2 file by uncommenting the old
+source code lines in src/dock/score_sasa.cpp.
+%_phobic_lig_buried
+%_lig_phobic_buried/tot_buried
+%_rec_phobic_buried/tot_buried
+rec_sasa_tot
+rec_sasa_phobic
+rec_sasa_philic
+rec_sasa_other
+com_sasa_tot
+com_sasa_phobic
+com_sasa_philic
+com_sasa_other
+com_sasa_tot_lig
+com_sasa_phobic_lig
+com_sasa_philic_lig
+com_sasa_other_lig
+com_sasa_tot_rec
+com_sasa_phobic_rec
+com_sasa_philiic_rec
+com_sasa_other_rec
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+RELEASE DATE
+
+April 2017
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+REFERENCES
+
+1. Jiang, L.; Rizzo, R. C.  Pharmacophore-Based Similarity Scoring for DOCK.
+J. Phys. Chem. B, 2015, 119 (3), 1083-1102.
+

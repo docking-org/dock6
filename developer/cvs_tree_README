@@ -1,0 +1,183 @@
+Dear New DOCK Developer,
+
+PLEASE read this document completely.  It contains:
+
+1)  Instructions for accessing the source code repository
+2)  Rules for using the repository
+3)  Recommendations for using the server effectively
+4)  Commonly used commands
+
+NOTE:  The rules of the server have been made for everyone involved to 
+facilitate administrating such a large and complicated server.  If you 
+do not follow the rules for the server, your privileges may be revoked.
+
+If you have additional problems or questions, please contact Terry at
+terry@cgl.ucsf.edu.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+INSTRUCTIONS FOR ACCESSING THE SOURCE CODE REPOSITORY
+
+You can access CVS remotely if you have the cvs software installed and
+in your path on your local machine.  These are the environment 
+variables that CVS requires, using csh syntax:
+
+setenv CVSROOT user@hamlet.compbio.ucsf.edu:/usr/local/cvsroot
+setenv CVS_SERVER /usr/bin/cvs
+setenv CVS_RSH ssh
+
+Instructions for using an ssh authentication agent to bypass
+continually entering one's password are at the end of this letter.
+
+Alternatively, you can logon to hamlet with ssh and access CVS 
+directly:
+
+setenv CVSROOT /usr/local/cvsroot
+setenv CVS_SERVER /usr/bin/cvs
+setenv CVS_RSH sh
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+RULES FOR USING THE REPOSITORY
+
+1)  You must subscribe to the DOCK developers list server (contact 
+John Irwin jji@cgl.ucsf.edu if you have not received an email).  In 
+addition to whatever emails you send to other developers, please post 
+regularly to the list server.  These discussions will be distributed to 
+everyone and will be archived for future reference.  It will also be 
+used to deliver group messages like bug fixes and release announcements. 
+ 
+2)  You must thoroughly document all committed changes in the log 
+file.  These comments must be transparent enough that other developers 
+will be able to understand what has been changed.  In other words, these
+should not be short hand notes to yourself but complete descriptions.
+
+3)  Remove all compiled executables and object files before committing 
+the changes.  The diff function used in merging depends on character 
+comparison and binary files will create complications.
+
+4)  Do not use the import command.  For some reason, in our version of
+cvs server, the import command creates files on sub-sub-sub branches 
+(ie version 1.1.1.1.1.1).  This will create issues later on when you are
+ attempting to merge versions.  If you need to add a large number of 
+files recursively through folders, use the following commands instead:
+
+    cvs add * #create the folders
+    cvs add `find . -name CVS -prune -o -name '*'` #add the files
+
+5)  Changes to the code that will modify functions that you have not 
+personally developed on the trunk must be discussed before they can be 
+implemented.  Any change that you would like to make to the core 
+functions of the code must be discussed by ALL the contacts before it 
+can be implemented.  These modifications will effect everyone and we 
+would like to both reduce the headaches in integrating the new code 
+and enable everyone to have access to the modifications as soon as 
+possible.
+  
+6)  All new branches must be named after the appropriate lab you are in.
+You can create as many new branches as you need, but the name MUST start
+with the name of the lab you are in.  This will prevent overwriting other
+branches that may have similar names (see COMMONLY USED COMMANDS for 
+instructions on how to make a new branch).
+
+7)  Do not download other people's code (outside of the trunk) without 
+their permission.  This rule is a courtesy to the other developers and 
+will allow them to notify you if there are issues with the code.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+RECOMMENDATIONS FOR USING DOCK CVS SERVER
+
+1)  Commit tested development code to the cvs server frequently.  This 
+makes your contributions available to the other coders and eases 
+transitions when releases approach.
+
+2)  You will be notified by email when there are bug fixes added to the 
+trunk.  When you receive these emails, update your code to ensure you do
+not lose these fixes in your work.
+
+3)  Communication will be essential for this process to run smoothly.  
+Please strive to overuse the list server and to royally irritate all 
+contacts.  It will make life easier for everyone when we 
+are doing the releases.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+COMMONLY USED COMMAND EXAMPLES
+
+1)  Creating a New Branch
+cvs checkout -r kuntz_dock dock  #download the code from Master Branch
+cvs tag -b kuntz_dock_solvation  #create new branch
+cvs update -r kuntz_dock_solvation  #move onto new branch
+cp ~/solvation/salt.cpp src/  #copy over modified files (if necessary)
+cvs add salt.cpp -r kuntz_dock_solvation  #add new files (if necessary)
+cvs commit -r kuntz_dock_solvation  #commit new changes to branch
+cvs update -A -d  #get back to an up to date trunk
+
+2)  Adding New Code
+cvs -nq update -r kuntz_dock  #note out of date files/possible conflicts
+cvs update -d  #update the code
+cvs diff -c #prints out contextual differences between new and old code
+vi  ...  #edit files with unresolved conflicts 
+cvs commit -r kuntz_dock  #commit new code
+
+3)  Merging from Trunk to Branch
+cvs co -r shoichet_dock dock  #pull down files from branch
+cvs -nq update -r HEAD        #dryrun of pull down files from tip of trunk
+cd dock/src                   #enter directory where files you want to merge
+                              #  are located
+cvs update -j HEAD score.cpp  #pull down only the source code file you
+                              #  want to merge
+cvs diff -c  #write out difference between merged file and file version 
+             #  on branch (output can be used to generate files for use 
+             #  with the "patch" command)
+vi score.cpp #make changes to file if necessary
+cvs commit -r shoichet_dock   #if happy with merge, save to branch
+
+4)  Other Frequently Used Commands
+cvs diff -c              #indicates differences between versions
+cvs log                  #print the log file
+cvs status -v            #prints the status and tags of file
+cvs tag -r post_bugfix1  #adds tag to all files
+
+
+More information about CVS is available online:
+http://en.wikipedia.org/wiki/Concurrent_Versions_System
+http://cvsbook.red-bean.com/cvsbook.html
+http://ximbiot.com/cvs/wiki
+
+SSH AUTHENTICATION AGENT INSTRUCTIONS
+
+This procedure will replace the password request on a per
+cvs command basis with a single passphrase entry on login.
+The three steps in the procedure are
+public and private key generation on your local machine, creation of your
+ssh authorized key file on the machine containing the cvs repository,
+and addition of the ssh authentication agent processing to your local
+machine dot (startup) file.
+
+1.  Key generation
+On your local machine execute the command
+ssh-keygen -t dsa
+
+$HOME/.ssh/id_dsa.pub
+is the default location for the key.
+Follow the usual common sense rules for your passphrase.
+
+2.  Authorized key file creation
+CVS accounts are on hamlet.compbio.ucsf.edu.
+On your local machine execute the commands
+ssh user@hamlet.compbio.ucsf.edu mkdir .ssh
+cd $HOME/.ssh
+scp id_dsa.pub user@hamlet.compbio.ucsf.edu:.ssh/authorized_keys
+
+3.  Startup file modification
+On your local machine add these lines, which use csh syntax,
+to your .login file
+    set jamesbond = $HOME/.ssh/secretagent
+    rm -f $jamesbond
+    ssh-agent >! $jamesbond
+    source $jamesbond
+    ssh-add
+
+
+If you desire to use ssh agent authentication for additional local
+machines then repeat step 1 on those machines and append the additional
+public keys to the authorized key file on hamlet.
+

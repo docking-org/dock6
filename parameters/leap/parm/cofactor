@@ -1,0 +1,63 @@
+#!/bin/sh
+# Automagically create cofactor, ion, and/or modified residue
+# Amber input files for Dock Amber Score.
+# Scott Brozell, Feb 2011
+#set -vx
+
+# Validate command syntax and process arguments
+if [ $# -lt 1 -o $# -gt 2 ]
+then
+   echo "usage:  $0 ligand_pdb_code [charge]"
+   exit
+fi
+charge=0
+if [ $# -eq 2 ]
+then
+   charge=$2
+fi
+lowerpdb=`echo $1 | tr '[:upper:]' '[:lower:]'`
+upperpdb=`echo $1 | tr '[:lower:]' '[:upper:]'`
+echo $lowerpdb
+echo $upperpdb
+
+# Emit formula of starting structure
+cat $lowerpdb.mol2 | cut -c78-79 | sort | uniq -c
+cat $lowerpdb.mol2 | cut -c78-79 | sort | uniq -c |sed -e 's@  *@@g' -e 's@\([1-9][0-9]*\)\([A-Z][a-zA-Z]*\)@\2\1@g' | perl -p -e 's@\n@ @'
+
+# Emit commands to be executed and pause for user to hit enter
+echo
+echo "wget ftp://ftp.ebi.ac.uk/pub/databases/msd/pdbechem/files/pdb/$upperpdb.pdb"
+echo "antechamber -fi pdb -fo mol2 -i $upperpdb.pdb -o $lowerpdb.mol2 -c bcc"
+echo "parmchk -f mol2 -i $lowerpdb.mol2 -o $lowerpdb.frcmod"
+read
+
+# Get PDBeChem files
+wget "http://www.ebi.ac.uk/msd-srv/msdchem/cgi-bin/cgi.pl?FUNCTION=record&ENTITY=CHEM_COMP&PRIMARYKEY=$upperpdb&PARENTINDEX=-1&APPLICATION=1" -O $lowerpdb -o wget
+wget ftp://ftp.ebi.ac.uk/pub/databases/msd/pdbechem/files/pdb/$upperpdb.pdb -a wget
+
+# Use GAFF
+antechamber -fi pdb -fo mol2 -i $upperpdb.pdb -o $lowerpdb.mol2 -c bcc -nc $charge
+
+# Extract molecule name and formula from PDBeChem html file
+moleculename=`cat $lowerpdb | sed -e '/Molecule name/!d' | sed -e 's@.*Molecule name<.A>.nbsp;<.NOBR><.TD><TD>\([][A-Z0-9,)(}{ '\''-]*\)<.TD>.*@\1@g'`
+formula=`cat $lowerpdb | sed -e '/Formula/!d' | sed -e 's@.*Formula<.A>.nbsp;<.NOBR><.TD><TD>\([A-Za-z0-9 ]*\)<.TD>.*@\1@g'`
+
+# Insert molecule name and formula into emitted mol2 file
+ED_COMMANDS=ED_COMMANDS
+rm -f $ED_COMMANDS
+echo "2,2s/$upperpdb/$upperpdb  $moleculename.  $formula." > $ED_COMMANDS
+echo "5,7d" >> $ED_COMMANDS
+echo "4a" >> $ED_COMMANDS
+echo "bcc via mopac" >> $ED_COMMANDS
+echo "****" >> $ED_COMMANDS
+echo "From PDBeChem: antechamber -fi pdb -fo mol2 -i $upperpdb.pdb -o $lowerpdb.mol2 -c bcc" >> $ED_COMMANDS
+echo "." >> $ED_COMMANDS
+echo "wq" >> $ED_COMMANDS
+ed $lowerpdb.mol2 < $ED_COMMANDS
+rm $ED_COMMANDS
+
+# Check force field parameters
+parmchk -f mol2 -i $lowerpdb.mol2 -o $lowerpdb.frcmod
+cat $lowerpdb.frcmod
+
+exit

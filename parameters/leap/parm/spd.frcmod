@@ -1,0 +1,18 @@
+Spermidine from 1U8D:  parmchk -f mol2 -i spd.mol2 -o spd.frcmod
+MASS
+
+BOND
+
+ANGLE
+h4-c2-nh   52.000     113.360   same as hc-c2-nh
+
+DIHE
+
+IMPROPER
+c3-h4-c2-nh         1.1          180.0         2.0          Using default value
+c2-hn-nh-hn         1.1          180.0         2.0          Using default value
+
+NONBON
+
+
+

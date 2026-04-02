@@ -1,0 +1,10 @@
+ gnorm=0  & 
+                      PM3 
+ Methanol   Check that heat of formation is 51.8773 kcal/mol
+   C
+   O 1.4 1             1
+   H 1.0 1 109 1       1 2
+   H 1.0 1 109 1 120 1 1 2 3
+   H 1.0 1 109 1 120 1 1 2 4
+   H 1.0 1 120 1  30 1 2 1 3
+

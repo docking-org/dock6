@@ -1,0 +1,159 @@
+
+
+        UUUUUUU    CCCCCCCC    SSSSSSS/  FFFFFFFFF  
+      UU/    UU/  CC/    CC/     SS/     FF/    FF/ 
+     UU/         CCCCCCCC/      SS/     FF/    FF/  
+    UU/  UUUU/  CC/ CC\        SS/     FF/    FF/   
+   UU/    UU/  CC/   CC\      SS/     FF/    FF/    
+   UUUUUUU/   CC/     CC\  SSSSSS/  FFFFFFFFF/      
+
+
+University of California at San Francisco, DOCK 4.0.1
+
+__________________Job_Information_________________
+launch_time                    Mon Jan 30 19:23:41 2023
+host_name                      pitzer-login
+memory_limit                   1073741824
+working_directory              /dock6/tutorials/ligand_sampling_demo/3_grid
+user_name                      scott
+
+________________General_Parameters________________
+compute_grids                  yes
+grid_spacing                   0.3
+output_molecule                no
+
+________________Scoring_Parameters________________
+contact_score                  no
+energy_score                   yes
+energy_cutoff_distance         9999
+atom_model                     a
+attractive_exponent            6
+repulsive_exponent             12
+distance_dielectric            yes
+dielectric_factor              4
+allow_non_integral_charges     no
+bump_filter                    yes
+bump_overlap                   0.75
+
+____________________File_Input____________________
+receptor_file                  ../1_struct/rec_charged.mol2
+box_file                       rec_box.pdb
+vdw_definition_file            ../../../parameters/vdw_AMBER_parm99.defn
+
+____________________File_Output___________________
+score_grid_prefix              grid
+
+
+
+Reading in coordinates of receptor.
+CHARGED RESIDUE LYS4                    :    1.000
+CHARGED RESIDUE LYS10                   :    1.000
+CHARGED RESIDUE GLU13                   :   -1.000
+CHARGED RESIDUE GLU14                   :   -1.000
+CHARGED RESIDUE GLU20                   :   -1.000
+CHARGED RESIDUE LYS22                   :    1.000
+CHARGED RESIDUE ASP25                   :   -1.000
+CHARGED RESIDUE LYS26                   :    1.000
+CHARGED RESIDUE LYS29                   :    1.000
+CHARGED RESIDUE ASP30                   :   -1.000
+CHARGED RESIDUE GLU34                   :   -1.000
+CHARGED RESIDUE LYS37                   :    1.000
+CHARGED RESIDUE ASP42                   :   -1.000
+CHARGED RESIDUE GLU44                   :   -1.000
+CHARGED RESIDUE LYS45                   :    1.000
+CHARGED RESIDUE ASP51                   :   -1.000
+CHARGED RESIDUE LYS59                   :    1.000
+CHARGED RESIDUE ASP67                   :   -1.000
+CHARGED RESIDUE LYS69                   :    1.000
+CHARGED RESIDUE LYS77                   :    1.000
+CHARGED RESIDUE ARG79                   :    1.000
+CHARGED RESIDUE ASP82                   :   -1.000
+CHARGED RESIDUE LYS84                   :    1.000
+CHARGED RESIDUE ASP89                   :   -1.000
+CHARGED RESIDUE ASP90                   :   -1.000
+CHARGED RESIDUE LYS96                   :    1.000
+CHARGED RESIDUE LYS98                   :    1.000
+CHARGED RESIDUE ASP101                  :   -1.000
+CHARGED RESIDUE LYS112                  :    1.000
+CHARGED RESIDUE GLU115                  :   -1.000
+CHARGED RESIDUE ARG116                  :    1.000
+CHARGED RESIDUE GLU120                  :   -1.000
+CHARGED RESIDUE LYS123                  :    1.000
+CHARGED RESIDUE GLU124                  :   -1.000
+CHARGED RESIDUE LYS127                  :    1.000
+CHARGED RESIDUE ARG128                  :    1.000
+CHARGED RESIDUE ASP131                  :   -1.000
+CHARGED RESIDUE LYS133                  :    1.000
+CHARGED RESIDUE GLU134                  :   -1.000
+CHARGED RESIDUE GLU144                  :   -1.000
+CHARGED RESIDUE ASP146                  :   -1.000
+CHARGED RESIDUE ARG149                  :    1.000
+CHARGED RESIDUE ARG150                  :    1.000
+CHARGED RESIDUE ARG151                  :    1.000
+CHARGED RESIDUE ASP157                  :   -1.000
+CHARGED RESIDUE LYS160                  :    1.000
+CHARGED RESIDUE GLU166                  :   -1.000
+CHARGED RESIDUE LYS167                  :    1.000
+CHARGED RESIDUE LYS175                  :    1.000
+CHARGED RESIDUE ASP178                  :   -1.000
+CHARGED RESIDUE ASP184                  :   -1.000
+CHARGED RESIDUE HIS193                  :    1.000
+CHARGED RESIDUE GLU195                  :   -1.000
+CHARGED RESIDUE LYS197                  :    1.000
+CHARGED RESIDUE HIS198                  :    1.000
+CHARGED RESIDUE ASP206                  :   -1.000
+CHARGED RESIDUE ARG214                  :    1.000
+CHARGED RESIDUE GLU217                  :   -1.000
+CHARGED RESIDUE LYS222                  :    1.000
+CHARGED RESIDUE ASP225                  :   -1.000
+CHARGED RESIDUE ASP235                  :   -1.000
+CHARGED RESIDUE GLU239                  :   -1.000
+CHARGED RESIDUE LYS242                  :    1.000
+CHARGED RESIDUE ASP257                  :   -1.000
+CHARGED RESIDUE HIS259                  :    1.000
+CHARGED RESIDUE LYS262                  :    1.000
+CHARGED RESIDUE GLU265                  :   -1.000
+CHARGED RESIDUE LYS273                  :    1.000
+CHARGED RESIDUE ASP274                  :   -1.000
+CHARGED RESIDUE GLU276                  :   -1.000
+CHARGED RESIDUE LYS279                  :    1.000
+CHARGED RESIDUE GLU282                  :   -1.000
+CHARGED RESIDUE ASP285                  :   -1.000
+CHARGED RESIDUE ARG291                  :    1.000
+CHARGED RESIDUE ASP292                  :   -1.000
+CHARGED RESIDUE LYS295                  :    1.000
+CHARGED RESIDUE GLU296                  :   -1.000
+CHARGED RESIDUE GLU297                  :   -1.000
+CHARGED RESIDUE GLU299                  :   -1.000
+CHARGED RESIDUE LYS300                  :    1.000
+CHARGED RESIDUE LYS301                  :    1.000
+CHARGED RESIDUE GLY306                  :   -1.000
+
+Total charge on 1ABE.pdb                :   -2.000
+
+Reading in grid box information.
+Box center of mass                      :   11.910   59.189   55.414
+Box dimensions                          :   31.116   26.557   29.958
+Number of grid points per side [x y z]  :      105       90      101
+Total number of grid points             :   954450
+
+Generating scoring grids.
+Percent of protein atoms processed      :        0
+Percent of protein atoms processed      :       10
+Percent of protein atoms processed      :       20
+Percent of protein atoms processed      :       30
+Percent of protein atoms processed      :       40
+Percent of protein atoms processed      :       50
+Percent of protein atoms processed      :       60
+Percent of protein atoms processed      :       70
+Percent of protein atoms processed      :       80
+Percent of protein atoms processed      :       90
+Percent of protein atoms processed      :      100
+Writing general grid info to grid.bmp
+Writing bump grid to grid.bmp
+Writing energy grids to grid.nrg
+  Writing attractive VDW energy grid
+  Writing repulsive VDW energy grid
+  Writing electrostatic energy grid
+
+Finished calculation.

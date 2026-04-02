@@ -1,0 +1,18 @@
+MTX  created via parmchk -f mol2 -i mtx.mol2 -o mtx.frcmod
+MASS
+
+BOND
+
+ANGLE
+na-ca-nh   72.905     117.150   Calculated with empirical approach
+nb-ca-c3   62.722     121.320   Calculated with empirical approach
+ca-c3-nh   66.959     109.170   Calculated with empirical approach
+
+DIHE
+
+IMPROPER
+
+NONBON
+
+
+

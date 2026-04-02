@@ -1,0 +1,17 @@
+conformer_search_type                                        rigid
+use_internal_energy                                          no
+ligand_atom_file                                             multi_lig.mol2
+limit_max_ligands                                            yes
+max_ligands                                                  5
+skip_molecule                                                yes
+initial_skip                                                 2
+read_mol_solvation                                           no
+calculate_rmsd                                               no
+use_database_filter                                          no
+orient_ligand                                                no
+bump_filter                                                  no
+score_molecules                                              no
+ligand_outfile_prefix                                        io3
+write_orientations                                           yes
+num_scored_conformers                                        1
+rank_ligands                                                 no

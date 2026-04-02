@@ -1,0 +1,60 @@
+
+__________________Job_Information_________________
+launch_time                    Wed Nov 16 20:43:10 2022
+host_name                      pitzer-login
+memory_limit                   1073741824
+working_directory              /dock6/install/test/solvgrid_generation
+user_name                      scott
+
+________________General_Parameters________________
+compute_grids                  yes
+grid_spacing                   0.33
+output_molecule                no
+
+________________Scoring_Parameters________________
+contact_score                  no
+chemical_score                 yes
+energy_score                   yes
+energy_cutoff_distance         10
+atom_model                     u
+attractive_exponent            6
+repulsive_exponent             12
+distance_dielectric            yes
+dielectric_factor              4
+bump_filter                    yes
+bump_overlap                   0.5
+
+____________________File_Input____________________
+receptor_file                  rec.crg
+box_file                       box
+vdw_definition_file            vdw.defn
+chemical_definition_file       conv.defn
+
+____________________File_Output___________________
+score_grid_prefix              chem
+
+
+
+Reading in grid box information.
+Box center of mass                      :   -2.520   32.197   23.145
+Box dimensions                          :   38.374   37.019   39.307
+Number of grid points per side [x y z]  :      118      114      121
+Total number of grid points             :  1627692
+
+Reading scoring grids.
+Writing general grid info to chem52.bmp
+Writing bump grid to chem52.bmp
+Writing Delphi grid info to chem52.phi
+Writing Delphi grid to chem52.phi
+Writing chemical grids to chem52.chm
+Writing energy grids to chem52.cmg
+  Writing attractive VDW energy grid
+  Writing repulsive VDW energy grid
+  Writing electrostatic energy grid
+Writing desolvation grids to chem52.dsl
+  Writing bulk desolvation energy grid
+  Writing explicit desolvation energy grid
+
+Finished calculation.
+      175392  0.699999988              56          54          58  -21.7070007       13.6874981       3.49150085    
+ maxgrid      2500000

@@ -1,0 +1,13 @@
+label	null
+label	hydrophobic
+label	donor
+label	acceptor
+label	polar
+
+table
+1
+1	1
+1	0	1
+1	0	0	1
+1	0	1	1	1
+

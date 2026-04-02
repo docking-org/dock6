@@ -1,0 +1,21 @@
+5-(AMINOMETHYL)-2-METHYLPYRIMIDIN-4-AMINE:  parmchk -f mol2 -i nsp.mol2 -o nsp.frcmod
+MASS
+
+BOND
+
+ANGLE
+n3-c3-ca   66.152     111.475   Calculated with empirical approach
+nb-ca-c3   62.722     121.320   Calculated with empirical approach
+
+DIHE
+
+IMPROPER
+ca-h4-ca-nb         1.1          180.0         2.0          Using default value
+ca-nb-ca-nh         1.1          180.0         2.0          Using default value
+ca-hn-nh-hn         1.1          180.0         2.0          Using default value
+c3-nb-ca-nb         1.1          180.0         2.0          Using default value
+
+NONBON
+
+
+

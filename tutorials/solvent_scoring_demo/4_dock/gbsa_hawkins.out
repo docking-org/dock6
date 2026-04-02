@@ -1,0 +1,149 @@
+
+
+
+--------------------------------------
+DOCK v6.10
+
+Released January 2023
+Copyright UCSF
+--------------------------------------
+
+
+Conformational Sampling Parameters
+------------------------------------------------------------------------------------------
+conformer_search_type                                        rigid
+
+Internal Energy Parameters
+------------------------------------------------------------------------------------------
+use_internal_energy                                          no
+
+Molecule Library Input Parameters
+------------------------------------------------------------------------------------------
+ligand_atom_file                                             ../1_struct/lig_charged.mol2
+limit_max_ligands                                            no
+skip_molecule                                                no
+read_mol_solvation                                           no
+calculate_rmsd                                               no
+
+Database Filter Parameters
+------------------------------------------------------------------------------------------
+use_database_filter                                          no
+
+Orient Ligand Parameters
+------------------------------------------------------------------------------------------
+orient_ligand                                                no
+
+Bump Filter Parameters
+------------------------------------------------------------------------------------------
+bump_filter                                                  no
+
+Master Score Parameters
+------------------------------------------------------------------------------------------
+score_molecules                                              yes
+
+Contact Score Parameters
+------------------------------------------------------------------------------------------
+contact_score_primary                                        no
+
+Grid Score Parameters
+------------------------------------------------------------------------------------------
+grid_score_primary                                           no
+
+MultiGrid Score Parameters
+------------------------------------------------------------------------------------------
+multigrid_score_primary                                      no
+
+Dock3.5 Score Parameters
+------------------------------------------------------------------------------------------
+dock3.5_score_primary                                        no
+
+Continuous Energy Score Parameters
+------------------------------------------------------------------------------------------
+continuous_score_primary                                     no
+
+Footprint Similarity Score Parameters
+------------------------------------------------------------------------------------------
+footprint_similarity_score_primary                           no
+
+Pharmacophore Similarity Score Parameters
+------------------------------------------------------------------------------------------
+pharmacophore_score_primary                                  no
+
+Hbond Energy Score Parameters
+------------------------------------------------------------------------------------------
+hbond_score_primary                                          no
+
+Internal Energy Score Parameters
+------------------------------------------------------------------------------------------
+internal_energy_score_primary                                no
+
+Descriptor Score Parameters
+------------------------------------------------------------------------------------------
+descriptor_score_primary                                     no
+
+Zou GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+gbsa_zou_score_primary                                       no
+
+Hawkins GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+gbsa_hawkins_score_primary                                   yes
+gbsa_hawkins_score_rec_filename                              ../1_struct/rec_charged.mol2
+gbsa_hawkins_score_solvent_dielectric                        78.5
+gbsa_hawkins_use_salt_screen                                 no
+gbsa_hawkins_score_gb_offset                                 0.09
+gbsa_hawkins_score_cont_vdw_and_es                           no
+gbsa_hawkins_score_grid_prefix                               ../3_grid/solvent_grid
+   WARNING:  Grid file should have been prepared with
+   "distance_dielectric = no" and "dielectric_factor = 1"
+
+SASA Score Parameters
+------------------------------------------------------------------------------------------
+
+Amber Score Parameters
+------------------------------------------------------------------------------------------
+
+Simplex Minimization Parameters
+------------------------------------------------------------------------------------------
+minimize_ligand                                              no
+
+Atom Typing Parameters
+------------------------------------------------------------------------------------------
+atom_model                                                   all
+vdw_defn_file                                                ../../../parameters/vdw_AMBER_parm99.defn
+flex_defn_file                                               ../../../parameters/flex.defn
+flex_drive_file                                              ../../../parameters/flex_drive.tbl
+
+Molecule Library Output Parameters
+------------------------------------------------------------------------------------------
+ligand_outfile_prefix                                        gbsa_hawkins
+write_orientations                                           no
+num_scored_conformers                                        1
+rank_ligands                                                 no
+------------------------------------------------------------------------------------------
+Initializing Library File Routines...
+Initializing Hawkins GB/SA Score Routines...
+Initializing Grid Score Routines...
+ Reading the energy grid from ../3_grid/solvent_grid.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ../3_grid/solvent_grid.bmp
+ Done reading the grid box quantifiers.
+
+-----------------------------------
+Molecule: UNNAMED
+
+ Elapsed time for docking:	2.644 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                  Hawkins_GBSA_Score:          -21.954327
+             Hawkins_GBSA_vdw_energy:          -16.948288
+              Hawkins_GBSA_es_energy:          -29.371174
+              Hawkins_GBSA_gb_energy:           27.126709
+              Hawkins_GBSA_sa_energy:           -2.761574
+
+
+1 Molecules Processed
+Total elapsed time:	6.160 seconds

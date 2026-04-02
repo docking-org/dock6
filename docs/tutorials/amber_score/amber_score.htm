@@ -1,0 +1,342 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>Tutorial: Amber Score in DOCK6</title>
+<style>
+.style2 {
+	font-size: 36px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+}
+.style4 {font-family: Arial, Helvetica, sans-serif; font-size: 18px;}
+.style6 {font-family: Arial, Helvetica, sans-serif}
+-->
+</style>
+</head>
+
+<body lang=EN-US link=blue vlink=blue style='tab-interval:.5in'>
+
+<div class=Section1>
+
+<p align=center style='text-align:center'><span class=style2><b><span
+style='font-size:27.0pt'>Amber Score in DOCK6</span></b></span></p>
+
+<p class=style4style10 align=center style='text-align:center'><span
+style='font-family:Arial'>Author: Devleena Shivakumar<br>
+Last updated January 27, 2023 by Scott Brozell<o:p></o:p></span></p>
+
+<p class=style4> This tutorial introduces DOCK Amber score
+and describes the preparation of input files for DOCK Amber rescoring.
+These techniques should be applicable to any protein-ligand system.
+Docking and rescoring studies of 3,5 difluoroaniline to
+M102Q/L99A T4 Lysozyme Protein
+(PDB ID
+  <a href="https://www.rcsb.org/pdb/explore/explore.do?structureId=1lgu">1LGU</a>
+) are the basis; see 
+<a href="https://doi.org/10.1016/j.jmb.2008.01.049">J. Mol. Biol. 377,
+914-934 (2008)</a>.
+</p>
+
+<p class=style4><b>What is Amber score?</p></b>
+<p class=style4>The generalized Born/surface area (GB/SA) continuum model
+for solvation free energy is a fast and accurate alternative to an explicit
+solvent model for molecular simulations.  We have implemented this physics-based
+method in the Amber scoring function in the program DOCK6. To curtail the
+computational cost while still maintaining accuracy, the atoms
+distant from the site of the ligand binding can be kept frozen.
+Thus, CPU time is not spent updating those energies and derivatives during the
+course of the simulation.  The main advantage of Amber score is
+that both the ligand and the active site(s) of the receptor can be flexible,
+allowing small structural rearrangements
+to reproduce the so-called "induced fit" while performing the scoring.</p>
+
+<p class=style4>When a user calls for Amber score, the program performs
+minimization, MD simulation, and more minimization
+ on the individual ligand, the individual
+receptor, and the ligand-receptor complex,
+and calculates the score as follows: </p>
+<p align=center style='text-align:center'><span class=style2><b><span
+style='font-size:27.0pt'>
+E<sub>binding</sub> = E<sub>complex</sub> - (E<sub>receptor</sub> + E<sub>ligand</sub>)
+</span></b></span></p>
+<p class=style4>where E is obtained from:</p>
+<p class=style4>E = EMM + (Ep-sol + Enp-sol)</p>
+<p class=style4>EMM = Ebad + EvdW + Ees --- 
+<a href="https://ambermd.org/eqn.txt">AMBER MM force field</a>
+</p>
+<p class=style4>Ep-sol --- Electrostatic part of solvation energy using GB</p>
+<p class=style4>Enp-sol --- Non-polar part of solvation energy using SA</p>
+<p class=style4>The user has the option to increase or decrease the number of
+minimization and MD simulation steps. However, it may not be desirable to
+have a large number of
+ steps due to the time taken for the calculations. For various protein
+test cases, we have found 100 minimization and 3000 MD steps to produce good
+results. These are set as defaults in the program.</p>
+
+<p class=style4>It is highly recommended to run a DOCK calculation with a less expensive
+primary/secondary score to write out the topmost poses. Amber score
+should be used on these topmost poses for each ligand.  For example,
+for T4 Lysozyme the DOCK score is calculated for 1 million compounds
+from the Available Chemicals Directory (ACD).
+The top 5000-10,000 compounds ranked by DOCK are passed
+through Amber score for further refinement.  This is further
+illustrated in the cartoon below:</p>
+<p align=center style='text-align:center'><img border=0 width=528 height=646
+id="_x0000_i1025" src=cartoon.png></p>
+
+<br>
+<br>
+<p class=style4><b>Input files preparation.</b></p>
+<p class=style4><b>1) Ligand Preparation:</b> Start with the output scored
+mol2 file from a previous DOCK run:
+<a href="lig.mol2">lig.mol2</a>.
+<p align=center style='text-align:center'><img border=0 width=455 height=326
+id="_x0000_i1025" src=lig.jpg></p>
+<p class=style4>lig.mol2 is the topmost pose generated for the ligand 3,5 difluoroaniline from
+a previous DOCK run. Also notice that this mol2 file is an output from DOCK, therefore
+the atom types are in SYBYL file format. For Amber score, we need the atom types
+in GAFF file format which is compatible with the AMBER molecular mechanics force field.
+You'll need a script prepare_amber.pl that will do the trick for you. If you have
+installed DOCK6, this script can be found in the bin directory.
+</p>
+
+<p class=style4><b>2) Receptor Preparation:</b> </p>
+<p class=style4>(a) Clean the PDB file:</p>
+<p class=style4>Download the receptor PDB file <a href="1lgu.pdb">1lgu.pdb</a>.
+<p align=center style='text-align:center'><img border=0 width=456 height=363
+id="_x0000_i1025" src=receptor.jpg></p>
+<p class=style4> Remove all the ligand atoms, ions, and crystal water molecules
+from the receptor pdb file. If you know that certain water molecules or
+ions play catalytic or structural roles, use your scientific judgment to decide
+whether to keep them in the PDB file. </p>
+
+<p class=style4>(b) Determine the protonation state of titratable groups:</p>
+<p class=style4>Determine the protonation state of the histidine and other titratable
+residues in the receptor. Care should be taken to assign the appropriate
+protonation state, especially if the residue is at or near the active site or
+within the flexible region of the scoring calculation. Use
+experimental data from the literature whenever available, or your chemical intuition
+to assign the protonation states for these residues. [Hint: Check for hydrogen bonding
+residues nearby to see whether His or Asp should be protonated.] Or, you can
+use softwares to do this job. Some examples:</p>
+<p class=style4>i. 
+<a href="https://github.com/Electrostatics/pdb2pqr">PDB2PQR</a>
+is a Python software package that automates the PDB file preparation
+and protonation state assignments.</p>
+<p class=style4>ii. 
+<a href="https://newbiophysics.cs.vt.edu/H++/">H++</a>
+is a tool to estimate pKa's of protein side chains, and to
+automate the process of assigning protonation states
+for molecular dynamics simulations.</p>
+
+<p class=style4>(c) Verify the residue names in the PDB file:</p>
+<p class=style4>After assigning the protonation states, make sure that your
+receptor PDB file has residue names according to the Amber readable format.
+Check the name of the residues to ensure that they have the correct names:</p>
+<p align=center style='text-align:center'><img border=0 width=490 height=538
+id="_x0000_i1025" src=table.png></p>
+<p class=style4>Note that in Amber,
+histidine has three different residue names based on the location of the
+proton(s) in the imidazole ring. The default residue name in the
+PDB file from RCSB is HIS. If you do not rename this, the program assumes that
+it is imidazole with a proton on the N-epsilon atom, and assigns it residue
+name HIE.
+In addition,
+if disulfide bonds are important then verify that the pdb file contains
+correct conect records for them, and change the residue names from CYS to CYX.
+</p>
+
+<p class=style4><b>3) Generation of Amber readable input files:</b></p>
+<p class=style4>Prepare Amber readable input files for each receptor,
+ligand and the corresponding complex.
+This is done with the help of a perl script that is provided
+in the bin directory.
+(Note that the environment variable AMBERHOME should be undefined
+when using this script.)
+To run this script, first verify that you have perl
+installed on your machine. Type the following at the command prompt:</p>
+<p class=style4>$ which perl</p>
+<p class=style4>You should get an output similar to
+<br>
+/usr/bin/perl
+<br>
+<p class=style4>If you cannot find perl then please install it.</p>
+<p class=style4>The syntax for prepare_amber.pl is </p>
+<p class=style4><b>USAGE: prepare_amber.pl ligand_mol2_file receptor_PDB_file</b><br>
+</p>
+<p class=style4>For this example: <br>
+prepare_amber.pl lig.mol2 1lgu.pdb</p>
+
+<p class=style4>The output files are
+<br>
+<p class=style4>Files associated with the receptor
+<br> amberize_receptor.out
+<br>1lgu.amber.pdb
+<br>1lgu.inpcrd
+<br> 1lgu.log
+<br>1lgu.prmtop
+</p>
+<p class=style4>Files associated with the ligand:
+<br> amberize_ligand.lig.1.out
+<br>lig.amber_score.mol2
+<br>lig.1.amber.pdb
+<br>lig.1.frcmod
+<br>lig.1.gaff.mol2
+<br>lig.1.inpcrd
+<br> lig.1.log
+<br> lig.1.mol2
+<br> lig.1.mopac.out
+<br>lig.1.prmtop
+</p>
+<p class=style4>Files associated with the complex:
+<br> amberize_complex.lig.1.out
+<br>1lgu.lig.1.amber.pdb
+<br>1lgu.lig.1.inpcrd
+<br> 1lgu.lig.1.log
+<br>1lgu.lig.1.prmtop
+</p>
+<p class=style4>prepare_amber.pl has the capability to read and process
+a single file containing multiple ligands -
+typically what you would get from a DOCK run.
+It splits a file containing multiple mol2 entries into individual mol2
+files and produces the files with extensions
+.amber.pdb, .inpcrd, and .prmtop
+that are later read by the Amber score.
+Since in this example, there was only one ligand in lig.mol2,
+the mol2 output was lig.1.mol2. Had there been 3 ligands in a ligand_mol2_file
+named mydnagil.mol2, the mol2 outputs
+would have been: mydnagil.1.mol2, mydnagil.2.mol2, and mydnagil.3.mol2.</p>
+
+<p class=style4>The script prepare_amber.pl performs the following
+main tasks:<br>
+(i) Reads the PDB file for the receptor;
+adds hydrogens and some other missing atoms if not present;
+adds AMBER force field atom types and charges. Generates Amber
+parameter/topology (prmtop) and coordinate (inpcrd) files.
+This is performed via the script amberize_receptor which invokes
+program tleap.
+<br>
+(ii) Generates a modified mol2 file with suffix amber_score.mol2
+(e.g., lig.amber_score.mol2) that appends to each TRIPOS MOLECULE a
+TRIPOS AMBER_SCORE_ID section containing a unique label
+(e.g., lig.1, mydnagil.1, etc.).
+This modified mol2 file should be assigned to the ligand_atom_file
+input parameter in the DOCK input file.
+<br>
+(iii) Splits the ligand_mol2_file into separate mol2 files,
+one file per ligand, where the file prefixes are the AMBER_SCORE_ID
+unique labels.  These mol2 files are used in the next step.
+<br>
+(iv) Runs the antechamber program to determine the semi-empirical charges,
+such as AM1-BCC, for each ligand.  Runs the tleap program to create
+parameter/topology and coordinate files for each ligand using the
+GAFF force field (prmtop, frcmod, and inpcrd),
+and writes a mol2 file for the ligands with GAFF atom types (gaff.mol2).
+This is performed via the script amberize_ligand.
+<br>
+(v) Combines each ligand with the receptor to generate the parameter/topology
+and coordinate files for each complex.
+This is performed via the script amberize_complex which invokes
+program tleap.
+<br>
+</p>
+<p class=style4>The script prepare_amber.pl also creates files
+with extensions .log and .out that contain the detailed results of the above
+steps.  The amberize_*.out files can be browsed to verify that the
+preparation was successful.  If prepare_amber.pl emits any warnings
+or errors then all these files should be scrutinized.
+Some errors are fatal, such as an inability to prepare the receptor;
+generally, and in this case especially
+start investigating by examining file amberize_receptor.out.
+Since preparation for Amber score is more stringent than 
+preparation for other DOCK scores, usually a small fraction
+of a large set of ligands fails during prepare_amber.pl execution.
+<a href="howto-recover-from-ligand-prep-failures.html">
+This Dock-fans post</a>
+discusses in detail the recovery options for failing ligands.
+</p>
+
+<p class=style4><b>4) Creation of a DOCK6 input file for Amber Score:</b></p>
+<p class=style4>Prepare an input file (dock.in) for DOCK6 or download
+it: <a href="dock.in">dock.in</a>.<br>
+</p>
+<p class=style4>
+The following options are Amber score specific:<br>
+ligand_atom_file............................. lig.amber_score.mol2<br>
+amber_score_primary.......................... yes<br>
+amber_score_secondary........................ no<br>
+amber_score_receptor_file_prefix............. 1lgu<br>
+amber_score_movable_region................... ligand<br>
+amber_score_minimization_rmsgrad............. 0.01<br>
+amber_score_before_md_minimization_cycles.... 100<br>
+amber_score_md_steps......................... 3000<br>
+amber_score_after_md_minimization_cycles..... 100<br>
+amber_score_gb_model......................... 5<br>
+amber_score_nonbonded_cutoff................. 18.0<br>
+amber_score_temperature...................... 300.0<br>
+amber_score_abort_on_unprepped_ligand........ yes<br>
+</p>
+<p class=style4>For ligand_atom_file, use the output file with the suffix
+.amber_score.mol2 generated by prepare_amber.pl (see (ii) above).</p>
+<p class=style4>Use the prefix of the receptor PDB file as the input for
+<i>amber_score_receptor_file_prefix</i>.
+For this example <i>amber_score_receptor_file_prefix</i> is 1lgu for the
+pdb file 1lgu.pdb.
+</p>
+<p class=style4>Choose amber_score_movable_region as ligand.
+This defines the region that is allowed to move during scoring.
+To select other options, please read the
+<a href="../../dock6_manual.htm#AMBERScore">DOCK 6 Manual</a>
+</p>
+
+<br>
+<p class=style4><b>Run DOCK6 with Amber Score.</b></p>
+<p class=style4>USAGE: dock6 -i input_file [-o output_file] [-v]<br>
+dock6 -i dock.in > dock.out &	</p>
+
+<p class=style4>Download a copy of the <a href="dock.out">dock.out</a> file.
+Check it with your output file to see whether you get any different results.
+Since this is a rescoring calculation of a single ligand,
+the DOCK _scored.mol2 file contains only that single ligand:
+<a href="output_scored.mol2">output_scored.mol2</a>.
+For Amber score this file contains the ligand coordinates from the
+final pose of the complex, the ligand charges from the ligand prmtop file,
+and the ligand DOCK atom types (not the GAFF atom types used by Amber score).
+Since the ligand was movable two additional output files are produced:
+<a href="lig.1.final_pose.amber.pdb">lig.1.final_pose.amber.pdb</a>
+and
+<a href="1lgu.lig.1.final_pose.amber.pdb">1lgu.lig.1.final_pose.amber.pdb</a>.
+These contain the final poses of the ligand and the complex, respectively,
+after the Amber score protocol.
+</p>
+<p class=style4>
+You can now change the options in the dock.in file, such as increase the
+number of steps of the amber_score minimization cycles and/or
+amber_score_md_steps, or increase/decrease the amber_score_temperature,
+change the amber_score_movable_region,
+and rerun the calculation to see
+the change in results.  In addition, try rerunning with verbose output
+via the -v flag.
+</p>
+<p class=style4>
+In general,
+the best type of movable region could be highly sensitive to the
+receptor.  For example, if specific changes to the receptor upon
+ligand binding are expected then the NAB_ATOM_EXPRESSION movable
+region is appropriate.  On the other hand, if a little relaxation
+of the receptor upon ligand binding is all that is desired then a
+small DISTANCE movable region might be sufficient.
+</p>
+<p class=style4>
+The amount of minimization and MD is dependent on the preparation
+of the receptor.  If the receptor has been well equilibrated then
+it is expected that fewer min steps and md cycles will be needed
+to relax the complex, in general.  Other factors, such as the
+type and extent of changes upon binding, are also relevant.
+</p>
+</div>
+
+</body>
+
+</html>

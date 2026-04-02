@@ -1,0 +1,16 @@
+#!/bin/sh
+
+echo "Generating files that characterize active site"
+cd 2_site
+./script_demo
+cd ..
+
+echo "Generating files that contain grid energies"
+cd 3_grid
+./script_demo
+cd ..
+
+echo "Performing DOCK run"
+cd 4_dock
+./script_demo
+cd ..

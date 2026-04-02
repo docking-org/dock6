@@ -1,0 +1,4 @@
+#!/bin/sh
+
+rm -f rec_box.pdb 
+rm -f 1VRT.rec.nrg 1VRT.rec.bmp

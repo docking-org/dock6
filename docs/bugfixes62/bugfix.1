@@ -1,0 +1,67 @@
+********>Bugfix 1:
+Author:  Scott Brozell
+Date:  May 5, 2008
+
+Program:  dock
+
+Description:  the Amber score distance movable residue selection was
+not correct.  This bug was only exercised when a strand had no residues
+within the distance cutoff; in that case the whole strand instead of none
+of the strand was selected by the generated NAB atom expression.
+
+Fix:  make the following changes to the file src/dock/score_amber.cpp
+-------------------------------------------------------------------------
+*** src/dock/score_amber.cpp	19 Dec 2007 18:58:06 -0000	1.75
+--- src/dock/score_amber.cpp	6 May 2008 00:01:47 -0000	1.77
+***************
+*** 743,750 ****
+  
+      // NAB idiom to loop over all atoms
+      for( n = 0, sp = (*m)->m_strands; sp; sp = sp->s_next ){
+!         residue_numbers.insert( ResiduesPerStrand::value_type(
+!             sp->s_strandname, set< Residue_Sequence_Number >() ) );
+          for( r = 0; r < sp->s_nresidues; r++ ){
+              res = sp->s_residues[ r ];
+              for( a = 0; a < res->r_natoms; a++ ){
+--- 743,749 ----
+  
+      // NAB idiom to loop over all atoms
+      for( n = 0, sp = (*m)->m_strands; sp; sp = sp->s_next ){
+!         set< Residue_Sequence_Number> rsnset;
+          for( r = 0; r < sp->s_nresidues; r++ ){
+              res = sp->s_residues[ r ];
+              for( a = 0; a < res->r_natoms; a++ ){
+***************
+*** 755,761 ****
+                          ap->a_pos[ 2 ] );
+                      if ( i->crds.distance_squared( axyz ) <
+                          distance_cutoff*distance_cutoff ) {
+!                         residue_numbers[sp->s_strandname].insert( r + 1 );
+                          ++ n;
+                          goto NEXT_RESIDUE;  // exit sphere and atom loops
+                      }
+--- 754,760 ----
+                          ap->a_pos[ 2 ] );
+                      if ( i->crds.distance_squared( axyz ) <
+                          distance_cutoff*distance_cutoff ) {
+!                         rsnset.insert( r + 1 );
+                          ++ n;
+                          goto NEXT_RESIDUE;  // exit sphere and atom loops
+                      }
+***************
+*** 764,769 ****
+--- 763,772 ----
+  NEXT_RESIDUE:
+          ;  // null statement
+          }
++         if ( ! rsnset.empty() ) {
++             residue_numbers.insert( ResiduesPerStrand::value_type(
++                 sp->s_strandname, rsnset ) );
++         }
+      }
+  
+      ostringstream mae;
+--------------------------------------------------------------------------
+
+Workaround:  none.
+

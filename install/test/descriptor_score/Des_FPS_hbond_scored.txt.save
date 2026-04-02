@@ -1,0 +1,230 @@
+####################################
+###  Molecule: MOL
+####################################
+
+##########                            HA_RMSDs:           -1000.000
+##########                            HA_RMSDh:           -1000.000
+##########                            HA_RMSDm:               0.000
+##########                    Descriptor_Score:            2.826035
+##########          Footprint_Similarity_Score:            2.826035
+##########                 desc_FPS_vdw_energy:          -46.693863
+##########                  desc_FPS_es_energy:           -3.251703
+##########              desc_FPS_vdw+es_energy:          -49.945564
+##########                  desc_FPS_num_hbond:                   1
+##########                    desc_FPS_vdw_fps:            1.419785
+##########                     desc_FPS_es_fps:            1.406249
+##########                     desc_FPS_hb_fps:            1.000000
+##########              desc_FPS_vdw_fp_numres:                 293
+##########               desc_FPS_es_fp_numres:                 293
+##########               desc_FPS_hb_fp_numres:                 293
+##########           Internal_energy_repulsive:            8.291633
+
+hbond detected: MET98 (98) N.am H---LIG1 (1) N.ar 2.06619 164.263
+
+####################################
+###  Molecule: MOL
+####################################
+
+##########                            HA_RMSDs:           -1000.000
+##########                            HA_RMSDh:           -1000.000
+##########                            HA_RMSDm:               0.000
+##########                    Descriptor_Score:            2.806914
+##########          Footprint_Similarity_Score:            2.806914
+##########                 desc_FPS_vdw_energy:          -49.165337
+##########                  desc_FPS_es_energy:           -2.839946
+##########              desc_FPS_vdw+es_energy:          -52.005283
+##########                  desc_FPS_num_hbond:                   1
+##########                    desc_FPS_vdw_fps:            1.421103
+##########                     desc_FPS_es_fps:            1.385811
+##########                     desc_FPS_hb_fps:            1.000000
+##########              desc_FPS_vdw_fp_numres:                 293
+##########               desc_FPS_es_fp_numres:                 293
+##########               desc_FPS_hb_fp_numres:                 293
+##########           Internal_energy_repulsive:            8.354062
+
+hbond detected: MET98 (98) N.am H---LIG1 (1) N.ar 2.41901 154.246
+
+####################################
+###  Molecule: MOL
+####################################
+
+##########                            HA_RMSDs:           -1000.000
+##########                            HA_RMSDh:           -1000.000
+##########                            HA_RMSDm:               0.000
+##########                    Descriptor_Score:            2.834028
+##########          Footprint_Similarity_Score:            2.834028
+##########                 desc_FPS_vdw_energy:          -50.263256
+##########                  desc_FPS_es_energy:           -1.073380
+##########              desc_FPS_vdw+es_energy:          -51.336636
+##########                  desc_FPS_num_hbond:                   1
+##########                    desc_FPS_vdw_fps:            1.420130
+##########                     desc_FPS_es_fps:            1.413898
+##########                     desc_FPS_hb_fps:            1.000000
+##########              desc_FPS_vdw_fp_numres:                 293
+##########               desc_FPS_es_fp_numres:                 293
+##########               desc_FPS_hb_fp_numres:                 293
+##########           Internal_energy_repulsive:            4.184525
+
+hbond detected: MET98 (98) N.am H---LIG1 (1) N.ar 2.39322 150.529
+
+####################################
+###  Molecule: MOL
+####################################
+
+##########                            HA_RMSDs:           -1000.000
+##########                            HA_RMSDh:           -1000.000
+##########                            HA_RMSDm:               0.000
+##########                    Descriptor_Score:            2.832399
+##########          Footprint_Similarity_Score:            2.832399
+##########                 desc_FPS_vdw_energy:          -45.640125
+##########                  desc_FPS_es_energy:           -3.415743
+##########              desc_FPS_vdw+es_energy:          -49.055870
+##########                  desc_FPS_num_hbond:                   1
+##########                    desc_FPS_vdw_fps:            1.421655
+##########                     desc_FPS_es_fps:            1.410744
+##########                     desc_FPS_hb_fps:            1.000000
+##########              desc_FPS_vdw_fp_numres:                 293
+##########               desc_FPS_es_fp_numres:                 293
+##########               desc_FPS_hb_fp_numres:                 293
+##########           Internal_energy_repulsive:            4.736934
+
+hbond detected: LIG1 (1) N.pl3 H---ASP160 (160) O.co2 1.96641 138.675
+
+####################################
+###  Molecule: MOL
+####################################
+
+##########                            HA_RMSDs:           -1000.000
+##########                            HA_RMSDh:           -1000.000
+##########                            HA_RMSDm:               0.000
+##########                    Descriptor_Score:            2.794761
+##########          Footprint_Similarity_Score:            2.794761
+##########                 desc_FPS_vdw_energy:          -49.063667
+##########                  desc_FPS_es_energy:           -2.262737
+##########              desc_FPS_vdw+es_energy:          -51.326405
+##########                  desc_FPS_num_hbond:                   1
+##########                    desc_FPS_vdw_fps:            1.426729
+##########                     desc_FPS_es_fps:            1.368033
+##########                     desc_FPS_hb_fps:            1.000000
+##########              desc_FPS_vdw_fp_numres:                 293
+##########               desc_FPS_es_fp_numres:                 293
+##########               desc_FPS_hb_fp_numres:                 293
+##########           Internal_energy_repulsive:            4.325646
+
+hbond detected: MET98 (98) N.am H---LIG1 (1) N.ar 2.06706 158.405
+
+####################################
+###  Molecule: MOL
+####################################
+
+##########                            HA_RMSDs:           -1000.000
+##########                            HA_RMSDh:           -1000.000
+##########                            HA_RMSDm:               0.000
+##########                    Descriptor_Score:            2.819168
+##########          Footprint_Similarity_Score:            2.819168
+##########                 desc_FPS_vdw_energy:          -43.552505
+##########                  desc_FPS_es_energy:           -5.000184
+##########              desc_FPS_vdw+es_energy:          -48.552689
+##########                  desc_FPS_num_hbond:                   2
+##########                    desc_FPS_vdw_fps:            1.420322
+##########                     desc_FPS_es_fps:            1.398846
+##########                     desc_FPS_hb_fps:            1.000000
+##########              desc_FPS_vdw_fp_numres:                 293
+##########               desc_FPS_es_fp_numres:                 293
+##########               desc_FPS_hb_fp_numres:                 293
+##########           Internal_energy_repulsive:            6.513687
+
+hbond detected: THR95 (95) O.3 H---LIG1 (1) O.3 2.22504 125.093
+hbond detected: MET98 (98) N.am H---LIG1 (1) N.ar 2.36283 161.834
+
+####################################
+###  Molecule: MOL
+####################################
+
+##########                            HA_RMSDs:           -1000.000
+##########                            HA_RMSDh:           -1000.000
+##########                            HA_RMSDm:               0.000
+##########                    Descriptor_Score:            2.809588
+##########          Footprint_Similarity_Score:            2.809588
+##########                 desc_FPS_vdw_energy:          -45.149216
+##########                  desc_FPS_es_energy:           -2.358670
+##########              desc_FPS_vdw+es_energy:          -47.507885
+##########                  desc_FPS_num_hbond:                   1
+##########                    desc_FPS_vdw_fps:            1.426520
+##########                     desc_FPS_es_fps:            1.383067
+##########                     desc_FPS_hb_fps:            1.000000
+##########              desc_FPS_vdw_fp_numres:                 293
+##########               desc_FPS_es_fp_numres:                 293
+##########               desc_FPS_hb_fp_numres:                 293
+##########           Internal_energy_repulsive:            3.368812
+
+hbond detected: CYS102 (102) N.am H---LIG1 (1) O.3 2.10228 151.334
+
+####################################
+###  Molecule: MOL
+####################################
+
+##########                            HA_RMSDs:           -1000.000
+##########                            HA_RMSDh:           -1000.000
+##########                            HA_RMSDm:               0.000
+##########                    Descriptor_Score:            2.826021
+##########          Footprint_Similarity_Score:            2.826021
+##########                 desc_FPS_vdw_energy:          -41.731178
+##########                  desc_FPS_es_energy:           -4.145655
+##########              desc_FPS_vdw+es_energy:          -45.876835
+##########                  desc_FPS_num_hbond:                   0
+##########                    desc_FPS_vdw_fps:            1.424851
+##########                     desc_FPS_es_fps:            1.401170
+##########                     desc_FPS_hb_fps:            0.000000
+##########              desc_FPS_vdw_fp_numres:                 293
+##########               desc_FPS_es_fp_numres:                 293
+##########               desc_FPS_hb_fp_numres:                 293
+##########           Internal_energy_repulsive:           11.654094
+
+
+####################################
+###  Molecule: MOL
+####################################
+
+##########                            HA_RMSDs:           -1000.000
+##########                            HA_RMSDh:           -1000.000
+##########                            HA_RMSDm:               0.000
+##########                    Descriptor_Score:            2.830863
+##########          Footprint_Similarity_Score:            2.830863
+##########                 desc_FPS_vdw_energy:          -44.874252
+##########                  desc_FPS_es_energy:           -0.431864
+##########              desc_FPS_vdw+es_energy:          -45.306118
+##########                  desc_FPS_num_hbond:                   0
+##########                    desc_FPS_vdw_fps:            1.421605
+##########                     desc_FPS_es_fps:            1.409258
+##########                     desc_FPS_hb_fps:            0.000000
+##########              desc_FPS_vdw_fp_numres:                 293
+##########               desc_FPS_es_fp_numres:                 293
+##########               desc_FPS_hb_fp_numres:                 293
+##########           Internal_energy_repulsive:            6.302218
+
+
+####################################
+###  Molecule: MOL
+####################################
+
+##########                            HA_RMSDs:           -1000.000
+##########                            HA_RMSDh:           -1000.000
+##########                            HA_RMSDm:               0.000
+##########                    Descriptor_Score:            2.834844
+##########          Footprint_Similarity_Score:            2.834844
+##########                 desc_FPS_vdw_energy:          -46.013573
+##########                  desc_FPS_es_energy:           -2.231609
+##########              desc_FPS_vdw+es_energy:          -48.245182
+##########                  desc_FPS_num_hbond:                   2
+##########                    desc_FPS_vdw_fps:            1.423223
+##########                     desc_FPS_es_fps:            1.411621
+##########                     desc_FPS_hb_fps:            1.000000
+##########              desc_FPS_vdw_fp_numres:                 293
+##########               desc_FPS_es_fp_numres:                 293
+##########               desc_FPS_hb_fp_numres:                 293
+##########           Internal_energy_repulsive:            6.952624
+
+hbond detected: LYS50 (50) N.4 H---LIG1 (1) N.ar 2.48192 122.406
+hbond detected: MET98 (98) N.am H---LIG1 (1) O.3 2.31936 157.034
+

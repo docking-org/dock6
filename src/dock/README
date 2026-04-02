@@ -1,0 +1,42 @@
+AMBER Scoring in DOCK
+
+Warning this is out of date and will be updated - SRB June 3, 2005.
+
+Design
+
+The Amber_Score class methods are modeled after those in class ZAPscore.
+The public interface methods override the virtual methods of class Base_Score.
+The underlying implementation is based on NAB.
+The private methods contain NAB program fragments.
+
+Installation
+
+Obtain NAB version 4.5.3 (plus bug fixes)
+http://www.scripps.edu/case/
+Create the config.h for NAB.
+Execute dock/src/nab/mirror.
+Build DOCK.
+
+Temporary Limitations
+
+Amber_Score can only handle one unique receptor and one ligand during the
+course of one DOCK run.  The user must input filenames for a combined
+receptor ligand pdb and AMBER prmtop; the ligand must be positioned at the
+tail of these files.
+
+Only the linux makefile has been modified to use Amber_Score.
+
+
+Input Options
+
+amber_score_verbose
+Control for Amber-side verbosity.
+"yes" produces a detailed energy breakdown for every scoring attempt.
+The default is "no" - minimal output.
+
+amber_score_minimization
+Control for Amber-side minimization.
+"everything" requests a minimization of both the receptor and the ligand.
+"ligand" requests a minimization of only the ligand.
+"nothing" requests no minimization; this is the default.
+

@@ -1,0 +1,249 @@
+
+
+
+--------------------------------------
+DOCK v6.10
+
+Released January 2023
+Copyright UCSF
+--------------------------------------
+
+
+Conformational Sampling Parameters
+------------------------------------------------------------------------------------------
+conformer_search_type                                        rigid
+
+Internal Energy Parameters
+------------------------------------------------------------------------------------------
+use_internal_energy                                          yes
+internal_energy_rep_exp                                      12
+internal_energy_cutoff                                       100.0
+Note: Internal energy only includes repulsive VDW for growth and/or minimization.
+
+Molecule Library Input Parameters
+------------------------------------------------------------------------------------------
+ligand_atom_file                                             lig.mol2
+limit_max_ligands                                            no
+skip_molecule                                                no
+read_mol_solvation                                           no
+calculate_rmsd                                               no
+
+Database Filter Parameters
+------------------------------------------------------------------------------------------
+use_database_filter                                          no
+
+Orient Ligand Parameters
+------------------------------------------------------------------------------------------
+orient_ligand                                                no
+
+Bump Filter Parameters
+------------------------------------------------------------------------------------------
+bump_filter                                                  no
+
+Master Score Parameters
+------------------------------------------------------------------------------------------
+score_molecules                                              yes
+
+Contact Score Parameters
+------------------------------------------------------------------------------------------
+contact_score_primary                                        no
+
+Grid Score Parameters
+------------------------------------------------------------------------------------------
+grid_score_primary                                           no
+
+MultiGrid Score Parameters
+------------------------------------------------------------------------------------------
+multigrid_score_primary                                      no
+
+Dock3.5 Score Parameters
+------------------------------------------------------------------------------------------
+dock3.5_score_primary                                        no
+
+Continuous Energy Score Parameters
+------------------------------------------------------------------------------------------
+continuous_score_primary                                     no
+
+Footprint Similarity Score Parameters
+------------------------------------------------------------------------------------------
+footprint_similarity_score_primary                           no
+
+Pharmacophore Similarity Score Parameters
+------------------------------------------------------------------------------------------
+pharmacophore_score_primary                                  no
+
+Hbond Energy Score Parameters
+------------------------------------------------------------------------------------------
+hbond_score_primary                                          no
+
+Internal Energy Score Parameters
+------------------------------------------------------------------------------------------
+internal_energy_score_primary                                no
+
+Descriptor Score Parameters
+------------------------------------------------------------------------------------------
+descriptor_score_primary                                     yes
+descriptor_use_grid_score                                    no
+descriptor_use_multigrid_score                               no
+descriptor_use_continuous_score                              yes
+descriptor_use_footprint_similarity                          yes
+descriptor_use_pharmacophore_score                           no
+descriptor_use_tanimoto                                      no
+descriptor_use_hungarian                                     no
+descriptor_use_volume_overlap                                no
+
+--- Descriptor Score Parameters: Continuous Energy Score ---
+descriptor_cont_score_rec_filename                           rec.mol2
+descriptor_cont_score_att_exp                                6
+descriptor_cont_score_rep_exp                                12
+descriptor_cont_score_rep_rad_scale                          1
+descriptor_cont_score_use_dist_dep_dielectric                yes
+descriptor_cont_score_dielectric                             4.0
+descriptor_cont_score_vdw_scale                              1
+descriptor_cont_score_es_scale                               1
+
+--- Descriptor Score Parameters: Footprint Similarity Score ---
+descriptor_fps_score_use_footprint_reference_mol2            yes
+descriptor_fps_score_footprint_reference_mol2_filename       lig.mol2
+descriptor_fps_score_foot_compare_type                       d
+descriptor_fps_score_foot_comp_all_residue                   no
+descriptor_fps_score_choose_foot_range_type                  threshold
+-------------------------------------------------------------
+You chose to use a residue range that is defined by only residues that
+have magnitudes that excede the specified thresholds (the 3 following
+parameters).  Each footprint type will have a distinct residue range.
+The union of both the ref. and pose ranges will define the
+evaluated range.
+-------------------------------------------------------------
+descriptor_fps_score_vdw_threshold                           1
+descriptor_fps_score_es_threshold                            1
+descriptor_fps_score_hb_threshold                            0.5
+descriptor_fps_score_use_remainder                           yes
+descriptor_fps_score_receptor_filename                       rec.mol2
+descriptor_fps_score_vdw_att_exp                             6
+descriptor_fps_score_vdw_rep_exp                             12
+descriptor_fps_score_vdw_rep_rad_scale                       1
+descriptor_fps_score_use_distance_dependent_dielectric       yes
+descriptor_fps_score_dielectric                              4.0
+descriptor_fps_score_vdw_fp_scale                            0
+descriptor_fps_score_es_fp_scale                             0
+descriptor_fps_score_hb_fp_scale                             0
+
+--- Descriptor Score Weights ---
+descriptor_weight_cont_score                                 1
+descriptor_weight_fps_score                                  0
+
+Using these settings, the Descriptor Score function takes the form:
+Descriptor_Score = (1 * Continuous_Score) + (0 * Footprint_Similarity_Score)
+
+Zou GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+
+Hawkins GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+
+SASA Score Parameters
+------------------------------------------------------------------------------------------
+
+Amber Score Parameters
+------------------------------------------------------------------------------------------
+
+Simplex Minimization Parameters
+------------------------------------------------------------------------------------------
+minimize_ligand                                              no
+
+Atom Typing Parameters
+------------------------------------------------------------------------------------------
+atom_model                                                   all
+vdw_defn_file                                                ../../../parameters/vdw_AMBER_parm99.defn
+flex_defn_file                                               ../../../parameters/flex.defn
+flex_drive_file                                              ../../../parameters/flex_drive.tbl
+
+Molecule Library Output Parameters
+------------------------------------------------------------------------------------------
+ligand_outfile_prefix                                        important_residues
+write_footprints                                             no
+write_hbonds                                                 no
+write_orientations                                           no
+num_scored_conformers                                        1
+rank_ligands                                                 no
+------------------------------------------------------------------------------------------
+Initializing Library File Routines...
+Initializing typer for Continuous Score within Descriptor Score...
+Initializing typer for Footprint Similarity Score within Descriptor Score...
+To cite Footprint Similarity Score use: 
+ Balius, T. E.; Mukherjee, S.; Rizzo, R. C. Implementation and Evaluation of a Docking-rescoring Method using Molecular Footprint Comparisons. J. Comput. Chem., 2011, 32, 2273-2289.
+
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.026 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:          -30.420767
+                    Continuous_Score:          -30.420767
+          desc_Continuous_vdw_energy:          -26.484882
+           desc_Continuous_es_energy:           -3.935884
+          Footprint_Similarity_Score:           -0.000000
+                 desc_FPS_vdw_energy:          -26.486822
+                  desc_FPS_es_energy:           -3.935867
+              desc_FPS_vdw+es_energy:          -30.422689
+                  desc_FPS_num_hbond:                   1
+                    desc_FPS_vdw_fps:       -10000.000000
+                     desc_FPS_es_fps:       -10000.000000
+                     desc_FPS_hb_fps:       -10000.000000
+              desc_FPS_vdw_fp_numres:                  14
+               desc_FPS_es_fp_numres:                   2
+               desc_FPS_hb_fp_numres:                   2
+ footprint type:vdw
+   range_pose:
+      5,13,20,22,48,49,50,52,53,54,55,71,78
+   range_ref:
+      5,13,20,22,48,49,50,52,53,54,55,71,78
+   range_union:
+     5,13,20,22,48,49,50,52,53,54,55,71,78
+compare footprints 
+0,LEU,-4.50796,-4.50796
+1,VAL,-3.00516,-3.00516
+2,ALA,-2.01214,-2.01214
+3,LYS,-3.42756,-3.42756
+4,THR,-2.38839,-2.38839
+5,GLN,2.92174,2.92174
+6,LEU,-1.65537,-1.65537
+7,PRO,-1.59425,-1.59425
+8,PHE,-1.88714,-1.88714
+9,GLY,5.67354,5.67354
+10,CYS,-1.10122,-1.10122
+11,LEU,-3.65701,-3.65701
+12,THR,-1.89433,-1.89433
+13,remainder,-7.95156,-7.95156
+ footprint type:es
+   range_pose:
+      51
+   range_ref:
+      51
+   range_union:
+     51
+compare footprints 
+0,MET,-1.63836,-1.63836
+1,remainder,-2.29751,-2.29751
+ footprint type:hb
+   range_pose:
+      51
+   range_ref:
+      51
+   range_union:
+     51
+compare footprints 
+0,MET,1,1
+1,remainder,0,0
+
+           Internal_energy_repulsive:           63.281521
+
+
+1 Molecules Processed
+Total elapsed time:	0.247 seconds

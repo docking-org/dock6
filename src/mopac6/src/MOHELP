@@ -1,0 +1,2091 @@
+1 MOPAC
+ MOPAC is a large semi-empirical quantum mechanical calculational 
+program. It is invoked by the command "MOPAC" followed by four, 
+three, two, one or no arguments. If any arguments are omitted, the 
+user will be prompted for them unless standard default values are 
+used.
+
+2  COMMAND
+   The command to submit a MOPAC job to the batch queues is of form
+
+   MOPAC [<filename>] [time or queue] [priority]
+
+Where:	<filename> is the name of the INPUT file. A data file with 
+                   the name <filename>.DAT must exist.
+
+    time or queue  is the time, in minutes, that the job should run for,
+                   or the queue.  
+	           Within MOPAC.COM logic will assign the job to a
+                   suitable queue based on the value of 'time'.
+
+	priority   is the queuing priority (In range 1-5)
+
+If the INPUT file cannot be located, an error message will be printed.
+2 DATA
+ The layout of data for a MOPAC job is
+
+      <Line of key words>  
+      <First title line>   
+      <Second title line>
+      <Geometric data>
+      <Symmetry data, if required>
+      <Reaction coordinate data, if required>
+      <Second set of geometry data, if required>
+
+  The reaction coordinate option and the transition-state 
+location are mutually exclusive.
+  The order of key-words is not important. Abbreviations should 
+be avoided. Title should include the name of the system, 
+and a brief description, e.g. a reference.
+3 COMMENTS
+   You can use lines two and three to identify the data.
+
+ Suggestions for this are:
+
+  The name of the compound or ion.
+
+  The reason why the calculation is being run, e.g. study of 
+  sigmatropic reactions.
+
+  A literature reference.
+
+2 GEOMETRY
+
+  The geometry is defined in terms of either internal coordinates or
+cartesian coordinates.   For internal coordinates this consists of 
+an interatomic distance in Angstroms from an already-defined atom 
+(j), an interatomic angle in degrees between atom i and j and an 
+already defined k, (k and j must be different atoms), and finally a 
+torsional angle in degrees between atom i, j, k, and an already 
+defined atom l (l cannot be the same as k or j)
+ Output normally only gives chemical symbols.
+3 FORMAT
+ The geometry is read in using essentially "Free-Format" of
+FORTRAN-77. Character input is used in order to accommodate
+the chemical symbols, but the numeric data can be regarded as 
+"free-format". This means that integers and real numbers can be 
+interspersed, numbers can be separated by one or more spaces, a tab 
+and/or by one comma. If a number is not specified, its value is set 
+to zero.
+3 INTERNAL_COORDINATES
+  Each atom (or DUMMY_ATOM) in the chemical species is
+described on a separate line of the INPUT file.  For
+each atom you must describe the DISTANCE (in Angstroms)
+to another atom, the ANGLE (in degrees) to two other atoms,
+and the DIHEDRAL ANGLE (again in degrees) to three other atoms.
+A typical input line would be:
+
+ symbol  distance       angle      dihedral     reference atoms
+ ------  --------      -------     --------     ---------------
+   H     1.1041   1    109.471  1   240.000   1    2   1   3
+
+The above line describes a hydrogen atom which is 1.1041
+Angstroms from the second atom in the file (see the 2
+under reference atoms.)  This hydrogen also describes
+an angle of 109.471 degrees with atoms 2 and 1 (see
+reference atoms) with atom 2 as the vertex and
+a dihedral angle of 240.000 degrees with the
+progression of atoms 3:1:2.
+3 CARTESIAN_COORDINATES
+ Cartesian coordinates consist of the chemical symbol followed
+by the x, y, and z coordinates of the atoms, after each coordinate
+is a flag indicating optimize or no optimize or reaction path.
+ Dummy atoms are not allowed.  Connectivity is not allowed.
+ An example of a cartesian coordinate atom is
+
+  H    0.365   1   1.442   1    2.000   1
+
+ Monatomic systems are identical in internal and cartesian coordinates.
+ Diatomic systems are obligate internal, which coincides with cartesian
+coordinates in which the second atom is along te x-axis. (Note: if you 
+don't want the second atom to be along the x-axis, use dummy atoms 
+in internal coordinates. Triatomic systems are obligate internal
+coordinates. Systems of more than three atoms are distinguished by
+the presence or absence of a connectivity list.
+3 Gaussian Z-Matrix
+ Examples of Gaussian Z-matrix format for atom positions are:
+
+ Se  12 RSeC12  8 ASeC12C8  4  DSeCCC4
+ Bi  23 2.4     6 ABiC23C6  17 180.0
+
+ RSeC12     2.3
+ ASeC12C8   109
+ DSeCCC4     0
+ ABiC23C6   120
+
+Se is bonded to atom 12, makes an angle with 12 to 8, and has a
+dihedral Se-12-8-4.  All three quantities must be given initial values
+after all the atoms are read in.
+ 
+3 DUMMY_ATOMS
+ In order to make the job of specifying difficult geometries more
+easy a dummy atom has been defined. This is a mathematical point 
+which is represented by the symbols X, XX or 99. Any number of dummy 
+atoms can be used in a molecule, but obviously the fewer the better.
+4 Example
+      AMMONIA Geometry with rigorous C3v symmetry
+   N    0.000000 0    0.000000 0    0.000000 0   0  0  0   
+  XX    1.012000 1    0.000000 0    0.000000 0   1  0  0
+  XX    1.000000 0  120.000000 0    0.000000 0   2  1  0
+   H    1.012000 0  110.000000 1  180.000000 0   1  2  3
+   H    1.012000 0  110.000000 0   60.000000 0   1  2  3
+   H    1.012000 0  110.000000 0  300.000000 0   1  2  3
+   0    0.000000 0    0.000000 0    0.000000 0   0  0  0
+   2 1 4 5 6
+   4 2 5 6
+4 Deleting dummy atoms
+  There are two easy ways of removing dummy atoms from a data-set.
+First, using MOPAC, the following keywords will generate an ARC
+file with the dummy atoms removed:    1SCF CHARGE=1000 XYZ
+The large charge ensures that the system has no electrons, so no
+SCF is involved.
+ Alternatively, use the DDUM program.  This takes the .DAT file and
+returns a new .DAT file with the dummy atoms removed.  A second
+file, ending in .XYZ, is also made. This is the cartesian coordinate
+equivalent to the new .DAT file.  If you want to rearrange the sequence 
+of atoms in the system, use this data-set.  After rearranging, rename the
+data set from .XYZ to .DAT and rerun DDUM.
+
+3 ISOTOPES
+ Isotopes are used in conjunction with chemical symbols. If no 
+isotope is specified, the most abundant isotope is used by default. 
+If an isotope is specified it would immediately follow the chemical 
+symbol (no space), thus: H2, H2.0140, C13, C13.00335.
+  The ISOTOPIC_MASSES are specified as part of the ATOMIC SYMBOL as:
+
+   H2.00  1.1041   1   109.471   1   240.000   1    2  1  3
+   C14    1.56     1   120.      1   145       1    5  3  6
+
+Here a deuterium nuclide has been used in place of a hydrogen.
+3 EXCEPTIONS
+ For internal coordinates only:
+ Atom 1 has no coordinates at all: this is the origin.
+ Atom 2 MUST be connected to atom 1 by an interatomic distance only.
+ Atom 3 can be connected to atom 1 or 2, and must make an angle with
+ atom 2 or 1 (thus - 3-2-1 or 3-1-2), no dihedral is possible for 
+ atom 3.
+ By default, atom 3 is connected to atom 2.
+3 CONSTRAINTS
+ For internal coordinates
+ (1) Interatomic distances MUST be greater than zero. Zero angstroms
+is not acceptable. The only exception is if the parameter is 
+symmetry-related to another atom, and is the dependent function.
+ (2) Angles must be positive. This constraint is for
+the benefit of the user only, negative angles are the result of 
+errors in the construction of the geometry. MOPAC will never
+produce negative angles.
+ (3) Dihedrals can normally only assume definable angles. If atom i 
+makes a dihedral with atoms j, k, and l, and the three atoms j, k, 
+and l are in a straight line, then the dihedral has no definable 
+angle. During the calculation this constraint is checked 
+continuously, and if atoms j, k, and l lie within 0.02 Angstroms of 
+a straight line the calculation will output an error message and 
+then stop. 
+ For cartesian coordinates:
+ Systems of less than four atoms are not defined.
+4 EXCEPTIONS
+The constraint in the specification of the dihedral angles is 
+relaxed if:
+ (a) if the angle is zero or 180 degrees, in which case dihedral 
+is not used.
+ (b) if atoms j, k, and l lie in an exactly straight line (usually 
+the result of a symmetry constraint), as in, e.g., acetylene, 
+acetonitrile, but-2-yne, atc.
+ If the exceptions are used, care must be taken to ensure that 
+the program does not violate these constraints during any 
+optimizations or during any calculations of derivatives - see also 
+FORCE.
+3 ELEMENTS
+ Definition of Elements 
+ Elements are defined in terms of their atomic numbers or their 
+chemical symbols. Acceptable symbols are:
+
+     H
+     Li  Be          B  C  N  O  F
+     Na' Mg         Al Si  P  S Cl  
+      K' * ...  Zn  Ga Ge As Se Br  
+     Rb' * ...  Cd  In Sn Sb Te  I         
+     *   * ...  Hg  Tl Pb Bi
+
+
+
+
+       XX  Cb  ++   +  --   -  Tv
+    or 99 102 103 104 105 106 107
+
+  ': Represented by point charges
+ XX: The Dummy Atom
+ Cb: Capped Bond Atom
+ Tv: The Translation Vector
+
+All symbols are case-insensitive.  Atomic numbers 
+are an optional alternative.
+
+4 MNDO   
+Within MNDO the following elements are defined
+     H
+     Li  Be          B  C  N  O  F
+     Na' *          Al Si  P  S Cl  
+      K' * ...  Zn   * Ge  *  * Br  
+     Rb' * ...   *   * Sn  *  *  I         
+     *   * ...  Hg   * Pb  *
+
+       XX  Cb  ++   +  --   -  Tv
+4 MINDO/3
+Within MINDO/3 the following elements are defined
+     H
+     *   *           B  C  N  O  F
+     *   *           * Si  P  S Cl  
+     *   * ...   *   *  *  *  * Br  
+     *   * ...   *   *  *  *  *  I         
+     *   * ...   *   *  *  *
+
+       XX  Cb  ++   +  --   -  Tv
+4 AM1
+Within AM1 the following elements are defined
+     H
+     Li  *           B  C  N  O  F
+     Na' *          Al Si  P  S Cl  
+      K' * ...  Zn   * Ge  *  * Br  
+     Rb' * ...   *   * Sn  *  *  I         
+     *   * ...  Hg   *  *  *
+
+       XX  Cb  ++   +  --   -  Tv
+4 PM3
+Within PM3 the following elements are defined
+      H
+     Li  Be          B  C  N  O  F
+     Na' Mg         Al Si  P  S Cl  
+      K' * ...  Zn  Ga Ge As Se Br  
+     Rb' * ...  Cd  In Sn Sb Te  I         
+     *   * ...  Hg  Tl Pb Bi
+
+       XX  Cb  ++   +  --   -  Tv
+4 OPTIMIZE
+ After an internal coordinate there is an integer to indicate the 
+action to be taken regarding that coordinate. Possible options are
+
+   Integer                        Action
+    
+     1                Optimize the internal coordinate.
+     0                Do not optimize the internal coordinate.
+    -1                Reaction coordinate.
+     T                Monitor turning points in IRC/DRC calculation.
+
+ Remarks:
+ Only one reaction coordinate is allowed, but this can be made more 
+versatile by the use of SYMMETRY. If a reaction coordinate is used, 
+the values of the reaction coordinate should follow immediately 
+after the geometry and any symmetry data. No terminator is required, 
+and free-format type input is acceptable
+ The six "missing" coordinates at the start of the geometry should 
+not be marked for optimization. If they are, a warning is given, and
+the calculation will continue.
+4 EXAMPLE
+ Examples of Coordinate Definitions.
+  O                               The first atom has no coordinates.
+  C      1.2 1                    The C-O bond length is to be 
+  H2.0   1.0 1 120   1            optimized. The third atom is a 
+  1      0.0 0   0.0 1  180 0 2 1 3 Deuterium. Atomic number of 
+Hydrogen is used, and SYMMETRY must have been specified, in
+order to not have to give a bond-length or an angle. The dihedral is 
+point-group defined as 180 degrees.
+3 REACTION_PATH
+    Calculations along a REACTION_PATH are identified by
+a -1 for the OPTIMIZATION_FLAG in the GEOMETRY file.
+
+  T=500
+    EXAMPLE OF REACTION PATH CALCULATION FOR DISSOCIATION
+      OF WATER INTO H AND OH
+   H
+   O   1.4   1    0     0     0    0    1  0  0
+   H   1.4  -1    109.5  1    0    0    2  1  0
+
+   1.5 1.6 1.8 2.0 2.5 3.0 4.0
+
+The above data would perform a REACTION_PATH calculation
+using hydrogen (atom 3) to oxygen (atom 2) distances
+of 1.4, 1.5, 1.6, 1.8, 2.0, 2.5, 3.0, and 4.0 Angstroms.
+All other INTERNAL_COORDINATES are allowed to optimize.
+3 SYMMETRY
+ Symmetry is used (a) to speed up the calculation, and 
+(b) to apply constraints to control the path of the calculation.
+The reference atom parameter should be marked for optimization, or 
+should be the reaction coordinate.
+The dependent atom(s) parameters should not be marked for 
+optimization.
+Given a reference atom, N, and dependent atoms M1, M2,...Mj, then the
+form of the symmetry data is:
+N, <function>, M1, M2, M3, ..... Mj,
+The comma's are obligatory. the <function> is one of eighteen
+pre-programmed functions.  The main ones used are:
+       1 = bond lengths are identical,
+       2 = bond angles are identical,
+       3 = dihedral angles are identical.
+Symmetry data should be followed by a blank line.
+4 FUNCTIONS
+               FULL LIST OF SYMMETRY FUNCTIONS
+
+   1     BOND LENGTH    IS SET EQUAL TO THE REFERENCE BOND LENGTH
+   2     BOND ANGLE     IS SET EQUAL TO THE REFERENCE BOND ANGLE 
+   3     DIHEDRAL ANGLE IS SET EQUAL TO THE REFERENCE DIHEDRAL ANGLE
+   4     DIHEDRAL ANGLE VARIES AS  90 DEGREES - REFERENCE DIHEDRAL  
+   5     DIHEDRAL ANGLE VARIES AS  90 DEGREES + REFERENCE DIHEDRAL  
+   6     DIHEDRAL ANGLE VARIES AS 120 DEGREES - REFERENCE DIHEDRAL  
+   7     DIHEDRAL ANGLE VARIES AS 120 DEGREES + REFERENCE DIHEDRAL  
+   8     DIHEDRAL ANGLE VARIES AS 180 DEGREES - REFERENCE DIHEDRAL  
+   9     DIHEDRAL ANGLE VARIES AS 180 DEGREES + REFERENCE DIHEDRAL  
+  10     DIHEDRAL ANGLE VARIES AS 240 DEGREES - REFERENCE DIHEDRAL  
+  11     DIHEDRAL ANGLE VARIES AS 240 DEGREES + REFERENCE DIHEDRAL  
+  12     DIHEDRAL ANGLE VARIES AS 270 DEGREES - REFERENCE DIHEDRAL  
+  13     DIHEDRAL ANGLE VARIES AS 270 DEGREES - REFERENCE DIHEDRAL  
+  14     DIHEDRAL ANGLE VARIES AS - REFERENCE DIHEDRAL              
+  15     BOND LENGTH VARIES AS HALF THE REFERENCE BOND LENGTH       
+  16     BOND ANGLE VARIES AS HALF THE REFERENCE BOND ANGLE         
+  17     BOND ANGLE VARIES AS 180 DEGREES - REFERENCE BOND ANGLE     
+  18     BOND LENGTH IS A KEYWORD-DEFINED MULTIPLE OF REFERENCE 
+         BOND LENGTH
+2 ERROR-MESSAGES
+
+ MOPAC produces several hundred messages, all of which are 
+ intended to be self-explanatory. However, when an error 
+ occurs it is useful to have more information than is given 
+ in the standard messages. 
+3 AN-UNOP
+  AN UNOPTIMIZABLE GEOMETRIC PARAMETER....
+ When internal coordinates are supplied, six coordinates 
+cannot be optimized. These are the three coordinates of 
+atom 1, the angle and dihedral on atom 2 and the dihedral
+on atom 3. An attempt has been made to optimize one of these. 
+This is usually indicative of a typographic error, but 
+might simply be an oversight. Either way, the error will be 
+corrected and the calculation will not be stopped here.
+3 ATOM-NU
+  ATOM NUMBER nn IS ILLDEFINED
+ The rules for definition of atom connectivity are:
+ 1 Atom 2 must be connected to atom 1 (default - no override)
+ 2 Atom 3 must be connected to atom 1 or 2, and make an angle 
+   with 2 or 1.
+ 3 All other atoms must be defined in terms of already-defined 
+   atoms: these atoms must all be different. Thus atom 9 might 
+   be connected to atom 5, make an angle with atom 6, and have 
+   a dihedral with atom 7. If the dihedral was with atom 5, 
+   then the geometry definition would be faulty.
+
+ If any of these rules is broken, a fatal error message is printed, 
+ and the calculation stopped.
+3  ATOMIC-NU
+ ATOMIC NUMBER nn IS NOT AVAILABLE ...
+ An element has been used for which parameters are not available. 
+Only if a typographic error has been made can this be rectified. 
+This check is not exhaustive, in that even if the elements are 
+acceptable  there are some combinations of elements within MINDO/3 
+that are not allowed. This is a fatal error message.
+3 ATOMIC-NU
+ ATOMIC NUMBER OF nn ?
+ An atom has been specified with a negative or zero atomic number.  
+This is normally caused by forgetting to specify an atomic number 
+or symbol. This is a fatal error message.
+3 ATOMS-nn 
+  ATOMS  nn AND nn ARE SEPARATED BY nn.nnnn ANGSTROMS.
+ Two genuine atoms (not dummies) are separated by a very small distance.
+This can occur when a complicated geometry is being optimized, 
+in which case the user may wish to continue. This can be done by 
+using the key-word GEO-OK. More often, however, this message 
+indicates a mistake, and the calculation is, by default, stopped.
+3 ATTEMPT TO 
+  ATTEMPT TO GO DOWNHILL IS UNSUCCESSFUL...
+ A quite rare message, produced by Bartel's gradient norm 
+minimization. Bartel's method attempts to minimize the gradient 
+norm by searching the gradient space for a minimum.  Apparently 
+a minimum has been found, but not recognized as such. The program 
+has searched in all (3N-6) directions, and found no way down, 
+but the criteria for a minimum have not been satisfied.  No advice 
+is available for getting round this error. 
+3 BOTH SYS
+  BOTH SYSTEMS ARE ON THE SAME SIDE..
+ A non-fatal message, but still cause for concern.  During a 
+SADDLE calculation the two geometries involved are on opposite 
+sides of the transition state. This situation is verified at 
+every point by calculating the cosine of the angle between 
+the two gradient vectors.  For as long as it is negative, 
+then the two geometries are on opposite sides of the T/S. 
+If, however, the cosine becomes positive, then the assumption 
+is made that one moiety has fallen over the T/S and is now below 
+the other geometry. That is, it is now further from the T/S than 
+the other, temporarily fixed, geometry.
+3  CI NOT 
+   C.I. NOT ALLOWED WITH UHF
+ There is no UHF configuration interaction calculation in MOPAC. 
+Either remove the key-word that implies C.I. or the word UHF.
+3 FAILED-IN 
+  FAILED IN SEARCH, SEARCH CONTINUING
+ Not a fatal error. The McIver-Komornicki gradient minimization 
+involves use of a line-search to find the lowest gradient.  
+This message is merely advice. However, if SIGMA takes a long time, 
+consider doing something else, such as  using NLLSQ, or 
+refining the geometry a bit before resubmitting it to SIGMA.
+3 FAILED-TO 
+      <<<<----**** FAILED TO ACHIEVE SCF. ****---->>>>
+ The SCF calculation failed to go to completion; a very unwanted 
+and depressing message that unfortunately appears every so often.
+ To date three unconditional convergers have appeared in the 
+literature: the SHIFT technique, Pulay's method, and the 
+Camp-King converger. It would not be fair to the authors to 
+condemn their methods. In MOPAC all sorts of weird and wonderful 
+systems are calculated, systems the authors of the convergers never 
+dreamed of.  MOPAC uses a combination of all three convergers at 
+times. Normally only a quadratic damper is used.  If this message 
+appears, suspect first that the calculation might be faulty, then, 
+if you feel confident, try altering the SHIFT, or invoking PULAY 
+or CAMP-KING on their own.
+ If nothing works, then consider slackening the SCF criterion.  
+This will allow heats of formation to be calculated with reasonable 
+precision, but the gradients are likely to be imprecise. 
+3 ILLEGAL 
+  ILLEGAL ATOMIC NUMBER
+ An element has been specified by an atomic number which 
+is not in the range 1 to 107. Check the data: the first datum 
+on one of the lines is faulty.
+3 JOB STOP
+  JOB STOPPED BY OPERATOR
+ Any MOPAC calculation, for which the SHUTDOWN command works, 
+can be stopped by a user who issues the command "$SHUT <filename>.
+ MOPAC will then stop the calculation at the first convenient point,
+usually after the current cycle has finished. A restart file will 
+be written and the job ended. The message will be printed as 
+soon as it is detected, which would be the next time the timer 
+routine is accessed.
+3 MAX-NO-ORB
+  **** MAX. NUMBER OF ORBITALS ALLOWED:....
+ At compile time the maximum sizes of the arrays in MOPAC 
+are fixed. The system being run exceeds the maximum number of 
+orbitals allowed. To rectify this, modify the file DIMSIZES.DAT 
+to change the number of heavy and light atoms allowed. If 
+DIMSIZES.DAT is altered, then the whole of MOPAC should be re-compiled 
+and re-linked.
+3 NAME 
+  NAME NOT FOUND
+ Various atomic parameters can be modified in MOPAC by use of 
+EXTERNAL=. These comprise
+
+       Uss         Betas         Gp2          GSD 
+       Upp         Betap         Hsp          GPD 
+       Udd         Betad         AM1          GDD 
+       Zs          Gss           Expc         FN1 
+       Zp          Gsp           Gaus         FN2 
+       Zd          Gpp           Alp          FN3 
+Thus to change the Uss of hydrogen to -13.6 the line
+
+              USS    H    -13.6
+
+could be used.  If an attempt is made to modify any other parameters, then
+an error message is printed, and the calculation terminated.
+3 THERE IS 
+  THERE IS A RISK OF INFINITE LOOPING...
+ The SCF criterion has been reset by the user, and the new value 
+is so small that the SCF test may never be satisfied.  This is a 
+case of user beware!
+3  THIS MESS
+   THIS MESSAGE SHOULD NEVER APPEAR, CONSULT A PROGRAMMER!
+ This message should never appear; a fault has been introduced into 
+MOPAC, most probably as a result of a programming error.  If this
+error appears and MOPAC has NOT been modified by the users' group,
+please contact James J.P. Stewart at the Seiler lab.
+3    TIME UP 
+     - - - - - - - TIME UP - - - - - - - 
+ The time defined on the key-words line or 3,600 seconds, if 
+no time was specified, is likely to be exceeded if another 
+cycle of calculation were to be performed. A controlled termination 
+of the run would follow this message.  The job may terminate 
+earlier than expected: this is ordinarily due to one of the
+recently completed cycles taking unusually long, and the 
+safety margin has been increased to allow for the possibility that 
+the next cycle might also run for much longer than expected.
+3 UNABLE TO 
+ """"""""""""""UNABLE TO ACHIEVE SELF-CONSISTENCY
+ See the error-message:
+     <<<<----**** FAILED TO ACHIEVE SCF. ****---->>>>
+3 UNRECOG
+  UNRECOGNISED ELEMENT NAME
+ In the geometric specification a chemical symbol which 
+does not correspond to any known element has been used. 
+The error lies in the first datum on a line of geometric data.
+3 ------------------------------------------------------------------
+   
+3 CALCULATION ABA
+  CALCULATION ABANDONED AT THIS POINT
+ A particularly annoying message! In order to define an atom's 
+position, the three atoms used in the connectivity table must not 
+accidentally fall into a straight line.  This can happen during 
+a geometry optimization or gradient minimization.  If they do, 
+and if the angle made by the atom being defined is not zero or 180 
+degrees, then its position becomes ill-defined.  This is not 
+desirable, and the calculation will stop in order to allow 
+corrective action to be taken. Note that if the three atoms
+are in an exactly straight line, then this message will not
+be triggered.
+3 CARTESIAN-1
+  CARTESIAN COORDINATES READ IN, AND CALCULATION...
+ If cartesian coordinates are read in, but the calculation is 
+to be carried out using internal coordinates, then either all 
+possible geometric variables must be optimized, or non can be 
+optimized. If only some are marked for optimization then ambiguity 
+exists. For example, if the "X" coordinate of atom 6 is marked 
+for optimization, but the "Y" is not, then when the conversion to 
+internal coordinates takes place, the first coordinate becomes 
+a bond-length, and the second an angle.  These bear no relationship
+to the "X" or "Y" coordinates. This is a fatal error.
+3 CARTESIAN-2
+  CARTESIAN COORDINATES READ IN, AND SYMMETRY...
+ If cartesian coordinates are read in, but the calculation is to 
+be carried out using internal coordinates, then any symmetry 
+relationships between the cartesian coordinates will not be reflected 
+in the internal coordinates. For example, if the "Y" coordinates of 
+atoms 5 and 6 are equal, it does not follow that the internal 
+coordinate angles these atoms make are equal.  This is a fatal error.
+3 ELEMENT NOT
+  ELEMENT NOT FOUND
+ When an external file is used to redefine MNDO or AM1 
+parameters, the chemical symbols used must correspond to 
+known elements.  Any that do not will trigger this fatal message.
+3 ERROR DURING 
+  ERROR DURING READ AT ATOM NUMBER ....
+ Something is wrong with the geometry data.  In order to help 
+find the error, the geometry already read in is printed. 
+The error lies either on the last line of the geometry printed, 
+or on the next (unprinted) line. This is a fatal error.
+3 GEOMETRY TOO 
+  GEOMETRY TOO UNSTABLE FOR EXTRAPOLATION..
+ In a reaction path calculation the initial geometry for a point is
+calculated by quadratic extrapolation using the previous three points.
+ If a quadratic fit is likely to lead to an inferior geometry, then
+the geometry of the last point calculated will be used.  The total 
+effect is to slow down the calculation, but no user action is recommended.
+3  GRADIENT-IS-TOO
+   ** GRADIENT IS TOO LARGE TO ALLOW...
+ Before a FORCE calculation can be performed the gradient norm 
+must be so small that the third and higher order components of 
+energy in the force field are negligible. If, in the system under 
+examination, the gradient norm is too large, the gradient norm
+will first be reduced using FLEPO, unless LET has been specified. 
+In some cases the FORCE calculation may be run only to decide if 
+a state is a ground state or a transition state, in which case
+the results have only two interpretations. Under these circumstances, 
+LET may be warranted.
+3 GRADIENT-IS-VERY
+  GRADIENT IS VERY LARGE...
+ In a calculation of the thermodynamic properties of the system, 
+if the rotation and translation vibrations are non-zero, as would 
+be the case if the gradient norm was significant, then these 
+"vibrations" would interfere with the low-lying genuine vibrations. 
+The criteria for THERMO are much more stringent than for a vibrational 
+frequency calculation, as it is the lowest few genuine vibrations that 
+determine the internal vibrational energy, entropy, etc.
+3 IMPOSSIBLE-NUM
+  IMPOSSIBLE NUMBER OF OPEN SHELL ELECTRONS
+ The keyword OPEN(n1,n2) has been used, but for an 
+even-electron system n1 was specified as odd or for an 
+odd-electron system n1 was specified as even. Either way, 
+there is a conflict which  the user must resolve.
+3 IMPOSSIBLE-OPT
+  IMPOSSIBLE OPTION REQUESTED
+ A general catch-all. This message will be printed if two 
+incompatible options are used, such as both MINDO/3 and AM1 
+being specified. Check the key-words, and resolve the conflict.
+3 INTERNAL-COORD
+  INTERNAL COORDINATES READ IN, AND CALCULATION...
+ If internal coordinates are read in, but the calculation is 
+to be carried out using cartesian coordinates, then either 
+all possible geometric variables must be optimized, or none 
+can be optimized. If only some are marked for optimization, then 
+ambiguity exists. For example, if the bond-length of atom 6 is 
+marked for optimization, but the angle  is not, then when
+the conversion to cartesian coordinates takes place, the 
+first coordinate becomes the "X" coordinate and the second the 
+"Y" coordinate. These bear no relationship to the bond length 
+or angle. This is a fatal error.
+3 INTERNA-COORD
+  INTERNAL COORDINATES READ IN, AND SYMMETRY...
+ If internal coordinates are read in, but the calculation is 
+to be carried out using cartesian coordinates, then any symmetry 
+relationships between the internal coordinates will not be 
+reflected in the cartesian coordinates. For example, if the 
+bond-lengths of atoms 5 and 6 are equal, it does not follow 
+that these atoms have equal values for their "X" coordinates. 
+This is a fatal error.
+3 MAX-NO-ATOMS 
+  **** MAX. NUMBER OF ATOMS ALLOWED:....
+ At compile time the maximum sizes of the arrays in MOPAC 
+are fixed. The system being run exceeds the maximum number of 
+atoms allowed. To rectify this, modify the file DIMSIZES.DAT to 
+increase the number of heavy and light atoms allowed. If 
+DIMSIZES.DAT is altered, then the whole of MOPAC should be 
+re-compiled and re-linked.
+3 MAX-NO-TWO 
+  **** MAX. NUMBER OF TWO ELECTRON INTEGRALS....
+ At compile time the maximum sizes of the arrays in MOPAC are 
+fixed. The system being run exceeds the maximum number of two-electron 
+integrals allowed. To rectify this, modify the file DIMSIZES.DAT 
+to modify the number of heavy and light atoms allowed. If DIMSIZES.DAT 
+3 NUMBER-OF-PART
+  NUMBER OF PARTICLES, nn GREATER THAN...
+  When user-defined microstates are not used, the MECI will 
+calculate all possible microstates that satisfy the space and 
+spin constraints imposed. This is done in PERM, which permutes N 
+electrons in M levels. If N is greater than M, then no possible 
+permutation is valid. This is not a fatal error - the program will 
+continue to run, but no C.I. will be done.
+3 NUMBER-OF-PERM
+  NUMBER OF PERMUTATIONS TOO GREAT, LIMIT 60
+ The number of permutations of alpha or beta microstates is 
+limited to 60. Thus if 3 alpha electrons are permuted among 5 
+M.O.s, that will generate 10 = 5!/(3!*2!) alpha microstates, which 
+is an allowed number. However if 4 alpha electrons are permuted 
+among 8 M.O.s, then 70 alpha microstates result and the arrays 
+defined will be insufficient. Note that 60 alpha and 60 beta
+microstates will permit 3600 microstates in all, which should be 
+more than sufficient for most purposes. (An exception would be 
+3 SYMMETRY SPEC
+  SYMMETRY SPECIFIED, BUT CANNOT BE USED IN IRC
+ This is self explanatory. The IRC requires all geometric 
+constraints to be lifted.  Any symmetry constraints will first 
+be applied, to symmetrize the geometry, and then removed to 
+allow the calculation to proceed.
+3 SYSTEM DOES 
+  SYSTEM DOES NOT APPEAR TO BE OPTIMIZABLE
+ This is a gradient norm minimization message. These routines 
+will only work if the nearest minimum to the supplied geometry 
+in gradient-norm space is a transition state or a ground state. 
+Gradient norm space can be visualized as the space of the scalar 
+of the derivative of the energy space with respect to geometry. 
+To a first approximation, there are twice as many minima in 
+gradient norm space as there are in energy space.
+ It is unlikely that there exists any simple way to refine a 
+geometry that results in this message. While it is appreciated that 
+a large amount of effort has probably already been expended in 
+getting to this point, users should steel themselves to writing 
+off the whole geometry. It is not recommended that a minor change 
+be made to the geometry and the job re-submitted.
+3 TEMPERATURE 
+  TEMPERATURE RANGE STARTS TOO LOW,...
+ The thermodynamics calculation assumes that the statistical 
+summations can be replaced by integrals.  This assumption is only 
+valid above 100K, so the lower temperature bound is set to 100, 
+and the calculation continued.
+3 THREE-ATOMS 
+  THREE ATOMS BEING USED TO DEFINE....
+ If the cartesian coordinates of an atom depend on the 
+dihedral angle it makes with three other atoms, and those three 
+atoms fall in an almost straight line, then a small change in 
+the cartesian coordinates of one of those three atoms can cause 
+a large change in its position. This is a potential source of 
+trouble, and the data should be changed to make the geometric
+specification of the atom in question less ambiguous. 
+ This message can appear at any time, particularly in 
+reaction path and saddle-point calculations.
+4 Exception
+ An exception to this rule is if the three atoms fall into 
+an exactly straight line. For example, if, in propyne, the 
+hydrogens are defined in terms of the three carbon atoms, then 
+no error will be flagged. In such a system the three atoms in 
+the straight line must not have the angle between them optimized,
+as the finite step in the derivative calculation would displace 
+one atom off the straight line and the error-trap would take effect.
+ Correction involves re-defining the connectivity. LET and GEO-OK
+will not allow the calculation to proceed.
+3 TRIPLET SPEC
+  TRIPLET SPECIFIED WITH ODD NUMBER OF ELECTRONS.
+ If TRIPLET has been specified the number of electrons 
+must be even.  Check the charge on the system, the empirical 
+formula, and whether TRIPLET was intended. 
+3 UNDEFINED SYM
+  UNDEFINED SYMMETRY FUNCTION USED
+ Symmetry operations are restricted to those defined, i.e. in 
+the range 1-18. Any other symmetry operations will trip 
+this fatal message.
+3  WARNING-(thermo)
+ Don't pay too much attention to this message.  Thermodynamics 
+calculations require a higher precision than vibrational 
+frequency calculations.  In particular, the gradient norm should 
+be very small. However, it is frequently not practical to reduce 
+the gradient norm further, and to date no-one has determined just 
+how slack the gradient criterion can be before unacceptable
+errors appear in the thermodynamic quantities.  The 0.4 
+gradient norm is only a suggestion.
+3 WARNING-INT
+  WARNING: INTERNAL COORDINATES...
+ Triatomics are, by definition, defined in terms of internal 
+coordinates. This warning is only a reminder.  For diatomics, 
+cartesian and internal coordinates are the same. For tetra-atomics 
+and higher, the presence or absence of a connectivity table 
+distinguishes internal and cartesian coordinates, but for triatomics 
+there is an ambiguity.  To resolve this, cartesian coordinates are 
+not allowed for the data input for triatomics.
+
+2 KEYS
+
+ The operation of MOPAC is controlled by keywords. They can be 
+in any order, are case insensitive, and should be separated by 
+at least one space. 
+The key-words for debugging MOPAC can be found in DEBUG
+
+3 Geometry
+4 1SCF
+ When a single geometry is to be studied, then 1SCF should be used. 
+All the key-words relevant to output can be used. If the gradients 
+are to be calculated then GRADIENTS should be specified. They are 
+not calculated by default. If the key-word RESTART is also present, 
+then the geometric parameters which were being optimized will 
+be used in the gradient calculation.
+4 AIDER 
+ AIDER allows MOPAC to optimize an ab-initio geometry.  To use it, 
+calculate the ab-initio gradients using, e.g., Gaussian.  Supply 
+MOPAC with these gradients, after converting them into kcal/mol.  
+The geometry resulting from a MOPAC run will be nearer to the 
+optimized ab-initio geometry than if the geometry optimizer in 
+Gaussian had been used.
+4 AIGIN
+ If the geometry (Z-matrix) is specified using the Gaussian-8X, 
+then normally this will be read in without difficulty.  In the 
+event that it is mistaken for a normal MOPAC-type Z-matrix, the 
+keyword AIGIN is provided.  AIGIN will force the data-set to be 
+read in assuming Gaussian format. This is necessary if more than 
+one system is being studied in one run.
+4 DEPVAR
+  When DEPVAR=n.nn is used in conjunction with symmetry-function 18
+then the dependent bond length is defined as n.nn times the 
+reference bond length.  DEPVAR is intended for use in defining 
+symmetry-dependent translation vectors.
+4 DFP
+ By default the Broyden-Fletcher-Goldfarb-Shanno function minimizer
+is used for geometry optimization.  The older method, the 
+Davidon-Fletcher-Powell method will be used when DFP is
+specified.
+4 DMAX=n.nn
+ In the EF routine, the maximum step-size is 0.2 (Angstroms or radians), by
+default.  This can be changed by specifying DMAX=n.nn.  Increasing DMAX can 
+lead to faster convergence but can also make the optimization go bad very 
+fast. Furthermore, the Hessian updating may deteriorate when using large 
+stepsizes. Reducing the stepsize to 0.10 or 0.05 is recommended when 
+encountering convergence problems.
+4 DRC
+ A Dynamic Reaction Coordinate calculation to be run.  If DRC is 
+used with IRC, DRC takes priority, thus IRC=1 and DRC means start
+with an IRC calculation, but as soon as the calculation gets under
+way use the DRC option. (Useful in following a DRC from the T/S)
+ If a "Half Life" for loss of kinetic energy is wanted, then use
+DRC=n.nn, where n.nn is the half-life in femtoseconds.
+5 PRINT
+ The DRC produces large amounts of output.  To reduce this the
+geometry optimization flags can be used.  If a flag is set to 1 
+then only when the geometric variable flagged passes through an
+extremum will a printout be made.  Up to 30 flags are allowed.
+Note that as the program re-numbers the molecule then the 
+definitions of internal cooordinates may change.  To prevent
+this do a pilot 1SCF run specifying XYZ in order to get the
+molecular geometry definition the same as that which would
+be generated by the DRC.  See also H-PRIORITY, X-PRIORITY and
+T-PRIORITY.
+4 EF 
+ The Eigenvector Following routine is an alternative to the BFGS, and appears
+to be much faster.  To invoke the eigenvector following routine, specify EF.
+EF is particularly good in the end-game, when the gradient is small.  
+See also HESS, DMAX, EIGINV.
+4  FORCE
+ A force-calculation is to be run. The Hessian, that is the matrix 
+(in millidynes per Angstrom) of second
+derivatives of the energy with respect to displacements of all 
+pairs of atoms in x, y, and z is calculated, On diagonalization 
+this gives the force constants for the molecule. The force matrix, 
+weighted for isotopic masses, is then used for calculating the 
+vibrational frequencies. The system can be characterised as a ground 
+state or a transition state by the presence of five (for a linear 
+system) or six eigenvalues which are very small (less than about 
+30cm(-1)) A transition state is further characterised by one, and 
+exactly one, negative force constant.
+ A FORCE calculation is a prerequisite for a THERMO calculation.
+ Before a FORCE calculation is started, a check is made to ensure 
+that a stationary point is being used.  The check involves 
+calculating the gradient norm (GNORM) and if this is significant, 
+the GNORM will be reduced using Bartell's method. All internal 
+coordinates are optimised, and any symmetry constraints are ignored 
+at this point. An implication of this is that if the specification 
+of the geometry relies on any angles being exactly 180 or zero 
+degrees, the calculation may fail. 
+4 GEO-OK
+ Normally the program will stop with a warning message if two atoms 
+are within 0.8 Angstroms of each other, or (more rarely) the D.F.P. 
+routine has difficulty optimising the geometry. GEO-OK will over-ride
+the job termination sequence, and allow the calculation to proceed. 
+In practice most jobs that terminate due to these checks contain 
+errors in data, so caution should be exercised if GEO-OK is used. 
+An important exception to this warning is if the system contains,
+or may give rise to, a Hydrogen molecule.
+4 GNORM=n.n
+ The geometry optimization and gradient minimization termination 
+criteria can be over-ridden by specifying a gradient norm 
+requirement. For example, GNORM=20 would allow them to exit as 
+soon as the gradient norm dropped below 20.0, the default being 
+1.0. A GNORM=0.001 could be used to refine a geometry beyond the 
+normal limits.
+4 IRC
+ An intrinsic reaction coordinate calculation to be run.  In the IRC
+all kinetic energy is continuously shed so that the minimum energy
+path is mapped.  In order to start the IRC from a stationary point,
+IRC=n or IRC=-n can be used, where n is the index of a normal 
+vibration. (Hint - Use IRC with ISOTOPE to store the Force matrix
+if there is the possibility of having to restart; this will allow
+the calculation to be restarted from the end of the Force 
+calculation.)
+4 KINETIC
+ In an IRC calculation, excess kinetic energy can be added using
+KINETIC=n.nn.  After kinetic energy equal to 0.2Kcal/mole has
+been reached, n.nn Kcal/mole of kinetic energy will be added to
+the system as increased velocity in the direction of the current
+velocity vector.
+4 MMOK
+ If a system contains the group -HNCO-, i.e. a peptide linkage,
+then a molecular mechanics correction can be made. This 
+increases the barrier to rotation about the C-N bond to 14 
+Kcal/mole in N-methyl acetamide.  If you want this correction,
+specify MMOK.
+4 NLLSQ
+ The gradient norm is to be minimised by Bartel's method. This is a 
+Non-Linear Least Squares gradient minimization routine. Gradient
+minimization will locate one of three possible points:
+  (a) A minimum in the energy surface. The gradient norm will go to 
+zero, and the lowest five or six eigenvalues resulting from a FORCE 
+calculation will be approximately zero.
+  (b) A transition state. The gradient norm will vanish, as in 
+(a), but in this case the system is characterised by one, and only 
+one, negative force constant. 
+  (c) A local minimum in the gradient norm space. In this (normally
+unwanted) case the gradient norm is minimised, but does not go to 
+zero. A FORCE calculation will not give the characteristic five or 
+six zero eigenvalues.  While normally very undesirable, sometimes 
+this is the only way to obtain a geometry. For instance, if a system
+is formed which cannot be characterised as an intermediate, and at 
+the same time is not a transition state, but none the less has some 
+chemical significance, then that state can be refined using NLLSQ.
+4 NOMM
+ If a system contains the group -HNCO-, i.e. a peptide linkage,
+then a molecular mechanics correction can be made. This 
+increases the barrier to rotation about the C-N bond to 14 
+Kcal/mole in N-methyl acetamide.  If you do NOT want this 
+correction, specify NOMM.
+4 POINT=n
+ The number of points to be calculated on a reaction path 
+is specified by POINT=n.  Used only with STEP in a path 
+calculation.
+4 POINT1=n
+ In a grid calculation, the number of points to be calculated 
+in the first direction is given by POINT1=n. 'n' should be 
+less than 24.
+4 POINT2=n
+ In a grid calculation, the number of points to be calculated 
+in the second direction is given by POINT2=n. 'n' should be 
+less than 24.
+4 POWSQ
+ The Hessian and associated matrices in POWSQ are printed. This is 
+useful only if POWSQ itself is being worked on.
+4 ROT=n
+ In the calculation of the rotational contributions to the 
+thermodynamic quantities the symmetry number of the molecule must be
+supplied. The symmetry number of a point group is the number of 
+equivalent positions attainable by pure rotations. No reflections or
+improper rotations are allowed. This number cannot be assumed by 
+default, and may be affected by subtle modifications to the molecule,
+such as isotopic substitution. A list of the most important symmetry
+numbers follows:
+         ----    TABLE OF SYMMETRY NUMBERS    ----
+  
+        C1 CI CS     1      D2 D2D D2H  4       C(INF)V   1
+        C2 C2V C2H   2      D3 D3D D3H  6       D(INF)H   2
+        C3 C3V C3H   3      D4 D4D D4H  8       T TD     12
+        C4 C4V C4H   4      D6 D6D D6H  12      OH       24
+        C6 C6V C6H   6      S6          3
+  
+4   SADDLE
+ The transition state in a simple chemical reaction is to be 
+optimised. Extra data are required. After the first geometry, 
+specifying the reactants, and any symmetry functions, have been 
+defined, the second geometry, specifying the products, is defined, 
+using the same format as that of the first geometry. For an expanded
+description, see chapter on background.
+ In general, run SADDLE calculations in cartesian coordinates. To
+do this, specify everything for optimization and put XYZ on the
+keyword line.
+5 EXAMPLE
+  An example of the data for the SADDLE calculation is:
+   XYZ  SADDLE UHF
+     ETHYL RADICAL, HYDROGEN MIGRATION FROM C1 TO C2
+  
+   6    0.000000 0    0.000000 0    0.000000 0   0  0  0
+   6    1.477139 1    0.000000 0    0.000000 0   1  0  0
+   1    1.082649 1  121.548305 1    0.000000 0   2  1  0
+   1    1.083216 1  120.899040 1  178.259153 1   2  1  3
+   1    2.148533 1   28.773756 1  229.130514 1   2  1  3
+   1    1.109818 1  111.971877 1    9.883760 1   1  2  3
+   1    1.112682 1  110.320360 1  250.170920 1   1  2  3
+   0    0.000000 0    0.000000 0    0.000000 0   0  0  0
+   6    0.000000 0    0.000000 0    0.000000 0   0  0  0
+   6    1.475620 1    0.000000 0    0.000000 0   1  0  0
+   1    1.110522 1  111.486757 1    0.000000 0   2  1  0
+   1    1.109711 1  111.884755 1  120.829959 1   2  1  3
+   1    1.112806 1  110.441152 1  240.645640 1   2  1  3
+   1    1.082678 1  121.172100 1   38.115205 1   1  2  3
+   1    1.082381 1  121.691755 1  217.320781 1   1  2  3
+   0    0.000000 0    0.000000 0    0.000000 0   0  0  0
+6 CAUTIONS
+(1) The starting geometry and final geometry must be related by
+    continuous deformation.  The bond lengths and angles are
+    unambiguous, but the dihedral angles are ill-defined by
+    360 degrees.  Dihedrals must be chosen so that rotation through
+    360 degrees is excluded. If a dihedral changes from 300 to 60
+    degrees, specify 300 as -60 degrees. Faults appear in the
+    results as a  very large barrier, as impossible contortions
+    are taking place in the molecule.
+  
+(2) Accidental straight lines.  If, in the course of a reaction, any
+    three atoms which are used in the definition of a fourth atom 
+    fall on a straight line, then the position of the fourth atom
+    becomes ill-defined.  To overcome this, use dummy atoms. 
+    If this situation occurs, then the calculation is terminated with
+    a warning message.
+4   SIGMA
+ The McIver-Komornicki gradient norm minimization routines, POWSQ 
+and SEARCH are to be used. These are very rapid routines, but very 
+often they do not work. If the gradient norm is low, say less than 
+about 5 units, then SIGMA will probably work, in most cases NLLSQ is
+recommended. SIGMA first calculates a quite accurate Hessian matrix,
+this is a slow step, then works out the direction of fastest decent,
+and searches along that direction until the gradient norm is 
+minimised. The Hessian is then partially updated in light of the 
+new gradients, and a fresh search direction found. Clearly, if the 
+Hessian changes markedly as a result of the line-search, the update 
+done will be inaccurate, and the new search direction will be faulty.
+ Of course, SIGMA should be avoided if at all possible when 
+non-variationally optimised calculations are being done.
+4 STEP 
+ In a reaction path, if the path step is constant, STEP can be 
+used instead of explicitly specifying each point.  The number 
+of steps is given by POINT.  If the reaction coordinate is an 
+interatomic distance, only positive STEPs are allowed.
+4 STEP1
+ In a 2-dimensional grid-search of part of geometric space, 
+GRID1=n.nn defines the step size of the first variable, the 
+step size of the second variable is defined by STEP2=m.mm.
+  
+  A grid search is defined by having two "-1" in the optimization
+flags, one "-1" defines a reaction path.
+4  SYMMETRY
+ Symmetry data defining related bond lengths, angles and dihedrals 
+can be included by supplying additional data after the geometry has 
+been entered. If there are any other data, such as values for the 
+reaction coordinates, or a second geometry, as required by SADDLE, 
+then it would follow the symmetry data. Symmetry data are terminated
+by one blank line. For non-variationally optimised systems symmetry
+constraints can save a lot of time because many derivatives do not 
+need to be calculated. At the same time, there is a risk that the 
+geometry may be wrongly specified, e.g. if methane radical cation is
+ defined as being tetrahedral, no indication that this is faulty 
+will be given until a FORCE calculation is run. (This system 
+Jahn-Teller distorts.)
+  
+5 SPECIFICATION
+The layout of the symmetry data is:
+<defining atom>,<symmetry relation>,<defined atom>,<defined atom>,...
+ For example, methane, with one independent variable, can be 
+defined as
+  SYMMETRY                   
+  METHANE                               
+  
+   H    0.000000 0    0.000000 0    0.000000 0   0  0  0
+   C    1.108557 1    0.000000 0    0.000000 0   1  0  0
+   H    1.108556 0  109.471221 0    0.000000 0   2  1  0
+   H    1.108556 0  109.471221 0  240.000000 0   2  1  3
+   H    1.108556 0  109.471221 0  120.000000 0   2  1  3
+   0    0.000000 0    0.000000 0    0.000000 0   0  0  0
+ 2 1 3 4 5
+  
+ Here the bond length (function 1) of the carbon atom (atom 2) is 
+used to define the bond lengths of hydrogens 3, 4 and 5. Spaces or 
+commas can be used to separate data. Note that only one parameter 
+is marked to be optimised. To end symmetry data use a blank line.
+5 FUNCTIONS
+ The full list of available symmetry relations is as follows:
+   1     BOND LENGTH    IS SET EQUAL TO THE REFERENCE BOND LENGTH
+   2     BOND ANGLE     IS SET EQUAL TO THE REFERENCE BOND ANGLE  
+   3     DIHEDRAL ANGLE IS SET EQUAL TO THE REFERENCE DIHEDRAL ANGLE
+   4     DIHEDRAL ANGLE VARIES AS  90 DEGREES - REFERENCE DIHEDRAL  
+   5     DIHEDRAL ANGLE VARIES AS  90 DEGREES + REFERENCE DIHEDRAL  
+   6     DIHEDRAL ANGLE VARIES AS 120 DEGREES - REFERENCE DIHEDRAL  
+   7     DIHEDRAL ANGLE VARIES AS 120 DEGREES + REFERENCE DIHEDRAL  
+   8     DIHEDRAL ANGLE VARIES AS 180 DEGREES - REFERENCE DIHEDRAL  
+   9     DIHEDRAL ANGLE VARIES AS 180 DEGREES + REFERENCE DIHEDRAL  
+  10     DIHEDRAL ANGLE VARIES AS 240 DEGREES - REFERENCE DIHEDRAL  
+  11     DIHEDRAL ANGLE VARIES AS 240 DEGREES + REFERENCE DIHEDRAL  
+  12     DIHEDRAL ANGLE VARIES AS 270 DEGREES - REFERENCE DIHEDRAL  
+  13     DIHEDRAL ANGLE VARIES AS 270 DEGREES + REFERENCE DIHEDRAL  
+  14     DIHEDRAL ANGLE VARIES AS - REFERENCE DIHEDRAL              
+  15     BOND LENGTH VARIES AS HALF THE REFERENCE BOND LENGTH       
+  16     BOND ANGLE VARIES AS HALF THE REFERENCE BOND ANGLE         
+  17     BOND ANGLE VARIES AS 180 DEGREES - REFERENCE BOND ANGLE     
+  18     BOND LENGTH IS A KEYWORD-DEFINED MULTIPLE OF REFERENCE 
+         BOND LENGTH
+ Function 18 is recommended only for polymers and very exotic systems, 
+functions 1,2,3 and 14 are most commonly used.
+4 THERMO
+ The thermodynamic quantities internal energy, heat capacity,
+partition function, and entropy can be calculated for translation, 
+rotation and vibrational degrees of freedom for a single 
+temperature, or a range of temperatures. Special situations such as 
+linear systems and transition states are accommodated. The 
+approximations used in the THERMO calculation are invalid below 100K,
+and checking of the lower bound of the temperature range is done to 
+prevent temperatures of less than 100K being used.
+ Another limitation, for which no checking is done, is that there 
+should be no internal rotations. If any exist, they will not be 
+recognised as such, and the calculated quantities too low as a 
+result.
+ If THERMO is specified on its own then the default values of the 
+temperature range are assumed. This starts at 200K and increases in 
+steps of 10 degrees to 400K. Three options exist for overriding the 
+default temperature range.
+5 A THERMO(nnn) 
+ The thermodynamic quantities for a 200 degree range of 
+temperatures, starting at nnnK and with an interval of 20 degrees 
+are to be calculated.
+5 B THERMO(nnn,mmm) 
+ The thermodynamic quantities for the temperature range limited by 
+a lower bound of nnn Kelvin and an upper bound of mmm Kelvin, the 
+step size being calculated in order to give appriximately 20 points,
+and a reasonable value for the step. The size of the step in Kelvin 
+degrees will be 1, 2, or 5, or a power of 10 times these numbers.
+5 C  THERMO(nnn,mmm,lll) 
+ As for THERMO(nnn,mmm) only now the user can explicitly define the
+step size. The step size cannot be less than 1K.
+4 TRANS
+ The imaginary frequency due to the reaction vector in a transition 
+state calculation must not be included in the thermochemical 
+calculation. The number of genuine vibrations considered can be:
+ 5 for a linear ground state system,
+ 6 for a non-linear ground state system, or
+ 6 for a linear transition-state complex,
+ 7 for a non-linear transition-state complex.
+5 TRANS=N 
+ The lowest N vibrations will not be considered in the THERMO 
+calculation.
+4 TS 
+ Within the Eigenvector Following routine, the option exists 
+to optimize a transition state.  To do this, use TS.  
+Preliminary indications are that the TS method is much faster 
+and more reliable than either SIGMA or NLLSQ.  TS appears to 
+work well with cartesian coordinates.  
+4 VELOCITY
+ The user can supply the initial velocity vector to start a DRC calculation.
+Limitations have to be imposed on the geometry in order for this keyword
+to work.  These are (a) the input geometry must be in cartesian coordinates,
+(b) the first three atoms must not be coaxial, (c) triatomic systems are
+not allowed (See geometry specification - triatomic systems are in 
+internal coordinates, by definition.)  
+ Put the velocity vector after the geometry as three data per line, 
+representing the x, y, and z components of velocity for each atom. The
+units of velocity are centimeters per second. 
+ The velocity vector will be rotated so as to suit the final cartesian
+coordinate orientation of the molecule.
+4 WILLIAMS 
+Within the ESP calculation, the Connolly surface is used as the default.
+If the surface generation procedure of Donald Williams is wanted, the keyword
+WILLIAMS should be used.
+4 XYZ 
+ Normally the geometric part of MOPAC runs in internal coordinates,
+XYZ allows it to run in cartesian coordinates. Mainly intended for
+use with SADDLE, but can be used elsewhere. Connectivity is generated
+by MOPAC each time the geometry is printed.
+ In order for XYZ to be used, the supplied geometry must either be in 
+cartesian coordinates or, if internal coordinates are used, symmetry
+must not be used, and all coordinates must be flagged for optimization.
+If dummy atoms are present, only 3N-6 coordinates need to be flagged
+for optimization.
+ If at all possible, the first 3 atoms should be real.  Except in 
+SADDLE, XYZ will still work if one or more dummy atoms occur before 
+the fourth real atom, in which case more than 3N-6 coordinates 
+will be flagged for optimization.  This could cause difficulties
+with the EF method, which is why dummy atoms at the start 
+of the geometry specification should be avoided.  The coordinates 
+to be optimized depend on the internal coordinate definition
+of real atoms 1, 2, and 3.  If the position of any of these atoms 
+depends on dummy atoms, then the optimization flags will be 
+different from the case where the first three atoms defined 
+are all real.  
+  The geometry is first converted to cartesian coordinates
+and dummy atoms excluded.  The cartesian coordinates to be 
+optimized are:
+
+ Atoms  R R R  R R X  R X R  X R R  R X X  X R X  X X R  X X X  
+
+        X Y Z  X Y Z  X Y Z  X Y Z  X Y Z  X Y Z  X Y Z  X Y Z  
+Atom 1         
+     2  +      +      + +    + +    + + +  + +    + + +  + + +  
+     3  + +    + + +  + + +  + + +  + + +  + + +  + + +  + + +  
+  4 on  + + +  + + +  + + +  + + +  + + +  + + +  + + +  + + +  
+
+ Where R and X apply to real and dummy atoms in the 
+internal coordinate Z-matrix, and atoms 1, 2, 3, and 4 are the 
+real atoms in cartesian coordinates.  A '+' means that the 
+relevant coordinate is flagged for optimization.  Note that 
+the number of flagged coordinates varies from 3N-6 to 3N-3, 
+atom 1 is never optimized.
+3 Electronic
+4 AM1
+ The AM1 Hamiltonian is to be used.  By default the MNDO 
+Hamiltonian is used.
+4  BIRADICAL
+ For molecules which are believed to have biradicaloid character the
+option exists to optimize the lowest energy state which results from 
+the mixing of three states. These states are, in order,
+ (a) the (micro)state arising from a one electron excitation from 
+the HOMO to the LUMO; this is combined with the microstate resulting 
+from the time-reversal operator acting on the parent microstate, 
+the result being a full singlet state, 
+(b) the state resulting from de-excitation from the formal LUMO to 
+the HOMO, and (c) the state resulting from the single electron in 
+the formal HOMO being excited into the LUMO. A configuration 
+interaction calculation is involved. 
+4 CI (C.I.)
+ Used as C.I.=n, C.I. invokes the Multi-Electron Configuration 
+Interaction calculation.  For C.I.=n, n M.O.s are used in the C.I.,
+straddling the HOMO-LUMO M.O.s.  Note that for all routine uses,
+e.g. odd-elecron systems, use of words such as BIRADICAL, TRIPLET,
+EXCITED, etc., a MECI calculation is automatically invoked.
+ C.I.=(n,m)
+ In addition to specifying the number of M.O.'s in the active 
+space, the number of electrons can also be defined.  In C.I.=(n,m), 
+n is the number of M.O.s in the active space, and m is the number 
+of doubly filled levels to be used.
+5  EXAMPLES
+   Keywords           Number of M.O.s  No. Electrons
+
+   C.I.=2                   2             2 (1)
+   C.I.=(2,1)               2             2 (3)
+   C.I.=(3,1)               3             2 (3)
+   C.I.=(3,2)               3             4 (5)
+   C.I.=(3,0) OPEN(2,3)     3             2 (N/A)
+   C.I.=(3,1) OPEN(2,2)     3             4 (N/A)
+   C.I.=(3,1) OPEN(1,2)     3           N/A (3)
+
+ Odd electron systems given in parentheses.
+4  CHARGE
+ When the system being studied is an ion, the charge, n, on the ion 
+can be supplied by CHARGE=n. For cations n can be 1 or 2 or 3 etc, 
+for anions -1 or -2 or -3 etc. 
+                          EXAMPLES
+  
+     ION               KEYWORD              ION          KEYWORD
+  
+     NH4(+)           CHARGE=1             CH3COO(-)      CHARGE=-1
+     C2H5(+)          CHARGE=1             (COO)(=)       CHARGE=-2
+     SO4(=)           CHARGE=-2            PO4(3-)        CHARGE=-3
+     HSO4(-)          CHARGE=-1            H2PO4(-)       CHARGE=-1
+4 DOUBLET
+ For use only with C.I.=n. DOUBLET will constrain the choice of 
+states to doublets only.  Thus if the ground state is a doublet,
+DOUBLET will have no effect unless ROOT=m is also specified.
+If, however, the ground state is a quartet, then DOUBLET will 
+cause an excited state to be used, the first doublet state.
+  
+ If DOUBLET is used with ROOT=m, then the m'th doublet state will
+be selected.
+4 DIPOLE
+ Used in the ESP calculation, DIPOLE will constrain the calculated 
+charges to reproduce the cartesian dipole moment components 
+calculated from the density matrix and nuclear charges.
+4 DIPX
+Similar to DIPOLE, except the fit will be for the X-component only.
+4 DIPY
+Similar to DIPOLE, except the fit will be for the Y-component only.
+4 DIPZ
+Similar to DIPOLE, except the fit will be for the Z-component only.
+4 EXCITED
+  The state to be calculated is the second singlet state. If the 
+ground state is a singlet, then the state calculated will be S(1), 
+if the ground state is a triplet then S(2). This state would 
+normally be the state resulting from a one-electron excitation from 
+the HOMO to the LUMO. 
+Exceptions would be if the lowest singlet state were a biradical, 
+in which case the EXCITED state could be a closed shell. 
+  The EXCITED state will be calculated from a C.I. calculation which
+uses three microstates. These microstates are:
+  (1) The state resulting from one electron being excited from the 
+HOMO to the LUMO.
+  (2) The state resulting from the first state after the LUMO 
+electron has been de-excited back into the HOMO.
+  (3) The state resulting from the first state after a second 
+electron has been excited into the LUMO.
+4 EXTERNAL
+ New atomic parameters for MNDO, AM1, or PM3 can be supplied 
+via a parameter file using EXTERNAL=filename, where 'filename' 
+is the name of the parameter file.  The structure of the 
+parameter file is
+  
+ parameter   element     value
+  
+  Thus
+  
+ BETAS        C          1.234567
+ FN21         Be         5.000000
+  
+The parameter file is ended with an end-of-file.
+4 ITRY=
+ The default maximum number of iterations is 200, to specify a
+different limit use ITRY=nnn.
+4 MICROS=n
+ The microstates used by MECI are normally generated by use 
+of a permutation operator.  When individually defined 
+microstates are desired, then MICROS=n can be used, where 
+n defines the number of microstates to be read in.
+5  Format 
+ After the geometry data plus any symmetry data are read in, 
+data defining each microstate is read in, using format 20I1, 
+one microstate per line.  The microstate data is preceded by 
+the word "MICROS" on a line by itself.  There is at present no 
+mechanism for using MICROS with a reaction path.  For a system 
+with n M.O.'s in the C.I. (use OPEN=(n1,n) or C.I.=n to do this), 
+the populations of the n alpha M.O.'s are defined, followed by 
+the n beta M.O.'s.  Allowed occupancies are zero and one. For n=6 
+the closed-shell ground state would be defined as 111000111000, 
+meaning one electron in each of the first three alpha M.O.'s, and 
+one electron in each of the first three beta M.O.'s.  Users are 
+warned that they are responsible for completing any spin manifolds.
+Thus while the state 111100110000 is a triplet state with component 
+of spin = 1, the state 111000110100, while having a component of 
+spin = 0 is neither a singlet nor a triplet. In order to complete 
+the spin manifold the microstate 110100111000 must also be included.
+ If a manifold of spin states is not complete, then the eigenstates 
+of the spin operator will not be quantized. When and only when 100 
+or fewer microstates are supplied, can spin quantization be 
+conserved.
+ There are two other limitations on possible microstates. 
+First, the number of electrons in every microstate should be 
+the same. If they differ, a warning message will be printed, 
+and the calculation continued (but the results will almost 
+certainly be nonsense). Second, the component of spin for 
+every microstate must be the same, except for teaching purposes. 
+Two microstates of different components of spin will have a 
+zero matrix element connecting them. No warning will be given as 
+this is a reasonable operation in a teaching situation. For example,
+if all states arising from two electrons in two levels are to 
+be calculated, say for teaching Russel-Saunders coupling, then the 
+following microstates would be used:
+      Microstate       No. of alpha, beta electrons  Ms  State
+
+        1100                    2     0              1   Triplet
+        1010                    1     1              0   Singlet
+        1001                    1     1              0   Mixed
+        0110                    1     1              0   Mixed
+        0101                    1     1              0   Singlet
+        0011                    0     2             -1   Triplet
+
+ Constraints on the space manifold are just as rigorous, but 
+much easier to satisfy. If the energy levels are degenerate, 
+then all components of a  manifold of degenerate M.O.'s should 
+be either included or excluded.  If only some, but not all, 
+components are used, the required degeneracy of the states will 
+be missing.
+ As an example, for the tetrahedral methane cation, if the user 
+supplies the  microstates corresponding to a component of spin = 3/2, 
+neglecting Jahn-Teller distortion, the minimum number of states 
+that can be supplied is 90 = (6!/(1!_*5!))_*(6!/(4!_*2!)).
+ While the total number of electrons should be the same for all 
+microstates, this number does not need to be the same as the number 
+of electrons supplied to the C.I.;  thus in the example above, a 
+cationic  state could be 110000111000. 
+ The format is defined as 20I1 so that spaces can be used for 
+empty M.O.'s.
+4  MINDO3
+ The default Hamiltonian within MOPAC is MNDO, with the alternative 
+of MINDO/3. To use the MINDO/3 Hamiltonian the key-word MINDO3 
+should be used. Acceptable alternatives are MINDO/3 or MINDO.
+4 OPEN
+  For an open shell system in which the top n2 M.O.s each have 
+n1/n2 electrons, OPEN(n,n2) can be used. For example, if methane 
+cation was required to have tetrahedral symmetry, OPEN(5,3) would
+be used, indicating that 5 electrons are in 3 M.O.s, each of which
+therefore has 1.6666 electrons.
+4 PARASOK
+ USE THIS KEY-WORD WITH EXTREME CAUTION!!  The AM1 method has been 
+parametrized for the elements C, H, N, and O, and provisional 
+parameters exist for the halogens.  If any other elements are 
+specified, the MNDO parameters, if available, will be used.  
+The resulting mixture of methods, AM1 with MNDO, has not been 
+studied to see how good the results are, and users are strictly on
+their own as far as accuracy and compatibility with other methods 
+is concerned.  In particular, while all parameter sets are 
+referenced in the output, other programs may not cite the parameter 
+sets used and thus compatibility with other MNDO programs is not 
+guaranteed.  
+4 PULAY
+ The default converger in the SCF calculation is to be replaced by 
+Pulay's procedure as soon as the density matrix is sufficiently 
+stable. A considerable improvement in speed can be achieved by the 
+use of PULAY. If a large number of SCF calculations are envisaged, 
+a sample calculation using 1SCF and PULAY should be compared with 
+using 1SCF on its own, and if a saving in time results, then PULAY 
+should be used in the full calculation.
+ Details of the working of PULAY can be printed by specifying
+DEBUGPULAY
+4 QUARTET
+ QUARTET will constrain the choice of states to quartets only.  
+When used on its own, QUARTET implies OPEN(3,3), total spin = 3/2
+and C.I.=3. If used in conjunction with C.I.=n, n>3, excited quartets
+can be studied using ROOT=m, m>1.
+4 QUINTET
+ QUINTET will constrain the choice of states to quintets only.  
+When used on its own, QUINTET implies OPEN(4,4), total spin = 4/2 = 2
+and C.I.=4. If used in conjunction with C.I.=n, n>4, excited quintets
+can be studied using ROOT=m, m>1.
+4  ROOT=n
+ The n'th root of a C.I. calculation is to be used in the calculation,
+irrespective of other key-words used. In normal use, this 
+key-word would not be used. It is retained for educational and 
+checking purposes. Unusual care should be exercised when ROOT= is 
+specified.
+4  SCFCRT=
+  The default SCF criterion is to be replaced by that defined by 
+ SCFCRT=. The SCF criterion can be varied from about 0.0001 to 
+ 1.D-20 To find a suitable value 1SCF and various values of 
+ SCFCRT=n.nnn should be used; a SCFCRT which allows evaluation of 
+ the heat of formation to an acceptable precision can thus be found 
+ rapidly.
+4 SEXTET
+ SEXTET will constrain the choice of states to sextets only.  
+When used on its own, SEXTET implies OPEN(5,5), total spin = 5/2
+and C.I.=5. If used in conjunction with C.I.=n, n>5, excited sextets 
+can be studied using ROOT=m, m>1.
+4   SHIFT=
+  In an attempt to obtain a SCF by damping oscillations, which
+ are slowing down the convergence, or preventing a SCF being achieved,
+ SHIFT can be used. The principle is that if the virtual M.O.s are 
+ raised in energy relative to the occupied set, then the 
+ polarizability of the occupied M.O.s will decrease; oscillations 
+ being attributed to autoregenerative charge fluctuations. A SHIFT of
+ 20 will raise the virtual M.O.s by 20 eV above their correct value. 
+ The disadvantage of SHIFT is that a large value can lead to 
+ excessive damping, and thus prevent an SCF being generated. As some 
+ virtual M.O.s are used in non-variationally optimised calculations 
+ SHIFT is automatically anulled at the end of the SCF in these 
+ circumstances.
+4 SINGLET
+ For use only with C.I.=n. SINGLET will constrain the choice of 
+states to singlets only.  Thus if the ground state is a singlet,
+SINGLET will have no effect unless ROOT=m is also specified.
+If, however, the ground state is a triplet, then SINGLET will 
+cause an excited state to be used, the first singlet state.
+  
+If SINGLET is used with ROOT=m, then the m'th singlet state will
+be selected.
+4 TRIPLET
+ The triplet state is defined. 
+  UHF interpretation
+ The number of alpha electrons exceeds that of the 
+beta electrons by 2. If TRIPLET is not specified, then
+the numbers of alpha and beta electrons are set equal.
+This does not necessarily correspond to a singlet.
+  
+ RHF interpretation.
+ Here BIRADICAL is assumed, and that combination
+of microstates is selected in order that a triplet
+energy is calculated. The wave-functions of the
+singlet and triplet states are identical.
+If triplet is not specified then a singlet state
+is assumed.
+4  UHF
+ The unrestricted Hartree-Fock Hamiltonian is to be used. 
+3 Output
+4 0SCF 
+ The data can be read in and output, but no actual calculation 
+is performed when this keyword is used. This is useful as a 
+check on the input data to rule out errors introduced in 
+transmission (usually a very last resort).
+ A second use is to convert from one format to another.  
+The input geometry is printed in various formats at the end of 
+a 0SCF calculation.  If NOINTER is absent, cartesian coordinates 
+are printed. Unconditionally, MOPAC Z-matrix internal coordinates 
+are printed, and if AIGOUT is present, Gaussian Z-matrix internal 
+coordinates are printed.  0SCF should now be used in place of DDUM.
+4 1ELECTRON
+ The final one-electron matrix is printed out. This matrix is 
+composed of atomic orbitals, the element between orbitals i and j on 
+different atoms is given by
+              H(i,j) = 0.5 x (beta(i) +beta(j)) x overlap(i,j)
+ The matrix elements between orbitals i and j on the same atom are 
+calculated from the electron-nuclear attraction energy, and also 
+the U(i) value, if i=j.
+ The one-electron matrix is unaffected by (a) the charge, and 
+(b) the electron density. It is only a function of the geometry.
+4  BONDS
+  The rotationally invariant bond order between all pairs of atoms is
+ printed. In this context a bond is defined as the sum of the 
+ squares of the density matrix elements connecting any two atoms. 
+ For ethane, ethylene, and acetylene the carbon-carbon bond orders 
+ are ca. 1.00, 2.00, and 3.00, respectively. The diagonal terms are 
+ the valencies calculated from the atomic terms only and are 
+ defined as the sum of  the bonds the atom makes with other atoms. 
+ In UHF and non-variationally optimized wavefunctions the 
+ calculated valency will be incorrect, the degree of error being 
+ proportional to the non-duodempotency of the density matrix. For 
+ an RHF wavefunction the  square of the density matrix is equal to 
+ twice the density matrix.
+4 COMPFG
+ Output information calculated in subroutine COMPFG. Normally 
+only the heat of formation calculated in ITER would be printed, 
+but if DEBUG is also used then the internal and cartesian 
+coordinates of the first five atoms are also printed.
+4 DCART
+ The cartesian derivatives which are calculated in DCART for 
+variationally optimized systems are printed if the key-word DCART 
+is present. The derivatives are in units of kcals/Angstrom, and the 
+coordinates are displacements in x, y, and z.
+4  DEBUG
+ Certain key-words have specific output control meanings, for example
+FOCK, VECTORS and DENSITY. If they are used, only the final arrays 
+of the relevant type are printed. If DEBUG is supplied, then all 
+arrays are printed. This is useful in debugging ITER. DEBUG can also 
+increase the amount of output produced when a key-word is supplied, 
+e.g. COMPFG.
+4    DENOUT
+ The density matrix at the end of the calculation is to be output 
+in a form suitable for being read in in another job. If an automatic 
+dump due to the time being exceeded occurs during the current run 
+then DENOUT in invoked automatically. (see RESTART)
+4  DENSITY
+ At the end of a job, when the results are being printed, the density
+matrix is printed. For RHF the normal density matrix is printed, for
+UHF the addition of the alpha and beta density matrices is printed.
+ If DEBUG is also being used, DENSITY will output every density 
+matrix.
+4  DEP
+  When new parameters are supplied via EXTERNAL, then DEP can be used
+to generate FORTRAN-77 code to allow the new parameters to be 
+inserted into the BLOCK-DATA file.
+4 DERIV
+ Output information calculated in subroutine DERIV.
+4 DFORCE
+ For use with FORCE.  DFORCE causes the whole Hessian matrix 
+to be printed in addition to invoking a normal FORCE calculation.
+4 ECHO
+ ECHO will cause all input data to be printed before the calculation 
+is started. Intended for use with noisy phone-lines, to check
+for corrupted data.
+4 EIGS
+ Print all eigenvalues calculated in ITER.
+4  ENPART
+ A very useful tool for analysing the energy terms within a system. 
+The total energy, in eV, equal to the addition of the electronic and 
+nuclear terms is partitioned into mono- and bi-centric 
+contributions, and these contributions in turn are divided into 
+nuclear and one- and two-electron terms.  Rewritten in 1988
+by Prof. Tsuneo Hirano.
+4  ESP
+This is the ElectroStatic Potential calculation of K. M. Merz 
+and B. H. Besler.  ESP calculates the expectation values of 
+the electrostatic potential of a molecule on a uniform 
+distribution of points.  The resultant ESP surface is then 
+fitted to atom centered charges that best reproduce the 
+distribution, in a least squares sense.
+4 ESR
+  After a MECI calculation has been done, ESR will cause the
+RHF unpaired spin densities on each atom to be calculated for 
+the first few states.
+4  FLEPO
+ Details of the working of the BFGS optimization routine are 
+printed. This is useful in monitoring a geometry optimization.
+4  FMAT
+ Used in debugging. Prints details of working in FMAT.
+4 FOCK 
+ The final Fock matrix will be printed out. If DEBUG is also used 
+then every Fock matrix will be printed. This produces a lot of 
+output.
+4 GRADIENTS
+ In a 1SCF calculation gradients are not calculated by default, in 
+non-variationally optimised systems this would take an excessive
+time. GRADIENTS allows the gradients to be calculated, all gradients
+are then calculated, whether marked for calculation or not, and if 
+the gradient norm is significant, (larger than 1.0) printed.
+4 GRAPH
+ Data for an electron-density contour map program are output to a 
+special file. At present this is limited to RHF only.
+4 HCORE
+ The starting one-electron matrix and the whole of the two-electron
+integral string are printed. This is very useful in tracking bugs in
+the electronics
+4  H-PRIORITY
+In an IRC calculation, results will be printed whenever 
+the calculated heat of formation changes  by 0.1 Kcal/mole. 
+Abbreviation, H-PRIO.
+  
+  If the step-size 0.1 Kcal/mole is not suitable, the user can
+define the step size using H-PRIORITY=n.nn
+4 ITER
+ The number of iterations, SCF criterion, etc. within ITER is output.
+ ITER does not produce a large amount of output.
+4 K=(n.nn,n)
+ Used in band-structure calculations, K=(n.nn,n) specifies 
+the step-size in the Brillouin zone, and the number of atoms 
+in the monomeric unit.  Two band-structure calculations are 
+supported: electronic and phonon.  Both require a polymer to 
+be used.  If FORCE is used, a phonon spectrum is assumed, 
+otherwise an electronic band structure is assumed.  For both
+calculations, a density of states is also done.  The band 
+structure calculation is very fast, so a small step-size will 
+not use much time.  The output is designed to be fed into a 
+graphics package, and is not 'elegant'.  For polyethylene, a 
+suitable keyword would be K=(0.01,6).
+4 LARGE
+ When LARGE is specified, extended output is given provided other
+DEBUG keywords are specified. Keywords affected are: COMPFG,
+DRC, POLAR, FORCE, MECI, DEBUG.
+4 LINMIN
+ There are two line-minimization routines in MOPAC, an energy 
+minimization and a gradient norm minimization.  LINMIN will 
+output details of the line minimization used in a given job.
+4 LOCALIZE
+ The occupied eigenvectors are transformed into a localized set of 
+M.O.s by a series of 2 by 2 rotations which maximise <psi**4>. The 
+value of 1/<psi**4> is a direct measure of the number of centres 
+involved in the M.O., thus for H2 the value if 1/<psi**4> is 2.0, 
+for a three-centre bond is 3.0, and a lone pair would be 1.0. 
+Higher degeneracies than allowed by point group theory are readily 
+obtained. For example, benzene would give rise to a 6-fold degenerate
+C-H bond, a 6-fold degenerate C-C sigma bond and a three-fold 
+degenerate C-C pi bond. In principle, there is no single step method
+to unambiguously obtain the most localized set of M.O.s in systems 
+where several cannonical structures are possible, just as no simple 
+method exists for finding the most stable conformer of some large 
+compound. However, the localized bonds generated
+will normally be quite acceptable for routine applications.
+4 MECI
+ Normally when a calculation involving C.I. is done the C.I.
+secular determinant and vectors, etc. are not printed.  These are
+very useful in understanding the working of the MECI calculation,
+and can be printed at the end of the calculation by specifying
+"MECI".  The key-word VECTORS will cause the state vectors to
+be printed.  Normally only the diagonal of the secular determinant
+is printed. To print the full matrix specify "LARGE" also. Use
+this latter key-word with 1SCF only, as LARGE with MECI also means
+print the working of all calls to MECI.  (This is a logical bug 
+and I've not yet come up with a good fix - the Sec. Det. can be 
+huge and most of the time it's not wanted, but when it is, 
+DEBUG is the obvious key-word.)	
+4 MOLDAT
+ If a fault is suspected in the setting up of the atomic data 
+(initial orbital occupancies, "U" values, number of orbitals, 
+electrons, etc,) then MOLDAT should be used to check these initial 
+assignments.
+4 MS=n
+ Useful for checking the MECI calculation and for teaching.  
+MS=n overrides the normal choice of magnetic component of spin.  
+Normally, if a triplet is requested, a MS of 1 will be used; 
+this excludes all singlets.  If MS=0 is also given, then singlets 
+will also be calculated.  The use of MS should not affect the 
+values of the results at all.
+4 MULLIK
+ A Mulliken population analysis will be carried out when
+MULLIK is specified.  Only RHF analysis is provided.
+4 NOINTER
+ The interatomic distances are suppressed from the output at the 
+start and finish of the calculation.
+4 NOLOG 
+ Normally a copy of the archive file will be directed to 
+the LOG file, along with a synopsis of the job.  If this 
+is not wanted, it can be suppressed completely by NOLOG.
+4 NOXYZ
+ The cartesian coordinates are suppressed from the output at the 
+start and finish of the calculation.
+4 PI
+ The density matrix is decomposed into sigma, pi and del components.
+This is very useful when the character of the bond is in doubt.
+ The diagonal terms give the hybridization state of the atom, whether
+it is sp2 or sp3 or whatever.
+4 PL
+  Print the value(s) of PL on every iteration.
+  
+ The density matrices in ITER are compared, iteration by iteration, 
+and the absolute value of largest difference in the diagonal elements
+is stored in PL. PL is thus a measure of the self-consistency of the
+calculation. Use PL when you want to monitor the rate of convergance.
+4 POLAR
+ The polarizability and first and second hyperpolarizabilities 
+are to calculated.  At present this calculation does not work for 
+polymers, but should work for all other systems.
+ By default, an electric field gradient of 0.001 is used.  
+This can be modified by specifying POLAR=n.nnnnn, where n.nnnnn 
+is the new field.  POLAR calculates the polarizabilities from 
+the heat of formation and from the dipole.  The degree to which 
+they agree is a measure of the precision (not the accuracy) of 
+the calculation.  The results from the heat of formation
+calculation are more trustworthy than those from the dipole.
+ Users should note that the hyperpolarizabilities obtained have 
+to be divided by 2.0 for beta and 6.0 for gamma to conform with 
+experimental convention. 
+4 SPIN
+ The spin matrix, defined as the difference between the alpha and 
+beta density matrices, is to be printed. If the system has a 
+closed-shell, e.g. methane run UHF, the spin matrix will be null.
+4 TIME
+    Print times of various stages. Mainly used in subroutine ITER.
+4 T-PRIORITY
+In an IRC calculation, results will be printed whenever the 
+calculated time changes  by 0.1 femtoseconds. Abbreviation, T-PRIO.
+  If the step-size 0.1 femtoseconds is not suitable, the user can
+define the step size using T-PRIORITY=n.nn
+4   VECTORS
+ The eigenvectors are to be printed. In UHF calculations both alpha 
+and beta eigenvectors are printed, in all cases the full set, 
+occupied and virtual, are output. The eigenvectors are normalised 
+to unity, that is the sum of the squares of the coefficients is 
+exactly one. If DEBUG is specified, then ALL eigenvectors on every 
+iteration of every SCF calculation will be printed. This is useful in
+a learning context, but would normally be very undesirable. 
+4  X-PRIORITY
+In an IRC calculation, results will be printed whenever the 
+calculated geometry changes by 0.05 Angstroms. The geometry 
+change is defined as the linear sum of the translation vectors 
+of motion for all atoms in the system. Abbreviation, X-PRIO.
+  If the step-size 0.05 Angstroms is not suitable, the user can
+define the step size using X-PRIORITY=n.nn
+4 AIGOUT 
+ The ARCHIVE file contains a data-set suitable for submission 
+to MOPAC.  If, in addition to this data-set, the Z-matrix for 
+Gaussian input is wanted, then AIGOUT (ab initio geometry output), 
+should be used.  The Z-matrix is in full Gaussian form.  
+Symmetry, where present, will be correctly defined.  Names of 
+symbolics will be those used if the original geometry was in 
+Gaussian format, otherwise 'logical' names will be used.
+Logical names are of form <t><a><b>[<c>][<d>] where <t> is 
+'r' for bond length, 'a' for angle, or 'd' for dihedral, <a> 
+is the atom number, <b> is the atom to which <a> is related, <c>, 
+if present, is the atom number to which <a> makes an angle, and 
+<d>, if present, is the atom number to which <a> makes a dihedral.
+3 Working
+4 &
+ An ' &' means 'turn the next line into keywords'.  A '&' on 
+line 1 would mean that a second line of keywords should be 
+read in.  If that second line contained a ' &', then a third 
+line of keywords would be read in. If the first line has a 
+' &' then the first description line is omitted, if the
+second line has a ' &', then both description lines are omitted.
+4 +
+  A ' +' sign means 'read another line of keywords'.  Note 
+the space before the '+' sign.  Since '+' is a keyword, it 
+must be preceeded by a space.  A ' +' on line 1 would mean 
+that a second line of keywords should be read in.  If that
+second line contains a ' +', then a third line of keywords 
+will be read in.  Regardless of whether a second or a third 
+line of keywords is read in, the next two lines would be 
+description lines. 
+5 Example
+RESTART T=4D FORCE OPEN(2,2) SHIFT=20 PM3 +
+SCFCRT=1.D-8 DEBUG + ISOTOPE FMAT ECHO singlet ROOT=3
+THERMO(300,400,1) ROT=3
+Example of data set with three lines of keywords.
+NOTE: this and the previous line are descriptive.
+4 ANALYT
+ By default, diatomic finite difference derivatives are used.  If
+ANALYT is specified analytical derivatives will be used.  These
+are more precise than finite difference, but take longer.  They
+are provided as a result of user requests. 
+4  BAR
+ In the SADDLE calculation the distance between the two geometries
+ is steadily reduced until the transition state is located.
+ Sometimes, however, the user may want to alter the maximum rate 
+ at which the distance between the two geometries reduces. BAR is 
+ a ratio, normally 0.15, or 15 percent. This represents a maximum 
+ rate of reduction of the bar of 15 percent per step. Alternative 
+ values that might be considered are e.g. BAR=0.05 or BAR=0.10.
+4 DUMP
+ Automatic restart files are written periodically.  The default time
+between dumps is set at compile time.  If the default is not 
+acceptable, DUMP=nnn (nnn being time in seconds) or DUMP=nnM 
+(nn being time in minutes) can be used to define the interval at 
+which restart files are written. 
+4 EIGINV 
+ Not recommended for normal use.  Used with the EF routine.  
+See source code for more details.
+4 ESPRST
+ESPRST restarts a stopped ESP calculation. 
+Do not use with RESTART.
+4 HESS=n
+ When the Eigenvector Following routine is used for 
+geometry optimization, it frequently works faster if 
+the Hessian is constructed first.  If HESS=1 is specified, 
+the Hessian matrix will be constructed before the geometry
+is optimized.  There are other, less common, options, e.g. 
+HESS=2. See comments in subroutine EF for details.
+4 ISOTOPE
+ The FORCE matrix is very time-consuming to generate, and in isotopic
+substitution studies several vibrational calculations may be needed. 
+To allow the frequencies to be calculated from the (constant) force 
+matrix ISOTOPE is used. When a FORCE calculation is completed ISOTOPE
+will cause the force matrix 
+to be stored, regardless of whether or not any intervening restarts 
+have been made. To re-calculate the frequencies, etc, starting at the
+end of the force matrix calculation specify RESTART.
+4 IUPD
+IUPD is used only in the EF routine.  IUPD should very 
+rarely be touched.  IUPD=1 can be used in minimum searches 
+if the the message "HEREDITARY POSITIVE DEFINITENESS ENDANGERED. 
+UPDATE SKIPPED THIS CYCLE" occurs every cycle for 10-20 
+iterations. Never use IUPD=2 for a TS search! For more 
+information, read the comments in subroutine EF.
+4 LET
+ Some safety checks in MOPAC can be overridden by specifying LET.
+Currently, these are:
+ (a) In FORCE, do not optimize the geometry even if the
+     starting GNORM is large.
+ (b) In SIGMA do not recalculate the Hessian matrix even
+     if it is detected to be corrupt.
+ (c) In specifying GNORM, use the GNORM defined, even if
+     it is less than 0.0001.
+ (d) In a POLAR calculation use the supplied orientaion,
+     do not orientate the molecule along the principal axes.
+4 NOANCI 
+ RHF open-shell derivatives are normally calculated using 
+Liotard's analytical C.I. method.  If this method is NOT to 
+be used, specify NOANCI (NO ANalytical Configuration Interaction 
+derivatives).
+4  NODIIS 
+ In the event that the G-DIIS option is not wanted, NODIIS 
+can be used. The G-DIIS normally accelerates the geometry 
+optimization, but there is no guarantee that it will do so.  
+If the heat of formation rises unexpectedly (i.e. rises during 
+a geometry optimization while the GNORM is larger than about 
+0.3), then try NODIIS.
+4 NOTHIEL 
+ In a normal geometry optimization using the BFGS routine, 
+Thiel's FSTMIN technique is used.  If normal line-searches 
+are wanted, specify NOTHIEL.
+4 NSURF
+ In an ESP calculation, NSURF=n specifies the number of 
+surface layers for the Connolly surface.
+4 OLDENS
+ A density matrix produced by an earlier run of MOPAC is to be used 
+to start the current calculation.
+4 OLDGEO 
+ If multiple geometries are to be run, and the final geometry 
+from one calculation is to be used to start the next calculation, 
+OLDGEO should be specified.  Example: If a MNDO, AM1, and PM3 
+calculation were to be done on one system, for which only a 
+rough geometry was available, then after the MNDO calculation, the 
+AM1 calculation could be done using the optimized MNDO geometry as 
+the starting geometry, by specifying OLDGEO.
+4 POTWRT
+In an ESP calculation, write out surface points and 
+electrostatic potential values to UNIT 21.
+4 PRECISE
+ The criteria for terminating all optimizations, electronic and 
+geometric, are to be increased by a factor of 100. This can be used 
+where more precise results are wanted. For a FORCE calculation the 
+geometry needs to be known quite precisely, and for small systems 
+the extra cost in CPU time is minimal.  Within a FORCE calculation
+quartic contamination is removed, this leads to a marked improvement
+in the trivial modes and a small improvement in the real modes.
+4 RECALC
+ RECALC=n calculates the Hessian every n steps in the 
+EF optimization.  For small n this is costly but is also 
+very effective in terms of convergence.  RECALC=10 and 
+DMAX=0.10 can be useful for difficult cases. In extreme 
+cases RECALC=1 and DMAX=0.05 will always find a stationary 
+point, if it exists.
+4   RESTART
+ When  a job has been stopped, for whatever reason, and intermediate
+results have been stored, then the calculation can be restarted at 
+the point it stopped at by specifying RESTART. The most common cause
+of a job stopping before completion is exceeding the time allocated. 
+A saddle-point calculation has no restart, but the output file 
+contains information which can easily be used to start the 
+calculation from a point near to where it stopped.
+ The density matrix, if used, is read of channel 10.
+ The rest of the data are read of channel 9.
+4 SETUP 
+ If, on the keyword line, the word 'SETUP' is specified, then 
+one or two lines of keywords will be read from a file with the 
+logical name SETUP.  The logical file SETUP must exist, and 
+must contain at least one line.  If the second line is defined 
+by the first line as a keyword line, and the second line contains 
+the word SETUP, then one line of keywords will be read from a 
+file with the logical name SETUP.  
+4 SETUP=name 
+ Same as SETUP, only the logical or actual name of the SETUP 
+file is 'name'.
+4 STO3G
+In an ESP calculation STO3G means "Use the STO-3G basis set 
+to de-orthogonalize the semiempirical orbitals".
+4 SYMAVG
+Used by the ESP, SYMAVG will average charges which should 
+have the same value by symmetry.
+4 T=nn.nn
+ The total C.P.U. time allowed for the current job is limited to 
+nn.nn seconds. If the next cycle of the calculation cannot be 
+completed without running a risk of exceeding the assigned time the 
+calculation will write a restart file and then stop. The safety 
+margin is 100 percent, that is to do another cycle, enough time to 
+do at least two full cycles must remain.
+ Make sure that there is a space before the "T" of T=n.nnn.
+ Alternative: T=n.nnnM will define the time in minutes rather than in
+seconds. E.g.    T=60M or T=60.0M would define one hour.
+2 SHUTDOWN
+  The SHUTDOWN DCL command will cause the program to perform restart 
+logic as if the time allotment had been exceeded. This command can 
+be used to stop a calculation to examine intermediate results. 
+The calculation may be continued with the keyword RESTART.
+  If the job called BENZENE is to be stopped, then issue the command
+
+   SHUT BENZENE
+
+from the directory containing the data-file.  SHUT is machine-
+independant and works by copying the data-file into one called 
+<filename>.END.  If such a file exists and is not empty, the SECOND 
+routine will increment the apparent CPU time by 1,000,000 seconds.
+ The message which follows will indicate whether the command was 
+sucessfully issued.  At the first opportunity the job will be stopped.  
+2 HISTORY
+ Year   Program     Description
+
+ 1983  MOPAC 1.14   MNDO, MINDO/3, Geometry Optimization,
+                    Gradient Minimization, Vibrational Frequencies.
+ 1984  MOPAC 2.08   Polymers, Full C.I. SADDLE Transition locator.
+ 1985  MOPAC 3.00   Dynamic and Intrinsic Reaction Coordinates.
+ 1985  AMPAC 1.00   Same as MOPAC 3.00, but with AM1 method added,
+                    and updated parameter sets for S and Si.
+ 1986  MOPAC 3.10   AM1 added, References printed, Periodic dumps,
+                    Old parameter sets for S and Si optional.
+ 1987  MOPAC 4.00   BFGS geometry optimizer, Analytical derivatives
+                    Keyword checking, Vibrational analysis rewritten.
+ 1989  MOPAC 5.00   MNDO-PM3 method, Hyperpolarizability, Energy
+                    partition rewritten, New convergers added to SCF,
+                    AM1 Boron added, MNDO Zn added.
+ 1989  AMPAC 2.00   Same as AMPAC 1.00, but much faster and more accurate
+                    SCF-CI derivatives.
+ 1990  MOPAC 6.00   More elements available: in PM3 Be, Mg, Zn, Ga, Ge,
+                    As, Se, Cd, In, Sn, Sb, Te, Hg, Tl, Pb, Bi. Faster
+                    and more robust than Version 5.00
+2 TECHNICAL
+3 FILES
+
+    MOPAC reads one to four files, these are:
+
+ <Filename>.DAT   User-written data file. (Obligatory) Channel 5
+    SETUP         User-written keywords file (Optional, invoked by
+                  keyword SETUP) 
+ <Filename>.RES   MOPAC-written RESTART file. (Optional, invoked by 
+                  RESTART) Channel 9
+ <Filename>.DEN   MOPAC-written density matrix file. (Optional, 
+                  invoked by RESTART or by OLDENS) Channel 10
+
+    MOPAC can write between one and four files, these are:
+
+ <Filename>.OUT  Main results file, always output. Channel 6
+ <Filename>.ARC  Summary, produced if a geometry is optimised, or 
+                 1SCF is used. Channel 12
+ <Filename>.RES  Restart. Used to restart a calculation where it runs
+                 out of time. Channel 9
+ <Filename>.DEN  Density matrix. Written when it runs out of time, 
+                 or when DENOUT is used. Channel 10
+ <Filename>.LOG  Synopsis of the job. Can be suppressed by keyword
+                 NOLOG.  Channel 11
+ <Filename>.GPT  Graphics file. Written when keyword "GRAPH" is used.
+                 Channel 13
+  If the job is long (as defined in RMOPAC.COM), a mail message 
+advising the user of the job's completeion will be sent.
+
+3 CONTROL
+ Control of the MOPAC program is provided through two mechanisms.
+	1) RUNNING: There are different QUEUES which execute at
+	different priorities.  Additionally, jobs on each queue
+	may be entered with different priorities.  
+
+	2) KEYWORDS: Calculations are controlled through
+	KEYWORDS. 
+3 OUTPUT
+Output from the calculation consists of one or more files.
+They are named:
+
+	NAME		CONTENT
+	=============   ====================================
+	<filename>.OUT	Printed results of calculation.
+			This file is ALWAYS created even when
+			the calculation is not completed.
+	<filename>.ARC	Archive file is produced at end of 
+                        calculation.
+	<filename>.DEN	Density file is produced if keyword
+			DENOUT is used or when the calculation
+			runs out of time and must be restarted.
+	<filename>.RES	This is the RESTART file to continue a 
+                        calculation.
+
+	<filename>.GPT	Graphical data for use by program DENSITY.
+Additionally, the contents of the .OUT file may be selected
+or deleted with keywords.
+2 EXAMPLES
+  The examples given here illustrate some of the options
+within MOPAC.  This set illustrates new features of MOPAC 6.00
+3 Radical 
+  charge=1  gnorm=0.05 ef
+ Anilinium radical cation.  Should take about 41 SCF 
+ calculations, H.o.F. (MNDO) = 205.82 kcal/mol
+   C  
+   C    2.789092 1                               1  
+  XX    1.000000 0   90.000000 0                 2  1  
+   C    1.390994 1   59.925608 1   -1.074533 1   1  2  3
+   C    1.390946 1   59.928550 1  179.024916 1   1  2  3
+   C    1.402112 1   59.884193 1    1.154321 1   2  1  4
+   C    1.402094 1   59.882032 1  180.898337 1   2  1  4
+   H    1.094371 1   89.996513 1  180.075925 1   1  4  2
+   H    1.094940 1  119.864158 1  179.899532 1   5  1  2
+   H    1.094919 1  119.879819 1  180.100109 1   6  1  2
+   H    1.096356 1  120.649117 1  180.129596 1   7  2  1
+   H    1.096340 1  120.661625 1  179.868194 1   8  2  1
+   N    1.429954 1   89.923047 1  175.722910 1   2  3  1
+   H    0.995874 1  111.585281 1   28.683968 1  14  2  3
+   H    0.995858 1  111.578487 1  153.575643 1  14  2  3
+   0    0.000000 0    0.000000 0    0.000000 0   0  0  0
+3 +,_use_of
+ 1SCF T=23M GRADIENTS MOLDAT PL EIGS ITER TIMES C.I.=3 +
+    setup  DEBUG  MECI VECTORS ENPART
+     1SCF - TEST MNDO CALCULATION OF FORMALDEHYDE +large
+  CALCULATED HEAT OF FORMATION SHOULD BE = -39.819 KCAL
+  H    
+  C    1.1038875  1      
+  H    1.1038853  1    113.887246  1                 
+  O    1.2268927  1    123.055522  1   -179.999565  1  2  1  3 
+
+ Use with SETUP file
+
+ shift=40 camp king NOLOG
+3 &,_use_of
+
+1SCF  C.I.=2 MECI LARGE VECTORS DENSITY & HCORE FOCK ENPART  
+MULLIK LOCAL PI BONDS 1electron DEBUG GRADIENTS COMPFG denout
+  CALCULATED HEAT OF FORMATION SHOULD BE = -32.995 KCAL
+ XX    
+  H    1.000000  0 
+  C    1.106060  1  180.000000  0 
+  H    1.106071  1  112.948031  1  180.000000  0  3  2  1
+  O    1.216607  1  123.532498  1  180.000000  0  3  2  4
+ XX    0.978174  1  118.749470  1  180.000000  0  3  2  4
+  0    0.000000  0    0.000000  0    0.000000  0  0  0  0
+3 SETUP,_use_of
+
+SYMMETRY CHARGE=2 OPEN(4,3) SINGLET ROOT=6 force setup
+ Methane  Check that the extra keywords are being read 
+          in from test5.key 
+  H    0.0000000  0      0.000000  0      0.000000  0  0  0  0
+  C    1.2298156  1      0.000000  0      0.000000  0  1  0  0
+  H    1.2298156  0    109.471000  0      0.000000  0  2  1  0
+  H    1.2298156  0    109.471000  0   -120.000000  0  2  1  3
+  H    1.2298156  0    109.471000  0    120.000000  0  2  1  3
+
+   2  1    3   4   5
+ Use SETUP file
+
+  CHARGE=2 OPEN(4,3) SINGLET ROOT=6 force 
+
+3 Labels_on_atoms
+  1scf  
+ Aniline  Check that atom labels are being output.
+  
+  C(Ph-NH2)    
+  C(Atom 2)    1.4 1             1
+  C(Atom 3)    1.4 1 120 1       2 1
+  C(Atom 4)    1.4 1 120 1   0 1 3 2 1
+  C(Atom 5)    1.4 1 120 1   0 1 4 3 2
+  C(Atom 6)    1.4 1 120 1   0 1 5 4 3
+  N(Ph-NH2)    1.4 1 120 1 180 1 1 2 3
+  H(on N)      1.0 1 109 1   0 1 7 1 2
+  H(on N)      1.0 1 109 1 120 1 7 1 8
+  H(Ortho)     1.0 1 120 1 180 1 2 3 4
+  H(Meta)      1.0 1 120 1 180 1 3 4 5
+  H(Para)      1.0 1 120 1 180 1 4 5 6
+  H(Meta')     1.0 1 120 1 180 1 5 6 1
+  H(Ortho')    1.0 1 120 1 180 1 6 1 2
+3 SADDLE
+ XYZ  BAR=0.2 SADDLE  
+   SADDLE CALCULATION, CH2O - HCOH   
+  Heat of formation should be 75.7 Kcal/mol, gradient: < 10.
+  XX    0.000000  0    0.000000  0    0.000000  0   0  0  0
+   O    1.008000  1    0.000000  0    0.000000  0   1  0  0 
+   C    1.217034  1   97.664390  1    0.000000  0   2  1  0 
+   H    1.105388  1  123.492803  1    0.000000  1   3  2  1 
+   H    1.305403  1  100.509198  1  180.014148  1   3  2  1 
+  XX    0.958000  1  117.593577  1  180.000000  1   3  2  4
+   0    0.000000  0    0.000000  0    0.000000  0   0  0  0
+  XX    0.000000  0    0.000000  0    0.000000  0   0  0  0
+   O    1.008000  1    0.000000  0    0.000000  0   1  0  0 
+   C    1.299808  1  107.868467  1    0.000000  0   2  1  0 
+   H    1.109933  1  111.309147  1    0.000000  1   3  2  1 
+   H    1.886033  1   27.738198  1  180.000000  1   3  2  1 
+  XX    0.938000  1  116.447661  1  180.000000  1   3  2  4
+   0    0.000000  0    0.000000  0    0.000000  0   0  0  0
+3 Z-matrices
+4 Cartesian
+  AIGOUT 0SCF
+   Benzene
+ 
+   C    0.0000000000000  1    0.0000000000000  1    0.0000000000000  1
+   C    1.3910880000000  1    0.0000000000000  1    0.0000000000000  1
+   C    2.0866320000000  1    1.2047175468997  1    0.0000000000000  1
+   C    1.3910880000000  1    2.4094350937994  1    0.0000000000000  1
+   C    0.0000000000000  1    2.4094350937994  1    0.0000000000000  1
+   C   -0.6955440000000  1    1.2047175468997  1    0.0000000000000  1
+   H   -0.5473650000000  1   -0.9480639902849  1    0.0000000000000  1
+   H   -0.5473650000000  1    3.3574990840843  1    0.0000000000000  1
+   H    1.9384530000000  1   -0.9480639902849  1    0.0000000000000  1
+   H   -1.7902740000000  1    1.2047175468997  1    0.0000000000000  1
+   H    3.1813620000000  1    1.2047175468997  1    0.0000000000000  1
+   H    1.9384530000000  1    3.3574990840843  1    0.0000000000000  1
+4 MOPAC
+If this data set is run, it will generate the cartesian
+and Gaussian Z-matrices.
+
+  AIGOUT SYMMETRY 0SCF
+   Benzene 
+ 
+  C    0.0000000  0      5.000000  0      0.000000  0    0    0    0      0.0000
+  C    1.3910880  1      0.000000  0      0.000000  0    1    0    0      0.0000
+  C    1.3910880  0    120.000000  0      0.000000  0    2    1    0      0.0000
+  C    1.3910880  0    120.000000  0      0.000000  0    3    2    1      0.0000
+  C    1.3910880  0    120.000000  0      0.000000  0    4    3    2      0.0000
+  C    1.3910880  0    120.000000  0      0.000000  0    5    4    3      0.0000
+  H    1.0947300  1    120.000000  0    180.000000  0    1    6    5      0.0000
+  H    1.0947300  0    120.000000  0    180.000000  0    5    6    1      0.0000
+  H    1.0947300  0    120.000000  0    180.000000  0    2    1    6      0.0000
+  H    1.0947300  0    120.000000  0    180.000000  0    6    1    2      0.0000
+  H    1.0947300  0    120.000000  0    180.000000  0    3    2    1      0.0000
+  H    1.0947300  0    120.000000  0    180.000000  0    4    3    2      0.0000
+
+   2  1    3   4   5   6
+   7  1    8   9  10  11  12
+4 Gaussian
+If this data set is run, it will generate the cartesian
+and Gaussian Z-matrices.
+  AIGOUT SYMMETRY 0SCF
+   Benzene 
+ 
+  C  
+  C     1     r21    
+  C     2     r21       1  120.000000
+  C     3     r21       2  120.000000   1    0.000000   0
+  C     4     r21       3  120.000000   2    0.000000   0
+  C     5     r21       4  120.000000   3    0.000000   0
+  H     1     r71       6  120.000000   5  180.000000   0
+  H     5     r71       6  120.000000   1  180.000000   0
+  H     2     r71       1  120.000000   6  180.000000   0
+  H     6     r71       1  120.000000   2  180.000000   0
+  H     3     r71       2  120.000000   1  180.000000   0
+  H     4     r71       3  120.000000   2  180.000000   0
+
+     r21        1.391088
+     r71        1.094730

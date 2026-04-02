@@ -1,0 +1,8 @@
+This directory contains files related to docking.
+
+                             --- * ---
+
+script_demo      		Script to perform demonstration
+rigid.in        		DOCK input file for rigid ligand docking
+anchor_and_grow.in 	DOCK input file for flexible ligand docking using the anchor-and-grow algorithm
+script_clean    		Script to remove files made by script_demo

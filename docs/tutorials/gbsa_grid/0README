@@ -1,0 +1,12 @@
+This directory contains files related to scoring grid construction.
+
+                             --- * ---
+
+script_demo     			Script to perform demonstration
+nchemgrid_GB				Folder where grids for GB for Zou GBSA are calculated
+nchemgrid_SA				Folder where grids for SA for Zou GBSA are calculated
+nchemgrid_GB/INCHEM		Input parameters for NCHEMGRID_GB 
+nchemgrid_GB/cavity.pdb	Cavity pdb file (empty)
+nchemgrid_SA/INCHEM		Input parameters for NCHEMGRID_SA
+gbsa_hawkins_grid.in		Input parameters for GRID for Hawkins GBSA
+script_clean    			Script to remove files made by script_demo

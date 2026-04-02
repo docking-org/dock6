@@ -1,0 +1,166 @@
+ *******************************************************************************
+ ** FRANK J. SEILER RES. LAB., U.S. AIR FORCE ACADEMY, COLO. SPGS., CO. 80840 **
+ *******************************************************************************
+
+                                 PM3 CALCULATION RESULTS
+
+
+ *******************************************************************************
+ *          MOPAC:  VERSION  6.00               CALC'D. 31-OCT-90               
+ *  SYMMETRY - SYMMETRY CONDITIONS TO BE IMPOSED
+ *   T=      - A TIME OF  3600.0 SECONDS REQUESTED
+ *  DUMP=N   - RESTART FILE WRITTEN EVERY  3600.0 SECONDS
+ *  PM3      - THE PM3 HAMILTONIAN TO BE USED
+ *  DENOUT   - DENSITY MATRIX OUTPUT ON CHANNEL 10
+ ***********************************************************************040BY040
+
+
+
+     PARAMETER DEPENDENCE DATA
+
+        REFERENCE ATOM      FUNCTION NO.    DEPENDENT ATOM(S)
+            3                  1             4
+            3                  2             4
+
+             DESCRIPTIONS OF THE FUNCTIONS USED
+
+   1      BOND LENGTH    IS SET EQUAL TO THE REFERENCE BOND LENGTH   
+   2      BOND ANGLE     IS SET EQUAL TO THE REFERENCE BOND ANGLE    
+  PM3 DENOUT  SYMMETRY
+  Formaldehyde.  Density matrix written to disk.
+ 
+
+    ATOM   CHEMICAL  BOND LENGTH    BOND ANGLE     TWIST ANGLE
+   NUMBER  SYMBOL    (ANGSTROMS)     (DEGREES)      (DEGREES)
+    (I)                  NA:I          NB:NA:I      NC:NB:NA:I     NA   NB   NC
+
+      1      O       
+      2      C         1.20000  *                                  1
+      3      H         1.10000  *     120.00000  *                 2    1
+      4      H         1.10000        120.00000     180.00000      2    1    3
+
+
+          CARTESIAN COORDINATES 
+
+    NO.       ATOM         X         Y         Z
+
+     1         O        0.0000    0.0000    0.0000
+     2         C        1.2000    0.0000    0.0000
+     3         H        1.7500    0.9526    0.0000
+     4         H        1.7500   -0.9526    0.0000
+  H: (PM3): J. J. P. STEWART, J. COMP. CHEM. 10, 209 (1989).                    
+  C: (PM3): J. J. P. STEWART, J. COMP. CHEM. 10, 209 (1989).                    
+  O: (PM3): J. J. P. STEWART, J. COMP. CHEM. 10, 209 (1989).                    
+
+
+          RHF CALCULATION, NO. OF DOUBLY OCCUPIED LEVELS =  6
+
+
+            INTERATOMIC DISTANCES
+0
+                  O  1       C  2       H  3       H  4
+ ------------------------------------------------------
+     O    1   0.000000
+     C    2   1.200000   0.000000
+     H    3   1.992486   1.100000   0.000000
+     H    4   1.992486   1.100000   1.905256   0.000000
+ CYCLE:   1 TIME:   0.66 TIME LEFT:   3598.5 GRAD.:     2.986 HEAT:-34.071592    
+ TEST ON GRADIENT SATISFIED
+ PETERS TEST SATISFIED 
+
+ -------------------------------------------------------------------------------
+  PM3 DENOUT  SYMMETRY
+  Formaldehyde.  Density matrix written to disk.
+ 
+
+
+     PETERS TEST WAS SATISFIED IN BFGS OPTIMIZATION           
+     SCF FIELD WAS ACHIEVED                                   
+
+
+                                PM3    CALCULATION
+                                                       VERSION  6.00
+                                                       31-OCT-90               
+
+
+
+
+          FINAL HEAT OF FORMATION =        -34.08161 KCAL
+
+
+          TOTAL ENERGY            =       -442.70830 EV
+          ELECTRONIC ENERGY       =       -834.62474 EV
+          CORE-CORE REPULSION     =        391.91644 EV
+
+          IONIZATION POTENTIAL    =         10.62974
+          NO. OF FILLED LEVELS    =          6
+          MOLECULAR WEIGHT        =     30.026
+
+
+          SCF CALCULATIONS  =                5
+          COMPUTATION TIME =   2.080 SECONDS
+
+
+
+
+
+    ATOM   CHEMICAL  BOND LENGTH    BOND ANGLE     TWIST ANGLE
+   NUMBER  SYMBOL    (ANGSTROMS)     (DEGREES)      (DEGREES)
+    (I)                  NA:I          NB:NA:I      NC:NB:NA:I     NA   NB   NC
+
+      1      O       
+      2      C         1.20205  *                                  1
+      3      H         1.09125  *     121.77479  *                 2    1
+      4      H         1.09125        121.77479     180.00000      2    1    3
+
+
+            INTERATOMIC DISTANCES
+0
+                  O  1       C  2       H  3       H  4
+ ------------------------------------------------------
+     O    1   0.000000
+     C    2   1.202047   0.000000
+     H    3   2.004301   1.091252   0.000000
+     H    4   2.004301   1.091252   1.855401   0.000000
+
+
+                  EIGENVALUES
+
+ -38.12807 -24.22323 -17.14199 -16.39925 -14.33004 -10.62974   0.82745   2.70755
+   4.16116   6.66961
+
+
+              NET ATOMIC CHARGES AND DIPOLE CONTRIBUTIONS
+
+         ATOM NO.   TYPE          CHARGE        ATOM  ELECTRON DENSITY
+           1          O          -0.3101          6.3101
+           2          C           0.2971          3.7029
+           3          H           0.0065          0.9935
+           4          H           0.0065          0.9935
+ DIPOLE           X         Y         Z       TOTAL
+ POINT-CHG.     1.826     0.000     0.000     1.826
+ HYBRID         0.337     0.000     0.000     0.337
+ SUM            2.163     0.000     0.000     2.163
+
+
+          CARTESIAN COORDINATES 
+
+    NO.       ATOM               X         Y         Z
+
+     1         O                  0.0000    0.0000    0.0000
+     2         C                  1.2020    0.0000    0.0000
+     3         H                  1.7767    0.9277    0.0000
+     4         H                  1.7767   -0.9277    0.0000
+
+
+          ATOMIC ORBITAL ELECTRON POPULATIONS
+
+   1.85751   1.24388   1.91839   1.29033   1.18061   0.88707   0.92551   0.70967
+   0.99352   0.99352
+  CHANNEL 12 OPENED
+
+
+
+ TOTAL CPU TIME:             2.45 SECONDS
+
+ == MOPAC DONE ==

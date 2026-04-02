@@ -1,0 +1,39 @@
+FLAVIN-ADENINE DINUCLEOTIDE:  parmchk -f mol2 -i fad.mol2 -o fad.frcmod
+MASS
+
+BOND
+cd-ne  381.80   1.414       same as ce-ne
+
+ANGLE
+c -cd-ne   65.257     121.360   Calculated with empirical approach
+c -cd-ne   68.400     120.890   same as c -cd-n2
+cd-ne-ca   66.700     118.670   same as c2-ne-ca
+ne-cd-cd   69.300     121.150   same as cd-cd-n2
+ca-nh-cd   65.500     123.660   same as c2-nh-ca
+
+DIHE
+c -cd-ne-ca   1    0.800       180.000           2.000      same as X -ce-ne-X 
+ca-ne-cd-cd   1    0.800       180.000           2.000      same as X -ce-ne-X 
+
+IMPROPER
+c3-ca-na-cc         1.1          180.0         2.0          Using default value
+h5-na-cc-nd         1.1          180.0         2.0          Using default value
+ca-ca-ca-nd         1.1          180.0         2.0          Using default value
+ca-nb-ca-nh         1.1          180.0         2.0          Using default value
+ca-hn-nh-hn         1.1          180.0         2.0          Using default value
+h5-nb-ca-nb         1.1          180.0         2.0          Using default value
+ca-na-ca-nb         1.1          180.0         2.0          Using default value
+n -nc-c -o         10.5          180.0         2.0          General improper torsional angle (2 general atom types)
+c -c -n -hn         1.1          180.0         2.0          General improper torsional angle (2 general atom types)
+cd-n -c -o         10.5          180.0         2.0          General improper torsional angle (2 general atom types)
+c -cd-cd-ne         1.1          180.0         2.0          Using default value
+ca-ca-ca-ne         1.1          180.0         2.0          Using default value
+ca-ca-ca-ha         1.1          180.0         2.0          Using default value
+ca-ca-ca-nh         1.1          180.0         2.0          Using default value
+c3-ca-nh-cd         1.1          180.0         2.0          Using default value
+cd-nc-cd-nh         1.1          180.0         2.0          Using default value
+
+NONBON
+
+
+

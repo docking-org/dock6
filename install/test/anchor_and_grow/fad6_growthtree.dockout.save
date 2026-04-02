@@ -1,0 +1,112 @@
+
+
+
+--------------------------------------
+DOCK v6.10
+
+Released January 2023
+Copyright UCSF
+--------------------------------------
+
+
+Conformational Sampling Parameters
+------------------------------------------------------------------------------------------
+conformer_search_type                                        flex
+write_fragment_libraries                                     no
+
+Anchor & Grow Parameters
+------------------------------------------------------------------------------------------
+user_specified_anchor                                        no
+limit_max_anchors                                            no
+min_anchor_size                                              40
+pruning_use_clustering                                       yes
+pruning_max_orients                                          10
+pruning_clustering_cutoff                                    10
+pruning_conformer_score_cutoff                               25.0
+pruning_conformer_score_scaling_factor                       1.0
+use_clash_overlap                                            no
+write_growth_tree                                            yes
+Warning: Writing the growth tree increases memory usage and can generate lots of large files.
+Concatenating and compressing growth tree branches is recommended
+
+Internal Energy Parameters
+------------------------------------------------------------------------------------------
+use_internal_energy                                          yes
+internal_energy_rep_exp                                      12
+internal_energy_cutoff                                       100.0
+Note: Internal energy only includes repulsive VDW for growth and/or minimization.
+
+Molecule Library Input Parameters
+------------------------------------------------------------------------------------------
+ligand_atom_file                                             lig.mol2
+limit_max_ligands                                            no
+skip_molecule                                                no
+read_mol_solvation                                           no
+calculate_rmsd                                               no
+
+Database Filter Parameters
+------------------------------------------------------------------------------------------
+use_database_filter                                          no
+
+Orient Ligand Parameters
+------------------------------------------------------------------------------------------
+orient_ligand                                                no
+
+Bump Filter Parameters
+------------------------------------------------------------------------------------------
+bump_filter                                                  no
+
+Master Score Parameters
+------------------------------------------------------------------------------------------
+score_molecules                                              no
+
+Atom Typing Parameters
+------------------------------------------------------------------------------------------
+atom_model                                                   all
+vdw_defn_file                                                ../../../parameters/vdw_AMBER_parm99.defn
+flex_defn_file                                               ../../../parameters/flex.defn
+flex_drive_file                                              ../../../parameters/flex_drive.tbl
+
+Molecule Library Output Parameters
+------------------------------------------------------------------------------------------
+ligand_outfile_prefix                                        fad6_growthtree
+write_orientations                                           no
+num_scored_conformers                                        1
+rank_ligands                                                 no
+------------------------------------------------------------------------------------------
+
+Initializing Conformer Generator Routines...
+Initializing Library File Routines...
+
+-----------------------------------
+VERBOSE MOLECULE STATS
+
+  Number of heavy atoms = 23
+  Number of rotatable bonds = 1
+  Formal Charge = 0.000
+  Molecular Weight = 314.468
+  Heavy Atoms = 23
+-----------------------------------
+# of anchor positions: 1
+-----------------------------------
+VERBOSE GROWTH STATS : ANCHOR #1
+
+1/1 anchor orients retained (max 10) t=0s
+Lyr 1-1 Segs|number of layers:2
+Lyr:1 Seg:0 Bond:25 : Sampling 6 dihedrals C16(C.3)  C17(C.3)  C20(C.2)  C21(C.3)
+Lyr:1 Seg:0 5/6 retained, Pruning: 1-clustered  (6 in growth tree) t=0.01s
+No more anchor fragments to be docked.
+
+-----------------------------------
+Molecule: LIG1
+
+ Elapsed time for docking:	0.031 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		5
+
+
+
+1 Molecules Processed
+Total elapsed time:	0.034 seconds

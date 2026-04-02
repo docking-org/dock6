@@ -1,0 +1,2411 @@
+
+
+
+--------------------------------------
+DOCK v6.10
+
+Released January 2023
+Copyright UCSF
+--------------------------------------
+
+
+Conformational Sampling Parameters
+------------------------------------------------------------------------------------------
+conformer_search_type                                        rigid
+
+Internal Energy Parameters
+------------------------------------------------------------------------------------------
+use_internal_energy                                          no
+
+Molecule Library Input Parameters
+------------------------------------------------------------------------------------------
+ligand_atom_file                                             ncidiv_p1.0.mol2
+limit_max_ligands                                            no
+skip_molecule                                                no
+read_mol_solvation                                           no
+calculate_rmsd                                               no
+
+Database Filter Parameters
+------------------------------------------------------------------------------------------
+use_database_filter                                          yes
+dbfilter_max_heavy_atoms                                     40
+dbfilter_min_heavy_atoms                                     10
+dbfilter_max_rot_bonds                                       5
+dbfilter_min_rot_bonds                                       0
+dbfilter_max_hb_donors                                       1
+dbfilter_min_hb_donors                                       0
+dbfilter_max_hb_acceptors                                    9
+dbfilter_min_hb_acceptors                                    0
+dbfilter_max_molwt                                           400
+dbfilter_min_molwt                                           200
+dbfilter_max_formal_charge                                   1.0
+dbfilter_min_formal_charge                                   -1.0
+
+Orient Ligand Parameters
+------------------------------------------------------------------------------------------
+orient_ligand                                                no
+
+Bump Filter Parameters
+------------------------------------------------------------------------------------------
+bump_filter                                                  no
+
+Master Score Parameters
+------------------------------------------------------------------------------------------
+score_molecules                                              no
+
+Atom Typing Parameters
+------------------------------------------------------------------------------------------
+atom_model                                                   all
+vdw_defn_file                                                ../../../parameters/vdw_AMBER_parm99.defn
+flex_defn_file                                               ../../../parameters/flex.defn
+flex_drive_file                                              ../../../parameters/flex_drive.tbl
+
+Molecule Library Output Parameters
+------------------------------------------------------------------------------------------
+ligand_outfile_prefix                                        database
+write_orientations                                           no
+num_scored_conformers                                        1
+rank_ligands                                                 no
+------------------------------------------------------------------------------------------
+Initializing Library File Routines...
+
+-----------------------------------
+ Molecule:        	ZINC00065175
+ Rotatable_Bonds: 	2
+ Heavy_Atoms:     	17
+ HBond_donors:    	2
+ HBond_acceptors: 	2
+ Molecular_Weight:	221.28
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+-----------------------------------
+ Molecule:        	ZINC00092157
+ Rotatable_Bonds: 	0
+ Heavy_Atoms:     	16
+ HBond_donors:    	2
+ HBond_acceptors: 	3
+ Molecular_Weight:	229.69
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+-----------------------------------
+ Molecule:        	ZINC00041118
+ Rotatable_Bonds: 	0
+ Heavy_Atoms:     	17
+ HBond_donors:    	1
+ HBond_acceptors: 	3
+ Molecular_Weight:	221.24
+ Formal_Charge:   	1.00
+
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC01566453
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	21
+ HBond_donors:    	1
+ HBond_acceptors: 	10
+ Molecular_Weight:	289.23
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond acceptors: 10
+
+
+-----------------------------------
+ Molecule:        	ZINC01566453
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	21
+ HBond_donors:    	1
+ HBond_acceptors: 	10
+ Molecular_Weight:	289.23
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond acceptors: 10
+
+
+-----------------------------------
+ Molecule:        	ZINC01566453
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	21
+ HBond_donors:    	2
+ HBond_acceptors: 	10
+ Molecular_Weight:	290.24
+ Formal_Charge:   	2.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+Filter Rejected: Too many hydrogen bond acceptors: 10
+Filter Rejected: Formal charge too high: 2.00 > 1.00
+
+
+-----------------------------------
+ Molecule:        	ZINC01622269
+ Rotatable_Bonds: 	4
+ Heavy_Atoms:     	22
+ HBond_donors:    	1
+ HBond_acceptors: 	10
+ Molecular_Weight:	318.34
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond acceptors: 10
+
+
+-----------------------------------
+ Molecule:        	ZINC00110365
+ Rotatable_Bonds: 	1
+ Heavy_Atoms:     	20
+ HBond_donors:    	1
+ HBond_acceptors: 	8
+ Molecular_Weight:	280.31
+ Formal_Charge:   	1.00
+
+
+ Elapsed time for docking:	0.002 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC00110358
+ Rotatable_Bonds: 	1
+ Heavy_Atoms:     	20
+ HBond_donors:    	1
+ HBond_acceptors: 	7
+ Molecular_Weight:	278.33
+ Formal_Charge:   	1.00
+
+
+ Elapsed time for docking:	0.002 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC04237573
+ Rotatable_Bonds: 	1
+ Heavy_Atoms:     	9
+ HBond_donors:    	1
+ HBond_acceptors: 	2
+ Molecular_Weight:	346.89
+ Formal_Charge:   	0.00
+
+
+Filter Rejected: Not enough heavy atoms: 9 < 10
+
+
+-----------------------------------
+ Molecule:        	ZINC04430753
+ Rotatable_Bonds: 	5
+ Heavy_Atoms:     	15
+ HBond_donors:    	1
+ HBond_acceptors: 	6
+ Molecular_Weight:	227.26
+ Formal_Charge:   	-1.00
+
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC04430753
+ Rotatable_Bonds: 	6
+ Heavy_Atoms:     	15
+ HBond_donors:    	1
+ HBond_acceptors: 	6
+ Molecular_Weight:	227.26
+ Formal_Charge:   	-1.00
+
+
+Filter Rejected: Too many rotatable bonds: 6 > 5
+
+
+-----------------------------------
+ Molecule:        	ZINC04715161
+ Rotatable_Bonds: 	1
+ Heavy_Atoms:     	14
+ HBond_donors:    	2
+ HBond_acceptors: 	3
+ Molecular_Weight:	184.20
+ Formal_Charge:   	0.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+Filter Rejected: Molecular Weight too low: 184.20 < 200.00
+
+
+-----------------------------------
+ Molecule:        	ZINC05120920
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	18
+ HBond_donors:    	1
+ HBond_acceptors: 	3
+ Molecular_Weight:	237.26
+ Formal_Charge:   	0.00
+
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC05120920
+ Rotatable_Bonds: 	2
+ Heavy_Atoms:     	18
+ HBond_donors:    	0
+ HBond_acceptors: 	3
+ Molecular_Weight:	237.26
+ Formal_Charge:   	0.00
+
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC00151887
+ Rotatable_Bonds: 	0
+ Heavy_Atoms:     	15
+ HBond_donors:    	2
+ HBond_acceptors: 	3
+ Molecular_Weight:	196.23
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+Filter Rejected: Molecular Weight too low: 196.23 < 200.00
+
+
+-----------------------------------
+ Molecule:        	ZINC03832421
+ Rotatable_Bonds: 	1
+ Heavy_Atoms:     	17
+ HBond_donors:    	0
+ HBond_acceptors: 	3
+ Molecular_Weight:	223.23
+ Formal_Charge:   	-0.00
+
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC12367936
+ Rotatable_Bonds: 	2
+ Heavy_Atoms:     	21
+ HBond_donors:    	2
+ HBond_acceptors: 	5
+ Molecular_Weight:	315.18
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+-----------------------------------
+ Molecule:        	ZINC12672242
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	29
+ HBond_donors:    	2
+ HBond_acceptors: 	6
+ Molecular_Weight:	410.52
+ Formal_Charge:   	0.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+Filter Rejected: Molecular Weight too high: 410.52 > 400.00
+
+
+-----------------------------------
+ Molecule:        	ZINC12672252
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	29
+ HBond_donors:    	2
+ HBond_acceptors: 	6
+ Molecular_Weight:	410.52
+ Formal_Charge:   	0.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+Filter Rejected: Molecular Weight too high: 410.52 > 400.00
+
+
+-----------------------------------
+ Molecule:        	ZINC05647206
+ Rotatable_Bonds: 	2
+ Heavy_Atoms:     	20
+ HBond_donors:    	3
+ HBond_acceptors: 	5
+ Molecular_Weight:	263.28
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 3
+
+
+-----------------------------------
+ Molecule:        	ZINC06188101
+ Rotatable_Bonds: 	4
+ Heavy_Atoms:     	16
+ HBond_donors:    	4
+ HBond_acceptors: 	10
+ Molecular_Weight:	242.24
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 4
+Filter Rejected: Too many hydrogen bond acceptors: 10
+
+
+-----------------------------------
+ Molecule:        	ZINC13099549
+ Rotatable_Bonds: 	6
+ Heavy_Atoms:     	17
+ HBond_donors:    	3
+ HBond_acceptors: 	7
+ Molecular_Weight:	242.28
+ Formal_Charge:   	2.00
+
+
+Filter Rejected: Too many rotatable bonds: 6 > 5
+Filter Rejected: Too many hydrogen bond donors: 3
+Filter Rejected: Formal charge too high: 2.00 > 1.00
+
+
+-----------------------------------
+ Molecule:        	ZINC13099550
+ Rotatable_Bonds: 	6
+ Heavy_Atoms:     	17
+ HBond_donors:    	3
+ HBond_acceptors: 	7
+ Molecular_Weight:	242.28
+ Formal_Charge:   	2.00
+
+
+Filter Rejected: Too many rotatable bonds: 6 > 5
+Filter Rejected: Too many hydrogen bond donors: 3
+Filter Rejected: Formal charge too high: 2.00 > 1.00
+
+
+-----------------------------------
+ Molecule:        	ZINC13099551
+ Rotatable_Bonds: 	6
+ Heavy_Atoms:     	17
+ HBond_donors:    	3
+ HBond_acceptors: 	7
+ Molecular_Weight:	242.28
+ Formal_Charge:   	2.00
+
+
+Filter Rejected: Too many rotatable bonds: 6 > 5
+Filter Rejected: Too many hydrogen bond donors: 3
+Filter Rejected: Formal charge too high: 2.00 > 1.00
+
+
+-----------------------------------
+ Molecule:        	ZINC13125763
+ Rotatable_Bonds: 	2
+ Heavy_Atoms:     	17
+ HBond_donors:    	2
+ HBond_acceptors: 	4
+ Molecular_Weight:	243.29
+ Formal_Charge:   	0.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+-----------------------------------
+ Molecule:        	ZINC13125763
+ Rotatable_Bonds: 	1
+ Heavy_Atoms:     	17
+ HBond_donors:    	1
+ HBond_acceptors: 	4
+ Molecular_Weight:	243.29
+ Formal_Charge:   	0.00
+
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC13130015
+ Rotatable_Bonds: 	0
+ Heavy_Atoms:     	15
+ HBond_donors:    	6
+ HBond_acceptors: 	5
+ Molecular_Weight:	200.22
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 6
+
+
+-----------------------------------
+ Molecule:        	ZINC13130015
+ Rotatable_Bonds: 	0
+ Heavy_Atoms:     	15
+ HBond_donors:    	6
+ HBond_acceptors: 	5
+ Molecular_Weight:	200.22
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 6
+
+
+-----------------------------------
+ Molecule:        	ZINC13140234
+ Rotatable_Bonds: 	2
+ Heavy_Atoms:     	18
+ HBond_donors:    	1
+ HBond_acceptors: 	7
+ Molecular_Weight:	269.35
+ Formal_Charge:   	1.00
+
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC13143021
+ Rotatable_Bonds: 	2
+ Heavy_Atoms:     	14
+ HBond_donors:    	2
+ HBond_acceptors: 	3
+ Molecular_Weight:	189.24
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+Filter Rejected: Molecular Weight too low: 189.24 < 200.00
+
+
+-----------------------------------
+ Molecule:        	ZINC13144613
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	10
+ HBond_donors:    	1
+ HBond_acceptors: 	2
+ Molecular_Weight:	139.22
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Molecular Weight too low: 139.22 < 200.00
+
+
+-----------------------------------
+ Molecule:        	ZINC13144614
+ Rotatable_Bonds: 	6
+ Heavy_Atoms:     	18
+ HBond_donors:    	1
+ HBond_acceptors: 	7
+ Molecular_Weight:	273.33
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many rotatable bonds: 6 > 5
+
+
+-----------------------------------
+ Molecule:        	ZINC13152247
+ Rotatable_Bonds: 	5
+ Heavy_Atoms:     	25
+ HBond_donors:    	6
+ HBond_acceptors: 	6
+ Molecular_Weight:	463.15
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 6
+Filter Rejected: Molecular Weight too high: 463.15 > 400.00
+
+
+-----------------------------------
+ Molecule:        	ZINC13152249
+ Rotatable_Bonds: 	0
+ Heavy_Atoms:     	17
+ HBond_donors:    	1
+ HBond_acceptors: 	6
+ Molecular_Weight:	237.28
+ Formal_Charge:   	1.00
+
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC13152278
+ Rotatable_Bonds: 	4
+ Heavy_Atoms:     	17
+ HBond_donors:    	3
+ HBond_acceptors: 	5
+ Molecular_Weight:	235.26
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 3
+
+
+-----------------------------------
+ Molecule:        	ZINC13152279
+ Rotatable_Bonds: 	4
+ Heavy_Atoms:     	17
+ HBond_donors:    	3
+ HBond_acceptors: 	5
+ Molecular_Weight:	235.26
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 3
+
+
+-----------------------------------
+ Molecule:        	ZINC13152291
+ Rotatable_Bonds: 	2
+ Heavy_Atoms:     	21
+ HBond_donors:    	2
+ HBond_acceptors: 	8
+ Molecular_Weight:	304.35
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+-----------------------------------
+ Molecule:        	ZINC13154317
+ Rotatable_Bonds: 	5
+ Heavy_Atoms:     	13
+ HBond_donors:    	5
+ HBond_acceptors: 	8
+ Molecular_Weight:	185.17
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 5
+Filter Rejected: Molecular Weight too low: 185.17 < 200.00
+
+
+-----------------------------------
+ Molecule:        	ZINC13154321
+ Rotatable_Bonds: 	1
+ Heavy_Atoms:     	17
+ HBond_donors:    	2
+ HBond_acceptors: 	7
+ Molecular_Weight:	239.25
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+-----------------------------------
+ Molecule:        	ZINC04822288
+ Rotatable_Bonds: 	2
+ Heavy_Atoms:     	23
+ HBond_donors:    	2
+ HBond_acceptors: 	6
+ Molecular_Weight:	323.74
+ Formal_Charge:   	-0.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+-----------------------------------
+ Molecule:        	ZINC13207617
+ Rotatable_Bonds: 	1
+ Heavy_Atoms:     	14
+ HBond_donors:    	2
+ HBond_acceptors: 	5
+ Molecular_Weight:	246.14
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+-----------------------------------
+ Molecule:        	ZINC13281671
+ Rotatable_Bonds: 	1
+ Heavy_Atoms:     	14
+ HBond_donors:    	3
+ HBond_acceptors: 	3
+ Molecular_Weight:	185.21
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 3
+Filter Rejected: Molecular Weight too low: 185.21 < 200.00
+
+
+-----------------------------------
+ Molecule:        	ZINC05114817
+ Rotatable_Bonds: 	5
+ Heavy_Atoms:     	23
+ HBond_donors:    	4
+ HBond_acceptors: 	7
+ Molecular_Weight:	313.34
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 4
+
+
+-----------------------------------
+ Molecule:        	ZINC05115990
+ Rotatable_Bonds: 	6
+ Heavy_Atoms:     	17
+ HBond_donors:    	3
+ HBond_acceptors: 	7
+ Molecular_Weight:	242.28
+ Formal_Charge:   	2.00
+
+
+Filter Rejected: Too many rotatable bonds: 6 > 5
+Filter Rejected: Too many hydrogen bond donors: 3
+Filter Rejected: Formal charge too high: 2.00 > 1.00
+
+
+-----------------------------------
+ Molecule:        	ZINC13152247
+ Rotatable_Bonds: 	5
+ Heavy_Atoms:     	25
+ HBond_donors:    	6
+ HBond_acceptors: 	6
+ Molecular_Weight:	463.15
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 6
+Filter Rejected: Molecular Weight too high: 463.15 > 400.00
+
+
+-----------------------------------
+ Molecule:        	ZINC13284902
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	17
+ HBond_donors:    	3
+ HBond_acceptors: 	8
+ Molecular_Weight:	235.20
+ Formal_Charge:   	-0.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 3
+
+
+-----------------------------------
+ Molecule:        	ZINC13284902
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	17
+ HBond_donors:    	4
+ HBond_acceptors: 	8
+ Molecular_Weight:	236.21
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 4
+
+
+-----------------------------------
+ Molecule:        	ZINC04878491
+ Rotatable_Bonds: 	2
+ Heavy_Atoms:     	24
+ HBond_donors:    	3
+ HBond_acceptors: 	4
+ Molecular_Weight:	317.41
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 3
+
+
+-----------------------------------
+ Molecule:        	ZINC04213833
+ Rotatable_Bonds: 	9
+ Heavy_Atoms:     	38
+ HBond_donors:    	4
+ HBond_acceptors: 	12
+ Molecular_Weight:	520.50
+ Formal_Charge:   	0.00
+
+
+Filter Rejected: Too many rotatable bonds: 9 > 5
+Filter Rejected: Too many hydrogen bond donors: 4
+Filter Rejected: Too many hydrogen bond acceptors: 12
+Filter Rejected: Molecular Weight too high: 520.50 > 400.00
+
+
+-----------------------------------
+ Molecule:        	ZINC13597430
+ Rotatable_Bonds: 	6
+ Heavy_Atoms:     	15
+ HBond_donors:    	2
+ HBond_acceptors: 	7
+ Molecular_Weight:	214.18
+ Formal_Charge:   	0.00
+
+
+Filter Rejected: Too many rotatable bonds: 6 > 5
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+-----------------------------------
+ Molecule:        	ZINC13597738
+ Rotatable_Bonds: 	1
+ Heavy_Atoms:     	19
+ HBond_donors:    	5
+ HBond_acceptors: 	5
+ Molecular_Weight:	259.35
+ Formal_Charge:   	2.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 5
+Filter Rejected: Formal charge too high: 2.00 > 1.00
+
+
+-----------------------------------
+ Molecule:        	ZINC01481981
+ Rotatable_Bonds: 	6
+ Heavy_Atoms:     	15
+ HBond_donors:    	3
+ HBond_acceptors: 	8
+ Molecular_Weight:	215.19
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many rotatable bonds: 6 > 5
+Filter Rejected: Too many hydrogen bond donors: 3
+
+
+-----------------------------------
+ Molecule:        	ZINC01587338
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	11
+ HBond_donors:    	2
+ HBond_acceptors: 	5
+ Molecular_Weight:	156.14
+ Formal_Charge:   	0.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+Filter Rejected: Molecular Weight too low: 156.14 < 200.00
+
+
+-----------------------------------
+ Molecule:        	ZINC01653222
+ Rotatable_Bonds: 	0
+ Heavy_Atoms:     	15
+ HBond_donors:    	2
+ HBond_acceptors: 	4
+ Molecular_Weight:	199.19
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+Filter Rejected: Molecular Weight too low: 199.19 < 200.00
+
+
+-----------------------------------
+ Molecule:        	ZINC01668896
+ Rotatable_Bonds: 	1
+ Heavy_Atoms:     	17
+ HBond_donors:    	2
+ HBond_acceptors: 	7
+ Molecular_Weight:	239.25
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+-----------------------------------
+ Molecule:        	ZINC15881824
+ Rotatable_Bonds: 	2
+ Heavy_Atoms:     	10
+ HBond_donors:    	2
+ HBond_acceptors: 	2
+ Molecular_Weight:	139.22
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+Filter Rejected: Molecular Weight too low: 139.22 < 200.00
+
+
+-----------------------------------
+ Molecule:        	ZINC01688662
+ Rotatable_Bonds: 	0
+ Heavy_Atoms:     	9
+ HBond_donors:    	3
+ HBond_acceptors: 	5
+ Molecular_Weight:	165.00
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Not enough heavy atoms: 9 < 10
+Filter Rejected: Too many hydrogen bond donors: 3
+Filter Rejected: Molecular Weight too low: 165.00 < 200.00
+
+
+-----------------------------------
+ Molecule:        	ZINC15924541
+ Rotatable_Bonds: 	4
+ Heavy_Atoms:     	20
+ HBond_donors:    	7
+ HBond_acceptors: 	9
+ Molecular_Weight:	273.25
+ Formal_Charge:   	-0.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 7
+
+
+-----------------------------------
+ Molecule:        	ZINC15924541
+ Rotatable_Bonds: 	4
+ Heavy_Atoms:     	20
+ HBond_donors:    	8
+ HBond_acceptors: 	9
+ Molecular_Weight:	274.26
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 8
+
+
+-----------------------------------
+ Molecule:        	ZINC15952559
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	20
+ HBond_donors:    	3
+ HBond_acceptors: 	6
+ Molecular_Weight:	271.25
+ Formal_Charge:   	-0.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 3
+
+
+-----------------------------------
+ Molecule:        	ZINC03850501
+ Rotatable_Bonds: 	2
+ Heavy_Atoms:     	14
+ HBond_donors:    	3
+ HBond_acceptors: 	6
+ Molecular_Weight:	212.25
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 3
+
+
+-----------------------------------
+ Molecule:        	ZINC04824024
+ Rotatable_Bonds: 	4
+ Heavy_Atoms:     	17
+ HBond_donors:    	3
+ HBond_acceptors: 	5
+ Molecular_Weight:	235.26
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 3
+
+
+-----------------------------------
+ Molecule:        	ZINC04824022
+ Rotatable_Bonds: 	4
+ Heavy_Atoms:     	17
+ HBond_donors:    	3
+ HBond_acceptors: 	5
+ Molecular_Weight:	235.26
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 3
+
+
+-----------------------------------
+ Molecule:        	ZINC04879418
+ Rotatable_Bonds: 	5
+ Heavy_Atoms:     	12
+ HBond_donors:    	2
+ HBond_acceptors: 	7
+ Molecular_Weight:	169.12
+ Formal_Charge:   	-1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+Filter Rejected: Molecular Weight too low: 169.12 < 200.00
+
+
+-----------------------------------
+ Molecule:        	ZINC04879418
+ Rotatable_Bonds: 	5
+ Heavy_Atoms:     	12
+ HBond_donors:    	2
+ HBond_acceptors: 	7
+ Molecular_Weight:	169.12
+ Formal_Charge:   	-1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+Filter Rejected: Molecular Weight too low: 169.12 < 200.00
+
+
+-----------------------------------
+ Molecule:        	ZINC04877299
+ Rotatable_Bonds: 	1
+ Heavy_Atoms:     	15
+ HBond_donors:    	4
+ HBond_acceptors: 	3
+ Molecular_Weight:	201.27
+ Formal_Charge:   	2.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 4
+Filter Rejected: Formal charge too high: 2.00 > 1.00
+
+
+-----------------------------------
+ Molecule:        	ZINC05027641
+ Rotatable_Bonds: 	2
+ Heavy_Atoms:     	12
+ HBond_donors:    	2
+ HBond_acceptors: 	4
+ Molecular_Weight:	182.61
+ Formal_Charge:   	0.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+Filter Rejected: Molecular Weight too low: 182.61 < 200.00
+
+
+-----------------------------------
+ Molecule:        	ZINC05279843
+ Rotatable_Bonds: 	1
+ Heavy_Atoms:     	15
+ HBond_donors:    	4
+ HBond_acceptors: 	3
+ Molecular_Weight:	201.27
+ Formal_Charge:   	2.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 4
+Filter Rejected: Formal charge too high: 2.00 > 1.00
+
+
+-----------------------------------
+ Molecule:        	ZINC08560067
+ Rotatable_Bonds: 	2
+ Heavy_Atoms:     	21
+ HBond_donors:    	2
+ HBond_acceptors: 	8
+ Molecular_Weight:	320.42
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+-----------------------------------
+ Molecule:        	ZINC00093738
+ Rotatable_Bonds: 	1
+ Heavy_Atoms:     	21
+ HBond_donors:    	1
+ HBond_acceptors: 	7
+ Molecular_Weight:	287.30
+ Formal_Charge:   	1.00
+
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC17529946
+ Rotatable_Bonds: 	7
+ Heavy_Atoms:     	19
+ HBond_donors:    	1
+ HBond_acceptors: 	5
+ Molecular_Weight:	267.33
+ Formal_Charge:   	0.00
+
+
+Filter Rejected: Too many rotatable bonds: 7 > 5
+
+
+-----------------------------------
+ Molecule:        	ZINC17529946
+ Rotatable_Bonds: 	7
+ Heavy_Atoms:     	19
+ HBond_donors:    	1
+ HBond_acceptors: 	5
+ Molecular_Weight:	267.33
+ Formal_Charge:   	0.00
+
+
+Filter Rejected: Too many rotatable bonds: 7 > 5
+
+
+-----------------------------------
+ Molecule:        	ZINC18083898
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	15
+ HBond_donors:    	2
+ HBond_acceptors: 	9
+ Molecular_Weight:	227.23
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+-----------------------------------
+ Molecule:        	ZINC18085106
+ Rotatable_Bonds: 	6
+ Heavy_Atoms:     	22
+ HBond_donors:    	1
+ HBond_acceptors: 	6
+ Molecular_Weight:	290.33
+ Formal_Charge:   	-0.00
+
+
+Filter Rejected: Too many rotatable bonds: 6 > 5
+
+
+-----------------------------------
+ Molecule:        	ZINC18085106
+ Rotatable_Bonds: 	6
+ Heavy_Atoms:     	22
+ HBond_donors:    	2
+ HBond_acceptors: 	6
+ Molecular_Weight:	291.34
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many rotatable bonds: 6 > 5
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+-----------------------------------
+ Molecule:        	ZINC18142874
+ Rotatable_Bonds: 	1
+ Heavy_Atoms:     	19
+ HBond_donors:    	2
+ HBond_acceptors: 	7
+ Molecular_Weight:	264.31
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+-----------------------------------
+ Molecule:        	ZINC08560067
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	21
+ HBond_donors:    	1
+ HBond_acceptors: 	8
+ Molecular_Weight:	319.41
+ Formal_Charge:   	0.00
+
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC13152611
+ Rotatable_Bonds: 	4
+ Heavy_Atoms:     	21
+ HBond_donors:    	2
+ HBond_acceptors: 	8
+ Molecular_Weight:	326.47
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+-----------------------------------
+ Molecule:        	ZINC13152611
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	21
+ HBond_donors:    	3
+ HBond_acceptors: 	8
+ Molecular_Weight:	327.47
+ Formal_Charge:   	2.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 3
+Filter Rejected: Formal charge too high: 2.00 > 1.00
+
+
+-----------------------------------
+ Molecule:        	ZINC01843030
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	11
+ HBond_donors:    	4
+ HBond_acceptors: 	7
+ Molecular_Weight:	157.11
+ Formal_Charge:   	-1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 4
+Filter Rejected: Molecular Weight too low: 157.11 < 200.00
+
+
+-----------------------------------
+ Molecule:        	ZINC01843029
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	11
+ HBond_donors:    	4
+ HBond_acceptors: 	7
+ Molecular_Weight:	157.11
+ Formal_Charge:   	-1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 4
+Filter Rejected: Molecular Weight too low: 157.11 < 200.00
+
+
+-----------------------------------
+ Molecule:        	ZINC17424892
+ Rotatable_Bonds: 	4
+ Heavy_Atoms:     	20
+ HBond_donors:    	1
+ HBond_acceptors: 	3
+ Molecular_Weight:	262.29
+ Formal_Charge:   	-1.00
+
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC19362650
+ Rotatable_Bonds: 	2
+ Heavy_Atoms:     	24
+ HBond_donors:    	0
+ HBond_acceptors: 	4
+ Molecular_Weight:	356.56
+ Formal_Charge:   	-0.00
+
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC19362650
+ Rotatable_Bonds: 	2
+ Heavy_Atoms:     	24
+ HBond_donors:    	1
+ HBond_acceptors: 	4
+ Molecular_Weight:	357.56
+ Formal_Charge:   	1.00
+
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC19362651
+ Rotatable_Bonds: 	2
+ Heavy_Atoms:     	24
+ HBond_donors:    	0
+ HBond_acceptors: 	4
+ Molecular_Weight:	356.56
+ Formal_Charge:   	0.00
+
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC19362651
+ Rotatable_Bonds: 	2
+ Heavy_Atoms:     	24
+ HBond_donors:    	1
+ HBond_acceptors: 	4
+ Molecular_Weight:	357.56
+ Formal_Charge:   	1.00
+
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC19366557
+ Rotatable_Bonds: 	2
+ Heavy_Atoms:     	10
+ HBond_donors:    	4
+ HBond_acceptors: 	2
+ Molecular_Weight:	144.26
+ Formal_Charge:   	2.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 4
+Filter Rejected: Molecular Weight too low: 144.26 < 200.00
+Filter Rejected: Formal charge too high: 2.00 > 1.00
+
+
+-----------------------------------
+ Molecule:        	ZINC13125795
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	19
+ HBond_donors:    	2
+ HBond_acceptors: 	5
+ Molecular_Weight:	253.24
+ Formal_Charge:   	-1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+-----------------------------------
+ Molecule:        	ZINC18163421
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	20
+ HBond_donors:    	5
+ HBond_acceptors: 	5
+ Molecular_Weight:	266.33
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 5
+
+
+-----------------------------------
+ Molecule:        	ZINC18163421
+ Rotatable_Bonds: 	4
+ Heavy_Atoms:     	20
+ HBond_donors:    	4
+ HBond_acceptors: 	5
+ Molecular_Weight:	265.32
+ Formal_Charge:   	0.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 4
+
+
+-----------------------------------
+ Molecule:        	ZINC18189380
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	20
+ HBond_donors:    	5
+ HBond_acceptors: 	5
+ Molecular_Weight:	266.33
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 5
+
+
+-----------------------------------
+ Molecule:        	ZINC18189380
+ Rotatable_Bonds: 	4
+ Heavy_Atoms:     	20
+ HBond_donors:    	4
+ HBond_acceptors: 	5
+ Molecular_Weight:	265.32
+ Formal_Charge:   	-0.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 4
+
+
+-----------------------------------
+ Molecule:        	ZINC19701771
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	31
+ HBond_donors:    	2
+ HBond_acceptors: 	10
+ Molecular_Weight:	427.41
+ Formal_Charge:   	-0.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+Filter Rejected: Too many hydrogen bond acceptors: 10
+Filter Rejected: Molecular Weight too high: 427.41 > 400.00
+
+
+-----------------------------------
+ Molecule:        	ZINC18156788
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	19
+ HBond_donors:    	0
+ HBond_acceptors: 	2
+ Molecular_Weight:	246.29
+ Formal_Charge:   	-1.00
+
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC18056840
+ Rotatable_Bonds: 	4
+ Heavy_Atoms:     	20
+ HBond_donors:    	1
+ HBond_acceptors: 	3
+ Molecular_Weight:	262.29
+ Formal_Charge:   	-1.00
+
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC19909409
+ Rotatable_Bonds: 	0
+ Heavy_Atoms:     	16
+ HBond_donors:    	1
+ HBond_acceptors: 	3
+ Molecular_Weight:	237.39
+ Formal_Charge:   	-1.00
+
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC19909409
+ Rotatable_Bonds: 	0
+ Heavy_Atoms:     	16
+ HBond_donors:    	2
+ HBond_acceptors: 	3
+ Molecular_Weight:	238.40
+ Formal_Charge:   	-0.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+-----------------------------------
+ Molecule:        	ZINC20028475
+ Rotatable_Bonds: 	2
+ Heavy_Atoms:     	15
+ HBond_donors:    	3
+ HBond_acceptors: 	6
+ Molecular_Weight:	209.25
+ Formal_Charge:   	-0.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 3
+
+
+-----------------------------------
+ Molecule:        	ZINC04428312
+ Rotatable_Bonds: 	1
+ Heavy_Atoms:     	17
+ HBond_donors:    	1
+ HBond_acceptors: 	3
+ Molecular_Weight:	226.28
+ Formal_Charge:   	0.00
+
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC16920429
+ Rotatable_Bonds: 	2
+ Heavy_Atoms:     	17
+ HBond_donors:    	3
+ HBond_acceptors: 	6
+ Molecular_Weight:	226.22
+ Formal_Charge:   	-1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 3
+
+
+-----------------------------------
+ Molecule:        	ZINC05551091
+ Rotatable_Bonds: 	5
+ Heavy_Atoms:     	17
+ HBond_donors:    	3
+ HBond_acceptors: 	5
+ Molecular_Weight:	253.35
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 3
+
+
+-----------------------------------
+ Molecule:        	ZINC05551760
+ Rotatable_Bonds: 	5
+ Heavy_Atoms:     	17
+ HBond_donors:    	3
+ HBond_acceptors: 	5
+ Molecular_Weight:	253.35
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 3
+
+
+-----------------------------------
+ Molecule:        	ZINC13542620
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	16
+ HBond_donors:    	2
+ HBond_acceptors: 	6
+ Molecular_Weight:	215.21
+ Formal_Charge:   	0.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+-----------------------------------
+ Molecule:        	ZINC01587338
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	11
+ HBond_donors:    	1
+ HBond_acceptors: 	5
+ Molecular_Weight:	155.13
+ Formal_Charge:   	-1.00
+
+
+Filter Rejected: Molecular Weight too low: 155.13 < 200.00
+
+
+-----------------------------------
+ Molecule:        	ZINC13139308
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	15
+ HBond_donors:    	2
+ HBond_acceptors: 	5
+ Molecular_Weight:	203.18
+ Formal_Charge:   	-1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+-----------------------------------
+ Molecule:        	ZINC26730911
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	31
+ HBond_donors:    	2
+ HBond_acceptors: 	10
+ Molecular_Weight:	427.41
+ Formal_Charge:   	0.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+Filter Rejected: Too many hydrogen bond acceptors: 10
+Filter Rejected: Molecular Weight too high: 427.41 > 400.00
+
+
+-----------------------------------
+ Molecule:        	ZINC13597428
+ Rotatable_Bonds: 	4
+ Heavy_Atoms:     	14
+ HBond_donors:    	1
+ HBond_acceptors: 	5
+ Molecular_Weight:	208.29
+ Formal_Charge:   	0.00
+
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC13130187
+ Rotatable_Bonds: 	5
+ Heavy_Atoms:     	29
+ HBond_donors:    	3
+ HBond_acceptors: 	7
+ Molecular_Weight:	395.41
+ Formal_Charge:   	-0.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 3
+
+
+-----------------------------------
+ Molecule:        	ZINC13597416
+ Rotatable_Bonds: 	2
+ Heavy_Atoms:     	17
+ HBond_donors:    	3
+ HBond_acceptors: 	7
+ Molecular_Weight:	228.21
+ Formal_Charge:   	0.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 3
+
+
+-----------------------------------
+ Molecule:        	ZINC13597273
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	17
+ HBond_donors:    	1
+ HBond_acceptors: 	5
+ Molecular_Weight:	242.30
+ Formal_Charge:   	-0.00
+
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC13597273
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	17
+ HBond_donors:    	0
+ HBond_acceptors: 	5
+ Molecular_Weight:	241.30
+ Formal_Charge:   	-1.00
+
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC13597276
+ Rotatable_Bonds: 	2
+ Heavy_Atoms:     	17
+ HBond_donors:    	1
+ HBond_acceptors: 	6
+ Molecular_Weight:	226.24
+ Formal_Charge:   	0.00
+
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC13597276
+ Rotatable_Bonds: 	2
+ Heavy_Atoms:     	17
+ HBond_donors:    	2
+ HBond_acceptors: 	6
+ Molecular_Weight:	227.25
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+-----------------------------------
+ Molecule:        	ZINC13597276
+ Rotatable_Bonds: 	2
+ Heavy_Atoms:     	17
+ HBond_donors:    	2
+ HBond_acceptors: 	6
+ Molecular_Weight:	227.25
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+-----------------------------------
+ Molecule:        	ZINC13597278
+ Rotatable_Bonds: 	2
+ Heavy_Atoms:     	17
+ HBond_donors:    	1
+ HBond_acceptors: 	6
+ Molecular_Weight:	226.24
+ Formal_Charge:   	-0.00
+
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC13597219
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	18
+ HBond_donors:    	1
+ HBond_acceptors: 	6
+ Molecular_Weight:	301.20
+ Formal_Charge:   	-0.00
+
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC13597354
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	18
+ HBond_donors:    	2
+ HBond_acceptors: 	7
+ Molecular_Weight:	282.73
+ Formal_Charge:   	-1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+-----------------------------------
+ Molecule:        	ZINC15990251
+ Rotatable_Bonds: 	7
+ Heavy_Atoms:     	21
+ HBond_donors:    	5
+ HBond_acceptors: 	7
+ Molecular_Weight:	287.34
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many rotatable bonds: 7 > 5
+Filter Rejected: Too many hydrogen bond donors: 5
+
+
+-----------------------------------
+ Molecule:        	ZINC13597230
+ Rotatable_Bonds: 	9
+ Heavy_Atoms:     	21
+ HBond_donors:    	2
+ HBond_acceptors: 	7
+ Molecular_Weight:	297.35
+ Formal_Charge:   	0.00
+
+
+Filter Rejected: Too many rotatable bonds: 9 > 5
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+-----------------------------------
+ Molecule:        	ZINC13597230
+ Rotatable_Bonds: 	9
+ Heavy_Atoms:     	21
+ HBond_donors:    	1
+ HBond_acceptors: 	7
+ Molecular_Weight:	296.35
+ Formal_Charge:   	-1.00
+
+
+Filter Rejected: Too many rotatable bonds: 9 > 5
+
+
+-----------------------------------
+ Molecule:        	ZINC29589800
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	11
+ HBond_donors:    	5
+ HBond_acceptors: 	4
+ Molecular_Weight:	158.22
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 5
+Filter Rejected: Molecular Weight too low: 158.22 < 200.00
+
+
+-----------------------------------
+ Molecule:        	ZINC13597237
+ Rotatable_Bonds: 	4
+ Heavy_Atoms:     	13
+ HBond_donors:    	1
+ HBond_acceptors: 	5
+ Molecular_Weight:	200.26
+ Formal_Charge:   	0.00
+
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC15990220
+ Rotatable_Bonds: 	4
+ Heavy_Atoms:     	18
+ HBond_donors:    	5
+ HBond_acceptors: 	6
+ Molecular_Weight:	244.28
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 5
+
+
+-----------------------------------
+ Molecule:        	ZINC18193844
+ Rotatable_Bonds: 	4
+ Heavy_Atoms:     	20
+ HBond_donors:    	1
+ HBond_acceptors: 	8
+ Molecular_Weight:	312.11
+ Formal_Charge:   	-0.00
+
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC05422109
+ Rotatable_Bonds: 	1
+ Heavy_Atoms:     	15
+ HBond_donors:    	1
+ HBond_acceptors: 	3
+ Molecular_Weight:	196.21
+ Formal_Charge:   	0.00
+
+
+Filter Rejected: Molecular Weight too low: 196.21 < 200.00
+
+
+-----------------------------------
+ Molecule:        	ZINC02018030
+ Rotatable_Bonds: 	1
+ Heavy_Atoms:     	16
+ HBond_donors:    	1
+ HBond_acceptors: 	3
+ Molecular_Weight:	227.29
+ Formal_Charge:   	-0.00
+
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC13152247
+ Rotatable_Bonds: 	5
+ Heavy_Atoms:     	25
+ HBond_donors:    	6
+ HBond_acceptors: 	6
+ Molecular_Weight:	463.15
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 6
+Filter Rejected: Molecular Weight too high: 463.15 > 400.00
+
+
+-----------------------------------
+ Molecule:        	ZINC15990245
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	17
+ HBond_donors:    	5
+ HBond_acceptors: 	6
+ Molecular_Weight:	248.69
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 5
+
+
+-----------------------------------
+ Molecule:        	ZINC08637986
+ Rotatable_Bonds: 	4
+ Heavy_Atoms:     	14
+ HBond_donors:    	1
+ HBond_acceptors: 	6
+ Molecular_Weight:	213.24
+ Formal_Charge:   	-1.00
+
+
+ Elapsed time for docking:	0.000 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC17995347
+ Rotatable_Bonds: 	7
+ Heavy_Atoms:     	29
+ HBond_donors:    	2
+ HBond_acceptors: 	10
+ Molecular_Weight:	431.23
+ Formal_Charge:   	0.00
+
+
+Filter Rejected: Too many rotatable bonds: 7 > 5
+Filter Rejected: Too many hydrogen bond donors: 2
+Filter Rejected: Too many hydrogen bond acceptors: 10
+Filter Rejected: Molecular Weight too high: 431.23 > 400.00
+
+
+-----------------------------------
+ Molecule:        	ZINC05552274
+ Rotatable_Bonds: 	6
+ Heavy_Atoms:     	13
+ HBond_donors:    	3
+ HBond_acceptors: 	6
+ Molecular_Weight:	183.21
+ Formal_Charge:   	-0.00
+
+
+Filter Rejected: Too many rotatable bonds: 6 > 5
+Filter Rejected: Too many hydrogen bond donors: 3
+Filter Rejected: Molecular Weight too low: 183.21 < 200.00
+
+
+-----------------------------------
+ Molecule:        	ZINC29589907
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	16
+ HBond_donors:    	0
+ HBond_acceptors: 	2
+ Molecular_Weight:	231.36
+ Formal_Charge:   	-0.00
+
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC13130211
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	23
+ HBond_donors:    	0
+ HBond_acceptors: 	8
+ Molecular_Weight:	311.23
+ Formal_Charge:   	-3.00
+
+
+Filter Rejected: Formal charge too low: -3.00 < -1.00
+
+
+-----------------------------------
+ Molecule:        	ZINC13130211
+ Rotatable_Bonds: 	4
+ Heavy_Atoms:     	23
+ HBond_donors:    	1
+ HBond_acceptors: 	8
+ Molecular_Weight:	312.24
+ Formal_Charge:   	-2.00
+
+
+Filter Rejected: Formal charge too low: -2.00 < -1.00
+
+
+-----------------------------------
+ Molecule:        	ZINC17858074
+ Rotatable_Bonds: 	4
+ Heavy_Atoms:     	22
+ HBond_donors:    	0
+ HBond_acceptors: 	3
+ Molecular_Weight:	358.26
+ Formal_Charge:   	-1.00
+
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC17858074
+ Rotatable_Bonds: 	4
+ Heavy_Atoms:     	22
+ HBond_donors:    	0
+ HBond_acceptors: 	3
+ Molecular_Weight:	358.26
+ Formal_Charge:   	-1.00
+
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC05502368
+ Rotatable_Bonds: 	2
+ Heavy_Atoms:     	13
+ HBond_donors:    	2
+ HBond_acceptors: 	7
+ Molecular_Weight:	219.03
+ Formal_Charge:   	0.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+-----------------------------------
+ Molecule:        	ZINC13597730
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	21
+ HBond_donors:    	2
+ HBond_acceptors: 	9
+ Molecular_Weight:	303.30
+ Formal_Charge:   	0.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+-----------------------------------
+ Molecule:        	ZINC13597732
+ Rotatable_Bonds: 	7
+ Heavy_Atoms:     	25
+ HBond_donors:    	2
+ HBond_acceptors: 	9
+ Molecular_Weight:	346.34
+ Formal_Charge:   	-0.00
+
+
+Filter Rejected: Too many rotatable bonds: 7 > 5
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+-----------------------------------
+ Molecule:        	ZINC13597732
+ Rotatable_Bonds: 	7
+ Heavy_Atoms:     	25
+ HBond_donors:    	1
+ HBond_acceptors: 	9
+ Molecular_Weight:	345.33
+ Formal_Charge:   	-1.00
+
+
+Filter Rejected: Too many rotatable bonds: 7 > 5
+
+
+-----------------------------------
+ Molecule:        	ZINC13144560
+ Rotatable_Bonds: 	8
+ Heavy_Atoms:     	20
+ HBond_donors:    	1
+ HBond_acceptors: 	7
+ Molecular_Weight:	280.28
+ Formal_Charge:   	-0.00
+
+
+Filter Rejected: Too many rotatable bonds: 8 > 5
+
+
+-----------------------------------
+ Molecule:        	ZINC06511656
+ Rotatable_Bonds: 	2
+ Heavy_Atoms:     	25
+ HBond_donors:    	0
+ HBond_acceptors: 	8
+ Molecular_Weight:	372.19
+ Formal_Charge:   	-1.00
+
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+
+-----------------------------------
+ Molecule:        	ZINC05647206
+ Rotatable_Bonds: 	2
+ Heavy_Atoms:     	20
+ HBond_donors:    	3
+ HBond_acceptors: 	5
+ Molecular_Weight:	263.28
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 3
+
+
+-----------------------------------
+ Molecule:        	ZINC05647206
+ Rotatable_Bonds: 	2
+ Heavy_Atoms:     	20
+ HBond_donors:    	3
+ HBond_acceptors: 	5
+ Molecular_Weight:	263.28
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 3
+
+
+-----------------------------------
+ Molecule:        	ZINC18124911
+ Rotatable_Bonds: 	6
+ Heavy_Atoms:     	31
+ HBond_donors:    	1
+ HBond_acceptors: 	8
+ Molecular_Weight:	465.30
+ Formal_Charge:   	0.00
+
+
+Filter Rejected: Too many rotatable bonds: 6 > 5
+Filter Rejected: Molecular Weight too high: 465.30 > 400.00
+
+
+-----------------------------------
+ Molecule:        	ZINC29590289
+ Rotatable_Bonds: 	5
+ Heavy_Atoms:     	18
+ HBond_donors:    	3
+ HBond_acceptors: 	5
+ Molecular_Weight:	270.42
+ Formal_Charge:   	1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 3
+
+
+-----------------------------------
+ Molecule:        	ZINC15952559
+ Rotatable_Bonds: 	5
+ Heavy_Atoms:     	20
+ HBond_donors:    	3
+ HBond_acceptors: 	6
+ Molecular_Weight:	271.25
+ Formal_Charge:   	0.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 3
+
+
+-----------------------------------
+ Molecule:        	ZINC15952559
+ Rotatable_Bonds: 	4
+ Heavy_Atoms:     	20
+ HBond_donors:    	3
+ HBond_acceptors: 	6
+ Molecular_Weight:	271.25
+ Formal_Charge:   	-0.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 3
+
+
+-----------------------------------
+ Molecule:        	ZINC15952559
+ Rotatable_Bonds: 	4
+ Heavy_Atoms:     	20
+ HBond_donors:    	2
+ HBond_acceptors: 	6
+ Molecular_Weight:	270.24
+ Formal_Charge:   	-1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+-----------------------------------
+ Molecule:        	ZINC15952559
+ Rotatable_Bonds: 	5
+ Heavy_Atoms:     	20
+ HBond_donors:    	3
+ HBond_acceptors: 	6
+ Molecular_Weight:	271.25
+ Formal_Charge:   	-0.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 3
+
+
+-----------------------------------
+ Molecule:        	ZINC15952559
+ Rotatable_Bonds: 	4
+ Heavy_Atoms:     	20
+ HBond_donors:    	3
+ HBond_acceptors: 	6
+ Molecular_Weight:	271.25
+ Formal_Charge:   	0.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 3
+
+
+-----------------------------------
+ Molecule:        	ZINC15952559
+ Rotatable_Bonds: 	4
+ Heavy_Atoms:     	20
+ HBond_donors:    	2
+ HBond_acceptors: 	6
+ Molecular_Weight:	270.24
+ Formal_Charge:   	-1.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+-----------------------------------
+ Molecule:        	ZINC29590292
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	25
+ HBond_donors:    	2
+ HBond_acceptors: 	12
+ Molecular_Weight:	342.23
+ Formal_Charge:   	-2.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+Filter Rejected: Too many hydrogen bond acceptors: 12
+Filter Rejected: Formal charge too low: -2.00 < -1.00
+
+
+-----------------------------------
+ Molecule:        	ZINC29590292
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	25
+ HBond_donors:    	2
+ HBond_acceptors: 	12
+ Molecular_Weight:	342.23
+ Formal_Charge:   	-2.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+Filter Rejected: Too many hydrogen bond acceptors: 12
+Filter Rejected: Formal charge too low: -2.00 < -1.00
+
+
+-----------------------------------
+ Molecule:        	ZINC05487838
+ Rotatable_Bonds: 	4
+ Heavy_Atoms:     	27
+ HBond_donors:    	1
+ HBond_acceptors: 	7
+ Molecular_Weight:	403.24
+ Formal_Charge:   	-1.00
+
+
+Filter Rejected: Molecular Weight too high: 403.24 > 400.00
+
+
+-----------------------------------
+ Molecule:        	ZINC17949075
+ Rotatable_Bonds: 	4
+ Heavy_Atoms:     	27
+ HBond_donors:    	0
+ HBond_acceptors: 	7
+ Molecular_Weight:	400.22
+ Formal_Charge:   	-2.00
+
+
+Filter Rejected: Molecular Weight too high: 400.22 > 400.00
+Filter Rejected: Formal charge too low: -2.00 < -1.00
+
+
+-----------------------------------
+ Molecule:        	ZINC17949075
+ Rotatable_Bonds: 	4
+ Heavy_Atoms:     	27
+ HBond_donors:    	0
+ HBond_acceptors: 	7
+ Molecular_Weight:	400.22
+ Formal_Charge:   	-2.00
+
+
+Filter Rejected: Molecular Weight too high: 400.22 > 400.00
+Filter Rejected: Formal charge too low: -2.00 < -1.00
+
+
+-----------------------------------
+ Molecule:        	ZINC13130011
+ Rotatable_Bonds: 	4
+ Heavy_Atoms:     	19
+ HBond_donors:    	2
+ HBond_acceptors: 	6
+ Molecular_Weight:	253.26
+ Formal_Charge:   	-0.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+-----------------------------------
+ Molecule:        	ZINC13130011
+ Rotatable_Bonds: 	4
+ Heavy_Atoms:     	19
+ HBond_donors:    	2
+ HBond_acceptors: 	6
+ Molecular_Weight:	253.26
+ Formal_Charge:   	0.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+-----------------------------------
+ Molecule:        	ZINC13130011
+ Rotatable_Bonds: 	4
+ Heavy_Atoms:     	19
+ HBond_donors:    	2
+ HBond_acceptors: 	6
+ Molecular_Weight:	253.26
+ Formal_Charge:   	-0.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+-----------------------------------
+ Molecule:        	ZINC13130011
+ Rotatable_Bonds: 	4
+ Heavy_Atoms:     	19
+ HBond_donors:    	2
+ HBond_acceptors: 	6
+ Molecular_Weight:	253.26
+ Formal_Charge:   	0.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+-----------------------------------
+ Molecule:        	ZINC29590323
+ Rotatable_Bonds: 	1
+ Heavy_Atoms:     	12
+ HBond_donors:    	2
+ HBond_acceptors: 	4
+ Molecular_Weight:	171.24
+ Formal_Charge:   	2.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+Filter Rejected: Molecular Weight too low: 171.24 < 200.00
+Filter Rejected: Formal charge too high: 2.00 > 1.00
+
+
+-----------------------------------
+ Molecule:        	ZINC17970262
+ Rotatable_Bonds: 	3
+ Heavy_Atoms:     	17
+ HBond_donors:    	2
+ HBond_acceptors: 	7
+ Molecular_Weight:	250.64
+ Formal_Charge:   	0.00
+
+
+Filter Rejected: Too many hydrogen bond donors: 2
+
+
+
+164 Molecules Processed
+Total elapsed time:	0.188 seconds

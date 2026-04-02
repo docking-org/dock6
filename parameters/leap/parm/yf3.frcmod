@@ -1,0 +1,21 @@
+2-{[(4-AMINO-2-METHYLPYRIMIDIN-5-YL)METHYL]AMINO}PROPANE-1-THIOL: parmchk -f mol2 -i yf3.mol2 -o yf3.frcmod
+MASS
+
+BOND
+
+ANGLE
+nb-ca-c3   62.722     121.320   Calculated with empirical approach
+ca-c3-n3   66.152     111.475   Calculated with empirical approach
+
+DIHE
+
+IMPROPER
+c3-nb-ca-nb         1.1          180.0         2.0          Using default value
+ca-nb-ca-nh         1.1          180.0         2.0          Using default value
+ca-hn-nh-hn         1.1          180.0         2.0          Using default value
+ca-h4-ca-nb         1.1          180.0         2.0          Using default value
+
+NONBON
+
+
+

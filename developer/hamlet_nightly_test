@@ -1,0 +1,132 @@
+#!/bin/sh
+set -vx
+
+# Checkout, build, test, and benchmark Dock periodically
+# using the at batch queue.
+# This version is for hamlet only because CVSROOT is special.
+# Log files are created, eg, 
+# bench.out.2003-09-29, test.out.2003-09-29, build.out.2003-09-29
+#
+# Modify these variables for your platform:
+# base, scratch, archive, cvspath, email_recipients
+# $archive - the location for the build, test, and benchmark logs.
+#            the default is $HOME/dock/qa/`hostname`
+# $base    - used in the definition of archive.
+# $scratch - the location for temporary storage of the Dock CVS tree.
+#            the default is /tmp
+# $cvspath - the location of the cvs command.
+#            the default is /usr/bin
+# $email_recipients - the list of email addresses to send the results.
+#            the $USER
+
+build_all(){
+#
+# procedure to perform a clean build.
+# it has one argument - variable config, which specifies the config file.
+#
+echo $search_tag
+cd $DOCK_HOME/install
+make distclean 1> /dev/null
+echo "config = $config" 1> $build_output 2>&1
+./configure $config
+echo "DOCKBUILDFLAGS = $DOCKBUILDFLAGS" 1>> $build_output 2>&1
+make -e -i install 1>> $build_output 2>&1
+cat $build_output | mail -s "$script_name $config build output" $email_recipients
+echo; grep Error $build_output
+cp -p $build_output $archive/$build_output.$config.`date +%Y-%m-%d`
+}
+
+test_all(){
+#
+# procedure to perform testing.
+# it has one argument - variable config, which specifies the config file.
+#
+cd $DOCK_HOME/install
+cd test/
+echo "config = $config" 1> $build_output 2>&1
+echo "DOCKBUILDFLAGS = $DOCKBUILDFLAGS" 1>> $test_output 2>&1
+make -i all 1>> $test_output 2>&1
+make -i check 1>> $test_output
+cat $test_output | mail -s  "$script_name $config test output" $email_recipients
+# grep for lines with nonzero dif files and lines with error.
+echo; grep -E '^\.[^.]|error' $test_output
+cp -p $test_output $archive/$test_output.$config.`date +%Y-%m-%d`
+}
+
+#
+# initialize
+#
+base=$HOME/dock
+if [ ! -d $base ]; then mkdir $base; fi
+scratch=/tmp
+dock=dock6
+archive=$base/qa/`hostname`
+if [ ! -d $base/qa ]; then mkdir $base/qa; fi
+if [ ! -d $archive ]; then mkdir $archive; fi
+bench_output=bench.out
+build_output=build.out
+search_tag='@@'
+script_name=hamlet_nightly_test
+test_output=test.out
+export DOCK_HOME=$scratch/$dock
+export PATH="${DOCK_HOME}/bin:${PATH}"
+cvspath=/usr/bin
+export CVS_SERVER=$cvspath/cvs
+export CVSROOT=/usr/local/cvsroot
+export CVS_RSH=ssh
+PATH="${PATH}:${cvspath}"
+email_recipients="$USER"
+export DOCKBUILDFLAGS=''
+echo "DOCKBUILDFLAGS = $DOCKBUILDFLAGS"
+cd $scratch
+# remove in case previous night's dock did not get removed.
+rm -r $dock
+cvs -Q checkout $dock
+cd $dock
+chmod -R go-rwx *
+
+#
+# spawn
+#
+#at -m -f $DOCK_HOME/developer/$script_name 2am tomorrow
+# cd is necessary because apparently at on hamlet goes to the working
+# directory where the at command was executed even with the -f option !
+cd
+noncvslocation=/home/$USER/dock/qa/$script_name
+cp $DOCK_HOME/developer/$script_name $noncvslocation
+at -m -f $noncvslocation 2am tomorrow
+
+#
+# build with config gnu
+#
+# clean in case previous night's dock did not get removed.
+cd $DOCK_HOME/install
+make uninstall
+config=gnu
+export DELPHI_PATH=/home/terry/delphi/delphi
+build_all
+#
+# build with config gnu.parallel
+#
+config=gnu.parallel
+export MPICH_HOME=/home/terry/mpich2-install
+export PATH="${MPICH_HOME}/bin:${PATH}"
+build_all
+#
+# test everything
+#
+mpdboot
+test_all
+echo hi scott
+#
+# terminate
+#
+sleep 36000
+cd $scratch
+echo $search_tag
+cvs -Q release -d $dock << EOF
+y
+EOF
+rm -rf $dock
+
+exit

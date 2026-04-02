@@ -1,0 +1,199 @@
+#!/bin/sh
+#set -vx
+
+# Create Amber input files for a receptor from a receptor pdb file.
+# Scott Brozell and Dave Case, TSRI
+
+# define constants
+leap_log=leap.log
+on=on
+success=0
+
+# create usage statement
+usage()
+{
+cat << EOF
+Usage: $0 [-k] [-n] [-r] [-s] receptor_pdb_file_prefix
+
+Description
+       Create Amber input files from a pdb file containing only the receptor.
+       The Amber input files are necessary for the DOCK Amber Score.
+
+Options
+       -k
+              keep temporary files; the default is to remove them.
+              This option must occur before receptor_pdb_file_prefix.
+
+       -n
+              Neutralize to a total charge of zero by adding sodium and
+              chloride ions.  The default is no neutralization.
+              This option must occur before receptor_pdb_file_prefix.
+
+       -r
+              Any nucleic acids are assumed to be RNAs.
+              The default is that any nucleic acids are assumed to be DNAs.
+              This option must occur before receptor_pdb_file_prefix.
+
+       -s
+              Solvate with solvateoct x TIP3PBOX 5.0.
+              The default is no solvation.
+              This option must occur before receptor_pdb_file_prefix.
+
+Operands
+       receptor_pdb_file_prefix
+              the name of the receptor only file without its .pdb extension.
+
+Outputs
+       {receptor_pdb_file_prefix}.inpcrd
+              the Amber initial coordinates file.
+
+       {receptor_pdb_file_prefix}.log
+              verbose output from LEaP's command processing.
+
+       {receptor_pdb_file_prefix}.amber.pdb
+              the Amber compatible pdb file.
+
+       {receptor_pdb_file_prefix}.prmtop
+              the Amber force field parameters and topology file.
+
+       stdout
+              output from LEaP's command processing.
+              This should be inspected for errors, warnings, and comments.
+
+Side Effects
+       A preexisting $leap_log will be appended to and renamed.
+
+Examples
+       $0 receptor
+
+EOF
+
+status=1;
+exit "$status";
+}
+
+# process command line options
+while [ "$1" = '-k' -o "$1" = '-n' -o "$1" = '-r' -o "$1" = '-s' ]
+do
+    if [ "$1" = '-k' ] ; then
+        keep_temporary_files=$on
+    elif [ "$1" = '-n' ] ; then
+        neutralize=$on
+    elif [ "$1" = '-r' ] ; then
+        ribo_nucleic_acids=$on
+    elif [ "$1" = '-s' ] ; then
+        solvate=$on
+    fi
+    shift
+done
+
+# process remaining command line arguments
+if [ $# -eq 1 ]
+then
+    receptor_pdb_file_prefix=$1
+else
+    usage;
+fi
+echo "Using receptor file prefix: $receptor_pdb_file_prefix"
+status=$success
+
+# define input, scratch, and output file names
+input_pdb=$receptor_pdb_file_prefix.pdb
+leapin=`echo $0.leapin.$$ | sed 's@[ /]@_@g'`  # convert pathname into filename
+leapin=/tmp/$leapin
+output_inpcrd=$receptor_pdb_file_prefix.inpcrd
+output_pdb=$receptor_pdb_file_prefix.amber.pdb
+output_prmtop=$receptor_pdb_file_prefix.prmtop
+outputna_inpcrd=$receptor_pdb_file_prefix.na.inpcrd
+outputna_pdb=$receptor_pdb_file_prefix.na.amber.pdb
+outputna_prmtop=$receptor_pdb_file_prefix.na.prmtop
+outputnah2o_inpcrd=$receptor_pdb_file_prefix.na.h2o.inpcrd
+outputnah2o_pdb=$receptor_pdb_file_prefix.na.h2o.amber.pdb
+outputnah2o_prmtop=$receptor_pdb_file_prefix.na.h2o.prmtop
+
+if [ ! -f "$input_pdb" ]
+then
+    echo "Error: the input file, $input_pdb, does not exist !"
+    status=2
+fi
+[ "$status" = "$success" ] || exit "$status"
+
+# create the leap input file
+if [ "$ribo_nucleic_acids" = "$on" ]
+then
+    forcefield='leaprc.rna.ff94'
+else
+    forcefield='leaprc.ff94'
+fi
+cat << EOF > "$leapin"
+ logFile $leap_log
+ # LEaP called by $0
+ source $forcefield
+ source leaprc.gaff
+ source leaprc.dock.ions
+ source leaprc.dock.cofactors
+EOF
+if [ "$ribo_nucleic_acids" = "$on" ]
+then
+cat << EOF >> "$leapin"
+ addPdbAtomMap { { "H2*" "H2'1" } } 
+ addPdbAtomMap { { "OP1" "O1P" } } 
+ addPdbAtomMap { { "OP2" "O2P" } } 
+ addPdbAtomMap { { "H5'" "H5'1" } } 
+ addPdbAtomMap { { "'H5'" "H5'2" } } 
+EOF
+fi
+cat << EOF >> "$leapin"
+ # Begin DOCK Amber Score receptor specific processing
+ source leaprc.dock.user
+ x=loadPdb $input_pdb
+ savePdb x $output_pdb
+ saveAmberParm x $output_prmtop $output_inpcrd
+EOF
+
+if [ "$neutralize" = "$on" ]
+then
+cat << EOF >> "$leapin"
+ addions x Na+ 0
+ savePdb x $outputna_pdb
+ addions x Cl- 0
+ savePdb x $outputna_pdb.cl
+ saveAmberParm x $outputna_prmtop $outputna_inpcrd
+EOF
+fi
+if [ "$solvate" = "$on" ]
+then
+cat << EOF >> "$leapin"
+ solvateoct x TIP3PBOX 5.0
+ savePdb x $outputnah2o_pdb
+ saveAmberParm x $outputnah2o_prmtop $outputnah2o_inpcrd
+EOF
+fi
+cat << EOF >> "$leapin"
+ quit
+EOF
+
+# create the prmtop
+status=$success
+if ! (export DOCK_HOME='DOCKHOME'; 'DOCKHOME'/bin/tleap -s -f "$leapin")
+then
+    echo "Error running tleap!"
+    status=5
+fi
+if [ ! -s "$output_prmtop" ]
+then
+    echo "Error: the output file, $output_prmtop, is not complete !"
+    status=7
+fi
+if [ -f "$leap_log" ]
+then
+    mv "$leap_log" "$receptor_pdb_file_prefix.log"
+fi
+if [ "$keep_temporary_files" != "$on" ]
+then
+    /bin/rm "$leapin"
+fi
+[ "$status" = "$success" ] || exit "$status"
+
+exit 0
+

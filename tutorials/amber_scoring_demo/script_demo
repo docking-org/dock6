@@ -1,0 +1,7 @@
+#!/bin/sh
+
+echo "Running AMBER Score demo"
+cd t4lys 
+./script_demo
+cd ..
+

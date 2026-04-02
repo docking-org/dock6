@@ -1,0 +1,101 @@
+NEW IN DOCK 6.2
+
+###Grid Reading Memory Efficiency###
+   The various DOCK classes that handle grid reading and analysis have
+been refactored.  As a direct result, grids are now only read once and
+then accessed by various scoring functions, thus significantly reducing
+the memory used when multiple grid-based scoring functions are called.
+
+###Conformation Output Control###
+   In version DOCK 6.1, we forced writing of all scored conformations.
+We have since found that this option significantly increases the length
+of the calculation and can take up inappropriate amounts of disk space for
+large libraries.  Previously, the parameter num_scored_conformers_written
+controlled both the number of conformations scored by the primary scoring
+function, as well as the number of conformations written.  In the new
+release, these two functions have been decoupled into two user parameters:
+num_scored_conformers, which sets the number of conformations to be scored
+by the primary scoring function, and write_conformations, which controls
+whether these conformations will be written.  Similarly,
+num_secondary_scored_conformers_written has been decoupled into
+num_secondary_scored_conformers and write_secondary_conformations.
+These changes provide users with greater control over conformation output.
+
+###Continuous Score Distance Dependent Dielectric Control###
+   The distance dependence of the dielectric factor in the
+electrostatic term of the continuous score of DOCK can now be switched
+off via input parameter cont_score_use_dist_dep_dielectric.
+
+###Amber Score Improvements###
+   The error reporting and robustness
+of the Amber score preparation scripts have been improved.
+If any step in the amberization fails fatally then termination is immediate.
+Detection of parmchk "ATTN, needs revision" messages for missing force
+field parameters and a recovery/override mechanism for the frcmod files
+have been added.  The recovery process is described in the warning message
+and involves creating a ligand_prefix.frcmod.revised file.
+The override mechanism is the file parameters/leap/cmd/leaprc.dock.user
+that is now sourced by every amberization script.
+Automatic support for a simple treatment of metal ions based on Amber's
+ff94 has been added: parameters/leap/cmd/leaprc.dock.ions.
+A library that is automatically used has been started for common cofactors:
+parameters/leap/cmd/leaprc.dock.cofactors.
+Support for RNA receptors has been added.
+The new script prepare_rna_amber.pl differs from prepare_amber.pl
+only in that the former assumes that any nucleic acids are RNA
+whereas the latter assumes DNA.
+Minimization convergence criterion specification via input parameter
+amber_score_minimization_rmsgrad has been added.  In verbose mode
+Amber score now emits at every step (ntpr=1).
+Skipping of inadequately prepped ligands via the input parameter
+amber_score_abort_on_unprepped_ligand has been added.
+
+###Sphere Selector###
+   The total number of spheres is now unlimited, eliminating the previous
+maximum of 100000 spheres.
+
+###Miscellaneous###
+   Incremental improvements in documentation, installation, and testing.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+DEPRECATED FEATURES
+
+1.  For a variety of reasons still under active development,
+amber_score cannot effectively be used as a secondary_score.
+This function was temporarily deprecated in 6.1, and using input parameter
+amber_score_secondary causes program termination.
+The recommended protocol is to perform two DOCK runs with the second run
+specifying amber_score as the primary_score.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+BUG FIXES
+
+Some bug reports have not yet been processed, but
+several important bugs have been fixed since the last release.
+
+For DOCK:
+   Ensure all cliques are examined as orients including the last one.
+   Incorrect electrostatics with gbsa_hawkins_score_cont_vdw_and_es = yes.
+   Incorrect communication of the Amber score ligand identifier.
+   Memory leak in Amber score due to absent freeing of nab molecules.
+   Incorrect documenting and handling of the charge options in amberize_ligand.
+   Memory leak in PBSA score.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+INPUT PARAMETER CHANGES
+
+Added:
+   amber_score_minimization_rmsgrad                             0.01
+   amber_score_abort_on_unprepped_ligand                        yes
+   cont_score_use_dist_dep_dielectric                           yes
+   num_scored_conformers                                        1
+   num_secondary_scored_conformers                              1
+   write_secondary_conformations                                yes
+
+Removed:
+   num_scored_conformers_written                                1
+   num_secondary_scored_conformers_written                      1
+

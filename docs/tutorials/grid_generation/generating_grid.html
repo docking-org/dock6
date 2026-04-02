@@ -1,0 +1,202 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<title>Tutorial: Generating A Grid</title>
+<style>
+.style2 {
+	font-size: 36px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+}
+.style4 {font-family: Arial, Helvetica, sans-serif; font-size: 18px;}
+.style5 {font-family: Arial, Helvetica, sans-serif}
+-->
+</style>
+</head>
+
+
+<p align=center class="style2" style='text-align:center'><b><span
+style='font-size:27.0pt'>Generating the Grid</span></b></p>
+
+<p align=center class="style4style10" style='text-align:center'>
+<span class="style5">Authors: Tiba Aynechi and P. Therese Lang <br>
+Last updated January 27, 2023 by Scott Brozell</p>
+
+<p align="left" class="style4">
+This tutorial describes the generation of the grids used for
+grid-based scoring in DOCK.
+We study the complex L-Arabinose-Binding Protein bound to L-Arabinose
+(PDB ID 
+  <a href="https://www.rcsb.org/pdb/explore/explore.do?structureId=1abe">1ABE</a>
+) as an example system.
+However, these techniques should be transferable to any protein-ligand system.
+</p>
+
+<p class=style4>To start this tutorial, obtain the <a
+href="../struct_prep/rec_charged.mol2">rec_charged.mol2</a> and the <a
+href="../sphere_generation/selected_spheres.sph"><span class=SpellE>selected_spheres.sph</span></a>
+files from the &quot;<a href="../struct_prep/prepping_molecules.htm">Structure Preparation
+Tutorial</a>&quot; and the &quot;<a href="../sphere_generation/generating_spheres.htm">
+Sphere Generation and Selection Tutorial</a>,&quot; respectively.
+The programs showbox and grid
+that are distributed and installed with DOCK are required.
+
+
+<p class=style4>STEP 1: Creating a box around the active site. </p>
+
+<p class=style4>The interactive program <span class=SpellE>showbox</span> is
+used to visualize and <span class=GramE>define the</span> location and size of the grid to be calculated using grid.
+The output of the program is in PDB format and can be visualized using a
+program capable of displaying PDB files. When you run the program interactively, you will be presented with a set of questions below, some of which may or may not appear depending on your answer. </p>
+<p align="center" class=style4>Flow Chart of Questions for Showbox<br>
+(Red path is followed in this tutorial)</p>
+<p align="center" class=style4><img src="flow_chart.JPG" width="653" height="487" border="1">
+<p align="left" class=style4><span class=style41><span style='font-size:13.5pt'>Run the command &quot;<span
+class=SpellE><span class=GramE>showbox</span></span><span class=GramE>&quot; to generate the question tree and calculate the grid box. Alternatively, you can list the answers to the questions in a text file, which can then be piped into showbox with the command &quot;showbox &lt; <a href="box.in">box.in</a>.&quot; </span>
+    </span></span>
+<p align="left" class=style4><span class=style41><span style='font-size:13.5pt'>The output <a href="rec_box.pdb"><span class=SpellE>rec_box.pdb</span></a>
+  is shown in the graphical representation below:<o:p></o:p></span></span>
+<p align="center" class=style4><img src="box.JPG" width="408" height="284">
+<p align=center style='text-align:center'><em>Image generated using Chimera (<a
+href="https://www.cgl.ucsf.edu/chimera/">https://www.cgl.ucsf.edu/chimera</a>) </em></p>
+
+<p class=style4>STEP 2: Generating the Grid. </p>
+
+<p class=style4>Grid creates the grid files necessary for rapid score evaluation in DOCK. Two types of scoring are available: contact and energy scoring. The scoring grids are stored in files ending in *. cnt and *. nrg respectively. When docking, each scoring function is applied independent of the others and the results are written to separate output files. Grid also computes a bump grid which identifies whether a ligand atom is in severe steric overlap with a receptor atom. The bump grid is identified with a *.bmp file extension. The file containing the bump grid also stores the size, position and grid spacing of all the grids. </p>
+<p class="style4">The grid calculation must be performed prior to docking. The calculation can take up to 45 minutes, but needs to be done only once for each receptor site. Since DOCK can perform continuum scoring without a grid, the grid calculation is not always required. However, for most docking tasks, such as when multiple binding modes for a molecule or multiple molecules are considered,
+it is more time efficient to precompute the scoring grids. </p>
+<p class="style4"> This tutorial uses the grid-based energy scoring function.
+The energy scoring component of DOCK is a type of force field scoring.
+Force field scores are approximate molecular mechanics interaction energies,
+consisting of van der Waals and electrostatic components: </p>
+<p align="center" class="style4"><img src="grid_score_function.JPG" width="322" height="76">
+</p>
+<p align="left"><span class="style4">where each term is a double sum over ligand atoms i and receptor atoms j</span>. </p>
+<p class=style4>To generate the grid itself you need to use the program grid that is distributed as an accessory to DOCK
+(<em><span style='font-family:Arial'>Kuntz et al. J. Mol. Biol. 1982. 161: 269-288</span></em>).
+Using the box generated in Step 1, the program grid pre-computes the contact and electrostatic potentials for the active site at a specified grid spacing.
+In order to run grid, you must generate an input file, here named <a href="grid.in">grid.in</a>,
+either interactively by answering questions or manually by creating a text file. </p>
+<blockquote>
+  <p align="left" class="style4">Usage: grid [-i [input_file]] [-o [output_file]] [-stv] </p>
+  <p align="left" class="style4">OPTIONS:<br>
+        <strong>-i input_file</strong> #Input parameters extracted from input_file, or grid.in if not specified <br>
+        <strong>-o output_file</strong> #Output written to output_file, or grid.out if not specified<br>
+        <strong>-s</strong> #Input parameters entered interactively<br>
+        <strong>-t</strong> #Reduced output level <br>
+        <strong>-v</strong> #Increased output level </p>
+</blockquote>
+<p align="left" class="style4"> grid.in and grid.out are the
+default input/output names, but you may specify others.
+Below are the parameters that may be declared for the grid calculation.
+Those in bold were used for the calculation in this tutorial.
+</p>
+<blockquote>
+  <p class="style4">NOTE: The following parameter definitions will use the format below:</p>
+  <blockquote>
+    <p class="style4">parameter_name [default] (value):<br>
+      #description</p>
+  </blockquote>
+  <p align="left" class="style4">In some cases, parameters are only needed (questions will only be asked) if the parameter above is enforced. These parameters are indicated below by additional indentation. </p>
+  <ul>
+    <li><span class="style4"><strong>compute_grids [no] (yes, no):</strong><br>
+      #Flag to compute scoring grids
+      </span>
+      <ul>
+        <li class="style4"><strong>grid_spacing [0.3] (float):</strong><br>
+          #The distance between grid points along each axis. </li>
+      </ul>
+    </li>
+    <li><span class="style4"><strong>output_molecule [no] (yes, no):</strong><br>
+      #Flag to write out the coordinates of the receptor into a new, cleaned-up file. Atoms are <br>
+      #resorted to put all residue atoms together
+      </span>
+      <ul>
+        <li class="style4">receptor_out_file [receptor_out.mol2] (string): <br>
+          #File for cleaned-up receptor when output_molecule set </li>
+      </ul>
+    </li>
+    <li class="style4">contact_score [no] (yes, no):<br>
+      #Flag to construct contact grid </li>
+      <ul>
+        <li class="style4">contact_cutoff_distance [4.5] (float): <br>
+          #Maximum distance between heavy atoms for the interaction to be counted as a contact </li>
+      </ul>
+    <li class="style4"><strong class="style4">energy_score [no] (yes, no): </strong><br>
+      #Flag to perform energy scoring</li>
+    <li><span class="style4"><strong>energy_cutoff_distance [10] (float): </strong><br>
+      #Maximum distance between two atoms for their contribution to the energy score to be <br>
+    #computed </span></li>
+    <li class="style4"><strong>atom_model [u] (u, a):</strong><br>
+      #Flag to control modeling of nonpolar hydrogens, i.e., hydrogens attached to carbons
+    </li>
+  </ul>
+  <blockquote>
+    <blockquote>
+      <p class="style4">u = United atom model. These hydrogens are assigned a zero
+VDW well-depth and the partial charge is transferred to the carbon.<br>
+      a = All atom model. These hydrogens have regular
+VDW well-depth and the partial charge is not modified. </p>
+    </blockquote>
+  </blockquote>
+  <ul>
+    <li class="style4"><strong>attractive_exponent [6] (int): </strong><br>
+    # Exponent of attractive Lennard - Jones term for VDW potential </li>
+    <li class="style4"><strong>repulsive_exponent [12] (int): </strong><br>
+    # Repulsive of attractive Lennard - Jones term for VDW potential </li>
+    <li class="style4"><strong>distance_dielectric [yes] (yes, no): </strong><br>
+    # Flag to make the dielectric depend linearly on the distance </li>
+    <li class="style4"><strong>dielectric_factor[4.0] (float): </strong><br>
+    #Coefficient of the dielectric </li>
+    <li class="style4"><strong>bump_filter [no] (yes, no): </strong><br>
+    #Flag to screen each orientation for clashes with receptor prior to scoring and minimizing </li>
+    <li class="style4"><strong>bump_overlap [0.75] (float):</strong> <br>
+      #Amount of VDW overlap allowed. If the probe atom and the receptor heavy
+       atom approach <br>
+      #closer than this fraction of the sum of their VDW radii, then the
+       position is flagged as a bump <br>
+      <blockquote>
+        <blockquote>
+          <p>0 = Complete overlap allowed <br>
+          1 = No overlap allowed </p>
+        </blockquote>
+      </blockquote>
+    </li>
+    <li class="style4"><strong>receptor_file [receptor.mol2] (string):</strong><br>
+    #Receptor coordinate file. Partial charges and atom types need to be present. </li>
+    <li class="style4"><strong>box_file</strong> <strong>[site_box.pdb] (float):</strong><br>
+    #File containing SHOWBOX output file which specifies boundaries of grid </li>
+    <li class="style4"><strong>vdw_definition_file [vdw.defn] (string): </strong><br>
+    #VDW parameter file</li>
+    <li class="style4"><strong>score_grid_prefix [grid] (string): </strong><br>
+      #Prefix for file name of grids. File extension will be appended automatically</li>
+    <li class="style4">allow_non_integral_charges [no] (yes, no):<br>
+      #Flag to allow residues with a non integer charge during receptor input </li>
+  </ul>
+</blockquote>
+<p class=style4>NOTE: You should specify the
+    full paths for the <a href="../struct_prep/rec_charged.mol2">rec_charged.mol2</a>, <a href="rec_box.pdb">rec_box.pdb</a> and vdw definition files. 
+A more detailed explanation of the scoring functions and the input parameters
+can be found in the <a href="../../dock6_manual.htm#Grid">DOCK 6 Manual</a>.
+</p>
+<p class=style4>The program will generate
+separate grid files for the contact, energy and bump calculations,
+with .<span class=SpellE>cnt</span>, .<span class=SpellE>nrg</span>, and .bmp extensions
+respectively.
+In this example, the grid files are named using the prefix 'grid' specified in
+<span class=SpellE>grid.in</span>:
+<a href="grid.nrg">grid.nrg</a> and <a href="grid.bmp">grid.bmp</a>.
+The DOCK grid files are binary files.
+Since <a href="https://en.wikipedia.org/wiki/Binary_file">binary files</a>
+are platform dependent, the energy and bump grids available for download here
+may not be compatible with your platform.
+For reference these were produced on x86_64 hardware running Linux with GNU
+4.1.2 compilers.
+There is also an output file named
+<a href="grid.out"><span class=SpellE>grid.out</span></a>
+summarizing the parameters used and the grids generated.
+Be sure to read this file and investigate any warnings.
+</p>
+
+</body>
+
+</html>

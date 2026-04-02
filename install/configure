@@ -1,0 +1,189 @@
+#!/bin/sh
+#set -vx
+
+#  Define parameters
+CONFIGURATIONS=../install
+CONFIG_COMMAND=`basename $0`
+CONFIG_FILE=config.h
+CREATION_STAMP='# Created at'
+DOCK_VERSION=`cat ../src/dock/version.h | grep DOCK_VERSION | cut -d'"' -f2`
+OPTION_SEPARATOR='.'
+OPTION_SEPARATOR_REGULAR_EXPRESSION='\.'
+
+
+#  Create usage statement
+usage(){
+cat << EOF
+
+Usage: $CONFIG_COMMAND [-help] [compiler/platform [parallel] ]
+
+Installation Summary
+      $CONFIG_COMMAND is the first step in the installation of $DOCK_VERSION.
+      For many users gnu will be the correct configuration file, e.g.:
+      ./$CONFIG_COMMAND gnu
+      The second step is to build the desired DOCK executable(s), e.g.,
+      use this command to build all the serial DOCK executables:
+      make all    # builds all the DOCK programs
+      The third step is to test the desired DOCK executable(s), e.g.:
+      make test   # tests all the DOCK programs
+      See the documentation for optional additional steps.
+
+      Note that most initial installation problems are due to unavailable
+      or fouled tools, especially compilers; verify that your compilers
+      work before installing DOCK.  And most platform idiosyncrasies can
+      and should be corrected by editing the install/config.h, as opposed
+      to editing the original configuration file, e.g., install/gnu.
+
+Description
+      Create the DOCK configuration file, $CONFIGURATIONS/$CONFIG_FILE,
+      by copying an existing configuration file that is selected using
+      the arguments.
+      When invoked without arguments, print this usage statement and
+      if the configuration file exists then print its creation stamp.
+      Some configuration files require that environment variables be
+      defined; these requirements are listed in the files and emitted
+      by $CONFIG_COMMAND.  Some configuration files contain 
+      troubleshooting sections that describe corrective measures
+      for common difficulties.
+
+Options
+      -help
+              emit the usage statement.
+
+Notes
+      Configuration filename completion is not supported:
+      if there is only one config file for e.g., sunos, say,
+      sunos.parallel, then all arguments to $CONFIG_COMMAND are required:
+      $CONFIG_COMMAND sunos parallel
+
+Available configurations are
+EOF
+
+set echo
+cd $CONFIGURATIONS
+ls -1 | \
+        grep -v $CONFIG_FILE | grep -v $CONFIG_COMMAND | grep -v CVS | \
+        grep -v Makefile | grep -v rules.h | grep -v test | \
+        sed "s/$OPTION_SEPARATOR_REGULAR_EXPRESSION/ /g"
+echo
+exit 1
+}
+
+
+#  Process arguments
+invocation="$0 $*"
+
+if [ $# -lt 1 ]; then
+    if [ -f $CONFIGURATIONS/$CONFIG_FILE ]; then
+        echo
+        echo "The configuration file exists with the creation stamp:"
+        grep "$CREATION_STAMP" $CONFIGURATIONS/$CONFIG_FILE 
+    fi
+    usage
+fi
+if [ $1 = '-h' -o $1 = help -o $1 = '-help' -o $1 = '--help' -o \
+                  $1 = HELP -o $1 = '-HELP' -o $1 = '--HELP' ]; then
+    usage
+fi
+config=$1
+shift
+find $CONFIGURATIONS -name "$config" -print \
+        -o -name "$config${OPTION_SEPARATOR}*" -print |
+        grep "$config" 1> /dev/null 2>&1 \
+||
+{
+    echo
+    echo "Error: No configuration file found for the platform:"
+    echo "    $config"
+    usage
+}
+
+# Configuration filename completion is not supported; see usage.
+if [ $# -eq 0 ]
+then
+    find $CONFIGURATIONS -name "$config" -print |
+            grep "$config" 1> /dev/null 2>&1 \
+    ||
+    {
+        echo
+        echo "Error: Insufficient arguments for this platform:"
+        echo "    $config"
+        usage
+    }
+fi
+
+while [ $# -gt 0 ]; do
+    config=$config${OPTION_SEPARATOR}$1
+    find $CONFIGURATIONS -name "$config" -print \
+            -o -name "$config.*" -print |
+            grep "$config" 1> /dev/null 2>&1 \
+    ||
+    {
+        echo
+        echo "Error: No configuration file found for the arguments:"
+        echo "    $config" | sed "s/$OPTION_SEPARATOR_REGULAR_EXPRESSION/ /g"
+        usage
+    }
+    shift
+done
+
+# Configuration filename completion is not supported; see usage.
+find $CONFIGURATIONS -name "$config" -print |
+        grep "$config" 1> /dev/null 2>&1 \
+||
+{
+    echo
+    echo "Error: Insufficient arguments specified!"
+    echo "    The generated configuration filename is not complete:"
+    echo "    $config"
+    usage
+}
+
+echo "The requested configuration file was found."
+
+
+# Warn if a configuration file already exists
+if [ -f $CONFIGURATIONS/$CONFIG_FILE ]; then
+    echo
+    echo "Warning: the configuration file already exists" \
+         "with the creation stamp:"
+    grep "$CREATION_STAMP" $CONFIGURATIONS/$CONFIG_FILE 
+    echo "It will be overwritten !"
+    echo
+    echo "Don't forget to make clean before rebuilding."
+    echo "To reconfigure and rebuild everything start with" \
+         "make distclean:"
+    echo "Reconfiguring after make distclean will avoid this warning."
+    echo
+fi
+
+#  Create CONFIG_FILE
+cp $CONFIGURATIONS/$config $CONFIGURATIONS/$CONFIG_FILE
+
+#  Add a DOCKHOME variable that can be used to hard-wire file locations
+#  into amber_score scripts:
+cd ..
+DOCKHOME=`pwd`
+cd install
+echo "DOCKHOME=${DOCKHOME}" >> $CONFIGURATIONS/$CONFIG_FILE
+
+#  Create bin directory
+if [ ! -d ../bin ]; then
+    mkdir ../bin
+fi
+
+#  Add a date and time stamp:
+date_and_time=`date`
+echo "$CREATION_STAMP $date_and_time via $invocation" \
+    >> $CONFIGURATIONS/$CONFIG_FILE
+
+echo "The DOCK configuration file has been created."
+
+#  Emit the requirements section
+cat $CONFIGURATIONS/$CONFIG_FILE |
+    sed -n '/REQUIREMENT/,/END.REQUIREMENT/p' |
+    sed 's/^#//' |
+    sed '/END.REQUIREMENT/d'
+
+exit
+

@@ -1,0 +1,498 @@
+    
+  ___________________DelPhi II____________________  
+ /                                                 
+ | A program to solve the PB equation             | 
+ | in 3D, using non-linear form, incorporating    | 
+ | 2 dielectric regions, ionic strength, periodic | 
+ | and focussing boundary conditions, utilizing   | 
+ | stripped optimum successive over-relaxation    | 
+ | and an improved algorithm for mapping the      | 
+ | Mol. Surface to the finite-Difference grid     | 
+ __________________          ____________________/ 
+                     DelPhi II                      
+   
+  program started on Fri Dec  8 2006
+              at 02:12:55
+ opening parameter file fort.10
+ atom radii read from file
+ fort.11
+  
+ ! default extended atom radii based loosely                 
+ ! on mike connolly's MS program- note H's are 0             
+ # of radius parameter records:          17
+  
+ atomic charges read from file
+ fort.12
+  
+ ! amber charges, based on kollman, weiner et al             
+ ! j. comp chem, vol 7, p 230 (1986)                         
+ # of charge parameter records:         974
+ assigning charges and radii...
+  
+ opening formatted file:fort.13
+ number of atoms read in =         1662
+  
+!!! WARNING: LYS   51 has a net charge of   0.0200
+!!! WARNING: NDP  162 has a net charge of   0.4860
+!!! WARNING: NDP  163 has a net charge of  -0.5210
+!!! WARNING: WAT    1 has a net charge of  -0.8340
+!!! WARNING: WAT    2 has a net charge of   0.4170
+!!! WARNING: WAT    3 has a net charge of   0.4170
+  
+ time to read in and/or assign rad/chrg=  5.9999999E-02
+   
+ grid size                  :          65
+ scale,in grids/A, set to be:  0.2414821    
+ object centred at (gu)     :  0.0000000E+00  0.0000000E+00  0.0000000E+00
+ inner,outer dielectrics    :   2.000000       78.00000    
+ ionic strength (M)         :  0.1000000    
+ debye length (A)           :   9.635460    
+ ion exclusion radius (A)   :   2.000000    
+ probe radius (A)           :   1.400000    
+ boundary conditions        : dipolar  
+ x,y,z periodic bc. flags   : F F F
+ # of linear iterations     :          50
+ # of non-linear iterations :           0
+ concentration map output   : F
+ spherical charge distbn.   : F
+ INSIGHT format output      : F
+ site potential output      : F
+ modified atom file output  : F
+ map file label             :
+qdiffxas: qdiffxs4 with an improved surfacing routine       
+  convergence graph turned off
+  potential listings turned off
+  
+   
+ box fill      (%):   20.00000    
+ xmin,xmax     (A):  -25.61900       27.38700    
+ ymin,ymax     (A):   2.308000       47.06100    
+ zmin,zma      (A): -0.8900000       47.04000    
+ x,y,z range   (A):    53.00600       44.75300       47.93000    
+ scale   (grids/A):   0.2414821    
+ object centre (A):   0.8840008       24.68450       23.07500    
+ number of atom coordinates read  :         1662
+ total number of charged atoms    :         1585
+ net assigned charge              :   -1.014998    
+ assigned positive charge         :    258.1924    
+ centred at (gu) :   32.83821       33.57947       33.06157    
+ assigned negative charge         :   -259.2073    
+ centred at (gu) :   32.86544       33.54877       33.10200    
+    
+ start vw surface at   5.9999999E-02
+ fill in re-entrant regions at   5.9999999E-02
+ boundary points on vw surface=          446
+ nv =           96 ne =           84
+ npr =        32076
+ no. pairs analyzed =        32076
+ no. exposed pairs  =         2163
+ no. arc points  =        15527
+ no. surface atoms  =          727 nbur =          935
+ mkacc time =   0.1700000    
+ writing accessible surface arcs data to file ARCDAT
+ initial cube size too small, 
+ in assigning accessible points to a grid
+ therefore rescaling...
+ grid for indexing accessible points =    1.512000    
+ m=            3 mr =          152
+ m=            0 mr =            0
+ time to grow re-entrant surface =   0.1900000    
+ no. cavity mid-points inaccessible to solvent =            0
+ scaling boundary grid points
+ % of contact boundary points =    45.45454    
+ time taken =   6.0000002E-02
+            1 points had to be assigned by global comparison
+ time to turn everything in is  0.2500000    
+ number of dielectric boundary points         297
+ no. dielectric boundary points in salt =            0
+ no. grid points charged and at boundary=         590
+ ##          293 charges are in solution ##
+ iepsmp to db, and charging done at  0.2600000    
+ number of grid points assigned charge         774
+  
+   setting boundary conditions
+  
+  some initial phi values: 
+  midg,midg,1; midg,midg,igrid 
+   2.0685457E-07 -3.5418068E-07
+  midg,1,midg; midg,igrid,midg 
+  -2.0822354E-07  1.9841893E-07
+  1,midg,midg; igrid,midg,midg 
+   1.3458181E-07 -2.3219748E-07
+  
+ gauss-seidel spectral radius is  0.9397475    
+  
+ estimated iterations to convergence          35
+   
+ setup time was (sec)   0.2700000    
+   
+ now iterating at: 02:12:56
+  
+  
+   rms-change     max change       #iterations
+   5.0292332E-03  0.6440191     at           10iterations
+   2.7977241E-05  3.3903122E-03 at           20iterations
+   1.7093139E-07  2.2888184E-05 at           30iterations
+   2.3525969E-08  3.8146973E-06 at           40iterations
+   2.7087276E-08  7.6293945E-06 at           50iterations
+ finished qdiffx linear iterations
+ at                       : 02:12:56
+ total time elapsed so far:   0.5100000    
+ # loops                  :           50
+ mean,max change (kT/e)   :   2.7087276E-08  7.6293945E-06
+total s.charge =    -0.1090
+ corrected reaction field energy:        -1013.056     kt
+  
+ energy calculations done at  0.5300000    
+   
+ writing potential map in DELPHI format
+   
+ potential map written to file
+ fort.14                                                                         
+   
+   
+ total cpu time was (sec)   0.5300000    
+   
+ DelPhi exited at 02:12:56
+0.530u 0.050s 0:00.57 101.7%	0+0k 0+0io 132pf+0w
+    
+  ___________________DelPhi II____________________  
+ /                                                 
+ | A program to solve the PB equation             | 
+ | in 3D, using non-linear form, incorporating    | 
+ | 2 dielectric regions, ionic strength, periodic | 
+ | and focussing boundary conditions, utilizing   | 
+ | stripped optimum successive over-relaxation    | 
+ | and an improved algorithm for mapping the      | 
+ | Mol. Surface to the finite-Difference grid     | 
+ __________________          ____________________/ 
+                     DelPhi II                      
+   
+  program started on Fri Dec  8 2006
+              at 02:12:56
+ opening parameter file fort.10
+ atom radii read from file
+ fort.11
+  
+ ! default extended atom radii based loosely                 
+ ! on mike connolly's MS program- note H's are 0             
+ # of radius parameter records:          17
+  
+ atomic charges read from file
+ fort.12
+  
+ ! amber charges, based on kollman, weiner et al             
+ ! j. comp chem, vol 7, p 230 (1986)                         
+ # of charge parameter records:         974
+ assigning charges and radii...
+  
+ opening formatted file:fort.13
+ number of atoms read in =         1662
+  
+!!! WARNING: LYS   51 has a net charge of   0.0200
+!!! WARNING: NDP  162 has a net charge of   0.4860
+!!! WARNING: NDP  163 has a net charge of  -0.5210
+!!! WARNING: WAT    1 has a net charge of  -0.8340
+!!! WARNING: WAT    2 has a net charge of   0.4170
+!!! WARNING: WAT    3 has a net charge of   0.4170
+  
+ time to read in and/or assign rad/chrg=  5.9999999E-02
+   
+ grid size                  :          65
+ scale,in grids/A, set to be:  0.7244463    
+ object centred at (gu)     :  0.0000000E+00  0.0000000E+00  0.0000000E+00
+ inner,outer dielectrics    :   2.000000       78.00000    
+ ionic strength (M)         :  0.1000000    
+ debye length (A)           :   9.635460    
+ ion exclusion radius (A)   :   2.000000    
+ probe radius (A)           :   1.400000    
+ boundary conditions        : focussing
+ x,y,z periodic bc. flags   : F F F
+ # of linear iterations     :         120
+ # of non-linear iterations :           0
+ concentration map output   : F
+ spherical charge distbn.   : F
+ INSIGHT format output      : F
+ site potential output      : F
+ modified atom file output  : F
+ map file label             :
+qdiffxas: qdiffxs4 with an improved surfacing routine       
+  convergence graph turned off
+  potential listings turned off
+  
+   
+ box fill      (%):   60.00000    
+ xmin,xmax     (A):  -25.61900       27.38700    
+ ymin,ymax     (A):   2.308000       47.06100    
+ zmin,zma      (A): -0.8900000       47.04000    
+ x,y,z range   (A):    53.00600       44.75300       47.93000    
+ scale   (grids/A):   0.7244463    
+ object centre (A):   0.8840008       24.68450       23.07500    
+ number of atom coordinates read  :         1662
+ total number of charged atoms    :         1585
+ net assigned charge              :   -1.014998    
+ assigned positive charge         :    258.1924    
+ centred at (gu) :   32.51468       34.73848       33.18476    
+ assigned negative charge         :   -259.2073    
+ centred at (gu) :   32.59639       34.64646       33.30601    
+    
+ start vw surface at   7.0000000E-02
+ fill in re-entrant regions at   9.0000004E-02
+ boundary points on vw surface=         6277
+ reading accessible surface arcs data from file ARCDAT    
+ no. of arc points read =        15527
+ grid for indexing accessible points =    1.400000    
+ m=          403 mr =         3522
+ m=            0 mr =           70
+ time to grow re-entrant surface =   3.9999999E-02
+ no. cavity mid-points inaccessible to solvent =           55
+ scaling boundary grid points
+ % of contact boundary points =    37.62953    
+ time taken =   0.1200000    
+            0 points had to be assigned by global comparison
+ time to turn everything in is  0.1600000    
+ number of dielectric boundary points        3088
+ no. dielectric boundary points in salt =            0
+ no. grid points charged and at boundary=        1369
+ ##          126 charges are in solution ##
+ iepsmp to db, and charging done at  0.1800000    
+ number of grid points assigned charge        6701
+  
+   setting boundary conditions
+  
+  
+ focussing boundary condition 
+ read from file
+ fort.18
+  
+  
+  focussing potential map:
+qdiffxas: qdiffxs4 with an improved surfacing routine       
+ original scale (grids/A)      :   0.2414821    
+ object centre at (A) :   0.8840008       24.68450       23.07500    
+  
+ pulling boundary values out of old potential map...
+  some initial phi values: 
+  midg,midg,1; midg,midg,igrid 
+   1.3153355E-02 -5.1189046E-02
+  midg,1,midg; midg,igrid,midg 
+  -4.9452800E-02  3.8107101E-02
+  1,midg,midg; igrid,midg,midg 
+  -1.3856421E-02 -6.0712826E-02
+  
+ gauss-seidel spectral radius is  0.9919934    
+  
+ estimated iterations to convergence          91
+   
+ setup time was (sec)   0.2000000    
+   
+ now iterating at: 02:12:56
+  
+  
+   rms-change     max change       #iterations
+    1.221577       37.57742     at           10iterations
+   0.1933296       6.545782     at           20iterations
+   3.0363997E-02   1.001419     at           30iterations
+   4.8697037E-03  0.1477489     at           40iterations
+   7.6328591E-04  2.5215149E-02 at           50iterations
+   1.2082035E-04  3.5514832E-03 at           60iterations
+   1.8677280E-05  5.4168701E-04 at           70iterations
+   3.0614181E-06  8.3923340E-05 at           80iterations
+   7.1426354E-07  3.0517578E-05 at           90iterations
+   5.2777682E-07  3.0517578E-05 at          100iterations
+   5.2758179E-07  3.0517578E-05 at          110iterations
+   5.2268001E-07  3.0517578E-05 at          120iterations
+ finished qdiffx linear iterations
+ at                       : 02:12:57
+ total time elapsed so far:   0.8000000    
+ # loops                  :          120
+ mean,max change (kT/e)   :   5.2268001E-07  3.0517578E-05
+total s.charge =     1.8252
+ corrected reaction field energy:        -1821.962     kt
+  
+ energy calculations done at   1.070000    
+   
+ writing potential map in DELPHI format
+   
+ potential map written to file
+ fort.14                                                                         
+   
+   
+ total cpu time was (sec)    1.070000    
+   
+ DelPhi exited at 02:12:57
+1.070u 0.000s 0:01.02 104.9%	0+0k 0+0io 131pf+0w
+    
+  ___________________DelPhi II____________________  
+ /                                                 
+ | A program to solve the PB equation             | 
+ | in 3D, using non-linear form, incorporating    | 
+ | 2 dielectric regions, ionic strength, periodic | 
+ | and focussing boundary conditions, utilizing   | 
+ | stripped optimum successive over-relaxation    | 
+ | and an improved algorithm for mapping the      | 
+ | Mol. Surface to the finite-Difference grid     | 
+ __________________          ____________________/ 
+                     DelPhi II                      
+   
+  program started on Fri Dec  8 2006
+              at 02:12:57
+ opening parameter file fort.10
+ atom radii read from file
+ fort.11
+  
+ ! default extended atom radii based loosely                 
+ ! on mike connolly's MS program- note H's are 0             
+ # of radius parameter records:          17
+  
+ atomic charges read from file
+ fort.12
+  
+ ! amber charges, based on kollman, weiner et al             
+ ! j. comp chem, vol 7, p 230 (1986)                         
+ # of charge parameter records:         974
+ assigning charges and radii...
+  
+ opening formatted file:fort.13
+ number of atoms read in =         1662
+  
+!!! WARNING: LYS   51 has a net charge of   0.0200
+!!! WARNING: NDP  162 has a net charge of   0.4860
+!!! WARNING: NDP  163 has a net charge of  -0.5210
+!!! WARNING: WAT    1 has a net charge of  -0.8340
+!!! WARNING: WAT    2 has a net charge of   0.4170
+!!! WARNING: WAT    3 has a net charge of   0.4170
+  
+ time to read in and/or assign rad/chrg=  5.0000001E-02
+   
+ grid size                  :          65
+ scale,in grids/A, set to be:   1.086669    
+ object centred at (gu)     :  0.0000000E+00  0.0000000E+00  0.0000000E+00
+ inner,outer dielectrics    :   2.000000       78.00000    
+ ionic strength (M)         :  0.1000000    
+ debye length (A)           :   9.635460    
+ ion exclusion radius (A)   :   2.000000    
+ probe radius (A)           :   1.400000    
+ boundary conditions        : focussing
+ x,y,z periodic bc. flags   : F F F
+ # of linear iterations     :         180
+ # of non-linear iterations :           0
+ concentration map output   : F
+ spherical charge distbn.   : F
+ INSIGHT format output      : F
+ site potential output      : F
+ modified atom file output  : F
+ map file label             :
+qdiffxas: qdiffxs4 with an improved surfacing routine       
+  convergence graph turned off
+  potential listings turned off
+  
+   
+ box fill      (%):   90.00000    
+ xmin,xmax     (A):  -25.61900       27.38700    
+ ymin,ymax     (A):   2.308000       47.06100    
+ zmin,zma      (A): -0.8900000       47.04000    
+ x,y,z range   (A):    53.00600       44.75300       47.93000    
+ scale   (grids/A):    1.086669    
+ object centre (A):   0.8840008       24.68450       23.07500    
+ number of atom coordinates read  :         1662
+ total number of charged atoms    :         1585
+ net assigned charge              :   -1.014998    
+ assigned positive charge         :    258.1924    
+ centred at (gu) :   32.27204       35.60778       33.27721    
+ assigned negative charge         :   -259.2073    
+ centred at (gu) :   32.39460       35.46968       33.45905    
+    
+ start vw surface at   5.0000001E-02
+ fill in re-entrant regions at   9.0000004E-02
+ boundary points on vw surface=        15355
+ reading accessible surface arcs data from file ARCDAT    
+ no. of arc points read =        15527
+ grid for indexing accessible points =    1.400000    
+ m=         2243 mr =         9530
+ m=           51 mr =         1088
+ m=            0 mr =            0
+ time to grow re-entrant surface =   7.9999998E-02
+ no. cavity mid-points inaccessible to solvent =          225
+ scaling boundary grid points
+ % of contact boundary points =    36.95065    
+ time taken =   0.1600000    
+            0 points had to be assigned by global comparison
+ time to turn everything in is  0.2400000    
+ number of dielectric boundary points        7031
+ no. dielectric boundary points in salt =            0
+ no. grid points charged and at boundary=         473
+ ##           39 charges are in solution ##
+ iepsmp to db, and charging done at  0.2500000    
+ number of grid points assigned charge        9945
+  
+   setting boundary conditions
+  
+  
+ focussing boundary condition 
+ read from file
+ fort.18
+  
+  
+  focussing potential map:
+qdiffxas: qdiffxs4 with an improved surfacing routine       
+ original scale (grids/A)      :   0.7244463    
+ object centre at (A) :   0.8840008       24.68450       23.07500    
+  
+ pulling boundary values out of old potential map...
+  some initial phi values: 
+  midg,midg,1; midg,midg,igrid 
+   6.1037336E-02 -0.6312994    
+  midg,1,midg; midg,igrid,midg 
+  -0.4003839      0.3765115    
+  1,midg,midg; igrid,midg,midg 
+  -2.7219506E-02 -0.3300020    
+  
+ gauss-seidel spectral radius is  0.9947750    
+  
+ estimated iterations to convergence         111
+   
+ setup time was (sec)   0.2600000    
+   
+ now iterating at: 02:12:57
+  
+  
+   rms-change     max change       #iterations
+    4.205398       101.8574     at           10iterations
+   0.9566364       19.58974     at           20iterations
+   0.2155785       3.861083     at           30iterations
+   4.9023885E-02  0.8807488     at           40iterations
+   1.1150355E-02  0.1893255     at           50iterations
+   2.5560728E-03  4.3849945E-02 at           60iterations
+   5.8789423E-04  1.0410309E-02 at           70iterations
+   1.3212231E-04  2.7523041E-03 at           80iterations
+   3.0211140E-05  5.6457520E-04 at           90iterations
+   6.9825019E-06  1.2969971E-04 at          100iterations
+   2.0129983E-06  6.1035156E-05 at          110iterations
+   1.3040985E-06  3.0517578E-05 at          120iterations
+   1.2901581E-06  6.1035156E-05 at          130iterations
+   1.2535177E-06  6.1035156E-05 at          140iterations
+   1.2621064E-06  6.1035156E-05 at          150iterations
+   1.2586380E-06  6.1035156E-05 at          160iterations
+   1.2860905E-06  6.1035156E-05 at          170iterations
+   1.2700557E-06  6.1035156E-05 at          180iterations
+ finished qdiffx linear iterations
+ at                       : 02:12:58
+ total time elapsed so far:    1.250000    
+ # loops                  :          180
+ mean,max change (kT/e)   :   1.2700557E-06  6.1035156E-05
+total s.charge =     1.0975
+ corrected reaction field energy:        -1888.720     kt
+  
+ energy calculations done at   1.850000    
+   
+ writing potential map in DELPHI format
+   
+ potential map written to file
+ fort.14                                                                         
+   
+   
+ total cpu time was (sec)    1.850000    
+   
+ DelPhi exited at 02:12:59
+1.850u 0.040s 0:01.87 101.0%	0+0k 0+0io 131pf+0w

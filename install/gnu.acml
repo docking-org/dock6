@@ -1,0 +1,45 @@
+# DOCK configuration file for recent (i.e., >= 4.1) GNU compilers
+# and the AMD Core Math Library.
+# This configuration file can be used on many platforms:
+#  Linux, Macintosh OS X, Windows with Cygwin, etc.
+# g77 or g95 could be used instead of gfortran.
+
+# REQUIREMENTS - define this environment variable:
+# ACML_HOME is the root directory of the AMD Core Math Library
+# END REQUIREMENTS
+
+
+# CC is the C compiler
+# CFLAGS is the flags for the C compiler
+# CXX is the C++ compiler
+# CXXFLAGS is the flags for the C++ compiler
+# DOCK_SUFFIX is the suffix for the dock executable
+# FC is the Fortran compiler
+# FFLAGS is the flags for the Fortran compiler
+# LIBS is the flags for the linker
+# LINK_WITHOUT_FORTRAN_MAIN is the flag for linking without Fortran's main
+# LOAD is the command to invoke the linker
+
+CC=          gcc
+CFLAGS=      -O2
+CXX=         g++
+CXXFLAGS=    -O2 -std=c++11
+DOCK_SUFFIX=
+FC=          gfortran
+FFLAGS=      -O2 -fno-automatic -fno-second-underscore -std=legacy
+LIBS=        -L$(ACML_HOME)/lib -lacml -lacml_mv -lgfortran
+LINK_WITHOUT_FORTRAN_MAIN=
+LOAD=        g++
+
+# Macro definitions for NAB
+# AR is the library archiver
+# LEX is the lexical analyzer generator; the darwin and xopen defines are
+# workarounds for some macOS 12 header file issues; e.g.:
+# sff.c:1615:19: error: implicitly declaring library function 'strdup' with type 'char *(const char *)
+# see also https://github.com/gphoto/libgphoto2/issues/552
+# OCFLAGS is the flags for the C compilers with high optimization
+# RANLIB is the library index generator
+AR=          ar rv
+LEX=         flex -D_DARWIN_C_SOURCE -D_XOPEN_SOURCE=600
+OCFLAGS=     -O3 -D_ANSI_SOURCE
+RANLIB=      ranlib

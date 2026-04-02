@@ -1,0 +1,202 @@
+
+
+
+--------------------------------------
+DOCK v6.10
+
+Released January 2023
+Copyright UCSF
+--------------------------------------
+
+
+Conformational Sampling Parameters
+------------------------------------------------------------------------------------------
+conformer_search_type                                        flex
+write_fragment_libraries                                     no
+
+Anchor & Grow Parameters
+------------------------------------------------------------------------------------------
+user_specified_anchor                                        no
+limit_max_anchors                                            no
+min_anchor_size                                              5
+pruning_use_clustering                                       yes
+pruning_max_orients                                          10
+pruning_clustering_cutoff                                    10
+pruning_conformer_score_cutoff                               100.0
+pruning_conformer_score_scaling_factor                       1.0
+use_clash_overlap                                            no
+write_growth_tree                                            no
+
+Internal Energy Parameters
+------------------------------------------------------------------------------------------
+use_internal_energy                                          yes
+internal_energy_rep_exp                                      12
+internal_energy_cutoff                                       100.0
+Note: Internal energy only includes repulsive VDW for growth and/or minimization.
+
+Molecule Library Input Parameters
+------------------------------------------------------------------------------------------
+ligand_atom_file                                             volume_ligand.mol2
+limit_max_ligands                                            no
+skip_molecule                                                no
+read_mol_solvation                                           no
+calculate_rmsd                                               yes
+use_rmsd_reference_mol                                       yes
+rmsd_reference_filename                                      reference.mol2
+
+Database Filter Parameters
+------------------------------------------------------------------------------------------
+use_database_filter                                          no
+
+Orient Ligand Parameters
+------------------------------------------------------------------------------------------
+orient_ligand                                                yes
+automated_matching                                           yes
+receptor_site_file                                           volume_spheres.sph
+max_orientations                                             100
+critical_points                                              no
+chemical_matching                                            no
+use_ligand_spheres                                           no
+
+Bump Filter Parameters
+------------------------------------------------------------------------------------------
+bump_filter                                                  no
+
+Master Score Parameters
+------------------------------------------------------------------------------------------
+score_molecules                                              yes
+
+Contact Score Parameters
+------------------------------------------------------------------------------------------
+contact_score_primary                                        no
+
+Grid Score Parameters
+------------------------------------------------------------------------------------------
+grid_score_primary                                           no
+
+MultiGrid Score Parameters
+------------------------------------------------------------------------------------------
+multigrid_score_primary                                      no
+
+Dock3.5 Score Parameters
+------------------------------------------------------------------------------------------
+dock3.5_score_primary                                        no
+
+Continuous Energy Score Parameters
+------------------------------------------------------------------------------------------
+continuous_score_primary                                     no
+
+Footprint Similarity Score Parameters
+------------------------------------------------------------------------------------------
+footprint_similarity_score_primary                           no
+
+Pharmacophore Similarity Score Parameters
+------------------------------------------------------------------------------------------
+pharmacophore_score_primary                                  no
+
+Hbond Energy Score Parameters
+------------------------------------------------------------------------------------------
+hbond_score_primary                                          no
+
+Internal Energy Score Parameters
+------------------------------------------------------------------------------------------
+internal_energy_score_primary                                no
+
+Descriptor Score Parameters
+------------------------------------------------------------------------------------------
+descriptor_score_primary                                     yes
+descriptor_use_grid_score                                    yes
+descriptor_use_pharmacophore_score                           no
+descriptor_use_tanimoto                                      no
+descriptor_use_hungarian                                     no
+descriptor_use_volume_overlap                                yes
+
+--- Descriptor Score Parameters: Grid Score ---
+descriptor_grid_score_rep_rad_scale                          1
+descriptor_grid_score_vdw_scale                              1
+descriptor_grid_score_es_scale                               1
+descriptor_grid_score_grid_prefix                            volume_grid
+
+--- Descriptor Score Parameters: Volume Overlap Score ---
+descriptor_volume_score_reference_mol2_filename              volume_ligand.mol2
+descriptor_volume_score_overlap_compute_method               analytical
+
+--- Descriptor Score Weights ---
+descriptor_weight_grid_score                                 1
+descriptor_weight_volume_overlap_score                       -40
+
+Using these settings, the Descriptor Score function takes the form:
+Descriptor_Score = (1 * Grid_Score) + (-40 * Volume_Score)
+
+Zou GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+
+Hawkins GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+
+SASA Score Parameters
+------------------------------------------------------------------------------------------
+
+Amber Score Parameters
+------------------------------------------------------------------------------------------
+
+Simplex Minimization Parameters
+------------------------------------------------------------------------------------------
+minimize_ligand                                              no
+
+Atom Typing Parameters
+------------------------------------------------------------------------------------------
+atom_model                                                   all
+vdw_defn_file                                                ../../../parameters/vdw_AMBER_parm99.defn
+flex_defn_file                                               ../../../parameters/flex.defn
+flex_drive_file                                              ../../../parameters/flex_drive.tbl
+chem_defn_file                                               ../../../parameters/chem.defn
+
+Molecule Library Output Parameters
+------------------------------------------------------------------------------------------
+ligand_outfile_prefix                                        Des_VOS+SGE
+write_orientations                                           no
+num_scored_conformers                                        5
+write_conformations                                          no
+cluster_conformations                                        yes
+cluster_rmsd_threshold                                       2.0
+rank_ligands                                                 no
+------------------------------------------------------------------------------------------
+
+Initializing Conformer Generator Routines...
+Initializing Library File Routines...
+Initializing Orienting Routines...
+Initializing typer for Grid Score within Descriptor Score...
+Initializing Grid Score Routines...
+ Reading the energy grid from volume_grid.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from volume_grid.bmp
+ Done reading the grid box quantifiers.
+Initializing typer for Volume Overlap Score within Descriptor Score...
+ Volume reference mol2 file was read in successfully
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.889 seconds
+
+ Anchors:		2
+ Orientations:		200
+ Conformations:		14
+
+                    Descriptor_Score:          -24.453857
+                          Grid_Score:          -15.451126
+                desc_Grid_vdw_energy:          -13.610838
+                 desc_Grid_es_energy:           -1.840288
+               Property_Volume_Score:            0.225068
+               desc_VOS_geometric_vo:            0.393104
+                desc_VOS_hvy_atom_vo:            0.342306
+            desc_VOS_pos_chrg_atm_vo:            0.350075
+            desc_VOS_neg_chrg_atm_vo:            0.196237
+         desc_VOS_hydrophobic_atm_vo:            0.006563
+         desc_VOS_hydrophilic_atm_vo:            0.062125
+           Internal_energy_repulsive:           43.602009
+
+
+1 Molecules Processed
+Total elapsed time:	0.935 seconds

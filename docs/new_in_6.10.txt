@@ -1,0 +1,223 @@
+DOCK 6.10
+
+This is a release of the version described in references [1] and [2] with
+the new genetic algorithm DOCK_GA: molecular evolution for ligand design. 
+
+
+NEW IN DOCK 6.10
+
+DOCK_GA
+    This new genetic algorithm leverages features of DOCK 6.9's de novo
+    design and augments them to allow for crossover and mutation of molecules
+    within an ensemble and allow for an ensemble to, by incremental changes,
+    drive toward a greater degree of energetic fitness than the initial
+    ensemble.  This enables efficient exploration of chemical space and provides
+    opportunities for molecular refinement of promising ligands, including
+    replacement of single segments/fragments within a molecule's interior.
+
+Addition of Ramping for Virtual Screening Minimization
+    A parameter was added for virtual screening experiments to the simplex
+    minimizer (use_min_ramp_flex_growth) that will allow for less minimization
+    steps at early layers, increasing the number of steps at each layer up to
+    the user defined maximum. This saves time during docking and was not found
+    to affect docking outcomes, but can be turned off by the user in the input.
+
+Internal Energy Score
+    The internal energy of a molecule can now be used as a score in DOCK, which
+    allows structures to be minimized by the simplex minimizer. This means 
+    conformations of ligands can be generated without protein influence, and 
+    ligands can be constructed using de novo design in the same way.
+
+De Novo Design - Molecular Weight Smoothing
+    Previously in de novo design, any molecule above the molecular weight limit
+    was rejected ("hard" pruning). A "soft" pruning function was added, and now
+    when a molecule is written to file a user provided upper and lower molecular 
+    weight limit can be assessed. Molecules can be rejected based on a Gaussian
+    function with a user provided standard deviation.
+
+Fragment Library Generation - Improved Visualization
+    Previously, the default library generation procedure was saving
+    untransformed coordinates of fragments to their respective output files
+    after fragmentation.  Now, fragments are overlaid on top of each other as
+    the default fragmentation behavior for easier viewing of fragment libraries.
+
+Script for Postprocessing Truncation of Custom Fragment Libraries
+    A python script was added to the DOCK suite of tools to allow for 
+    postprocessing of fragment libraries to truncate the final library based on 
+    a user-defined cutoff of fragment frequency. This will allow users to only 
+    perform the relatively expensive fragmentation step once, and easily create 
+    smaller libraries after.
+
+Gzstream
+    DOCK now has the ability to read in and write gzipped files using gzstream, 
+    allowing us to leverage this space saving measure in future releases. 
+
+Miscellaneous
+   The parallel DOCK build mechanism generally supports any MPI installation;
+   the focus on MPICH2 has been eliminated.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+DEPRECATED FEATURES
+
+    1. Secondary scoring capabilities have been removed.
+
+    2. PBSA Score has been removed.
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+BUG FIXES
+
+For DOCK:
+    1. During DN and GA experiments, an error will now be thrown if VDW
+    parameters that do not include information about dummy atoms are being
+    used.  For these experiments, users should use vdw_de_novo.defn as their
+    VDW parameters.
+
+For Grid:
+    1. Structures with nonintegral charges now return an error if any residue
+    in the input has a nonintegral charge.  Users wishing to override this and
+    still return a valid nonintegral-based grid can so specify in the grid
+    input file with the parameter allow_non_integral_charges.
+
+For accessories:
+    1. Migrated from python 2 to 3.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+INPUT PARAMETER CHANGES AND THEIR DEFAULT VALUES
+
+Example:
+    parameter_name                      [default_value] (options):
+
+
+Added:
+
+For DOCK_GA:
+    ga_molecule_file                    [ga_molecule_file.mol2] ():
+    ga_utilities                        [no] (yes no):
+    ga_fraglib_scaffold_file            [fraglib_scaffold.mol2] ():
+    ga_fraglib_linker_file              [fraglib_linker.mol2] ():
+    ga_fraglib_sidechain_file           [fraglib_sidechain.mol2] ():
+    ga_torenv_table                     [fraglib_torenv.dat] ():
+    ga_max_generations                  [100] ():
+    ga_xover_on                         [yes] (yes no):
+    ga_xover_sampling_method_rand       [yes] (yes no):
+    ga_xover_max                        [150] ():
+    ga_bond_tolerance                   [0.5] ():
+    ga_angle_cutoff                     [0.14] ():
+    ga_check_overlap                    [no] (yes no):
+    ga_mutate_addition                  [yes] (yes no):
+    ga_mutate_deletion                  [yes] (yes no):
+    ga_mutate_substitution              [yes] (yes no):
+    ga_mutate_replacement               [yes] (yes no):
+    ga_mutate_parents                   [no] (yes no):
+    ga_omut_rate                        [0.7] ():
+    ga_max_mut_cycles                   [5] ():
+    ga_mut_sampling_method              [rand] (rand | graph):
+    ga_num_random_picks                 [15] ():
+    ga_max_root_size                    [5] ():
+    ga_energy_cutoff                    [100] ():
+    ga_heur_unmatched_num               [1] ():
+    ga_heur_matched_rmsd                [0.5] ():
+    ga_constraint_mol_wt                [500] ():
+    ga_constraint_rot_bon               [10] ():
+    ga_constraint_H_accept              [10] ():
+    ga_constraint_H_don                 [5] ():
+    ga_constraint_formal_charge         [2] ():
+    ga_ensemble_size                    [200] ():
+    ga_selection_method                 [elitism] (elitism | tournament | roulette):
+    ga_elitism_combined                 [yes] (yes no):
+    ga_elitism_option                   [max] (percent | number | max):
+    ga_max_num_gen_with_no_crossover    [25] ():
+    ga_name_identifier                  [ga] ():
+    ga_output_prefix                    [ga_output] ():
+
+    ~With ga_mutate_parents set to "yes"~
+    ga_pmut_rate                         [0.3] ():
+
+    ~With ga_mut_sampling_method set to "graph"~
+    ga_graph_max_picks                  [10] ():
+    ga_graph_breadth                    [3] ():
+    ga_graph_depth                      [2] ():
+    ga_graph_temperature                [100] ():
+
+    ~With ga_selection_method set to "tournament"~
+    ga_tournament_p_vs_c                [yes] (yes no):
+
+    ~With ga_selection_method set to "roulette"~
+    ga_roulette_separate                [yes] (yes no):
+
+    ~With ga_selection_method set to "elitism" and...~
+    ~... ga_elitism_option set to "number"~
+    ga_elitism_number                   [20] ():
+
+    ~... ga_elitism_option set to "percent"
+    ga_elitism_percent                  [0.2] ():
+
+For DOCK_DN:
+    dn_mol_wt_cutoff_type               [soft] ():
+    dn_upper_constraint_mol_wt          [550] ():
+    dn_lower_constraint_mol_wt          [0] ():
+    dn_MW_std_dev                       [35] ():
+
+For Scoring Functions:
+    internal_energy_score_primary       [no] (yes no):
+
+For Simplex Minimizer During Docking:
+
+    use_min_ramp_flex_growth            [yes] (yes no):
+
+
+Changed: 
+
+Example
+    parameter_name                      previous_value -> new_value
+
+
+For Fragment Library Generation:
+    
+    fragment_library_trans_origin                   no -> yes
+
+For DOCK_DN:
+    
+   dn_pruning_conformer_score_scaling_factor        1.0 -> 2.0
+
+For Simplex Minimization
+    
+    simplex_grow_max_iterations                     500 -> 250
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+OUTPUT COMPONENTS
+
+For DOCK_GA:
+    1. ${ga_output_prefix}.restart0000.mol2 is the initial parent ensemble to 
+    begin DOCK_GA sampling.
+
+    2. ${ga_output_prefix}.restart####.mol2 is the molecules from each
+    generation (####). This file can be used as a restart file where the user
+    only needs to change simplex_random_seed to the number of the generation
+    last completed.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+KNOWN BUGS
+
+    1. When selecting both internal energy and internal energy score, the
+    parameter "internal_energy_rep_exp" appears twice in the question tree,
+    and will be asked for user input if using DOCK from the command-line even
+    if the value is already set.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+REFERENCES
+
+1. Prentis, L.E.; Singleton, C.D.; Bickel, J.D.; Allen, W.J.; Rizzo, R.C.
+A Molecular Evolution Algorithm for Ligand Design in DOCK. 
+J. Comput. Chem. 43(29):1942-1963, 2022.
+
+2. Singleton, C.D. (2018). Computer-aided Design of Fusion Inhibitors Targeting
+Ebolavirus. Order No. 10746080, State University of New York at Stony Brook.
+

@@ -1,0 +1,11 @@
+#!/bin/sh
+
+echo "Generating grids"
+
+cd 3_grid
+./script_demo
+cd ..
+
+cd 4_dock
+./script_demo
+cd ..

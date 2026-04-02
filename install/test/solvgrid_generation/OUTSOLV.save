@@ -1,0 +1,57 @@
+    name of input pdb file: rec.crg                                                                         
+    name of output contact grid file: solvmap                                                                         
+    atomic radii:
+         1. for O N C S P Other [1.4 1.3 1.7 2.22.2 1.8]?
+   1.39999998       1.29999995       1.70000005       2.20000005       2.20000005       1.79999995    
+         2. for probe (exclusion) [1.4]?   1.39999998    
+    number of grid points per angstrom?(1-4)           1
+ pdb file of limiting box:box                                                                             
+ grid resolution:    1.00000000    
+ maximum and minimum x y z:
+   16.6669998       50.7060013       42.7989998    
+  -21.7070007       13.6870003       3.49200010    
+ number of nonhydrogen atoms =         1343
+ grid x, y, z dimensions:          39          37          40
+ dV is   7.95774683E-02
+ end contact grid calc.
+           0 /          39  the way there!
+           1 /          39  the way there!
+           2 /          39  the way there!
+           3 /          39  the way there!
+           4 /          39  the way there!
+           5 /          39  the way there!
+           6 /          39  the way there!
+           7 /          39  the way there!
+           8 /          39  the way there!
+           9 /          39  the way there!
+          10 /          39  the way there!
+          11 /          39  the way there!
+          12 /          39  the way there!
+          13 /          39  the way there!
+          14 /          39  the way there!
+          15 /          39  the way there!
+          16 /          39  the way there!
+          17 /          39  the way there!
+          18 /          39  the way there!
+          19 /          39  the way there!
+          20 /          39  the way there!
+          21 /          39  the way there!
+          22 /          39  the way there!
+          23 /          39  the way there!
+          24 /          39  the way there!
+          25 /          39  the way there!
+          26 /          39  the way there!
+          27 /          39  the way there!
+          28 /          39  the way there!
+          29 /          39  the way there!
+          30 /          39  the way there!
+          31 /          39  the way there!
+          32 /          39  the way there!
+          33 /          39  the way there!
+          34 /          39  the way there!
+          35 /          39  the way there!
+          36 /          39  the way there!
+          37 /          39  the way there!
+          38 /          39  the way there!
+          39 /          39  the way there!
+ successful completion

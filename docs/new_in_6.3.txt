@@ -1,0 +1,131 @@
+DOCK 6.3
+
+This is a release of the version applied in the DOCK6 paper [1].
+Recent improvements to the sampling implementation and corrections to 
+prevent steric clashes that have been mentioned on the Dock-fans list
+[2] are not incorporated here; they will appear in the next version
+which is expected to be released soon.
+
+NEW IN DOCK 6.3
+
+###Amber Score Improvements###
+   The distance movable region can be applied to receptors that include
+explicit waters.  This is useful for RNA-small molecule complexes [1],
+and it required changing the ligand position in the complex from the
+last strand to the first strand; this implementation detail has resulted
+in input parameter changes for the nab_atom_expression movable region.
+The preparation of RNA receptors can neutralize to a total charge of zero
+and can solvate with water.  These are done via LEaP, and its charge
+tolerance has been increased from 0.0001 (as in Amber10) to 0.001 to
+avoid excessive instances of left over charges of plus or minus one.
+An option to use the existing ligand charges has been added to both
+prepare_amber.pl and prepare_rna_amber.pl. This automates efficient
+rescoring with multiple scores; note that Amber Score is more sensitive to
+charges than other DOCK Scores; so the existing charges should be good ones.
+The error reporting and robustness of the Amber score preparation scripts
+have been improved; a final fail check (for a nonzero sized prmtop file)
+has been added.  The amberize output file names now use the complete ligand
+identifiers to avoid overwriting in batch processing of multiple multi-ligand
+calculations.  The ions library, leaprc.dock.ions, has grown modestly.
+
+###PB/SA Score Improvements###
+   Updated to OpenEye Toolkits version 1.7.0.  In particular, DOCK uses
+the APIs as in OEChem TK 1.7.0 and Zap TK 2.1.1.
+
+###Input File Processing###
+   Unused dock6 input name/value pairs are no longer silently ignored;
+now a warning is emitted.
+
+###Miscellaneous###
+   64 bit platforms are now fully supported although the test suite
+temporarily still contains reference outputs from a 32 bit platform.
+Several configuration files have been added; thanks to Francesco Pietra
+for testing the ones for Intel compilers.  SGI platforms are no longer
+supported.  Ubuntu Linux is supported; recent GNU compilers emit lots
+of warnings when building DOCK that should be ignored.
+g77 is still the default Fortran compiler. But gfortran comes with any not
+too old GNU compiler installation; hand edit install/config.h to use it.
+parameters/prot.table.ambcrg.pdb3H has been created in an effort to begin
+supporting PDB version 3 naming.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+DEPRECATED FEATURES
+
+1.  For a variety of reasons still under active development,
+amber_score cannot effectively be used as a secondary_score.
+This function was temporarily deprecated in 6.1, and using input parameter
+amber_score_secondary causes program termination.
+The recommended protocol is to perform two DOCK runs with the second run
+specifying amber_score as the primary_score.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+BUG FIXES
+
+Some bug reports have not yet been processed, but
+several important bugs have been fixed since the last release.
+
+For DOCK:
+   Incorrect Amber score distance movable residue selection.
+This bug was only exercised when a strand had no residues within
+the distance cutoff; in that case the whole strand instead of none
+of the strand was selected by the generated NAB atom expression.
+
+   Flexible ligand pruning without clustering ignored input parameter
+pruning_conformer_score_cutoff increasing the number of conformations.
+
+   Incorrect PB/SA score PB component energy units.
+
+   For chemical matching the centers index list was being resized
+to the sphere list size instead of the centers list size.
+
+   Zou GB/SA Score reading of the GB and SA grids on 64 bit platforms.
+
+   Missing C header file inclusions.
+
+For grid-convert:
+   Fatal termination with contact_score = yes.
+
+For nchemgrid_GB:
+   Zou GB/SA Score writing of the GB grids on 64 bit platforms.
+
+For nchemgrid_SA:
+   Zou GB/SA Score writing of the SA grids on 64 bit platforms.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+INPUT PARAMETER CHANGES AND THEIR DEFAULT VALUES
+
+Added:
+   amber_score_receptor_movable_atom_expr                       "::"
+   amber_score_complex_movable_atom_expr                        "::"
+
+Removed:
+   amber_score_movable_atom_expression                          "::"
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+FILE FORMAT CHANGES
+
+For DOCK:
+   The label for RMSDs in structural output files has changed from 
+'########## RMSD' to '#HEAVY ATM RMSD'.
+
+For nchemgrid_GB:
+   The .rec file has changed from binary to textual representation.
+
+For nchemgrid_SA:
+   The .sas file has changed from binary to textual representation.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+REFERENCES
+
+1. "DOCK 6: Combining Techniques to Model RNA-Small Molecule Complexes,"
+P. T. Lang, S. R. Brozell, S. Mukherjee, E. F. Pettersen, E. C. Meng, V.
+Thomas, R. Rizzo, D. A. Case, T. L. James, and I. D. Kuntz, RNA, Vol. 15,
+1219-1230 (2009). 
+
+2. http://mailman.docking.org/pipermail/dock-fans/2009-May/002058.html
+

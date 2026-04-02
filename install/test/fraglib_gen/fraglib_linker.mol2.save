@@ -1,0 +1,50 @@
+##########                                TYPE:              Linker
+##########                             FR_NAME:               lnk.3
+##########                                FREQ:                   1
+##########                            CONN_PTS:                   2
+##########                                  MW:              28.010
+##########                               DB_ID:            LIF5.lig
+########## 
+@<TRIPOS>MOLECULE
+LIF5.lig
+ 4 3 1 0 0
+SMALL
+bcc
+lnk.3
+
+@<TRIPOS>ATOM
+      1 Du1        51.8139  -19.0975  -18.2923 Du      1  lnk.3       0.0000
+      2 C11        51.6617  -17.7840  -17.6288 C.2     1  lnk.3       0.6691
+      3 O3         51.3282  -17.6986  -16.4512 O.2     1  lnk.3      -0.5370
+      4 Du2        52.2776  -16.6037  -18.1714 Du      1  lnk.3       0.0000
+@<TRIPOS>BOND
+     1     1     2    1
+     2     2     3    2
+     3     2     4    1
+@<TRIPOS>SUBSTRUCTURE
+     1 lnk.3        1 TEMP              0 ****  ****    0 ROOT
+
+##########                                TYPE:              Linker
+##########                             FR_NAME:               lnk.6
+##########                                FREQ:                   1
+##########                            CONN_PTS:                   2
+##########                                  MW:              15.999
+##########                               DB_ID:            LIF5.lig
+########## 
+@<TRIPOS>MOLECULE
+LIF5.lig
+ 3 2 1 0 0
+SMALL
+bcc
+lnk.6
+
+@<TRIPOS>ATOM
+      1 Du1        51.6617  -17.7840  -17.6288 Du      1  lnk.6       0.0000
+      2 O4         52.2776  -16.6037  -18.1714 O.3     1  lnk.6      -0.3762
+      3 Du2        52.2598  -15.4131  -17.4423 Du      1  lnk.6       0.0000
+@<TRIPOS>BOND
+     1     1     2    1
+     2     2     3    1
+@<TRIPOS>SUBSTRUCTURE
+     1 lnk.6        1 TEMP              0 ****  ****    0 ROOT
+

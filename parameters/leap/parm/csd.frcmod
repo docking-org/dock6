@@ -1,0 +1,16 @@
+3-SULFINOALANINE:  parmchk -f mol2 -i csd.mol2 -o csd.frcmod
+MASS
+
+BOND
+
+ANGLE
+c3-c3-s4   68.324     111.460   Calculated with empirical approach
+
+DIHE
+
+IMPROPER
+
+NONBON
+
+
+

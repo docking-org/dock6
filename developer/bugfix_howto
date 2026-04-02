@@ -1,0 +1,106 @@
+How To make a DOCK bugfix for release.
+
+
+Steps
+
+1.  Create the bug correction using the fully patched DOCK release.
+    The simplest way to do that is to checkout via the release tag:
+
+        cvs co -r dock6-7-release dock6
+        mv dock6 bugfixing
+        cd bugfixing/install
+        ./configure (platform)
+        make install
+        make test >& before
+
+    where the dock6 checkout via the release tag has been renamed to avoid
+    confusion, dock6-7-release is an example release tag, and platform
+    is generally the compiler used on the gold standard machine; currently,
+    gnu is the platform and an OSC machine is the gold standard (for its
+    machine details see install/test/KNOWN_FAILURES).  Note that some
+    bugfixes may require specific platforms or configure options.  Note
+    also that any existing bugfixes must be manually applied.
+    Then correct the necessary source files and rebuild:
+
+        cd bugfixing/src/(program)
+        edit (buggyfiles)  # see below for alternatives
+        make clean
+        cd bugfixing/install
+        make install
+        make test >& after
+
+    If the bug correction changes the test outputs then the change must be
+    substantiated and the output patches must be included in the bugfix.
+    Compare and scrutinize the before and after test results:
+
+        diff before after
+
+2.  Validate the bug correction on the gold standard machine if not already
+    done in step 1.  Also important to include are Mac, Intel compilers,
+    and possibly Cygwin.
+
+3.  Create the bugfix. 
+    The context diff's for the source files and the test output files
+    will be inserted into the bugfix file (do not cut and paste these):
+
+        cd bugfixing/
+        cvs diff -c src/(program)/(buggyfiles) > /tmp/(buggyfiles).diff
+        cvs diff -c install/test/(name)/(savefiles) > /tmp/(savefiles).diff
+
+    Use an existing bugfix file as a template, e.g.:
+
+        cd (my_dock6_trunk)/docs/bugfixes67
+        cp bugfix.1 bugfix.(next)
+        edit bugfix.(next)
+
+    Update all the sections of the bugfix file, and read into the editor
+    session the context diff's: /tmp/(buggyfiles).diff and
+    /tmp/(savefiles).diff
+
+4.  Test the bugfix by applying it:
+
+        cd /tmp
+        cvs co -r dock6-7-release dock6
+        cd /tmp/dock6
+        patch -p0 -N -r patch_rejects < (my_dock6_trunk)/docs/bugfixes67/bugfix.(next)
+        cd /tmp/dock6/install
+        ./configure (platform)
+        make install
+        make test
+
+5.  Add the bugfix to the web index, e.g.:
+
+        cd (my_dock6_trunk)/docs/bugfixes67
+        edit 6.7_bugfixes.htm
+
+6.  Commit the bug correction and bugfix:
+
+        cd (my_dock6_trunk)/docs/bugfixes67/
+        cvs add bugfix.(next)
+        cvs commit bugfix.(next)
+        cvs commit 6.7_bugfixes.htm
+        cvs tag dock6-7-(next)-release
+
+        cd bugfixing/
+        cvs commit src/(program)/(buggyfiles)
+        cvs commit install/test/(name)/(savefiles)
+
+7.  In the trunk update the bugfixes section of the release notes for the
+    next version:
+
+        cd (my_dock6_trunk)/docs
+        edit new_in_(6.8).txt
+        cvs commit new_in_(6.8).txt
+
+8.  In the trunk ensure that the bug correction is in place.
+    Usually the debugging process occurs in the trunk.  But if not then
+    sometimes applying a patch from the bugfixing branch to the trunk
+    works.  Naturally the bug correction in the trunk needs to be 
+    validated and committed.
+
+9.  Update the manual and the tutorials in the trunk.
+
+10. Contact Scott Brozell, Trent Balius, or John Irwin to post the bugfix on the web page.
+
+        cvs diff -r HEAD -c
+        patch -c -p0 -R < ../uptodatedock6/bf

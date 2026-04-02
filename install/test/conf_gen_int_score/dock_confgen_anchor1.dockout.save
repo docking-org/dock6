@@ -1,0 +1,186 @@
+
+
+
+--------------------------------------
+DOCK v6.10
+
+Released January 2023
+Copyright UCSF
+--------------------------------------
+
+
+Conformational Sampling Parameters
+------------------------------------------------------------------------------------------
+conformer_search_type                                        flex
+write_fragment_libraries                                     no
+
+Anchor & Grow Parameters
+------------------------------------------------------------------------------------------
+user_specified_anchor                                        yes
+atom_in_anchor                                               C,19
+pruning_use_clustering                                       yes
+pruning_max_orients                                          300
+pruning_clustering_cutoff                                    300
+pruning_conformer_score_cutoff                               100.0
+pruning_conformer_score_scaling_factor                       1.0
+use_clash_overlap                                            no
+write_growth_tree                                            no
+
+Internal Energy Parameters
+------------------------------------------------------------------------------------------
+use_internal_energy                                          no
+
+Molecule Library Input Parameters
+------------------------------------------------------------------------------------------
+ligand_atom_file                                             lig.mol2
+limit_max_ligands                                            no
+skip_molecule                                                no
+read_mol_solvation                                           no
+calculate_rmsd                                               no
+
+Database Filter Parameters
+------------------------------------------------------------------------------------------
+use_database_filter                                          no
+
+Orient Ligand Parameters
+------------------------------------------------------------------------------------------
+orient_ligand                                                no
+
+Bump Filter Parameters
+------------------------------------------------------------------------------------------
+bump_filter                                                  no
+
+Master Score Parameters
+------------------------------------------------------------------------------------------
+score_molecules                                              yes
+
+Contact Score Parameters
+------------------------------------------------------------------------------------------
+contact_score_primary                                        no
+
+Grid Score Parameters
+------------------------------------------------------------------------------------------
+grid_score_primary                                           no
+
+MultiGrid Score Parameters
+------------------------------------------------------------------------------------------
+multigrid_score_primary                                      no
+
+Dock3.5 Score Parameters
+------------------------------------------------------------------------------------------
+dock3.5_score_primary                                        no
+
+Continuous Energy Score Parameters
+------------------------------------------------------------------------------------------
+continuous_score_primary                                     no
+
+Footprint Similarity Score Parameters
+------------------------------------------------------------------------------------------
+footprint_similarity_score_primary                           no
+
+Pharmacophore Similarity Score Parameters
+------------------------------------------------------------------------------------------
+pharmacophore_score_primary                                  no
+
+Hbond Energy Score Parameters
+------------------------------------------------------------------------------------------
+hbond_score_primary                                          no
+
+Internal Energy Score Parameters
+------------------------------------------------------------------------------------------
+internal_energy_score_primary                                yes
+internal_energy_rep_exp                                      12
+
+Descriptor Score Parameters
+------------------------------------------------------------------------------------------
+
+Zou GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+
+Hawkins GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+
+SASA Score Parameters
+------------------------------------------------------------------------------------------
+
+Amber Score Parameters
+------------------------------------------------------------------------------------------
+
+Simplex Minimization Parameters
+------------------------------------------------------------------------------------------
+minimize_ligand                                              yes
+minimize_anchor                                              no
+minimize_flexible_growth                                     yes
+use_advanced_simplex_parameters                              no
+minimize_flexible_growth_ramp                                no
+simplex_max_cycles                                           1
+simplex_score_converge                                       0.1
+simplex_cycle_converge                                       1.0
+simplex_trans_step                                           1.0
+simplex_rot_step                                             0.1
+simplex_tors_step                                            5
+simplex_grow_max_iterations                                  0
+simplex_grow_tors_premin_iterations                          20
+simplex_random_seed                                          0
+simplex_restraint_min                                        yes
+simplex_coefficient_restraint                                100
+
+Atom Typing Parameters
+------------------------------------------------------------------------------------------
+atom_model                                                   all
+vdw_defn_file                                                ../../../parameters/vdw_AMBER_parm99.defn
+flex_defn_file                                               ../../../parameters/flex.defn
+flex_drive_file                                              ../../../parameters/flex_drive.tbl
+
+Molecule Library Output Parameters
+------------------------------------------------------------------------------------------
+ligand_outfile_prefix                                        output_anchor1
+write_orientations                                           no
+num_scored_conformers                                        5000
+write_conformations                                          no
+cluster_conformations                                        no
+rank_ligands                                                 no
+------------------------------------------------------------------------------------------
+
+Initializing Conformer Generator Routines...
+Initializing Library File Routines...
+
+-----------------------------------
+VERBOSE MOLECULE STATS
+
+  Number of heavy atoms = 36
+  Number of rotatable bonds = 4
+  Formal Charge = 4.000
+  Molecular Weight = 506.822
+  Heavy Atoms = 36
+-----------------------------------
+# of anchor positions: 1
+-----------------------------------
+VERBOSE GROWTH STATS : ANCHOR #1
+
+1/1 anchor orients retained (max 300) t=0.01s
+Lyr 1-2 Segs|Lyr 2-2 Segs|number of layers:3
+Lyr:1 Seg:0 Bond:1 : Sampling 6 dihedrals N(N.4)  C(C.3)  C(C.ar)  C(C.ar)
+Lyr:1 Seg:0 6/6 retained, Pruning:  t=0.02s
+Lyr:1 Seg:1 Bond:49 : Sampling 6 dihedrals C(C.ar)  C(C.ar)  C(C.3)  N(N.4)
+Lyr:1 Seg:1 36/36 retained, Pruning:  t=0.13s
+Lyr:2 Seg:0 Bond:0 : Sampling 3 dihedrals C(C.ar)  C(C.3)  N(N.4)  C(C.3)
+Lyr:2 Seg:0 72/108 retained, Pruning: 36-score  t=0.42s
+Lyr:2 Seg:1 Bond:51 : Sampling 3 dihedrals C(C.ar)  C(C.3)  N(N.4)  C(C.3)
+Lyr:2 Seg:1 200/216 retained, Pruning: 14-score 2-clustered  t=1.05s
+No more anchor fragments to be docked.
+
+-----------------------------------
+Molecule: CHEMBL543895
+
+ Elapsed time for docking:	1.122 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		200
+
+                      Internal_Score:           13.288237
+
+
+1 Molecules Processed
+Total elapsed time:	1.366 seconds

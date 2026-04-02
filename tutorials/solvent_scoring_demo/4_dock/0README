@@ -1,0 +1,8 @@
+This directory contains files related to docking.
+
+                             --- * ---
+
+script_demo     Script to perform demonstration
+gbsa_zou.in     DOCK input file to rescore using Zou version of GBSA
+gbsa_hawkins.in DOCK input file to rescore using Hawkins version of GBSA
+script_clean    Script to remove files made by script_demo

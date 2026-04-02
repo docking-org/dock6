@@ -1,0 +1,66 @@
+TITLE: GB/SA Grid generation
+
+EXECUTABLES TESTED:
+	grid
+	nchemgrid_GB
+	nchemgrid_SA
+
+WALL CLOCK TIME:
+	6.41 secs
+
+FILES USED:
+	sgrid.in		#input file for grid
+	box.pdb			#coordinates for box needed for grid,
+					nchemgrid_GB, and nchemgrid_SA
+	rec.mol2		#structure file used to create sgrid
+        rec.pdb                 #structure file used to create zou_grid
+	vdw.defn		#vdw parameter file used to create grid
+	prot.table.ambcrg.ambH	#charge parameter file used to create zou_grid
+	vdw.parms.amb		#vdw parameter file used to create zou_grid
+
+	nchemgrid_GB/
+		INCHEM		#input file for nchemgrid_GB
+		cavity.pdb	#empty (but required)
+
+	nchemgrid_SA/
+		INCHEM		#input file for nchemgrid_SA
+
+FILES GENERATED:
+	sgrid.bmp		#bump grid file
+	sgrid.nrg		#energy grid file
+
+	nchemgrid_GB/
+		inva		#debugging file with inverse Born radius for
+					receptor atoms
+		NEG_INVA	#error file listing embedded receptor atoms
+		OUTCHEM		#restatement of input parameters; messages
+					pertaining to calculation of the grids
+		OUTPARM    	#messages pertaining to parameterization of
+					receptor atoms; net charge on the
+					receptor molecule including any ions
+					or waters in the receptor pdb file
+    		PDBPARM    	#shows which parameters have been associated
+					with each atom in the receptor pdb file
+		screen.para	#file that contains descreening parameters
+		zou_grid.bmp	#bump grid
+		zou_grid.rec	#xyz coordinates, effective charge, effective
+					vdw radii, inverse Born radii, and
+					descreening parameters for receptor
+		zou_grid.sol	#flags for whether receptor atoms are solvated
+		zou_grid.vdw	#vdw values for receptor
+
+	nchemgrid_SA/
+		OUTCHEM		#restatement of input parameters; messages
+					pertaining to calculation of the grids
+		OUTPARM    	#messages pertaining to parameterization of
+					receptor atoms; net charge on the
+					receptor molecule including any ions
+					or waters in the receptor pdb file
+    		PDBPARM    	#shows which parameters have been associated
+					with each atom in the receptor pdb file
+		zou_grid.bmp	#bump grid
+		zou_grid.sas	#xyz coordinates, effective vdw radii, vdw type,
+					number of spherical grid points, and
+					polarity type for each receptor atom
+		zou_grid.sasmark#information about grid spacing, coordinates,
+					dimensions, etc

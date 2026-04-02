@@ -1,0 +1,13 @@
+#!/bin/sh
+
+echo MPI dock demo
+
+echo "Generating files that contain grid energies"
+cd 3_grid
+./script_demo
+cd ..
+
+echo "Performing Parallelized DOCK run"
+cd 4_dock
+./script_demo
+cd ..

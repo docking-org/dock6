@@ -1,0 +1,33 @@
+TITLE: Contact Scoring
+
+EXECUTABLES TESTED:  
+	dock6
+
+FUNCTIONS TESTED:
+	Minimization Parameters
+	
+WALL CLOCK TIME:
+	  secs
+
+FILES USED:
+	minimize1.dockin	#minimization turned on but no to all other questions
+	minimize2.dockin	#final_pose_minimization
+    	minimize3.dockin	#anchor_pose_minimization
+	minimize4.dockin        #growth_minimization
+        minimize5.dockin        #advanced_simplex_parameters
+        minimize6.dockin        #include_internal_energy
+	lig.mol2		#ligand structure file
+	struct.sph		#receptor sphere file
+	chem.defn		#chem parameter input file
+	flex.defn		#flex atom definition file
+	flex_drive.tbl		#flex torsional drive file
+	vdw.defn		#vdw parameter file used to create grid
+
+	../grid_generation/	
+		grid.bmp	#bump grid
+		grid.nrg	#energy grid
+
+FILES GENERATED:
+	XXX_scored.mol2		#best scoring pose from input file	
+
+NOTE:  grid_generation must be run first

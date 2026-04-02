@@ -1,0 +1,135 @@
+
+
+
+--------------------------------------
+DOCK v6.10
+
+Released January 2023
+Copyright UCSF
+--------------------------------------
+
+
+Conformational Sampling Parameters
+------------------------------------------------------------------------------------------
+conformer_search_type                                        rigid
+
+Internal Energy Parameters
+------------------------------------------------------------------------------------------
+use_internal_energy                                          no
+
+Molecule Library Input Parameters
+------------------------------------------------------------------------------------------
+ligand_atom_file                                             lig.amber_score.mol2
+limit_max_ligands                                            no
+skip_molecule                                                no
+read_mol_solvation                                           no
+calculate_rmsd                                               no
+
+Database Filter Parameters
+------------------------------------------------------------------------------------------
+use_database_filter                                          no
+
+Orient Ligand Parameters
+------------------------------------------------------------------------------------------
+orient_ligand                                                no
+
+Bump Filter Parameters
+------------------------------------------------------------------------------------------
+bump_filter                                                  no
+
+Master Score Parameters
+------------------------------------------------------------------------------------------
+score_molecules                                              yes
+
+Contact Score Parameters
+------------------------------------------------------------------------------------------
+contact_score_primary                                        no
+
+Grid Score Parameters
+------------------------------------------------------------------------------------------
+grid_score_primary                                           no
+
+MultiGrid Score Parameters
+------------------------------------------------------------------------------------------
+multigrid_score_primary                                      no
+
+Dock3.5 Score Parameters
+------------------------------------------------------------------------------------------
+dock3.5_score_primary                                        no
+
+Continuous Energy Score Parameters
+------------------------------------------------------------------------------------------
+continuous_score_primary                                     no
+
+Footprint Similarity Score Parameters
+------------------------------------------------------------------------------------------
+footprint_similarity_score_primary                           no
+
+Pharmacophore Similarity Score Parameters
+------------------------------------------------------------------------------------------
+pharmacophore_score_primary                                  no
+
+Hbond Energy Score Parameters
+------------------------------------------------------------------------------------------
+hbond_score_primary                                          no
+
+Internal Energy Score Parameters
+------------------------------------------------------------------------------------------
+internal_energy_score_primary                                no
+
+Descriptor Score Parameters
+------------------------------------------------------------------------------------------
+descriptor_score_primary                                     no
+
+Zou GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+gbsa_zou_score_primary                                       no
+
+Hawkins GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+gbsa_hawkins_score_primary                                   no
+
+SASA Score Parameters
+------------------------------------------------------------------------------------------
+SASA_score_primary                                           no
+
+Amber Score Parameters
+------------------------------------------------------------------------------------------
+amber_score_primary                                          yes
+amber_score_receptor_file_prefix                             1a28
+amber_score_movable_region                                   everything
+amber_score_minimization_rmsgrad                             0.01
+amber_score_before_md_minimization_cycles                    1
+amber_score_md_steps                                         1
+amber_score_after_md_minimization_cycles                     1
+amber_score_gb_model                                         5
+amber_score_nonbonded_cutoff                                 18.0
+amber_score_temperature                                      300.0
+amber_score_abort_on_unprepped_ligand                        yes
+
+Molecule Library Output Parameters
+------------------------------------------------------------------------------------------
+ligand_outfile_prefix                                        output
+write_orientations                                           no
+num_scored_conformers                                        1
+rank_ligands                                                 no
+------------------------------------------------------------------------------------------
+Initializing Library File Routines...
+
+-----------------------------------
+Molecule: C1
+
+ Elapsed time for docking:	5.024 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                         Amber_Score:          -50.739548
+                Amber_complex_energy:        -7785.792968
+               Amber_receptor_energy:         7760.484807
+                 Amber_ligand_energy:          -25.431386
+
+
+1 Molecules Processed
+Total elapsed time:	10.156 seconds

@@ -1,0 +1,9 @@
+#!/bin/sh
+
+
+DOCKHOME/bin/teLeap \
+                     -IDOCKHOME/parameters/leap/prep \
+                     -IDOCKHOME/parameters/leap/lib \
+                     -IDOCKHOME/parameters/leap/parm \
+                     -IDOCKHOME/parameters/leap/cmd \
+                     $*

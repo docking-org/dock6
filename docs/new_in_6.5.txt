@@ -1,0 +1,158 @@
+DOCK 6.5
+
+This is a release of the version applied in references [1] and [2].
+
+NEW IN DOCK 6.5
+
+###New Anchor Controls###
+
+   Now one can choose the anchor used during growth.  In addition, one
+can limit the max number of anchors used during multiple-anchor docking.
+The new input parameters for this anchor selection are listed below.
+
+###New Scoring Function###
+
+   Descriptor Score is a newly introduced scoring function, which
+reports van der Waals and Coulombic energies, hydrogen bonds, and
+per-residue energy decomposition comparisons with a reference molecule.  
+For more information on Descriptor Score see ref. [1].
+
+###Amber Score Improvements###
+
+   The cofactors library, leaprc.dock.cofactors, and the ions library,
+leaprc.dock.ions, have grown substantially.  These offer automatic
+support for simple treatments of common cofactors and ions.
+
+###PB/SA Score Improvements###
+
+   PB/SA score has undergone some generalizations and efficiency
+improvements that make docking, as opposed to rescoring, more tractable
+for nontrivial systems.
+
+###Miscellaneous###
+
+   If heavy atom RMSD calculation is activated in program DOCK then the
+RMSDs are now also emitted in the DOCK standard output file as well as the
+structural output files.  The label for RMSDs in output files has changed;
+see below.  In program grid, atom valence violations detected during
+van der Waals label assignments now emit warning messages instead of causing
+fatal terminations.  Such warnings should be thoroughly investigated since
+they are usually caused by inadequate preparation.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+DEPRECATED FEATURES
+
+1.  For a variety of reasons still under active development,
+amber_score cannot effectively be used as a secondary_score.
+This function was temporarily deprecated in 6.1, and using input parameter
+amber_score_secondary causes program termination.
+The recommended protocol is to perform two DOCK runs with the second run
+specifying amber_score as the primary_score.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+BUG FIXES
+
+Some bug reports have not yet been processed, but several important bugs have
+been fixed since the last release.
+
+For DOCK:
+   Incorrect Amber score input filenames for neutralized, solvated
+RNA complexes.  This caused duplicated filenames and loss of information.
+
+For sphere_selector:
+   Inadequate error checking in sphere file reading.  This bug was only
+exercised when the sphere file had size zero; in that case an infinite loop
+occurred.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+INPUT PARAMETER CHANGES AND THEIR DEFAULT VALUES
+
+Added:
+
+ For Anchor selection ( Anchor & Grow Parameters)
+
+    user_specified_anchor [no] (yes no):
+        atom_in_anchor [C1,1] ():
+    limit_max_anchors [no] (yes no):
+        max_anchor_num [1] ():
+
+ For descriptor Score:
+
+    descriptor_score_primary [no] (yes no):
+    descriptor_score_secondary [no] (yes no):
+    desc_use_footprint_reference_mol2 [no] (yes no):
+        desc_footprint_reference_mol2_filename [ligand_footprint.mol2] ():
+    desc_use_footprint_reference_txt [no] (yes no):
+        desc_footprint_reference_txt_filename [ligand_footprint.txt] ():
+    desc_foot_compare_type [r] (r d):
+        desc_normalize_foot [yes] (yes no):
+    desc_foot_comp_all_residue [yes] (yes no):
+        desc_choose_foot_range_type [specify_range] (specify_range threshold):
+        desc_range [20-40,60-80] ():
+        desc_vdw_threshold [1] ():
+        desc_es_threshold [1] ():
+        desc_hb_threshold [0.5] ():
+    desc_use_remainder [yes] (yes no):
+    desc_score_rec_filename [receptor.mol2] ():
+    desc_score_att_exp [6] ():
+    desc_score_rep_exp [12] ():
+    desc_score_rep_rad_scale [1] ():
+    desc_use_distance_dependent_dielectric [yes] (yes no):
+    desc_score_dielectric [4.0] ():
+    desc_score_vdw_scale [1] ():
+    desc_score_es_scale [1] ():
+    desc_score_hb_scale [0] ():
+    desc_score_internal_scale [0] ():
+    desc_score_fp_vwd_scale [0] ():
+    desc_score_fp_es_scale [0] ():
+    desc_score_fp_hb_scale [0] ():
+
+Removed:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+FILE FORMAT CHANGES
+
+For DOCK:
+   The label for RMSDs in output files has changed from 
+'#HEAVY ATM RMSD' to '########## HA_RMSD'.
+
+   New file type for reading in a reference footprint.
+Format is as follows:
+
+####################################
+###  Reference FP 
+####################################
+
+ resname   resid     vdw_ref      es_ref  hb_ref
+    GLY1       1   -0.000045   -0.000061       0
+    GLU2       2   -0.000226    0.000032       0
+    ALA3       3   -0.000174   -0.000093       0
+    PRO4       4   -0.000266    0.000186       0
+    ASN5       5   -0.001091    0.000538       0
+    GLN6       6   -0.000612    0.000165       0
+    ALA7       7   -0.001325   -0.000591       0
+    LEU8       8   -0.002368    0.000552       0
+    LEU9       9   -0.007224    0.000388       0
+   ARG10      10   -0.007143   -0.008906       0
+   ILE11      11   -0.004132    0.000615       0
+   LEU12      12   -0.012233   -0.000404       0
+   LYS13      13   -0.002511   -0.003366       0
+   GLU14      14   -0.004349    0.005031       0
+   THR15      15   -0.001461    0.000304       0
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+REFERENCES
+
+1. Balius, T. E.; Mukherjee, S.; Rizzo, R. C. Implementation and Evaluation of
+a Docking-Rescoring Method using Molecular Footprint Comparisons, J. Comput.
+Chem., 2011, 32 (10), 2273.2289. doi: 10.1002/jcc.21814 PMID: 21541962
+
+2. Docking and Scoring: A Review of Docking Programs, a Symposium at the March
+2011 ACS Meeting.
+http://abstracts.acs.org/chem/241nm/program/divisionindex.php?act=presentations&val=Docking+and+Scoring%3A+A+Review+of+Docking+Programs&ses=Docking+and+Scoring%3A+A+Review+of+Docking+Programs&prog=54110
+

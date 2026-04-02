@@ -1,0 +1,24 @@
+5,6,7,8-TETRAHYDROBIOPTERIN:  parmchk -f mol2 -i h4b.mol2 -o h4b.frcmod
+MASS
+
+BOND
+
+ANGLE
+c -cd-nh   66.700     122.760   same as c -ce-nh
+
+DIHE
+
+IMPROPER
+n -nc-cd-nh         1.1          180.0         2.0          Using default value
+cd-hn-nh-hn         1.1          180.0         2.0          Using default value
+c -cd-n -hn         1.1          180.0         2.0          General improper torsional angle (2 general atom types)
+cd-n -c -o         10.5          180.0         2.0          General improper torsional angle (2 general atom types)
+c -cc-cd-nh         1.1          180.0         2.0          Using default value
+cd-nc-cc-nh         1.1          180.0         2.0          Using default value
+c3-cd-nh-hn         1.1          180.0         2.0          Using default value
+c3-cc-nh-hn         1.1          180.0         2.0          Using default value
+
+NONBON
+
+
+

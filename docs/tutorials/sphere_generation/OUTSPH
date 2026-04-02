@@ -1,0 +1,10 @@
+ density type = X
+ reading  rec.ms                                                                             type   R
+ # of atoms =   2317   # of surf pts =  64657
+ finding spheres for   rec.ms                                                                          
+ dotlim =     0.000
+ radmax =    4.000
+ Minimum radius of acceptable spheres?
+  1.39999998
+ output to  rec.sph                                                                         
+ clustering is complete     33  clusters

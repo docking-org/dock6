@@ -1,0 +1,28 @@
+TITLE: Orientation
+
+EXECUTABLES TESTED:  
+	dock6
+
+FUNCTIONS TESTED:
+	Orient Ligand Parameters
+	
+WALL CLOCK TIME:
+	1.53 secs
+
+FILES USED:
+	orient1.dockin		#automated matching (single)
+	orient2.dockin		#manual matching
+	orient3.dockin		#use ligand spheres
+        orient4.dockin          #automated matching (library)
+	lig.mol2		#ligand structure file
+	multi_lig.mol2		#multiple ligand structure file
+	struct.sph		#receptor sphere file
+	lig.sph			#ligand sphere file
+	chem.defn		#chem parameter input file
+	flex.defn		#flex atom definition file
+	flex_drive.tbl		#flex torsional drive file
+	vdw.defn		#vdw parameter file used to create grid
+
+FILES GENERATED:
+	XXX_orients.mol2	#orientations from input file
+	XXX_scored.mol2		#best scoring pose from input file	

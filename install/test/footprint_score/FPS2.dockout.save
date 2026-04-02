@@ -1,0 +1,369 @@
+
+
+
+--------------------------------------
+DOCK v6.10
+
+Released January 2023
+Copyright UCSF
+--------------------------------------
+
+
+Conformational Sampling Parameters
+------------------------------------------------------------------------------------------
+conformer_search_type                                        rigid
+
+Internal Energy Parameters
+------------------------------------------------------------------------------------------
+use_internal_energy                                          yes
+internal_energy_rep_exp                                      12
+internal_energy_cutoff                                       100.0
+Note: Internal energy only includes repulsive VDW for growth and/or minimization.
+
+Molecule Library Input Parameters
+------------------------------------------------------------------------------------------
+ligand_atom_file                                             ligand_poses_minscored.mol2
+limit_max_ligands                                            yes
+max_ligands                                                  10
+skip_molecule                                                no
+read_mol_solvation                                           no
+calculate_rmsd                                               yes
+use_rmsd_reference_mol                                       yes
+rmsd_reference_filename                                      reference.mol2
+
+Database Filter Parameters
+------------------------------------------------------------------------------------------
+use_database_filter                                          no
+
+Orient Ligand Parameters
+------------------------------------------------------------------------------------------
+orient_ligand                                                no
+
+Bump Filter Parameters
+------------------------------------------------------------------------------------------
+bump_filter                                                  no
+
+Master Score Parameters
+------------------------------------------------------------------------------------------
+score_molecules                                              yes
+
+Contact Score Parameters
+------------------------------------------------------------------------------------------
+contact_score_primary                                        no
+
+Grid Score Parameters
+------------------------------------------------------------------------------------------
+grid_score_primary                                           no
+
+MultiGrid Score Parameters
+------------------------------------------------------------------------------------------
+multigrid_score_primary                                      no
+
+Dock3.5 Score Parameters
+------------------------------------------------------------------------------------------
+dock3.5_score_primary                                        no
+
+Continuous Energy Score Parameters
+------------------------------------------------------------------------------------------
+continuous_score_primary                                     no
+
+Footprint Similarity Score Parameters
+------------------------------------------------------------------------------------------
+footprint_similarity_score_primary                           yes
+fps_score_use_footprint_reference_mol2                       no
+fps_score_use_footprint_reference_txt                        yes
+fps_score_footprint_reference_txt_filename                   reference.txt
+fps_score_foot_compare_type                                  Euclidean
+-------------------------------------------------------------
+You chose to use the Euclidean distance as the metric 
+to compare the footprints.  When the value is 0 then 
+there is perfect agreement between the two footprints.
+As the agreement gets worse between the two
+footprints the value increases.
+-------------------------------------------------------------
+fps_score_normalize_foot                                     yes
+fps_score_foot_comp_all_residue                              yes
+fps_score_receptor_filename                                  receptor.mol2
+fps_score_vdw_att_exp                                        6
+fps_score_vdw_rep_exp                                        9
+fps_score_vdw_rep_rad_scale                                  1
+fps_score_use_distance_dependent_dielectric                  yes
+fps_score_dielectric                                         4.0
+fps_score_vdw_fp_scale                                       1
+fps_score_es_fp_scale                                        1
+fps_score_hb_fp_scale                                        0
+
+Pharmacophore Similarity Score Parameters
+------------------------------------------------------------------------------------------
+
+Hbond Energy Score Parameters
+------------------------------------------------------------------------------------------
+
+Internal Energy Score Parameters
+------------------------------------------------------------------------------------------
+
+Descriptor Score Parameters
+------------------------------------------------------------------------------------------
+
+Zou GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+
+Hawkins GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+
+SASA Score Parameters
+------------------------------------------------------------------------------------------
+
+Amber Score Parameters
+------------------------------------------------------------------------------------------
+
+Simplex Minimization Parameters
+------------------------------------------------------------------------------------------
+minimize_ligand                                              no
+
+Atom Typing Parameters
+------------------------------------------------------------------------------------------
+atom_model                                                   all
+vdw_defn_file                                                ../../../parameters/vdw_AMBER_parm99.defn
+flex_defn_file                                               ../../../parameters/flex.defn
+flex_drive_file                                              ../../../parameters/flex_drive.tbl
+
+Molecule Library Output Parameters
+------------------------------------------------------------------------------------------
+ligand_outfile_prefix                                        FPS2
+write_footprints                                             yes
+write_hbonds                                                 yes
+write_orientations                                           no
+num_scored_conformers                                        1
+rank_ligands                                                 no
+------------------------------------------------------------------------------------------
+Initializing Library File Routines...
+To cite Footprint Similarity Score use: 
+ Balius, T. E.; Mukherjee, S.; Rizzo, R. C. Implementation and Evaluation of a Docking-rescoring Method using Molecular Footprint Comparisons. J. Comput. Chem., 2011, 32, 2273-2289.
+
+
+-----------------------------------
+Molecule: MOL
+
+ Elapsed time for docking:	0.034 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+          Footprint_Similarity_Score:            0.665627
+                      FPS_vdw_energy:          -64.927635
+                       FPS_es_energy:           -3.251703
+                   FPS_vdw+es_energy:          -68.179337
+                       FPS_num_hbond:                   1
+           Internal_energy_repulsive:            8.291633
+                         FPS_vdw_fps:            0.236715
+                          FPS_es_fps:            0.428912
+                          FPS_hb_fps:            0.000000
+                   FPS_vdw_fp_numres:                 293
+                    FPS_es_fp_numres:                 293
+                    FPS_hb_fp_numres:                 293
+
+-----------------------------------
+Molecule: MOL
+
+ Elapsed time for docking:	0.035 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+          Footprint_Similarity_Score:            1.557741
+                      FPS_vdw_energy:          -64.847847
+                       FPS_es_energy:           -2.839946
+                   FPS_vdw+es_energy:          -67.687790
+                       FPS_num_hbond:                   1
+           Internal_energy_repulsive:            8.354062
+                         FPS_vdw_fps:            0.410455
+                          FPS_es_fps:            1.147286
+                          FPS_hb_fps:            0.000000
+                   FPS_vdw_fp_numres:                 293
+                    FPS_es_fp_numres:                 293
+                    FPS_hb_fp_numres:                 293
+
+-----------------------------------
+Molecule: MOL
+
+ Elapsed time for docking:	0.034 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+          Footprint_Similarity_Score:            1.489014
+                      FPS_vdw_energy:          -66.273689
+                       FPS_es_energy:           -1.073380
+                   FPS_vdw+es_energy:          -67.347069
+                       FPS_num_hbond:                   1
+           Internal_energy_repulsive:            4.184525
+                         FPS_vdw_fps:            0.262441
+                          FPS_es_fps:            1.226573
+                          FPS_hb_fps:            0.000000
+                   FPS_vdw_fp_numres:                 293
+                    FPS_es_fp_numres:                 293
+                    FPS_hb_fp_numres:                 293
+
+-----------------------------------
+Molecule: MOL
+
+ Elapsed time for docking:	0.034 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+          Footprint_Similarity_Score:            1.647171
+                      FPS_vdw_energy:          -63.934780
+                       FPS_es_energy:           -3.415743
+                   FPS_vdw+es_energy:          -67.350525
+                       FPS_num_hbond:                   1
+           Internal_energy_repulsive:            4.736934
+                         FPS_vdw_fps:            0.416617
+                          FPS_es_fps:            1.230554
+                          FPS_hb_fps:            1.414214
+                   FPS_vdw_fp_numres:                 293
+                    FPS_es_fp_numres:                 293
+                    FPS_hb_fp_numres:                 293
+
+-----------------------------------
+Molecule: MOL
+
+ Elapsed time for docking:	0.034 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+          Footprint_Similarity_Score:            1.068140
+                      FPS_vdw_energy:          -64.643425
+                       FPS_es_energy:           -2.262737
+                   FPS_vdw+es_energy:          -66.906158
+                       FPS_num_hbond:                   1
+           Internal_energy_repulsive:            4.325646
+                         FPS_vdw_fps:            0.320732
+                          FPS_es_fps:            0.747408
+                          FPS_hb_fps:            0.000000
+                   FPS_vdw_fp_numres:                 293
+                    FPS_es_fp_numres:                 293
+                    FPS_hb_fp_numres:                 293
+
+-----------------------------------
+Molecule: MOL
+
+ Elapsed time for docking:	0.034 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+          Footprint_Similarity_Score:            1.288321
+                      FPS_vdw_energy:          -61.768936
+                       FPS_es_energy:           -5.000184
+                   FPS_vdw+es_energy:          -66.769119
+                       FPS_num_hbond:                   2
+           Internal_energy_repulsive:            6.513687
+                         FPS_vdw_fps:            0.369463
+                          FPS_es_fps:            0.918857
+                          FPS_hb_fps:            0.765367
+                   FPS_vdw_fp_numres:                 293
+                    FPS_es_fp_numres:                 293
+                    FPS_hb_fp_numres:                 293
+
+-----------------------------------
+Molecule: MOL
+
+ Elapsed time for docking:	0.034 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+          Footprint_Similarity_Score:            1.867576
+                      FPS_vdw_energy:          -62.646763
+                       FPS_es_energy:           -2.358670
+                   FPS_vdw+es_energy:          -65.005432
+                       FPS_num_hbond:                   1
+           Internal_energy_repulsive:            3.368812
+                         FPS_vdw_fps:            0.598513
+                          FPS_es_fps:            1.269064
+                          FPS_hb_fps:            1.414214
+                   FPS_vdw_fp_numres:                 293
+                    FPS_es_fp_numres:                 293
+                    FPS_hb_fp_numres:                 293
+WARNING: sum of squares close to zero in norm calculation.
+
+-----------------------------------
+Molecule: MOL
+
+ Elapsed time for docking:	0.034 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+          Footprint_Similarity_Score:            1.392832
+                      FPS_vdw_energy:          -62.926819
+                       FPS_es_energy:           -4.145655
+                   FPS_vdw+es_energy:          -67.072472
+                       FPS_num_hbond:                   0
+           Internal_energy_repulsive:           11.654094
+                         FPS_vdw_fps:            0.520799
+                          FPS_es_fps:            0.872033
+                          FPS_hb_fps:            1.000000
+                   FPS_vdw_fp_numres:                 293
+                    FPS_es_fp_numres:                 293
+                    FPS_hb_fp_numres:                 293
+WARNING: sum of squares close to zero in norm calculation.
+
+-----------------------------------
+Molecule: MOL
+
+ Elapsed time for docking:	0.034 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+          Footprint_Similarity_Score:            1.498438
+                      FPS_vdw_energy:          -64.496681
+                       FPS_es_energy:           -0.431864
+                   FPS_vdw+es_energy:          -64.928543
+                       FPS_num_hbond:                   0
+           Internal_energy_repulsive:            6.302218
+                         FPS_vdw_fps:            0.335560
+                          FPS_es_fps:            1.162878
+                          FPS_hb_fps:            1.000000
+                   FPS_vdw_fp_numres:                 293
+                    FPS_es_fp_numres:                 293
+                    FPS_hb_fp_numres:                 293
+
+-----------------------------------
+Molecule: MOL
+
+ Elapsed time for docking:	0.034 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+          Footprint_Similarity_Score:            2.052198
+                      FPS_vdw_energy:          -62.391811
+                       FPS_es_energy:           -2.231609
+                   FPS_vdw+es_energy:          -64.623421
+                       FPS_num_hbond:                   2
+           Internal_energy_repulsive:            6.952624
+                         FPS_vdw_fps:            0.583400
+                          FPS_es_fps:            1.468798
+                          FPS_hb_fps:            0.765367
+                   FPS_vdw_fp_numres:                 293
+                    FPS_es_fp_numres:                 293
+                    FPS_hb_fp_numres:                 293
+
+
+10 Molecules Processed
+Total elapsed time:	1.145 seconds

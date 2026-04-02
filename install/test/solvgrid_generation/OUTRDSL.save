@@ -1,0 +1,28 @@
+ receptor pdb file:
+rec.crg                                                                         
+ receptor parameters will be read from:
+prot.table.ambcrg.ambH                                                          
+ van der Waals parameter file:
+vdw.parms.amb.mindock                                                           
+ input box file defining grid location:
+box                                                                             
+box center coordinates [x y z]:
+-2.520000     32.19700     23.14500    
+box x-dimension =  38.37400    
+box y-dimension =  37.01900    
+box z-dimension =  39.30700    
+ grid spacing in angstroms
+  0.699999988    
+ grid points per side [x y z]:
+          56          54          58
+ total number of grid points =       175392
+ a distance-dependent dielectric will be used
+the dielectric function will be multiplied by   4.00
+ cutoff distance for energy calculations:
+   8.00000000    
+ distances defining bumps with receptor atoms:
+receptor polar atoms  2.30
+receptor carbon atoms  2.60
+ output grid prefix name:
+chem                                                                            
+ Occupancy desolvation grid will be generated

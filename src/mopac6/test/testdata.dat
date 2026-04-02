@@ -1,0 +1,117 @@
+     nointer  noxyz + mndo dump=8
+     t=2000 + thermo(298,298) force isotope
+     ROT=2 
+     DEMONSTRATION OF MOPAC - FORCE AND THERMODYNAMICS CALCULATION
+     FORMALDEHYDE, MNDO ENERGY = -32.8819  See Manual.
+     O    
+     C    1.216487  1                                 1  0  0 
+     H    1.106109  1  123.513310  1                  2  1  0 
+     H    1.106109  1  123.513310  1  180.000000  1   2  1  3 
+     0    0.000000  0    0.000000  0    0.000000  0   0  0  0
+   CHARGE=2 OPEN(4,3) SINGLET ROOT=6 force 
+  Methane RHF dication, 6th singlet state (totally symmetric)
+   Check that vibrational frequencies are 1343(T) 2488(A) 2554(E) 4620(T) +/-1
+   H    
+   C    1.2298156  
+   H    1.2298156  0    109.471221  
+   H    1.2298156  0    109.471221  0   -120.000000  0    2    1    3
+   H    1.2298156  0    109.471221  0    120.000000  0    2    1    3
+ 
+  gnorm=0  & 
+                       PM3 
+  Methanol   Check that heat of formation is -51.8773 kcal/mol
+    C
+    O 1.4 1             1
+    H 1.0 1 109 1       1 2
+    H 1.0 1 109 1 120 1 1 2 3
+    H 1.0 1 109 1 120 1 1 2 4
+    H 1.0 1 120 1  30 1 2 1 3
+ 
+   gnorm=0    AIGIN
+  Ethane, showing use of Gaussian Z-matrix input (AIGIN is necessary in this run)
+  Check that heat of formation is -19.7220
+   C  
+   C     1     r21    
+   H     2     r32       1     a321   
+   H     2     r32       1     a321      3  120   0
+   H     2     r32       1     a321      3  240   0
+   H     1     r32       2     a321      3  d6321 0
+   H     1     r32       2     a321      3 -d6321 0
+   H     1     r32       2     a321      3  180   0
+ 
+      r21        1.5
+      r32        1.0
+      a321     109.0
+      d6321     60.0
+ 
+   ts  +
+            am1
+   Location of transition state for HCN -> HNC
+   Check the heat of formation is 118.456 kcal/mol
+   H
+   C  1.3 1
+   N  1.3 1 60 1
+ 
+   SYMMETRY  CHARGE=2 OPEN(4,3) SINGLET ROOT=6 setup=testdata.dat rot=12
+  Methane  Check that the extra keywords are being read in from start of file
+  
+   H    0.0000000  0      0.000000  0      0.000000  0    0    0    0      0.4123
+   C    1.2298156  1      0.000000  0      0.000000  0    1    0    0      0.3509
+   H    1.2298156  0    109.471000  0      0.000000  0    2    1    0      0.4123
+   H    1.2298156  0    109.471000  0   -120.000000  0    2    1    3      0.4123
+   H    1.2298156  0    109.471000  0    120.000000  0    2    1    3      0.4123
+ 
+    2  1    3   4   5
+ 
+   1scf  
+  Aniline  Check that atom labels are being output.
+   
+   C(Ph-NH2)    
+   C(Atom 2)    1.4 1             1
+   C(Atom 3)    1.4 1 120 1       2 1
+   C(Atom 4)    1.4 1 120 1   0 1 3 2 1
+   C(Atom 5)    1.4 1 120 1   0 1 4 3 2
+   C(Atom 6)    1.4 1 120 1   0 1 5 4 3
+   N(Ph-NH2)    1.4 1 120 1 180 1 1 2 3
+   H(on N)      1.0 1 109 1   0 1 7 1 2
+   H(on N)      1.0 1 109 1 120 1 7 1 8
+   H(Ortho)     1.0 1 120 1 180 1 2 3 4
+   H(Meta)      1.0 1 120 1 180 1 3 4 5
+   H(Para)      1.0 1 120 1 180 1 4 5 6
+   H(Meta')     1.0 1 120 1 180 1 5 6 1
+   H(Ortho')    1.0 1 120 1 180 1 6 1 2
+ 
+   pm3 denout  symmetry
+   Formaldehyde.  Density matrix written to disk.
+ 
+ o
+ c 1.2 1             1
+ h 1.1 1 120 1       2 1
+ h 1.1 0 120 0 180 0 2 1 3
+ 
+ 3 1 4
+ 3 2 4
+ 
+  am1 symm
+ water.  This calculation ensures that the information on formaldehyde is lost.
+ 
+ o
+ h 1.1 1           1
+ h 1.1 0  104 1    1 2 
+ 
+ 2 1 3
+ 
+ oldgeo mndo 
+  Water  The geometry used is that for the previous run (water)
+ 
+   pm3 oldens symmetry gnorm=0  pl  1scf
+   Formaldehyde  Check the PLS to ensure that the density matrix was read
+ in correctly
+   O    0.0000000  0      0.000000  0      
+   C    1.2020463  1      0.000000  0      
+   H    1.0912524  1    121.774563  1      
+   H    1.0912524  0    121.774563  0    180.000000  0    2    1    3      
+ 
+    3  1    4
+    3  2    4
+ 

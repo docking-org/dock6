@@ -1,0 +1,103 @@
+DOCK 6.7
+
+This is a release of the version applied in reference [1].
+
+NEW IN DOCK 6.7
+
+###Input Parameter Default Values###
+
+   Based on a performance assessment [1] using large data sets containing
+systems with diverse structure and chemistry and employing multiple metrics,
+which were pose reproduction, cross-docking, and database enrichment,
+the default values for several input parameters have been updated:
+max_orientations 500 -> 1000
+use_internal_energy no -> yes
+pruning_max_orients 100 -> 1000
+pruning_conformer_score_cutoff 25.0 -> 100.0
+bump_filter yes -> no
+simplex_grow_max_iterations 20 -> 500
+
+   In order to make the footprint scores [2-3] easily accessible and user
+friendly the standard euclidean comparison is recommended. Thus, the default
+values for several input parameters have been updated:
+
+desc_foot_compare_type r -> d
+desc_normalize_foot yes -> no
+multigrid_score_use_euc no -> yes
+multigrid_score_use_norm_euc yes -> no
+
+###Miscellaneous###
+
+   Incremental improvements in documentation, installation, and testing.
+As of version 6.3 DOCK officially stopped supporting SGI platforms because the
+developers no longer have access to SGI machines. However, user interest has
+continued, and the sgi configuration files have been updated based on feedback.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+DEPRECATED FEATURES
+
+1.  For a variety of reasons still under active development,
+amber_score cannot effectively be used as a secondary_score.
+This function was temporarily deprecated in 6.1, and using input parameter
+amber_score_secondary causes program termination.
+The recommended protocol is to perform two sequential DOCK runs where the
+output ligand poses from the first run are rescored specifying amber_score
+as the primary_score in the second run.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+BUG FIXES
+
+Some bug reports have not yet been processed, but several important bugs have
+been fixed since the last release.
+
+For multigrid_fp_gen.py:
+   Bond information is not written to the individual-residue-mol2 files that
+are used to make the individual-residue-grids; the @<TRIPOS>BOND sections are
+empty.  This caused the same ligand pose scored on a correct grid to differ
+in VDW energy by as much as ~10% compared to a faulty grid.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+INPUT PARAMETER CHANGES AND THEIR DEFAULT VALUES
+
+Changed:
+
+   bump_filter [no] (yes, no)
+   desc_foot_compare_type [d] (r d)
+   desc_normalize_foot [no] (yes no)
+   max_orientations [1000] (int)
+   multigrid_score_use_euc [yes] (yes no)
+   multigrid_score_use_norm_euc [no] (yes no)
+   pruning_conformer_score_cutoff [100.0] (float)
+   pruning_max_orients [1000] (int)
+   simplex_grow_max_iterations [500] (int)
+   use_internal_energy [yes] (yes no)
+
+Added:
+
+Removed:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+FILE FORMAT CHANGES
+
+None.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+REFERENCES
+
+1. Allen, W. J.; Balius, T. E.; Mukherjee, S.; Brozell, S. R.; Moustakas, D. T.;
+Lang, P. T.; Case, D. A.; Kuntz, I. D.; Rizzo, R. C.  DOCK 6: Impact of New
+Features and Current Docking Performance.  J. Comput. Chem. 2014, Submitted.
+
+2. Balius, T. E.; Mukherjee, S.; Rizzo, R. C.  Implementation and Evaluation
+of a Docking-rescoring Method Using Molecular Footprint Comparisons.
+J. Comput. Chem. 2011, 32, 2273-2289.
+
+3. Balius, T. E.; Allen, W. J.; Mukherjee, S.; Rizzo, R. C. Grid-Based
+Molecular Footprint Comparison Method for Docking and De Novo Design:
+Application to HIVgp41.  J. Comput. Chem. 2013, 34, 1226-1240.
+

@@ -1,0 +1,227 @@
+DOCK 6.4
+
+For version 6.4, recent improvements to the sampling implementation and
+corrections to prevent steric clashes that have been mentioned on the
+Dock-fans list [1] are incorporated here.
+
+NEW IN DOCK 6.4
+
+###Internal Energy###
+
+   During growth and minimization, an internal energy scoring function can be
+used. The goal of the internal energy function is to reduce the occurrence of
+internal clashes during the torsional optimization. This function computes the
+repulsive Lennard-Jones term between all ligand atom pairs, excluding all 1-2,
+1-3, and 1-4 pairs. (Currently, attractive Lennard-Jones and Coulombic terms
+are neglected; the aim is to eliminate internal clashes not to optimize the
+internal geometry. In addition, since there is no dihedral term in the force
+field, if the attractive terms are included, the molecule might appear less
+physical.)  The internal energy can be cut on or off; if cut on, it is
+always used and is reported in the final energy.  If it is cut off, it is never
+used.  The pruning during growth is done by considering both the internal and
+interaction energies.  We recommend its use.
+
+   Note that DOCK 6.3 also had an internal energy function however it was only
+used in final minimization and not during growth.  
+
+   The modifications have greatly improved the behavior of the Anchor and Grow
+algorithm.
+
+###Growth Tree and Statistics###
+
+   Dock uses Breadth First Search to sample the conformational space of the
+ligand. The tree is pruned at every stage of growth to remove unsuitable
+conformations. In order to be as space efficient as possible, DOCK only saves
+one level of growth at a time unless "write_growth_tree" is turned on. In
+order to construct the growth tree it was necessary to do the following: (1)
+Retain all levels of growth (before and after minimization) in memory. (2)
+Link every conformer to its parent conformer during growth. (3) While writing
+out the tree, the traversal starts from a fully grown ligand (leaf), moving up
+the branch (parent conformer) until the ligand anchor (root) is reached.
+Finally, the growth tree branch is printed as a multi-mol2 file starting from
+the anchor to the fully grown ligand, including minimizations. This newly
+implemented feature allows visualization of all stages of growth.
+Note that the growth trees can easily be visualized using the Viewdock
+module in the UCSF chimera program. Extra information regarding conformer
+number, anchor number, parent conformer, etc. can also be accessed
+directly using this tool.
+
+   The verbose growth statistics feature is useful for debugging incomplete
+growths and other possible issues with the growth routines. This feature
+is also useful to show progress when docking larger peptide-like ligands
+(twenty or more rotatable bonds) which can take several hours.
+In the example below, cumulative timings in seconds (e.g., t=16.75s)
+are shown at the end of each line to allow quick profiling of
+the slowest steps during docking. A separate section is printed for each
+anchor sampled when using multiple anchors. For anchor #1, the orienting
+routine produces 998 orients, and 41 are retained after clustering and
+minimization. The ligand has 7 rotatable bonds. The second line shows the
+assignment of layers and segments. For details on the terminology, please
+consult the DOCK 4 paper. Subsequently, two lines of information are printed
+for each torsion sampled.
+
+    VERBOSE GROWTH STATS : ANCHOR #1
+    41/998 anchor orients retained (max 1000) t=16.75s
+    Lyr 1-1 Segs|Lyr 2-1 Segs|Lyr 3-2 Segs|Lyr 4-2 Segs|Lyr 5-1 Segs|
+    Lyr:1 Seg:0 Bond:8 : Sampling 6 dihedrals C6(C.ar) C4(C.ar) C3(C.3) C1(C.3)
+    Lyr:1 Seg:0 21/246 retained, Pruning: 2-outside grid 5-score 218-clustered (62 in growth tree) t=20.92s
+    Lyr:2 Seg:0 Bond:5 : Sampling 3 dihedrals C4(C.ar) C3(C.3) C1(C.3) N1(N.3)
+    Lyr:2 Seg:0 57/63 retained, Pruning: 1-score 5-clustered (119 in growth tree) t=22.36s
+    Lyr:3 Seg:0 Bond:1 : Sampling 3 dihedrals C3(C.3) C1(C.3) N1(N.3) S1(S.o2)
+    Lyr:3 Seg:0 105/171 retained, Pruning: 1-outside grid 9-score 56-clustered (224 in growth tree) t=27s
+    Lyr:3 Seg:1 Bond:3 : Sampling 6 dihedrals N4(N.am) C2(C.2) C1(C.3) C3(C.3)
+    Lyr:3 Seg:1 67/630 retained, Pruning: 16-score 547-clustered (291 in growth tree) t=48.8s
+    Lyr:4 Seg:0 Bond:43 : Sampling 3 dihedrals C16(C.ar) S1(S.o2) N1(N.3) C1(C.3)
+    Lyr:4 Seg:0 100/201 retained, Pruning: 101-clustered (391 in growth tree) t=56.67s
+    Lyr:4 Seg:1 Bond:26 : Sampling 2 dihedrals C11(C.3) N4(N.am) C2(C.2) C1(C.3)
+    Lyr:4 Seg:1 154/200 retained, Pruning: 13-score 33-clustered (545 in growth tree) t=73.21s
+    Lyr:5 Seg:0 Bond:46 : Sampling 6 dihedrals C17(C.ar) C16(C.ar) S1(S.o2) N1(N.3)
+    Lyr:5 Seg:0 99/924 retained, Pruning: 30-score 795-clustered (644 in growth tree) t=179.43s
+
+    Lyr:1 Seg:0 indicates that this is Layer #1 and Segment #0. Layer and
+segment numbers start from zero and correspond to the array indices used
+internally. Bond:8 refers to the bond number in the mol2 file. "Sampling 6
+dihedrals C6(C.ar)  C4(C.ar)  C3(C.3)  C1(C.3)" specifies the exact torsion
+being sampled. Six dihedral positions are being sampled in this case, as
+determined by the drive_id in flex_drive.tbl. 21/246 retained means 21
+conformers were retained from the 246 conformers generated during growth (41
+conformers x 6 dihedral positions = 246 new conformers). The Pruning section
+demonstrates how these 246-21=225 conformers were pruned: 2 conformers
+were outside the energy grid, 5 conformers exceeded the score cut-off (see
+pruning_conformer_score_cutoff) and 218 conformers were clustered. Typically
+clustering removes the greatest number of conformers during each torsion grown
+as controlled by the pruning_clustering_cutoff parameter. The reader is
+encouraged to verify that the number of conformers retained can be calculated
+as above at each stage of growth. If the growth tree is turned on, the total
+number of conformers stored in the growth tree are also reported.
+
+###Database Filter###
+
+   The Database Filter is designed for on-the-fly filtering of small molecules
+from the database during docking. Filtering small molecules by heavy atoms,
+rotatable bonds, molecular weight and formal charge is currently supported.
+This routine is designed to be modular so that other descriptors can be easily
+added. The default values are deliberately set to allow most small molecules
+to pass through. One use of this routine would be to partition a database into
+subsets such as "0-7 rotbonds" or "300-500 molwt" or "neutral charge". Another
+use would be to exclude ligands that are too small (<200 amu) or too large
+(>500 amu) for a particular target. This routine can also be used to filter a
+database without performing any docking.
+
+###Pre-minimization###
+
+   Pre-minimization, which explores only the torsional (N) degrees of freedom,
+occurs prior to standard minimization.  Note that if 500 iterations of
+standard minimization and 20 iterations of torsion pre-minimization are
+specified, at most 520 steps of minimization will be performed. The motivation
+for using the torsion pre-minimizer is to optimize the torsions before
+translating. This parameter should only be used in cases where the growth tree
+reveals that the minimizer is translating a correctly oriented scaffold to
+relieve clashes instead of adjusting the torsions first. Alternatively, the
+restraint minimization routine could be used (see below). 
+
+###Restrained Minimization###
+
+   We have implemented an "RMSD tether": Erestraint = k * RMSD ^ 2.
+If simplex_restraint_min is yes then every time the minimizer is called the
+conformer is restrained to the initial conformation passed to the minimizer.
+Only the active heavy atoms are used in the calculation.  If this function is
+used during growth, the entered conformer grown so far is restrained including
+the most recently grown torsion.  This ensures considerably less movement
+during minimization.  
+
+###Miscellaneous###
+
+   The test suite now contains reference outputs from a 64 bit platform
+(x86_64).  Several configuration files have been added; thanks to
+Carlos P Sosa et al. for work on the ones for the Blue Genes. 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+DEPRECATED FEATURES
+
+1.  Elimination of the final minimization functionality from the code.  We
+believe that it is no longer needed with the better behavior of Anchor and
+Grow. 
+
+2.  The Internal Energy function was moved from flexible growth. The Internal
+Energy function is able to be used for all docking and minimization
+calculations. 
+
+3.  For a variety of reasons still under active development,
+amber_score cannot effectively be used as a secondary_score.
+This function was temporarily deprecated in 6.1, and using input parameter
+amber_score_secondary causes program termination.
+The recommended protocol is to perform two DOCK runs with the second run
+specifying amber_score as the primary_score.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+BUG FIXES
+
+Some bug reports have not yet been processed, but several important bugs have
+been fixed since the last release.
+
+For DOCK:
+
+   For the uses of multiple anchors fragments (choose of different portions of
+the molecule) a C++ vector was not properly cleared. This was resolved
+
+   The orienting bug fix has been added and validated through visualization.  
+
+   The resolution of the clash problem for highly flexible ligands (Rotatable
+bonds > 7) has been accomplished by inclusion of an internal energy function
+at every stage of growth.  The internal energy function can be cut on or off
+and will always or never be used, respectively.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+INPUT PARAMETER CHANGES AND THEIR DEFAULT VALUES
+
+Added:
+   use_database_filter [no] (yes, no)
+   dbfilter_max_heavy_atoms [999] (int)
+   dbfilter_min_heavy_atoms [0] (int)
+   dbfilter_max_rot_bonds [999] (int)
+   dbfilter_min_rot_bonds [0] (int)
+   dbfilter_max_molwt [9999.0] (float)
+   dbfilter_min_molwt [0.0] (int)
+   dbfilter_max_formal_charge [10.0] (float)
+   dbfilter_min_formal_charge [-10.0] (float)
+
+   write_growth_tree [no] (yes, no)
+
+   simplex_tors_premin_iterations [0] (int)
+   simplex_grow_tors_premin_iterations [0] (int)
+   simplex_restraint_min [yes] (yes, no)
+   simplex_coefficient_restraint [10.0] (float)
+
+Removed:
+   internal_energy_att_exp
+   internal_energy_dielectric
+
+   simplex_final_min [no] (yes, no)
+   simplex_final_max_iterations [0] (int)
+   simplex_final_min_rep_rad_scale [1.0] (float)
+   simplex_final_min_add_internal [no] (yes, no)
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+FILE FORMAT CHANGES
+
+For DOCK:
+   The label for Grid Score changes from  
+##########    Grid Score:
+##########           vdw:
+##########            es:
+to 
+##########    Grid Score:
+##########      Grid_vdw:
+##########       Grid_es:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+REFERENCES
+
+1. http://mailman.docking.org/pipermail/dock-fans/2009-May/002058.html
+

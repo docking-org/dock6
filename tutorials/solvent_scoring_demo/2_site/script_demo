@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# Construct sphere set in active site
+../../../bin/sphgen
+
+# Select spheres within 10 Ang of ligand 
+../../../bin/sphere_selector rec.sph ../1_struct/lig_charged.mol2 10.0
+
+# Convert selected spheres into pdb format for viewing
+../../../bin/showsphere < selected_spheres.in 
+
+# Convert spheres from largest cluster into pdb format for viewing
+../../../bin/showsphere < sphgen_cluster.in

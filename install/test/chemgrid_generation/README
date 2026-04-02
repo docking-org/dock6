@@ -1,0 +1,17 @@
+TITLE: VDW/ES Grid generation
+
+EXECUTABLES TESTED:  
+	chemgrid
+	grid-convert
+	
+FILES USED:
+	INCHEM			#input file for chemgrid
+	box			#coordinates of bounding box
+	rec.crg			#structure file used to create grid
+	vdw.parms.amb.mindock	#vdw parameter file used to create grid
+	prot.table.ambcrg.ambH	#charges and radii for protein atoms
+
+FILES GENERATED:
+	OUTCHEM			#output file from chemgrid
+	chem.*			#bump vdw and es chemgrids
+	chem52.*		#bump vdw and DelPhi esp map grids

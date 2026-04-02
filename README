@@ -1,0 +1,27 @@
+DOCK 6 Main README
+
+
+This directory tree contains DOCK 6.
+All contents are protected by copyright and licensing provisions.
+
+------------------------------------------------------------------------------
+
+The documentation is online.  For complete installation instructions see
+http://dock.compbio.ucsf.edu/DOCK_6/dock6_manual.htm#Installation
+For the impatient, installation starts with "./configure -help" in the
+"install" directory.  That is, in a terminal window type this (and then press
+the "enter" key):
+cd install; ./configure -help
+
+For more information, including tutorials, bug fixes, etc., please consult
+the UCSF DOCK Web page:
+
+               http://dock.compbio.ucsf.edu/
+
+------------------------------------------------------------------------------
+
+DOCK 6 is provided under a license that has restrictions on its use and
+redistribution.  You should not use DOCK 6 unless you have executed a license
+agreement with UCSF.  Consult that license to see the provisions that apply.
+
+------------------------------------------------------------------------------

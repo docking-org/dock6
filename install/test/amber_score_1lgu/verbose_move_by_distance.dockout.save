@@ -1,0 +1,348 @@
+
+
+
+--------------------------------------
+DOCK v6.10
+
+Released January 2023
+Copyright UCSF
+--------------------------------------
+
+
+Conformational Sampling Parameters
+------------------------------------------------------------------------------------------
+conformer_search_type                                        rigid
+
+Internal Energy Parameters
+------------------------------------------------------------------------------------------
+use_internal_energy                                          no
+
+Molecule Library Input Parameters
+------------------------------------------------------------------------------------------
+ligand_atom_file                                             lig.amber_score.mol2
+limit_max_ligands                                            no
+skip_molecule                                                no
+read_mol_solvation                                           no
+calculate_rmsd                                               no
+
+Database Filter Parameters
+------------------------------------------------------------------------------------------
+use_database_filter                                          no
+
+Orient Ligand Parameters
+------------------------------------------------------------------------------------------
+orient_ligand                                                no
+
+Bump Filter Parameters
+------------------------------------------------------------------------------------------
+bump_filter                                                  no
+
+Master Score Parameters
+------------------------------------------------------------------------------------------
+score_molecules                                              yes
+
+Contact Score Parameters
+------------------------------------------------------------------------------------------
+contact_score_primary                                        no
+
+Grid Score Parameters
+------------------------------------------------------------------------------------------
+grid_score_primary                                           no
+
+MultiGrid Score Parameters
+------------------------------------------------------------------------------------------
+multigrid_score_primary                                      no
+
+Dock3.5 Score Parameters
+------------------------------------------------------------------------------------------
+dock3.5_score_primary                                        no
+
+Continuous Energy Score Parameters
+------------------------------------------------------------------------------------------
+continuous_score_primary                                     no
+
+Footprint Similarity Score Parameters
+------------------------------------------------------------------------------------------
+footprint_similarity_score_primary                           no
+
+Pharmacophore Similarity Score Parameters
+------------------------------------------------------------------------------------------
+pharmacophore_score_primary                                  no
+
+Hbond Energy Score Parameters
+------------------------------------------------------------------------------------------
+hbond_score_primary                                          no
+
+Internal Energy Score Parameters
+------------------------------------------------------------------------------------------
+internal_energy_score_primary                                no
+
+Descriptor Score Parameters
+------------------------------------------------------------------------------------------
+descriptor_score_primary                                     no
+
+Zou GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+gbsa_zou_score_primary                                       no
+
+Hawkins GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+gbsa_hawkins_score_primary                                   no
+
+SASA Score Parameters
+------------------------------------------------------------------------------------------
+SASA_score_primary                                           no
+
+Amber Score Parameters
+------------------------------------------------------------------------------------------
+amber_score_primary                                          yes
+amber_score_receptor_file_prefix                             1lgu
+amber_score_movable_region                                   distance
+amber_score_movable_distance_cutoff                          3.0
+receptor_site_file                                           selected_spheres.sph
+amber_score_minimization_rmsgrad                             0.01
+amber_score_before_md_minimization_cycles                    1
+amber_score_md_steps                                         1
+amber_score_after_md_minimization_cycles                     1
+amber_score_gb_model                                         5
+amber_score_nonbonded_cutoff                                 18.0
+amber_score_temperature                                      300.0
+amber_score_abort_on_unprepped_ligand                        yes
+
+Molecule Library Output Parameters
+------------------------------------------------------------------------------------------
+ligand_outfile_prefix                                        move_by_distance
+write_orientations                                           no
+num_scored_conformers                                        1
+rank_ligands                                                 no
+------------------------------------------------------------------------------------------
+Initializing Library File Routines...
+Initializing Amber_Score...
+
+Reading the receptor input files.
+Reading parm file (1lgu.prmtop)
+title:
+                                                                                
+Number of receptor strands is 1
+Number of receptor residues is 162
+Number of receptor atoms is 2601
+
+42 receptor residues are within 3 Angstroms of the active site.
+The distance based atom expression for the receptor is 1:74,75,77,78,79,81,82,83,84,85,86,87,88,89,91,99,101,102,103,104,105,107,108,109,111,114,115,117,118,119,121,122,123,126,129,133,136,138,145,149,153,154,:
+The ligand must be the first strand.
+The distance based atom expression for the complex is 1::|2:74,75,77,78,79,81,82,83,84,85,86,87,88,89,91,99,101,102,103,104,105,107,108,109,111,114,115,117,118,119,121,122,123,126,129,133,136,138,145,149,153,154,:
+
+************************************** 
+Computing the receptor energy:
+
+	mm_options:  diel=C
+	mm_options:  gbsa=0
+	mm_options:  nsnb=99999
+	mm_options:  cut=18.0
+	mm_options:  gb=5
+	mm_options:  ntpr=1
+freezing 1902 atoms using expression 1:74,75,77,78,79,81,82,83,84,85,86,87,88,89,91,99,101,102,103,104,105,107,108,109,111,114,115,117,118,119,121,122,123,126,129,133,136,138,145,149,153,154,: for moving atoms
+    iter    Total    bad         vdW     elect.     cons.   genBorn      frms
+ff:   0  -1621.21    577.05    132.21  -1987.89      0.00   -342.58  9.00e+00
+ff:   1  -1631.05    572.33    127.36  -1988.02      0.00   -342.70  8.71e+00
+Minimization reached the maximum number of iterations.
+The random number is 1454538876
+	mm_options:  diel=C
+	mm_options:  dt=0.001
+	mm_options:  gamma_ln=2
+	mm_options:  rattle=0
+	mm_options:  cut=18.0
+	mm_options:  gb=5
+	mm_options:  tempi=300.0
+	mm_options:  temp0=300.0
+	mm_options:  ntwx=1
+	mm_options:  ntpr=1
+    iter    Total    bad         vdW     elect.     cons.   genBorn      frms
+ff:   0  -1631.05    572.33    127.36  -1988.02      0.00   -342.70  8.71e+00
+ff:   1  -1611.15    612.78    109.10  -1988.77      0.00   -344.25  8.91e+00
+md:           1      0.001     571.95   -1611.15   -1039.20     274.51
+	mm_options:  diel=C
+	mm_options:  gbsa=0
+	mm_options:  nsnb=99999
+	mm_options:  cut=18.0
+	mm_options:  gb=5
+	mm_options:  ntpr=1
+    iter    Total    bad         vdW     elect.     cons.   genBorn      frms
+ff:   0  -1611.15    612.78    109.10  -1988.77      0.00   -344.25  8.91e+00
+ff:   1  -1621.00    606.79    105.46  -1988.92      0.00   -344.32  8.65e+00
+Minimization reached the maximum number of iterations.
+Reading parm file (1lgu.prmtop)
+title:
+                                                                                
+	mm_options:  cut=999.0
+	mm_options:  gbsa=1
+     bond:    248.585115367
+    angle:    765.762376639
+ dihedral:    805.777506375
+    enb14:   1129.898528429
+    eel14:   5766.664006909
+      enb:    -23.215649480
+      eel:  -11104.546237777
+      egb:  -2217.799735933
+    econs:      0.000000000
+    esurf:     44.450493893
+    Total:  -4584.423595578
+Done computing the receptor energy.
+Done initializing Amber_Score.
+
+
+Reading the ligand lig.1 input files.
+
+Reading parm file (lig.1.prmtop)
+title:
+AAH                                                                             
+Number of ligand strands is 1
+Number of ligand residues is 1
+Number of ligand atoms is 14
+
+Reading the complex 1lgu.lig.1 input files.
+Reading parm file (1lgu.lig.1.prmtop)
+title:
+AAH                                                                             
+Number of complex strands is 2
+Number of complex residues is 163
+Number of complex atoms is 2615
+
+************************************** 
+Computing the ligand energy:
+
+	mm_options:  diel=C
+	mm_options:  gbsa=0
+	mm_options:  nsnb=99999
+	mm_options:  cut=18.0
+	mm_options:  gb=5
+	mm_options:  ntpr=1
+    iter    Total    bad         vdW     elect.     cons.   genBorn      frms
+ff:   0    -67.06      3.80      3.40    -67.14      0.00     -7.12  1.37e+01
+ff:   1    -62.45      9.56      4.03    -67.60      0.00     -8.44  2.93e+01
+Minimization reached the maximum number of iterations.
+The random number is 1454538876
+	mm_options:  diel=C
+	mm_options:  dt=0.001
+	mm_options:  gamma_ln=2
+	mm_options:  rattle=0
+	mm_options:  cut=18.0
+	mm_options:  gb=5
+	mm_options:  tempi=300.0
+	mm_options:  temp0=300.0
+	mm_options:  ntwx=1
+	mm_options:  ntpr=1
+    iter    Total    bad         vdW     elect.     cons.   genBorn      frms
+ff:   0    -62.45      9.56      4.03    -67.60      0.00     -8.44  2.93e+01
+ff:   1    -62.97      8.94      4.02    -67.65      0.00     -8.28  2.77e+01
+md:           1      0.002      12.21     -62.97     -50.76     292.56
+	mm_options:  diel=C
+	mm_options:  gbsa=0
+	mm_options:  nsnb=99999
+	mm_options:  cut=18.0
+	mm_options:  gb=5
+	mm_options:  ntpr=1
+    iter    Total    bad         vdW     elect.     cons.   genBorn      frms
+ff:   0    -62.97      8.94      4.02    -67.65      0.00     -8.28  2.77e+01
+ff:   1    -68.63      2.76      3.89    -67.58      0.00     -7.70  6.15e+00
+Minimization reached the maximum number of iterations.
+	mm_options:  cut=999.0
+	mm_options:  gbsa=1
+Using carbon SA parms for atom type F 
+Using carbon SA parms for atom type F 
+     bond:      0.257317228
+    angle:      2.466515247
+ dihedral:      0.039230371
+    enb14:      4.306857340
+    eel14:   -140.726844555
+      enb:     -0.417882579
+      eel:     73.142361355
+      egb:     -7.701063655
+    econs:      0.000000000
+    esurf:      1.052693503
+    Total:    -67.580815746
+Done computing the ligand energy.
+
+
+************************************** 
+Computing the complex energy:
+
+	mm_options:  diel=C
+	mm_options:  gbsa=0
+	mm_options:  nsnb=99999
+	mm_options:  cut=18.0
+	mm_options:  gb=5
+	mm_options:  ntpr=1
+freezing 1902 atoms using expression 1::|2:74,75,77,78,79,81,82,83,84,85,86,87,88,89,91,99,101,102,103,104,105,107,108,109,111,114,115,117,118,119,121,122,123,126,129,133,136,138,145,149,153,154,: for moving atoms
+    iter    Total    bad         vdW     elect.     cons.   genBorn      frms
+ff:   0  -1676.92    580.85    145.63  -1992.76      0.00   -410.64  9.13e+00
+ff:   1  -1686.76    576.19    140.72  -1992.91      0.00   -410.75  8.84e+00
+Minimization reached the maximum number of iterations.
+The random number is 1454538876
+	mm_options:  diel=C
+	mm_options:  dt=0.001
+	mm_options:  gamma_ln=2
+	mm_options:  rattle=0
+	mm_options:  cut=18.0
+	mm_options:  gb=5
+	mm_options:  tempi=300.0
+	mm_options:  temp0=300.0
+	mm_options:  ntwx=1
+	mm_options:  ntpr=1
+    iter    Total    bad         vdW     elect.     cons.   genBorn      frms
+ff:   0  -1686.76    576.19    140.72  -1992.91      0.00   -410.75  8.84e+00
+ff:   1  -1666.52    621.49    117.29  -1994.69      0.00   -410.61  9.34e+00
+md:           1      0.003     600.87   -1666.52   -1065.65     282.72
+	mm_options:  diel=C
+	mm_options:  gbsa=0
+	mm_options:  nsnb=99999
+	mm_options:  cut=18.0
+	mm_options:  gb=5
+	mm_options:  ntpr=1
+    iter    Total    bad         vdW     elect.     cons.   genBorn      frms
+ff:   0  -1666.52    621.49    117.29  -1994.69      0.00   -410.61  9.34e+00
+ff:   1  -1676.38    615.38    113.77  -1994.80      0.00   -410.73  9.08e+00
+Minimization reached the maximum number of iterations.
+Reading parm file (1lgu.lig.1.prmtop)
+title:
+AAH                                                                             
+	mm_options:  cut=999.0
+	mm_options:  gbsa=1
+Using carbon SA parms for atom type F 
+Using carbon SA parms for atom type F 
+     bond:    259.719489468
+    angle:    762.723590351
+ dihedral:    806.270643536
+    enb14:   1134.049738505
+    eel14:   5627.062603567
+      enb:    -19.076947513
+      eel:  -11043.365914242
+      egb:  -2209.981653662
+    econs:      0.000000000
+    esurf:     43.490391265
+    Total:  -4639.108058726
+Done computing the complex energy.
+
+
+Energy of the complex 1lgu.lig.1 is -4639.10805873    
+Energy of the receptor 1lgu is -4584.42359558    
+Energy of the ligand lig.1 is -67.5808157458    
+
+
+-----------------------------------
+Molecule: AAH
+
+ Elapsed time for docking:	1.517 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                         Amber_Score:           12.896353
+                Amber_complex_energy:        -4639.108059
+               Amber_receptor_energy:         4584.423596
+                 Amber_ligand_energy:           67.580816
+
+
+1 Molecules Processed
+Total elapsed time:	3.282 seconds

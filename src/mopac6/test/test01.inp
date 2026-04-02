@@ -1,0 +1,10 @@
+    nointer  noxyz + mndo dump=8
+    t=2000 + thermo(298,298) force isotope
+    ROT=2 
+    DEMONSTRATION OF MOPAC - FORCE AND THERMODYNAMICS CALCULATION
+    FORMALDEHYDE, MNDO ENERGY = -32.8819  See Manual.
+    O    
+    C    1.216487  1                                 1  0  0 
+    H    1.106109  1  123.513310  1                  2  1  0 
+    H    1.106109  1  123.513310  1  180.000000  1   2  1  3 
+    0    0.000000  0    0.000000  0    0.000000  0   0  0  0

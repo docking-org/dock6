@@ -1,0 +1,248 @@
+
+
+
+--------------------------------------
+DOCK v6.10
+
+Released January 2023
+Copyright UCSF
+--------------------------------------
+
+
+Conformational Sampling Parameters
+------------------------------------------------------------------------------------------
+conformer_search_type                                        flex
+write_fragment_libraries                                     no
+
+Anchor & Grow Parameters
+------------------------------------------------------------------------------------------
+user_specified_anchor                                        no
+limit_max_anchors                                            no
+min_anchor_size                                              40
+pruning_use_clustering                                       yes
+pruning_max_orients                                          10
+pruning_clustering_cutoff                                    10
+pruning_conformer_score_cutoff                               100.0
+pruning_conformer_score_scaling_factor                       1.0
+use_clash_overlap                                            no
+write_growth_tree                                            no
+
+Internal Energy Parameters
+------------------------------------------------------------------------------------------
+use_internal_energy                                          no
+
+Molecule Library Input Parameters
+------------------------------------------------------------------------------------------
+ligand_atom_file                                             ../fp_multigrid_generation/lig.mol2
+limit_max_ligands                                            no
+skip_molecule                                                no
+read_mol_solvation                                           no
+calculate_rmsd                                               no
+
+Database Filter Parameters
+------------------------------------------------------------------------------------------
+use_database_filter                                          no
+
+Orient Ligand Parameters
+------------------------------------------------------------------------------------------
+orient_ligand                                                no
+
+Bump Filter Parameters
+------------------------------------------------------------------------------------------
+bump_filter                                                  no
+
+Master Score Parameters
+------------------------------------------------------------------------------------------
+score_molecules                                              yes
+
+Contact Score Parameters
+------------------------------------------------------------------------------------------
+contact_score_primary                                        no
+
+Grid Score Parameters
+------------------------------------------------------------------------------------------
+grid_score_primary                                           no
+
+MultiGrid Score Parameters
+------------------------------------------------------------------------------------------
+multigrid_score_primary                                      yes
+multigrid_score_rep_rad_scale                                1
+multigrid_score_vdw_scale                                    1
+multigrid_score_es_scale                                     1
+multigrid_score_number_of_grids                              15
+multigrid_score_grid_prefix0                                 ../fp_multigrid_generation/resid_005
+multigrid_score_grid_prefix1                                 ../fp_multigrid_generation/resid_013
+multigrid_score_grid_prefix2                                 ../fp_multigrid_generation/resid_020
+multigrid_score_grid_prefix3                                 ../fp_multigrid_generation/resid_022
+multigrid_score_grid_prefix4                                 ../fp_multigrid_generation/resid_048
+multigrid_score_grid_prefix5                                 ../fp_multigrid_generation/resid_049
+multigrid_score_grid_prefix6                                 ../fp_multigrid_generation/resid_050
+multigrid_score_grid_prefix7                                 ../fp_multigrid_generation/resid_051
+multigrid_score_grid_prefix8                                 ../fp_multigrid_generation/resid_052
+multigrid_score_grid_prefix9                                 ../fp_multigrid_generation/resid_053
+multigrid_score_grid_prefix10                                ../fp_multigrid_generation/resid_054
+multigrid_score_grid_prefix11                                ../fp_multigrid_generation/resid_055
+multigrid_score_grid_prefix12                                ../fp_multigrid_generation/resid_071
+multigrid_score_grid_prefix13                                ../fp_multigrid_generation/resid_078
+multigrid_score_grid_prefix14                                ../fp_multigrid_generation/resid_remaining
+multigrid_score_individual_rec_ensemble                      no
+multigrid_score_weights_text                                 no
+multigrid_score_fp_ref_mol                                   yes
+multigrid_score_footprint_ref                                ../fp_multigrid_generation/lig.mol2
+multigrid_score_foot_compare_type                            Euclidean
+-------------------------------------------------------------
+You chose to use the Euclidean distance as the metric 
+to compare the footprints.  When the value is 0 then 
+there is perfect agreement between the two footprints.
+As the agreement gets worse between the two
+footprints the value increases.
+-------------------------------------------------------------
+multigrid_score_normalize_foot                               yes
+-------------------------------------------------------------
+You chose to normalize footprints which penalizes
+the score of the pose if the footprint is bad.
+-------------------------------------------------------------
+multigrid_score_vdw_norm_scale                               1
+multigrid_score_es_norm_scale                                1
+
+Dock3.5 Score Parameters
+------------------------------------------------------------------------------------------
+
+Continuous Energy Score Parameters
+------------------------------------------------------------------------------------------
+
+Footprint Similarity Score Parameters
+------------------------------------------------------------------------------------------
+
+Pharmacophore Similarity Score Parameters
+------------------------------------------------------------------------------------------
+
+Hbond Energy Score Parameters
+------------------------------------------------------------------------------------------
+
+Internal Energy Score Parameters
+------------------------------------------------------------------------------------------
+
+Descriptor Score Parameters
+------------------------------------------------------------------------------------------
+
+Zou GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+
+Hawkins GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+
+SASA Score Parameters
+------------------------------------------------------------------------------------------
+
+Amber Score Parameters
+------------------------------------------------------------------------------------------
+
+Simplex Minimization Parameters
+------------------------------------------------------------------------------------------
+minimize_ligand                                              no
+
+Atom Typing Parameters
+------------------------------------------------------------------------------------------
+atom_model                                                   all
+vdw_defn_file                                                ../../../parameters/vdw_AMBER_parm99.defn
+flex_defn_file                                               ../../../parameters/flex.defn
+flex_drive_file                                              ../../../parameters/flex_drive.tbl
+
+Molecule Library Output Parameters
+------------------------------------------------------------------------------------------
+ligand_outfile_prefix                                        grid1
+write_footprints                                             no
+write_orientations                                           no
+num_scored_conformers                                        1
+rank_ligands                                                 no
+------------------------------------------------------------------------------------------
+
+Initializing Conformer Generator Routines...
+Initializing Library File Routines...
+To cite Multigrid Energy Score use: 
+ Balius, T. E.; Mukherjee, S.; Rizzo, R. C. Implementation and Evaluation of a Docking-rescoring Method using Molecular Footprint Comparisons. J. Comput. Chem., 2011, 32, 2273-2289
+
+Initializing Multi Grid Score Routines...
+Reading in 15 grids
+ Reading the energy grid from ../fp_multigrid_generation/resid_005.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ../fp_multigrid_generation/resid_005.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ../fp_multigrid_generation/resid_013.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ../fp_multigrid_generation/resid_013.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ../fp_multigrid_generation/resid_020.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ../fp_multigrid_generation/resid_020.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ../fp_multigrid_generation/resid_022.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ../fp_multigrid_generation/resid_022.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ../fp_multigrid_generation/resid_048.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ../fp_multigrid_generation/resid_048.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ../fp_multigrid_generation/resid_049.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ../fp_multigrid_generation/resid_049.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ../fp_multigrid_generation/resid_050.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ../fp_multigrid_generation/resid_050.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ../fp_multigrid_generation/resid_051.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ../fp_multigrid_generation/resid_051.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ../fp_multigrid_generation/resid_052.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ../fp_multigrid_generation/resid_052.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ../fp_multigrid_generation/resid_053.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ../fp_multigrid_generation/resid_053.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ../fp_multigrid_generation/resid_054.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ../fp_multigrid_generation/resid_054.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ../fp_multigrid_generation/resid_055.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ../fp_multigrid_generation/resid_055.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ../fp_multigrid_generation/resid_071.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ../fp_multigrid_generation/resid_071.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ../fp_multigrid_generation/resid_078.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ../fp_multigrid_generation/resid_078.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ../fp_multigrid_generation/resid_remaining.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ../fp_multigrid_generation/resid_remaining.bmp
+ Done reading the grid box quantifiers.
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.258 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		9
+
+                     MultiGrid_Score:          -42.610439
+                      MGS_vdw_energy:          -40.350243
+                       MGS_es_energy:           -3.201102
+                   MGS_vdw+es_energy:          -43.551346
+                         MGS_vdw_fps:            0.431279
+                          MGS_es_fps:            0.509630
+                      MGS_vdw+es_fps:            0.940909
+
+
+1 Molecules Processed
+Total elapsed time:	0.311 seconds

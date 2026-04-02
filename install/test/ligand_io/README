@@ -1,0 +1,29 @@
+TITLE: Ligand Input/Output
+
+EXECUTABLES TESTED:  
+	dock6
+
+FUNCTIONS TESTED:
+	Molecule Library Parameters
+	
+WALL CLOCK TIME:
+	0.63 secs
+
+FILES USED:
+	io1.dockin		#single molecule read
+	io2.dockin		#multiple molecule read
+	io3.dockin		#section of multiple molecule
+	io4.dockin		#single molecule solvation read
+	lig.mol2		#single molecule structure file
+	multi_lig.mol2		#multiple molecule structure file
+	solv_lig.mol2		#single molecule structure file with solvation
+	chem.defn		#chem parameter input file
+	flex.defn		#flex atom definition file
+	flex_drive.tbl		#flex torsional drive file
+	vdw.defn		#vdw parameter file used to create grid
+
+FILES GENERATED:
+	XXX_orients.mol2	#orientations from input file
+	XXX_conformers.mol2	#conformations from input file
+	XXX_scored.mol2		#best scoring pose from input file	
+	XXX_ranked.mol2		#library ranked by energy score

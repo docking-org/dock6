@@ -1,0 +1,30 @@
+@<TRIPOS>MOLECULE
+EDO  1,2-ETHANEDIOL.  C2 H6 O2. 
+   10     9     1     0     0
+SMALL
+bcc via mopac
+****
+From PDBeChem: antechamber -fi pdb -fo mol2 -i EDO.pdb -o edo.mol2 -c bcc
+@<TRIPOS>ATOM
+      1 C1         -0.6090   -0.2820    0.7100 c3        1 EDO      0.089700
+      2 O1          0.5570    0.1670    1.4020 oh        1 EDO     -0.602000
+      3 C2         -0.6090    0.2820   -0.7100 c3        1 EDO      0.089700
+      4 O2          0.5570   -0.1670   -1.4020 oh        1 EDO     -0.602000
+      5 H11        -0.6090   -1.3720    0.6680 h1        1 EDO      0.032800
+      6 H12        -1.4990    0.0600    1.2380 h1        1 EDO      0.067800
+      7 HO1         0.5180   -0.2100    2.2910 ho        1 EDO      0.411800
+      8 H21        -1.4990   -0.0600   -1.2380 h1        1 EDO      0.067700
+      9 H22        -0.6090    1.3710   -0.6680 h1        1 EDO      0.032800
+     10 HO2         0.5180    0.2100   -2.2910 ho        1 EDO      0.411800
+@<TRIPOS>BOND
+     1    1    2 1   
+     2    1    3 1   
+     3    1    5 1   
+     4    1    6 1   
+     5    2    7 1   
+     6    3    4 1   
+     7    3    8 1   
+     8    3    9 1   
+     9    4   10 1   
+@<TRIPOS>SUBSTRUCTURE
+     1 EDO         1 TEMP              0 ****  ****    0 ROOT

@@ -1,0 +1,10 @@
+#!/bin/sh
+
+cd 3_grid
+./script_clean
+cd ..
+
+cd 4_dock
+./script_clean
+cd ..
+

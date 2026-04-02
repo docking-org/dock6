@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"><title>Tutorial: DOCK3.5 Score in DOCK6</title>
+
+<style>
+.style2 {
+font-size: 36px;
+font-family: Arial, Helvetica, sans-serif;
+font-weight: bold;
+}
+.style4 {font-family: Arial, Helvetica, sans-serif; font-size: 18px;}
+.style6 {font-family: Arial, Helvetica, sans-serif}
+-->
+</style>
+</head>
+<body style="" lang="EN-US" link="blue" vlink="blue">
+<div class="Section1">
+<p style="text-align: center;" align="center"><span class="style2"><b><span style="font-size: 27pt;">DOCK
+3.5 Score in DOCK6</span></b></span></p>
+<p class="style4style10" style="text-align: center;" align="center"><span style="font-family: Arial;">Author:
+Kaushik Raha<br>
+Last updated September 27, 2008</span></p><p class="style4style10" style="text-align: center;" align="center"><span style="font-family: Arial;"><o:p></o:p></span></p>
+<p class="style4"> This tutorial introduces DOCK 3.5 Score
+in DOCK6 and describes the preparation of input files for and grids for
+using DOCK 3.5 scoring functions in DOCK6. These techniques should
+be applicable to any protein-ligand system.&nbsp;
+</p>
+<p class="style4"><b>What is DOCK 3.5 score?</b></p>
+<p class="style4">DOCK3.5
+score is a variant of
+Grid-based scoring (see <a href="http://dock.compbio.ucsf.edu/DOCK_6/dock6_manual.htm#Grid">Grid</a>).
+It is the scoring function available in the dock3.3.54 distributed by the <a href="http://shoichetlab.compbio.ucsf.edu/">Shoichet Laboratory</a>. DOCK3.5 scoring function calculates ligand desolvation in addition to
+steric and electrostatic interactions between the ligand and receptor.
+The electrostatic interactions between the ligand and the protein are
+calculated from a electrostatic potential (ESP) map. The ESP map is
+calculated using finite difference Poisson-Boltzmann equation (PBE)
+as implemented in the program DelPhi. DelPhi is not a part of the DOCK6
+distribution.&nbsp;Ligand
+  desolvation is calculated as a sum of the atomic desolvation weighted
+  by a normalization factor that accounts for the extent to which the
+  ligand atom is buried by the binding site. Please see the DOCK6 <a href="http://dock.compbio.ucsf.edu/DOCK_6/dock6_manual.htm">manual</a> for futher details. In the DOCK
+scoring hierarchy
+DOCK3.5 Score
+follows GridScore and can be used both as the primary and the secondary
+scoring function.
+</p><br>
+<br>
+<p class="style4"><b>Input files preparation.</b></p>
+<p class="style4"><b>1) Ligand Preparation:</b> The ligand desolvation
+calculation in DOCK3.5 scoring requires calculation of partial atomic
+desolvation for the ligand atoms. The program AMSOL is used for this
+purpose, however AMSOL is not a part of the DOCK6 distribution. If the
+user has access to AMSOL then ligand preparation scripts can be
+obtained from <a href="mailto:mailto:jji@cgl.ucsf.edu">us</a>. A ligand preparation page has been setup as a part of <a href="http://zinc.docking.org">ZINC</a>&nbsp;for this purpose as well.&nbsp;
+</p><p class="style4"><b>2) Receptor Preparation:</b>
+</p>
+<p class="style4">(a) Clean the PDB file:</p><br>
+<p class="style4"><b>Run DOCK6 with DOCK3.5 Score.</b></p>
+<p class="style4">USAGE: dock6 -i input_file [-o
+output_file] [-v]<br>
+dock6 -i dock.in &gt; dock.out &amp; </p>
+<p class="style4">Download a copy of the <a href="http://dock.compbio.ucsf.edu/DOCK_6/tutorials/amber_score/dock.out">dock.out</a>
+file.
+Check it with your output file to see whether you get any different
+results.
+</p>
+<p class="style4">
+You can now change the options in the dock.in file, such as increase
+the
+number of steps of the amber_score minimization cycles and/or
+amber_score_md_steps, or increase/decrease the amber_score_temperature,
+change the amber_score_movable_region,
+and rerun the calculation to see
+the change in results.</p>
+<p class="style4">
+In general,
+the best type of movable region could be highly sensitive to the
+receptor. For example, if specific changes to the receptor upon
+ligand binding are expected then the NAB_ATOM_EXPRESSION movable
+region is appropriate. On the other hand, if a little relaxation
+of the receptor upon ligand binding is all that is desired then a
+small DISTANCE movable region might be sufficient.
+</p>
+<p class="style4">
+The amount of minimization and MD is dependent on the preparation
+of the receptor. If the receptor has been well equilibrated then
+it is expected that fewer min steps and md cycles will be needed
+to relax the complex, in general. Other factors, such as the
+type and extent of changes upon binding, are also relevant.
+</p>
+</div>
+</body></html>

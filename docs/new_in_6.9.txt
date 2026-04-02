@@ -1,0 +1,177 @@
+DOCK 6.9
+
+This is a release of the version described in reference [1] with the new
+ligand searching method DOCK_DN: De Novo design using fragment-based assembly.
+
+
+NEW IN DOCK 6.9
+
+DOCK_DN for ligand de novo design:
+   De novo design can be used to explore vast areas of chemical space in 
+   computational lead discovery. DOCK_DN is an iterative fragment growth method, 
+   integrated into the program DOCK, in which new molecules are built using 
+   rules for allowable connections based on known molecules. The method leverages 
+   DOCK's advanced scoring and pruning approaches, and users can define very
+   specific criteria in terms of properties or features to customize growth
+   toward a particular region. Refer to the user manual and reference 1. 
+
+Fragment Library Generation:
+   Users now have the ability to create fragment libraries from individual or
+   multi-mol2 files. This function is important for utilizing any of the de novo
+   ligand design algorithms. For more information please see the user manual.
+
+Mulitgrid Footprint:
+   The footprint output text file (.txt) from multigrid now matches that of a
+   Footprint text file from FPS.
+   
+   Old Reference.txt file format:
+	ARG  -0.061288  -1.156031
+        LYS  -0.009564  -0.661054
+        ARG  -0.316997  -1.903850
+
+   New Reference.txt file format:
+      resname   resid     vdw_ref      es_ref  hb_ref    vdw_pose     es_pose hb_pose
+           GLU       1   -0.000147    0.015721       0   -0.000143    0.015118       0
+           MET       2   -0.000380    0.005436       0   -0.000368    0.005407       0
+           GLU       3   -0.000199    0.195522       0   -0.000193    0.193527       0
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+DEPRECATED FEATURES
+
+   1. For a variety of reasons still under active development,
+      amber_score cannot effectively be used as a secondary_score.
+      This function was temporarily deprecated in 6.1, and using input parameter
+      amber_score_secondary causes program termination.
+      The recommended protocol is to perform two sequential DOCK runs where the
+      output ligand poses from the first run are rescored specifying amber_score
+      as the primary_score in the second run.
+
+   2. In order to minimize a ligand using the DOCK simplex minimizer a scoring
+      function is needed, i.e., internal energy in combination with another
+      scoring function is necessary.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+BUG FIXES
+
+Some bug reports have not yet been processed, but several important bugs have
+been fixed since the last release.
+
+For DOCK:
+
+   1. In terms of orienting Du placeholders can be used as critical points to 
+      increase the number of orients for smaller fragments/anchors. 
+
+   2. Double bonds are no longer sampled in the DOCK simplex minimizer. 
+
+   3. The current flex.defn file now includes single bonds between aromatic
+      carbons, which will flag them as rotatable bonds. 
+   
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+INPUT PARAMETER CHANGES AND THEIR DEFAULT VALUES
+
+Added:
+
+For Fragment Library Generation:
+   write_fragment_libraries                                      [no] (yes no):
+   fragment_library_prefix                                       [fraglib] ():
+   fragment_library_freq_cutoff                                  [1] ():
+   fragment_library_sort_method                                  [freq] (freq | fingerprint):
+   fragment_library_trans_origin                                 [no] (yes no):
+   
+For DOCK_DN:
+   dn_fraglib_scaffold_file                                      [fraglib_scaffold.mol2] ():
+   dn_fraglib_linker_file                                        [fraglib_linker.mol2] ():
+   dn_fraglib_sidechain_file                                     [fraglib_sidechain.mol2] ():
+   dn_user_specified_anchor                                      [yes] (yes no):
+   dn_fraglib_anchor_file                                        [fraglib_anchor.mol2] ():
+   dn_use_torenv_table                                           [yes] (yes no):
+   dn_torenv_table                                               [fraglib_torenv.dat] ():
+   dn_sampling_method                                            [graph] (ex | rand | graph):
+   dn_graph_max_picks                                            [30] ():
+   dn_graph_breadth                                              [3] ():
+   dn_graph_depth                                                [2] ():
+   dn_graph_temperature                                          [100.0] ():
+   dn_num_random_picks                                           [20] ():
+   dn_pruning_conformer_score_cutoff                             [100.0] ():
+   dn_pruning_conformer_score_scaling_factor                     [1.0] ():
+   dn_pruning_clustering_cutoff                                  [100.0] ():
+   dn_constraint_mol_wt                                          [550.0] ():
+   dn_constraint_rot_bon                                         [15] ():
+   dn_constraint_formal_charge                                   [2.0] ():
+   dn_heur_unmatched_num                                         [1] ():
+   dn_heur_matched_rmsd                                          [2.0] ():
+   dn_unique_anchors                                             [1] ():
+   dn_max_grow_layers                                            [9] ():
+   dn_max_root_size                                              [25] ():
+   dn_max_layer_size                                             [25] ():
+   dn_max_current_aps                                            [5] ():
+   dn_max_scaffolds_per_layer                                    [1] ():
+   dn_write_checkpoints                                          [yes] (yes no):
+   dn_write_prune_dump                                           [no] (yes no):
+   dn_write_orients                                              [no] (yes no):
+   dn_write_growth_trees                                         [no] (yes no):
+   dn_output_prefix                                              [output] ():
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+OUTPUT COMPONENTS
+
+Added:
+
+For DOCK_DN:
+   1. ${dn_output_prefix}.denovo_build.mol2 is the mol2 file containing the
+      complete top scoring molecules. Molecules are appended to this file as
+      molecules are built to completion. 
+
+   2. ${dn_output_prefix}.anchor_{#}.root_layer_{##}.mol2 are the partial
+      molecules for each anchor (#) at each layer (##). These files are
+      generated as the algorithm is running. This feature is turned on/off by
+      the input parameter "dn_write_checkpoints".
+
+   3. ${dn_output_prefix}.anchor_{#}.prune_dump_layer_{##}.mol2 are the partial
+      and complete molecules that were filtered out for having undesirable
+      properties for each anchor (#) at each layer (##) of growth. This feature
+      is turned on/off by the input parameter "dn_write_prune_dump". 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+FILE FORMAT CHANGES
+
+For DOCK:
+
+##########                DOCK_Rotatable_Bonds:
+##########                    Molecular_Weight:
+##########                       Formal_Charge:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+KNOWN BUGS
+
+   1. When calculating rmsd without using a reference mol2 and turning on the
+      ranking flag the associated rmsd values are calculated against the wrong
+      molecules.  Workaround: turn off ranking or use a reference mol2 file.
+
+   2. For a small portion of instances triple bonds next to rotatable bonds
+      cause an issue upon initializing minimization. We are actively working on
+      a solution to this bug.
+
+   3. Parallel runs may not be successful with earlier versions of MPI.
+      DOCK6.9 was tested and validated using mainly 2018 MPI versions.  
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+RELEASE DATE
+
+November 2018
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+REFERENCES
+
+1. Allen, W. J.; Fochtman, B. C.; Balius, T. E.; Rizzo, R. C.  Customizable
+de novo design strategies for DOCK: Application to HIVgp41 and other therapeutic
+targets.  J. Comput. Chem. 2017, 38, 2641-2663.  DOI: 10.1002/jcc.25052
+

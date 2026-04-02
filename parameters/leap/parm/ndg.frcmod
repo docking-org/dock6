@@ -1,0 +1,16 @@
+2-(Acetylamino)-2-Deoxy-A-D-Glucopyranose:  parmchk -f mol2 -i ndg.mol2 -o ndg.frcmod
+MASS
+
+BOND
+
+ANGLE
+
+DIHE
+
+IMPROPER
+c3-n -c -o         10.5          180.0         2.0          General improper torsional angle (2 general atom types)
+
+NONBON
+
+
+

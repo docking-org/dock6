@@ -1,0 +1,20 @@
+@<TRIPOS>MOLECULE
+PO4  PHOSPHATE ION.  O4 P. 
+    5     4     1     0     0
+SMALL
+bcc via mopac
+****
+From PDBeChem: antechamber -fi pdb -fo mol2 -i PO4.pdb -o po4.mol2 -c bcc -nc -3
+@<TRIPOS>ATOM
+      1 P           0.0000    0.0000    0.0000 p5        1 PO4      1.243400
+      2 O1          0.0000   -1.2880   -0.9110 o         1 PO4     -1.060900
+      3 O2          0.0000    1.2880   -0.9110 o         1 PO4     -1.060900
+      4 O3         -1.2880    0.0000    0.9110 o         1 PO4     -1.060800
+      5 O4          1.2880    0.0000    0.9110 o         1 PO4     -1.060800
+@<TRIPOS>BOND
+     1    1    2 1   
+     2    1    3 1   
+     3    1    4 1   
+     4    1    5 1   
+@<TRIPOS>SUBSTRUCTURE
+     1 PO4         1 TEMP              0 ****  ****    0 ROOT

@@ -1,0 +1,52 @@
+##########                                TYPE:           Sidechain
+##########                             FR_NAME:               sid.4
+##########                                FREQ:                   1
+##########                            CONN_PTS:                   1
+##########                                  MW:              17.007
+##########                               DB_ID:            1IK4.lig
+########## 
+@<TRIPOS>MOLECULE
+1IK4.lig
+ 3 2 1 0 0
+SMALL
+bcc
+sid.4
+
+@<TRIPOS>ATOM
+      1 Du1         0.0000    0.0000    0.0000 Du      1  sid.4       0.0000
+      2 O1         -1.3691   -0.0000   -0.0000 O.3     1  sid.4      -0.4571
+      3 H4         -1.6914    0.9117   -0.0000 H       1  sid.4       0.3830
+@<TRIPOS>BOND
+     1     2     1    1
+     2     3     2    1
+@<TRIPOS>SUBSTRUCTURE
+     1 sid.4        1 TEMP              0 ****  ****    0 ROOT
+
+##########                                TYPE:           Sidechain
+##########                             FR_NAME:               sid.5
+##########                                FREQ:                   1
+##########                            CONN_PTS:                   1
+##########                                  MW:              78.972
+##########                               DB_ID:            1IK4.lig
+########## 
+@<TRIPOS>MOLECULE
+1IK4.lig
+ 5 4 1 0 0
+SMALL
+bcc
+sid.5
+
+@<TRIPOS>ATOM
+      1 Du1         0.0000    0.0000    0.0000 Du      1  sid.5       0.0000
+      2 O4         -1.9288    0.4052    1.6134 O.co2   1  sid.5      -0.9045
+      3 O5         -2.4358    1.0801   -1.0308 O.co2   1  sid.5      -0.9255
+      4 O6         -2.1758   -1.5556    0.0000 O.co2   1  sid.5      -0.9115
+      5 P1         -1.7128    0.0000    0.0000 P.3     1  sid.5       1.3229
+@<TRIPOS>BOND
+     1     5     1    1
+     2     5     2    1
+     3     5     3    1
+     4     5     4    1
+@<TRIPOS>SUBSTRUCTURE
+     1 sid.5        1 TEMP              0 ****  ****    0 ROOT
+

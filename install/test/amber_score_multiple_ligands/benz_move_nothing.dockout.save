@@ -1,0 +1,255 @@
+
+
+
+--------------------------------------
+DOCK v6.4
+
+Released May 2010
+Copyright UCSF
+--------------------------------------
+
+
+Molecule Library Input Parameters
+------------------------------------------------------------------------------------------
+ligand_atom_file                                             benz_binders.amber_score.mol2
+limit_max_ligands                                            no
+skip_molecule                                                no
+read_mol_solvation                                           no
+calculate_rmsd                                               no
+
+Database Filter Parameters
+------------------------------------------------------------------------------------------
+use_database_filter                                          no
+
+Orient Ligand Parameters
+------------------------------------------------------------------------------------------
+orient_ligand                                                no
+
+Internal Energy Parameters
+------------------------------------------------------------------------------------------
+use_internal_energy                                          no
+
+Flexible Ligand Parameters
+------------------------------------------------------------------------------------------
+flexible_ligand                                              no
+Note: Performing rigid docking, single point calc, or minimization without orientation.
+
+Bump Filter Parameters
+------------------------------------------------------------------------------------------
+bump_filter                                                  no
+
+Master Score Parameters
+------------------------------------------------------------------------------------------
+score_molecules                                              yes
+
+Contact Score Parameters
+------------------------------------------------------------------------------------------
+contact_score_primary                                        no
+contact_score_secondary                                      no
+
+Grid Score Parameters
+------------------------------------------------------------------------------------------
+grid_score_primary                                           no
+grid_score_secondary                                         no
+
+Dock3.5 Score Parameters
+------------------------------------------------------------------------------------------
+dock3.5_score_primary                                        no
+dock3.5_score_secondary                                      no
+
+Continuous Energy Score Parameters
+------------------------------------------------------------------------------------------
+continuous_score_primary                                     no
+continuous_score_secondary                                   no
+
+Zou GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+gbsa_zou_score_primary                                       no
+gbsa_zou_score_secondary                                     no
+
+Hawkins GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+gbsa_hawkins_score_primary                                   no
+gbsa_hawkins_score_secondary                                 no
+
+Amber Score Parameters
+------------------------------------------------------------------------------------------
+amber_score_primary                                          yes
+amber_score_secondary                                        no
+amber_score_receptor_file_prefix                             1lgu
+amber_score_movable_region                                   nothing
+amber_score_gb_model                                         5
+amber_score_nonbonded_cutoff                                 18.0
+amber_score_temperature                                      300.0
+amber_score_abort_on_unprepped_ligand                        yes
+
+Warning:  No secondary scoring function selected.
+
+
+Molecule Library Output Parameters
+------------------------------------------------------------------------------------------
+ligand_outfile_prefix                                        benz_move_nothing
+write_orientations                                           no
+num_scored_conformers                                        1
+rank_ligands                                                 no
+------------------------------------------------------------------------------------------
+
+Initializing Library File Routines...
+
+-----------------------------------
+Molecule: ABT 
+
+ Elapsed time for docking:	2 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+   Amber Score:            6.733979
+       complex:        -4576.570950
+      receptor:         4584.941716
+        ligand:           -1.636787
+
+-----------------------------------
+Molecule: ADA 
+
+ Elapsed time for docking:	2 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+   Amber Score:           -6.226788
+       complex:        -4586.031143
+      receptor:         4584.941716
+        ligand:           -5.137361
+
+-----------------------------------
+Molecule: ADL 
+
+ Elapsed time for docking:	2 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+   Amber Score:            3.893114
+       complex:        -4576.987804
+      receptor:         4584.941716
+        ligand:           -4.060797
+
+-----------------------------------
+Molecule: APK 
+
+ Elapsed time for docking:	2 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+   Amber Score:           36.269520
+       complex:        -4537.985177
+      receptor:         4584.941716
+        ligand:          -10.687018
+
+-----------------------------------
+Molecule: AQU 
+
+ Elapsed time for docking:	2 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+   Amber Score:           -1.351079
+       complex:        -4575.351577
+      receptor:         4584.941716
+        ligand:          -10.941217
+
+-----------------------------------
+Molecule: AWN 
+
+ Elapsed time for docking:	2 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+   Amber Score:            2.222337
+       complex:        -4579.788115
+      receptor:         4584.941716
+        ligand:           -2.931264
+
+-----------------------------------
+Molecule: AXH 
+
+ Elapsed time for docking:	2 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+   Amber Score:           14.006351
+       complex:        -4588.859201
+      receptor:         4584.941716
+        ligand:           17.923837
+
+-----------------------------------
+Molecule: CNG 
+
+ Elapsed time for docking:	2 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+   Amber Score:           16.412491
+       complex:        -4561.046103
+      receptor:         4584.941716
+        ligand:           -7.483122
+
+-----------------------------------
+Molecule: DMZ 
+
+ Elapsed time for docking:	2 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+   Amber Score:          170.115753
+       complex:        -4408.552234
+      receptor:         4584.941716
+        ligand:           -6.273732
+
+-----------------------------------
+Molecule: JUF 
+
+ Elapsed time for docking:	2 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+   Amber Score:          178.616211
+       complex:        -4392.067060
+      receptor:         4584.941716
+        ligand:          -14.258438
+
+-----------------------------------
+Molecule: NXN 
+
+ Elapsed time for docking:	2 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+   Amber Score:          689.917969
+       complex:        -3843.385072
+      receptor:         4584.941716
+        ligand:          -51.638671
+
+
+11 Molecules Processed
+Total elapsed time:	24 seconds

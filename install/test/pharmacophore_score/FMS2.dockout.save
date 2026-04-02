@@ -1,0 +1,370 @@
+
+
+
+--------------------------------------
+DOCK v6.10
+
+Released January 2023
+Copyright UCSF
+--------------------------------------
+
+
+Conformational Sampling Parameters
+------------------------------------------------------------------------------------------
+conformer_search_type                                        rigid
+
+Internal Energy Parameters
+------------------------------------------------------------------------------------------
+use_internal_energy                                          no
+
+Molecule Library Input Parameters
+------------------------------------------------------------------------------------------
+ligand_atom_file                                             ligand.mol2
+limit_max_ligands                                            no
+skip_molecule                                                no
+read_mol_solvation                                           no
+calculate_rmsd                                               no
+
+Database Filter Parameters
+------------------------------------------------------------------------------------------
+use_database_filter                                          no
+
+Orient Ligand Parameters
+------------------------------------------------------------------------------------------
+orient_ligand                                                no
+
+Bump Filter Parameters
+------------------------------------------------------------------------------------------
+bump_filter                                                  no
+
+Master Score Parameters
+------------------------------------------------------------------------------------------
+score_molecules                                              yes
+
+Contact Score Parameters
+------------------------------------------------------------------------------------------
+contact_score_primary                                        no
+
+Grid Score Parameters
+------------------------------------------------------------------------------------------
+grid_score_primary                                           no
+
+MultiGrid Score Parameters
+------------------------------------------------------------------------------------------
+multigrid_score_primary                                      no
+
+Dock3.5 Score Parameters
+------------------------------------------------------------------------------------------
+dock3.5_score_primary                                        no
+
+Continuous Energy Score Parameters
+------------------------------------------------------------------------------------------
+continuous_score_primary                                     no
+
+Footprint Similarity Score Parameters
+------------------------------------------------------------------------------------------
+footprint_similarity_score_primary                           no
+
+Pharmacophore Similarity Score Parameters
+------------------------------------------------------------------------------------------
+pharmacophore_score_primary                                  yes
+fms_score_use_ref_mol2                                       no
+fms_score_use_ref_txt                                        yes
+fms_score_ref_txt_filename                                   reference.txt
+fms_score_write_reference_pharmacophore_mol2                 yes
+fms_score_write_reference_pharmacophore_txt                  yes
+fms_score_reference_output_mol2_filename                     new_ref.mol2
+fms_score_reference_output_txt_filename                      new_ref.txt
+fms_score_write_candidate_pharmacophore                      no
+fms_score_write_matched_pharmacophore                        no
+fms_score_compare_type                                       overlap
+-------------------------------------------------------------
+You are using a ligand based reference for computing the FMS.
+When the value is 0 then there is a perfect overlap.
+When the value is negative then you have multi-matched ph4.
+When the value is positive then you have matches with residual.
+-------------------------------------------------------------
+fms_score_full_match                                         yes
+fms_score_match_rate_weight                                  5.0
+fms_score_match_dist_cutoff                                  1.0
+fms_score_match_proj_cutoff                                  0.7071
+fms_score_max_score                                          20
+
+Hbond Energy Score Parameters
+------------------------------------------------------------------------------------------
+
+Internal Energy Score Parameters
+------------------------------------------------------------------------------------------
+
+Descriptor Score Parameters
+------------------------------------------------------------------------------------------
+
+Zou GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+
+Hawkins GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+
+SASA Score Parameters
+------------------------------------------------------------------------------------------
+
+Amber Score Parameters
+------------------------------------------------------------------------------------------
+
+Simplex Minimization Parameters
+------------------------------------------------------------------------------------------
+minimize_ligand                                              no
+
+Atom Typing Parameters
+------------------------------------------------------------------------------------------
+atom_model                                                   all
+vdw_defn_file                                                ../../../parameters/vdw_AMBER_parm99.defn
+flex_defn_file                                               ../../../parameters/flex.defn
+flex_drive_file                                              ../../../parameters/flex_drive.tbl
+pharmacophore_defn_file                                      ../../../parameters/ph4.defn
+
+Molecule Library Output Parameters
+------------------------------------------------------------------------------------------
+ligand_outfile_prefix                                        lig_rigid_txt_ref
+write_orientations                                           no
+num_scored_conformers                                        1
+rank_ligands                                                 no
+------------------------------------------------------------------------------------------
+Initializing Library File Routines...
+To cite Pharmacophore Score use: 
+ Jiang, L.; Rizzo, R. C. Pharmacophore-Based Similarity Scoring for DOCK, J. Phys. Chem. B., 2015, 119, 1083-1102. 
+
+
+-----------------------------------
+Molecule: MOL
+
+ Elapsed time for docking:	0.003 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                 Pharmacophore_Score:            2.205686
+                   FMS_num_match_tot:                   8
+                   FMS_max_match_ref:                  12
+                   FMS_max_match_mol:                  12
+                      FMS_match_rate:            0.333333
+                     FMS_match_resid:            0.539020
+         FMS_num_hydrophobic_matched:                   2
+               FMS_num_donor_matched:                   1
+            FMS_num_acceptor_matched:                   2
+            FMS_num_aromatic_matched:                   3
+            FMS_num_positive_matched:                   0
+            FMS_num_negative_matched:                   0
+                FMS_num_ring_matched:                   0
+
+-----------------------------------
+Molecule: MOL
+
+ Elapsed time for docking:	0.003 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                 Pharmacophore_Score:            4.558976
+                   FMS_num_match_tot:                   3
+                   FMS_max_match_ref:                  12
+                   FMS_max_match_mol:                  12
+                      FMS_match_rate:            0.750000
+                     FMS_match_resid:            0.808976
+         FMS_num_hydrophobic_matched:                   0
+               FMS_num_donor_matched:                   0
+            FMS_num_acceptor_matched:                   2
+            FMS_num_aromatic_matched:                   1
+            FMS_num_positive_matched:                   0
+            FMS_num_negative_matched:                   0
+                FMS_num_ring_matched:                   0
+
+-----------------------------------
+Molecule: MOL
+
+ Elapsed time for docking:	0.003 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                 Pharmacophore_Score:            4.542620
+                   FMS_num_match_tot:                   3
+                   FMS_max_match_ref:                  12
+                   FMS_max_match_mol:                  12
+                      FMS_match_rate:            0.750000
+                     FMS_match_resid:            0.792620
+         FMS_num_hydrophobic_matched:                   0
+               FMS_num_donor_matched:                   0
+            FMS_num_acceptor_matched:                   2
+            FMS_num_aromatic_matched:                   1
+            FMS_num_positive_matched:                   0
+            FMS_num_negative_matched:                   0
+                FMS_num_ring_matched:                   0
+
+-----------------------------------
+Molecule: MOL
+
+ Elapsed time for docking:	0.003 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                 Pharmacophore_Score:            5.575541
+                   FMS_num_match_tot:                   1
+                   FMS_max_match_ref:                  12
+                   FMS_max_match_mol:                  12
+                      FMS_match_rate:            0.916667
+                     FMS_match_resid:            0.992207
+         FMS_num_hydrophobic_matched:                   1
+               FMS_num_donor_matched:                   0
+            FMS_num_acceptor_matched:                   0
+            FMS_num_aromatic_matched:                   0
+            FMS_num_positive_matched:                   0
+            FMS_num_negative_matched:                   0
+                FMS_num_ring_matched:                   0
+
+-----------------------------------
+Molecule: MOL
+
+ Elapsed time for docking:	0.003 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                 Pharmacophore_Score:            4.001829
+                   FMS_num_match_tot:                   4
+                   FMS_max_match_ref:                  12
+                   FMS_max_match_mol:                  12
+                      FMS_match_rate:            0.666667
+                     FMS_match_resid:            0.668495
+         FMS_num_hydrophobic_matched:                   0
+               FMS_num_donor_matched:                   0
+            FMS_num_acceptor_matched:                   2
+            FMS_num_aromatic_matched:                   2
+            FMS_num_positive_matched:                   0
+            FMS_num_negative_matched:                   0
+                FMS_num_ring_matched:                   0
+
+-----------------------------------
+Molecule: MOL
+
+ Elapsed time for docking:	0.003 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                 Pharmacophore_Score:            5.127288
+                   FMS_num_match_tot:                   2
+                   FMS_max_match_ref:                  12
+                   FMS_max_match_mol:                  12
+                      FMS_match_rate:            0.833333
+                     FMS_match_resid:            0.960621
+         FMS_num_hydrophobic_matched:                   0
+               FMS_num_donor_matched:                   0
+            FMS_num_acceptor_matched:                   1
+            FMS_num_aromatic_matched:                   1
+            FMS_num_positive_matched:                   0
+            FMS_num_negative_matched:                   0
+                FMS_num_ring_matched:                   0
+
+-----------------------------------
+Molecule: MOL
+
+ Elapsed time for docking:	0.003 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                 Pharmacophore_Score:            5.127678
+                   FMS_num_match_tot:                   2
+                   FMS_max_match_ref:                  12
+                   FMS_max_match_mol:                  12
+                      FMS_match_rate:            0.833333
+                     FMS_match_resid:            0.961012
+         FMS_num_hydrophobic_matched:                   0
+               FMS_num_donor_matched:                   0
+            FMS_num_acceptor_matched:                   1
+            FMS_num_aromatic_matched:                   1
+            FMS_num_positive_matched:                   0
+            FMS_num_negative_matched:                   0
+                FMS_num_ring_matched:                   0
+
+-----------------------------------
+Molecule: MOL
+
+ Elapsed time for docking:	0.002 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                 Pharmacophore_Score:            5.898907
+                   FMS_num_match_tot:                   1
+                   FMS_max_match_ref:                  12
+                   FMS_max_match_mol:                  12
+                      FMS_match_rate:            0.916667
+                     FMS_match_resid:            1.315573
+         FMS_num_hydrophobic_matched:                   0
+               FMS_num_donor_matched:                   0
+            FMS_num_acceptor_matched:                   0
+            FMS_num_aromatic_matched:                   1
+            FMS_num_positive_matched:                   0
+            FMS_num_negative_matched:                   0
+                FMS_num_ring_matched:                   0
+
+-----------------------------------
+Molecule: MOL
+
+ Elapsed time for docking:	0.002 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                 Pharmacophore_Score:           20.000000
+                   FMS_num_match_tot:                   0
+                   FMS_max_match_ref:                  12
+                   FMS_max_match_mol:                  12
+                      FMS_match_rate:            4.000000
+                     FMS_match_resid:            0.000000
+         FMS_num_hydrophobic_matched:                   0
+               FMS_num_donor_matched:                   0
+            FMS_num_acceptor_matched:                   0
+            FMS_num_aromatic_matched:                   0
+            FMS_num_positive_matched:                   0
+            FMS_num_negative_matched:                   0
+                FMS_num_ring_matched:                   0
+
+-----------------------------------
+Molecule: MOL
+
+ Elapsed time for docking:	0.002 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                 Pharmacophore_Score:            4.699949
+                   FMS_num_match_tot:                   3
+                   FMS_max_match_ref:                  12
+                   FMS_max_match_mol:                  12
+                      FMS_match_rate:            0.750000
+                     FMS_match_resid:            0.949949
+         FMS_num_hydrophobic_matched:                   2
+               FMS_num_donor_matched:                   0
+            FMS_num_acceptor_matched:                   1
+            FMS_num_aromatic_matched:                   0
+            FMS_num_positive_matched:                   0
+            FMS_num_negative_matched:                   0
+                FMS_num_ring_matched:                   0
+
+
+10 Molecules Processed
+Total elapsed time:	0.058 seconds

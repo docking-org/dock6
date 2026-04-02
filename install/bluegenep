@@ -1,0 +1,44 @@
+# DOCK configuration file for IBM XL compilers on Blue Gene/P
+# with MPI based parallelism (specifically MPICH2 but should for all MPIs).
+
+# CC is the C compiler
+# CFLAGS is the flags for the C compiler
+# CXX is the C++ compiler
+# CXXFLAGS is the flags for the C++ compiler
+# FC is the Fortran compiler
+# FFLAGS is the flags for the Fortran compiler
+# LIBS is the flags for the linker
+# SFX is the suffix for the executable
+
+BGP_SYS=     /bgsys/drivers/ppcfloor
+CC=          /opt/ibmcmp/vac/bg/9.0/bin/bgxlc
+CFLAGS=      -L/opt/ibmcmp/xlmass/bg/4.4/bglib -L-qcheck=all $(XLC_TRACE_LIB) \
+             -qarch=440d -qtune=440 -qignprag=omp -qinline  -qflag=w:w  \
+             -DBUILD_DOCK_WITH_MPI -DMPICH_IGNORE_CXX_SEEK \
+             -I$(BGP_SYS)/comm/include -O5  -qlist -qsource  -qhot
+CXX=         /opt/ibmcmp/vacpp/bg/9.0/bin/bgxlC
+CXXFLAGS=    -L/opt/ibmcmp/xlmass/bg/4.4/bglib -L-qcheck=all $(XLC_TRACE_LIB) \
+             -qarch=440d -qtune=440 -qignprag=omp -qinline  -qflag=w:w  \
+             -DBUILD_DOCK_WITH_MPI \
+             -I$(BGP_SYS)/comm/include -O5  -qlist -qsource  -qhot
+
+FC=          /opt/ibmcmp/xlf/bg/11.1/bin/bgxlf90
+FFLAGS=      $(XLC_TRACE_LIB) -O3 -qlist -qsource  -qhot -fno-automatic \
+             -fno-second-underscore -qarch-440d -O3  -qlist -qsource -qhot \
+             -qlist -fno-automatic  -fno-second-underscore
+
+LOAD=        /opt/ibmcmp/vacpp/bg/9.0/bin/bgxlC
+LIBS=        -lm -L$(BGP_SYS)/comm/lib   -lmpich.cnk -ldcmfcoll.cnk \
+             -ldcmf.cnk -L$(BGP_SYS)/runtime/SPI -lSPI.cna -lrt -lpthread
+SFX=         .bgp.opt.mpi
+
+# Macro definitions for NAB
+# AR is the library archiver
+# LEX is the lexical analyzer generator
+# OCFLAGS is the flags for the C compilers with high optimization
+# RANLIB is the library index generator
+
+AR=          ar rv
+LEX=         flex
+OCFLAGS=     -D_ANSI_SOURCE
+RANLIB=      ranlib

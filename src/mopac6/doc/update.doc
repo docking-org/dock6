@@ -1,0 +1,3253 @@
+   
+
+   
+
+   
+
+                    
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+                              MOPAC 6.00 RELEASE NOTES
+
+   
+
+   
+
+   
+
+   
+
+   
+
+                       Notes summarizing the changes in MOPAC
+
+                      in going from MOPAC 5.00 to MOPAC 6.00.
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+                                         by
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+                                James J. P. Stewart,
+
+   
+
+                        Frank J. Seiler Research Laboratory
+
+                          United States Air Force Academy
+
+                                      CO 80840
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+                                    October 1990
+
+   
+
+   
+
+   
+
+                                         
+
+   
+   
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+                                      CONTENTS
+
+   
+
+   
+
+   
+
+   CHAPTER 1       INTRODUCTION
+
+   
+
+           1.1     REDEFINED KEYWORDS . . . . . . . . . . . . . . . . 1-1
+
+           1.2     GENERAL  . . . . . . . . . . . . . . . . . . . . . 1-2
+
+           1.3     CORRECTION OF FAULTS IN MOPAC 5.0  . . . . . . . . 1-3
+
+           1.4     INCREASES IN EFFICIENCY  . . . . . . . . . . . . . 1-4
+
+           1.5     CRITERIA, LAYOUT, AND HOUSEKEEPING CHANGES . . . . 1-5
+
+           1.6     IMPROVED OR NEW FUNCTIONALITIES  . . . . . . . . . 1-9
+
+           1.7     EXTENSION TO NEW ELEMENTS. . . . . . . . . . . .  1-10
+
+   
+
+   
+
+   CHAPTER 2       DEFINITIONS FOR NEW KEYWORDS
+
+   
+
+           2.1     NEW KEY WORDS  . . . . . . . . . . . . . . . . . . 2-1
+
+           2.2     KEYWORDS THAT GO TOGETHER  . . . . . . . . . . .  2-10
+
+   
+
+   
+
+   CHAPTER 3       BACKGROUND
+
+   
+
+           3.1     AIDER  . . . . . . . . . . . . . . . . . . . . . . 3-1
+
+           3.2     GAUSSIAN Z-MATRICES  . . . . . . . . . . . . . . . 3-2
+
+   
+
+   
+
+   CHAPTER 4       REFERENCES
+
+   
+
+   
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+                                     CHAPTER 1
+
+   
+
+                                    INTRODUCTION
+
+   
+
+   
+
+   
+
+                             Introduction to MOPAC 6.0
+
+                            for Experienced MOPAC Users
+
+   
+
+   
+
+                                   Why Read This?
+
+   
+
+           Readers are assumed to  be  familiar  with  MOPAC  data  input  and
+
+      output.  While the MOPAC 6.0 Manual contains a full description of these
+
+      functions, experienced users can more easily learn about  MOPAC  6.0  by
+
+      reference to the changes relative to MOPAC 5.0.  This document should be
+
+      read once, then discarded.  Thereafter, reference to MOPAC 6.0 should be
+
+      through the Manual or through the on-line HELP utility.
+
+   
+
+           Note that the Manual will  have  slightly  different  wording  from
+
+      these upgrade notes:  the Manual is intended to be a reference document.
+
+      These notes are intended to be read once only.
+
+   
+
+           Of paramount importance is the redefinition of the  keywords  DEBUG
+
+      and 1SCF.
+
+   
+
+   
+
+   
+
+   
+
+      1.1  REDEFINED KEYWORDS
+
+   
+
+           DEBUG:  Previously, DEBUG meant 'increase the amount of output when
+
+      other keywords were used.' With the passage of time, more and more debug
+
+      keywords have been defined.  Rather than define  all  allowed  keywords,
+
+      existing debug keywords, such as FLEPO, LINMIN, etc.  have been removed,
+
+      and are assumed to be debug keywords  if  'DEBUG'  is  specified.   Now,
+
+      'DEBUG'  means  'all  unrecognized  keywords  are  assumed  to  be debug
+
+      keywords'.  A few keywords,  such  as  VECTORS  and  DENSITY,  are  both
+
+      recognized  and  debug  keywords:   recognized  to be both as legitimate
+
+      keywords (VECTORS will cause the final eigenvectors to be printed),  and
+
+      as  debug keywords, in that they cause increased diagnostic output to be
+
+      generated when DEBUG is also used (VECTORS will cause  all  eigenvectors
+
+   
+
+                                        1-1
+
+   
+
+   
+
+   
+
+                                    INTRODUCTION
+
+   
+
+   
+
+      on every iteration to be printed).
+
+   
+
+           1SCF:  Previously,  1SCF  would  not  generate  derivatives  unless
+
+      GRADIENTS  was  also  specified,  in  which  case  all  derivatives were
+
+      generated.  This choice of function had been made because half  electron
+
+      derivatives took so long.
+
+   
+
+           With the analytic C.I.  derivatives, the time constraint is lifted.
+
+      In  order  to  accommodate the new Gaussian options a new definition for
+
+      1SCF became desirable.
+
+   
+
+           1SCF Definition:  A single SCF calculation will be done.   If  GRAD
+
+      is also specified, gradients for the marked parameters will be generated
+
+      and printed.  Under no circumstances will optimization or symmetry  data
+
+      be changed.
+
+   
+
+   
+
+   
+
+   
+
+   
+
+      1.2  GENERAL
+
+   
+
+           The new keyword SETUP is recommended for general  use.   The  SETUP
+
+      file  should  contain all commonly-used keywords.  If the default values
+
+      of criteria are  not  acceptable,  then  the  desired  criteria  can  be
+
+      specified  in  SETUP.   Each  data-set  could  then use SETUP.  If, in a
+
+      specific job, the defaults in SETUP need to be changed, then specify the
+
+      the  new  value  on  the  keyword  line.  The order of priority is thus:
+
+      keywords take priority over SETUP, which takes  priority  over  built-in
+
+      default values.
+
+   
+
+   
+
+                    CHANGES IN GOING FROM MOPAC 5.0 TO MOPAC 6.0
+
+   
+
+           The changes made to MOPAC 5.0 in order to create MOPAC 6.0  can  be
+
+      divided  into  the  following groups:  (a) correction of faults in MOPAC
+
+      5.0; (b) changes to increase the speed of execution; (c) minor  criteria
+
+      and layout changes; (d) improved or new algorithms; (e) extension to new
+
+      elements.
+
+   
+
+           The main change that users should be aware of  is  that  much  more
+
+      control  over  the calculation has been made available to the user.  The
+
+      keyword PRECISE is retained, but is not  recommended.   PRECISE  is  too
+
+      heavy-handed.   Most  of  the time it is sufficient to tighten up one or
+
+      two criteria, rather that tighten up everything.  In particular, PRECISE
+
+      should not routinely be used in conjunction with FORCE.
+
+   
+
+           Other examples of increased user control:
+
+   
+
+   
+
+   
+
+   
+
+                                        1-2
+
+   
+
+   
+
+   
+
+                                    INTRODUCTION
+
+   
+
+   
+
+           (a) In Version 5.0, if C.I.=4 was specified,  exactly  4  electrons
+
+      were  involved  in  the  C.I.   In  Version 6.0, the user can select the
+
+      number of electrons involved in the C.I.
+
+   
+
+           (b) In Version 5.0, users could not suppress  certain  output,  for
+
+      example  the  DRC  geometries.   This frequently resulted in huge output
+
+      files.  Version 6.0 gives  the  user  extensive  control  over  what  is
+
+      printed in DRC's and IRC's.
+
+   
+
+           (c)  Additional  diagnostics  are  provided   to   allow   detailed
+
+      monitoring of a calculation.
+
+   
+
+   
+
+   
+
+   
+
+      1.3  CORRECTION OF FAULTS IN MOPAC 5.0
+
+   
+
+   
+
+           1.  Force   constants   and   frequencies   calculated   using    a
+
+               non-variationally optimized wavefunction were frequently faulty
+
+               due to array overwrites.  This has  been  completely  reworked,
+
+               and is now corrected.
+
+   
+
+           2.  When a text line was 'full', i.e.  no  double  spaces  and  the
+
+               first  character  was not a space, MOPAC 5.00 would corrupt the
+
+               last word.  This has  been  corrected  in  lines  2  and  3  by
+
+               extending  the  strings  to  81  characters.   Line  1 has been
+
+               completely re-defined (see later).
+
+   
+
+           3.  The torsion angle calculation was very  clumsy,  and  sometimes
+
+               produced incorrect results.  This has been completely rewritten
+
+               by Dr George Purvis III, of Tektronix, and is now 'bugfree'.
+
+   
+
+           4.  When PRECISE was used in a FORCE calculation  on  diatomic  and
+
+               triatomic  systems,  the  trivial  modes had large frequencies.
+
+               Constraints have now been placed  on  the  step  size  used  in
+
+               calculating  the  Hessian.   Other  modes  were  not  affected.
+
+               PRECISE is NOT recommended for use with FORCE calculations.
+
+   
+
+           5.  In FORCE  calculations  involving  large  numbers  of  hydrogen
+
+               atoms,  the diagonalization would sometimes not work.  This bug
+
+               was reported by Dr Yoshihisa Inoue of the Green Cross Corp.  of
+
+               Osaka, Japan, along with a suggested fix.  The diagonalizer has
+
+               been corrected, and such calculations should now work.
+
+   
+
+           6.  The EXTERNAL option would only work with AM1.  In Version  6.0,
+
+               EXTERNAL will work with MNDO, AM1 and PM3.
+
+   
+
+           7.  In going from MOPAC  4.0  to  MOPAC  5.0,  an  error  had  been
+
+               introduced   into  the  vibrational  transition  dipoles.   The
+
+               magnitudes were wrong by about 30%.  This has been corrected in
+
+   
+
+                                        1-3
+
+   
+
+   
+
+   
+
+                                    INTRODUCTION
+
+   
+
+   
+
+               Version 6.0.
+
+   
+
+           8.  In Version 5.0, if two atoms were  coincident,  then  a  divide
+
+               error  would  occur.  This resulted in a job crash.  In Version
+
+               6.0, those conditions  would  cause  an  error  message  to  be
+
+               printed, and the run stopped.
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+      1.4  INCREASES IN EFFICIENCY
+
+   
+
+   
+
+           1.  Where   possible,   the   finite-difference   derivatives    of
+
+               non-variationally optimized wavefunctions (RHF open shell) have
+
+               been replaced by the analytical derivatives described by  Dewar
+
+               and  Liotard.   These are extremely fast compared with full SCF
+
+               derivatives, and are normally highly accurate.  The derivatives
+
+               can be used for all four Hamiltonians.
+
+   
+
+                    Limitations:  For reasons still unknown, if the  state  to
+
+               be  optimized is very different from the ground state, then the
+
+               computed  derivatives  have  unacceptably  large  errors.    To
+
+               correct  this,  either  use  keyword  NOANCI or specify an open
+
+               shell SCF wavefunction.   For  example,  to  optimize  the  9th
+
+               excited state of formaldehyde, suitable keywords are "OPEN(2,3)
+
+               C.I.=(3,0) ROOT=9" See also C.I.  (see later)
+
+   
+
+           2.  If, in a DRC, all forces on the atoms are  very  small  for  10
+
+               consecutive steps (i.e.  the system has become quiescent), then
+
+               the calculation will be stopped.
+
+   
+
+           3.  Prof Walter Thiel has proposed a new  strategy  for  optimizing
+
+               geometries.   Some  of  his ideas have been incorporated into a
+
+               new subroutine, FSTMIN, which replaces LINMIN.
+
+   
+
+           4.  Prof Peter Pulay's Geometric Direct Inversion of the  Iterative
+
+               Subspace  technique  has been rendered into FORTRAN by Cummings
+
+               and Gready.  Commings and Gready  volunteered  their  code  for
+
+               incorporation  into  MOPAC.   The  G-DIIS  technique  does  not
+
+               require  any  additional  function  evaluations,  and  is  thus
+
+               'free'.  The implementation of the G-DIIS im MOPAC does not run
+
+               as fast as that described by Cummings and Gready.  This is most
+
+               likely  a  result  of  incorporating it into the existing MOPAC
+
+               structure.
+
+   
+
+           5.  The two-electron two-center contributions to  the  Fock  matrix
+
+               have been rewritten.
+
+   
+
+   
+
+                                        1-4
+
+   
+
+   
+
+   
+
+                                    INTRODUCTION
+
+   
+
+   
+
+           6.  The Eigenvector Following (EF) routine, as described by  Baker,
+
+               has  been  added.   This  normally, but not always, runs faster
+
+               than the BFGS.  For this reason, the EF is the  preferred  (but
+
+               not the default) geometry optimization technique.  In addition,
+
+               EF can locate and refine transition states  (new  keyword  TS).
+
+               This  copy  of  EF is a slightly modified form of the procedure
+
+               recommended by Baker, Jensen, Rzepa and Stebbings.
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+      1.5  CRITERIA, LAYOUT, AND HOUSEKEEPING CHANGES
+
+   
+
+   
+
+           1.  The LOG file will now be created in the  directory  from  which
+
+               the  job is run.  This seems more sensible than having it go to
+
+               the root directory.  If you want the LOG file to go to the root
+
+               directory, modify MOPAC.COM as indicated in MOPAC.COM.
+
+   
+
+           2.  Some information on the job will be  output  to  the  log  file
+
+               unless  'NOLOG' is specified.  This will consist of the keyword
+
+               lines, the "cycles", and a copy of the archive file:   This  is
+
+               useful  for two reasons:  (a) monitoring a running job, and (b)
+
+               In case of a machine crash, which sometimes causes the OUT  and
+
+               ARC files to be lost, the LOG file will normally survive.
+
+   
+
+           3.  The whole data-set is read in at the very start of a  run,  and
+
+               put  into  a  scratch  file.   This  frees up the data-set in a
+
+               transparent manner.
+
+   
+
+           4.  A normal MOPAC Z-matrix will no longer need  the  extra  zero's
+
+               for  atoms  2  or  3,  even  if the connectivity is explicitely
+
+               given.  Thus, the geometry of formaldehyde could be written as:
+
+   
+
+                  C                                        C
+
+                  O  1.2 1                    instead of   O  1.2 1
+
+                  H  1.1 1 120 1       1 2                 H  1.1 1 120 1   0 0 1 2
+
+                  H  1.1 1 120 1 180 0 1 2 3               H  1.1 1 120 1 180 0 1 2 3
+
+   
+
+   
+
+           5.  Element Specification:  In addition  to  the  chemical  symbol,
+
+               users  can now add a brief (6 character) description of an atom
+
+               by enclosing the description within brackets, e.g.  Br(Bridge),
+
+               C(Me),  P(V),  H(on C23).  Some care should be exercised if the
+
+               output is to be read in to another program, as the layout  will
+
+               begin  to  change  when  any  discription  involves more than 3
+
+               characters.
+
+   
+
+   
+
+   
+
+                                        1-5
+
+   
+
+   
+
+   
+
+                                    INTRODUCTION
+
+   
+
+   
+
+                    Dummy atoms can now be specified by the symbol 'X' or 'x',
+
+               in  addition  to the current symbols 'XX', 'Xx', etc, and '99'.
+
+               This change has been made to accommodate GAUSSIAN Z-matrices.
+
+   
+
+           6.  Version 6.0 will now allow multiple data-sets to be run as part
+
+               of  one job.  The program is designed to consider each data-set
+
+               as a wholly new calculation.  Thus, the first calculation might
+
+               be  an  AM1  FORCE  calculation,  and the second a PM3 geometry
+
+               optimization.  Limitations:  Except for the  first  system,  no
+
+               system  must  cause  the  data-set  to be rewound.  Examples of
+
+               data-sets which would cause a rewind are:
+
+   
+
+               1.  C.I.  calculations where the keyword MICROS is used.
+
+   
+
+               2.  Gaussian Z-matrices when the keyword AIGIN is NOT used.
+
+   
+
+               3.  When ab-initio gradients are read in, using keyword AIDER.
+
+   
+
+               4.  If ECHO is used.
+
+   
+
+   
+
+           7.  In addition to internal and cartesian coordinates,  MOPAC  will
+
+               now  allow  GAUSSIAN geometry files to be read in.  Most of the
+
+               time, the file will be recognized automatically, but  for  very
+
+               small  files  (two atom systems), the user will need to specify
+
+               AIGIN.  If GAUSSIAN input is used, only one molecule can be run
+
+               at  a  time,  unless  AIGIN  is  specified.   (MOPAC now allows
+
+               several molecules to be run one after the other)
+
+   
+
+           8.  Energy gradients can be read in.  These  can  be  used  in  the
+
+               calculation of ab initio stationary points.  See "Background".
+
+   
+
+           9.  The SCF criterion has been re-defined.  The new  SCF  criterion
+
+               is  defined  as  follows:  "An SCF is assumed to exist when the
+
+               energy change, in kcal/mol, drops below  SCFCRT  on  successive
+
+               iterations".   There  are  other minor qualifications regarding
+
+               the density matrix, but an SCF is defined mainly  in  terms  of
+
+               energy fluctuation.  The other qualifications impose additional
+
+               criteria on the SCF, and do not relax it.
+
+   
+
+          10.  Up to three lines are now  allowed  for  keywords.   Three  new
+
+               keywords are used to define the keyword lines.  These are:
+
+   
+
+               1.  +:  A ' +' sign means  'read  another  line  of  keywords'.
+
+                   Note  the  space  before  the  '+'  sign.   Since  '+' is a
+
+                   keyword, it must be preceeded by a space.  A ' +' on line 1
+
+                   would  mean  that  a second line of keywords should be read
+
+                   in.  If that second line containes a  ' +',  then  a  third
+
+                   line  of keywords will be read in.  Regardless of whether a
+
+                   second or a third line of keywords is read in, the next two
+
+                   lines will be description lines.
+
+   
+
+                                        1-6
+
+   
+
+   
+
+   
+
+                                    INTRODUCTION
+
+   
+
+   
+
+                        Example of ' +' option
+
+                       RESTART T=4D FORCE OPEN(2,2) SHIFT=20 PM3 +
+
+                       SCFCRT=1.D-8 DEBUG ISOTOPE FMAT ECHO +
+
+                       THERMO(300,400,1) ROT=3
+
+                       [Example of data set with three lines of keywords.]
+
+                       NOTE: There are two lines of description.]
+
+   
+
+               2.  &:  An ' &' means 'turn the next line  into  keywords'.   A
+
+                   ' &'  on  line  1 would mean that a second line of keywords
+
+                   should be read in.  If that second line containes  a  ' &',
+
+                   then  a  third  line  of  keywords will be read in.  If the
+
+                   first line has a ' &' then the first  description  line  is
+
+                   omitted,   if  the  second  line  has  a  ' &',  then  both
+
+                   description lines are omitted.
+
+   
+
+               3.  SETUP:  If, on  the  keyword  line,  the  word  'SETUP'  is
+
+                   specified,  then  one or two lines of keywords will be read
+
+                   from a file with the logical name SETUP.   The  file  SETUP
+
+                   must  exist,  and  must  contain at least one line.  If the
+
+                   second line of the data-set is defined by the first line as
+
+                                                        _
+                   a  keyword  line  (by  a  +  or  an  ), and the second line
+
+                   contains the word SETUP, then one line of keywords will  be
+
+                   read from a file with the logical name SETUP.  SETUP can be
+
+                   followed, optionally, by the logical name, or the  name  of
+
+                   the   file,   which   holds   the   SETUP  keywords,  e.g.,
+
+                   SETUP=mydata.keys, SETUP=fred,  in  which  case  the  SETUP
+
+                   keywords  are in the file mydata.keys, or the file with the
+
+                   logical name fred.
+
+   
+
+   
+
+                    The following table illustrates the allowed combinations
+
+          Line 1      Line 2     Line 3  Line 4   Line 5  Setup used
+
+   
+
+          Keys        Text       Text   Z-matrix Z-matrix  not used 
+
+          Keys +      Keys       Text    Text    Z-matrix  not used
+
+          Keys +      Keys +     Keys    Text    Text      not used
+
+          Keys &      Keys       Text   Z-matrix Z-matrix  not used
+
+          Keys &      Keys &     Keys   Z-matrix Z-matrix  not used
+
+          Keys SETUP  Text       Text   Z-matrix Z-matrix 1 or 2 lines used
+
+          Keys +      Keys SETUP Text    Text    Z-matrix 1 line used
+
+          Keys &      Keys SETUP Text   Z-matrix Z-matrix 1 line used
+
+   
+
+                No other combinations are allowed.
+
+   
+
+                The proposed use of the SETUP option is to allow a  frequently
+
+           used  set  of  keywords  to  be  defined  by a single keyword.  For
+
+           example, if the default criteria  are  not  suitable,  SETUP  might
+
+           contain
+
+            " SCFCRT=1.D-8  SHIFT=30 ITRY=600 GNORM=0.02 ANALYT "
+
+            "                                                   "
+
+           The order of usage of a keyword is Line 1 > Line 2 > Line 3.   Line
+
+   
+
+                                        1-7
+
+   
+
+   
+
+   
+
+                                    INTRODUCTION
+
+   
+
+   
+
+           1 > SETUP.  Line 2 > SETUP.  SETUP > built in default values.
+
+   
+
+      11.  Because of the steadily increasing number of keywords, a change has
+
+           been  made  which  will allow a large number of keywords to be used
+
+           without having a very large WRTKEY subroutine.  (WRTKEY checks  the
+
+           validity  of  keywords,  and  prints  all  keywords used.) Now, all
+
+           keywords which print details of subroutines will not be  explicitly
+
+           recognized.    Instead,   if  DEBUG  is  specified,  all  otherwise
+
+           unrecognized keywords will be assumed to be  valid  keywords.   The
+
+           main  effect  is  that keywords such as FLEPO, LINMIN, MOLDAT, etc.
+
+           are now not valid keywords, but can be used if the keyword DEBUG is
+
+           also specified.
+
+   
+
+      12.  To save space, DRC and IRC outputs will, by default, only print the
+
+           line with the percent sign.  Other output can be obtained by use of
+
+           the keyword LARGE, according to the following rules:
+
+   
+
+              Keyword             Effect
+
+              LARGE          Print all internal and cartesian coordinates 
+
+                             and cartesian velocities.
+
+              LARGE=1        Print all internal coordinates.
+
+              LARGE=-1       Print all internal and cartesian coordinates 
+
+                             and cartesian velocities.
+
+              LARGE=n        Print every n'th set of internal coordinates.
+
+              LARGE=-n       Print every n'th set of internal and cartesian 
+
+                             coordinates and cartesian velocities.
+
+   
+
+                If LARGE=1 is used, the output will be the  same  as  that  of
+
+           Version 5.0, when LARGE was not used.  If LARGE is used, the output
+
+           will be the same as that of Version 5.0, when LARGE was  used.   To
+
+           save disk space, do not use LARGE.
+
+   
+
+      13.  In order to allow  MOPAC  to  be  run  on  machines  which  do  not
+
+           automatically  SAVE variables, many (but not all) variables are now
+
+           SAVED.
+
+   
+
+      14.  A second copy of the ARCHIVE file is now automatically  written  to
+
+           the LOG file.  This can be suppressed by specifying "NOLOG".
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+                                        1-8
+
+   
+
+   
+
+   
+
+                                    INTRODUCTION
+
+   
+
+   
+
+      1.6  IMPROVED OR NEW FUNCTIONALITIES
+
+   
+
+   
+
+           1.  A completely new  functionality,  the  ElectroStatic  Potential
+
+               calculation  of  Besler,  Merz,  and  Kollman,  has been added.
+
+               Because of its size, it is not part of the default  MOPAC,  but
+
+               can  be  added  at  any  time.  Instructions on this are in the
+
+               Manual.
+
+   
+
+           2.  The C.I.  keyword has been extended  to  allow  the  number  of
+
+               doubly-filled  levels  to be specified.  The extended format is
+
+               C.I.=(N,M), where N is the number  of  M.O.s  involved  in  the
+
+               C.I., and M is the number of filled levels.
+
+   
+
+   
+
+                                          EXAMPLES
+
+                  Keywords           Number of M.O.s  No. Electrons
+
+   
+
+                  C.I.=2                   2             2 (1)
+
+                  C.I.=(2,1)               2             2 (3)
+
+                  C.I.=(3,1)               3             2 (3)
+
+                  C.I.=(3,2)               3             4 (5)
+
+                  C.I.=(3,0) OPEN(2,3)     3             2 (N/A)
+
+                  C.I.=(3,1) OPEN(2,2)     3             4 (N/A)
+
+                  C.I.=(3,1) OPEN(1,2)     3           N/A (3)
+
+   
+
+                Odd electron systems given in parentheses.
+
+   
+
+           3.  Phonon  and  electronic  band  structure   calculation.    Both
+
+               calculations can be run on a polymer.  The same keyword is used
+
+               to specify both.  Which calculation is actually run depends  on
+
+               other   keywords,   e.g.,  if  FORCE  is  specified,  a  phonon
+
+               calculation will be run, otherwise a band-structure calculation
+
+               will be run.
+
+   
+
+           4.  The hyperpolarizability calculation has been made more precise.
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+                                        1-9
+
+   
+
+   
+
+   
+
+                                    INTRODUCTION
+
+   
+
+   
+
+      1.7  EXTENSION TO NEW ELEMENTS.
+
+   
+
+   
+
+           1.  AM1:  New elements added:  Aluminum, Phosphorus and Sulfur.
+
+   
+
+                    Editorial comment:
+
+   
+
+                    Extra  care  should  be  taken  when  using  aluminum   or
+
+               phosphorus.  Both elements have sharp energy barriers, aluminum
+
+               at 2.05 Angstroms and phosphorus at 3.0 Angstroms.   These  can
+
+               severely  complicate  results.   Thus  Al2F6  has  three stable
+
+               bridged configurations, and P4O6 and P4O10 are highly distorted
+
+               relative   to  the  correct  Td  geometry,  the  P-P  distances
+
+               differing by 0.4 Angstroms.
+
+   
+
+           2.  MNDO:  None.
+
+   
+
+           3.  PM3:  Beryllium, Magnesium, Zinc, Gallium, Germanium,  Arsenic,
+
+               Selenium,  Cadmium,  Indium, Tin, Antimony, Tellurium, Mercury,
+
+               Thallium, Lead, and Bismuth.
+
+   
+
+                    Editorial comment:
+
+   
+
+                    Extra  care  should  be  taken  with  cadmium  and   other
+
+               elements.   The  paucity  of  reference data resulted in a high
+
+               accuracy, poorly predictive method.
+
+   
+
+                    The full set of available PM3 elements is as follows:
+
+                                       Elements available in PM3
+
+   
+
+                                     H
+
+                                     **  Be      **  C   N   O   F
+
+                                     **  Mg      Al  Si  P   S   Cl
+
+                                     **  **  Zn  Ga  Ge  As  Se  Br
+
+                                     **  **  Cd  In  Sn  Sb  Te  I
+
+                                     **  **  Hg  Tl  Pb  Bi
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+                                        1-10
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+                                     CHAPTER 2
+
+   
+
+                            DEFINITIONS FOR NEW KEYWORDS
+
+   
+
+   
+
+   
+
+      2.1  NEW KEY WORDS
+
+   
+
+   
+
+   
+
+                                       & (C)
+
+   
+
+           An ' &' means 'turn the next line into keywords'.  A ' &' on line 1
+
+      would  mean  that  a second line of keywords should be read in.  If that
+
+      second line contained a ' &', then a third line  of  keywords  would  be
+
+      read  in.   If the first line has a ' &' then the first description line
+
+      is omitted, if the second line has a ' &', then both  description  lines
+
+      are omitted.
+
+   
+
+           Examples
+
+        Use of one '&'
+
+   
+
+       VECTORS DENSITY RESTART & NLLSQ T=1H SCFCRT=1.D-8 DUMP=30M ITRY=300 
+
+       PM3 FOCK OPEN(2,2) ROOT=3 SINGLET SHIFT=30
+
+       Test on a totally weird system
+
+   
+
+        Use of two '&'s
+
+   
+
+       LARGE=-10 & DRC=4.0 T=1H SCFCRT=1.D-8 DUMP=30M ITRY=300 SHIFT=30 
+
+       PM3 OPEN(2,2) ROOT=3 SINGLET NOANCI ANALYT  T-PRIORITY=0.5 &
+
+       LET GEO-OK VELOCITY KINETIC=5.0 
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+                                        2-1
+
+   
+
+   
+
+   
+
+                            DEFINITIONS FOR NEW KEYWORDS
+
+   
+
+   
+
+                                       + (C)
+
+   
+
+           A ' +' sign means 'read another line of keywords'.  Note the  space
+
+      before  the '+' sign.  Since '+' is a keyword, it must be preceeded by a
+
+      space.  A ' +' on line 1 would mean  that  a  second  line  of  keywords
+
+      should  be  read in.  If that second line containes a ' +', then a third
+
+      line of keywords will be read in.  Regardless of whether a second  or  a
+
+      third  line  of  keywords  is  read  in,  the  next  two  lines would be
+
+      description lines.
+
+   
+
+           Example of ' +' option
+
+   
+
+          RESTART T=4D FORCE OPEN(2,2) SHIFT=20 PM3 +
+
+          SCFCRT=1.D-8 DEBUG + ISOTOPE FMAT ECHO singlet ROOT=3
+
+          THERMO(300,400,1) ROT=3
+
+          [Example of data set with three lines of keywords.]
+
+          NOTE: There are two lines of description.]
+
+   
+
+   
+
+                                      1SCF (C)
+
+   
+
+           When users want to examine the results of a single SCF  calculation
+
+      of  a  geometry,  1SCF  should be used.  1SCF can be used in conjunction
+
+      with RESTART, in which case a single SCF calculation will be  done,  and
+
+      the results printed.
+
+   
+
+           When 1SCF is used on its own (that is, RESTART is  not  also  used)
+
+      then derivatives will only be calculated if GRAD is also specified.
+
+   
+
+           1SCF is helpful in a learning situation.  MOPAC  normally  performs
+
+      many  SCF  calculations,  and in order to minimize output when following
+
+      the working of the SCF calculation, 1SCF is very useful.
+
+   
+
+   
+
+                                     AIDER (C)
+
+   
+
+           AIDER allows MOPAC to optimize an ab-initio geometry.  To  use  it,
+
+      calculate  the  ab-initio gradients using, e.g., Gaussian.  Supply MOPAC
+
+      with these gradients, after converting them into kcal/mol.  The geometry
+
+      resulting  from  a  MOPAC  run will be nearer to the optimized ab-initio
+
+      geometry than if the geometry optimizer in Gaussian had been used.
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+                                        2-2
+
+   
+
+   
+
+   
+
+                            DEFINITIONS FOR NEW KEYWORDS
+
+   
+
+   
+
+                                     AIGIN (C)
+
+   
+
+           If the geometry (Z-matrix) is specified using the Gaussian-8X, then
+
+      normally  this will be read in without difficulty.  In the event that it
+
+      is mistaken for a normal  MOPAC-type  Z-matrix,  the  keyword  AIGIN  is
+
+      provided.  As of the time of writing, no examples of data requiring this
+
+      keyword have been made.  AIGIN  is  therefore  a  hedge  against  as-yet
+
+      unknown  problems  with Z-matrices.  AIGIN will force the data-set to be
+
+      read in assuming Gaussian format.  This is necessary if  more  than  one
+
+      system is being studied in one run.
+
+   
+
+   
+
+                                     AIGOUT (O)
+
+   
+
+           The ARCHIVE file contains a data-set  suitable  for  submission  to
+
+      MOPAC.   If,  in  addition  to  this data-set, the Z-matrix for Gaussian
+
+      input is wanted, then AIGOUT (ab  initio  geometry  output),  should  be
+
+      used.
+
+   
+
+           The Z-matrix is in full Gaussian form.   Symmetry,  where  present,
+
+      will be correctly defined.  Names of symbolics will be those used if the
+
+      original geometry was in Gaussian format, otherwise 'logical' names will
+
+      be used.  Logical names are of form <t><a><b>[<c>][<d>] where <t> is 'r'
+
+      for bond length, 'a' for angle, or 'd' for dihedral,  <a>  is  the  atom
+
+      number, <b> is the atom to which <a> is related, <c>, if present, is the
+
+      atom number to which <a> makes an angle, and <d>,  if  present,  is  the
+
+      atom number to which <a> makes a dihedral.
+
+   
+
+           If 1SCF is specified, extra care should be taken to ensure that the
+
+      desired  format is generated.  If the 1SCF is used in conjunction with a
+
+      RESTART, then the variables defined will be those of the  original  job.
+
+      Otherwise,  by  default,  when  1SCF  is  specified,  gradients  are not
+
+      calculated.  This means  that  all  variables  become  fixed,  i.e.,  no
+
+      symbolics are used.  See also 1SCF and RESTART.
+
+   
+
+   
+
+                                       DIPOLE
+
+   
+
+           Used in the ESP calculation, DIPOLE will constrain  the  calculated
+
+      charges  to  reproduce the cartesian dipole moment components calculated
+
+      from the density matrix and nuclear charges.
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+                                        2-3
+
+   
+
+   
+
+   
+
+                            DEFINITIONS FOR NEW KEYWORDS
+
+   
+
+   
+
+                                        DIPX
+
+      Similar to DIPOLE, except the fit will be for the X-component only.
+
+   
+
+   
+
+                                        DIPY
+
+      Similar to DIPOLE, except the fit will be for the Y-component only.
+
+   
+
+   
+
+                                        DIPZ
+
+      Similar to DIPOLE, except the fit will be for the Z-component only.
+
+   
+
+   
+
+                                     DMAX=n.nn
+
+   
+
+           In the EF routine, the  maximum  step-size  is  0.2  (Angstroms  or
+
+      radians),  by  default.   This  can  be changed by specifying DMAX=n.nn.
+
+      Increasing DMAX can lead to faster convergence but  can  also  make  the
+
+      optimization  go  bad  very fast.  Furthermore, the Hessian updating may
+
+      deteriorate when using large stepsizes.  Reducing the stepsize  to  0.10
+
+      or 0.05 is recommended when encountering convergence problems.
+
+   
+
+   
+
+   
+
+           EF (C)
+
+   
+
+           The Eigenvector Following routine is an alternative  to  the  BFGS,
+
+      and  appears  to  be  much  faster.  To invoke the eigenvector following
+
+      routine, specify EF.  EF is particularly good in the end-game, when  the
+
+      gradient is small.  See also HESS, DMAX, EIGINV.
+
+   
+
+   
+
+                                     EIGINV (W)
+
+   
+
+           Not recommended for normal use.  Used with  the  EF  routine.   See
+
+      source code for more details.
+
+   
+
+   
+
+                                        ESP
+
+      This is  the  ElectroStatic  Potential  calculation  of  K. M. Merz  and
+
+      B. H. Besler.    ESP   calculates   the   expectation   values   of  the
+
+      electrostatic potential of a  molecule  on  a  uniform  distribution  of
+
+      points.   The  resultant  ESP  surface  is  then fitted to atom centered
+
+      charges that best reproduce the distribution, in a least squares sense.
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+                                        2-4
+
+   
+
+   
+
+   
+
+                            DEFINITIONS FOR NEW KEYWORDS
+
+   
+
+   
+
+                                       ESPRST
+
+      ESPRST restarts a stopped ESP calculation.  Do not use with RESTART.
+
+   
+
+   
+
+                                     IUPD=n (W)
+
+   
+
+           IUPD is used only in the EF routine.  IUPD should  very  rarely  be
+
+      touched.   IUPD=1  can  be  used  in minimum searches if the the message
+
+      "HEREDITARY  POSITIVE  DEFINITENESS  ENDANGERED.   UPDATE  SKIPPED  THIS
+
+      CYCLE"  occurs every cycle for 10-20 iterations.  Never use IUPD=2 for a
+
+      TS search!  For more information, read the comments in subroutine EF.
+
+   
+
+   
+
+                                     HESS=n (W)
+
+   
+
+           When  the  Eigenvector  Following  routine  is  used  for  geometry
+
+      optimization,  it  frequently works faster if the Hessian is constructed
+
+      first.  If HESS=1 is specified, the Hessian matrix will  be  constructed
+
+      before  the  geometry  is  optimized.   There  are  other,  less common,
+
+      options, e.g.  HESS=2.  See comments in subroutine EF for details.
+
+   
+
+   
+
+                                   K=(n.nn,n) (C)
+
+   
+
+           Used  in  band-structure  calculations,  K=(n.nn,n)  specifies  the
+
+      step-size  in  the  Brillouin  zone,  and  the  number  of  atoms in the
+
+      monomeric  unit.   Two  band-structure   calculations   are   supported:
+
+      electronic  and phonon.  Both require a polymer to be used.  If FORCE is
+
+      used, a  phonon  spectrum  is  assumed,  otherwise  an  electronic  band
+
+      structure  is  assumed.   For  both calculations, a density of states is
+
+      also done.  The band structure calculation is  very  fast,  so  a  small
+
+      step-size will not use much time.
+
+   
+
+           The output is designed to be fed into a graphics  package,  and  is
+
+      not   'elegant'.    For   polyethylene,  a  suitable  keyword  would  be
+
+      K=(0.01,6).
+
+   
+
+   
+
+                                      MODE (C)
+
+   
+
+           MODE is used in the EF routine.  Normally  the  default  MODE=1  is
+
+      used  to locate a transition state, but if this is incorrect, explicitly
+
+      define the vector to be followed by MODE=n.  (MODE is not a  recommended
+
+      keyword).   If  you  use  the  FORCE  option when deciding which mode to
+
+      follow, set all isotopic masses to 1.0.  The normal modes from FORCE are
+
+      normally mass-weighted; this can mislead.  Alternatively, use LARGE with
+
+      FORCE:  this gives the force constants and vectors in  addition  to  the
+
+      mass-weighted  normal  modes.  Only the mass-weighted modes can be drawn
+
+      with DRAW.
+
+   
+
+   
+
+   
+
+                                        2-5
+
+   
+
+   
+
+   
+
+                            DEFINITIONS FOR NEW KEYWORDS
+
+   
+
+   
+
+                                        MS=n
+
+   
+
+           Useful for checking the MECI calculation and  for  teaching.   MS=n
+
+      overrides the normal choice of magnetic component of spin.  Normally, if
+
+      a triplet is requested, a MS of  1  will  be  used;  this  excludes  all
+
+      singlets.  If MS=0 is also given, then singlets will also be calculated.
+
+      The use of MS should not affect the values of the results at all.
+
+   
+
+   
+
+                                     NOANCI (W)
+
+   
+
+           RHF open-shell derivatives are normally calculated using  Liotard's
+
+      analytical  C.I.   method.   If  this  method is NOT to ne used, specify
+
+      NOANCI (NO ANalytical Configuration Interaction derivatives).
+
+   
+
+   
+
+                                     NODIIS (W)
+
+   
+
+           In the event that the G-DIIS option is not wanted,  NODIIS  can  be
+
+      used.   The  G-DIIS  normally accelerates the geometry optimization, but
+
+      there is no guarantee that it will do so.   If  the  heat  of  formation
+
+      rises unexpectedly (i.e.  rises during a geometry optimization while the
+
+      GNORM is larger than about 0.3), then try NODIIS.
+
+   
+
+   
+
+                                     NOLOG (O)
+
+   
+
+           Normally a copy of the archive file will be  directed  to  the  LOG
+
+      file,  along  with a synopsis of the job.  If this is not wanted, it can
+
+      be suppressed completely by NOLOG.
+
+   
+
+   
+
+                                      NONR (W)
+
+   
+
+           Not recommended for normal use.  Used with  the  EF  routine.   See
+
+      source code for more details.
+
+   
+
+   
+
+                                    NOTHIEL (W)
+
+   
+
+           In a normal geometry optimization using the BFGS  routine,  Thiel's
+
+      FSTMIN  technique  is used.  If normal line-searches are wanted, specify
+
+      NOTHIEL.
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+                                        2-6
+
+   
+
+   
+
+   
+
+                            DEFINITIONS FOR NEW KEYWORDS
+
+   
+
+   
+
+                                       NSURF
+
+   
+
+           In an ESP calculation, NSURF=n  specifies  the  number  of  surface
+
+      layers for the Connolly surface.
+
+   
+
+   
+
+                                     OLDGEO (C)
+
+   
+
+           If multiple geometries are to be run, and the final  geometry  from
+
+      one  calculation  is  to  be  used to start the next calculation, OLDGEO
+
+      should be specified.  Example:  If a MNDO, AM1, and PM3 calculation were
+
+      to be done on one system, for which only a rough geometry was available,
+
+      then after the MNDO calculation, the AM1 calculation could be done using
+
+      the  optimized  MNDO  geometry  as  the starting geometry, by specifying
+
+      OLDGEO.
+
+   
+
+   
+
+                                     ORIDE (W)
+
+   
+
+           Do not use this keyword until you have read Simon's article.  ORIDE
+
+      is  part  of the EF routine, and means "Use whatever Lamdas are produced
+
+      even if they would normally be 'unacceptable'."
+
+   
+
+   
+
+                                    POINT=n (C)
+
+   
+
+           The number of points  to  be  calculated  on  a  reaction  path  is
+
+      specified by POINT=n.  Used only with STEP in a path calculation.
+
+   
+
+   
+
+                                    POINT1=n (C)
+
+   
+
+           In a grid calculation, the number of points to be calculated in the
+
+      first direction is given by POINT1=n.  'n' should be less than 24.
+
+   
+
+   
+
+                                    POINT2=n (C)
+
+   
+
+           In a grid calculation, the number of points to be calculated in the
+
+      second direction is given by POINT2=n.  'n' should be less than 24.
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+                                        2-7
+
+   
+
+   
+
+   
+
+                            DEFINITIONS FOR NEW KEYWORDS
+
+   
+
+   
+
+                                       POTWRT
+
+   
+
+           In an ESP calculation, write out surface points  and  electrostatic
+
+      potential values to UNIT 21.
+
+   
+
+   
+
+                                      RECALC=n
+
+   
+
+           RECALC=n  calculates  the  Hessian  every  n  steps   in   the   EF
+
+      optimization.   For small n this is costly but is also very effective in
+
+      terms of  convergence.   RECALC=10  and  DMAX=0.10  can  be  useful  for
+
+      difficult  cases.   In  extreme cases RECALC=1 and DMAX=0.05 will always
+
+      find a stationary point, if it exists.
+
+   
+
+   
+
+                                       SCALE
+
+   
+
+           SCALE=n.n specifies the scaling factor for Van der Waals' radii for
+
+      the initial layer of the Connolly surface in the ESP calculation.
+
+   
+
+   
+
+                                  SCFCRT=n.nn (W)
+
+   
+
+           The default SCF criterion is to be  replaced  by  that  defined  by
+
+      SCFCRT=.
+
+   
+
+           The SCF criterion is the  change  in  energy  in  kcal/mol  on  two
+
+      successive  iterations.   Other minor criteria may make the requirements
+
+      for an SCF slightly more stringent.  The SCF  criterion  can  be  varied
+
+      from  about  0.001  to  1.D-25,  although numbers in the range 0.0001 to
+
+      1.D-9 will suffice for most applications.
+
+   
+
+   
+
+                                    SCINCR=n.nn
+
+   
+
+           In an ESP calculation, SCINCR=n.nn specifies the increment  between
+
+      layers of the surface in the Connolly surface.  (default:  0.20)
+
+   
+
+   
+
+                                     SETUP (C)
+
+   
+
+           If, on the keyword line, the word 'SETUP' is specified, then one or
+
+      two  lines  of  keywords  will be read from a file with the logical name
+
+      SETUP.  The logical file SETUP must exist, and must contain at least one
+
+      line.   If  the  second  line  is defined by the first line as a keyword
+
+      line, and the second line contains the word  SETUP,  then  one  line  of
+
+      keywords will be read from a file with the logical name SETUP.
+
+   
+
+   
+
+   
+
+   
+
+   
+
+                                        2-8
+
+   
+
+   
+
+   
+
+                            DEFINITIONS FOR NEW KEYWORDS
+
+   
+
+   
+
+                                   SETUP=name (C)
+
+   
+
+           Same as SETUP, only the logical or actual name of the SETUP file is
+
+      'name'.
+
+   
+
+   
+
+                                       SLOPE
+
+   
+
+           In an ESP calculation, SLOPE=n.nn specifies the  scale  factor  for
+
+      MNDO charges.  (default=1.422)
+
+   
+
+   
+
+                                      STEP (C)
+
+   
+
+           In a reaction path, if the path step is constant, STEP can be  used
+
+      instead  of  explicitly  specifying  each point.  The number of steps is
+
+      given by POINT.  If the reaction coordinate is an interatomic  distance,
+
+      only positive STEPs are allowed.
+
+   
+
+   
+
+                                       SYMAVG
+
+   
+
+           Used by the ESP, SYMAVG will average charges which should have  the
+
+      same value by symmetry.
+
+   
+
+   
+
+                                       STO3G
+
+   
+
+           In an ESP calculation STO3G means "Use  the  STO-3G  basis  set  to
+
+      de-orthogonalize the semiempirical orbitals".
+
+   
+
+   
+
+                                       TS (C)
+
+   
+
+           Within the Eigenvector Following  routine,  the  option  exists  to
+
+      optimize   a  transition  state.   To  do  this,  use  TS.   Preliminary
+
+      indications are that the TS method is much faster and more reliable than
+
+      either SIGMA or NLLSQ.
+
+   
+
+           TS appears to work well with cartesian coordinates.
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+                                        2-9
+
+   
+
+   
+
+   
+
+                            DEFINITIONS FOR NEW KEYWORDS
+
+   
+
+   
+
+                                    WILLIAMS (C)
+
+   
+
+           Within the ESP calculation, the Connolly surface  is  used  as  the
+
+      default.   If  the  surface  generation  procedure of Donald Williams is
+
+      wanted, the keyword WILLIAMS should be used.
+
+   
+
+   
+
+   
+
+      2.2  KEYWORDS THAT GO TOGETHER
+
+   
+
+           Normally only a subset of keywords are used in any given  piece  of
+
+      research.  Keywords which are related to each other in this way are:
+
+   
+
+           1.  In getting an SCF:  SHIFT, PULAY, ITRY, CAMP, SCFCRT, 1SCF, PL
+
+   
+
+           2.  In C.I.  work:  SINGLET, DOUBLET, etc., OPEN(n,m),  C.I.=(n,m),
+
+               LARGE, MECI, MS=n, VECTORS, ESR, ROOT=n
+
+   
+
+           3.  In excited states:  UHF with  (TRIPLET,  QUARTET,  etc.),  C.I.
+
+               keywords.
+
+   
+
+           4.  In geometry optimization:
+
+   
+
+               1.  Using BFGS:  GNORM=n.n, XYZ, PRECISE.
+
+   
+
+               2.  Using EF:  GNORM=n.n, XYZ, PRECISE
+
+   
+
+               3.  Using NLLSQ:  GNORM=n.n, XYZ, PRECISE
+
+   
+
+               4.  Using SIGMA:  GNORM=n.n, XYZ, PRECISE
+
+   
+
+   
+
+           5.  In Gaussian work:  AIGIN, AIGOUT, AIDER.
+
+   
+
+           6.  In SADDLE:  XYZ, BAR=n.n
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+                                        2-10
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+                                     CHAPTER 3
+
+   
+
+                                     BACKGROUND
+
+   
+
+   
+
+   
+
+      3.1  AIDER
+
+   
+
+           AIDER will allow gradients to be defined for a system.  MOPAC  will
+
+      calculate  gradients,  as  usual, and then use the supplied gradients to
+
+      form an error function.  The error function  is  (supplied  gradients  -
+
+      initial  calculated  gradients).   This  is  then  added to the computed
+
+      gradients, so that for the initial  SCF,  the  apparent  gradients  will
+
+      equal the supplied gradients.
+
+   
+
+           A typical data-set using AIDER would look like this:
+
+         PM3 AIDER AIGOUT GNORM=0.01 EF
+
+       Cyclohexane
+
+   
+
+        X  
+
+        X     1    1.0
+
+        C     1    CX    2  CXX
+
+        C     1    CX    2  CXX    3  120.000000   
+
+        C     1    CX    2  CXX    3 -120.000000   
+
+        X     1    1.0   2  90.0   3    0.000000
+
+        X     1    1.0   6  90.0   2  180.000000
+
+        C     1    CX    7  CXX    3  180.000000   
+
+        C     1    CX    7  CXX    3   60.000000   
+
+        C     1    CX    7  CXX    3  -60.000000   
+
+        H     3    H1C   1  H1CX   2    0.000000   
+
+        H     4    H1C   1  H1CX   2    0.000000   
+
+        H     5    H1C   1  H1CX   2    0.000000   
+
+        H     8    H1C   1  H1CX   2  180.000000   
+
+        H     9    H1C   1  H1CX   2  180.000000   
+
+        H    10    H1C   1  H1CX   2  180.000000   
+
+        H     3    H2C   1  H2CX   2  180.000000   
+
+        H     4    H2C   1  H2CX   2  180.000000   
+
+        H     5    H2C   1  H2CX   2  180.000000   
+
+        H     8    H2C   1  H2CX   2    0.000000   
+
+        H     9    H2C   1  H2CX   2    0.000000   
+
+        H    10    H2C   1  H2CX   2    0.000000   
+
+   
+
+   
+
+                                        3-1
+
+   
+
+   
+
+   
+
+                                     BACKGROUND
+
+   
+
+   
+
+        CX      1.46613   
+
+        H1C     1.10826   
+
+        H2C     1.10684   
+
+        CXX    80.83255 
+
+        H1CX  103.17316
+
+        H2CX  150.96100
+
+   
+
+        AIDER
+
+          0.0000
+
+         13.7589   -1.7383
+
+         13.7589   -1.7383    0.0000
+
+         13.7589   -1.7383    0.0000
+
+          0.0000    0.0000    0.0000
+
+          0.0000    0.0000    0.0000
+
+         13.7589   -1.7383    0.0000
+
+         13.7589   -1.7383    0.0000
+
+         13.7589   -1.7383    0.0000
+
+        -17.8599   -2.1083    0.0000
+
+        -17.8599   -2.1083    0.0000
+
+        -17.8599   -2.1083    0.0000
+
+        -17.8599   -2.1083    0.0000
+
+        -17.8599   -2.1083    0.0000
+
+        -17.8599   -2.1083    0.0000
+
+        -17.5612   -0.6001    0.0000
+
+        -17.5612   -0.6001    0.0000
+
+        -17.5612   -0.6001    0.0000
+
+        -17.5612   -0.6001    0.0000
+
+        -17.5612   -0.6001    0.0000
+
+        -17.5612   -0.6001    0.0000
+
+   
+
+           Each  supplied  gradient  goes  with  the  corresponding   internal
+
+      coordinate.   In  the  example  given,  the  gradients came from a 3-21G
+
+      calculation on the geometry shown.  Symmetry will be taken into  account
+
+      automatically.   Gaussian  prints  out  gradients in atomic units; these
+
+      need to be converted into kcal/mol/Angstrom or kcal/mol/radian for MOPAC
+
+      to use.  The resulting geometry from the MOPAC run will be nearer to the
+
+      optimized 3-21G geometry than  if  the  normal  geometry  optimizers  in
+
+      Gaussian had been used.
+
+   
+
+   
+
+   
+
+      3.2  GAUSSIAN Z-MATRICES
+
+   
+
+           With certain limitations, geometries can now  be  specified  within
+
+      MOPAC using the Gaussian Z-matrix format.
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+                                        3-2
+
+   
+
+   
+
+   
+
+                                     BACKGROUND
+
+   
+
+   
+
+                      Exceptions to the full Gaussian standard
+
+   
+
+           1.  The option of defining an atom's position by one  distance  and
+
+               two  angles  is  not  allowed.  In other words, the N4 variable
+
+               described in the Gaussian manual must either  be  zero  or  not
+
+               specified.   MOPAC requires the geometry of atoms to be defined
+
+               in terms  of,  at  most,  one  distance,  one  angle,  and  one
+
+               dihedral.
+
+   
+
+           2.  Gaussian cartesian coordinates are not supported.
+
+   
+
+           3.  Chemical symbols must not be followed by an integer identifying
+
+               the atom.  Numbers after a symbol are used by MOPAC to indicate
+
+               isotopic mass.  If labels are desired, they should be  enclosed
+
+               in parentheses, thus "Cl(on C5)34.96885"
+
+   
+
+           4.  The connectivity (N1, N2, N3) must be integers.  Labels are not
+
+               allowed.
+
+   
+
+   
+
+   
+
+                       Specification of Gaussian Z-matrices.
+
+   
+
+           The information contained in the Gaussian Z-matrix is identical  to
+
+      that in a MOPAC Z-matrix.  The order of presentation is different.  Atom
+
+      N, (real or dummy) is specified in the format:
+
+        Element   N1   Length  N2  Alpha   N3  Beta
+
+   
+
+           Where Element is the same as for the MOPAC Z-matrix.  N1,  N2,  and
+
+      N3  are the connectivity, the same as the MOPAC Z-matrix NA, NB, and NC:
+
+      bond lengths are between N and N1, angles are between N, N1 and N2,  and
+
+      dihedrals  are  between  N, N1, N2, and N3.  The same rules apply to N1,
+
+      N2, and N3 as to NA, NB, and NC.
+
+   
+
+           Length, Alpha and  Beta  are  the  bond  lengths,  the  angle,  and
+
+      dihedral.   They can be real, e.g.  1.45, 109.4, 180.0, or 'logical'.  A
+
+      logical is an alphanumeric string of up  to  8  characters,  e.g.   R51,
+
+      A512,  D5213, CH, CHO, CHOC, etc.  Two or more logicals can be the same.
+
+      Dihedral logicals can optionally be preceeded by a minus sign, in  which
+
+      case  the  value  of  the  dihedral  is the negative of the value of the
+
+      logical.  This is the equivalent of the normal MOPAC SYMMETRY operations
+
+      1, 2, 3, and 14.
+
+   
+
+           If an internal coordinate is real, it will not be optimized.   This
+
+      is  the  equivalent  of the MOPAC optimization flag "0".  If an internal
+
+      coordinate is logical, it can be optimized.
+
+   
+
+           The Z-matrix is terminated by a blank line, after which  comes  the
+
+      starting values of the logicals, one per line.  If there is a blank line
+
+      in this set, then all logicals  after  the  blank  line  are  considered
+
+      fixed;  that  is,  they will not be optimized.  The set before the blank
+
+   
+
+                                        3-3
+
+   
+
+   
+
+   
+
+                                     BACKGROUND
+
+   
+
+   
+
+      line will be optimized.
+
+   
+
+           If a Gaussian Z-matrix is supplied, the keyword SYMMETRY should NOT
+
+      be  specified,  even if symmetry is defined by the Z-matrix.  At the end
+
+      of the job, if the MOPAC Z-matrix format is wanted, you will need to add
+
+      SYMMETRY to the keyword line, if the Gaussian Z-matrix implied symmetry.
+
+   
+
+   
+
+                Example of Gaussian Z-matrix geometry specification
+
+   
+
+         Line 1    AM1
+
+         Line 2  Ethane                                   
+
+         Line 3  
+
+         Line 4    C  
+
+         Line 5    C     1     r21    
+
+         Line 6    H     2     r32       1     a321   
+
+         Line 7    H     2     r32       1     a321      3  d4213
+
+         Line 8    H     2     r32       1     a321      3 -d4213
+
+         Line 9    H     1     r32       2     a321      3   60.
+
+         Line 10   H     1     r32       2     a321      3  180.
+
+         Line 11   H     1     r32       2     a321      3  d300
+
+         Line 12 
+
+         Line 13      r21        1.5
+
+         Line 14      r32        1.1
+
+         Line 15      a321     109.5
+
+         Line 16      d4313    120.0
+
+         Line 17
+
+         Line 18      d300     300.0
+
+         Line 19 
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+                                        3-4
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+                                     CHAPTER 4
+
+   
+
+                                     REFERENCES
+
+   
+
+   
+
+   
+
+           On G-DIIS:   "Computational  Strategies  for  the  Optimization  of
+
+      Equilibrium    Geometry   and   Transition-State   Structures   at   the
+
+      Semiempirical Level", Peter L.  Cummings, Jill  E.   Gready,  J.   Comp.
+
+      Chem., 10, 939-950 (1989).
+
+   
+
+           On Analytical C.I.  Derivatives:   "  An  Efficient  Procedure  for
+
+      Calculating   the   Molecular   Gradient,   using  SCF-CI  Semiempirical
+
+      Wavefunctions with a Limited  Number  of  Configurations",  M.   J.   S.
+
+      Dewar,  D.   A.   Liotard,  J.   Mol.  Struct.  (Theochem), 206, 123-133
+
+      (1990).
+
+   
+
+           On Eigenvector Following:  J.  Baker,  J.   Comp.   Chem.,  7,  385
+
+      (1986).
+
+   
+
+           On Analytical  C.I.   Derivatives:   "An  Efficient  Procedure  for
+
+      Calculating   the   Molecular   Gradient,   using  SCF-CI  Semiempirical
+
+      Wavefunctions with a Limited  number  of  Configurations",  M.   J.   S.
+
+      Dewar,  D.   A.   Liotard,  J.   Mol.  Struct.  (Theochem), 206, 123-133
+
+      (1990).  On ElectroStatic Potentials  (ESP):   "Atomic  Charges  Derived
+
+      from  Semiempirical  Methods", B.  H.  Besler, K.  M.  Merz, Jr., P.  A.
+
+      Kollman, J.  Comp.  Chem., 11 431-439 (1990).
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+   
+
+                                        4-1
+
+   
+   
+
+   
+
+   
+
+                                                             Page Index-1
+
+   
+
+   
+
+                                   INDEX
+
+   
+
+   
+
+   
+
+   +                                   LARGE
+
+     example of, 1-6                     with DRC, 1-8
+
+   &, 2-1                              Learning, 2-2
+
+   +, 2-2                              LOG file, 1-8
+
+                                         introduction, 1-5
+
+   AIDER, 2-2
+
+   AIGIN, 2-3                          MODE=n, 2-5
+
+   AIGOUT, 2-3                         MS=n, 2-6
+
+    
+
+   Band structure, 1-9, 2-5            NOANCI, 2-6
+
+   Brillouin Zones, 2-5                NODIIS, 2-6
+
+                                       NOLOG, 2-6
+
+   C.I., keyword                       NONR, 2-6
+
+     examples of, 1-9                  NOTHIEL, 2-6
+
+                                       NSURF, 2-7
+
+   DEBUG
+
+     redefined, 1-1                    OLDGEO, 2-7
+
+   DIPOLE, 2-3                         One SCF (keyword), 2-2
+
+   DIPX, 2-4                           ORIDE, 2-7
+
+   DIPZ, 2-4
+
+   DMAX=n.n, 2-4                       phonon band structure, 2-5
+
+                                       Phonon spectra, 1-9
+
+   EF, 2-4                             POINT, 2-7
+
+   EIGINV, 2-4                         POINT1=n, 2-7
+
+   Elements                            POINT2=n, 2-7
+
+     labeling, 1-5                     POTWRT, 2-8
+
+   ESP, 2-4                            PRECISE, 1-2
+
+   ESPRST, 2-5                           with FORCE, 1-2
+
+    
+
+   FORCE                               RECALC=n, 2-8
+
+     use of PRECISE, 1-2
+
+                                       SCALE, 2-8
+
+   Gaussian, 1-6                       1SCF, 2-2
+
+   GREEN CROSS CORP, 1-3                 redefined, 1-2
+
+                                       SCFCRT=, 2-8
+
+   Heat of Formation                   SCINCR, 2-8
+
+     Precision, 2-8                    SETUP, 1-2, 2-8
+
+   HESS=n, 2-5                           specification, 1-7
+
+                                       SETUP=name, 2-9
+
+   IUPD=n, 2-5                         SLOPE, 2-9
+
+                                       STEP, 2-9
+
+                                       STO3G, 2-9
+
+   K=(n.nn,n), 2-5                     SYMAVG, 2-9
+
+   KEYWORDS
+
+     redefined, 1-1                    TEKTRONIX, 1-3
+
+   keywords                            TS, 2-9
+
+     priority, 1-7
+
+     specification, 1-7                WILLIAMS, 2-10
+

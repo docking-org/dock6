@@ -1,0 +1,33 @@
+# DOCK configuration file for Portland Group compilers.
+
+# CC is the C compiler
+# CFLAGS is the flags for the C compiler
+# CXX is the C++ compiler
+# CXXFLAGS is the flags for the C++ compiler
+# DOCK_SUFFIX is the suffix for the dock executable
+# FC is the Fortran compiler
+# FFLAGS is the flags for the Fortran compiler
+# LIBS is the flags for the linker
+# LINK_WITHOUT_FORTRAN_MAIN is the flag for linking without Fortran's main
+# LOAD is the command to invoke the linker
+
+CC=          pgcc
+CFLAGS=      -O2
+CXX=         pgCC
+CXXFLAGS=    -O2
+DOCK_SUFFIX=
+FC=          pgf90
+FFLAGS=      -O2
+LIBS=        -lm -lpthread
+LINK_WITHOUT_FORTRAN_MAIN= -Mnomain
+LOAD=        pgCC
+
+# Macro definitions for NAB
+# AR is the library archiver
+# LEX is the lexical analyzer generator
+# OCFLAGS is the flags for the C compilers with high optimization
+# RANLIB is the library index generator
+AR=          ar rv
+LEX=         flex
+OCFLAGS=     -O3 -D_ANSI_SOURCE
+RANLIB=      ranlib

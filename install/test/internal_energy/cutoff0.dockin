@@ -1,0 +1,17 @@
+conformer_search_type                                        rigid
+use_internal_energy                                          yes
+internal_energy_rep_exp                                      12
+internal_energy_cutoff                                      -1.0
+ligand_atom_file                                             lig.mol2
+limit_max_ligands                                            no
+skip_molecule                                                no
+read_mol_solvation                                           no
+calculate_rmsd                                               no
+use_database_filter                                          no
+orient_ligand                                                no
+bump_filter                                                  no
+score_molecules                                              no
+ligand_outfile_prefix                                        output
+write_orientations                                           no
+num_scored_conformers                                        1
+rank_ligands                                                 no

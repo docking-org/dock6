@@ -1,0 +1,16 @@
+This directory contains files related to docking.
+Because MPI usage is platform dependent, script_demo reads these environment
+variables:
+DOCK_PROCESSES  The number of MPI processes for DOCKing.
+MPI_HOME        The path of the MPI installation.
+If DOCK_PROCESSES is undefined then 4 is used.
+If MPI_HOME is defined then the mpirun from that MPI bin subdirectory
+is executed.
+If MPI_HOME is undefined then mpirun is assumed to be in the PATH;
+this is appropriate for platforms with native MPI.
+
+                             --- * ---
+
+script_demo     Script to perform demonstration
+mpi.in          DOCK input file to flexibly dock library of ligands 
+script_clean    Script to remove files made by script_demo

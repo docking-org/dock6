@@ -1,0 +1,220 @@
+#!/bin/sh
+#set -vx
+# Create Amber input files from a mol2 file containing only the ligand.
+# Scott Brozell, Dave Case, Devleena Shivakumar, TSRI
+
+# define constants
+mopac_output=mopac.out
+leap_log=leap.log
+on=on
+success=0
+
+# create usage statement
+usage()
+{
+cat << EOF
+Usage: $0 [-k] ligand_mol2_file_prefix [antechamber_charge_options]
+
+Description
+       Create Amber input files from a mol2 file containing only the ligand
+       and from an optional specification of the Antechamber charge treatment.
+       The Amber input files are necessary for the DOCK Amber Score.
+
+Options
+       -k
+              keep temporary files; the default is to remove them.
+              This option must be the first argument.
+
+Operands
+       ligand_mol2_file_prefix
+              the name of the ligand only mol2 file without its extension.
+
+       [antechamber_charge_options]
+              the Antechamber charge options.
+              These options must be the last arguments.
+              The default is -nc 0 -c bcc which is a total charge of zero
+              and a charge method of AM1-BCC.  Consult the Antechamber
+              documentation for syntax and available charge methods.
+              Depending on the charge method a file of name
+              {ligand_mol2_file_prefix}.$mopac_output may be produced.
+Outputs
+       {ligand_mol2_file_prefix}.frcmod
+              the force field modification Amber parameter file.
+              This is either a copy of a user created frcmod file named
+              {ligand_mol2_file_prefix}.frcmod.revised
+              or is created by parmchk.  In the latter case if 
+              problems are detected in the frcmod file then this is
+              created {ligand_mol2_file_prefix}.frcmod.incomplete
+              and the user is expected to create the revised file from it
+              and to rerun $0.
+
+       {ligand_mol2_file_prefix}.gaff.mol2
+              the mol2 file with Amber GAFF atom types and charges
+              produced via Antechamber.
+
+       {ligand_mol2_file_prefix}.inpcrd
+              the Amber initial coordinates file.
+
+       {ligand_mol2_file_prefix}.log
+              verbose output from LEaP's command processing.
+
+       {ligand_mol2_file_prefix}.amber.pdb
+              the Amber compatible pdb file.
+
+       {ligand_mol2_file_prefix}.prmtop
+              the Amber force field parameters and topology file.
+
+       stdout
+              output from antechamber, parmchk, and LEaP's command processing.
+              This should be inspected for errors, warnings, and comments.
+
+Side Effects
+       A preexisting $mopac_output will be deleted.
+       A preexisting $leap_log will be appended to and renamed.
+
+Examples
+       $0 ligand
+       $0 lig -nc 2 -c gas
+       $0 lig -c rc -cf my.charges
+
+EOF
+
+status=1;
+exit "$status";
+}
+
+
+# process command line options
+if [ "$1" = '-k' ]
+then
+    keep_temporary_files=$on
+    shift
+fi
+
+# process remaining command line arguments
+if [ $# -lt 1 ]
+then
+    usage;
+elif [ $# -eq 1 ]
+then
+    ligand=$1
+    shift
+    charge_options='-nc 0 -c bcc'
+else
+    ligand=$1
+    shift
+    charge_options="$@"
+fi
+echo "Using ligand file prefix: $ligand"
+echo "Using antechamber options: $charge_options"
+status=$success
+
+# define input, scratch, and output file names
+input_mol2=$ligand.mol2
+leapin=`echo $0.leapin.$$ | sed 's@[ /]@_@g'`  # convert pathname into filename
+leapin=/tmp/$leapin
+output_frcmod=$ligand.frcmod
+output_inpcrd=$ligand.inpcrd
+output_log=$ligand.log
+output_mol2=$ligand.gaff.mol2
+output_pdb=$ligand.amber.pdb
+output_prmtop=$ligand.prmtop
+
+if [ ! -f "$input_mol2" ]
+then
+    echo "Error: the input file, $input_mol2, does not exist !"
+    status=2
+fi
+[ "$status" = "$success" ] || exit "$status"
+
+
+# create an Amber compatible mol2 file
+status=$success
+/bin/rm -f "$mopac_output"
+echo "Executing antechamber to generate the mol2 file with GAFF and charges."
+if ! (export DOCK_HOME='DOCKHOME'; 'DOCKHOME'/bin/antechamber -s 2 -i "$input_mol2" -fi mol2 -o "$output_mol2" -fo mol2 $charge_options)
+then
+    echo "Error running antechamber!"
+    status=3
+fi
+if [ -f "$mopac_output" ]
+then
+    mv "$mopac_output" "$ligand.$mopac_output"
+fi
+if [ "$keep_temporary_files" != "$on" ]
+then
+    /bin/rm -f ANTECH* ATOMTYPE.INF mopac.in SHUTDOWN
+fi
+[ "$status" = "$success" ] || exit "$status"
+
+
+# create the force field modifications
+if [ -f "$output_frcmod.revised" ]
+then
+    echo "Using revised force field parameter file $output_frcmod.revised"
+    cp "$output_frcmod.revised" "$output_frcmod"
+else
+    status=$success
+    echo "Executing parmchk to generate the force field parameters."
+    if ! (export DOCK_HOME='DOCKHOME'; 'DOCKHOME'/bin/parmchk -f mol2 -i "$output_mol2" -o "$output_frcmod")
+    then
+        echo "Error running parmchk!"
+        status=4
+    fi
+    [ "$status" = "$success" ] || exit "$status"
+    troubleahead='ATTN, need revision'
+    if grep "$troubleahead" "$output_frcmod" > /dev/null ; then
+        echo 
+        echo "Warning: Missing force field parameters for $ligand !"
+        echo "    Temporarily using zero for all missing parameters and continuing;"
+        echo "    Get the missing parameters and then do this:"
+        echo "    Copy $output_frcmod.incomplete to $output_frcmod.revised"
+        echo "    Add the missing parameters to $output_frcmod.revised"
+        echo "    Rerun amberize ligand and amberize complex for $ligand"
+        echo 
+        grep "$troubleahead" "$output_frcmod"
+        echo 
+        cp "$output_frcmod" "$output_frcmod.incomplete"
+    fi
+fi
+
+
+# create the prmtop
+status=$success
+cat << EOF > "$leapin"
+ logFile $leap_log
+ # LEaP called by $0
+ source leaprc.gaff
+ # Begin DOCK Amber Score ligand specific processing
+ frcmod=loadamberparams $output_frcmod
+ source leaprc.dock.user
+ $ligand=loadmol2 $output_mol2
+ check $ligand
+ savepdb $ligand $output_pdb
+ saveamberparm $ligand $output_prmtop $output_inpcrd
+ quit
+EOF
+
+echo "Executing LEaP to generate the Amber input files."
+if ! (export DOCK_HOME='DOCKHOME'; 'DOCKHOME'/bin/tleap -s -f "$leapin")
+then
+    echo "Error running tleap!"
+    status=5
+fi
+if [ ! -s "$output_prmtop" ]
+then
+    echo "Error: the output file, $output_prmtop, is not complete !"
+    status=7
+fi
+if [ -f "$leap_log" ]
+then
+    mv "$leap_log" "$output_log"
+fi
+if [ "$keep_temporary_files" != "$on" ]
+then
+    /bin/rm "$leapin"
+fi
+[ "$status" = "$success" ] || exit "$status"
+
+exit 0
+

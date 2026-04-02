@@ -1,0 +1,88 @@
+Known Problems in the Quality Control Suite.
+
+I.
+Gotchas.
+
+The environment variable AMBERHOME should not be defined when running the
+tests.  In particular, a defined AMBERHOME variable can cause problems in
+the AMBER score tests.  See this FAQ for symptoms and details:
+https://dock.compbio.ucsf.edu/DOCK_6/faq.htm#Error%20from%20amberize_ligand;
+------------------------------------------------------------------------------
+
+
+II.
+Specific Comments on Tests.
+Alphabetical by subdirectory name or test name and then by individual
+file name (if any).
+
+amber_score_181l
+amber_score_1a28
+amber_score_1lgu
+amber_score_multiple_ligands
+   Note that the environment variable AMBERHOME should be undefined
+   when using AMBER score.  See this FAQ for symptoms and details:
+   https://dock.compbio.ucsf.edu/DOCK_6/faq.htm#Error%20from%20amberize_ligand;
+
+anchor_and_grow
+bump_filter
+conf_gen_int_score/dock_confgen_anchor1
+contact_score
+   On some platforms a different number of conformations is produced.
+   If the change is small then it is usually not a sign of serious problems.
+   This can cause differences in the *_scored.mol2 files.
+
+de_novo/dn_de_novo_rand
+   This test is particularly sensitive because small scoring differences
+   can affect the number of fragments.  This can cause differences in the
+   denovo_build.mol2 file.  If the changes are small then it is usually not a
+   sign of serious problems.
+
+delphi_grid_generation
+   This target is invoked by test subdirectory names chemgrid_generation and
+   solvgrid_generation.
+   On some platforms and with some versions of delphi the output contains
+   something like this:
+ igrid  mgrid          65          65
+ scale oldmid igrid  0.241482      0.884000       24.6845       23.0750
+   This can cause differences in the delphi.out file.
+
+descriptor_score/Des_FPS_footprint_scored.txt
+descriptor_score/Des_FPS+DCE_footprint_scored.txt
+   These tests have close contacts in some residues including ASN147 and
+   consequently the vdw_ref are sensitive.
+
+descriptor_score/Des_FMS
+descriptor_score/Des_FMS+SGE
+descriptor_score/Des_Hun+SGE
+descriptor_score/Des_SGE
+descriptor_score/Des_SGE+All
+descriptor_score/Des_Tan+SGE
+   These tests are particularly sensitive with respect to the number of
+   conformations which then produces significant scoring differences.
+
+minimization
+   On macOS these tests are prone to insignificant but noisy differences
+   in floating point numbers.  Reported platforms are OS X 10.8, 10.9.5, and
+   10.12.14 using various gcc's including 4.7.4 (from Macports) and 6.3.
+------------------------------------------------------------------------------
+
+
+III.
+General Comments on Platform Differences.
+
+The .save files are from an x86_64 platform and with gfortran either:
+gcc version 7.5.0 (Ubuntu 7.5.0-3ubuntu1~18.04)
+or
+Linux 3.10.0-1160.76.1.el7.x86_64 #1 SMP Tue Jul 26 14:15:37 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+Red Hat Enterprise Linux Server release 7.9 (Maipo)
+gcc version 7.3.0 (GCC) 
+
+Other similar operating systems and compilers tend to show differences mainly
+in floating point arithmetic.
+
+32 bit platforms tend to show more differences, and the causes include
+binary file formats and memory layouts as well as floating point arithmetic.
+------------------------------------------------------------------------------
+
+Last updated January 30, 2023.
+

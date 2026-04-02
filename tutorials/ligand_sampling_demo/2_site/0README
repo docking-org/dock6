@@ -1,0 +1,10 @@
+This directory contains files related to sphere generation.
+
+                             --- * ---
+
+script_demo          script to automatically perform demonstration
+rec.ms               molecular surface of protein (generated using "dms")
+INSPH                SPHGEN input file
+sphgen_cluster.in    SHOWSPHERE input file for largest cluster created by sphgen
+selected_spheres.in  SHOWSPHERE input file for spheres within 10 Ang of ligand
+script_clean         script to remove files made by script_demo

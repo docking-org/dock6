@@ -1,0 +1,28 @@
+This directory contains a Docking example that will demonstrate 
+Amber score in DOCK6, and flexible ligand, minimization, and MD 
+using an implicit solvent model, GB/SA and an AMBER force field.  
+The demo is meant to provide an idea of how the dock 
+programs work.  The values selected for the example are customized 
+for this case, and may not be the best values for all dockings.
+
+Devleena Shivakumar 06/15/2006
+
+                             --- * ---
+
+script_demo             This script executes the various steps in the
+                        demonstration.  The entire demonstration can 
+                        take a while, especially the MD simulation step.
+
+t4lys/                  This directory contains receptor and ligand
+                        coordinate files for M102Q/L99A T4 Lysozyme.
+
+
+script_clean            This script cleans up (removes) the various files
+                        generated during the demonstration.
+
+For more information about the steps involved in generating these files,
+go to the tutorials located on the DOCK Web site at 
+http://dock.compbio.ucsf.edu/DOCK_6/tutorials/index.htm.
+
+Note: More Amber Score demos will be added later. 
+

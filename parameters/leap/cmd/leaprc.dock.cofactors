@@ -1,0 +1,59 @@
+# DOCK Amber Score Cofactor Library
+#  Scott Brozell February 2005
+
+#  Library of cofactors commonly encountered in docking.
+#  These cofactors are modeled with the general Amber Force field (GAFF).
+#  Load cofactor UNITs in alphabetical order.
+
+ADP = loadMol2 adp.mol2
+frcmod = loadamberparams adp.frcmod
+APC = loadMol2 apc.mol2
+frcmod = loadamberparams apc.frcmod
+BAL = loadMol2 bal.mol2
+BMA = loadMol2 bma.mol2
+BME = loadMol2 bme.mol2
+BOG = loadMol2 bog.mol2
+DMS = loadMol2 dms.mol2
+EDO = loadMol2 edo.mol2
+EOH = loadMol2 eoh.mol2
+FAD = loadMol2 fad.mol2
+frcmod = loadamberparams fad.frcmod
+FPP = loadMol2 fpp.mol2
+frcmod = loadamberparams fpp.frcmod
+FUC = loadMol2 fuc.mol2
+GLC = loadMol2 glc.mol2
+GOL = loadMol2 gol.mol2
+H4B = loadMol2 h4b.mol2
+frcmod = loadamberparams h4b.frcmod
+IMP = loadMol2 imp.mol2
+frcmod = loadamberparams imp.frcmod
+IPA = loadMol2 ipa.mol2
+MAN = loadMol2 man.mol2
+MRD = loadMol2 mrd.mol2
+MTX = loadMol2 mtx.mol2
+frcmod = loadamberparams mtx.frcmod
+MYR = loadMol2 myr.mol2
+NAG = loadMol2 nag.mol2
+frcmod = loadamberparams nag.frcmod
+NAP = loadMol2 nap.mol2
+frcmod = loadamberparams nap.frcmod
+NDG = loadMol2 ndg.mol2
+frcmod = loadamberparams ndg.frcmod
+NDP = loadMol2 ndp.mol2
+frcmod = loadamberparams ndp.frcmod
+NSP = loadMol2 nsp.mol2
+frcmod = loadamberparams nsp.frcmod
+P22 = loadMol2 p22.mol2
+P25 = loadMol2 p25.mol2
+PLP = loadMol2 plp.mol2
+frcmod = loadamberparams plp.frcmod
+SAH = loadMol2 sah.mol2
+frcmod = loadamberparams sah.frcmod
+SPD = loadmol2 spd.mol2
+frcmod = loadamberparams spd.frcmod
+SUC = loadMol2 suc.mol2
+UMP = loadMol2 ump.mol2
+frcmod = loadamberparams ump.frcmod
+YF3 = loadMol2 yf3.mol2
+frcmod = loadamberparams yf3.frcmod
+
