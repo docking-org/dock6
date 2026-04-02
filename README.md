@@ -21,7 +21,7 @@ We and others have used DOCK for the following applications:
 
 ## New to DOCK6.13:
 
-New methodologies have been added to DOCK_DN that allow for users to bias the selection of both fragments and torsions toward those of higher frequency in the provided set. This provides users with finer control over the fragment and torsion compositions of their final ensembles. This method can be enabled in a standard DOCK_DN run with no additional processing or input files, so long as the libraries provided have associated frequencies that would be output with standard fragment library generation in DOCK6. [Bickel et al., J.Comput. Chem. 2025](https://onlinelibrary.wiley.com/doi/10.1002/jcc.27508)
+New methodologies have been added to DOCK_DN that allow for users to bias the selection of both fragments and torsions toward those of higher frequency in the provided set. This provides users with finer control over the fragment and torsion compositions of their final ensembles. This method can be enabled in a standard DOCK_DN run with no additional processing or input files, so long as the libraries provided have associated frequencies that would be output with standard fragment library generation in DOCK6. [Bickel et al., J.Comput. Chem. 2024](https://onlinelibrary.wiley.com/doi/10.1002/jcc.27508)
 
 Filtering molecules in DOCK_GA by a soft molecular weight cutoff has been added. Now, users can allow a chance for molecules to be accepted beyond this cutoff, enabling some deviation around the cutoffs. Changes to mutation selection and how fragments are chosen for mutation have been modified such that DOCK_GA will no longer select fragments incompatible with the attempted mutation type.
 
