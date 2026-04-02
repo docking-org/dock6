@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released September 2024
 Copyright UCSF
 --------------------------------------
 
@@ -48,6 +48,10 @@ contact_score_primary                                        no
 Grid Score Parameters
 ------------------------------------------------------------------------------------------
 grid_score_primary                                           no
+
+GIST Score Parameters
+------------------------------------------------------------------------------------------
+gist_score_primary                                           no
 
 MultiGrid Score Parameters
 ------------------------------------------------------------------------------------------
@@ -102,6 +106,7 @@ Amber Score Parameters
 Simplex Minimization Parameters
 ------------------------------------------------------------------------------------------
 minimize_ligand                                              no
+simplex_final_min                                            no
 
 Atom Typing Parameters
 ------------------------------------------------------------------------------------------
@@ -113,11 +118,14 @@ flex_drive_file                                              ../../../parameters
 Molecule Library Output Parameters
 ------------------------------------------------------------------------------------------
 ligand_outfile_prefix                                        verbosezou_gbsaprimary
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
 Initializing Library File Routines...
+
 Initializing Zou GB/SA Score Routines...
 Initializing Grid Score Routines...
  Reading the energy grid from ../gbsa_grid_generation/grid.nrg
@@ -167,7 +175,7 @@ total = -379.750000
 -----------------------------------
 Molecule:  C1 
 
- Elapsed time for docking:	0.008 seconds
+ Elapsed time for docking:	0.004 seconds
 
  Anchors:		1
  Orientations:		1
@@ -181,4 +189,7 @@ Molecule:  C1
 
 
 1 Molecules Processed
-Total elapsed time:	0.049 seconds
+Total elapsed time:	0.024 seconds
+Number of molecules per second:	42.083
+Virtual memory used for this process: 86832 kilobytes
+Physical memory used for this process: 13456 kilobytes

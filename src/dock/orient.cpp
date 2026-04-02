@@ -227,8 +227,10 @@ minimized_fit(double umat[3][3], double rm[3][3])
         for (j = 0; j < 3; j++)
             rm[i][j] = rot[i][j];       // can be transposed
 }
-
+//
 /*************************************************************************/
+// x1 is the ligand atoms, x2 is the sphere atoms.
+// rm should rotate x1 onto x2
 int
 compute_rot_matrix(XYZVec & x1, XYZVec & x2, double rm[3][3], int n)
 {
@@ -260,7 +262,37 @@ compute_rot_matrix(XYZVec & x1, XYZVec & x2, double rm[3][3], int n)
         umat[2][2] += x1[j].z * x2[j].z;
     }
 
+    /*
+    // calculate the distance/residual between spheres and orients // for debuging TEB 2021
+    double tempresid = 0; 
+    for (j = 0; j < n; j++) {
+         double tempdist2 = 0;
+         tempdist2 =+ (x1[j].x - x2[j].x) * (x1[j].x - x2[j].x);
+         tempdist2 =+ (x1[j].y - x2[j].y) * (x1[j].y - x2[j].y);
+         tempdist2 =+ (x1[j].z - x2[j].z) * (x1[j].z - x2[j].z);
+         tempresid =+ sqrt(tempdist2);
+    }
+    cout << "calculate the distance/residual between spheres and orients (before minimized_fit): " << tempresid << endl;
+    */
+
     minimized_fit(umat, rm);
+
+    /*
+    // calculate the distance/residual between spheres and orients // for debuging TEB 2021
+    XYZCRD P; 
+    tempresid = 0; 
+    for (j = 0; j < n; j++) {
+         double tempdist2 = 0;
+         P.x = rm[0][0] * x1[j].x + rm[0][1] * x1[j].y + rm[0][2] * x1[j].z;
+         P.y = rm[1][0] * x1[j].x + rm[1][1] * x1[j].y + rm[1][2] * x1[j].z;
+         P.z = rm[2][0] * x1[j].x + rm[2][1] * x1[j].y + rm[2][2] * x1[j].z;
+         tempdist2 =+ (P.x - x2[j].x) * (P.x - x2[j].x);
+         tempdist2 =+ (P.y - x2[j].y) * (P.y - x2[j].y);
+         tempdist2 =+ (P.z - x2[j].z) * (P.z - x2[j].z);
+         tempresid =+ sqrt(tempdist2);
+    }
+    cout << "calculate the distance/residual between spheres and orients (after minimized_fit): " << tempresid << endl;
+    */
 
     return (1);
 }
@@ -304,10 +336,13 @@ Orient::input_parameters(Parameter_Reader & parm)
 
         if (automated_matching) {
             tolerance = 0.25;
-            dist_min = 2.0;
+            //dist_min = 2.0;
+            dist_min  = 0.0;
             min_nodes = 3;
             max_nodes = 10;
         } else {
+            automated_matching = 
+                 parm.query_param("automated_matching_iteration", "no", "yes no") == "yes";
             tolerance =
                 atof(parm.query_param("distance_tolerance", "0.25").c_str());
             if (tolerance <= 0.0) {
@@ -317,10 +352,11 @@ Orient::input_parameters(Parameter_Reader & parm)
                 exit(0);
             }
             dist_min =
-                atof(parm.query_param("distance_minimum", "2.0").c_str());
-            if (dist_min <= 0.0) {
+                atof(parm.query_param("distance_minimum", "0.5").c_str());
+            //if (dist_min <= 0.0) {
+            if (dist_min < 0.0) {
                 cout <<
-                    "ERROR: Parameter must be a float greater than zero.  Program will terminate."
+                    "ERROR: Parameter must be a float greater than or equal to zero.  Program will terminate."
                     << endl;
                 exit(0);
             }
@@ -467,7 +503,7 @@ Orient::get_spheres()
 void
 Orient::calculate_sphere_distance_matrix()
 {
-
+    delete[]sph_dist_mat; 
     sph_dist_mat = new double[num_spheres * num_spheres];
 
     for (int i = 0; i < num_spheres; i++)
@@ -491,6 +527,7 @@ Orient::get_centers(DOCKMol & mol)
             // CDS-09/26/16: added dummy atom
             if (mol.amber_at_heavy_flag[atom] || mol.atom_types[atom] == "Du") {
                 if (mol.atom_active_flags[atom]) {
+                    //cout << "atom "<< atom << "is a center point" << endl;
                     tmp.crds.x = mol.x[atom];
                     tmp.crds.y = mol.y[atom];
                     tmp.crds.z = mol.z[atom];
@@ -498,8 +535,10 @@ Orient::get_centers(DOCKMol & mol)
                     tmp.surface_point_i = 0;
                     tmp.surface_point_j = 0;
                     tmp.critical_cluster = 0;
-                    if (use_chemical_matching)
+                    if (use_chemical_matching){
+                        cout << "atom = " << atom << "; color = " << mol.chem_types[atom] << endl;
                         tmp.color = mol.chem_types[atom];
+                    }
                     centers.push_back(tmp);
                     num_centers++;
                 }
@@ -640,7 +679,8 @@ Orient::calculate_ligand_distance_matrix()
 //{
 void
 //Orient::match_ligand_covalent(DOCKMol & mol)
-Orient::match_ligand_covalent(DOCKMol & mol, float bondlenth)
+//Orient::match_ligand_covalent(DOCKMol & mol, float bondlength, float bondlength2, float angle)
+Orient::match_ligand_covalent(DOCKMol & mol, float bondlength, float bondlength2, float angle, bool flag_adjust_bonds, bool flag_orient, bool flag_first)
 {
     SCOREMol        tmp_mol;
     float           mol_score;
@@ -649,16 +689,20 @@ Orient::match_ligand_covalent(DOCKMol & mol, float bondlenth)
 
     int             itmp;
 
-    if (verbose) { 
+    // if (verbose) { 
+    if (verbose and not flag_first) { 
          cout << "-----------------------------------" << endl 
               << "COVALENT ORIENTING INFO :" << endl << endl;
     }
-    ofstream myfile;
+    if (not flag_first){  //  if it is not the frist time, we want to copy the already oreinted molecule into the mol // this will help reproduceablity.
+       copy_molecule( mol, original);
+    } 
     //LEP - debug flag of orienting 
     //if (Parameter_Reader::verbosity_level() > 0) {
-        myfile.open ("debug.mol2");
+        //ofstream myfile;
+        //myfile.open ("debug.mol2");
+        //Write_Mol2(mol, myfile);
     //}
-    Write_Mol2(mol, myfile);
 
     //cout << "CG_Conformer_Search::submit_anchor_orientation" << endl;
     mol_score = mol.current_score;
@@ -675,10 +719,10 @@ Orient::match_ligand_covalent(DOCKMol & mol, float bondlenth)
     // rec residue is in the correct position - the objective is to translate / rotate lig
     // so that the bond from dummy2->dummy1 is overlapping the bond from sphere2->sphere1
 
+/*
     cout << dummy1 << " " 
          << dummy2 << " " 
          << atomtag << endl;
-
     cout << "dummy atoms from the ligand\n"
          << "DUMMY 1: \n"
          << " " << mol.x[dummy1] 
@@ -696,37 +740,110 @@ Orient::match_ligand_covalent(DOCKMol & mol, float bondlenth)
          << " " << mol.y[atomtag] 
          << " " << mol.z[atomtag] 
          << " " << mol.atom_names[atomtag] << endl;
+*/
 
+    if ( flag_adjust_bonds ){
 
-    // Step 1. Adjust the bond length of frag2 to match covalent radii of new pair
+    // Step 1. Adjust the bond length of covalent bond.
+    //
+    //    D2--D1--A1(this is the frist atom of the ligand)
+    //
+
+    //    Step 1.1 Frist, we will adjust the bond lenth for D1--A1 
+    if (verbose) { 
+      cout << "input bond lengths: " << endl;
+      cout << "bondlength D1--A1 = " << sqrt(pow(mol.x[atomtag] - mol.x[dummy1],2.0) + pow( mol.y[atomtag] - mol.y[dummy1],2.0) +  pow(mol.z[atomtag] - mol.z[dummy1],2.0)) << endl;
+      cout << "bondlength D2--D1 = " << sqrt(pow(mol.x[dummy1] - mol.x[dummy2],2.0)  + pow( mol.y[dummy1] - mol.y[dummy2],2.0)  +  pow(mol.z[dummy1] - mol.z[dummy2],2.0)) << endl;
+    }
+
+    if (bondlength2 > 0.0 and bondlength > 0.0 ) {  // if the bond lenth is positive then ajust the length. if you just adjusted D1-A1 and not D2-D1 then D2-D2 might be wierd (distorted): so, if you adjust D1-A1 you must adjust D2-D1.    
+        float new_rad = bondlength2;
+        // Calculate the x-y-z components of the bond vector (bond_vec)
+        DOCKVector bond_vec;
+        bond_vec.x = mol.x[atomtag] - mol.x[dummy1];
+        bond_vec.y = mol.y[atomtag] - mol.y[dummy1];
+        bond_vec.z = mol.z[atomtag] - mol.z[dummy1];
+       
+        // Normalize the bond vector then multiply each component by new_rad so that it is the desired
+        // length
+        bond_vec = bond_vec.normalize_vector();
+        bond_vec.x *= new_rad;
+        bond_vec.y *= new_rad;
+        bond_vec.z *= new_rad;
+        // Change the coordinates of the dummy atom so that the bond length is correct
+        mol.x[dummy1] = mol.x[atomtag] - bond_vec.x;
+        mol.y[dummy1] = mol.y[atomtag] - bond_vec.y;
+        mol.z[dummy1] = mol.z[atomtag] - bond_vec.z;
+        //Write_Mol2(mol, myfile);
+    } // else (if the bond is negative) do not adjust the bond. 
+ 
+    //    Step 1.1 second we will adjust the bond lenth for D2--D1 
 
     // Calculate the desired bond length and remember as 'new_rad'
     //float new_rad = calc_cov_radius(frag1.mol.atom_types[heavy1]) +
     //                calc_cov_radius(frag2.mol.atom_types[heavy2]);
     //float new_rad = 1.4;
-    float new_rad = bondlenth;
+    if (bondlength > 0.0 ) {  // if the bond lenth is positive then ajust the length.  (D2-D1 can be adjusted regardless if D1-A1 is adjusted.)
+        float new_rad = bondlength;
+        
+        // Calculate the x-y-z components of the bond vector (bond_vec)
+        DOCKVector bond_vec;
+        bond_vec.x = mol.x[dummy1] - mol.x[dummy2];
+        bond_vec.y = mol.y[dummy1] - mol.y[dummy2];
+        bond_vec.z = mol.z[dummy1] - mol.z[dummy2];
+        
+        // Normalize the bond vector then multiply each component by new_rad so that it is the desired
+        // length
+        bond_vec = bond_vec.normalize_vector();
+        bond_vec.x *= new_rad;
+        bond_vec.y *= new_rad;
+        bond_vec.z *= new_rad;
+        // Change the coordinates of the dummy atom so that the bond length is correct
+        mol.x[dummy2] = mol.x[dummy1] - bond_vec.x;
+        mol.y[dummy2] = mol.y[dummy1] - bond_vec.y;
+        mol.z[dummy2] = mol.z[dummy1] - bond_vec.z;
+        //Write_Mol2(mol, myfile);
+    } // else (if the bond is negative) do not adjust the bond. 
+    if (verbose) { 
+      cout << "ajusted bond lengths: " << endl;
+      cout << "bondlength D1--A1 = " << sqrt(pow(mol.x[atomtag] - mol.x[dummy1],2.0) + pow( mol.y[atomtag] - mol.y[dummy1],2.0) +  pow(mol.z[atomtag] - mol.z[dummy1],2.0)) << endl;
+      cout << "bondlength D2--D1 = " << sqrt(pow(mol.x[dummy1] - mol.x[dummy2],2.0)  + pow( mol.y[dummy1] - mol.y[dummy2],2.0)  +  pow(mol.z[dummy1] - mol.z[dummy2],2.0)) << endl;
+    }
 
-    
+    // Step 1.5 Adjust angle.  
+    // if angle is negative then leave angle unchanged. 
 
-    // Calculate the x-y-z components of the current frag2 bond vector (bond_vec)
-    DOCKVector bond_vec;
-    bond_vec.x = mol.x[dummy1] - mol.x[dummy2];
-    bond_vec.y = mol.y[dummy1] - mol.y[dummy2];
-    bond_vec.z = mol.z[dummy1] - mol.z[dummy2];
+    if (angle < 0.0){
+        cout << " set angle is not used. because value is negative.  " << endl;
+    } else{
+        mol.set_angle(atomtag,dummy1,dummy2,angle);
+    } 
 
-    // Normalize the bond vector then multiply each component by new_rad so that it is the desired
-    // length
-    bond_vec = bond_vec.normalize_vector();
-    bond_vec.x *= new_rad;
-    bond_vec.y *= new_rad;
-    bond_vec.z *= new_rad;
-    // Change the coordinates of the frag2 dummy atom so that the bond length is correct
-    mol.x[dummy2] = mol.x[dummy1] - bond_vec.x;
-    mol.y[dummy2] = mol.y[dummy1] - bond_vec.y;
-    mol.z[dummy2] = mol.z[dummy1] - bond_vec.z;
-    Write_Mol2(mol, myfile);
+/*
+    cout << "dummy atoms from the ligand\n"
+         << "DUMMY 1: \n"
+         << " " << mol.x[dummy1] 
+         << " " << mol.y[dummy1] 
+         << " " << mol.z[dummy1] 
+         << " " << mol.atom_names[dummy1] << endl;
+
+    cout << "DUMMY2: \n" 
+         << " " << mol.x[dummy2] 
+         << " " << mol.y[dummy2] 
+         << " " << mol.z[dummy2] 
+         << " " << mol.atom_names[dummy2] << endl;
+
+    cout << "ATOM for dhideral sampling: \n" 
+         << " " << mol.x[atomtag] 
+         << " " << mol.y[atomtag] 
+         << " " << mol.z[atomtag] 
+         << " " << mol.atom_names[atomtag] << endl;
+*/
+
+    } // if flag_adjust_bonds
 
 
+    if ( flag_orient ){
     // Step 2. Translate dummy2 of frag2 to the origin
 
     // Figure out what translation is required to move the dummy atom to the origin
@@ -738,7 +855,7 @@ Orient::match_ligand_covalent(DOCKMol & mol, float bondlenth)
     // Use the dockmol function to translate the fragment so the dummy atom is at the origin
     mol.translate_mol(trans1);
     //myfile << "####### I AM HERE" << endl;
-    Write_Mol2(mol, myfile);
+    //Write_Mol2(mol, myfile);
 
     // Step 3. Calculate dot product to determine theta (theta = angle between vec1 and vec2)
 
@@ -748,6 +865,7 @@ Orient::match_ligand_covalent(DOCKMol & mol, float bondlenth)
     vec1.y = spheres[0].crds.y - spheres[1].crds.y;
     vec1.z = spheres[0].crds.z - spheres[1].crds.z;
 
+/*
     cout  << "\n\nSpheres representing the covalent residue" << endl;
     cout   <<  "Atom 1, place dummy 1 here:\n"; 
     cout   <<  spheres[0].crds.x 
@@ -761,7 +879,7 @@ Orient::match_ligand_covalent(DOCKMol & mol, float bondlenth)
     cout   <<  spheres[2].crds.x 
     << " " <<  spheres[2].crds.y 
     << " " <<  spheres[2].crds.z << endl; 
-
+*/
 
     // vec2 = vector pointing from dummy2 to heavy2 in frag2 (dummy2 is at the origin)
     DOCKVector vec2;
@@ -784,11 +902,17 @@ Orient::match_ligand_covalent(DOCKMol & mol, float bondlenth)
     vec2_magsq = (vec2.x * vec2.x) + (vec2.y * vec2.y) + (vec2.z * vec2.z);
 
     // Compute cosine and sine of theta (theta itself is not actually calculated)
-    if (vec1_magsq != 0.0 && vec2_magsq != 0.0 ){
+    //if (vec1_magsq != 0.0 && vec2_magsq != 0.0 ){
+    if (vec1_magsq > 0.0000001 && vec2_magsq > 0.0000001 ){
       cos_theta = dot / (sqrt (vec1_magsq * vec2_magsq));
     }
-    else{ // this only happens if the vector are already aligned, I think. 
+    else{ // 
       cos_theta = 1.0;
+      //if dot >= 0.0{
+      //   cos_theta = 1.0;
+      //}else{
+      //   cos_theta = -1.0;
+      //}
     }
 
     // cos_theta should never be greater than one. 
@@ -805,11 +929,11 @@ Orient::match_ligand_covalent(DOCKMol & mol, float bondlenth)
        sin_theta = sqrt (1 - (cos_theta * cos_theta));
     }
 
-    cout << "dot product info: " << dot << " " <<
-            vec1_magsq << " " <<
-            vec2_magsq << " " <<
-            cos_theta << " " <<
-            sin_theta <<endl;
+    //cout << "dot product info: " << dot << " " <<
+    //        vec1_magsq << " " <<
+    //        vec2_magsq << " " <<
+    //        cos_theta << " " <<
+    //        sin_theta <<endl;
     // dot product info: 3.60413 3.24744 4 1 -nan
 
     // Step 4. Rotate vec2 to be coincident with vec1
@@ -922,7 +1046,7 @@ Orient::match_ligand_covalent(DOCKMol & mol, float bondlenth)
         mol.rotate_mol(finalmat);
     }
 
-    Write_Mol2(mol, myfile);
+    //Write_Mol2(mol, myfile);
 
     // Step 5. Translate frag2 to frag1
 
@@ -934,13 +1058,17 @@ Orient::match_ligand_covalent(DOCKMol & mol, float bondlenth)
 
     // Use the dockmol function to translate frag2
     mol.translate_mol(trans2);
-    Write_Mol2(mol, myfile);
-    myfile.close();
-    //copy_molecule(original, mol);
+    //Write_Mol2(mol, myfile);
+    //myfile.close();
+    } // flag_orient
+    if ( flag_first){ // copy the mol into original // we can do this without orienting it at all.  I thought that we only want to do this once after we orient it, but I think it is better to not orient it.   
+       copy_molecule(original, mol);
+    }
 }
 
 /************************************************/
 void
+//bool
 Orient::new_next_orientation_covalent(DOCKMol & mol, float angle)
 {
 
@@ -968,33 +1096,37 @@ Orient::new_next_orientation_covalent(DOCKMol & mol, float angle)
     int dummy1 = mol.dummy1;
     int dummy2 = mol.dummy2;
     int atomtag = mol.atomtag;
-    ofstream myfile;
-    myfile.open ("debug.mol2",ios::app);
+    //ofstream myfile;
+    //myfile.open ("debug.mol2",ios::app);
 
     //float angle = 0.0;
 //    while (angle < 2*PI){ // 360 degrees == 2*PI radians
-      myfile << "######## angle:  " << angle << endl;
+      // myfile << "######## angle:  " << angle << endl;
       set_torsion(
-      spheres[2].crds.x, mol.x[dummy1],  mol.x[dummy2], mol.x[atomtag],
-      spheres[2].crds.y, mol.y[dummy1],  mol.y[dummy2], mol.y[atomtag],
-      spheres[2].crds.z, mol.z[dummy1],  mol.z[dummy2], mol.z[atomtag],  
+      //spheres[2].crds.x, mol.x[dummy1],  mol.x[dummy2], mol.x[atomtag],
+      //spheres[2].crds.y, mol.y[dummy1],  mol.y[dummy2], mol.y[atomtag],
+      //spheres[2].crds.z, mol.z[dummy1],  mol.z[dummy2], mol.z[atomtag],  
+      spheres[2].crds.x, mol.x[dummy2],  mol.x[dummy1], mol.x[atomtag],
+      spheres[2].crds.y, mol.y[dummy2],  mol.y[dummy1], mol.y[atomtag],
+      spheres[2].crds.z, mol.z[dummy2],  mol.z[dummy1], mol.z[atomtag],  
       angle, mol);
     //SCOREMol        tmp_mol;
       //anchor_positions.push_back(tmp_mol);
       //copy_molecule(anchor_positions[anchor_positions.size() - 1].
       //                    second, mol);
-      Write_Mol2(mol,myfile); 
+      // Write_Mol2(mol,myfile); 
 
 //      angle = angle + (10.0 * (PI/180.0)); // 10 degree incraments
 //    }
-    myfile.close();
-
+    //myfile.close();
+//    return true;
 }
 
 
 
 
 /*************************************/
+// This is copied from dockmol.cpp 
 // This function seems to be using simple rotation matrices
 // Why not use the fancy quternion stuff? :sudipto
 // this function is is modifed from that which is in ?? 
@@ -1187,7 +1319,12 @@ Orient::match_ligand(DOCKMol & mol)
 
         // calc chem matching table if chem matching is used
         if (use_chemical_matching) {
-
+            if (verbose) {
+                cout << " using chemical matching " << endl;
+                for (i = 0; i < spheres.size(); i++) {
+                   cout << "sphere = " << i << "; color = " << spheres[i].color << endl;
+                }
+            } 
             // idx = center*num_spheres + sphere
             chem_match_align_tbl.clear();
             chem_match_align_tbl.resize((spheres.size() * centers.size()), 0);
@@ -1255,10 +1392,18 @@ Orient::match_ligand(DOCKMol & mol)
                 s2 = j % num_spheres;
                 c2 = j / num_spheres;
 
-                residual_mat[k] =
-                    fabs(sph_dist_mat[s1 * num_spheres + s2] -
-                         lig_dist_mat[c1 * num_centers + c2]);
-
+                //residual_mat[k] =
+                //    fabs(sph_dist_mat[s1 * num_spheres + s2] -
+                //         lig_dist_mat[c1 * num_centers + c2]);
+                // if two spheres are too close together discard them. 
+                if (sph_dist_mat[s1 * num_spheres + s2] < dist_min) {
+                   residual_mat[k] = 10000.0;
+                }
+                else {
+                   residual_mat[k] =
+                      fabs(sph_dist_mat[s1 * num_spheres + s2] -
+                           lig_dist_mat[c1 * num_centers + c2]);
+                }
                 k++;
             }
         }
@@ -1377,6 +1522,7 @@ Orient::id_all_cliques()
     int *new_state = new int[max_nodes];
     new_level_residuals = new double[max_nodes];
 
+    double loop_tolerance =  tolerance;
 
     if (verbose){
            cout <<"Sphere Center Matching Parameters:" << endl
@@ -1390,7 +1536,7 @@ Orient::id_all_cliques()
            && ((automated_matching) || (am_iteration_num == 1))
            && (am_iteration_num < 10)) {
 
-        tolerance = am_iteration_num * orig_tolerance;
+        loop_tolerance = am_iteration_num * orig_tolerance;
 
         for (i = 0; i < size * max_nodes; i++) {
             if (i < size)
@@ -1442,7 +1588,7 @@ Orient::id_all_cliques()
                         // new_level_residuals[new_level] = residual_mat[k];
                     }
 
-                    if (new_level_residuals[new_level] > tolerance) {
+                    if (new_level_residuals[new_level] > loop_tolerance) {
                         next_cand = -1;
                         new_candset[index] = false;
                         new_notset[index] = true;
@@ -1465,7 +1611,7 @@ Orient::id_all_cliques()
                     // add state to cliques if tolerance is proper
                     if ((new_level_residuals[new_level - 1] >
                          orig_tolerance * (am_iteration_num - 1))
-                        && (new_level_residuals[new_level - 1] <= tolerance)) {
+                        && (new_level_residuals[new_level - 1] <= loop_tolerance)) {
                         limit_cliques++;
 
                         tmp_clique.nodes.clear();
@@ -1517,7 +1663,7 @@ Orient::id_all_cliques()
 
                             }
 
-                            if (tmp_resid > tolerance) {
+                            if (tmp_resid > loop_tolerance) {
                                 new_candset[new_level * size + i] = false;
                                 new_notset[new_level * size + i] = false;
                             }
@@ -1534,7 +1680,7 @@ Orient::id_all_cliques()
                     // add state to cliques
                     if ((new_level_residuals[new_level - 1] >
                          orig_tolerance * (am_iteration_num - 1))
-                        && (new_level_residuals[new_level - 1] <= tolerance)) {
+                        && (new_level_residuals[new_level - 1] <= loop_tolerance)) {
 
                         tmp_clique.nodes.clear();
                         tmp_clique.residual =
@@ -1576,33 +1722,35 @@ Orient::id_all_cliques()
         cout.precision(4);
         cout << fixed;
         cout << "Num of cliques generated: " << cliques.size() << endl;
-        cout << " Residual Info:"  << endl;
-        cout << "   min residual:    " << cliques[0].residual << endl;
-        cout << "   median residual: " << cliques[(int)(cliques.size() / 2)].residual << endl;
-        cout << "   max residual:    " << cliques[cliques.size() - 1].residual << endl;
-        double temp_resid_sum=0;
-        double temp_resid2_sum=0;
-        int max_node_size = 0;
-        int min_node_size = 999999;
-        double node_size_sum = 0;
-        for (int i = 0; i < cliques.size(); i++){
-            temp_resid_sum += cliques[i].residual;
-            temp_resid2_sum += (cliques[i].residual*cliques[i].residual);
-            if (min_node_size > cliques[i].nodes.size())
-                 min_node_size = cliques[i].nodes.size();
-            if (max_node_size < cliques[i].nodes.size())
-                 max_node_size = cliques[i].nodes.size();
-            node_size_sum += cliques[i].nodes.size();
+        if (cliques.size() > 0){
+            cout << " Residual Info:"  << endl;
+            cout << "   min residual:    " << cliques[0].residual << endl;
+            cout << "   median residual: " << cliques[(int)(cliques.size() / 2)].residual << endl;
+            cout << "   max residual:    " << cliques[cliques.size() - 1].residual << endl;
+            double temp_resid_sum=0;
+            double temp_resid2_sum=0;
+            int max_node_size = 0;
+            int min_node_size = 999999;
+            double node_size_sum = 0;
+            for (int i = 0; i < cliques.size(); i++){
+                temp_resid_sum += cliques[i].residual;
+                temp_resid2_sum += pow(cliques[i].residual,2);
+                if (min_node_size > cliques[i].nodes.size())
+                     min_node_size = cliques[i].nodes.size();
+                if (max_node_size < cliques[i].nodes.size())
+                     max_node_size = cliques[i].nodes.size();
+                node_size_sum += cliques[i].nodes.size();
+            }
+            double mean = temp_resid_sum / cliques.size();
+            double std  = sqrt(temp_resid2_sum/ cliques.size() - pow(mean,2));
+            cout << "   mean residual:   " << mean << endl;
+            cout << "   std residual:    "  << std  << endl;
+            cout << " Node Sizes:"  << endl;
+            cout << "   min nodes:    "  << min_node_size << endl;
+            cout << "   max nodes:    "  << max_node_size << endl;
+            cout << "   mean nodes:   " << node_size_sum / cliques.size() << endl;
+            cout.unsetf ( ios_base::fixed  ); 
         }
-        double mean = temp_resid_sum / cliques.size();
-        double std  = sqrt(temp_resid2_sum/ cliques.size() - (mean*mean));
-        cout << "   mean residual:   " << mean << endl;
-        cout << "   std residual:    "  << std  << endl;
-        cout << " Node Sizes:"  << endl;
-        cout << "   min nodes:    "  << min_node_size << endl;
-        cout << "   max nodes:    "  << max_node_size << endl;
-        cout << "   mean nodes:   " << node_size_sum / cliques.size() << endl;
-        cout.unsetf ( ios_base::fixed  ); 
              
     }
 
@@ -1675,7 +1823,7 @@ Orient::check_clique_chemical_match(CLIQUE & clique)
             sphere_idx = idx / num_centers;
             center_idx = idx % num_centers;
 */
-            // correct orinting: sudipto & DTM
+            // correct orienting: sudipto & DTM
             // replace it with the proper sphere/center indexing
             sphere_idx = idx % num_spheres;
             center_idx = idx / num_spheres;
@@ -1768,48 +1916,10 @@ Orient::check_clique_critical_points(CLIQUE & clique)
 bool
 Orient::new_next_orientation(DOCKMol & mol)
 {
-    if (orient_ligand) {
-        if (cliques.size() == 0) {
-        if (verbose) cout << "No orients found for current anchor" << endl;
-            return false;
-    }
-
-        if (last_orient_flag) {
-            clean_up();
-            return false;
-        }
-        new_extract_coords_from_clique(cliques[current_clique]);
-        calculate_translations();
-        translate_clique_to_origin();
-        calculate_rotation();
-
-        copy_molecule(mol, original);
-        mol.translate_mol(-centers_com);
-        mol.rotate_mol(rotation_matrix);
-        mol.translate_mol(spheres_com);
-
-        current_clique++;
-        if ((current_clique == max_orients) || (current_clique == cliques.size())){
-            last_orient_flag = true;        
-        } else{
-            last_orient_flag = false;
-
-        }
-
-        return true;
-
-    } else {
-        if (!last_orient_flag) {
-            last_orient_flag = true;
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-
+    bool all_atoms = true;
+    return new_next_orientation(mol, all_atoms);
 }
-/***********************************************/
+
 bool
 //Orient::new_next_orientation(DOCKMol & mol)
 Orient::new_next_orientation(DOCKMol & mol, bool all_atoms)
@@ -1868,24 +1978,32 @@ Orient::new_next_orientation(DOCKMol & mol, bool all_atoms)
             return false;
         }
     }
+    return false;
 
 }
 
 
 /************************************************/
-void
-Orient::orientation_HDB(DOCKMol & mol)
-{
-    if (orient_ligand) {
-        new_extract_coords_from_clique(cliques[current_clique-1]);
-        calculate_translations();
-        translate_clique_to_origin();
-        calculate_rotation();
+// Called in hdb search routine to orient each segement before scorring
 
+bool
+Orient::orientation_HDB(DOCKMol & mol, bool first)
+{
+    //cout << "orientation_HDB" << endl;
+    if (orient_ligand) {
+        //cout << "current_clique = " << current_clique << endl;
+        if (first) { // only do this if it is the frist set
+           new_extract_coords_from_clique(cliques[current_clique-1]);
+           calculate_translations();
+           translate_clique_to_origin();
+           calculate_rotation();
+        }
+        //copy_molecule(mol, original);
         mol.translate_mol(-centers_com);
         mol.rotate_mol(rotation_matrix);
         mol.translate_mol(spheres_com);
     }
+    return false;
 }
 
 

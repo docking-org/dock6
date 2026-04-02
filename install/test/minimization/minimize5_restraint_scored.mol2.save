@@ -2,14 +2,14 @@
 ##########                                Name:                 C1 
 ##########                    Molecular_Weight:             314.468
 ##########                DOCK_Rotatable_Bonds:                   1
-##########                       Formal_Charge:         0.000100061
+##########                       Formal_Charge:                   0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                  23
-##########                          Grid_Score:          -33.168030
-##########                     Grid_vdw_energy:          -30.696215
-##########                      Grid_es_energy:           -2.471817
-##########           Internal_energy_repulsive:           30.651119
+##########                          Grid_Score:          -33.168049
+##########                     Grid_vdw_energy:          -30.696228
+##########                      Grid_es_energy:           -2.471820
+##########           Internal_energy_repulsive:           30.651180
 
 @<TRIPOS>MOLECULE
  C1 

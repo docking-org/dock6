@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released September 2024
 Copyright UCSF
 --------------------------------------
 
@@ -85,6 +85,10 @@ Grid Score Parameters
 ------------------------------------------------------------------------------------------
 grid_score_primary                                           no
 
+GIST Score Parameters
+------------------------------------------------------------------------------------------
+gist_score_primary                                           no
+
 MultiGrid Score Parameters
 ------------------------------------------------------------------------------------------
 multigrid_score_primary                                      no
@@ -121,6 +125,8 @@ descriptor_use_pharmacophore_score                           no
 descriptor_use_tanimoto                                      no
 descriptor_use_hungarian                                     no
 descriptor_use_volume_overlap                                yes
+descriptor_use_gist                                          no
+descriptor_use_dock3.5                                       no
 
 --- Descriptor Score Parameters: Grid Score ---
 descriptor_grid_score_rep_rad_scale                          1
@@ -166,6 +172,7 @@ simplex_tors_step                                            10.0
 simplex_anchor_max_iterations                                500
 simplex_grow_max_iterations                                  250
 simplex_grow_tors_premin_iterations                          0
+simplex_final_min                                            no
 simplex_random_seed                                          0
 simplex_restraint_min                                        yes
 simplex_coefficient_restraint                                10.0
@@ -644,11 +651,11 @@ Random number - index_seg (mutation_selection): 0
 Atoms of segment for mutation: C8,C9,C10,H4,C11,C12,H5,C13,H6
 Calling Mutation Function: Replacement
 Selecting frag: scf.209
-deleted frag from vector because no ring
+Deleted frag from vector because no ring
 Selecting frag: scf.206
 Deleted frag because of distance cutoff
 Selecting frag: scf.70
-deleted frag from vector because no ring
+Deleted frag from vector because no ring
 Selecting frag: scf.29
 Deleted fragment because its too similar to chosen segment
 Selecting frag: scf.167
@@ -660,7 +667,7 @@ Deleted frag because of distance cutoff
 Selecting frag: scf.234
 Deleted frag because of distance cutoff
 Selecting frag: scf.9
-deleted frag from vector because no ring
+Deleted frag from vector because no ring
 Selecting frag: scf.198
 Deleted fragment because its too similar to chosen segment
 Number with invalid torenv 0
@@ -676,23 +683,23 @@ Calling Mutation Function: Replacement
 Selecting frag: lnk.1
 Deleted fragment because not matching bondtypes
 Selecting frag: lnk.293
-deleted frag from vector because it has a ring
+Deleted frag from vector because it has a ring
 Selecting frag: lnk.205
-deleted frag from vector because it has a ring
+Deleted frag from vector because it has a ring
 Selecting frag: lnk.21
 Deleted fragment because not matching bondtypes
 Selecting frag: lnk.254
-deleted frag from vector because it has a ring
+Deleted frag from vector because it has a ring
 Selecting frag: lnk.238
-deleted frag from vector because it has a ring
+Deleted frag from vector because it has a ring
 Selecting frag: lnk.291
-deleted frag from vector because it has a ring
+Deleted frag from vector because it has a ring
 Selecting frag: lnk.223
-deleted frag from vector because it has a ring
+Deleted frag from vector because it has a ring
 Selecting frag: lnk.378
-deleted frag from vector because it has a ring
+Deleted frag from vector because it has a ring
 Selecting frag: lnk.285
-deleted frag from vector because it has a ring
+Deleted frag from vector because it has a ring
 Number with invalid torenv 0
 Offspring size: 0, only single best scoring offspring retained
 
@@ -1417,7 +1424,7 @@ Calling Mutation Function: Replacement
 Selecting frag: scf.335
 Deleted frag because of distance cutoff
 Selecting frag: scf.194
-deleted frag from vector because no ring
+Deleted frag from vector because no ring
 Selecting frag: scf.221
 Deleted fragment because not matching bondtypes
 Selecting frag: scf.206
@@ -1427,11 +1434,11 @@ Deleted frag because of distance cutoff
 Selecting frag: scf.234
 Deleted frag because of distance cutoff
 Selecting frag: scf.74
-deleted frag from vector because no ring
+Deleted frag from vector because no ring
 Selecting frag: scf.258
 Deleted frag because of distance cutoff
 Selecting frag: scf.70
-deleted frag from vector because no ring
+Deleted frag from vector because no ring
 Selecting frag: scf.29
 Deleted frag because of distance cutoff
 Number with invalid torenv 0
@@ -1614,25 +1621,25 @@ Random number - index_seg (mutation_selection): 0
 Atoms of segment for mutation: C7,C8,H6,H7,H8,C9,H9,H10,H11
 Calling Mutation Function: Replacement
 Selecting frag: lnk.63
-deleted frag from vector because it has a ring
+Deleted frag from vector because it has a ring
 Selecting frag: lnk.79
-deleted frag from vector because it has a ring
+Deleted frag from vector because it has a ring
 Selecting frag: lnk.248
-deleted frag from vector because it has a ring
+Deleted frag from vector because it has a ring
 Selecting frag: lnk.191
-deleted frag from vector because it has a ring
+Deleted frag from vector because it has a ring
 Selecting frag: lnk.208
-deleted frag from vector because it has a ring
+Deleted frag from vector because it has a ring
 Selecting frag: lnk.16
-deleted frag from vector because it has a ring
+Deleted frag from vector because it has a ring
 Selecting frag: lnk.326
-deleted frag from vector because it has a ring
+Deleted frag from vector because it has a ring
 Selecting frag: lnk.57
-deleted frag from vector because it has a ring
+Deleted frag from vector because it has a ring
 Selecting frag: lnk.173
-deleted frag from vector because it has a ring
+Deleted frag from vector because it has a ring
 Selecting frag: lnk.205
-deleted frag from vector because it has a ring
+Deleted frag from vector because it has a ring
 Number with invalid torenv 0
 Offspring size: 0, only single best scoring offspring retained
 
@@ -2815,7 +2822,7 @@ Random number - index_seg (mutation_selection): 0
 Atoms of segment for mutation: C1,H1,C2,C3,C4,C5,H2,C6,O1,C7,N1
 Calling Mutation Function: Replacement
 Selecting frag: scf.78
-deleted frag from vector because no ring
+Deleted frag from vector because no ring
 Selecting frag: scf.335
 Deleted frag because of distance cutoff
 Selecting frag: scf.167
@@ -2825,15 +2832,15 @@ Deleted frag because of distance cutoff
 Selecting frag: scf.29
 Deleted frag because of distance cutoff
 Selecting frag: scf.74
-deleted frag from vector because no ring
+Deleted frag from vector because no ring
 Selecting frag: scf.9
-deleted frag from vector because no ring
+Deleted frag from vector because no ring
 Selecting frag: scf.289
 Deleted frag because of distance cutoff
 Selecting frag: scf.221
 Deleted fragment because not matching bondtypes
 Selecting frag: scf.194
-deleted frag from vector because no ring
+Deleted frag from vector because no ring
 Number with invalid torenv 0
 Offspring size: 0, only single best scoring offspring retained
 
@@ -3272,14 +3279,17 @@ scoredgen, parents
 ### Parents size before P-O pruning 24 Parents size after pruning 24
 
 -----------------------------------
-Average Score offspring gen 1: -37.477
+Average Score offspring gen 1: -37.5625
 #### Final parent size before selection: 24
 #### Final offspring size before selection: 24
 Selection Method: Tournament
-Average score survivors gen 1: -52.2444
+Average score survivors gen 1: -52.2657
 
 -----------------------------------
 
 
 0 Molecules Processed
-Total elapsed time:	15.960 seconds
+Total elapsed time:	19.261 seconds
+Number of molecules per second:	0.000
+Virtual memory used for this process: 117900 kilobytes
+Physical memory used for this process: 47068 kilobytes

@@ -3,10 +3,23 @@ Known Problems in the Quality Control Suite.
 I.
 Gotchas.
 
-The environment variable AMBERHOME should not be defined when running the
-tests.  In particular, a defined AMBERHOME variable can cause problems in
-the AMBER score tests.  See this FAQ for symptoms and details:
+Amber.
+The environment variable AMBERHOME should Not be defined when preparing
+input files for Dock's AMBER score, ie, during amberization.  This includes
+when running the AMBER score tests.  See this FAQ for symptoms and details:
 https://dock.compbio.ucsf.edu/DOCK_6/faq.htm#Error%20from%20amberize_ligand;
+
+Python.
+The Python scripts installed by Dock support both versions 2 and 3.
+We have used a standard shebang, but we have reports that some macOS
+platforms do not have a simple python which causes this error:
+/usr/bin/env: python: No such file or directory
+One way to fix this is to edit Dock's bin/*.py files and replace
+#!/usr/bin/env python
+with
+#!/usr/bin/env python3
+In the near future we may make this switch ourselves; there is a trade off
+between old platforms that do not have python3 and non standard platforms.
 ------------------------------------------------------------------------------
 
 
@@ -23,6 +36,14 @@ amber_score_multiple_ligands
    when using AMBER score.  See this FAQ for symptoms and details:
    https://dock.compbio.ucsf.edu/DOCK_6/faq.htm#Error%20from%20amberize_ligand;
 
+amber_score_1a28/move_everything.dockout
+   The ligand energy of this test is oddly sensitive which then produces a
+   significant scoring difference.  Here are values from OS Red Hat Enterprise
+   Linux Server release 7.9 with gcc versions 7.3.0 and 8.4.0:
+                        Amber_Score:          -50.739548
+               Amber_complex_energy:        -7785.792968
+                Amber_ligand_energy:          -25.431386
+
 anchor_and_grow
 bump_filter
 conf_gen_int_score/dock_confgen_anchor1
@@ -30,6 +51,14 @@ contact_score
    On some platforms a different number of conformations is produced.
    If the change is small then it is usually not a sign of serious problems.
    This can cause differences in the *_scored.mol2 files.
+
+covalent_attach_and_grow
+   The tests that emit verbose growth statistics are sensitive because of
+   the detailed output on the layers, segments, pruning, and clustering.
+
+de_novo
+   The tests that emit growth layering statistics are sensitive because of
+   the detailed output on the root size information.
 
 de_novo/dn_de_novo_rand
    This test is particularly sensitive because small scoring differences
@@ -89,5 +118,5 @@ in floating point arithmetic.
 binary file formats and memory layouts as well as floating point arithmetic.
 ------------------------------------------------------------------------------
 
-Last updated November 15, 2023.
+Last updated September 10, 2024.
 

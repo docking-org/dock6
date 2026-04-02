@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released September 2024
 Copyright UCSF
 --------------------------------------
 
@@ -22,6 +22,7 @@ min_anchor_size                                              40
 pruning_use_clustering                                       yes
 pruning_max_orients                                          10
 pruning_clustering_cutoff                                    10
+pruning_orient_score_cutoff                                  1000.0
 pruning_conformer_score_cutoff                               25.0
 pruning_conformer_score_scaling_factor                       1.0
 use_clash_overlap                                            no
@@ -74,13 +75,16 @@ flex_drive_file                                              ../../../parameters
 Molecule Library Output Parameters
 ------------------------------------------------------------------------------------------
 ligand_outfile_prefix                                        bump1
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
 
 Initializing Conformer Generator Routines...
 Initializing Library File Routines...
+
 Initializing Orienting Routines...
 Initializing Bump Filter Routines...
  Reading the bump grid from ../grid_generation/grid.bmp
@@ -89,7 +93,7 @@ Initializing Bump Filter Routines...
 -----------------------------------
 Molecule:  C1 
 
- Elapsed time for docking:	0.155 seconds
+ Elapsed time for docking:	0.113 seconds
 
  Anchors:		1
  Orientations:		36
@@ -98,4 +102,7 @@ Molecule:  C1
 
 
 1 Molecules Processed
-Total elapsed time:	0.158 seconds
+Total elapsed time:	0.116 seconds
+Number of molecules per second:	8.612
+Virtual memory used for this process: 93292 kilobytes
+Physical memory used for this process: 21496 kilobytes

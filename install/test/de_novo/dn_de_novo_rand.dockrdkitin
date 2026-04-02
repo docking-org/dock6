@@ -10,6 +10,15 @@ dn_num_random_picks                                          20
 dn_pruning_conformer_score_cutoff                            100.0
 dn_pruning_conformer_score_scaling_factor                    2.0
 dn_pruning_clustering_cutoff                                 100.0
+dn_remove_duplicates                                         yes
+dn_max_duplicates_per_mol                                    0
+dn_write_pruned_duplicates                                   no
+dn_advanced_pruning                                          yes
+dn_prune_initial_sample                                      yes
+dn_sample_torsions                                           yes
+dn_prune_individual_torsions                                 yes
+dn_prune_combined_torsions                                   yes
+dn_random_root_selection                                     no
 dn_mol_wt_cutoff_type                                        soft
 dn_upper_constraint_mol_wt                                   550.0
 dn_lower_constraint_mol_wt                                   0.0
@@ -43,6 +52,7 @@ dn_max_root_size                                             25
 dn_max_layer_size                                            25
 dn_max_current_aps                                           5
 dn_max_scaffolds_per_layer                                   1
+dn_max_successful_att_per_root                               50000
 dn_write_checkpoints                                         yes
 dn_write_prune_dump                                          yes
 dn_write_orients                                             no
@@ -63,6 +73,7 @@ bump_filter                                                  no
 score_molecules                                              yes
 contact_score_primary                                        no
 grid_score_primary                                           no
+gist_score_primary                                           no
 multigrid_score_primary                                      no
 dock3.5_score_primary                                        no
 continuous_score_primary                                     no
@@ -77,6 +88,8 @@ descriptor_use_pharmacophore_score                           no
 descriptor_use_tanimoto                                      no
 descriptor_use_hungarian                                     no
 descriptor_use_volume_overlap                                no
+descriptor_use_gist                                          no
+descriptor_use_dock3.5                                       no
 descriptor_multigrid_score_rep_rad_scale                     1
 descriptor_multigrid_score_vdw_scale                         1
 descriptor_multigrid_score_es_scale                          1
@@ -134,6 +147,7 @@ simplex_tors_step                                            10.0
 simplex_anchor_max_iterations                                500
 simplex_grow_max_iterations                                  500
 simplex_grow_tors_premin_iterations                          0
+simplex_final_min                                            no
 simplex_random_seed                                          0
 simplex_restraint_min                                        no
 atom_model                                                   all

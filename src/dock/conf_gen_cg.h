@@ -58,7 +58,15 @@ class           CG_Conformer_Search {
     bool            cluster;
     int             pruning_clustering_cutoff;     // number of confs/layer
 
-    float           bondlenth;                     // bond lenth of covalent angle.
+    float           bondlength;                     // bond length of covalent bond (dummy1--dummy2).
+    float           blstep; 
+    float           blstop; 
+    float           bondlength2;                    // bond length of covalent bond (covalent attachment point and dummy1).
+    float           blstep2; 
+    float           blstop2; 
+    float           angleval;                      //  covalent angle.
+    float           avstep; 
+    float           avstop; 
     //int             num_sample_angles;           // number of angles to sample about covalent bond.
     float           dihideral_step;                // dihideral step size about the covalent attachment.
 

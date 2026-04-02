@@ -137,6 +137,7 @@ Bump_Filter::get_bump_score(DOCKMol & mol)
 Energy_Score::Energy_Score()
 {
     energy_grid = NULL;
+    grid_lig_efficiency = false; //this gets called when it is not initialized, so this will prevent any issues
 }
 
 // +++++++++++++++++++++++++++++++++++++++++
@@ -208,6 +209,7 @@ Energy_Score::input_parameters(Parameter_Reader & parm, bool & primary_score,
                 exit(0);
             }
         }
+        grid_lig_efficiency = parm.query_param("grid_lig_efficiency", "no", "yes no") == "yes";
         grid_file_name = parm.query_param( "grid_score_grid_prefix", "grid" );
     }
 }
@@ -246,6 +248,7 @@ Energy_Score::compute_score(DOCKMol & mol)
         float es_val = 0.0;
         float vdw_val = 0.0;
         float total = 0.0;
+        int num_active_heavy = 0;
         for (atom = 0; atom < mol.num_atoms; atom++) {
 
             if (mol.atom_active_flags[atom]) {
@@ -258,15 +261,29 @@ Energy_Score::compute_score(DOCKMol & mol)
                      (vdwB[mol.amber_at_id[atom]] * energy_grid->interpolate(energy_grid->bvdw))) *
                     vdw_scale;
                 es_val += mol.charges[atom] * energy_grid->interpolate(energy_grid->es) * es_scale;
+                if (mol.atom_types[atom] != "H"){
+                    num_active_heavy +=1;
+                }
             }
         }
 
         total = vdw_val + es_val;
-
+        grid_total = total;
         vdw_component = vdw_val;
         es_component = es_val;
 
-        mol.current_score = total;
+        total_eff = total / num_active_heavy;
+        vdw_eff = vdw_component / num_active_heavy;
+        es_eff = es_component / num_active_heavy;
+
+        if ( !grid_lig_efficiency) {
+            mol.current_score = total;
+        } else {
+            mol.current_score = total_eff;
+        }
+
+        //JDB This is assigned above
+        //mol.current_score = total;
         mol.current_data = output_score_summary(mol);
 
     }
@@ -281,14 +298,28 @@ Energy_Score::output_score_summary(DOCKMol & mol)
     ostringstream text;
 
     if (use_score) {
-
-        text << DELIMITER << setw(STRING_WIDTH) << "Grid_Score:" //Put in underscore to be consistent. Yuchen 10/24/2016
-             << setw(FLOAT_WIDTH) << fixed << mol.current_score << endl;
-        text << DELIMITER << setw(STRING_WIDTH) << "Grid_vdw_energy:" 
-             << setw(FLOAT_WIDTH) << fixed << vdw_component << endl
-             << DELIMITER << setw(STRING_WIDTH) << "Grid_es_energy:"  
-             << setw(FLOAT_WIDTH) << fixed << es_component  << endl;
-
+        
+        if (grid_lig_efficiency) {
+            text << DELIMITER << setw(STRING_WIDTH) << "Grid_Efficiency_Score:" //Put in underscore to be consistent. Yuchen 10/24/2016
+                 << setw(FLOAT_WIDTH) << fixed << mol.current_score << endl;
+            text << DELIMITER << setw(STRING_WIDTH) << "Grid_vdw_efficiency:" 
+                 << setw(FLOAT_WIDTH) << fixed << vdw_eff << endl
+                 << DELIMITER << setw(STRING_WIDTH) << "Grid_es_efficiency:"  
+                 << setw(FLOAT_WIDTH) << fixed << es_eff  << endl
+                 << DELIMITER << setw(STRING_WIDTH) << "Grid_Score:"  
+                 << setw(FLOAT_WIDTH) << fixed << grid_total  << endl
+                 << DELIMITER << setw(STRING_WIDTH) << "Grid_vdw_energy:" 
+                 << setw(FLOAT_WIDTH) << fixed << vdw_component << endl
+                 << DELIMITER << setw(STRING_WIDTH) << "Grid_es_energy:"  
+                 << setw(FLOAT_WIDTH) << fixed << es_component  << endl;
+        } else { 
+            text << DELIMITER << setw(STRING_WIDTH) << "Grid_Score:" //Put in underscore to be consistent. Yuchen 10/24/2016
+                << setw(FLOAT_WIDTH) << fixed << mol.current_score << endl;
+            text << DELIMITER << setw(STRING_WIDTH) << "Grid_vdw_energy:" 
+                << setw(FLOAT_WIDTH) << fixed << vdw_component << endl
+                << DELIMITER << setw(STRING_WIDTH) << "Grid_es_energy:"  
+                << setw(FLOAT_WIDTH) << fixed << es_component  << endl;
+        }
         // Compute lig internal energy with segments (sudipto 12-12-08)
         //float int_vdw_att, int_vdw_rep, int_es;
         //compute_ligand_internal_energy(mol, int_vdw_att, int_vdw_rep, int_es);
@@ -499,6 +530,16 @@ Continuous_Energy_Score::compute_score(DOCKMol & mol)
                         sqrt(((mol.x[i] - receptor.x[j])*(mol.x[i] - receptor.x[j])) +
                              ((mol.y[i] - receptor.y[j])*(mol.y[i] - receptor.y[j])) + 
                              ((mol.z[i] - receptor.z[j])*(mol.z[i] - receptor.z[j])));
+
+                    // for covalent docking we use a dummy atoms that likely overlaps with a receptor atom.
+                    // if the distance is 0.0 then check if it is a dummy atom.
+                    if (dist < 0.0001 and mol.atom_types[i] == "Du"){
+                       // the dummy should have 0.0 charge and 0.0 vdw radius.
+                       // skipe to next atom
+                       cout << "Dummy atom too close. skip to next atom. " << endl;
+                       continue;
+                    }
+
                     vdw_val +=
                         (((vdwA[mol.amber_at_id[i]] *
                            vdwA[receptor.amber_at_id[j]]) / pow(dist,

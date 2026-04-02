@@ -218,6 +218,11 @@ class           DN_GA_Build {
     void            print_torenv( std::vector <TorEnv_GA> );
     void            print_fraggraph();
 
+    //necessary function to sort the fragment class!!!
+    void            frag_sort(std::vector<Fragment> &, std::function<bool(const Fragment&,const Fragment&)>);
+    void            frag_sort(std::vector< std::pair <Fragment, int>> &,
+                              std::function<bool(const std::pair<Fragment, int> &, const std::pair <Fragment, int> &)>);
+
     // Functions that are turned off right now
     //bool            prune_molecular_weight( DOCKMol & );
     //bool            prune_rotatable_bonds( DOCKMol & );

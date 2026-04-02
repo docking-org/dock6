@@ -1,0 +1,84 @@
+#!/bin/bash
+
+Dockerfile=$1
+
+docker build -f $Dockerfile -t dock6-suite ../../
+
+cd ../../
+
+mkdir bin
+
+cd ./bin
+
+cat <<EOF> dock6-suite.docker
+#!/bin/bash
+
+usage() { 
+    echo "Usage: dock6-suite.docker [ -h help ] [ -b BINARY CALL WITH ARGUMENTS ] [ -v mounting files and folders ]" 1>&2;
+    echo "Interactive Mode Usage: dock6-suite.docker [ -h help ] [ -v mounting files and folders ]" 1>&2;
+    exit 1; 
+    }
+
+# Fixed container path
+CONTAINER_PATH="/app/workspace"
+VOLUMES=""
+BINARYCALL=""
+
+# If no arguments provided, show usage and exit
+[ \$# -eq 0 ] && { echo "No arguments provided...entering interactive mode";}
+
+while getopts 'v:b:h' OPTION; do
+  case "\$OPTION" in
+    v)
+      VOLUMES="\$VOLUMES -v \$(realpath \$OPTARG):\$CONTAINER_PATH/\$(basename \$OPTARG)"
+      ;;
+    b)
+      BINARYCALL="\$OPTARG"
+      ;;
+    ? | h | *)
+      usage
+      ;;
+  esac
+done
+shift "\$((\$OPTIND -1))"
+
+echo "#############################################################"
+echo "# Mounting these files/folders to the docker container:"
+echo "# \$VOLUMES"
+echo "#"
+echo "# Working directory in the docker container for this process:"
+echo "# \$CONTAINER_PATH"
+echo "#"
+echo "# All new files and folders created in this directory will"
+echo "# appear in the host's path you have called \\\`dock6-suite.docker\\\`."
+echo "# Files and folders you have mount will NOT be duplicated."
+echo "#"
+echo "# The binary call with its arguments:"
+echo "# \$BINARYCALL"
+echo "#############################################################"
+
+
+# interactive mode
+if [ -z "\$BINARYCALL" ]; then
+
+    docker run -it --rm --entrypoint /bin/bash\
+              \$VOLUMES \
+              -v \$(realpath):\$CONTAINER_PATH\
+              -w \$CONTAINER_PATH \
+              dock6-suite
+
+
+# run on current environement
+else
+    docker run --rm \
+              \$VOLUMES \
+              -v \$(realpath):\$CONTAINER_PATH\
+              -w \$CONTAINER_PATH \
+              dock6-suite \$BINARYCALL
+fi
+
+EOF
+
+
+chmod u+x *docker
+

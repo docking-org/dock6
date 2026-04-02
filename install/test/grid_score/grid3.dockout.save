@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released September 2024
 Copyright UCSF
 --------------------------------------
 
@@ -22,6 +22,7 @@ min_anchor_size                                              40
 pruning_use_clustering                                       yes
 pruning_max_orients                                          1
 pruning_clustering_cutoff                                    1
+pruning_orient_score_cutoff                                  1000.0
 pruning_conformer_score_cutoff                               100.0
 pruning_conformer_score_scaling_factor                       1.0
 use_clash_overlap                                            no
@@ -65,7 +66,11 @@ grid_score_primary                                           yes
 grid_score_rep_rad_scale                                     1
 grid_score_vdw_scale                                         0.5
 grid_score_es_scale                                          0.5
+grid_lig_efficiency                                          no
 grid_score_grid_prefix                                       ../grid_generation/grid
+
+GIST Score Parameters
+------------------------------------------------------------------------------------------
 
 MultiGrid Score Parameters
 ------------------------------------------------------------------------------------------
@@ -106,6 +111,7 @@ Amber Score Parameters
 Simplex Minimization Parameters
 ------------------------------------------------------------------------------------------
 minimize_ligand                                              no
+simplex_final_min                                            no
 
 Atom Typing Parameters
 ------------------------------------------------------------------------------------------
@@ -117,13 +123,16 @@ flex_drive_file                                              ../../../parameters
 Molecule Library Output Parameters
 ------------------------------------------------------------------------------------------
 ligand_outfile_prefix                                        grid3
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
 
 Initializing Conformer Generator Routines...
 Initializing Library File Routines...
+
 Initializing Grid Score Routines...
  Reading the energy grid from ../grid_generation/grid.nrg
  Done reading the energy grid.
@@ -133,7 +142,7 @@ Initializing Grid Score Routines...
 -----------------------------------
 Molecule:  C1 
 
- Elapsed time for docking:	0.014 seconds
+ Elapsed time for docking:	0.008 seconds
 
  Anchors:		1
  Orientations:		1
@@ -145,4 +154,7 @@ Molecule:  C1
 
 
 1 Molecules Processed
-Total elapsed time:	0.018 seconds
+Total elapsed time:	0.011 seconds
+Number of molecules per second:	94.985
+Virtual memory used for this process: 86068 kilobytes
+Physical memory used for this process: 16252 kilobytes

@@ -18,7 +18,7 @@ Simplex_Minimizer::input_parameters(Parameter_Reader & parm,
     use_min_rigid_anchor = false;
     use_min_flex_growth = false;
     use_min_flex_growth_ramp = false;
-//    final_min = false;
+    final_min = false;
     secondary_min_pose = false;
 
     minimize_ligand = false;
@@ -51,7 +51,7 @@ Simplex_Minimizer::input_parameters(Parameter_Reader & parm,
 		        advanced_min_params = (parm.  query_param("use_advanced_simplex_parameters", "no", "yes no") == "yes") ? true : false;
                 // LEP - ga and dn not ready for simplex ramp
                 if (!genetic_algorithm && !denovo_design){
-                    use_min_flex_growth_ramp = (parm.  query_param("minimize_flexible_growth_ramp", "no", "yes no") == "yes") ? true : false;
+                    use_min_flex_growth_ramp = (parm.  query_param("minimize_flexible_growth_ramp", "yes", "yes no") == "yes") ? true : false;
                 }
 
             }
@@ -230,7 +230,15 @@ Simplex_Minimizer::input_parameters(Parameter_Reader & parm,
             }
             // parameters for flexible minimization
             if (use_min_flex_growth) {
-                flex_min_max_iterations = atoi(parm.query_param("simplex_grow_max_iterations", "250").  c_str());
+
+                // If ramp is on simplex_grow_max_iterations should be 250, otherwise 500
+                if (use_min_flex_growth_ramp) {
+                   flex_min_max_iterations = atoi(parm.query_param("simplex_grow_max_iterations", "250").  c_str());
+                }
+                else {
+                   flex_min_max_iterations = atoi(parm.query_param("simplex_grow_max_iterations", "500").  c_str());
+                }
+
                 if (flex_min_max_iterations < 0) {
                     cout <<
                         "ERROR:  simplex_grow_max_iterations cannot be negative.  Program will terminate."
@@ -311,205 +319,111 @@ Simplex_Minimizer::input_parameters(Parameter_Reader & parm,
                 }
             }
 
-            /*  //final_min has been superseded by the option to perform anchor and grow 
-                // docking with internal energy at every level of growth
-            // option to perform one more round of minimization 
-            final_min = (parm.query_param("simplex_final_min", "no", "yes no") == "yes") ? true : false;
-            if (final_min) {
-                final_min_rep_radius_scale = atof(parm.query_param("simplex_final_min_rep_rad_scale", "1").c_str());
-                if (final_min_rep_radius_scale <= 0.0) {
-                    cout <<
-                        "ERROR:  Parameter must be a float greater than zero. Program will terminate."
-                        << endl;
-                    exit(0);
-                }
-                final_min_max_iterations =
-                    atoi(parm.query_param("simplex_final_max_iterations", "0").
+        }
+        // final_min has been superseded by the option to perform anchor and grow 
+        // docking with internal energy at every level of growth
+        // option to perform one more round of minimization 
+        // TEB put final min back, 2023
+        //
+        final_min = (parm.query_param("simplex_final_min", "no", "yes no") == "yes") ? true : false;
+        if (final_min) {
+            final_min_rep_radius_scale = atof(parm.query_param("simplex_final_min_rep_rad_scale", "1").c_str());
+            if (final_min_rep_radius_scale <= 0.0) {
+                cout <<
+                    "ERROR:  Parameter must be a float greater than zero. Program will terminate."
+                    << endl;
+                exit(0);
+            }
+            final_min_max_iterations =
+                atoi(parm.query_param("simplex_final_max_iterations", "500").
+                     c_str());
+            if (final_min_max_iterations <= 0) {
+                cout <<
+                    "ERROR:  Parameters must be an integer greater than zero.  Program will terminate."
+                    << endl;
+                exit(0);
+            }
+            //if (advanced_min_params) {
+                final_min_max_cycles =
+                    atoi(parm.query_param("simplex_final_max_cycles", "1").
                          c_str());
-                if (final_min_max_iterations <= 0) {
+                if (final_min_max_cycles <= 0) {
                     cout <<
                         "ERROR:  Parameters must be an integer greater than zero.  Program will terminate."
                         << endl;
                     exit(0);
                 }
-                if (advanced_min_params) {
-                    final_min_max_cycles =
-                        atoi(parm.query_param("simplex_final_max_cycles", "1").
-                             c_str());
-                    if (final_min_max_cycles <= 0) {
-                        cout <<
-                            "ERROR:  Parameters must be an integer greater than zero.  Program will terminate."
-                            << endl;
-                        exit(0);
-                    }
-                    final_min_score_converge =
-                        atof(parm.
-                             query_param("simplex_final_score_converge",
-                                         "0.1").c_str());
-                    if (final_min_score_converge <= 0.0) {
-                        cout <<
-                            "ERROR:  Parameters must be a float greater than zero.  Program will terminate."
-                            << endl;
-                        exit(0);
-                    }
-                    final_min_cycle_converge =
-                        atof(parm.
-                             query_param("simplex_final_cycle_converge",
-                                         "1.0").c_str());
-                    if (final_min_cycle_converge <= 0.0) {
-                        cout <<
-                            "ERROR:  Parameters must be a float greater than zero.  Program will terminate."
-                            << endl;
-                        exit(0);
-                    }
-                    final_min_trans_step_size =
-                        atof(parm.
-                             query_param("simplex_final_trans_step",
-                                         "1.0").c_str());
-                    if (final_min_trans_step_size <= 0.0) {
-                        cout <<
-                            "ERROR:  Parameters must be a float greater than zero.  Program will terminate."
-                            << endl;
-                        exit(0);
-                    }
-                    final_min_rot_step_size =
-                        atof(parm.query_param("simplex_final_rot_step", "0.1").
-                             c_str());
-                    if (final_min_rot_step_size <= 0.0) {
-                        cout <<
-                            "ERROR:  Parameters must be a float greater than zero.  Program will terminate."
-                            << endl;
-                        exit(0);
-                    }
-                    final_min_tors_step_size =
-                        atof(parm.
-                             query_param("simplex_final_tors_step",
-                                         "10.0").c_str());
-                    if (final_min_tors_step_size <= 0.0) {
-                        cout <<
-                            "ERROR:  Parameters must be a float greater than zero.  Program will terminate."
-                            << endl;
-                        exit(0);
-                    }
-                } else {
-                    final_min_max_cycles = max_cycles;
-                    final_min_score_converge = score_converge;
-                    final_min_cycle_converge = cycle_converge;
-                    final_min_trans_step_size = trans_step_size;
-                    final_min_rot_step_size = rot_step_size;
-                    final_min_tors_step_size = tors_step_size;
+                final_min_score_converge =
+                    atof(parm.
+                         query_param("simplex_final_score_converge",
+                                     "0.1").c_str());
+                if (final_min_score_converge <= 0.0) {
+                    cout <<
+                        "ERROR:  Parameters must be a float greater than zero.  Program will terminate."
+                        << endl;
+                    exit(0);
                 }
-            }
-            */
-           
-            // if secondary scoring function is used and user wants to minimize 
-            // with secondary scoring function before output
-            if (score.use_secondary_score && score.secondary_min) {
-		secondary_min_pose = false;
-                //secondary_min_pose =
-                //    (parm.
-                //     query_param("simplex_secondary_minimize_pose", "yes",
-                //                 "yes no") == "yes") ? true : false;
-                if (secondary_min_pose) {
-                    secondary_advanced_min_params =
-                        (parm.
-                         query_param
-                         ("use_advanced_secondary_simplex_parameters", "no",
-                          "yes no") == "yes") ? true : false;
-                    secondary_min_max_iterations =
-                        atoi(parm.
-                             query_param("simplex_secondary_max_iterations",
-                                         "100").c_str());
-                    if (secondary_min_max_iterations <= 0) {
-                        cout <<
-                            "ERROR:  Parameters must be an integer greater than zero.  Program will terminate."
-                            << endl;
-                        exit(0);
-                    }
-                    if (secondary_advanced_min_params) {
-                        secondary_min_max_cycles =
-                            atoi(parm.
-                                 query_param("simplex_secondary_max_cycles",
-                                             "1").c_str());
-                        if (secondary_min_max_cycles <= 0) {
-                            cout <<
-                                "ERROR:  Parameters must be an integer greater than zero.  Program will terminate."
-                                << endl;
-                            exit(0);
-                        }
-                        secondary_min_score_converge =
-                            atof(parm.
-                                 query_param("simplex_secondary_score_converge",
-                                             "0.1").c_str());
-                        if (secondary_min_score_converge <= 0.0) {
-                            cout <<
-                                "ERROR:  Parameters must be a float greater than zero.  Program will terminate."
-                                << endl;
-                            exit(0);
-                        }
-
-                        secondary_min_cycle_converge =
-                            atof(parm.
-                                 query_param("simplex_secondary_cycle_converge",
-                                             "1.0").c_str());
-                        if (secondary_min_cycle_converge <= 0.0) {
-                            cout <<
-                                "ERROR:  Parameters must be a float greater than zero.  Program will terminate."
-                                << endl;
-                            exit(0);
-                        }
-                        secondary_min_trans_step_size =
-                            atof(parm.
-                                 query_param("simplex_secondary_trans_step",
-                                             "1.0").c_str());
-                        if (secondary_min_trans_step_size <= 0.0) {
-                            cout <<
-                                "ERROR:  Parameters must be a float greater than zero.  Program will terminate."
-                                << endl;
-                            exit(0);
-                        }
-                        secondary_min_rot_step_size =
-                            atof(parm.
-                                 query_param("simplex_secondary_rot_step",
-                                             "0.1").c_str());
-                        if (secondary_min_rot_step_size <= 0.0) {
-                            cout <<
-                                "ERROR:  Parameters must be a float greater than zero.  Program will terminate."
-                                << endl;
-                            exit(0);
-                        }
-                        secondary_min_tors_step_size =
-                            atof(parm.
-                                 query_param("simplex_secondary_tors_step",
-                                             "10.0").c_str());
-                        if (secondary_min_tors_step_size <= 0.0) {
-                            cout <<
-                                "ERROR:  Parameters must be a float greater than zero.  Program will terminate."
-                                << endl;
-                            exit(0);
-                        }
-                    } else {
-                        secondary_min_max_cycles = max_cycles;
-                        secondary_min_score_converge = score_converge;
-                        secondary_min_cycle_converge = cycle_converge;
-                        secondary_min_trans_step_size = trans_step_size;
-                        secondary_min_rot_step_size = rot_step_size;
-                        secondary_min_tors_step_size = tors_step_size;
-                    }
+                final_min_cycle_converge =
+                    atof(parm.
+                         query_param("simplex_final_cycle_converge",
+                                     "1.0").c_str());
+                if (final_min_cycle_converge <= 0.0) {
+                    cout <<
+                        "ERROR:  Parameters must be a float greater than zero.  Program will terminate."
+                        << endl;
+                    exit(0);
                 }
-            }
-
-            random_seed =
-                atoi(parm.query_param("simplex_random_seed", "0").c_str());
-            //trent balius 2009/08/27
-            restrained_min = (parm.query_param("simplex_restraint_min", "no", "yes no") == "yes") ? true : false;
-            if (restrained_min) {
-                coefficient_restraint =
-                      atof(parm.query_param("simplex_coefficient_restraint", "10.0").c_str());
-            }
+                final_min_trans_step_size =
+                    atof(parm.
+                         query_param("simplex_final_trans_step",
+                                     "1.0").c_str());
+                if (final_min_trans_step_size <= 0.0) {
+                    cout <<
+                        "ERROR:  Parameters must be a float greater than zero.  Program will terminate."
+                        << endl;
+                    exit(0);
+                }
+                final_min_rot_step_size =
+                    atof(parm.query_param("simplex_final_rot_step", "0.1").
+                         c_str());
+                if (final_min_rot_step_size <= 0.0) {
+                    cout <<
+                        "ERROR:  Parameters must be a float greater than zero.  Program will terminate."
+                        << endl;
+                    exit(0);
+                }
+                final_min_tors_step_size =
+                    atof(parm.
+                         query_param("simplex_final_tors_step",
+                                     "10.0").c_str());
+                if (final_min_tors_step_size <= 0.0) {
+                    cout <<
+                        "ERROR:  Parameters must be a float greater than zero.  Program will terminate."
+                        << endl;
+                    exit(0);
+                }
+            //} else {
+            //    final_min_max_cycles = max_cycles;
+            //    final_min_score_converge = score_converge;
+            //    final_min_cycle_converge = cycle_converge;
+            //    final_min_trans_step_size = trans_step_size;
+            //    final_min_rot_step_size = rot_step_size;
+            //    final_min_tors_step_size = tors_step_size;
+            //}
         }
-    } else
-        minimize_ligand = false;
+      
+        if (final_min or minimize_ligand) {  
+
+           random_seed =
+               atoi(parm.query_param("simplex_random_seed", "0").c_str());
+           //trent balius 2009/08/27
+           restrained_min = (parm.query_param("simplex_restraint_min", "no", "yes no") == "yes") ? true : false;
+           if (restrained_min) {
+               coefficient_restraint =
+                     atof(parm.query_param("simplex_coefficient_restraint", "10.0").c_str());
+           }
+        }
+    }
 }
 
 /******************************************************/
@@ -728,6 +642,47 @@ Simplex_Minimizer::minimize_final_pose(DOCKMol & mol, Master_Score & score, AMBE
     }
 }
 
+void
+Simplex_Minimizer::minimize_pose_final_min(DOCKMol & mol, Master_Score & score)
+{
+    int             i;
+    FLOATVec        vertex;
+
+    //cout << "Entering minimize_final_pose" << endl;
+    //cout << minimize_ligand << " " << use_min_rigid_anchor << " " << use_min_flex_growth << endl;
+    //
+        if (final_min) {
+            cout << "In Simplex_Minimizer::minimize_final_pose" << endl;
+        // initialize degrees of freedom as all zeros (all DOF)
+            vertex.clear();
+
+            // rigid DOF
+            for (i = 0; i < 6; i++)
+                vertex.push_back(0.000);
+
+            // flex DOF
+            id_torsions(mol, vertex);
+
+            torsion_scale_factors.resize(torsions.size(), 1);
+
+            bond_vectors.clear();
+            bond_vectors.resize(mol.num_bonds, -1);
+
+         // DTM 11-12-08 - fix bug with bad energies in final min - due to re-init vdw energy
+            //score.primary_score->rep_radius_scale = final_min_rep_radius_scale;
+            //score.primary_score->init_vdw_energy(typer, 6, 12);
+
+            minimize(*score.primary_score, mol, vertex, final_min_max_cycles,
+                     final_min_cycle_converge, final_min_max_iterations,
+                     final_min_score_converge, final_min_trans_step_size,
+                     final_min_rot_step_size, final_min_tors_step_size);
+
+            // compute the final score for the molecule
+            score.compute_primary_score(mol);
+        }
+
+
+}
 
 /******************************************************/
 void
@@ -771,6 +726,7 @@ Simplex_Minimizer::secondary_minimize_pose(DOCKMol & mol, Master_Score & score)
 void
 Simplex_Minimizer::id_torsions(DOCKMol & mol, FLOATVec & vertex)
 {
+    //cout << "Entering id_torsions ..." << endl;
     int             i,
                     j,
                     max_central,
@@ -793,8 +749,11 @@ Simplex_Minimizer::id_torsions(DOCKMol & mol, FLOATVec & vertex)
             // Fochmod Sep 29, 2014 
             // altered to make minimization decisions only if bond is not a
             // rotor and if the mol2 says that it is a single bond
+            //cout<< i << "  "<< mol.amber_bt_id[i] << endl;
             if (mol.bond_is_rotor(i)) {
+                //cout<< i << "  "<< mol.bond_types[i] << endl;
                 if (mol.bond_types[i] == "1") {
+                    //cout<< i << "  "<< mol.bond_types[i] << endl;
                     torsions.push_back(tmp_torsion);
                     torsions[torsions.size() - 1].bond_num = i;
                     vertex.push_back(0.0);
@@ -803,6 +762,7 @@ Simplex_Minimizer::id_torsions(DOCKMol & mol, FLOATVec & vertex)
         }
     }
 
+    //cout << "torsions.size() = " << torsions.size() <<endl;
     // ID the inter-segment rot-bonds
     for (i = 0; i < torsions.size(); i++) {
 
@@ -941,6 +901,9 @@ Simplex_Minimizer::simplex_minimize(Base_Score & score, DOCKMol & mol,
     int             step_count;
     int             fail_count;
 
+    // move to main dock loop
+    //srand(random_seed); // reset the seed so that molecule order in the file does not mater. 
+
     size = vertex.size();
 
     // allocate arrays
@@ -1042,11 +1005,14 @@ Simplex_Minimizer::simplex_minimize(Base_Score & score, DOCKMol & mol,
             // generate random initial simplex points
             for (i = 0; i < size; i++) {
                 p[0][i] = vertex[i];
+                //p[0][i] = 0.0;
             }
+
             for (i = 1; i < size + 1; i++) {
                 for (j = 0; j < size; j++) {
                     p[i][j] =
-                        p[0][j] + 2.0 * (((float) rand() / (float) RAND_MAX) -
+                        //p[0][j] + 2.0 * (((float) rand() / (float) RAND_MAX) -
+                        vertex[j] + 2.0 * (((float) rand() / (float) RAND_MAX) -
                                          0.5);
                 }
             }
@@ -1086,11 +1052,11 @@ Simplex_Minimizer::simplex_minimize(Base_Score & score, DOCKMol & mol,
                               + Econstraint;
 
                     // copy best mol to min_mol, and generate min structure
-                    copy_molecule(min_mol, ref_mol);
+                    copy_crds(min_mol, ref_mol);
                     scale_simplex_vector(new_vec, vertex, trans_step_size,
                                          rot_step_size, tors_step_size);
                     vector_to_dockmol(min_mol, new_vec);
-                    copy_molecule(mol, min_mol);
+                    copy_crds(mol, min_mol);
 
                     // free arrays
                     for (x = 0; x < size + 1; x++) {
@@ -1172,11 +1138,11 @@ Simplex_Minimizer::simplex_minimize(Base_Score & score, DOCKMol & mol,
                               + Econstraint;
 
                 // copy best mol to min_mol, and generate min structure
-                copy_molecule(min_mol, ref_mol);
+                copy_crds(min_mol, ref_mol);
                 scale_simplex_vector(new_vec, vertex, trans_step_size,
                                      rot_step_size, tors_step_size);
                 vector_to_dockmol(min_mol, new_vec);
-                copy_molecule(mol, min_mol);
+                copy_crds(mol, min_mol);
 
                 // free arrays
                 for (x = 0; x < size + 1; x++) {
@@ -1247,11 +1213,11 @@ Simplex_Minimizer::simplex_minimize(Base_Score & score, DOCKMol & mol,
                               + Econstraint;
 
                     // copy best mol to min_mol, and generate min structure
-                    copy_molecule(min_mol, ref_mol);
+                    copy_crds(min_mol, ref_mol);
                     scale_simplex_vector(new_vec, vertex, trans_step_size,
                                          rot_step_size, tors_step_size);
                     vector_to_dockmol(min_mol, new_vec);
-                    copy_molecule(mol, min_mol);
+                    copy_crds(mol, min_mol);
 
                     // free arrays
                     for (x = 0; x < size + 1; x++) {
@@ -1343,11 +1309,11 @@ Simplex_Minimizer::simplex_minimize(Base_Score & score, DOCKMol & mol,
                               + Econstraint;
 
                     // copy best mol to min_mol, and generate min structure
-                    copy_molecule(min_mol, ref_mol);
+                    copy_crds(min_mol, ref_mol);
                     scale_simplex_vector(new_vec, vertex, trans_step_size,
                                          rot_step_size, tors_step_size);
                     vector_to_dockmol(min_mol, new_vec);
-                    copy_molecule(mol, min_mol);
+                    copy_crds(mol, min_mol);
 
                     // free arrays
                     for (x = 0; x < size + 1; x++) {
@@ -1425,13 +1391,13 @@ Simplex_Minimizer::simplex_minimize(Base_Score & score, DOCKMol & mol,
 
                                 // copy best mol to min_mol, and generate min
                                 // structure
-                                copy_molecule(min_mol, ref_mol);
+                                copy_crds(min_mol, ref_mol);
                                 scale_simplex_vector(new_vec, vertex,
                                                      trans_step_size,
                                                      rot_step_size,
                                                      tors_step_size);
                                 vector_to_dockmol(min_mol, new_vec);
-                                copy_molecule(mol, min_mol);
+                                copy_crds(mol, min_mol);
 
                                 // free arrays
                                 for (x = 0; x < size + 1; x++) {
@@ -1572,11 +1538,11 @@ Simplex_Minimizer::simplex_minimize(Base_Score & score, DOCKMol & mol,
 ***/
 
     // copy best mol to min_mol, and generate min structure
-    copy_molecule(min_mol, ref_mol);
+    copy_crds(min_mol, ref_mol);
     scale_simplex_vector(new_vec, vertex, trans_step_size, rot_step_size,
                          tors_step_size);
     vector_to_dockmol(min_mol, new_vec);
-    copy_molecule(mol, min_mol);
+    copy_crds(mol, min_mol);
 
     // free arrays
     for (i = 0; i < size + 1; i++) {
@@ -1751,6 +1717,8 @@ Simplex_Minimizer::vector_to_dockmol(DOCKMol & mol, FLOATVec & v)
             }
 
         }
+
+        //cout << "torsion:: " << (PI / 180.0) * current_angle << " " << new_angle << endl; 
 
     }
 

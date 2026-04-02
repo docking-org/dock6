@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released September 2024
 Copyright UCSF
 --------------------------------------
 
@@ -22,6 +22,7 @@ min_anchor_size                                              5
 pruning_use_clustering                                       yes
 pruning_max_orients                                          10
 pruning_clustering_cutoff                                    100
+pruning_orient_score_cutoff                                  1000.0
 pruning_conformer_score_cutoff                               100.0
 pruning_conformer_score_scaling_factor                       1.0
 use_clash_overlap                                            no
@@ -74,6 +75,10 @@ Grid Score Parameters
 ------------------------------------------------------------------------------------------
 grid_score_primary                                           no
 
+GIST Score Parameters
+------------------------------------------------------------------------------------------
+gist_score_primary                                           no
+
 MultiGrid Score Parameters
 ------------------------------------------------------------------------------------------
 multigrid_score_primary                                      no
@@ -110,6 +115,8 @@ descriptor_use_pharmacophore_score                           yes
 descriptor_use_tanimoto                                      yes
 descriptor_use_hungarian                                     yes
 descriptor_use_volume_overlap                                yes
+descriptor_use_gist                                          no
+descriptor_use_dock3.5                                       no
 
 --- Descriptor Score Parameters: Grid Score ---
 descriptor_grid_score_rep_rad_scale                          1
@@ -187,6 +194,7 @@ simplex_tors_step                                            10.0
 simplex_anchor_max_iterations                                500
 simplex_grow_max_iterations                                  20
 simplex_grow_tors_premin_iterations                          0
+simplex_final_min                                            no
 simplex_random_seed                                          0
 simplex_restraint_min                                        no
 
@@ -202,13 +210,16 @@ pharmacophore_defn_file                                      ../../../parameters
 Molecule Library Output Parameters
 ------------------------------------------------------------------------------------------
 ligand_outfile_prefix                                        Des_SGE+All
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
 
 Initializing Conformer Generator Routines...
 Initializing Library File Routines...
+
 Initializing Orienting Routines...
 Initializing typer for Grid Score within Descriptor Score...
 Initializing Grid Score Routines...
@@ -225,22 +236,22 @@ Initializing typer for Volume Overlap Score within Descriptor Score...
 -----------------------------------
 Molecule:  C1 
 
- Elapsed time for docking:	2.678 seconds
+ Elapsed time for docking:	3.300 seconds
 
  Anchors:		1
  Orientations:		100
- Conformations:		13
+ Conformations:		11
 
-                    Descriptor_Score:          -35.979496
-                          Grid_Score:          -35.967720
-                desc_Grid_vdw_energy:          -33.422718
-                 desc_Grid_es_energy:           -2.545002
-                 Pharmacophore_Score:            2.656024
+                    Descriptor_Score:          -35.979778
+                          Grid_Score:          -35.967995
+                desc_Grid_vdw_energy:          -33.423004
+                 desc_Grid_es_energy:           -2.544989
+                 Pharmacophore_Score:            2.656023
               desc_FMS_num_match_tot:                   5
               desc_FMS_max_match_ref:                   9
               desc_FMS_max_match_mol:                   9
                  desc_FMS_match_rate:            0.444444
-                desc_FMS_match_resid:            0.433802
+                desc_FMS_match_resid:            0.433801
     desc_FMS_num_hydrophobic_matched:                   3
           desc_FMS_num_donor_matched:                   0
        desc_FMS_num_acceptor_matched:                   2
@@ -249,19 +260,22 @@ Molecule:  C1
        desc_FMS_num_negative_matched:                   0
            desc_FMS_num_ring_matched:                   0
                       Tanimoto_Score:            1.000000
- Hungarian_Matching_Similarity_Score:           -4.579762
+ Hungarian_Matching_Similarity_Score:           -4.579763
        desc_HMS_num_unmtchd_hvy_atms:                   0
            desc_HMS_num_ref_hvy_atms:                  23
-        desc_HMS_rmsd_mtchd_hvy_atms:            0.420238
+        desc_HMS_rmsd_mtchd_hvy_atms:            0.420236
                Property_Volume_Score:            0.911959
                desc_VOS_geometric_vo:            0.934697
                 desc_VOS_hvy_atom_vo:            0.936269
-            desc_VOS_pos_chrg_atm_vo:            0.850164
-            desc_VOS_neg_chrg_atm_vo:            0.930311
+            desc_VOS_pos_chrg_atm_vo:            0.850165
+            desc_VOS_neg_chrg_atm_vo:            0.930312
          desc_VOS_hydrophobic_atm_vo:            0.929411
-         desc_VOS_hydrophilic_atm_vo:            0.890903
-           Internal_energy_repulsive:            6.769831
+         desc_VOS_hydrophilic_atm_vo:            0.890902
+           Internal_energy_repulsive:            6.769813
 
 
 1 Molecules Processed
-Total elapsed time:	2.695 seconds
+Total elapsed time:	3.322 seconds
+Number of molecules per second:	0.301
+Virtual memory used for this process: 93464 kilobytes
+Physical memory used for this process: 23520 kilobytes

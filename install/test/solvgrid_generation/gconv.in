@@ -15,6 +15,9 @@ bump_filter                    yes
 bump_overlap                   0.5
 receptor_file                  rec.crg
 box_file                       box
-vdw_definition_file            vdw.defn
-chemical_definition_file       conv.defn
+vdw_definition_file            ../../../parameters/vdw_AMBER_parm94.dock3_7.defn
+chemical_definition_file       ../../../parameters/chemgrid/conv.defn
 score_grid_prefix              chem
+phi_grid_size                  193
+DOCK3_7_grids                  no
+QNIFFT_grid                    no

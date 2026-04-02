@@ -1,12 +1,23 @@
+#include "fragment.h"
 #include "iso_align.h"
 #include "dockmol.h"
 #include "hungarian.h"
+#include "fingerprint.h"
+#include "utils.h"
 
 #include <ostream>
 #include <iostream>
 #include <string>
 #include <vector>
 #include <cmath>
+#include <unordered_map>
+#include <cstdio>
+#include <sys/stat.h>
+#include <functional>
+#include <list>
+#include <iomanip>
+#include <dirent.h>
+#include <numeric>  
 
 class A_Pair;
 class Scored_Triangle;
@@ -16,8 +27,450 @@ class Domain;
 class Score;
 class Iso_Parm;
 
+void Iso_Align::frag_sort(std::vector<Fragment> & vec_frag, std::function<bool( Fragment&,  Fragment&)> func){
+
+    std::list<Fragment> list_growing(vec_frag.begin(), vec_frag.end());
+    list_growing.sort(func);
+
+    vec_frag.clear();
+    for (Fragment tmp_frag : list_growing){
+        vec_frag.push_back(tmp_frag); 
+    }    
+
+}
+bool
+Iso_Align::fragment_sort(  Fragment & a, Fragment & b )
+{   
+    return (a.get_iso_score() > b.get_iso_score());
+}
+bool
+Iso_Align::fragment_sort_reverse(  Fragment & a, Fragment & b )
+{   
+    return (a.get_iso_score() < b.get_iso_score());
+}
+Iso_Table::Iso_Tab::Iso_Tab(){
+    (*this).best_triangles = {};
+}
+
+Iso_Table::Iso_Tab::~Iso_Tab(){
+
+    (*this).clear_table();
+
+}
+
+Iso_Table::Iso_Tab::Iso_Tab(const Iso_Tab& original){
+
+    (*this).clear_table();
+
+    //This is for copying best triangles
+    for (const std::vector<Iso_Acessory::Scored_Triangle>  &tail : original.best_triangles){
+        std::vector<Iso_Acessory::Scored_Triangle> tmp_vec {};
+        (*this).best_triangles.push_back(tmp_vec);
+        int i = (*this).best_triangles.size()-1;
+
+        for (const Iso_Acessory::Scored_Triangle &tri : tail){
+            (*this).best_triangles[i].push_back(tri);
+        }
+    }
+
+    //copies the the head and tails
+    for (const std::pair<std::string,std::vector<Fragment>> &tmp_pair : original){
+        std::string tmp_str = "";
+        std::vector<Fragment> tmp_vec {};
+        (*this).push_back(std::make_pair(tmp_str,tmp_vec)); 
+        int i = (*this).size()-1;
+
+        //assign head and tails
+        (*this)[i].first = tmp_pair.first;
+        for(const Fragment & frag : tmp_pair.second){
+            (*this)[i].second.push_back(frag);
+        }
+
+    }
+
+}
+
+void Iso_Table::Iso_Tab::operator=(const Iso_Tab& original){
+
+    (*this).clear_table();
+
+    //This is for copying best triangles
+    for (const std::vector<Iso_Acessory::Scored_Triangle>  &tail : original.best_triangles){
+        std::vector<Iso_Acessory::Scored_Triangle> tmp_vec {};
+        (*this).best_triangles.push_back(tmp_vec);
+        int i = (*this).best_triangles.size()-1;
+
+        for (const Iso_Acessory::Scored_Triangle &tri : tail){
+            (*this).best_triangles[i].push_back(tri);
+        }
+    }
+
+    //copies the the head and tails
+    for (const std::pair<std::string,std::vector<Fragment>> &tmp_pair : original){
+        std::string tmp_str = "";
+        std::vector<Fragment> tmp_vec {};
+        (*this).push_back(std::make_pair(tmp_str,tmp_vec)); 
+        int i = (*this).size()-1;
+
+        //assign head and tails
+        (*this)[i].first = tmp_pair.first;
+        for(const Fragment & frag : tmp_pair.second){
+            (*this)[i].second.push_back(frag);
+        }
+
+    }
+}
+
+void Iso_Table::Iso_Tab::set(Fragment head, std::vector<Fragment> &tail){
+
+    Fingerprint fing;
+    std::vector<Fragment> tmp_vec {};
+
+    std::string head_st = fing.compute_unique_string(head.mol);
+
+    //push back the names of the fragment
+    (*this).head_names.push_back(head.mol.energy);
+
+    std::string head_frag_name = head.mol.energy;
+
+    size_t last_index = head_frag_name.find_last_not_of("0123456789");
+    int head_frag_num = atoi(head_frag_name.substr(last_index + 1).c_str());
+ 
+
+    //Where we label frag names.
+    for (unsigned int i =0; i < tail.size(); i++){
+        Fragment tmp_frag;
+        tmp_frag = tail[i];
+
+        std::string tail_frag_name = tmp_frag.mol.energy;
+        size_t last_index = tail_frag_name.find_last_not_of("0123456789");
+        int tail_frag_num = atoi(tail_frag_name.substr(last_index + 1).c_str());
+
+        //if "iso" is not in the frag_string add it
+        std::string tmp_str = tmp_frag.mol.energy;
+        if (tmp_str.find("iso_") == string::npos && 
+            head_frag_num != tail_frag_num){
+            //append the name of frag with an iso
+            ostringstream new_name;
+            new_name << "iso_" <<tmp_frag.mol.energy << 
+                "_" << head_frag_num;
+            tmp_frag.mol.energy = new_name.str();
+        } else if (tmp_str.find("iso_") == string::npos && 
+             head_frag_num == tail_frag_num){
+            //append the name of frag with an iso
+            ostringstream new_name;
+            new_name << "iso_" <<tmp_frag.mol.energy;
+            tmp_frag.mol.energy = new_name.str();
+        }
+        
+        //This is here to prepend the subst name with iso_
+        for (unsigned int j =0; j< tail[i].mol.num_atoms; j++){
+
+            std::string subst_name = tmp_frag.mol.subst_names[j]; 
+
+            if (subst_name.find("iso_") == string::npos && 
+                 head_frag_num != tail_frag_num){
+                //append the name of frag with an iso
+                ostringstream new_subs_name;
+                new_subs_name << "iso_" <<tmp_frag.mol.subst_names[j] <<
+                    "_" << head_frag_num;
+                tmp_frag.mol.subst_names[j] = new_subs_name.str();
+
+            } else if (subst_name.find("iso_") == string::npos && 
+                 head_frag_num == tail_frag_num){
+                //append the name of frag with an iso
+                ostringstream new_subs_name;
+                new_subs_name << "iso_" <<tmp_frag.mol.subst_names[j];;
+                tmp_frag.mol.subst_names[j] = new_subs_name.str();
+            }else if (subst_name.empty()){
+                //append the name of frag with an iso
+                tmp_frag.mol.subst_names[j] = "iso";
+            }
+        }
+
+        //activate all atoms for rotation and translation
+        for (unsigned int z =0; z<tmp_frag.mol.num_atoms; z++){ 
+            tmp_frag.mol.atom_active_flags[z] == true;
+        }
+
+        // Iterate through all bonds and set bond_active_flag to true
+        for (int z=0; z<tmp_frag.mol.num_bonds; z++){
+                  tmp_frag.mol.bond_active_flags[z] = true;
+        }
+
+        tmp_vec.push_back(tmp_frag);
+    }
+
+    for(unsigned int i=0; i<tmp_vec.size(); i++){
+        if (head_st == fing.compute_unique_string(tmp_vec[i].mol)){
+            (*this).head_frags.push_back(tmp_vec[i]);
+            break;
+        }
+        if (i==(tmp_vec.size()-1)) {
+            std::cout << "You don't have a head in your snake vector." << endl;
+            std::cout << "Are you sure your head fragments are also included in your" << endl;
+            std::cout << "`dn_fraglib_iso_[scaffold_linker_sidechain]_file` mol2 files?" << endl;
+            std::cout << "Exiting..." << endl;
+            exit(0);
+        }
+    }   
+    (*this).push_back(std::make_pair(head_st,tmp_vec));
+    tmp_vec.clear();
+}
+
+void Iso_Table::Iso_Tab::set_tri(Fragment head, 
+std::vector<Iso_Acessory::Scored_Triangle> best_tri){
+
+    if (!(*this).check_if(head)){
+        std::cout<< "you must set the heads of the iso table. Exiting..."
+                 << std::endl;
+        exit(0);
+    }
+
+    Fingerprint fing;
+    std::string head_st = fing.compute_unique_string(head.mol);
+
+    for (unsigned int i =0; i < (*this).get_size(); i++){
+       if (head_st == (*this).get_string(i)){
+           (*this).best_triangles.push_back(best_tri);
+           break;
+       }
+    }
+}
+
+int Iso_Table::Iso_Tab::get_size(){
+    return (*this).size();
+}
+
+int Iso_Table::Iso_Tab::get_size_total(){
+
+
+    int counter = 0;
+    for (unsigned int i =0; i < (*this).get_size(); i++){
+        counter = counter + (*this)[i].second.size();
+    }
+
+
+    return counter;
+}
+void Iso_Table::Iso_Tab::print_table(){
+
+}
+
+std::string Iso_Table::Iso_Tab::get_string(int i){
+
+    return (*this)[i].first;
+}
+
+bool Iso_Table::Iso_Tab::check_if(Fragment maybe_head){
+
+    Fingerprint fing;
+    std::string maybe_head_st = fing.compute_unique_string(maybe_head.mol);
+    bool ret_bool = false;
+    for (unsigned int i =0; i < (*this).get_size(); i++){
+       if (maybe_head_st == (*this).get_string(i)){return true;}
+    }
+    return ret_bool;
+
+}
+
+std::vector<Fragment> Iso_Table::Iso_Tab::get(Fragment head, int number=100){
+    Fingerprint fing;
+    std::string head_st = fing.compute_unique_string(head.mol);
+    for (unsigned int i =0 ; i < (*this).get_size(); i++){
+        if (head_st == (*this).get_string(i)){
+            std::vector<Fragment> return_vec;
+            for (unsigned int j=0; j<(*this)[i].second.size(); j++){
+                if (j<number){
+                    Fragment tmp_frag;
+                    tmp_frag= (*this)[i].second[j];
+                    return_vec.push_back(tmp_frag);
+                }
+            }
+            return return_vec;
+        }
+    } 
+    return {};
+}
+
+Fragment Iso_Table::Iso_Tab::get_head(Fragment head){
+    Fingerprint fing;
+    std::string head_st = fing.compute_unique_string(head.mol);
+    Fragment iso_head;
+
+    for (unsigned int i =0 ; i < (*this).get_size(); i++){
+        //three_pair handling
+
+        std::string fragment_name = head.mol.energy;
+        size_t last_index = fragment_name.find_last_not_of("0123456789");
+        int head_frag_num = atoi(fragment_name.substr(last_index + 1).c_str());
+
+        fragment_name = head_frags[i].mol.energy;
+        last_index = fragment_name.find_last_not_of("0123456789");
+        int tail_frag_num = atoi(fragment_name.substr(last_index + 1).c_str());
+        if (tail_frag_num==head_frag_num){
+            iso_head = (*this).head_frags[i];
+            return iso_head;
+        }
+    } 
+    iso_head.mol.title = "NOT_FOUND";
+    return iso_head;
+}
+
+
+//Writes the entire table
+void Iso_Table::Iso_Tab::write_table(std::string BASEPATH,int num_top){
+    const string DELIMITER    = "########## ";
+    const int    STRING_WIDTH = 17 + 19;
+    const int    FLOAT_WIDTH  = 20;
+
+    std::ofstream     header;
+    std::stringstream base;
+
+    base << BASEPATH << "/isofrags";
+    string base_str = base.str();
+    mkdir(base_str.c_str(), 0744);
+
+    for (unsigned int i =0 ; i < (*this).get_size(); i++){
+        std::ofstream    fout_isofrag;
+
+        std::stringstream name_file; 
+        name_file << "isofrag_" << (*this).head_names[i] << ".mol2";
+
+        std::string name_file_str = name_file.str();
+     
+        fout_isofrag.open(name_file_str,std::ios_base::app);
+
+        fout_isofrag << "#HEAD " << (*this).head_names[i] << endl;
+
+
+        //Writing head
+        std::stringstream three_pairs_str; 
+        three_pairs_str << head_frags[i].best_tri.three_pairs[0].get_ref() << "/" <<
+            head_frags[i].best_tri.three_pairs[0].get_test()<< "/" <<
+            head_frags[i].best_tri.three_pairs[1].get_ref() << "/" <<
+            head_frags[i].best_tri.three_pairs[1].get_test()<< "/" <<
+            head_frags[i].best_tri.three_pairs[2].get_ref() << "/" <<
+            head_frags[i].best_tri.three_pairs[2].get_test()<< std::endl;
+
+        fout_isofrag << "\n" <<
+
+            DELIMITER << std::setw(STRING_WIDTH) <<
+            "Head_Name:" << std::setw(FLOAT_WIDTH) <<head_frags[i].mol.energy <<
+            endl <<
+
+            DELIMITER << std::setw(STRING_WIDTH) <<
+            "Iso_Score:" << std::setw(FLOAT_WIDTH) << head_frags[i].get_iso_score() <<
+            endl <<
+
+            DELIMITER << std::setw(STRING_WIDTH) <<
+            "Molecular_Weight:" << std::setw(FLOAT_WIDTH) << head_frags[i].mol.mol_wt <<
+            endl <<
+
+
+            DELIMITER << std::setw(STRING_WIDTH) <<
+            "FREQ:" << std::setw(FLOAT_WIDTH) << head_frags[i].freq_num <<
+            endl <<
+
+
+            DELIMITER << std::setw(STRING_WIDTH) <<
+            "Three_pairs:" << std::setw(21) << three_pairs_str.str() << 
+            endl;
+
+        for (unsigned int z =0;z<head_frags[i].mol.num_atoms;z++){
+            head_frags[i].mol.atom_active_flags[z] =true;
+        }
+
+        Write_Mol2(head_frags[i].mol,fout_isofrag);
+
+        std::stringstream iso_head_name;
+        iso_head_name << "iso_" << (*this).head_names[i];
+
+
+        //Writing tail
+        for (unsigned int j =0; j< (*this)[i].second.size(); j++){
+
+            if (iso_head_name.str() == (*this)[i].second[j].mol.energy) {
+                continue;
+            }
+
+            //when fragment writing counter reaches num_top, break
+            if (j >= num_top){
+                break;
+            }
+           
+            std::stringstream three_pairs_str; 
+            three_pairs_str << (*this)[i].second[j].best_tri.three_pairs[0].get_ref() << "/" <<
+                (*this)[i].second[j].best_tri.three_pairs[0].get_test()<< "/" <<
+                (*this)[i].second[j].best_tri.three_pairs[1].get_ref() << "/" <<
+                (*this)[i].second[j].best_tri.three_pairs[1].get_test()<< "/" <<
+                (*this)[i].second[j].best_tri.three_pairs[2].get_ref() << "/" <<
+                (*this)[i].second[j].best_tri.three_pairs[2].get_test()<< std::endl;
+
+            fout_isofrag << "\n" <<
+
+                DELIMITER << std::setw(STRING_WIDTH) <<
+                "Name:" << std::setw(FLOAT_WIDTH) <<(*this)[i].second[j].mol.energy <<
+                endl <<
+
+                DELIMITER << std::setw(STRING_WIDTH) <<
+                "Iso_Score:" << std::setw(FLOAT_WIDTH) << (*this)[i].second[j].get_iso_score() <<
+                endl <<
+
+                DELIMITER << std::setw(STRING_WIDTH) <<
+                "Molecular_Weight:" << std::setw(FLOAT_WIDTH) << (*this)[i].second[j].mol.mol_wt <<
+                endl <<
+
+
+                DELIMITER << std::setw(STRING_WIDTH) <<
+                "FREQ:" << std::setw(FLOAT_WIDTH) << (*this)[i].second[j].freq_num <<
+                endl <<
+
+
+                DELIMITER << std::setw(STRING_WIDTH) <<
+                "Three_pairs:" << std::setw(21) << three_pairs_str.str() << 
+                endl;
+
+            for (unsigned int z =0;z<(*this)[i].second[j].mol.num_atoms;z++){
+                (*this)[i].second[j].mol.atom_active_flags[z] =true;
+            }
+
+            Write_Mol2((*this)[i].second[j].mol,fout_isofrag);
+        }
+
+        fout_isofrag.flush();
+        fout_isofrag.close();
+        std::stringstream name_file_to;  
+        name_file_to << BASEPATH << "/isofrags/"<<name_file_str;
+        std::string name_file_to_str = name_file_to.str();
+   
+        rename(name_file_str.c_str(),name_file_to_str.c_str());
+        
+    } 
+}
+
+std::vector<Iso_Acessory::Scored_Triangle> 
+Iso_Table::Iso_Tab::get_tri(Fragment head){
+    Fingerprint fing;
+    std::string head_st = fing.compute_unique_string(head.mol);
+    for (unsigned int i=0; i < (*this).get_size(); i++){
+        if (head_st == (*this).get_string(i)){return (*this).best_triangles[i];}
+    } 
+    return {};
+}
+
+
+void Iso_Table::Iso_Tab::clear_table(){
+
+    (*this).clear();
+    (*this).best_triangles.clear();
+}
 
 //Iso_Parm methods
+
+void  Iso_Parm::set_dist_du_du_inter(float len){
+    this->dist_du_du_inter = len;
+}
 
 void  Iso_Parm::set_bond_angle_tol_sid(float angle){
     this->bond_angle_tol_sid = angle;
@@ -45,25 +498,144 @@ void  Iso_Parm::set_dist_tol_sid(float dist){
 void  Iso_Parm::set_dist_tol_lnk(float dist){
     this->dist_tol_lnk=dist;
 }
-void  Iso_Parm::set_dist_tol_scf(float dist){
-    this->dist_tol_scf=dist;
+void  Iso_Parm::set_dist_du_du_lnk(float dist){
+    this->dist_du_du_lnk=dist;
+}
+void  Iso_Parm::set_dist_du_du_scf(float dist){
+    this->dist_du_du_scf=dist;
 }
 
+void  Iso_Parm::set_diff_num_atoms(int diff){
+    this->diff_num_atoms = diff;
+}
+void  Iso_Parm::set_iso_num_top(int num){
+    this->iso_num_top = num;
+}
+void Iso_Parm::set_iso_rank_score_sel(std::string score){
+    this->iso_rank_score_sel = score;
+}
+
+void  Iso_Parm::set_rank(bool if_rank){
+    this->rank = if_rank;
+}
+
+void  Iso_Parm::set_write_libraries(bool if_write){
+    this->write_libraries = if_write;
+}
+
+void Iso_Parm::set_iso_fraglib(bool if_frag,std::string PATH){
+
+
+    this->iso_fraglib      = if_frag;
+    this->iso_fraglib_path = PATH;
+    //if (if_frag){
+    //    
+    //}
+
+
+}
+void Iso_Parm::set_iso_score_sel(std::string score){
+    this->iso_score_sel = score;
+}
+
+void Iso_Parm::set_iso_rank_reverse(bool reverse){
+    this->iso_rank_reverse = reverse;
+}
+void Iso_Parm::set_iso_write_freq_cutoff(int cutoff){
+    this->iso_write_freq_cutoff = cutoff;
+};
+
+void Iso_Parm::set_iso_cos_score_cutoff(float cutoff){
+    this->iso_cos_score_cutoff = cutoff;
+};
+
+float  Iso_Parm::get_dist_du_du_inter(){
+    return this->dist_du_du_inter;
+}
 float Iso_Parm::get_dist_tol_sid(){
     return this->dist_tol_sid;
 };
 float Iso_Parm::get_dist_tol_lnk(){
     return this->dist_tol_lnk;
 }
-float Iso_Parm::get_dist_tol_scf(){
-    return this->dist_tol_scf;
+float Iso_Parm::get_dist_du_du_lnk(){
+    return this->dist_du_du_lnk;
 }
+float Iso_Parm::get_dist_du_du_scf(){
+    return this->dist_du_du_scf;
+}
+
+bool Iso_Parm::get_rank(){
+    return this->rank;
+}
+
+bool Iso_Parm::get_write_libraries(){
+    return this->write_libraries;
+}
+
+int Iso_Parm::get_diff_num_atoms(){
+    return this->diff_num_atoms;
+}
+int Iso_Parm::get_iso_num_top(){
+    return this->iso_num_top;
+}
+float Iso_Parm::get_iso_cos_score_cutoff(){
+    return this->iso_cos_score_cutoff;
+}
+
+
+std::pair<bool,
+      std::vector<std::string>> Iso_Parm::get_iso_fraglib(){
+
+
+    std::vector<std::string> tmp {};
+
+    DIR *OPEN_DIR_PATH; 
+    struct dirent *dp;
+    OPEN_DIR_PATH = opendir((*this).iso_fraglib_path.c_str());
+    if (OPEN_DIR_PATH == NULL) {
+        printf ("Cannot open directory '%s'\n", (*this).iso_fraglib_path.c_str());
+        exit(0);
+    }
+    while ((dp = readdir(OPEN_DIR_PATH)) != NULL){
+            std::string filename(dp->d_name);
+            tmp.push_back(filename);
+    }
+    closedir(OPEN_DIR_PATH);
+    
+    return std::make_pair(this->iso_fraglib,tmp);
+}
+std::string Iso_Parm::get_iso_score_sel(){
+    return this->iso_score_sel;
+}
+
+std::string Iso_Parm::get_iso_rank_score_sel(){
+    return this->iso_rank_score_sel;
+}
+
+bool Iso_Parm::get_iso_rank_reverse(){
+    return this->iso_rank_reverse;
+}
+int Iso_Parm::get_iso_write_freq_cutoff(){
+    return this->iso_write_freq_cutoff;
+};
 
 //Iso_Parm END
 
 //Iso_Score::Domain methods
 
 Iso_Score::Domain::Domain(){
+
+    this->overlap     = 0.0;
+    this->overlap_hvy = 0.0;
+    this->overlap_pho = 0.0;
+    this->overlap_phi = 0.0;
+    this->overlap_neg = 0.0;
+    this->overlap_pos = 0.0;
+
+}
+
+Iso_Score::Domain::~Domain(){
 
     this->overlap     = 0.0;
     this->overlap_hvy = 0.0;
@@ -136,13 +708,22 @@ void  Iso_Score::Domain::set_overlap_pos(float overlap){
 //Iso_Score::Domain methods end
 
 
-float Iso_Score::Analytical_method(Fragment & reffrag, Fragment & testfrag)
+void Iso_Score::Score::Analytical_method(Fragment & reffrag, Fragment & testfrag)
 {
     int         i,
                 j;
     float       pi = 3.14,
                 d_sqr,
                 overlap_temp;
+
+
+    int reffrag_heavy_atoms =0;
+
+    //create obj for finger print calc
+    Fingerprint fing;
+
+    //create obj for hungar rmsd
+    Hungarian_RMSD h;
 
     //create three different domains for volume overlap
     Iso_Score::Domain      ref_o;
@@ -159,6 +740,59 @@ float Iso_Score::Analytical_method(Fragment & reffrag, Fragment & testfrag)
     float           hydrophilic_component=0.0;
 
 
+    for (i = 0; i < reffrag.mol.num_atoms; i++){
+        if (reffrag.mol.atom_active_flags[i]) {
+            for (j = 0; j < reffrag.mol.num_atoms; j++){
+                if (reffrag.mol.atom_active_flags[j]) {
+                    d_sqr = (reffrag.mol.x[i] - reffrag.mol.x[j]) * 
+                            (reffrag.mol.x[i] - reffrag.mol.x[j]) + 
+                            (reffrag.mol.y[i] - reffrag.mol.y[j]) * 
+                            (reffrag.mol.y[i] - reffrag.mol.y[j]) + 
+                            (reffrag.mol.z[i] - reffrag.mol.z[j]) * 
+                            (reffrag.mol.z[i] - reffrag.mol.z[j]);
+                    if (d_sqr < (reffrag.mol.amber_at_radius[i] + reffrag.mol.amber_at_radius[j]) *
+                        (reffrag.mol.amber_at_radius[i] + reffrag.mol.amber_at_radius[j])) {
+                        if (d_sqr > 0.00001)
+                            overlap_temp = pi / 12 * 
+                                (reffrag.mol.amber_at_radius[i] + reffrag.mol.amber_at_radius[j] - sqrt(d_sqr)) * 
+                                (reffrag.mol.amber_at_radius[i] + reffrag.mol.amber_at_radius[j] - sqrt(d_sqr)) * 
+                                (sqrt(d_sqr) + 2 * (reffrag.mol.amber_at_radius[i] + reffrag.mol.amber_at_radius[j]) - 3 / 
+                                 sqrt(d_sqr) * (reffrag.mol.amber_at_radius[i] - reffrag.mol.amber_at_radius[j])       * 
+                                (reffrag.mol.amber_at_radius[i] - reffrag.mol.amber_at_radius[j]));
+                        else
+                            overlap_temp = pi / 12 * 2 * 
+                                (reffrag.mol.amber_at_radius[i] + reffrag.mol.amber_at_radius[j]) * 
+                                (reffrag.mol.amber_at_radius[i] + reffrag.mol.amber_at_radius[j]) *  
+                                (reffrag.mol.amber_at_radius[i] + reffrag.mol.amber_at_radius[j]);
+
+                        ref_o.set_overlap(ref_o.get_overlap() + overlap_temp);
+                        if (reffrag.mol.atom_types[i] != "H" && reffrag.mol.atom_types[j] != "H")
+
+                            ref_o.set_overlap_hvy(ref_o.get_overlap_hvy() + overlap_temp);
+
+                        if (reffrag.mol.chem_types[i] == "hydrophobic" && reffrag.mol.chem_types[j] == "hydrophobic")
+                             ref_o.set_overlap_pho(ref_o.get_overlap_pho() + overlap_temp); 
+                        if ((reffrag.mol.chem_types[i] == "donar"    || 
+                             reffrag.mol.chem_types[i] == "acceptor" || 
+                             reffrag.mol.chem_types[i] == "polar")   && 
+                            (reffrag.mol.chem_types[j] == "donar"    ||  
+                             reffrag.mol.chem_types[j] == "acceptor" || 
+                             reffrag.mol.chem_types[j] == "polar"))
+
+                            ref_o.set_overlap_phi(ref_o.get_overlap_phi() + overlap_temp);
+                        if (reffrag.mol.charges[i] < 0 && reffrag.mol.charges[j] < 0)
+
+                            ref_o.set_overlap_neg(ref_o.get_overlap_neg() + overlap_temp);  
+
+                        if (reffrag.mol.charges[i] > 0 && reffrag.mol.charges[j] > 0)
+
+                            ref_o.set_overlap_pos(ref_o.get_overlap_pos() + overlap_temp);
+                    }
+                }
+            }
+        }
+    }
+
     //pair wise calculation where you caculate 
     //atomic level volume overlaps
     for (i = 0; i < testfrag.mol.num_atoms; i++){
@@ -174,7 +808,7 @@ float Iso_Score::Analytical_method(Fragment & reffrag, Fragment & testfrag)
                     reffrag.mol.amber_at_radius[j]) * 
                     (testfrag.mol.amber_at_radius[i]            + 
                     reffrag.mol.amber_at_radius[j])) {
-                    if (d_sqr != 0)
+                    if (d_sqr > 0.00001)
                         overlap_temp = pi / 12 * 
                            (testfrag.mol.amber_at_radius[i] + reffrag.mol.amber_at_radius[j] - sqrt(d_sqr)) * 
                            (testfrag.mol.amber_at_radius[i] + reffrag.mol.amber_at_radius[j] - sqrt(d_sqr)) * 
@@ -232,7 +866,7 @@ float Iso_Score::Analytical_method(Fragment & reffrag, Fragment & testfrag)
                             (testfrag.mol.z[i] - testfrag.mol.z[j]);
                     if (d_sqr < (testfrag.mol.amber_at_radius[i] + testfrag.mol.amber_at_radius[j]) *
                         (testfrag.mol.amber_at_radius[i] + testfrag.mol.amber_at_radius[j])) {
-                        if (d_sqr != 0)
+                        if (d_sqr > 0.00001)
                             overlap_temp = pi / 12 * 
                                 (testfrag.mol.amber_at_radius[i] + testfrag.mol.amber_at_radius[j] - sqrt(d_sqr)) * 
                                 (testfrag.mol.amber_at_radius[i] + testfrag.mol.amber_at_radius[j] - sqrt(d_sqr)) * 
@@ -277,7 +911,6 @@ float Iso_Score::Analytical_method(Fragment & reffrag, Fragment & testfrag)
 
     if (test_o.get_overlap() == 0 && ref_o.get_overlap() == 0)
         total_component = 0;
-
     else
         total_component = ref_test_o.get_overlap() / max(test_o.get_overlap(), ref_o.get_overlap() );
 
@@ -306,8 +939,35 @@ float Iso_Score::Analytical_method(Fragment & reffrag, Fragment & testfrag)
     else
         positive_component = ref_test_o.get_overlap_pos() / max(test_o.get_overlap_pos(), ref_o.get_overlap_pos() );
 
-    return total_component;
 
+
+    //Hungarian scoring
+    std::pair <float, int> h_result = h.calc_Hungarian_RMSD_dissimilar(reffrag.mol,testfrag.mol);
+
+
+    (*this).hrmsd_score = h_result.first;
+
+    for (int i=0; i<reffrag.mol.num_atoms; i++){
+        if (reffrag.mol.atom_types[i].compare("H") != 0 && reffrag.mol.atom_types[i].compare("Du") != 0){ 
+            reffrag_heavy_atoms++;
+        }   
+    }
+    (*this).hms_score   = -5 * (reffrag_heavy_atoms -h_result.second) / reffrag_heavy_atoms +
+                           1 * (h_result.first);
+
+    (*this).tani_score  = fing.compute_tanimoto(reffrag.mol, testfrag.mol);
+
+    (*this).vos_score = (total_component+heavy_atom_component+
+                     negative_component+positive_component+
+                     hydrophobic_component+hydrophilic_component)/6;
+
+    (*this).total_component       = total_component;
+    (*this).heavy_atom_component  = heavy_atom_component;
+    (*this).negative_component    = negative_component;
+    (*this).positive_component    = positive_component;
+    (*this).hydrophobic_component = hydrophobic_component;
+    (*this).hydrophilic_component = hydrophilic_component;
+    
 }
 
 
@@ -317,28 +977,188 @@ float Iso_Score::Analytical_method(Fragment & reffrag, Fragment & testfrag)
 //Iso_Score class Methods
 
 
-void Iso_Score::Score::set_vo_score(float score){
+void Iso_Score::Score::operator=(const Iso_Score::Score& original){
 
-    this->vo_score = score;
+
+    this->hrmsd_score           = original.hrmsd_score;
+    this->hms_score             = original.hms_score;
+    this->tani_score            = original.tani_score;
+    this->vos_score             = original.vos_score;
+
+    this->score                 = original.score;
+    this->total_component       = original.total_component;
+    this->heavy_atom_component  = original.heavy_atom_component;
+    this->negative_component    = original.negative_component;
+    this->positive_component    = original.positive_component;
+    this->hydrophobic_component = original.hydrophobic_component;
+    this->hydrophilic_component = original.hydrophilic_component;
+}
+Iso_Score::Score::Score(){
+  
+    this->hrmsd_score           =9999.0;
+    this->hms_score             =9999.0;
+    this->tani_score            =0.0; 
+    this->vos_score             =0.0; 
+    this->score                 =0.0; 
+    this->total_component       =0.0; 
+    this->heavy_atom_component  =0.0; 
+    this->negative_component    =0.0; 
+    this->positive_component    =0.0; 
+    this->hydrophobic_component =0.0; 
+    this->hydrophilic_component =0.0; 
+
+}
+Iso_Score::Score::~Score(){
+  
+    this->hrmsd_score           =9999.0;
+    this->hms_score             =9999.0;
+    this->tani_score            =0.0; 
+    this->vos_score             =0.0; 
+    this->score                 =0.0; 
+    this->total_component       =0.0; 
+    this->heavy_atom_component  =0.0; 
+    this->negative_component    =0.0; 
+    this->positive_component    =0.0; 
+    this->hydrophobic_component =0.0; 
+    this->hydrophilic_component =0.0; 
+
+}
+Iso_Score::Score::Score( const Iso_Score::Score& original){
+  
+    this->hrmsd_score           = original.hrmsd_score;
+    this->hms_score             = original.hms_score;
+    this->tani_score            = original.tani_score;
+    this->vos_score             = original.vos_score;
+    this->score                 = original.score;
+    this->total_component       = original.total_component;
+    this->heavy_atom_component  = original.heavy_atom_component;
+    this->negative_component    = original.negative_component;
+    this->positive_component    = original.positive_component;
+    this->hydrophobic_component = original.hydrophobic_component;
+    this->hydrophilic_component = original.hydrophilic_component;
 }
 
-void Iso_Score::Score::set_score(float score){
+float Iso_Score::Score::get_score(std::string score_type){
 
-    this->score = score;
+    std::vector<std::string> list_of_scores = {
+        "hrmsd_score",
+        "hms_score",
+        "tanimoto",
+        "vos_score",
+        "score",
+        "total_component",
+        "heavy_atom_component",
+        "negative_component",
+        "positive_component",
+        "hydrophobic_component",
+        "hydrophilic_component" 
+    };
+    float hyb_score = 0.0;
+
+    if(score_type == "hrmsd_score"){
+        return this->hrmsd_score;
+    }
+    else if(score_type == "hms_score"){
+        return this->hms_score;
+    }
+    else if(score_type == "tanimoto"){
+        return this->tani_score;
+    }
+    else if(score_type == "vos_score"){
+        return this->vos_score;
+    }
+    else if(score_type == "score"){
+        return this->score;
+    }
+    else if(score_type == "total_component"){
+        return this->total_component;
+    }
+    else if(score_type == "heavy_atom_component"){
+        return this->heavy_atom_component;
+    }
+    else if(score_type == "negative_component"){
+        return this->negative_component;
+    }
+    else if(score_type == "positive_component"){
+        return this->positive_component;
+    }
+    else if(score_type == "hydrophobic_component"){
+        return this->hydrophobic_component;
+    }
+    else if(score_type =="hydrophilic_component"){
+        return this->hydrophilic_component;
+    } 
+    // If not any of these, it is probably a hybrid
+    else{
+
+       std::vector <std::string> tokens;
+       Tokenizer(score_type,tokens,*";");
+       for (int i=0; i<tokens.size(); i++){
+           std::vector <std::string> subtokens;
+           Tokenizer(tokens[i],subtokens,*",");
+ 
+           if (subtokens.size() != 2) {
+               std::cout << "Must either specify weights or score between ';'" << std::endl;
+               std::cout << "Or you have more than 2 strings in a score component" << std::endl;
+               std::cout << "usage: [weight0],[score_type0];[weight1],[score_type1]" << std::endl;
+               std::cout << "example: -1,hms_score;-5,heavy_atom_component" << std::endl;
+               exit(1);
+           }
+ 
+           if ( !(std::find(list_of_scores.begin(), list_of_scores.end(), subtokens[1]) != list_of_scores.end()) ){
+               std::cout << "One of your rank score component '" << subtokens[1] <<"' is not available"  << std::endl;
+               exit(1);
+           }
+           std::string subscore_type = subtokens[1];
+           float       subscore = 0;
+           float       weight   = std::stof(subtokens[0]);
+           if(subscore_type == "hrmsd_score"){
+               subscore = this->hrmsd_score;
+           }
+           else if(subscore_type == "hms_score"){
+               subscore = this->hms_score;
+           }
+           else if(subscore_type == "tanimoto"){
+               subscore = this->tani_score;
+           }
+           else if(subscore_type == "vos_score"){
+               subscore = this->vos_score;
+           }
+           else if(subscore_type == "score"){
+               subscore = this->score;
+           }
+           else if(subscore_type == "total_component"){
+               subscore = this->total_component;
+           }
+           else if(subscore_type == "heavy_atom_component"){
+               subscore = this->heavy_atom_component;
+           }
+           else if(subscore_type == "negative_component"){
+               subscore = this->negative_component;
+           }
+           else if(subscore_type == "positive_component"){
+               subscore = this->positive_component;
+           }
+           else if(subscore_type == "hydrophobic_component"){
+               subscore = this->hydrophobic_component;
+           }
+           else if(subscore_type =="hydrophilic_component"){
+               subscore = this->hydrophilic_component;
+           } 
+           hyb_score = hyb_score + (weight * subscore);
+       }
+       return hyb_score;
+
+    }
+
+   
+    std::cout<<"You didn't select the right scoring function for ranking. exiting..." << std::endl;
+    exit(0);
 }
 
-float Iso_Score::Score::get_score(){
-
-    return this->score;
-}
-
-float Iso_Score::Score::get_vo_score(){
-
-    return this->vo_score;
-}
 void Iso_Score::Score::calc_score(Fragment& reffrag,Fragment& testfrag){
  
-    this->score=Iso_Score::Analytical_method(reffrag,testfrag);
+    (*this).Analytical_method(reffrag,testfrag);
 }
 
 
@@ -347,6 +1167,42 @@ void Iso_Score::Score::calc_score(Fragment& reffrag,Fragment& testfrag){
 
 //A_Pair class methods
 
+Iso_Acessory::A_Pair::A_Pair(){
+  
+    this->title = "";
+    this->cos_sim = 0.0;
+    (*this).first = 0;
+    (*this).second = 0;
+
+}
+
+Iso_Acessory::A_Pair::A_Pair( const A_Pair & original){
+
+    (*this).title = original.title; 
+    (*this).cos_sim = original.cos_sim; 
+    (*this).first = original.first;
+    (*this).second = original.second;
+
+
+}
+
+void Iso_Acessory::A_Pair::operator=( const A_Pair & original){
+
+    (*this).title = original.title; 
+    (*this).cos_sim = original.cos_sim; 
+    (*this).first = original.first;
+    (*this).second = original.second;
+
+}
+
+Iso_Acessory::A_Pair::~A_Pair(){
+  
+    this->title = "";
+    this->cos_sim = 0.0;
+    (*this).first = 0;
+    (*this).second = 0;
+
+}
 int Iso_Acessory::A_Pair::get_ref(){
     int ref_atomnum = (*this).first;
     return ref_atomnum;
@@ -429,12 +1285,59 @@ void Iso_Acessory::A_Pair::clear(){
 
 //Scored_Triangle class methods
 
-
 Iso_Acessory::Scored_Triangle::Scored_Triangle(){
   
     this->alignable = false;
+    this->hrmsd = 9999;
+    this->volume_overlap = 9998;
+    (*this).three_pairs = {};
+}
+
+Iso_Acessory::Scored_Triangle::Scored_Triangle( const Scored_Triangle & original){
+
+    (*this).clear_triangle();
+
+    (*this).alignable = original.alignable; 
+    (*this).hrmsd = original.hrmsd; 
+    (*this).volume_overlap = original.volume_overlap; 
+    
+    for (const A_Pair & one_pair : original.three_pairs){
+        (*this).three_pairs.push_back(one_pair);
+    }
+    if ((*this).three_pairs.size() > 3) {
+        std::cout << "During assigning Scored_Triangle, the threepairs have more than 3 pairs. \n exiting..." << std::endl;
+        exit(0);
+    }
 
 }
+
+void Iso_Acessory::Scored_Triangle::operator=( const Scored_Triangle & original){
+
+    (*this).clear_triangle();
+
+    (*this).alignable = original.alignable; 
+    (*this).hrmsd = original.hrmsd; 
+    (*this).volume_overlap = original.volume_overlap; 
+
+    for (const A_Pair & one_pair : original.three_pairs){
+        (*this).three_pairs.push_back(one_pair);
+    }
+    if ((*this).three_pairs.size() > 3) {
+        std::cout << "During assigning Scored_Triangle, the threepairs have more than 3 pairs. \n exiting..." << std::endl;
+        exit(0);
+    }
+
+}
+
+Iso_Acessory::Scored_Triangle::~Scored_Triangle(){
+  
+    this->alignable = false;
+    this->hrmsd = 9999;
+    this->volume_overlap = 9998;
+    (*this).three_pairs.clear();
+}
+
+
 
 void Iso_Acessory::Scored_Triangle::push_back(A_Pair& one_pair){
 
@@ -465,7 +1368,7 @@ void Iso_Acessory::Scored_Triangle::pop_back(){
 
 void Iso_Acessory::Scored_Triangle::print(){
     for (unsigned int i =0; i<(*this).three_pairs.size();i++){
-        float cos = (*this).three_pairs[i].get_ref();
+        float cos = (*this).three_pairs[i].get_cos_sim();
         int   ref = (*this).three_pairs[i].get_ref();
         int   test= (*this).three_pairs[i].get_test();
         std::cout << cos << " "<< ref << " " << test << std::endl;
@@ -487,8 +1390,11 @@ void Iso_Acessory::Scored_Triangle::print(Fragment& reffrag,Fragment& testfrag){
 
 
 
-void Iso_Acessory::Scored_Triangle::clear(){
+void Iso_Acessory::Scored_Triangle::clear_triangle(){
     (*this).three_pairs.clear();
+    this->hrmsd = 9999;
+    this->volume_overlap = 9998;
+    this->alignable = false;
 
 }
 
@@ -503,6 +1409,33 @@ void Iso_Acessory::Scored_Triangle::is_alignable(){
     this->alignable = true;
 
 }
+
+void Iso_Acessory::Scored_Triangle::set_hrmsd(float score){
+    this->hrmsd = score;
+}
+
+float Iso_Acessory::Scored_Triangle::get_hrmsd(){
+
+    if (this->hrmsd == 9999){
+        std::cout << "Iso_Acessory::Scored_Triangle::get_hrmsd: you are trying to access an unscored iso frag" << std::endl;
+        exit(0);
+    }
+    return this->hrmsd;
+}
+
+void Iso_Acessory::Scored_Triangle::set_vos(float score){
+    this->volume_overlap = score;
+}
+
+float Iso_Acessory::Scored_Triangle::get_vos(){
+
+    if (this->volume_overlap== 9998){
+        std::cout << "Iso_Acessory::Scored_Triangle::get_vos: you are trying to access an unscored iso frag" << std::endl;
+        exit(0);
+    }
+    return this->volume_overlap;
+}
+
 
 
 //drive function to sort the vector elements by 
@@ -526,8 +1459,8 @@ bool Iso_Acessory::Scored_Triangle::check_if_redundant (){
 
 
 //Scored_Triangle class methods END
-
-bool check_H_vs_atom (Fragment & reffrag, Fragment & testfrag){
+//checks num of H relative to heavy atoms
+bool Iso_Align::check_H_vs_atom (Fragment & reffrag, Fragment & testfrag){
     int ref_num_H      =  0; 
     int ref_num_heavy  =  0;
     int test_num_H     =  0;
@@ -547,7 +1480,8 @@ bool check_H_vs_atom (Fragment & reffrag, Fragment & testfrag){
     return false; 
 }
 
-float dot_product(std::vector<float> vec1,std::vector<float>vec2) {
+//calculates dot_product
+float Iso_Align::dot_product(std::vector<float> vec1,std::vector<float>vec2) {
     float dot_result = 0.0;
     int vec1_2_size  = 0;
     if (vec1.size() == vec2.size()){
@@ -563,7 +1497,7 @@ float dot_product(std::vector<float> vec1,std::vector<float>vec2) {
 }
 
 //calculates cross_prod
-std::vector<float> cross_prod(const std::vector<float> & v1, const std::vector<float> & v2) 
+std::vector<float> Iso_Align::cross_prod(const std::vector<float> & v1, const std::vector<float> & v2) 
 {
     std::vector <float> vec(3,0.0);
 
@@ -575,7 +1509,7 @@ std::vector<float> cross_prod(const std::vector<float> & v1, const std::vector<f
 }
 
 //calcualtes the length of a vector
-float length_vec(std::vector<float> len_vec)
+float Iso_Align::length_vec(std::vector<float> len_vec)
 {
     float           len;
 
@@ -586,7 +1520,7 @@ float length_vec(std::vector<float> len_vec)
 }
 
 //substracts a vector
-std::vector<float> subtract_vec(const std::vector<float> &v1, const std::vector<float> &v2)
+std::vector<float> Iso_Align::subtract_vec(const std::vector<float> &v1, const std::vector<float> &v2)
 {
     std::vector<float> diff {};
 
@@ -598,7 +1532,7 @@ std::vector<float> subtract_vec(const std::vector<float> &v1, const std::vector<
 }
 
 //you have to pass through by reference or the molecules will be distorted
-void normalize_vec(std::vector <float> &vec_to_norm)
+void Iso_Align::normalize_vec(std::vector <float> &vec_to_norm)
 {
     float len;
     len = length_vec(vec_to_norm);
@@ -611,7 +1545,7 @@ void normalize_vec(std::vector <float> &vec_to_norm)
 }
 
 //gets magnitude in a vector
-float magnitude(std::vector<float> mag_vec){
+float Iso_Align::magnitude(std::vector<float> mag_vec){
     float mag_result = 0.0;
     for (unsigned int i =0; i<mag_vec.size(); i++){
         mag_result += (mag_vec[i] * mag_vec[i]);
@@ -620,7 +1554,49 @@ float magnitude(std::vector<float> mag_vec){
     return mag_result;
 }
 
-float get_torsion_angle(const std::vector<float> v1
+float Iso_Align::calc_2atoms_length(Fragment  frag, int origin, int target)
+{
+    float           len;
+
+    len = sqrt( ( (frag.mol.x[origin] - frag.mol.x[target]) * (frag.mol.x[origin] - frag.mol.x[target]) )   
+             +  ( (frag.mol.y[origin] - frag.mol.y[target]) * (frag.mol.y[origin] - frag.mol.y[target]) )
+             +  ( (frag.mol.z[origin] - frag.mol.z[target]) * (frag.mol.z[origin] - frag.mol.z[target]) ) ); 
+    return len;
+};
+//calculates the vector angle
+float Iso_Align::get_vector_angle(const std::vector<float> & v1, const std::vector<float> & v2)
+{
+    float           mag,
+                    prod;
+    float           result;
+    float           pi = 3.1415926536;
+
+    mag = length_vec(v1) * length_vec(v2);
+
+    if (mag == 0) {
+        std::cout << "A magnitude value is 0. It will return calc a -nan value. exiting..." <<
+            std::endl;
+        exit(0);
+    }
+
+    prod = dot_product(v1, v2) / mag;
+
+    if (prod < -0.999999)
+        prod = -0.9999999f;
+
+    if (prod > 0.9999999)
+        prod = 0.9999999f;
+
+    if (prod > 1.0)
+        prod = 1.0f;
+
+    result = (acos(prod) / pi) * 180;
+    
+    return result;
+}
+//This is a different torsion angle calculator
+//than the one we have in the code base
+float Iso_Align::get_torsion_angle(const std::vector<float> v1
                         ,const std::vector<float> v2
                         ,const std::vector<float> v3
                         ,const std::vector<float> v4){
@@ -651,32 +1627,9 @@ float get_torsion_angle(const std::vector<float> v1
 
 }
 
-float get_vector_angle(const std::vector<float> & v1, const std::vector<float> & v2)
-{
-    float           mag,
-                    prod;
-    float           result;
-    float           pi = 3.1415926536;
 
-    mag = length_vec(v1) * length_vec(v2);
-    prod = dot_product(v1, v2) / mag;
-
-    if (prod < -0.999999)
-        prod = -0.9999999f;
-
-    if (prod > 0.9999999)
-        prod = 0.9999999f;
-
-    if (prod > 1.0)
-        prod = 1.0f;
-
-    result = (acos(prod) / pi) * 180;
-
-    return result;
-}
-
-
-float calc_cos_similarity( Fragment &reffrag, Fragment & testfrag,int atomref, int atomtest){
+//calculates cosine similarity
+float Iso_Align::calc_cos_similarity( Fragment &reffrag, Fragment & testfrag,int atomref, int atomtest){
 
     float results = 0;
     std::vector <float> ref_fd_vector  = {};
@@ -708,9 +1661,45 @@ float calc_cos_similarity( Fragment &reffrag, Fragment & testfrag,int atomref, i
 
 };
 
+float 
+Iso_Align::threeD_length(std::vector<float> first, std::vector<float> second)
+{
+    float           len;
 
+    len = sqrt( ( (first[0] - second[0]) * (first[0] - second[0] ) )   
+             +  ( (first[1] - second[1]) * (first[1] - second[1] ) ) 
+             +  ( (first[2] - second[2]) * (first[2] - second[2] ) ));  
+    return len;
+
+}
+
+float
+Iso_Align::get_dist_diff_atat(DOCKMol & refmol, DOCKMol & testmol, int ref_atomnum, int test_atomnum)
+{
+
+    float return_dist = 0;
+    std::vector<float> ref_vec{};
+    std::vector<float> test_vec{};
+
+    ref_vec.push_back(refmol.x[ref_atomnum]);
+    ref_vec.push_back(refmol.y[ref_atomnum]);
+    ref_vec.push_back(refmol.z[ref_atomnum]);
+    
+    test_vec.push_back(testmol.x[test_atomnum]);
+    test_vec.push_back(testmol.y[test_atomnum]);
+    test_vec.push_back(testmol.z[test_atomnum]);
+
+    return_dist = threeD_length(ref_vec,test_vec);
+
+    return return_dist;
+}
+//gets the difference between two atom positions in length
 bool 
-get_diff_dist_two_mol (Fragment & reffrag, Fragment & testfrag,Iso_Acessory::Scored_Triangle triangle,float cutoff,bool sidechains_or_scaffold)
+Iso_Align::get_diff_dist_two_mol (Fragment & reffrag, 
+		       Fragment & testfrag,
+		       Iso_Acessory::Scored_Triangle triangle,
+		       float cutoff,
+		        bool sidechains_or_scaffold)
 {
 
     bool diff         = false;
@@ -724,6 +1713,7 @@ get_diff_dist_two_mol (Fragment & reffrag, Fragment & testfrag,Iso_Acessory::Sco
 
 
 
+    //If linker
     ref_0_1_dist = calc_2atoms_length(reffrag
                                      ,triangle.three_pairs[0].get_ref()
                                      ,triangle.three_pairs[1].get_ref());
@@ -751,10 +1741,6 @@ get_diff_dist_two_mol (Fragment & reffrag, Fragment & testfrag,Iso_Acessory::Sco
                                          ,triangle.three_pairs[1].get_test()
                                          ,triangle.three_pairs[2].get_test());
     }
-
-    //std::cout << "ref_0_1_dist: " << ref_0_1_dist << " ref_0_2_dist: " << ref_0_2_dist << " ref_1_2_dist: " << ref_1_2_dist << std::endl;
-    //std::cout << "test_0_1_dist: " << test_0_1_dist << " test_0_2_dist: " << test_0_2_dist << " test_1_2_dist: " << test_1_2_dist << std::endl;
-
    
     //at anypoint, if the distances between two atoms between two molecules are more than
     //cutoff, return true.
@@ -780,7 +1766,7 @@ get_diff_dist_two_mol (Fragment & reffrag, Fragment & testfrag,Iso_Acessory::Sco
 }
 
 //local function that gets centroids: 𝑥=Σ𝑥𝑖/𝑛,𝑦=Σ𝑦𝑖/𝑛,z=Σz𝑖/𝑛
-std::vector<std::vector<float>> get_centroid(DOCKMol & refmol
+std::vector<std::vector<float>> Iso_Align::get_centroid(DOCKMol & refmol
                                             ,DOCKMol & testmol
                                             ,Iso_Acessory::Scored_Triangle tri_atom_pairs
                                             ,bool getref){
@@ -831,7 +1817,7 @@ std::vector<std::vector<float>> get_centroid(DOCKMol & refmol
 }
 
 //translates the molecules by the target vector
-void target_translation (DOCKMol & trans_mol,std::vector<float> trans_vec) {
+void Iso_Align::target_translation (DOCKMol & trans_mol,std::vector<float> trans_vec) {
 
     for (unsigned int i = 0; i<trans_mol.num_atoms; i++){
         trans_mol.x[i]+=trans_vec[0];
@@ -842,7 +1828,7 @@ void target_translation (DOCKMol & trans_mol,std::vector<float> trans_vec) {
 
 //calculates and returns rotation matrix
 //that swivels the moving vec to the ref vec
-std::vector<std::vector<double>> get_rotation_mat( std::vector<float>& vec1_test, std::vector<float>& vec2) {
+std::vector<std::vector<double>> Iso_Align::get_rotation_mat( std::vector<float>& vec1_test, std::vector<float>& vec2) {
     std::vector<std::vector<double>> final_mat_vec;
 
     double dot_test        = 0.0; 
@@ -852,37 +1838,52 @@ std::vector<std::vector<double>> get_rotation_mat( std::vector<float>& vec1_test
     double cos_theta_test  = 0.0; 
     double sin_theta_test  = 0.0; 
    
+    double finalmat_test[3][3];
+
     dot_test        =dot_product(vec1_test,vec2);
 
     vec1_magsq_test =magnitude(vec1_test);
     vec2_magsq      =magnitude(vec2); 
 
     cos_theta_test = dot_test/ (sqrt(vec1_magsq_test* vec2_magsq));
-    if (cos_theta_test >= 1.0){
+
+    if (cos_theta_test > 1.0){
         cos_theta_test = 1.0;
         sin_theta_test = 0.0;
     }
-    else if (cos_theta_test <= -1.0){
+    else if (cos_theta_test < -1.0){
         cos_theta_test = -1.0;
         sin_theta_test = 0.0;
     }
     else{
         sin_theta_test = sqrt (1 - (cos_theta_test * cos_theta_test));
     }
-    //// if cos_theta is 1, vec 1 and vec 2 are perfect,
-    //// otherwise enter this loop and calculate lots of stuff
-    //else if (cos_theta_ref !=1 ||  cos_theta_test !=1) {
-        std::vector<float> normalU_test = cross_prod(vec1_test,vec2);
-    //    
-        std::vector<float> normalW_test = cross_prod(vec2,normalU_test);
-    //    //normalize vectors
-        normalize_vec(vec2);
 
-        normalize_vec(normalU_test);
+    if (cos_theta_test == -1){
+        finalmat_test[0][0] =  -1; finalmat_test[0][1] = 0; finalmat_test[0][2] = 0;
+        finalmat_test[1][0] =  0; finalmat_test[1][1] = -1; finalmat_test[1][2] = 0;
+        finalmat_test[2][0] =  0; finalmat_test[2][1] = 0; finalmat_test[2][2] = -1;
+    }else if (cos_theta_test == 1){
+        finalmat_test[0][0] =  1; finalmat_test[0][1] = 0; finalmat_test[0][2] = 0;
+        finalmat_test[1][0] =  0; finalmat_test[1][1] = 1; finalmat_test[1][2] = 0;
+        finalmat_test[2][0] =  0; finalmat_test[2][1] = 0; finalmat_test[2][2] = 1;
 
-        normalize_vec(normalW_test);
 
-    //    // Make coorinate rotation matrix, which rotates coordinates to normalW, vec2, normalU coordinates    
+    }else if(cos_theta_test != 1){
+        //// if cos_theta is 1, vec 1 and vec 2 are perfect,
+        //// otherwise enter this loop and calculate lots of stuff
+        //else if (cos_theta_ref !=1 ||  cos_theta_test !=1) {
+            std::vector<float> normalU_test = cross_prod(vec1_test,vec2);
+        //    
+            std::vector<float> normalW_test = cross_prod(vec2,normalU_test);
+        //    //normalize vectors
+            normalize_vec(vec2);
+
+            normalize_vec(normalU_test);
+
+            normalize_vec(normalW_test);
+
+        //    // Make coorinate rotation matrix, which rotates coordinates to normalW, vec2, normalU coordinates    
         float coorRot_test[3][3];
 
 
@@ -896,8 +1897,8 @@ std::vector<std::vector<double>> get_rotation_mat( std::vector<float>& vec1_test
         coorRot_test[2][1]    =         vec2[2];
         coorRot_test[2][2]    = normalU_test[2];
 
-    //    // make inverse matrix of coordRot matrix - since coorRot is an orthonal matrix 
-    //    // the inverse if its transpose, coorRot^T
+          // make inverse matrix of coordRot matrix - since coorRot is an orthonal matrix 
+          // the inverse if its transpose, coorRot^T
         float invcoorRot_test[3][3];
 
         invcoorRot_test[0][0] = coorRot_test[0][0];
@@ -919,7 +1920,6 @@ std::vector<std::vector<double>> get_rotation_mat( std::vector<float>& vec1_test
 
         float temp_test[3][3];
 
-        double finalmat_test[3][3];
 
         for (int w=0; w<3; w++){
             for (int q=0; q<3; q++){
@@ -938,20 +1938,22 @@ std::vector<std::vector<double>> get_rotation_mat( std::vector<float>& vec1_test
                 }
             }
         }
-        std::vector <double> t_vec {};
-        for (int w=0; w<3; w++){
-            for (int q=0; q<3; q++){
-                t_vec.push_back(finalmat_test[w][q]);
-            }
-            final_mat_vec.push_back(t_vec);
-            t_vec.clear();
-        }
+    }
 
+    //convert double 3 by 3 into vector mat 
+    std::vector <double> t_vec {};
+    for (int w=0; w<3; w++){
+        for (int q=0; q<3; q++){
+            t_vec.push_back(finalmat_test[w][q]);
+        }
+        final_mat_vec.push_back(t_vec);
+        t_vec.clear();
+    }
+ 
     return final_mat_vec;
 };
 
-void align_molcentroid (DOCKMol& refmol, DOCKMol& testmol,std::vector<std::vector<float>> centroid_vec,Iso_Acessory::Scored_Triangle three_atom_pairs){
-
+void Iso_Align::align_molcentroid (DOCKMol& refmol, DOCKMol& testmol,std::vector<std::vector<float>> centroid_vec,Iso_Acessory::Scored_Triangle three_atom_pairs){
 
     //instantiate vecotrs that are used to translate mols
     //to the origin
@@ -984,6 +1986,7 @@ void align_molcentroid (DOCKMol& refmol, DOCKMol& testmol,std::vector<std::vecto
     std::vector<float> vec2     {refmol.x[three_atom_pairs.three_pairs[0].get_ref()],
                                  refmol.y[three_atom_pairs.three_pairs[0].get_ref()],
                                  refmol.z[three_atom_pairs.three_pairs[0].get_ref()]};
+   
     double finalmat_test[3][3];
     std::vector<std::vector <double>> tmp_rot_mat{};
     tmp_rot_mat = get_rotation_mat(vec1_test,vec2);
@@ -1018,6 +2021,8 @@ void align_molcentroid (DOCKMol& refmol, DOCKMol& testmol,std::vector<std::vecto
             finalmat_test_1[w][q] = tmp_rot_mat[w][q];
         }    
     }  
+
+
     testmol.rotate_mol(finalmat_test_1);
     refmol.rotate_mol(finalmat_test_1);
 
@@ -1098,53 +2103,12 @@ void align_molcentroid (DOCKMol& refmol, DOCKMol& testmol,std::vector<std::vecto
 
 }
 
-
-//gets hrmsd scores in a pair (first: if Du-du-angles are tolerable, second: another PAIR where 
-//FIRST: hrmsd, SECOND: num of dissimilar atoms)
-//the score is calcualted between refmol and testmol based on the
-//the testing three_atom_pairs
-std::pair<bool,std::pair <double, int>>
-get_hrmsd_and_du_angles(DOCKMol &refmol, DOCKMol & testmol, Iso_Acessory::Scored_Triangle atom_pairs){
-
-    float angle_tolerance = 5.0;
-
-    //instantiate template DOCKMol objects
-    DOCKMol tmprefmol;
-    DOCKMol tmptestmol;
-  
-    //copy DOCKMol objects to make templates 
-    copy_molecule_shallow(tmprefmol,refmol);
-    copy_molecule_shallow(tmptestmol,testmol);
-
-    //initialize variables to get hrmsd 
-    std::vector<std::vector<float>> tmp_centroid_coor {};
-    Hungarian_RMSD h;
-    std::pair<bool,std::pair <double, int>> result;
-    result.second.first  = 9999.0;
-    result.second.second = 0; 
-
-    //get coordinates of the centroid for both tmprefmol and tmptestmol
-    tmp_centroid_coor = get_centroid(tmprefmol,tmptestmol,atom_pairs,true);
-
-    //alignment the molecules based on centroid coordinates
-    align_molcentroid(tmprefmol,tmptestmol,tmp_centroid_coor,atom_pairs);
-    
-    ///get the results for hungarian 
-    result.second  = h.calc_Hungarian_RMSD_dissimilar(tmprefmol,tmptestmol);
-  
-    //get result for du_axi_overlap
-    result.first = are_Du_axis_overlapped(tmprefmol,tmptestmol,atom_pairs,angle_tolerance);
-
-    tmprefmol.clear_molecule();
-    tmptestmol.clear_molecule();
-
-    return result;
-}
-
+//fn that asks...are the Du vectors pointing at 
+//neighboring atom overlapping?
 bool 
-are_Du_axis_overlapped(DOCKMol &refmol, DOCKMol &testmol
+Iso_Align::are_Du_axis_overlapped(DOCKMol &refmol, DOCKMol &testmol
                        ,Iso_Acessory::Scored_Triangle atom_pairs
-                       ,float cutoff)
+                       ,float angle_cutoff,float dist_cutoff)
 {
     DOCKMol tmprefmol;
     DOCKMol tmptestmol;
@@ -1152,12 +2116,28 @@ are_Du_axis_overlapped(DOCKMol &refmol, DOCKMol &testmol
     std::vector<float> test_trans_vec {};
     std::vector<float> ref_trans_vec  {};
 
-
     std::vector<int> refnbrs {};
     std::vector<int> testnbrs {};
-
     std::vector <float> all_angles {};
+    std::vector <float> all_distances {};
     
+
+    //Get distanace difference betwen two fragments bases on Du-Du pair
+    for (unsigned int i = 0; i<atom_pairs.three_pairs.size(); i++){
+        if (refmol.atom_types[atom_pairs.three_pairs[i].get_ref()] == "Du" &&
+            testmol.atom_types[atom_pairs.three_pairs[i].get_test()] == "Du"){
+            
+            int refmol_atomnum = atom_pairs.three_pairs[i].get_ref();
+            int testmol_atomnum = atom_pairs.three_pairs[i].get_test();
+
+            if (i==0){all_distances.push_back(get_dist_diff_atat(refmol,testmol,refmol_atomnum,testmol_atomnum));}
+            if (i==1){all_distances.push_back(get_dist_diff_atat(refmol,testmol,refmol_atomnum,testmol_atomnum));} 
+            if (i==2){all_distances.push_back(get_dist_diff_atat(refmol,testmol,refmol_atomnum,testmol_atomnum));}
+        }
+    }
+
+
+    //Then translate the du-du atoms to origin, then calcualte the angle for the neighboring atoms.
     for (unsigned int i = 0; i<atom_pairs.three_pairs.size(); i++){
         if (refmol.atom_types[atom_pairs.three_pairs[i].get_ref()] == "Du" &&
             testmol.atom_types[atom_pairs.three_pairs[i].get_test()] == "Du"){
@@ -1190,7 +2170,7 @@ are_Du_axis_overlapped(DOCKMol &refmol, DOCKMol &testmol
             vec_test.push_back(tmptestmol.y[testnbrs[0]]);
             vec_test.push_back(tmptestmol.z[testnbrs[0]]);
            
-             
+ 
             if (i==0){all_angles.push_back(get_vector_angle(vec_ref,vec_test));}
             if (i==1){all_angles.push_back(get_vector_angle(vec_ref,vec_test));} 
             if (i==2){all_angles.push_back(get_vector_angle(vec_ref,vec_test));}
@@ -1206,14 +2186,19 @@ are_Du_axis_overlapped(DOCKMol &refmol, DOCKMol &testmol
         } 
     }
 
- 
     unsigned int true_counter = 0;
-    for (unsigned int i=0;i<all_angles.size();i++){
-        if (all_angles[i] < cutoff){
+    for (unsigned int i=0;i<all_distances.size();i++){
+        if (all_distances[i] < dist_cutoff){
             true_counter++;
         }
     }
-    if (true_counter == all_angles.size()){return true;}
+ 
+    for (unsigned int i=0;i<all_angles.size();i++){
+        if (all_angles[i] < angle_cutoff){
+            true_counter++;
+        }
+    }
+    if (true_counter == (all_angles.size() + all_distances.size()) ){return true;}
 
     return false;
 }
@@ -1223,67 +2208,50 @@ are_Du_axis_overlapped(DOCKMol &refmol, DOCKMol &testmol
 //FIRST: hrmsd, SECOND: num of dissimilar atoms)
 //the score is calcualted between refmol and testmol based on the
 //the testing three_atom_pairs
-std::pair<bool,std::pair <double, int>>
-get_hrmsd_and_du_angles(Fragment &reffrag, Fragment & testfrag
-                       ,Iso_Acessory::Scored_Triangle atom_pairs){
+std::pair<bool,std::pair <Iso_Score::Score, int>>
+Iso_Align::get_aliscore_and_du_angles(Fragment reffrag, Fragment testfrag
+                       ,Iso_Acessory::Scored_Triangle atom_pairs,float ang_tol, float dist_tol){
+    float angle_tolerance = ang_tol;
+    float du_du_dist_tolerance = dist_tol;
 
 
-    //std::fstream fout_molecules;
-    //fout_molecules.open("test_translated.mol2",std::ios_base::app);
-
-    //std::fstream ffout_molecules;
-    //ffout_molecules.open("test_translated_true.mol2",std::ios_base::app);
-
-    //instantiate template DOCKMol objects
-    DOCKMol tmprefmol;
-    DOCKMol tmptestmol;
+    ////instantiate template DOCKMol objects
+    //DOCKMol tmprefmol;
+    //DOCKMol tmptestmol;
   
-    //copy DOCKMol objects to make templates 
-    copy_molecule_shallow(tmprefmol,reffrag.mol);
-    copy_molecule_shallow(tmptestmol,testfrag.mol);
+    Iso_Score::Score tmp_score;
 
     //initialize variables to get hrmsd 
     std::vector<std::vector<float>> tmp_centroid_coor {};
     Hungarian_RMSD h;
-    std::pair<bool,std::pair <double, int>> result;
-    result.second.first  = 9999.0;
+    std::pair<bool,std::pair <Iso_Score::Score, int>> result;
     result.second.second = 0; 
 
     //get coordinates of the centroid for both tmprefmol and tmptestmol
-    tmp_centroid_coor = get_centroid(tmprefmol,tmptestmol,atom_pairs,true);
+    tmp_centroid_coor = get_centroid(reffrag.mol,testfrag.mol,atom_pairs,true);
 
     //alignment the molecules based on centroid coordinates
-    align_molcentroid(tmprefmol,tmptestmol,tmp_centroid_coor,atom_pairs);
+    align_molcentroid(reffrag.mol,testfrag.mol,tmp_centroid_coor,atom_pairs);
     
     ///get the results for hungarian 
-    result.second  = h.calc_Hungarian_RMSD_dissimilar(tmprefmol,tmptestmol);
-  
+    //result.second  = h.calc_Hunrarian_RMSD_dissimilar(reffrag.mol,testfrag.mol);
+    
+    tmp_score.calc_score(reffrag,testfrag);
 
-     
-    //Write_Mol2(tmprefmol,fout_molecules);
-    //Write_Mol2(tmptestmol,fout_molecules);
+    result.second.first = tmp_score;
 
     //get result for du_axi_overlap
-    result.first = are_Du_axis_overlapped(tmprefmol,tmptestmol,atom_pairs,5.0);     
-   
-    //if (result.first == true){Write_Mol2(tmptestmol,ffout_molecules);}
-
-    tmprefmol.clear_molecule();
-    tmptestmol.clear_molecule();
+    result.first = are_Du_axis_overlapped(reffrag.mol,testfrag.mol,atom_pairs
+                                          ,angle_tolerance,du_du_dist_tolerance); 
 
     return result;
 }
 
 
+Iso_Acessory::Scored_Triangle Iso_Align::get_three_atoms_pairs(Fragment& reffrag
+                                                   ,Fragment& testfrag, Iso_Parm parameters){
 
 
-
-
-
-Iso_Acessory::Scored_Triangle get_three_atoms_pairs(Fragment& reffrag
-                                                   ,Fragment& testfrag){
-
-    std::cout << testfrag.mol.title << std::endl;
     bool more_than = false; 
     bool du_more_than = false;
     float more_than_para = 1.0;
@@ -1297,7 +2265,7 @@ Iso_Acessory::Scored_Triangle get_three_atoms_pairs(Fragment& reffrag
     std::vector<Iso_Acessory::A_Pair>                       heavy_and_du_pairs;
     std::vector<Iso_Acessory::A_Pair>                       du_du_pairs;
     std::vector<Iso_Acessory::A_Pair>                       return_vec;
-    std::vector<std::pair<double
+    std::vector<std::pair<float
                           ,Iso_Acessory::Scored_Triangle>>  sorting_stack;
 
 
@@ -1305,17 +2273,25 @@ Iso_Acessory::Scored_Triangle get_three_atoms_pairs(Fragment& reffrag
 
     //create a pair that can accept a bool and  hrmsd scores
     //from the hungarian function.
-    std::pair<bool,std::pair <double, int>> should_align {};
+    std::pair<bool,std::pair <Iso_Score::Score, int>> should_align {};
    
     //pairwise calculations to calcualte cos_sim_score 
     //and get the du_du filled vectors.
     for (unsigned int i = 0; i < reffrag.mol.num_atoms; i++){
         for (unsigned int m = 0; m < testfrag.mol.num_atoms; m++){
             cos_score = calc_cos_similarity(reffrag,testfrag, i, m);
-                Iso_Acessory::A_Pair one_pair;
-                one_pair.set_cos_sim(cos_score);
-                one_pair.set_ref(i);
-                one_pair.set_test(m);
+            Iso_Acessory::A_Pair one_pair;
+            one_pair.set_cos_sim(cos_score);
+            one_pair.set_ref(i);
+            one_pair.set_test(m);
+
+            //Where you set your cutoff of cos_score cutoff
+            if (cos_score < parameters.get_iso_cos_score_cutoff()){
+
+                //std::cout << "REJ:"<< cos_score << " " << parameters.get_iso_cos_score_cutoff() << std::endl;
+                one_pair.clear();
+                continue;
+            } 
 
             if ((reffrag.mol.num_atoms <=5 || testfrag.mol.num_atoms<=5) 
                  && check_H_vs_atom(reffrag,testfrag)){
@@ -1336,14 +2312,12 @@ Iso_Acessory::Scored_Triangle get_three_atoms_pairs(Fragment& reffrag
 
     }
 
-    //for (int i = 0;i<heavy_and_du_pairs.size(); i++){
-    //    heavy_and_du_pairs[i].print_all(reffrag,testfrag);
-
-    //}
-    //for (int i = 0;i<du_du_pairs.size(); i++){
-    //    du_du_pairs[i].print_all(reffrag,testfrag);
-  
-    //}
+    //std::cout << "heavy_and_du_pairs.size() " << heavy_and_du_pairs.size() << std::endl; 
+    //If there are no three pairs to align with, return not alignable
+    if (heavy_and_du_pairs.size() == 0) { return notalignable; }
+ 
+    //If there are no three pairs for du_dus, return not alignable
+    if (du_du_pairs.size() == 0) { return notalignable; }
 
     //IDONT KNOW IF I HAVE TO USE
     //activate each heavy atom 
@@ -1365,8 +2339,23 @@ Iso_Acessory::Scored_Triangle get_three_atoms_pairs(Fragment& reffrag
              ,[](Iso_Acessory::A_Pair a, Iso_Acessory::A_Pair b){ 
                  return a.get_cos_sim() > b.get_cos_sim();}); 
 
-    //if ref and tet fragments are sidechains...
-    if (reffrag.get_num_du() == 1 && testfrag.get_num_du() == 1){
+    //if the differences of num_atoms are too much...
+    if (abs(reffrag.mol.num_atoms - testfrag.mol.num_atoms) > parameters.get_diff_num_atoms()){
+	return notalignable;
+    }
+
+    //if the freq_num cutoff is not met...
+    if (testfrag.freq_num < parameters.get_iso_write_freq_cutoff()){
+        return notalignable;
+    }
+
+    //std::cout <<reffrag.get_num_du() << " num_du  " <<testfrag.get_num_du() << std::endl;
+    //std::cout << " du_du_size " <<du_du_pairs.size() << std::endl;
+    //for (int z = 0;z<du_du_pairs.size(); z++){
+    //    du_du_pairs[z].print_all(reffrag,testfrag);
+    //}
+    //if ref and test fragments are SIDECHAINS...
+    if (reffrag.get_num_du() == 1 && testfrag.get_num_du() == 1 && du_du_pairs.size()==1){
 
         Iso_Acessory::Scored_Triangle temp_triangle;
  
@@ -1381,80 +2370,113 @@ Iso_Acessory::Scored_Triangle get_three_atoms_pairs(Fragment& reffrag
             exit(0);
         }
 
-         for (unsigned int j = 0; j < heavy_and_du_pairs.size(); j++){
+	//get info on neighboring atoms
+	std::vector <int> ref_neighbhors_du = 
+	    reffrag.mol.get_atom_neighbors(temp_triangle.three_pairs[0].get_ref());
+	std::vector <int> test_neighbhors_du = 
+	    testfrag.mol.get_atom_neighbors(temp_triangle.three_pairs[0].get_test());
+  
+        // Filter out if the bond types for the sidechains between du and heavy atom  
+        // are the same. if not return nothign 
+        int bond_id_ref =  reffrag.mol.get_bond(temp_triangle.three_pairs[0].get_ref(),
+                                                ref_neighbhors_du[0]);
+        int bond_id_test=  testfrag.mol.get_bond(temp_triangle.three_pairs[0].get_test(),
+                                                 test_neighbhors_du[0]);
 
+        std::string bond_type_ref = reffrag.mol.bond_types[bond_id_ref];
+        std::string bond_type_test= testfrag.mol.bond_types[bond_id_test];
+        // check if the bond_types are same
+        if (bond_type_ref != bond_type_test) {return notalignable;}
+ 
+	bool if_nbr_exit = false;
 
+        for (unsigned int j = 0; j < heavy_and_du_pairs.size(); j++){
+	    //check if atoms are Du, if it is, skip
+            if (reffrag.mol.atom_types[heavy_and_du_pairs[j].get_ref()] == "Du" ||
+                testfrag.mol.atom_types[heavy_and_du_pairs[j].get_test()] == "Du"){continue;}
+	    
+	    //get neighboring atoms of the Du atom, and set as second atom pair
+	    if (reffrag.mol.atom_names[ref_neighbhors_du[0]] == reffrag.mol.atom_names[heavy_and_du_pairs[j].get_ref()]   &&
+		testfrag.mol.atom_names[test_neighbhors_du[0]] == testfrag.mol.atom_names[heavy_and_du_pairs[j].get_test()]
+		){
+		if_nbr_exit = true;
+		temp_triangle.push_back(heavy_and_du_pairs[j]);
+	    }
+	}
+
+	if (if_nbr_exit == false){
+	    //std::cout << "ERROR: during calculations Du atoms show now neighboring atoms. Exiting..." 
+	    //    << std::endl;
+	    return notalignable;
+	}
+
+	//Where you do the real alignment
+	for (unsigned int j = 0; j < heavy_and_du_pairs.size(); j++){
             if (reffrag.mol.atom_types[heavy_and_du_pairs[j].get_ref()] == "Du" ||
                 testfrag.mol.atom_types[heavy_and_du_pairs[j].get_test()] == "Du"){continue;}
 
-            temp_triangle.push_back(heavy_and_du_pairs[j]);
+	    temp_triangle.push_back(heavy_and_du_pairs[j]);
 
-            for (unsigned int z = 0; z < heavy_and_du_pairs.size(); z++) {
-
-                if (reffrag.mol.atom_types[heavy_and_du_pairs[z].get_ref()] == "Du" ||
-                    testfrag.mol.atom_types[heavy_and_du_pairs[z].get_test()] == "Du"){continue;}
-
-                temp_triangle.push_back(heavy_and_du_pairs[z]);
-
-                if (temp_triangle.three_pairs.size() == 3 
-                    && temp_triangle.check_if_redundant()){
-            	    temp_triangle.pop_back(); 
-                    continue;
-                }
-
-                if (temp_triangle.three_pairs.size() == 2 && temp_triangle.check_if_redundant()){
-                    std::cout<< "ERROR: du-du first pair and second non du pair"
-                             << "have atom redundancies, when they should not. check your mol2 file. exiting.."<< endl;
-                    exit(0);
-                }
-
-                should_align.second.first  = 9999.0;
-                should_align.second.second = 0; 
-                more_than    = false;  
-
-                //get if the distance differences of corresponding triangle sides
-                //between refmol and testmol are too much, return true. 
-                more_than = get_diff_dist_two_mol(reffrag,testfrag,temp_triangle,more_than_para,false);
-
-                //if true, must skip because you will waste time aligning
-                if (more_than == true){temp_triangle.pop_back(); continue;}
-
-                //If false, do the alignment
-                if (more_than == false && temp_triangle.three_pairs.size() == 3 && 
-                    !temp_triangle.check_if_redundant()){
-
-                    //should these molecules be aligned?
-                    should_align  = get_hrmsd_and_du_angles(reffrag,testfrag,temp_triangle);
-                    
-                    //if du_du angles are too far away, SKIP;      
-                    if (!should_align.first){
-                        temp_triangle.pop_back();
-                        continue;
-                    }                        
- 
-                    //once you get the hrmsd score, push back the three atom pairs
-                    sorting_stack.push_back(std::make_pair(should_align.second.first,temp_triangle));
-
-                    //get rid of the top pair on top of LIFO stack
-                    temp_triangle.pop_back();
-                    continue;
-                }
+            if (temp_triangle.three_pairs.size() == 3 
+                && temp_triangle.check_if_redundant()){
+              temp_triangle.pop_back(); 
+                continue;
             }
 
-            temp_triangle.pop_back();
+            if (temp_triangle.three_pairs.size() == 2 && temp_triangle.check_if_redundant()){
+                //std::cout<< "ERROR: du-du first pair and second non du pair"
+                //         << "have atom redundancies, when they should not. check your mol2 file. exiting.."<< endl;
+                return notalignable;
+            }
 
-        }    
+            should_align.second.second = 0; 
+            more_than    = false;  
+     
+            //get if the distance differences of corresponding triangle sides
+            //between refmol and testmol are too much, return true. 
+            more_than = get_diff_dist_two_mol(reffrag,testfrag,temp_triangle
+                                              ,parameters.get_dist_tol_sid(),false);
+     
+            //if true, must skip because you will waste time aligning
+            if (more_than == true){temp_triangle.pop_back(); continue;}
+     
+            //If false, do the alignment
+            if (more_than == false && temp_triangle.three_pairs.size() == 3 && 
+                !temp_triangle.check_if_redundant()){
+     
+                //should these molecules be aligned?
+                should_align  = get_aliscore_and_du_angles(reffrag,testfrag
+                          ,temp_triangle,parameters.get_bond_angle_tol_sid()
+                          ,parameters.get_dist_du_du_inter());
+                
+                //if du_du angles are too far away, SKIP;      
+                if (!should_align.first){
+                    temp_triangle.pop_back();
+                    continue;
+                }                        
+
+     
+                //once you get the hrmsd score, push back the three atom pairs
+                float iso_score = should_align.second.first.get_score(parameters.get_iso_score_sel());
+                sorting_stack.push_back(std::make_pair(iso_score,temp_triangle));
+     
+                //get rid of the top pair on top of LIFO stack
+                temp_triangle.pop_back();
+                continue;
+            }
+	}
+
 
         //sort tmp stack to get the best hrmsd score
         try {
 
             //deactivate each heavy atom 
-            for (unsigned int i =0; i<reffrag.mol.num_atoms;i++){
-                reffrag.mol.atom_active_flags[i] = false;
-            }
-            for (unsigned int i =0; i<testfrag.mol.num_atoms;i++){
-                testfrag.mol.atom_active_flags[i] = false;
-            }
+            //for (unsigned int i =0; i<reffrag.mol.num_atoms;i++){
+            //    reffrag.mol.atom_active_flags[i] = false;
+            //}
+            //for (unsigned int i =0; i<testfrag.mol.num_atoms;i++){
+            //    testfrag.mol.atom_active_flags[i] = false;
+            //}
 
             //sometimes the tmp_stack will have nothing
             //if so, throw a 0 value, so it can be caught
@@ -1463,22 +2485,39 @@ Iso_Acessory::Scored_Triangle get_three_atoms_pairs(Fragment& reffrag
             //sort and get the best hrmsd scoring three_atom_pair
             //and return
 
-            std::sort(sorting_stack.begin(),sorting_stack.end()
-                      ,[](std::pair<double,Iso_Acessory::Scored_Triangle>  a
-                      ,std::pair<double,Iso_Acessory::Scored_Triangle> b)
-                      {return a.first < b.first;});
-         
+            if (parameters.get_iso_score_sel() == "hrmsd_score" || parameters.get_iso_score_sel() == "hms_score"){
+                std::sort(sorting_stack.begin(),sorting_stack.end()
+                          ,[](std::pair<float,Iso_Acessory::Scored_Triangle>  a
+                          ,std::pair<float,Iso_Acessory::Scored_Triangle> b)
+                          {return a.first < b.first;});
+            } else {
+
+                std::sort(sorting_stack.begin(),sorting_stack.end()
+                          ,[](std::pair<float,Iso_Acessory::Scored_Triangle>  a
+                          ,std::pair<float,Iso_Acessory::Scored_Triangle> b)
+                          {return a.first > b.first;});
+            }
+
+	    if (parameters.get_rank()){
+		//set the hrmsd score for later ranking
+                float tmpscore =  sorting_stack[0].first;
+		sorting_stack[0].second.set_vos(tmpscore);
+	    }
+	
             return sorting_stack[0].second;
 
         } catch(int size_of_stack) {
-            std::cout << testfrag.mol.title  
-                      << " is not alignable to reference. Size of stack is: " 
-                      << size_of_stack 
-                      << std::endl;
+            //std::cout << testfrag.mol.title  
+            //          << " is not alignable to reference. Size of stack is: " 
+            //          << size_of_stack 
+            //          << std::endl;
             return notalignable;
         }
 
-    }else if (reffrag.get_num_du() == 2 && testfrag.get_num_du() == 2){
+    //IF LINKER
+    }else if ( reffrag.get_num_du() == 2 && 
+               testfrag.get_num_du() == 2 && 
+               du_du_pairs.size() == 4 ){
 
         //instialize a special data struct just for linkers
         //it will contain all combinations of Du-Du.
@@ -1496,6 +2535,56 @@ Iso_Acessory::Scored_Triangle get_three_atoms_pairs(Fragment& reffrag
                 pair_of_Du_Dus.second.push_back(du_du_pairs[i]);
             }
         }
+  
+	//get info on neighboring atoms
+	std::vector <int> ref_neighbhors_du_1 = 
+	    reffrag.mol.get_atom_neighbors(pair_of_Du_Dus.first.three_pairs[0].get_ref());
+	std::vector <int> test_neighbhors_du_1 = 
+	    testfrag.mol.get_atom_neighbors(pair_of_Du_Dus.first.three_pairs[0].get_test());
+
+
+	std::vector <int> ref_neighbhors_du_2 = 
+	    reffrag.mol.get_atom_neighbors(pair_of_Du_Dus.first.three_pairs[1].get_ref());
+	std::vector <int> test_neighbhors_du_2 = 
+	    testfrag.mol.get_atom_neighbors(pair_of_Du_Dus.first.three_pairs[1].get_test());
+
+
+        // Filter out if the bond types for the sidechains between du and heavy atom  
+        // are the same. if not return nothign 
+
+        int bond_id_ref_first_1 = reffrag.mol.get_bond(pair_of_Du_Dus.first.three_pairs[0].get_ref(),
+                                                       ref_neighbhors_du_1[0]);
+        int bond_id_test_first_1 = testfrag.mol.get_bond(pair_of_Du_Dus.first.three_pairs[0].get_test(),
+                                                         test_neighbhors_du_1[0]);
+
+        int bond_id_ref_first_2 = reffrag.mol.get_bond(pair_of_Du_Dus.first.three_pairs[1].get_ref(),
+                                                       ref_neighbhors_du_2[0]);
+        int bond_id_test_first_2 = testfrag.mol.get_bond(pair_of_Du_Dus.first.three_pairs[1].get_test(),
+                                                         test_neighbhors_du_2[0]);
+
+
+        std::vector<std::string> ref_bond_types {reffrag.mol.bond_types[bond_id_ref_first_1],
+                                                 reffrag.mol.bond_types[bond_id_ref_first_2]};
+
+
+        std::vector<std::string> test_bond_types {testfrag.mol.bond_types[bond_id_test_first_1],
+                                                  testfrag.mol.bond_types[bond_id_test_first_2]};
+
+
+        // if there is absolutely no match in bond types for
+        // at least one bond, you must return unalignable.
+        for (unsigned int i =0; i<ref_bond_types.size(); i++){
+            int check = 0;
+            for (unsigned int j =0; j<test_bond_types.size(); j++){
+                if (ref_bond_types[i] == test_bond_types[j]){
+                    check++;
+                }
+            }
+            if (check == 0){
+               return notalignable;
+               }
+        }
+
 
         //start the for loop to assess the du-du distances, alignment,
         //and return the du-dus 
@@ -1516,7 +2605,7 @@ Iso_Acessory::Scored_Triangle get_three_atoms_pairs(Fragment& reffrag
             }
 
             //check if the du-du distances are at least in tolerable distances
-            du_more_than = get_diff_dist_two_mol(reffrag,testfrag,temp_triangle,du_more_than_para_lnk,true);
+            du_more_than = get_diff_dist_two_mol(reffrag,testfrag,temp_triangle,parameters.get_dist_du_du_lnk(),true);
 
             //if there is a big difference, skip for loop.
             if(du_more_than == true){ continue;}
@@ -1526,7 +2615,6 @@ Iso_Acessory::Scored_Triangle get_three_atoms_pairs(Fragment& reffrag
             for (unsigned int j = 0; j < heavy_and_du_pairs.size(); j++){
 
                 //assign values to set up a fresh alignment
-                should_align.second.first  = 9999.0;
                 should_align.second.second = 0; 
                 more_than         = false;
            
@@ -1546,7 +2634,7 @@ Iso_Acessory::Scored_Triangle get_three_atoms_pairs(Fragment& reffrag
                 }
 
                 //check if the two Du-Du pair distances are more than a tolerence 
-                more_than = get_diff_dist_two_mol(reffrag,testfrag,temp_triangle,more_than_tol_lnk,false);
+                more_than = get_diff_dist_two_mol(reffrag,testfrag,temp_triangle,parameters.get_dist_tol_lnk(),false);
     
                 //if tolerance is broken, popback and skip 
                 if (more_than == true){temp_triangle.pop_back();  continue;}
@@ -1554,11 +2642,14 @@ Iso_Acessory::Scored_Triangle get_three_atoms_pairs(Fragment& reffrag
                 //if tolerance is within boundaries, align and calc hrmsd.
                 if (more_than == false && temp_triangle.three_pairs.size() == 3){
 
-                    should_align  = get_hrmsd_and_du_angles(reffrag,testfrag,temp_triangle);
+                    should_align  = get_aliscore_and_du_angles(reffrag,testfrag
+                                    ,temp_triangle,parameters.get_bond_angle_tol_lnk()
+                                    ,parameters.get_dist_du_du_inter());
     
                     //if du_du angles are too far away, SKIP; 
                     if (!should_align.first){ temp_triangle.pop_back();  continue;}
-		    sorting_stack.push_back(std::make_pair(should_align.second.first,temp_triangle));
+                    float iso_score = should_align.second.first.get_score(parameters.get_iso_score_sel());
+                    sorting_stack.push_back(std::make_pair(iso_score,temp_triangle));
                     temp_triangle.pop_back();
                 }
             }
@@ -1568,12 +2659,12 @@ Iso_Acessory::Scored_Triangle get_three_atoms_pairs(Fragment& reffrag
         //sort tmp stack to get the best hrmsd score
         try {
             //deactivate each heavy atom 
-            for (unsigned int i =0; i<reffrag.mol.num_atoms;i++){
-                reffrag.mol.atom_active_flags[i] = false;
-            }
-            for (unsigned int i =0; i<testfrag.mol.num_atoms;i++){
-                testfrag.mol.atom_active_flags[i] = false;
-            }
+            //for (unsigned int i =0; i<reffrag.mol.num_atoms;i++){
+            //    reffrag.mol.atom_active_flags[i] = false;
+            //}
+            //for (unsigned int i =0; i<testfrag.mol.num_atoms;i++){
+            //    testfrag.mol.atom_active_flags[i] = false;
+            //}
 
             //sometimes the tmp_stack will have nothing
             //if so, throw a 0 value, so it can be caught 
@@ -1583,26 +2674,89 @@ Iso_Acessory::Scored_Triangle get_three_atoms_pairs(Fragment& reffrag
 
             //sort and get the best hrmsd scoring three_atom_pair
             //and return
-            std::sort(sorting_stack.begin(),sorting_stack.end()
-                      ,[](std::pair<double,Iso_Acessory::Scored_Triangle>  a
-                      ,std::pair<double,Iso_Acessory::Scored_Triangle> b)
-                      {return a.first < b.first;});
+            if (parameters.get_iso_score_sel() == "hrmsd_score" || 
+                    parameters.get_iso_score_sel() == "hms_score"){
+                std::sort(sorting_stack.begin(),sorting_stack.end()
+                          ,[](std::pair<float,Iso_Acessory::Scored_Triangle>  a
+                          ,std::pair<float,Iso_Acessory::Scored_Triangle> b)
+                          {return a.first < b.first;});
+            } else {
 
-            return sorting_stack[0].second;
-            
-        } catch(int error_code) {
-            if (error_code == 0) {
-                std::cout <<  "ERROR_"<< error_code <<": " 
-                          << testfrag.mol.title
-                          <<" is not alignable to referece."
-                          <<" Size of the linker return stack is: 0." 
-                          << std::endl;
+                std::sort(sorting_stack.begin(),sorting_stack.end()
+                          ,[](std::pair<float,Iso_Acessory::Scored_Triangle>  a
+                          ,std::pair<float,Iso_Acessory::Scored_Triangle> b)
+                          {return a.first > b.first;});
+            }
+
+            ////PRINT
+            //std::cout << sorting_stack[0].first << " ";
+            //sorting_stack[0].second.print(reffrag,testfrag);
+
+            for (int si = 0; si<sorting_stack.size(); si++){
+
+	        if (parameters.get_rank()){
+                    float tmpscore =  sorting_stack[si].first;
+	            sorting_stack[si].second.set_vos(tmpscore);
+	        }
+
+                // Check if the bonds that are overlapped have the same bond types
+                Iso_Acessory::Scored_Triangle see_if_bond_overlap = sorting_stack[si].second;
+
+	        ref_neighbhors_du_1 = 
+	            reffrag.mol.get_atom_neighbors(see_if_bond_overlap.three_pairs[0].get_ref());
+	        test_neighbhors_du_1 = 
+	            testfrag.mol.get_atom_neighbors(see_if_bond_overlap.three_pairs[0].get_test());
+
+
+	        ref_neighbhors_du_2 = 
+	            reffrag.mol.get_atom_neighbors(see_if_bond_overlap.three_pairs[1].get_ref());
+	        test_neighbhors_du_2 = 
+	            testfrag.mol.get_atom_neighbors(see_if_bond_overlap.three_pairs[1].get_test());
+       
+                bond_id_ref_first_1 = reffrag.mol.get_bond(see_if_bond_overlap.three_pairs[0].get_ref(),
+                                                               ref_neighbhors_du_1[0]);
+                bond_id_test_first_1 = testfrag.mol.get_bond(see_if_bond_overlap.three_pairs[0].get_test(),
+                                                                 test_neighbhors_du_1[0]);
+
+                bond_id_ref_first_2 = reffrag.mol.get_bond(see_if_bond_overlap.three_pairs[1].get_ref(),
+                                                               ref_neighbhors_du_2[0]);
+                bond_id_test_first_2 = testfrag.mol.get_bond(see_if_bond_overlap.three_pairs[1].get_test(),
+                                                             test_neighbhors_du_2[0]);
+
+                 std::vector<std::string> ref_bond_types {reffrag.mol.bond_types[bond_id_ref_first_1],
+                                                          reffrag.mol.bond_types[bond_id_ref_first_2]};
+
+
+                 std::vector<std::string> test_bond_types {testfrag.mol.bond_types[bond_id_test_first_1],
+                                                           testfrag.mol.bond_types[bond_id_test_first_2]};
+
+                // If they do not have the same bond types, return unalignable
+                if (ref_bond_types[0] != test_bond_types[0]) {
+                    continue;
                 }
+
+                if (ref_bond_types[1] != test_bond_types[1]) {
+                    continue;
+                }
+                return sorting_stack[si].second;
+            } 
+            int size_of_vec =  sorting_stack.size();
+            throw size_of_vec;
+
+        } catch(int error_code) {
+            //if (error_code == 0) {
+            //    std::cout <<  "ERROR_"<< error_code <<": " 
+            //              << testfrag.mol.title
+            //              <<" is not alignable to referece."
+            //              <<" Size of the linker return stack is: "<<error_code<<"." 
+            //              << std::endl;
+	    //}
             return notalignable; 
         }
 
-    //if scaffolds for 3 du atoms and above
-    }else if (reffrag.get_num_du() == testfrag.get_num_du() ){
+    //if SCAFFOLDS for 3 du atoms and above
+    }else if ( reffrag.get_num_du() == testfrag.get_num_du() && 
+               du_du_pairs.size() == (reffrag.get_num_du() * testfrag.get_num_du()) ){
 
         //a special data struct: a VECTOR that contains a VECTOR,
         //which contains a PAIR, where first: cos sim and second: an atom pair
@@ -1629,7 +2783,63 @@ Iso_Acessory::Scored_Triangle get_three_atoms_pairs(Fragment& reffrag
             }
             single_du_du.pop_back();
         }
-        single_du_du.clear();
+        single_du_du.clear_triangle();
+
+	//get info on neighboring atoms
+	std::vector <int> ref_neighbhors_du_1 = 
+	     reffrag.mol.get_atom_neighbors(vec_three_dus_dus[0].three_pairs[0].get_ref());
+	std::vector <int> test_neighbhors_du_1 = 
+	    testfrag.mol.get_atom_neighbors(vec_three_dus_dus[0].three_pairs[0].get_test());
+
+	std::vector <int> ref_neighbhors_du_2 = 
+	     reffrag.mol.get_atom_neighbors(vec_three_dus_dus[0].three_pairs[1].get_ref());
+	std::vector <int> test_neighbhors_du_2 = 
+	    testfrag.mol.get_atom_neighbors(vec_three_dus_dus[0].three_pairs[1].get_test());
+
+        std::vector <int> ref_neighbhors_du_3 = 
+             reffrag.mol.get_atom_neighbors(vec_three_dus_dus[0].three_pairs[2].get_ref());
+        std::vector <int> test_neighbhors_du_3 = 
+            testfrag.mol.get_atom_neighbors(vec_three_dus_dus[0].three_pairs[2].get_test());
+        
+        // Filter out if the bond types for the sidechains between du and heavy atom  
+        // are the same. if not return nothign 
+
+        int bond_id_ref_first_1  =  reffrag.mol.get_bond(vec_three_dus_dus[0].three_pairs[0].get_ref(),
+                                                         ref_neighbhors_du_1[0]);
+        int bond_id_test_first_1 = testfrag.mol.get_bond(vec_three_dus_dus[0].three_pairs[0].get_test(),
+                                                         test_neighbhors_du_1[0]);
+
+        int bond_id_ref_first_2  =  reffrag.mol.get_bond(vec_three_dus_dus[0].three_pairs[1].get_ref(), 
+                                                         ref_neighbhors_du_2[0]);
+        int bond_id_test_first_2 = testfrag.mol.get_bond(vec_three_dus_dus[0].three_pairs[1].get_test(),
+                                                         test_neighbhors_du_2[0]);
+
+        int bond_id_ref_first_3  =  reffrag.mol.get_bond(vec_three_dus_dus[0].three_pairs[2].get_ref(),
+                                                         ref_neighbhors_du_3[0]);
+        int bond_id_test_first_3 = testfrag.mol.get_bond(vec_three_dus_dus[0].three_pairs[2].get_test(),
+                                                         test_neighbhors_du_3[0]);
+
+
+        std::vector<std::string> ref_bond_types {reffrag.mol.bond_types[bond_id_ref_first_1],
+                                                 reffrag.mol.bond_types[bond_id_ref_first_2],
+                                                 reffrag.mol.bond_types[bond_id_ref_first_3]};
+
+
+        std::vector<std::string> test_bond_types {testfrag.mol.bond_types[bond_id_test_first_1],
+                                                  testfrag.mol.bond_types[bond_id_test_first_2],
+                                                  testfrag.mol.bond_types[bond_id_test_first_3]};
+
+        // if there is absolutely no match in bond types for
+        // at least one bond, you must return unalignable.
+        for (unsigned int i =0; i<ref_bond_types.size(); i++){
+            int check = 0;
+            for (unsigned int j =0; j<test_bond_types.size(); j++){
+                if (ref_bond_types[i] == test_bond_types[j]){
+                    check++;
+                }
+            }
+            if (check == 0){return notalignable;}
+        }
     
         //loop through vec_three_du_du where we can assess if the 
         //distances of corresponding du-du distances between two mol
@@ -1637,14 +2847,14 @@ Iso_Acessory::Scored_Triangle get_three_atoms_pairs(Fragment& reffrag
         std::vector <bool> vec_of_bool {};
         for (unsigned int i = 0;i < vec_three_dus_dus.size(); i++){
             //too check if the du-du distances are at least matching
-            du_more_than = get_diff_dist_two_mol(reffrag,testfrag,vec_three_dus_dus[i],1.0,false);
+            du_more_than = get_diff_dist_two_mol(reffrag,testfrag,vec_three_dus_dus[i]
+						,parameters.get_dist_du_du_scf(),false);
             vec_of_bool.push_back(du_more_than);
         }
  
         //to check of the vec_of_bool and vec_of_dudus have the same size
         try {
             if (vec_of_bool.size() != vec_three_dus_dus.size()){ throw 0;}
-            
 
             unsigned int num_of_false =0;
             unsigned int num_of_true  =0;
@@ -1661,37 +2871,38 @@ Iso_Acessory::Scored_Triangle get_three_atoms_pairs(Fragment& reffrag
         }catch (int error_code){
 
             if (error_code == 0){
-                std::cout << "ERROR "<< error_code << ": "
-                          <<" Aligning " <<testfrag.mol.title << " and" << reffrag.mol.title
-                          <<" are giving an error...REASON:\n" 
-                          <<" std::vector<std::pair<float,std::pair<int,int>>> Iso_Align::select_three_atoms_pairs():"  
-                          <<" error in matching vector size between 'vec_of_bool' and 'vec_three_dus_dus'."
-                          <<" returning empty scaffold vector..." 
-                          << std::endl;
+                //std::cout << "ERROR "<< error_code << ": "
+                //          <<" Aligning " <<testfrag.mol.title << " and" << reffrag.mol.title
+                //          <<" are giving an error...REASON:\n" 
+                //          <<" std::vector<std::pair<float,std::pair<int,int>>> Iso_Align::select_three_atoms_pairs():"  
+                //          <<" error in matching vector size between 'vec_of_bool' and 'vec_three_dus_dus'."
+                //          <<" returning empty scaffold vector..." 
+                //          << std::endl;
                 return notalignable;
             }else if (error_code == 1){
-                std::cout << "ALIGNABLE " << error_code <<": " 
-                          << testfrag.mol.title 
-                          <<" All Du-Du distances between ref and testmol"
-                          <<" are tolerable and are alignable."
-                          << std::endl;
+                //std::cout << "ALIGNABLE " << error_code <<": " 
+                //          << testfrag.mol.title 
+                //          <<" All Du-Du distances between ref and testmol"
+                //          <<" are tolerable and are alignable."
+                //          << std::endl;
             }else if (error_code == 2){
-                std::cout << "WARNING " << error_code <<": " 
-                          << testfrag.mol.title << " is could be differet from " 
-                          << reffrag.mol.title  << "."
-                          <<" Some Du-Du distances could be unalignable."
-                          <<" Double check on the alignments."
-                          << std::endl; 
+                //std::cout << "WARNING " << error_code <<": " 
+                //          << testfrag.mol.title << " is could be differet from " 
+                //          << reffrag.mol.title  << "."
+                //          <<" Some Du-Du distances could be unalignable."
+                //          <<" Double check on the alignments."
+                //          << std::endl; 
             }else if (error_code == 3){
-                std::cout << "ERROR " << error_code <<": " 
-                          << testfrag.mol.title << " is too differet from " 
-                          << reffrag.mol.title  << "."
-                          <<" Du-Du distances are too different. Can't be aligned."
-                          <<" Returning empty vector."
-                          << std::endl;  
+                //std::cout << "ERROR " << error_code <<": " 
+                //          << testfrag.mol.title << " is too differet from " 
+                //          << reffrag.mol.title  << "."
+                //          <<" Du-Du distances are too different. Can't be aligned."
+                //          <<" Returning empty vector."
+                //          << std::endl;  
                 return notalignable;
             }
         }
+
 
 
         //this is where we align and check.
@@ -1701,10 +2912,11 @@ Iso_Acessory::Scored_Triangle get_three_atoms_pairs(Fragment& reffrag
             if (!vec_of_bool[i]){
 
                 should_align.first         = false;
-                should_align.second.first  = 9999.0;
                 should_align.second.second = 0;
 
-                should_align   = get_hrmsd_and_du_angles(reffrag,testfrag,vec_three_dus_dus[i]);
+                should_align   = get_aliscore_and_du_angles(reffrag,testfrag,vec_three_dus_dus[i]
+                                                    ,parameters.get_bond_angle_tol_scf()
+                                                    ,parameters.get_dist_du_du_inter());
             
                 //if du_du angles are too faraway SKIP!
                 if (!should_align.first){ 
@@ -1712,7 +2924,8 @@ Iso_Acessory::Scored_Triangle get_three_atoms_pairs(Fragment& reffrag
                     continue;
                 }
                 vec_three_dus_dus[i].is_alignable();
-                sorting_stack.push_back(std::make_pair(should_align.second.first,vec_three_dus_dus[i]));
+                float iso_score = should_align.second.first.get_score(parameters.get_iso_score_sel());
+                sorting_stack.push_back(std::make_pair(iso_score,vec_three_dus_dus[i]));
             }
             vec_three_dus_dus[i].is_not_alignable();
         }
@@ -1722,36 +2935,105 @@ Iso_Acessory::Scored_Triangle get_three_atoms_pairs(Fragment& reffrag
         try {
 
             //deactivate each heavy atom 
-            for (unsigned int i =0; i<reffrag.mol.num_atoms;i++){
-                reffrag.mol.atom_active_flags[i] = false;
-            }
-            for (unsigned int i =0; i<testfrag.mol.num_atoms;i++){
-                testfrag.mol.atom_active_flags[i] = false;
-            }
+            //for (unsigned int i =0; i<reffrag.mol.num_atoms;i++){
+            //    reffrag.mol.atom_active_flags[i] = false;
+            //}
+            //for (unsigned int i =0; i<testfrag.mol.num_atoms;i++){
+            //    testfrag.mol.atom_active_flags[i] = false;
+            //}
 
             if (sorting_stack.empty()) { throw 0;}
 
             //sort tmp stack to get the best hrmsd score
-            std::sort(sorting_stack.begin(),sorting_stack.end()
-                      ,[](std::pair<double,Iso_Acessory::Scored_Triangle>  a
-                      ,std::pair<double,Iso_Acessory::Scored_Triangle> b)
-                      {return a.first < b.first;});
+            if (parameters.get_iso_score_sel() == "hrmsd_score" || parameters.get_iso_score_sel() == "hms_score"){
+                std::sort(sorting_stack.begin(),sorting_stack.end()
+                          ,[](std::pair<float,Iso_Acessory::Scored_Triangle>  a
+                          ,std::pair<float,Iso_Acessory::Scored_Triangle> b)
+                          {return a.first < b.first;});
+            } else {
+                std::sort(sorting_stack.begin(),sorting_stack.end()
+                          ,[](std::pair<float,Iso_Acessory::Scored_Triangle>  a
+                          ,std::pair<float,Iso_Acessory::Scored_Triangle> b)
+                          {return a.first > b.first;});
+            }
 
-            return sorting_stack[0].second;
+            for (int si = 0; si < sorting_stack.size(); si++){
+
+	        if (parameters.get_rank()){
+	            //set the hrmsd score for later ranking
+                    float tmpscore = sorting_stack[si].first;
+	            sorting_stack[si].second.set_vos(tmpscore);
+	        }
+
+                // Check if the bonds that are overlapped have the same bond types
+                Iso_Acessory::Scored_Triangle see_if_bond_overlap = sorting_stack[si].second;
+
+	        ref_neighbhors_du_1 = 
+	            reffrag.mol.get_atom_neighbors(see_if_bond_overlap.three_pairs[0].get_ref());
+	        test_neighbhors_du_1 = 
+	            testfrag.mol.get_atom_neighbors(see_if_bond_overlap.three_pairs[0].get_test());
+
+	        ref_neighbhors_du_2 = 
+	            reffrag.mol.get_atom_neighbors(see_if_bond_overlap.three_pairs[1].get_ref());
+	        test_neighbhors_du_2 = 
+	            testfrag.mol.get_atom_neighbors(see_if_bond_overlap.three_pairs[1].get_test());
+
+	        ref_neighbhors_du_3 = 
+	            reffrag.mol.get_atom_neighbors(see_if_bond_overlap.three_pairs[2].get_ref());
+	        test_neighbhors_du_3 = 
+	            testfrag.mol.get_atom_neighbors(see_if_bond_overlap.three_pairs[2].get_test());
+       
+                bond_id_ref_first_1 = reffrag.mol.get_bond(see_if_bond_overlap.three_pairs[0].get_ref(),
+                                                               ref_neighbhors_du_1[0]);
+                bond_id_test_first_1 = testfrag.mol.get_bond(see_if_bond_overlap.three_pairs[0].get_test(),
+                                                                 test_neighbhors_du_1[0]);
+
+                bond_id_ref_first_2 = reffrag.mol.get_bond(see_if_bond_overlap.three_pairs[1].get_ref(),
+                                                               ref_neighbhors_du_2[0]);
+                bond_id_test_first_2 = testfrag.mol.get_bond(see_if_bond_overlap.three_pairs[1].get_test(),
+                                                             test_neighbhors_du_2[0]);
+
+                bond_id_ref_first_3 = reffrag.mol.get_bond(see_if_bond_overlap.three_pairs[2].get_ref(),
+                                                               ref_neighbhors_du_3[0]);
+                bond_id_test_first_3 = testfrag.mol.get_bond(see_if_bond_overlap.three_pairs[2].get_test(),
+                                                             test_neighbhors_du_3[0]);
+
+                std::vector<std::string> ref_bond_types {reffrag.mol.bond_types[bond_id_ref_first_1],
+                                                         reffrag.mol.bond_types[bond_id_ref_first_2],
+                                                         reffrag.mol.bond_types[bond_id_ref_first_3]};
+
+
+                std::vector<std::string> test_bond_types {testfrag.mol.bond_types[bond_id_test_first_1],
+                                                          testfrag.mol.bond_types[bond_id_test_first_2],
+                                                          testfrag.mol.bond_types[bond_id_test_first_3]};
+
+                // If they do not have the same bond types on the bond overlap, return unalignable
+                if (ref_bond_types[0] != test_bond_types[0] ) {continue;}
+
+                if (ref_bond_types[1] != test_bond_types[1] ) {continue;}
+
+                if (ref_bond_types[2] != test_bond_types[2] ) {continue;}
+
+                return sorting_stack[si].second;
+            }
+
+            int size_of_vec =  sorting_stack.size();
+            throw size_of_vec;
+
         }catch (int size_of_stack){
-            std::cout << testfrag.mol.title 
-                      << " is not alignable to reference. Size of stack is: " 
-                      << size_of_stack 
-                      << std::endl;
+            //std::cout << testfrag.mol.title 
+            //          << " is not alignable to reference. Size of stack is: " 
+            //          << size_of_stack 
+            //          << std::endl;
             return notalignable;  
         }
 
     }else if (reffrag.get_num_du() != testfrag.get_num_du()){
-        std::cout << testfrag.mol.title 
-                  << " is not alignable to reference due to different num of attachment points. " 
-                  << "refmol num of Du: " << reffrag.get_num_du() << " testmol num of Du: " << testfrag.get_num_du()  
-                  << " Returning an empty vector."
-                  << std::endl; 
+        //std::cout << testfrag.mol.title 
+        //          << " is not alignable to reference due to different num of attachment points. " 
+        //          << "refmol num of Du: " << reffrag.get_num_du() << " testmol num of Du: " << testfrag.get_num_du()  
+        //          << " Returning an empty vector."
+        //          << std::endl; 
         return notalignable;
     } 
 
@@ -1759,6 +3041,7 @@ Iso_Acessory::Scored_Triangle get_three_atoms_pairs(Fragment& reffrag
     return notalignable;
 }
 
+//get the legnths for the twoD atom plots
 float twoD_length(std::pair<float,float> first, std::pair<float, float> second)
 {
     float           len;
@@ -1794,22 +3077,17 @@ float area_pentagon(std::vector<std::pair <float,float>> half_sq, float bin )
     }
     //calcualte the area of the trapezoid
     //b1 is the length of the left of the trapezoid
-    b1 =  twoD_length({half_sq[0].first,y2}, {half_sq[0].first, 0});
+    b1 = twoD_length({half_sq[0].first,y2}, {half_sq[0].first, 0});
     
     //b2 is the lenght of the right of the trapzoid
     b2 = twoD_length({half_sq[3].first,y1},{half_sq[3].first, 0}); 
     area1 = (b1 + b2)/2 * h1;
 
-    //std::cout << "area1 " << area1 <<std::endl;
     //calculate the area of the trianlge that sits on top of the trapezoid
     b3 = twoD_length(half_sq[1],{bin,y1});
     h2 = twoD_length(half_sq[1],{bin-1,y2});  
     area2 = (b3 * h2)/2;
-    //std::cout << "area2 " << area2 << std::endl;
-    //std::cout << b3 << " b3 and h2 " << h2 << std::endl;
-    //std::cout << half_sq[3].first << " half_sq[3].first" << std::endl;
-    //std::cout << b1 << " b1 and b2 " << b2 << std::endl;
-    //std::cout << y1 << " y1 and y2 " << y2 << std::endl;
+
     //return the total area
     return area1 + area2;
 }
@@ -1870,8 +3148,6 @@ std::vector<std::pair <float,float>> get_plot_triangle_coord(float center, float
              half_sq_coordinates[i].second = y;
              half_sq_coordinates[i].first = max_bin;
          } 
-         
-         //std::cout<<half_sq_coordinates[i].first << " " << half_sq_coordinates[i].second << std::endl;
     } 
     return half_sq_coordinates;
 }
@@ -1881,7 +3157,7 @@ std::vector<std::pair <float,float>> get_plot_triangle_coord(float center, float
 //2nd step -> get the 2D atom plots for each atom within the internal structure
 //3rd step -> calculate the similarity between each atom freq_dist 
 //4th step -> align
-std::vector <float> get_twoD_atom_plots(std::vector<float> vec_of_centers){
+std::vector <float> get_twoD_atom_plots(std::vector<float> & vec_of_centers){
 
     //these are set min and max bins
     float max_bin = 6.0;
@@ -1894,9 +3170,12 @@ std::vector <float> get_twoD_atom_plots(std::vector<float> vec_of_centers){
     std::vector<float> atom_plot(int(max_bin),0.0);
 
     std::vector<std::pair <float,float>> single_tri_coords {};
-   
-    for (unsigned int i = 0; i<vec_of_centers.size(); i++){
-        single_tri_coords = get_plot_triangle_coord(vec_of_centers[i],min_bin,max_bin);  
+
+    
+    std::vector<float> vec_of_center_temp = vec_of_centers;
+
+    for (unsigned int i = 0; i<vec_of_center_temp.size(); i++){
+        single_tri_coords = get_plot_triangle_coord(vec_of_center_temp[i],min_bin,max_bin);  
         for (int z=0; z<int(max_bin); z++){
             if (single_tri_coords[1].first == z) {
                 atom_plot[z-1] = atom_plot[z-1] + 0.5;         
@@ -1905,53 +3184,38 @@ std::vector <float> get_twoD_atom_plots(std::vector<float> vec_of_centers){
             } 
 
             if (single_tri_coords[1].first > z-1 && single_tri_coords[1].first < z ) {
-                //std::cout << "lol " <<  single_half_sq[1].first << " " << z<< std::endl;
                 float  left_area=0;
                 float   mid_area=0;
                 float right_area=0;
-                //std::cout << "midarea start ===========" << std::endl;
-                ////check if left side of triangle is hitting a bin
-                ////if (single_half_sq[0].second != 0) {
+
+		//calculate the mid_area that is shaped as a pentagon.
                 mid_area =  area_pentagon(single_tri_coords,z);  
-                //    std::cout<< "mid_area left" << mid_area << std::endl;
-                ////} 
-                ////or check if the right side of the triangle is hitting a bin
-                ////if (single_half_sq[3].second != 0) {
-                ////    mid_area = area_pentagon(single_half_sq,z);  
-                ////    std::cout<< "mid_area right" << mid_area << std::endl;
-                ////}
-                //std::cout << "midarea end   ===========" << std::endl;
+
                 //check if there is a triangle in the bin before or after the current bin number
                 tmp_pair   = area_triangle(single_tri_coords,z);
                 left_area  = tmp_pair.first;
                 right_area = tmp_pair.second;
-                     
-                atom_plot[z-1] = atom_plot[z-1] + mid_area;
-                atom_plot[z-2] = atom_plot[z-2] + left_area;
-                atom_plot[z]   = atom_plot[z]   + right_area;
  
-                //right_tmp_length =  twoD_length(single_half_sq[3], {single_half_sq[3].first, 0});
-
-                //std::cout << "left LENGTH " << left_tmp_length << " |right LENGTH" << right_tmp_length << std::endl;
+                atom_plot[z-1] = atom_plot[z-1] + mid_area;
+		if (z != 1){
+		    atom_plot[z-2] = atom_plot[z-2] + left_area;
+		}
+                atom_plot[z]   =   atom_plot[z] + right_area;
 
             }
         }
+	single_tri_coords.clear();
     }
+
+    single_tri_coords.clear();
+    vec_of_center_temp.clear();
 
     return atom_plot; 
 };
 
-float calc_2atoms_length(Fragment  frag, int origin, int target)
-{
-    float           len;
 
-    len = sqrt( ( (frag.mol.x[origin] - frag.mol.x[target]) * (frag.mol.x[origin] - frag.mol.x[target]) )   
-             +  ( (frag.mol.y[origin] - frag.mol.y[target]) * (frag.mol.y[origin] - frag.mol.y[target]) )
-             +  ( (frag.mol.z[origin] - frag.mol.z[target]) * (frag.mol.z[origin] - frag.mol.z[target]) ) ); 
-    return len;
-};
-
-std::vector<float> get_a_radial_dist(Fragment & frag, unsigned int atom_num){
+std::vector<float> 
+Iso_Align::get_a_radial_dist(Fragment & frag, unsigned int atom_num){
 
     std::vector<float> list_of_radial_dist {};
     float tmplength = 0;  
@@ -1963,6 +3227,7 @@ std::vector<float> get_a_radial_dist(Fragment & frag, unsigned int atom_num){
         }
            
         tmplength = calc_2atoms_length(frag,atom_num,i);
+
         //vector filled with radial distances amongst each atom in the internal structure that comes
         //from the "atom_num" atom position of the internal structure. 
         list_of_radial_dist.push_back(tmplength);
@@ -1973,7 +3238,7 @@ std::vector<float> get_a_radial_dist(Fragment & frag, unsigned int atom_num){
     //get twoD_atom_plots
     return_radial_areas_vec = get_twoD_atom_plots(list_of_radial_dist);
     
-
+    list_of_radial_dist.clear();
     return return_radial_areas_vec;
 }
 
@@ -1986,7 +3251,7 @@ Iso_Align::get_all_radial_dist(Fragment& frag)
     std::vector<float> tmp_radial{};
 
 
-    for (int origin; origin<frag.mol.num_atoms;origin++){
+    for (int origin=0; origin<frag.mol.num_atoms;origin++){
         for ( int target=0; target<frag.mol.num_atoms; target++){
             if (frag.mol.atom_names[origin] == frag.mol.atom_names[target]){
                 continue;
@@ -2004,7 +3269,7 @@ Iso_Align::get_all_radial_dist(Fragment& frag)
         tmp_radial = get_twoD_atom_plots(list_of_radial_dist);
 
         frag.set_radial_dist_distri(origin,tmp_radial);
-
+     
         list_of_radial_dist.clear();
         tmp_radial.clear();
     }
@@ -2012,45 +3277,264 @@ Iso_Align::get_all_radial_dist(Fragment& frag)
 
 //The command where you call the align method
 void
-Iso_Align::align(Fragment& reffrag, std::vector<Fragment>& vec_testfrags, Iso_Parm parameters){
+Iso_Align::align(Fragment& reffrag, std::vector<Fragment>& vec_testfrags, 
+                 Iso_Parm  parameters){
 
     int num_frags =                 vec_testfrags.size();
     std::vector<Iso_Acessory::Scored_Triangle>    three_atoms_pairs {};
     std::vector<std::vector<float>> tmp_centroid_coor {}; 
 
-    reffrag.allocate_radial_dist_distri();
-    reffrag.calc_num_du();
-    reffrag.calc_radial_dist_distri();
-
-    for (unsigned int i = 0; i<vec_testfrags.size(); i++){
-        vec_testfrags[i].allocate_radial_dist_distri();
-        vec_testfrags[i].calc_num_du();
-        vec_testfrags[i].calc_radial_dist_distri();
+    //calculate the radial dist of ref frag
+    if (!reffrag.is_it_radial_set() && !reffrag.alloc_set){
+        reffrag.allocate_radial_dist_distri();
+        reffrag.calc_num_du();
+        reffrag.calc_radial_dist_distri();
     }
 
+    //calculate the radial dist in test frags
+    for (unsigned int i = 0; i<vec_testfrags.size(); i++){
+        if (!vec_testfrags[i].is_it_radial_set() && !vec_testfrags[i].alloc_set){
+            vec_testfrags[i].allocate_radial_dist_distri();
+            vec_testfrags[i].calc_num_du();
+            vec_testfrags[i].calc_radial_dist_distri();
+        }
+    }
+
+    //returns best triagnle from the three atom pairs
     for (unsigned int i =0; i<num_frags; i++){
         Iso_Acessory::Scored_Triangle best_triangle;
-        best_triangle = get_three_atoms_pairs(reffrag,vec_testfrags[i]);
+        best_triangle = get_three_atoms_pairs(reffrag,vec_testfrags[i],parameters);
 
 
+	//If empty, there are no viable alignments, skip
         if(best_triangle.three_pairs.empty()) {
             vec_testfrags[i].is_not_iso_aligned();
+	    vec_testfrags[i].set_iso_score(9998);
             continue;
         }    
+	//marks the frags as iso alignable
         vec_testfrags[i].is_iso_aligned();
+
+	//calculates the centroids
         tmp_centroid_coor = get_centroid(reffrag.mol
                                         ,vec_testfrags[i].mol
                                         ,best_triangle
                                         ,true);
+	//3D aligns the molecules
         align_molcentroid(reffrag.mol,vec_testfrags[i].mol,tmp_centroid_coor,best_triangle);
 
-        best_triangle.clear();
+	//if rank is turned on, set teh hrmsd score
+	if (parameters.get_rank()){
+            vec_testfrags[i].set_iso_score(best_triangle.get_vos());	
+	}
+
+        best_triangle.clear_triangle();
     }
 
-    reffrag.clear_radial_dist_distri();
-
-    for (unsigned int i = 0; i<vec_testfrags.size(); i++){
-	vec_testfrags[i].clear_radial_dist_distri();
+    if (parameters.get_rank()){
+	//sort the pairs based on cos_similarity
+	//sort the fragments based on their iso_frag hrmsd
+    	Iso_Align::frag_sort(vec_testfrags
+    	         ,Iso_Align::fragment_sort); 
     }
 
 };
+
+void
+Iso_Align::align(Fragment& reffrag, std::vector<Fragment>& vec_testfrags, 
+                 Iso_Parm  parameters, std::vector<Iso_Acessory::Scored_Triangle> & best_triangles){
+
+    int num_frags =                 vec_testfrags.size();
+    std::vector<Iso_Acessory::Scored_Triangle>    three_atoms_pairs {};
+    std::vector<std::vector<float>> tmp_centroid_coor {}; 
+
+    //calculate the radial dist of ref frag
+    if (!reffrag.is_it_radial_set() && !reffrag.alloc_set){
+        reffrag.allocate_radial_dist_distri();
+        reffrag.calc_num_du();
+        reffrag.calc_radial_dist_distri();
+    }
+
+    //calculate the radial dist in test frags
+    for (unsigned int i = 0; i<vec_testfrags.size(); i++){
+        if (!vec_testfrags[i].is_it_radial_set() && !vec_testfrags[i].alloc_set){
+            vec_testfrags[i].allocate_radial_dist_distri();
+            vec_testfrags[i].calc_num_du();
+            vec_testfrags[i].calc_radial_dist_distri();
+        }
+    }
+    //returns best triagnle from the three atom pairs
+    for (unsigned int i =0; i<num_frags; i++){
+        Iso_Acessory::Scored_Triangle best_triangle;
+        best_triangle = get_three_atoms_pairs(reffrag,vec_testfrags[i],parameters);
+
+        vec_testfrags[i].best_tri = best_triangle;
+        best_triangles.push_back(best_triangle);
+
+
+	//If empty, there are no viable alignments, skip
+        if(best_triangle.three_pairs.empty()) {
+            vec_testfrags[i].is_not_iso_aligned();
+	    vec_testfrags[i].set_iso_score(9998);
+            continue;
+        }    
+	//marks the frags as iso alignable
+        vec_testfrags[i].is_iso_aligned();
+
+	//calculates the centroids
+        tmp_centroid_coor = get_centroid(reffrag.mol
+                                        ,vec_testfrags[i].mol
+                                        ,best_triangle
+                                        ,true);
+	//3D aligns the molecules
+        align_molcentroid(reffrag.mol,vec_testfrags[i].mol,tmp_centroid_coor,best_triangle);
+
+	//set teh score
+        vec_testfrags[i].set_iso_score(best_triangle.get_vos());	
+
+        best_triangle.clear_triangle();
+    }
+
+    if (parameters.get_rank()){
+
+        Iso_Score::Score tmp_score;
+
+        for (unsigned int i=0; i<vec_testfrags.size(); i++){
+            tmp_score.calc_score(reffrag,vec_testfrags[i]);
+            vec_testfrags[i].set_iso_score(
+                tmp_score.get_score(parameters.get_iso_rank_score_sel()));
+        }       
+
+        if (parameters.get_iso_rank_reverse()==false){
+            if (parameters.get_iso_rank_score_sel()== "hrmsd_score" || parameters.get_iso_rank_score_sel()== "hms_score"){
+	        //sort the pairs based on cos_similarity
+	        //sort the fragments based on their iso_frag hrmsd
+    	        Iso_Align::frag_sort(vec_testfrags
+                         ,Iso_Align::fragment_sort_reverse); 
+            }else{
+    	        Iso_Align::frag_sort(vec_testfrags
+    	                 ,Iso_Align::fragment_sort); 
+            }
+        }else{
+            if (parameters.get_iso_rank_score_sel()== "hrmsd_score" || parameters.get_iso_rank_score_sel()== "hms_score"){
+	        //sort the pairs based on cos_similarity
+	        //sort the fragments based on their iso_frag hrmsd
+    	        Iso_Align::frag_sort(vec_testfrags
+                         ,Iso_Align::fragment_sort); 
+            }else{
+    	        Iso_Align::frag_sort(vec_testfrags
+    	                 ,Iso_Align::fragment_sort_reverse); 
+            }
+        }
+    }
+  
+};
+// +++++++++++++++++++++++++++++++++++++++++
+// Activate all of the atoms AND bonds in a given DOCKMol
+void
+activate_mol( DOCKMol & mol )
+{
+     // Iterate through all atoms and set atom_active_flag to true
+     for (int i=0; i<mol.num_atoms; i++){
+               mol.atom_active_flags[i] = true;
+     }    
+
+     // Iterate through all bonds and set bond_active_flag to true
+     for (int i=0; i<mol.num_bonds; i++){
+               mol.bond_active_flags[i] = true;
+     }    
+
+    return;
+
+} // end DN_Build::activate_mol()
+
+// Function to find the possible
+// permutations
+void 
+Iso_Align::permutations( std::vector<std::vector<Iso_Acessory::A_Pair> >& res,
+                   std::vector< Iso_Acessory::A_Pair > nums, int l, int h)
+{
+    // Base case
+    // Add the vector to result and return
+    if (l == h) {
+        res.push_back(nums);
+        return;
+    }
+ 
+    // Permutations made
+    for (int i = l; i <= h; i++) {
+ 
+        // Swapping
+        swap(nums[l], nums[i]);
+ 
+        // Calling permutations for
+        // next greater value of l
+        permutations(res, nums, l + 1, h);
+ 
+        // Backtracking
+        swap(nums[l], nums[i]);
+    }
+}
+
+// Function to get the permutations
+std::vector<std::vector<Iso_Acessory::A_Pair> > 
+Iso_Align::permute( std::vector< Iso_Acessory::A_Pair >& nums)
+{
+    // Declaring result variable
+    std::vector<std::vector<Iso_Acessory::A_Pair> > res;
+    int x = nums.size() - 1;
+ 
+    // Calling permutations for the first
+    // time by passing l
+    // as 0 and h = nums.size()-1
+    permutations(res, nums, 0, x);
+    return res;
+}
+
+
+Fragment
+Iso_Align::align_two_frags(Fragment reffrag, Fragment testfrag){
+
+    Hungarian_RMSD h;    
+    std::vector<std::vector<Iso_Acessory::A_Pair> > all_poss_pairs
+        = permute(testfrag.best_tri.three_pairs);
+
+    std::vector<Fragment> poss_frags {};
+    std::vector<float> poss_hrmsd {};
+
+    for ( int i =0; i < all_poss_pairs.size(); i++){
+ 
+        Fragment copy_ref = reffrag;
+        Fragment copy_test = testfrag;
+ 
+        Iso_Acessory::Scored_Triangle BEST_TRI;
+        BEST_TRI.three_pairs = all_poss_pairs[i];
+
+        //Grab both centroids
+        std::vector<std::vector<float>> 
+            centroid_coor = get_centroid(reffrag.mol
+                                    ,testfrag.mol
+                                    ,BEST_TRI
+                                    ,true);
+
+        align_molcentroid(copy_ref.mol,copy_test.mol,centroid_coor, BEST_TRI);
+
+        std::pair <float, int> h_result = 
+            h.calc_Hungarian_RMSD_dissimilar(reffrag.mol,copy_test.mol); 
+
+        poss_frags.push_back( copy_test );
+        poss_hrmsd.push_back( h_result.first );
+  
+    }
+
+    std::vector<int> indices(poss_hrmsd.size());
+    std::iota(indices.begin(),indices.end(),0);
+    std::sort(indices.begin(), indices.end(),
+              [&](int A, int B) -> bool {
+                   return poss_hrmsd[A]
+                        < poss_hrmsd[B];
+               });  
+
+    return poss_frags[indices[0]];
+
+}

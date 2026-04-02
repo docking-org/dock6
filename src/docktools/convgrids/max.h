@@ -42,7 +42,8 @@ c  maxlig--maximum number of ligand atoms
       parameter (maxlst=10000)
 c  maxlst--maximum number of ligands saved (per list)
       integer maxgrd
-      parameter (maxgrd=2500000)
+      !parameter (maxgrd=2500000)
+      parameter (maxgrd=10000000)
 c  maxgrd--maximum number of points in grids for force field scoring
       integer maxtyv
       parameter (maxtyv=50)
@@ -57,10 +58,13 @@ c  maxpts--maximum number of ligand or receptor centers
 c  maxwid--maximum number of items in a bin (number of nodes + 2)
 c  maxnod--maximum number of bins per ligand or receptor center
       integer nsize
-      parameter (nsize=65)
+      !parameter (nsize=65)
+      !parameter (nsize=100)
+      !parameter (nsize=193)
+      !parameter (nsize=194)
 c  nsize--points per side of DelPhi electrostatic potential grid
       integer maxdix,maxdiy,maxdiz
-      parameter (maxdix=150, maxdiy=150, maxdiz=150)
+      parameter (maxdix=200, maxdiy=200, maxdiz=200)
 c  maxdim--maximum points per side of grid for contact scoring
       integer maxctr
       parameter (maxctr=12)

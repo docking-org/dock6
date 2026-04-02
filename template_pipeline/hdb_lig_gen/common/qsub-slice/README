@@ -1,0 +1,40 @@
+qsub-slice
+==========
+
+This is a set of scripts for SGE/Grid-Engine that make running standard 
+shell scripts in a map-reduce like fashion very easy. The qsub-mr script
+takes (at minium) a line-wise input file and a map script to run. 
+
+Workflow Overview
+-----------------
+
+ * Split the input file into M slices of N lines within the inputs/ direcotry
+ * Create an SGE job with M individual tasks running the "map wrapper"
+ * The stdout and stderr files for each task will be created in logs/
+ * The map wrapper performs the following steps:
+  - Identify the correct input file for the current task
+  - Create a task-specfic local scratch directory
+  - Run the specified map script with the task's input file as an argument
+  - Upon completion (or failure) move the contents of the scratch directory
+    into the outputs/ directory with a name corresponding to the original 
+    input file.
+ * If a reduce script is supplied, submit it to run once all tasks finish
+
+Quick Notes
+-----------
+
+ * The number of lines per task can be adjusted with the -l argument
+ * Map scripts can be called iteratively with the contents of each
+   line of the input (opposed to being called with the path to the
+   input file) by providing the -I argument. 
+ * The maximum number of running tasks can be controlled via -tc
+ * SGE/Grid-engine arguments are extracted from the map script and
+   added to the submission arguments by default
+ * For very large submissions (more than a few thousand tasks) consider
+   using the qsub-mr-meta script, which further subdivides the overall
+   work into multiple jobs to manage directory usage.
+ * You can provide an environment to source prior to each map/reduce task
+   via the -s argument. Note this currently expects an sh/bash file.
+ * Eventually a native tcsh implementation will be via "-S tcsh"
+
+

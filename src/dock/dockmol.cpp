@@ -32,6 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <iostream>
 #include <sstream>
+#include <iomanip> 
 #include <string.h>
 #include "dockmol.h"
 
@@ -125,6 +126,614 @@ RDKit::Bond::BondType select_bond_type( std::string bond_order ){
     return bond_type;
 }
 #endif
+
+/***********************************************************************/
+
+// This is to retain the HEADER information of a mol2 molecule.
+// While it is reading into a mol2
+bool
+Read_Mol2_retain(DOCKMol & mol, istream & ifs, bool read_color, bool read_solvation,
+          bool read_amber)
+{
+    char            line[1000];
+    int             count;
+    int             i;
+    int             n1;
+    bool            atom_line;
+    char            typ[100],
+                    col[100];
+
+    char            tmp1[100],
+                    tmp2[100],
+                    jwu_tmp4[100],
+		            jwu_tmp3[100],
+                    subst_name[100];
+    int             natoms,
+                    nbonds,
+                    nresidues; //defined by jwu
+    string          l1,
+                    l2,
+                    l3,
+                    l4,
+                    l5,
+                    l6;
+    float           f1,
+                    f2,
+                    f3,
+                    f4,
+                    f5;
+
+    bool            found_solvation = false;
+    bool            found_color = false;
+    bool            found_amber = false;
+
+    bool            check_cols = false;
+    bool            seven_columns = false; // default @<TRIPOS>ATOM line has 9 columns. By GDRM
+    //int             bad_line{0}; // number of bad atom lines. By GDRM
+
+    float           retained_grid = -999999.12345; 
+    float           retained_int_eng = -999999.12345;
+    float           retained_vdw_comp = -999999.12345;
+    float           retained_es_comp = -999999.12345;
+
+    int             retained_rot_b = -1; 
+    float           retained_mol_wt = -1.0;
+    int             retained_hb_acceptors = -1;
+    int             retained_hb_donors = -1;
+    float           retained_formal_charge = -999999.12345;
+
+    // init state vars
+    atom_line = false;
+
+    // read forward until the tripos molecule tag is reached
+    for (;;) {
+        if (!ifs.getline(line, 1000)) {
+            mol.clear_molecule();
+            // cout << endl << "ERROR: Ligand file empty.  Program will
+            // terminate." << endl;
+            return false;
+        }
+
+        if (!strncmp(line, "@<TRIPOS>MOLECULE", 17))
+            break;
+
+        std::string tmp_string = line; 
+        if (tmp_string.find("Grid_Score:")!=string::npos){
+            std::istringstream iss (tmp_string);
+            std::vector<std::string> string_vec{};
+            std::string tmp_str;
+            while(iss >> tmp_str){
+                string_vec.push_back(tmp_str);
+            }
+
+            std::ostringstream out;
+
+            if (string_vec.size() == 3) {
+
+                out << std::setprecision(20) << stof(string_vec[2]);
+                float precise = std::stof(out.str());
+
+                retained_grid = precise;
+            }
+
+            if (string_vec.size() == 2) {
+                vector < string >  tokens;
+                Tokenizer(string_vec[1], tokens, *":"); 
+
+                out << std::setprecision(20) << stof(tokens[1]);
+                float precise = std::stof(out.str());
+
+                retained_grid = precise;
+            }
+        }
+
+        if (tmp_string.find("Internal_energy_repulsive:")!=string::npos){
+            std::istringstream iss (tmp_string);
+            std::vector<std::string> string_vec{};
+            std::string tmp_str;
+            while(iss >> tmp_str){
+                string_vec.push_back(tmp_str);
+            }
+            std::ostringstream out;
+            if (string_vec.size() == 3) {
+
+                out << std::setprecision(20) << stof(string_vec[2]);
+                float precise = std::stof(out.str());
+
+                retained_int_eng = precise;
+            }
+
+            if (string_vec.size() == 2) {
+                vector < string >  tokens;
+                Tokenizer(string_vec[1], tokens, *":"); 
+
+                out << std::setprecision(20) << stof(tokens[1]);
+                float precise = std::stof(out.str());
+
+                retained_int_eng = precise;
+            }
+        }
+
+        if (tmp_string.find("Grid_vdw_energy:")!=string::npos){
+            std::istringstream iss (tmp_string);
+            std::vector<std::string> string_vec{};
+            std::string tmp_str;
+            while(iss >> tmp_str){
+                string_vec.push_back(tmp_str);
+            }
+
+            std::ostringstream out;
+
+            if (string_vec.size() == 3) {
+                out << std::setprecision(20) << stof(string_vec[2]);
+                float precise = std::stof(out.str());
+                retained_vdw_comp = precise;
+            }
+
+            if (string_vec.size() == 2) {
+                vector < string >  tokens;
+                Tokenizer(string_vec[1], tokens, *":"); 
+
+                out << std::setprecision(20) << stof(tokens[1]);
+                float precise = std::stof(out.str());
+
+                retained_vdw_comp = precise;
+            }
+        }
+
+        if (tmp_string.find("Grid_es_energy:")!=string::npos){
+            std::istringstream iss (tmp_string);
+            std::vector<std::string> string_vec{};
+            std::string tmp_str;
+            while(iss >> tmp_str){
+                string_vec.push_back(tmp_str);
+            }
+
+            std::ostringstream out;
+
+            if (string_vec.size() == 3) {
+
+                out << std::setprecision(20) << stof(string_vec[2]);
+                float precise = std::stof(out.str());
+
+                retained_es_comp = precise;
+            }
+
+            if (string_vec.size() == 2) {
+                vector < string >  tokens;
+                Tokenizer(string_vec[1], tokens, *":"); 
+
+                out << std::setprecision(20) << stof(tokens[1]);
+                float precise = std::stof(out.str());
+
+                retained_es_comp = precise;
+            }
+        }
+
+        if (tmp_string.find("Molecular_Weight:")!=string::npos){
+            std::istringstream iss (tmp_string);
+            std::vector<std::string> string_vec{};
+            std::string tmp_str;
+            while(iss >> tmp_str){
+                string_vec.push_back(tmp_str);
+            }
+
+            std::ostringstream out;
+
+            if (string_vec.size() == 3) {
+
+                out << std::setprecision(20) << stof(string_vec[2]);
+                float precise = std::stof(out.str());
+
+                retained_mol_wt = precise;
+            }
+
+            if (string_vec.size() == 2) {
+                vector < string >  tokens;
+                Tokenizer(string_vec[1], tokens, *":"); 
+
+                out << std::setprecision(20) << stof(tokens[1]);
+                float precise = std::stof(out.str());
+
+                retained_mol_wt = precise;
+            }
+        }
+
+        if (tmp_string.find("DOCK_Rotatable_Bonds:")!=string::npos){
+            std::istringstream iss (tmp_string);
+            std::vector<std::string> string_vec{};
+            std::string tmp_str;
+            while(iss >> tmp_str){
+                string_vec.push_back(tmp_str);
+            }
+            if (string_vec.size() == 3) {
+                retained_rot_b = stof(string_vec[2]);
+            }
+
+            if (string_vec.size() == 2) {
+                vector < string >  tokens;
+                Tokenizer(string_vec[1], tokens, *":"); 
+                retained_rot_b = stof(tokens[1]);
+            }
+        }
+
+        if (tmp_string.find("Formal_Charge:")!=string::npos){
+            std::istringstream iss (tmp_string);
+            std::vector<std::string> string_vec{};
+            std::string tmp_str;
+            while(iss >> tmp_str){
+                string_vec.push_back(tmp_str);
+            }
+            std::ostringstream out;
+
+            if (string_vec.size() == 3) {
+                out << std::setprecision(20) << stof(string_vec[2]);
+                float precise = std::stof(out.str());
+                retained_formal_charge = precise;
+            }
+
+            if (string_vec.size() == 2) {
+                vector < string >  tokens;
+                Tokenizer(string_vec[1], tokens, *":"); 
+
+                out << std::setprecision(20) << stof(tokens[1]);
+                float precise = std::stof(out.str());
+                retained_formal_charge = precise;
+            }
+        }
+
+        if (tmp_string.find("HBond_Acceptors:")!=string::npos){
+            std::istringstream iss (tmp_string);
+            std::vector<std::string> string_vec{};
+            std::string tmp_str;
+            while(iss >> tmp_str){
+                string_vec.push_back(tmp_str);
+            }
+            if (string_vec.size() == 3) {
+                retained_hb_acceptors = stof(string_vec[2]);
+            }
+
+            if (string_vec.size() == 2) {
+                vector < string >  tokens;
+                Tokenizer(string_vec[1], tokens, *":"); 
+                retained_hb_acceptors= stof(tokens[1]);
+            }
+        }
+
+        if (tmp_string.find("HBond_Donors:")!=string::npos){
+            std::istringstream iss (tmp_string);
+            std::vector<std::string> string_vec{};
+            std::string tmp_str;
+            while(iss >> tmp_str){
+                string_vec.push_back(tmp_str);
+            }
+            if (string_vec.size() == 3) {
+                retained_hb_donors = stof(string_vec[2]);
+            }
+
+            if (string_vec.size() == 2) {
+                vector < string >  tokens;
+                Tokenizer(string_vec[1], tokens, *":"); 
+                retained_hb_donors = stof(tokens[1]);
+            }
+        }
+    }
+
+    // loop over the header info
+    for (count = 0;; count++) {
+
+        if (!ifs.getline(line, 1000)) {
+            mol.clear_molecule();
+            cout << endl <<
+                "ERROR:  Ligand file empty.  Program will terminate." << endl;
+            return false;
+        }
+
+        if (!strncmp(line, "@<TRIPOS>ATOM", 13)) {
+            atom_line = true;
+            break;
+        }
+        // assign the first 5 header lines to the proper fields
+        switch (count) {
+
+        case 0:
+            l1 = line;
+            break;
+
+        case 1:
+            l2 = line;
+            break;
+
+        case 2:
+            l3 = line;
+            break;
+
+        case 3:
+            l4 = line;
+            break;
+
+        case 4:
+            l5 = line;
+            break;
+
+        case 5:
+            l6 = line;
+            break;
+        }
+
+    }
+
+    // if there are no atoms, throw error and return false
+    if (!atom_line) {
+        mol.clear_molecule();
+        cout <<
+            "ERROR: @<TRIPOS>ATOM indicator missing from ligand file.  Program will terminate."
+            << endl;
+        return false;
+    }
+    // get # of atoms and bonds from mol info line
+    // sscanf(l2.c_str(), "%d %d", &natoms, &nbonds);
+    sscanf(l2.c_str(), "%d %d %d", &natoms, &nbonds, &nresidues);
+
+    // If nresidues is zero, DOCK6 needs to be told to read the @<TRIPOS>ATOM lines
+    // correctly. By GDRM
+    if (nresidues == 0){
+        check_cols = true;
+        nresidues = 1;
+    }
+
+    // initialize molecule vectors
+    // mol.allocate_arrays(natoms, nbonds);
+    mol.allocate_arrays(natoms, nbonds, nresidues);
+
+    mol.title = l1;
+    mol.mol_info_line = l2;
+    mol.comment1 = l3;
+    mol.comment2 = l4;
+    mol.energy = l5;
+    mol.comment3 = l6;
+
+    // loop over atoms and read in atom info
+    for (i = 0; i < mol.num_atoms; i++) {
+        if (!ifs.getline(line, 1000)) {
+            mol.clear_molecule();
+            cout <<
+                "ERROR:  Atom information missing from ligand file.  Program will terminate."
+                << endl;
+            return false;
+        }
+        //jwu comment
+        // 1     N       15.2586  -59.3416   35.3528 N.4     1 PRO1  -0.2020
+        // GDRM comment:
+        // when nres = 0, @<TRIPOS>ATOM might contain 7 columns instead of 9:
+        // 1     N       15.2586  -59.3416   35.3528 N.4  -0.2020
+        if (check_cols){
+            // Test number of columns per line
+            stringstream string_test;
+            string_test << line;
+            int countCols{0};
+            double value{};
+            while(string_test >> value){
+                ++countCols;
+            }
+            if (countCols == 7){
+                seven_columns == true;
+            }
+        }
+        //  Read data from mol2 as a function of the number of columns
+        if (seven_columns){
+            sscanf(line, "%s %s %f %f %f %s %f", jwu_tmp4, tmp1, &mol.x[i], &mol.y[i],
+                   &mol.z[i], tmp2, &mol.charges[i]);
+            mol.atom_names[i] = tmp1;
+            mol.atom_types[i] = tmp2;
+            mol.atom_number[i] = jwu_tmp4;
+            mol.atom_residue_numbers[i] = "1";
+            mol.subst_names[i] = subst_name;//mol.title
+        } else {
+            sscanf(line, "%s %s %f %f %f %s %s %s %f", jwu_tmp4, tmp1, &mol.x[i], &mol.y[i],
+                   &mol.z[i], tmp2, jwu_tmp3, subst_name, &mol.charges[i]);
+            mol.atom_names[i] = tmp1;
+            mol.atom_types[i] = tmp2;
+	        mol.atom_number[i] = jwu_tmp4;
+	        mol.atom_residue_numbers[i] = jwu_tmp3;
+            mol.subst_names[i] = subst_name;//mol.title
+        }
+    }
+    // If all partial charges are zero, it is a bad molecule
+    int num_zeros = 0;
+    for (int i = 0; i < mol.num_atoms; ++i){
+        if (mol.charges[i] == 0.0){
+            num_zeros += 1;
+        }
+    }
+    // Is it a bad molecule?
+    if (num_zeros == mol.num_atoms){
+        mol.bad_molecule = true;
+    } else {
+        mol.bad_molecule = false;
+    }
+
+    // skip down to the bond section
+    for (;;) {
+        if (!ifs.getline(line, 1000)) {
+            mol.clear_molecule();
+            cout <<
+                "ERROR: @<TRIPOS>BOND indicator missing from ligand file.  Program will terminate."
+                << endl;
+            return false;
+        }
+
+        if (!strncmp(line, "@<TRIPOS>BOND", 13))
+            break;
+    }
+
+    // loop over bonds and add them
+    for (i = 0; i < mol.num_bonds; i++) {
+        if (!ifs.getline(line, 1000)) {
+            mol.clear_molecule();
+            cout <<
+                "ERROR: Bond information missing from ligand file.  Program will terminate."
+                << endl;
+            return false;
+        }
+
+
+        sscanf(line, "%*d %d %d %s", &mol.bonds_origin_atom[i],
+               &mol.bonds_target_atom[i], tmp1);
+
+        // adjust bond atom #'s to start at 0
+        mol.bonds_origin_atom[i]--;
+        mol.bonds_target_atom[i]--;
+
+        mol.bond_types[i] = tmp1;
+
+    }
+
+
+    // ID ring atoms/bonds
+    mol.id_ring_atoms_bonds();
+
+
+    // Read Atom Color from a pre-colored mol2 file kxr 0206
+    // skip to the color section
+
+    if (read_color) {
+        for (;;) {
+
+            if (!ifs.getline(line, 1000)) {
+                mol.clear_molecule();
+                cout <<
+                    "ERROR: @<TRIPOS>COLOR indicator missing from ligand file.  Program will terminate."
+                    << endl;
+                return false;
+            }
+
+            if (!strncmp(line, "@<TRIPOS>COLOR", 14)) {
+                found_color = true;
+                break;
+            }
+
+
+        }
+
+
+        if (found_color) {
+
+            for (i = 0; i < mol.num_atoms; i++) {
+
+                if (!ifs.getline(line, 1000)) {
+                    mol.clear_molecule();
+                    cout <<
+                        "ERROR: Coloring information missing from ligand file.  Program will terminate."
+                        << endl;
+                    return false;
+                }
+
+                sscanf(line, "%d %99s %99s", &n1, typ, col);
+                mol.atom_color[i] = col;
+            }
+        }
+    }
+    // Read Total and atomic desolvation numbers kxr
+    // skip to the solvation info section
+    if (read_solvation) {
+
+        for (;;) {
+            if (!ifs.getline(line, 1000)) {
+                mol.clear_molecule();
+                cout << endl <<
+                    "ERROR: @<TRIPOS>SOLVATION indicator missing from ligand file.  Program will terminate."
+                    << endl;
+                return false;
+            }
+            // if(!found_solvation) {
+            if (!strncmp(line, "@<TRIPOS>SOLVATION", 18)) {
+                found_solvation = true;
+                break;
+            }                   // else { cout << endl << "ERROR: Desolvation
+                                // input absent.  Program will terminate." <<
+                                // endl; return false; } } else break;
+        }
+
+        if (found_solvation) {
+
+            if (!ifs.getline(line, 1000)) {
+                mol.clear_molecule();
+                cout <<
+                    "ERROR: Solvation information missing from ligand file.  Program will terminate."
+                    << endl;
+                return false;
+            }
+
+            mol.total_dsol = 0.0f;
+            int             start_atm = 0;
+
+            if (ifs.getline(line, 1000)) {
+                sscanf(line, "%f %f %f %f %f", &f1, &f2, &f3, &f4, &f5);
+                mol.total_dsol += f5;
+                mol.atom_psol[start_atm] = f2;
+                mol.atom_apsol[start_atm] = f4;
+                start_atm = 1;
+            }
+
+            for (i = start_atm; i < mol.num_atoms; i++) {
+
+                if (ifs.getline(line, 1000)) {
+                    sscanf(line, "%f %f %f %f %f", &f1, &f2, &f3, &f4, &f5);
+                    mol.total_dsol += f5;
+                    mol.atom_psol[i] = f2;
+                    mol.atom_apsol[i] = f4;
+                }
+            }
+        }
+    }
+
+    if (read_amber) {
+        for (;;) {
+            // check if AMBER_SCORE_ID is even present
+            if (!ifs.getline(line, 1000)) {
+                mol.clear_molecule();
+                cout << endl <<
+                    "ERROR: @<TRIPOS>AMBER_SCORE_ID indicator missing from ligand file.  Program will terminate."
+                    << endl;
+                return false;
+            }
+            // identify that we are in the amber_score_id portion of the file
+            if (!strncmp(line, "@<TRIPOS>AMBER_SCORE_ID", 23)) {
+                found_amber = true;
+                break;
+            }
+        }
+
+        if (found_amber) {
+            // check if there is any information in the AMBER_SCORE_ID field
+            if (!ifs.getline(line, 1000)) {
+                mol.clear_molecule();
+                cout <<
+                    "ERROR: No AMBER Score location information available.  Program will terminate."
+                    << endl;
+                return false;
+            }
+
+            sscanf(line, "%99s", tmp1);
+            mol.amber_score_ligand_id = tmp1;
+        }
+    }
+
+
+    if ( retained_grid != -999999.12345 ) { mol.current_score = retained_grid; };
+    if ( retained_int_eng != -999999.12345 ) { mol.internal_energy = retained_int_eng; }
+    if ( retained_vdw_comp != -999999.12345 ) { mol.vdw_comp = retained_vdw_comp; };
+    if ( retained_es_comp != -999999.12345 ) { mol.es_comp = retained_es_comp; };
+    if ( retained_formal_charge != -999999.12345 ) { mol.formal_charge = retained_formal_charge; };
+
+    if ( retained_rot_b != -1) { mol.rot_bonds = retained_rot_b; };
+    if ( retained_mol_wt != -1.0 ) { mol.mol_wt = retained_mol_wt; };
+    if ( retained_hb_acceptors!= -1) { mol.hb_acceptors = retained_hb_acceptors; };
+    if ( retained_hb_donors != -1) { mol.hb_donors = retained_hb_donors; };
+
+    return true;
+}
 
 /***********************************************************************/
 bool
@@ -561,6 +1170,19 @@ bool Write_Mol2(DOCKMol & mol, ostream & ofs)
             mol.subst_names[0].c_str());
     ofs << line << endl << endl;
 
+    if (mol.flag_write_solvation){
+       ofs << "@<TRIPOS>SOLVATION" << endl;
+       ofs << mol.subst_names[0].c_str() << " header " << endl;
+       for (i = 0; i < mol.num_atoms; i++) {
+//                    mol.total_dsol += f5;
+//                    mol.atom_psol[i] = f2;
+//                    mol.atom_apsol[i] = f4;
+//
+            sprintf(line, "%f %f %f %f %f", 0.0, mol.atom_psol[i], 0.0, mol.atom_apsol[i], (mol.atom_psol[i]+mol.atom_apsol[i]) );
+            ofs << line << endl;
+
+       }
+    }
 
     return true;
 }
@@ -590,6 +1212,7 @@ copy_molecule(DOCKMol & target, const DOCKMol & original)
     target.parent = original.parent; // for GA parent status
 
     target.mol_data = original.mol_data;
+    target.hdb_data = original.hdb_data;
 
     target.num_atoms = original.num_atoms;
     target.num_bonds = original.num_bonds;
@@ -607,6 +1230,8 @@ copy_molecule(DOCKMol & target, const DOCKMol & original)
     target.ph4_types_assigned = original.ph4_types_assigned;
 
     target.current_score = original.current_score;
+    target.vdw_comp = original.vdw_comp;
+    target.es_comp = original.es_comp;
     // Score components - CS - 06-05-16
     target.score_nrg = original.score_nrg;          // Energy Score
     target.score_mg_nrg = original.score_mg_nrg;    // MG Score
@@ -629,6 +1254,7 @@ copy_molecule(DOCKMol & target, const DOCKMol & original)
     target.grid_num = original.grid_num;
     target.amber_score_ligand_id = original.amber_score_ligand_id;
     target.total_dsol = original.total_dsol;
+    target.flag_write_solvation = original.flag_write_solvation;
 
     target.rot_bonds = original.rot_bonds;    //YUCHEN
     target.mol_wt = original.mol_wt;
@@ -955,6 +1581,7 @@ DOCKMol::initialize()
 {
 
     arrays_allocated = false;
+    flag_write_solvation = false;
     // use_internal_energy = false;
     clear_molecule();           // /////////////////////
 
@@ -1001,6 +1628,9 @@ DOCKMol::allocate_arrays(int natoms, int nbonds, int nresidues) //added jwu
     atom_segment_ids = new int[num_atoms];
     bond_segment_ids = new int[num_bonds]; // CDS - 04/09/15
     atom_dnm_flag = new bool[num_atoms];   // LEP
+    for (int atom_index=0; atom_index < num_atoms; atom_index++){
+        atom_dnm_flag[atom_index] = false;
+    }
     mol_dnm_flag = false; // JDB
 
     //// added for inter molecular H-Bonds in xlogp
@@ -1250,6 +1880,7 @@ DOCKMol::clear_molecule()
     simplex_text = "";
     energy = "";
     mol_data = "";
+    hdb_data = "";
 
     // clear scalar data
     num_atoms = 0;
@@ -1260,6 +1891,8 @@ DOCKMol::clear_molecule()
     num_active_bonds = 0;
     score_text_data = "";
     current_score = 0.0;
+    vdw_comp = 0.0;
+    es_comp = 0.0;
     rot_bonds = 0;
     heavy_atoms = 0;
     hb_donors = 0;
@@ -1287,6 +1920,7 @@ DOCKMol::clear_molecule()
     amber_score_ligand_id = "";
     grid_num = 0; // This defaults to the first grid read in
     total_dsol = 0.0;
+    flag_write_solvation = false;
     mol_dnm_flag=false; //JDB
 
     #ifdef BUILD_DOCK_WITH_RDKIT
@@ -1523,7 +2157,6 @@ DOCKMol::get_torsion(int a1, int a2, int a3, int a4)
                     v2,
                     v3,
                     v4;
-
     v1.x = x[a1];
     v1.y = y[a1];
     v1.z = z[a1];
@@ -1606,6 +2239,7 @@ DOCKMol::set_torsion(int a1, int a2, int a3, int a4, float angle)
     // atoms = get_atom_children(a2, a3);
     // atoms = child_list[a2][a3]; //////////////////
 
+    // we could call the get_torsion function here instead. I will leave as is for now. TEB, 2022
     // calculate the torsion angle
     v1x = x[tor[0]] - x[tor[1]];
     v2x = x[tor[1]] - x[tor[2]];
@@ -1617,6 +2251,11 @@ DOCKMol::set_torsion(int a1, int a2, int a3, int a4, float angle)
     v3y = y[tor[2]] - y[tor[3]];
     v3z = z[tor[2]] - z[tor[3]];
 
+
+    // calculate cross products to give orthonormal vectors
+    // c1 is orthagonal to v1 v2
+    // c2 is orthagonal to v2 v3
+    // c3 is orthagonal to c1 c2
     c1x = v1y * v2z - v1z * v2y;
     c2x = v2y * v3z - v2z * v3y;
     c1y = -v1x * v2z + v1z * v2x;
@@ -1630,7 +2269,7 @@ DOCKMol::set_torsion(int a1, int a2, int a3, int a4, float angle)
     c1mag = pow(c1x, 2) + pow(c1y, 2) + pow(c1z, 2);
     c2mag = pow(c2x, 2) + pow(c2y, 2) + pow(c2z, 2);
 
-    if (c1mag * c2mag < 0.01)
+    if (c1mag * c2mag < 0.000001)
         costheta = 1.0;         // avoid div by zero error
     else
         costheta = (c1x * c2x + c1y * c2y + c1z * c2z) / (sqrt(c1mag * c2mag));
@@ -1651,6 +2290,12 @@ DOCKMol::set_torsion(int a1, int a2, int a3, int a4, float angle)
 
     // find the difference between current and requested
     rotang = angle - radang;
+
+    //cout << "angle:" << angle << "; radang:" << radang << endl;
+    //cout << rotang << endl;
+    //if (rotang == 0.0){
+    //    cout << "rotang = 0" << endl;
+    //}
 
     sn = sin(rotang);
     cs = cos(rotang);
@@ -1707,19 +2352,241 @@ DOCKMol::set_torsion(int a1, int a2, int a3, int a4, float angle)
     }
 
 }
+/*********************************************/
+// TEB, Dec. 2022.  coppied and modified set_torsion function to set a angle between 3 atoms. 
+// This fuction is used in the covalent code. 
+/*********************************************/
+void
+DOCKMol::set_angle(int a1, int a2, int a3, float angle)
+{
+    //cout << "In set angle ..." << endl;
+    int             ang[3];
+    vector < int   >atoms;
+    float           v1x,
+                    v1y,
+                    v1z,
+                    v2x,
+                    v2y,
+                    v2z;
+    float           ux,
+                    uy,
+                    uz;
+    float           c1x,
+                    c1y,
+                    c1z,
+                    c2x,
+                    c2y,
+                    c2z,
+                    c3x,
+                    c3y,
+                    c3z;
+    float           c1mag,
+                    c2mag,
+                    radang,
+                    costheta,
+                    m[9];
+    float           nx,
+                    ny,
+                    nz,
+                    mag,
+                    rotang,
+                    sn,
+                    cs,
+                    t,
+                    tx,
+                    ty,
+                    tz;
+    int             i,
+                    j,
+                    idx;
+
+    // cout << a1 << " " << a2 << " " << a3 << endl;
+    ang[0] = a1; // ligand atom
+    ang[1] = a2; // dummy1
+    ang[2] = a3; // dummy2
+    idx = get_bond(a1, a2);
+    //idx = get_bond(a2, a1);
+
+    // cout << idx << endl;
+    if (a1 < a2)
+        idx = 2 * idx;
+    else
+        idx = 2 * idx + 1;
+    // cout << idx << endl;
+
+    //cout << "I AM HERE" << endl;
+    atoms = atom_child_list[idx];
+    //atoms = atom_child_list[a2];
+    //cout << "I AM HERE" << endl;
+    // atoms = get_atom_children(a2, a3);
+    // atoms = child_list[a2][a3]; //////////////////
+
+    // we could call the get_torsion function here instead. I will leave as is for now. TEB, 2022
+    // calculate the angle
+    v1x = x[ang[0]] - x[ang[1]];
+    v1y = y[ang[0]] - y[ang[1]];
+    v1z = z[ang[0]] - z[ang[1]];
+    v2x = x[ang[2]] - x[ang[1]];
+    v2y = y[ang[2]] - y[ang[1]];
+    v2z = z[ang[2]] - z[ang[1]];
+
+    // crossproducted of v1 and v2
+    // we will want to rotated about vec u
+    ux = v1y * v2z - v1z * v2y;
+    uy = -v1x * v2z + v1z * v2x;
+    uz = v1x * v2y - v1y * v2x;
+
+
+    c1x = v1x;
+    c1y = v1y;
+    c1z = v1z;
+    c2x = v2x;
+    c2y = v2y;
+    c2z = v2z;
+    c3x = ux;
+    c3y = uy;
+    c3z = uz;
+    
+    c1mag = pow(c1x, 2) + pow(c1y, 2) + pow(c1z, 2);
+    c2mag = pow(c2x, 2) + pow(c2y, 2) + pow(c2z, 2);
+
+    if (c1mag * c2mag < 0.000001)
+        costheta = 1.0;         // avoid div by zero error
+    else
+        costheta = (c1x * c2x + c1y * c2y + c1z * c2z) / (sqrt(c1mag * c2mag));
+
+    if (costheta < -0.999999)
+        costheta = -0.999999f;
+    if (costheta > 0.999999)
+        costheta = 0.999999f;
+
+    // cout << "sign of u: " << ux*uy*uz << endl;
+    //if ((v2x * c3x + v2y * c3y + v2z * c3z) > 0.0)
+        radang = -acos(costheta);
+    //else
+    //    radang = acos(costheta);
+
+    
+    // now we have the torsion angle (radang) - set up the rot matrix
+    //
+    //
+    // find the difference between current and requested
+    rotang = angle - radang;
+    //
+
+    cout << " current angle: " << radang << endl;
+    cout << " requested angle: " << angle << endl;
+    // 
+    // now we have the torsion angle (radang) - set up the rot matrix
+    // 
+
+    // find the difference between current and requested
+    rotang = angle - radang;
+
+    //cout << "angle:" << angle << "; radang:" << radang << endl;
+    //cout << rotang << endl;
+    //if (rotang == 0.0){
+    //    cout << "rotang = 0" << endl;
+    //}
+
+    sn = sin(rotang);
+    cs = cos(rotang);
+    t = 1 - cs;
+
+    // normalize the rotation vector
+    mag = sqrt(pow(ux, 2) + pow(uy, 2) + pow(uz, 2));
+    nx = ux / mag;
+    ny = uy / mag;
+    nz = uz / mag;
+
+    // set up the rotation matrix
+    m[0] = t * nx * nx + cs;
+    m[1] = t * nx * ny + sn * nz;
+    m[2] = t * nx * nz - sn * ny;
+    m[3] = t * nx * ny - sn * nz;
+    m[4] = t * ny * ny + cs;
+    m[5] = t * ny * nz + sn * nx;
+    m[6] = t * nx * nz + sn * ny;
+    m[7] = t * ny * nz - sn * nx;
+    m[8] = t * nz * nz + cs;
+
+    // 
+    // now the matrix is set - time to rotate the atoms
+    // 
+    tx = x[ang[1]];
+    ty = y[ang[1]];
+    tz = z[ang[1]];
+
+    for (i = 0; i < atoms.size(); i++) {
+        j = atoms[i];
+        //cout << i << " " << j << endl;
+        // for(i=0;i<num_atoms;i++) {
+        // j = i;
+
+        // if(child_list[a2*num_atoms + i] == a3) { //////////////
+
+        x[j] -= tx;
+        y[j] -= ty;
+        z[j] -= tz;
+
+        nx = x[j] * m[0] + y[j] * m[1] + z[j] * m[2];
+        ny = x[j] * m[3] + y[j] * m[4] + z[j] * m[5];
+        nz = x[j] * m[6] + y[j] * m[7] + z[j] * m[8];
+
+        x[j] = nx;
+        y[j] = ny;
+        z[j] = nz;
+        x[j] += tx;
+        y[j] += ty;
+        z[j] += tz;
+
+        // } /////////////////////////
+    }
+
+/*
+// For debuging ...
+    v1x = x[ang[1]] - x[ang[0]];
+    v1y = y[ang[1]] - y[ang[0]];
+    v1z = z[ang[1]] - z[ang[0]];
+    v2x = x[ang[1]] - x[ang[2]];
+    v2y = y[ang[1]] - y[ang[2]];
+    v2z = z[ang[1]] - z[ang[2]];
+
+    c1x = v1x;
+    c1y = v1y;
+    c1z = v1z;
+    c2x = v2x;
+    c2y = v2y;
+    c2z = v2z;
+
+
+    c1mag = pow(c1x, 2) + pow(c1y, 2) + pow(c1z, 2);
+    c2mag = pow(c2x, 2) + pow(c2y, 2) + pow(c2z, 2);
+
+    if (c1mag * c2mag < 0.000001)
+        costheta = 1.0;         // avoid div by zero error
+    else
+        costheta = (c1x * c2x + c1y * c2y + c1z * c2z) / (sqrt(c1mag * c2mag));
+
+    if (costheta < -0.999999)
+        costheta = -0.999999f;
+    if (costheta > 0.999999)
+        costheta = 0.999999f;
+
+        radang = acos(costheta);
+
+    cout << "new angle = " << radang << endl;
+// END debuging
+*/
+
+}
 
 /*********************************************/
 void
 DOCKMol::translate_mol(const DOCKVector & vec)
 {
-    int             i;
-
-    for (i = 0; i < num_atoms; i++) {
-        x[i] += vec.x;
-        y[i] += vec.y;
-        z[i] += vec.z;
-    }
-
+   bool flag_all = true;
+   translate_mol(vec,flag_all);
 }
 
 /*********************************************/
@@ -1784,22 +2651,11 @@ DOCKMol::rotate_mol(double mat[3][3], bool flag_all)
 void
 DOCKMol::rotate_mol(double mat[3][3])
 {
-    double          new_mat[9];
-    int             i,
-                    j,
-                    k;
-
-    k = 0;
-
-    for (i = 0; i < 3; i++)
-        for (j = 0; j < 3; j++)
-            new_mat[k++] = mat[i][j];
-
-    rotate_mol(new_mat);
-
+   bool flag_all = true;
+   rotate_mol(mat, flag_all);
 }
 
-/*********************************************/
+/*
 void
 DOCKMol::rotate_mol(double mat[9])
 {
@@ -1819,7 +2675,7 @@ DOCKMol::rotate_mol(double mat[9])
     }
 
 }
-/*********************************************/
+*/
 bool
 DOCKMol::atoms_are_one_three(int a1, int a2)
 {
@@ -2973,7 +3829,15 @@ DOCKMol::setxyz( const double * xyz )
         z[i] = xyz[ 3 * i + 2 ];
     }
 }
-
+void DOCKMol::cout_information() {
+    cout << "Hi" << endl;
+    for (int i = 0; i<this->num_atoms; i++) {
+        cout << this->atom_number[i] << " " 
+        << this->x[i] << " " 
+        << this->y[i] << " " 
+        << this->z[i] << endl;
+    }
+}
 // +++++++++++++++++++++++++++++++++++++++++
 // Copy the charges from the argument to this DOCKMol
 // multiplying them by the units conversion factor.
@@ -3096,10 +3960,12 @@ HDB_conformer::~HDB_conformer(){
 }
 /*********************************************/
 //void HDB_conformer::initialize(int num, int size, float ie, int * sl){
-void HDB_conformer::initialize(int num, int size, float ie){
+void HDB_conformer::initialize(int num, int size, bool fbroken, float ie1, float ie2){
     conf_num = num;
     num_of_seg = size;
-    internal_energy = ie;
+    broken = fbroken;
+    internal_energy1 = ie1;
+    internal_energy2 = ie2;
     list_of_seg = new int[size];
 }
 
@@ -3125,3 +3991,23 @@ HDB_Mol::~HDB_Mol(){
   delete[]confs;
 }
 
+void
+HDB_Mol::clear_molecule()
+{
+  delete[]name;
+  delete[]atoms;
+  delete[]bonds;
+  delete[]coords;
+  delete[]rigid;
+  delete[]segs;
+  delete[]confs;
+
+name = new char [100];
+atoms  = NULL;
+bonds  = NULL;
+coords = NULL;
+rigid  = NULL;
+segs   = NULL;
+confs  = NULL;
+
+}

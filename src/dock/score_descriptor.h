@@ -9,7 +9,7 @@
 #include "hungarian.h"
 #include "score_volume.h"
 #include "score_gist.h"
-//#include "score_chemgrid.h"
+#include "score_chemgrid.h"
 
 class AMBER_TYPER;
 class Bump_Grid;
@@ -21,7 +21,7 @@ class Parameter_Reader;
 
 
 #define VDWOFF -0.09
-#define MAX_ATOM_REC 1000
+#define MAX_ATOM_REC 2000
 #define MAX_ATOM_LIG 200
 #define SQR(x) ((x)*(x))
 #define MAX(x, y) ((x) > (y) ? (x) : (y))
@@ -59,7 +59,7 @@ class           Descriptor_Energy_Score:public Base_Score {
     Hungarian_RMSD              desc_c_hun;
     Volume_Score                desc_c_vol;
     GIST_Score                  desc_c_gist;
-    //Chemgrid_Score              desc_c_cmg;      // TEB added
+    Chemgrid_Score              desc_c_cmg;      // TEB added
 
 
     // Other parameters (not in classes)
@@ -128,6 +128,8 @@ class           Descriptor_Energy_Score:public Base_Score {
     void            initialize(AMBER_TYPER &);
     bool            compute_score(DOCKMol &);
     std::string     output_score_summary(DOCKMol &);
+  private:
+    bool desc_score_valid = false; //This variable is default to false and will be turned to true if a descriptor score component score is selected for use
 };
 
 /*****************************************************************/

@@ -1,0 +1,229 @@
+
+
+
+--------------------------------------
+DOCK v6.12
+
+Released September 2024
+Copyright UCSF
+--------------------------------------
+
+
+Conformational Sampling Parameters
+------------------------------------------------------------------------------------------
+conformer_search_type                                        flex
+write_fragment_libraries                                     no
+
+Anchor & Grow Parameters
+------------------------------------------------------------------------------------------
+user_specified_anchor                                        no
+limit_max_anchors                                            no
+min_anchor_size                                              5
+pruning_use_clustering                                       yes
+pruning_max_orients                                          1000
+pruning_clustering_cutoff                                    100
+pruning_orient_score_cutoff                                  1000.0
+pruning_conformer_score_cutoff                               100.0
+pruning_conformer_score_scaling_factor                       1.0
+use_clash_overlap                                            no
+write_growth_tree                                            no
+
+Internal Energy Parameters
+------------------------------------------------------------------------------------------
+use_internal_energy                                          yes
+internal_energy_rep_exp                                      12
+internal_energy_cutoff                                       100.0
+Note: Internal energy only includes repulsive VDW for growth and/or minimization.
+
+Molecule Library Input Parameters
+------------------------------------------------------------------------------------------
+ligand_atom_file                                             xtal-lig.mol2
+limit_max_ligands                                            no
+skip_molecule                                                no
+read_mol_solvation                                           no
+calculate_rmsd                                               no
+
+Database Filter Parameters
+------------------------------------------------------------------------------------------
+use_database_filter                                          no
+
+Orient Ligand Parameters
+------------------------------------------------------------------------------------------
+orient_ligand                                                yes
+automated_matching                                           yes
+receptor_site_file                                           selected_spheres.sph
+max_orientations                                             1000
+critical_points                                              no
+chemical_matching                                            no
+use_ligand_spheres                                           no
+
+Bump Filter Parameters
+------------------------------------------------------------------------------------------
+bump_filter                                                  no
+
+Master Score Parameters
+------------------------------------------------------------------------------------------
+score_molecules                                              yes
+
+Contact Score Parameters
+------------------------------------------------------------------------------------------
+contact_score_primary                                        no
+
+Grid Score Parameters
+------------------------------------------------------------------------------------------
+grid_score_primary                                           no
+
+GIST Score Parameters
+------------------------------------------------------------------------------------------
+gist_score_primary                                           yes
+gist_score_att_exp                                           6
+gist_score_rep_exp                                           12
+gist_score_gist_scale                                        -1
+gist_score_gist_type                                         trilinear
+gist_score_grid_file                                         gist-EswPlusEww_ref2_cap_blury_1p8.dx
+gist_score_Hydrogen_grid_file                                gist-EswPlusEww_ref2_cap_blury_1p0.dx
+
+MultiGrid Score Parameters
+------------------------------------------------------------------------------------------
+
+Dock3.5 Score Parameters
+------------------------------------------------------------------------------------------
+
+Continuous Energy Score Parameters
+------------------------------------------------------------------------------------------
+
+Footprint Similarity Score Parameters
+------------------------------------------------------------------------------------------
+
+Pharmacophore Similarity Score Parameters
+------------------------------------------------------------------------------------------
+
+Hbond Energy Score Parameters
+------------------------------------------------------------------------------------------
+
+Internal Energy Score Parameters
+------------------------------------------------------------------------------------------
+
+Descriptor Score Parameters
+------------------------------------------------------------------------------------------
+
+Zou GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+
+Hawkins GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+
+SASA Score Parameters
+------------------------------------------------------------------------------------------
+
+Amber Score Parameters
+------------------------------------------------------------------------------------------
+
+Simplex Minimization Parameters
+------------------------------------------------------------------------------------------
+minimize_ligand                                              no
+simplex_final_min                                            no
+
+Atom Typing Parameters
+------------------------------------------------------------------------------------------
+atom_model                                                   all
+vdw_defn_file                                                ../../../parameters/vdw_AMBER_parm99.defn
+flex_defn_file                                               ../../../parameters/flex.defn
+flex_drive_file                                              ../../../parameters/flex_drive.tbl
+
+Molecule Library Output Parameters
+------------------------------------------------------------------------------------------
+ligand_outfile_prefix                                        output_blurry_trilin_flex
+write_mol_solvation                                          no
+write_orientations                                           yes
+num_scored_conformers                                        1
+score_threshold                                              100.0
+rank_ligands                                                 no
+------------------------------------------------------------------------------------------
+
+Initializing Conformer Generator Routines...
+Initializing Library File Routines...
+
+Initializing Orienting Routines...
+Read in 56 spheres for orienting.
+Initializing GIST Grid Score Routines...
+ Reading the gist grid from gist-EswPlusEww_ref2_cap_blury_1p8.dx
+32 32 32
+36.412 27.694 23.825
+0.5 0.5 0.5
+32768
+32768 10922 2
+16 16 16
+ Done reading the gist grid.
+Initializing GIST H Grid...
+ Reading the gist grid from gist-EswPlusEww_ref2_cap_blury_1p0.dx
+32 32 32
+36.412 27.694 23.825
+0.5 0.5 0.5
+32768
+32768 10922 2
+16 16 16
+ Done reading the gist grid.
+
+-----------------------------------
+VERBOSE MOLECULE STATS
+
+  Number of heavy atoms = 9
+  Number of rotatable bonds = 0
+  Formal Charge = 1.003
+  Molecular Weight = 119.146
+  Heavy Atoms = 9
+-----------------------------------
+ANCHOR ATOMS.
+
+ANCHOR #1: N1,1 ; C2,2 ; N3,3 ; C3A,4 ; C4,5 ; C5,6 ; C6,7 ; C7,8 ; C7A,9 ; H7,14 ; H6,13 ; H5,12 ; H4,11 ; H3,16 ; H2,10 ; H1,15 ; 
+-----------------------------------
+VERBOSE ORIENTING STATS :
+
+Orienting 9 anchor heavy atom centers
+Sphere Center Matching Parameters:
+   tolerance: 0.25; dist_min: 0; min_nodes: 3; max_nodes: 10
+Num of cliques generated: 2086
+ Residual Info:
+   min residual:    0.0015
+   median residual: 0.5858
+   max residual:    0.7497
+   mean residual:   0.5468
+   std residual:    0.1573
+ Node Sizes:
+   min nodes:    3
+   max nodes:    4
+   mean nodes:   3.0297
+Current clique:1000
+# of anchor positions: 739
+-----------------------------------
+VERBOSE GROWTH STATS : ANCHOR #1
+
+Error scoring Anchor #1 Orient #738: ERROR:  Conformation could not be scored.
+Conformation not completely within grid box.
+
+110/739 anchor orients retained (max 1000) t=0.42s
+number of layers:1
+Current clique:1000
+(last_orient_flag==true)Current clique:1000
+(last_orient_flag==true)Current clique:0
+No more anchor fragments to be docked.
+
+-----------------------------------
+Molecule: xtal-lig.pdb
+
+ Elapsed time for docking:	1.855 seconds
+
+ Anchors:		1
+ Orientations:		1000
+ Conformations:		110
+
+                          GIST_Score:           -2.661784
+           Internal_energy_repulsive:            0.000000
+
+
+1 Molecules Processed
+Total elapsed time:	1.867 seconds
+Number of molecules per second:	0.536
+Virtual memory used for this process: 130220 kilobytes
+Physical memory used for this process: 57532 kilobytes

@@ -6,6 +6,7 @@ min_anchor_size                                              5
 pruning_use_clustering                                       yes
 pruning_max_orients                                          10
 pruning_clustering_cutoff                                    100
+pruning_orient_score_cutoff                                  1000.0
 pruning_conformer_score_cutoff                               100.0
 pruning_conformer_score_scaling_factor                       1.0
 use_clash_overlap                                            no
@@ -32,6 +33,7 @@ bump_filter                                                  no
 score_molecules                                              yes
 contact_score_primary                                        no
 grid_score_primary                                           no
+gist_score_primary                                           no
 multigrid_score_primary                                      no
 dock3.5_score_primary                                        no
 continuous_score_primary                                     no
@@ -48,6 +50,8 @@ descriptor_use_pharmacophore_score                           yes
 descriptor_use_tanimoto                                      no
 descriptor_use_hungarian                                     no
 descriptor_use_volume_overlap                                no
+descriptor_use_gist                                          no
+descriptor_use_dock3.5                                       no
 descriptor_fms_score_use_ref_mol2                            no
 descriptor_fms_score_use_ref_txt                             yes
 descriptor_fms_score_ref_txt_filename                        reference.txt
@@ -76,6 +80,7 @@ simplex_tors_step                                            10.0
 simplex_anchor_max_iterations                                500
 simplex_grow_max_iterations                                  500
 simplex_grow_tors_premin_iterations                          0
+simplex_final_min                                            no
 simplex_random_seed                                          0
 simplex_restraint_min                                        no
 atom_model                                                   all
@@ -84,6 +89,8 @@ flex_defn_file                                               ../../../parameters
 flex_drive_file                                              ../../../parameters/flex_drive.tbl
 pharmacophore_defn_file                                      ../../../parameters/ph4.defn
 ligand_outfile_prefix                                        Des_FMS_txt
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no

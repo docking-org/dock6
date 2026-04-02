@@ -104,6 +104,7 @@ AG_Conformer_Search::input_parameters(Parameter_Reader & parm)
             
             anchor_score_cutoff = 1000.0;
             num_growth_poses = INT_MAX;
+            anchor_score_cutoff = atof(parm.query_param("pruning_orient_score_cutoff", "1000.0").c_str());
             // DTM-11-10-08
             //growth_cutoff = false;
             //growth_cutoff = true;
@@ -218,7 +219,7 @@ AG_Conformer_Search::prepare_molecule(DOCKMol & mol)
 
     // Write fragments for de novo libraries
     if (write_fragment_libraries){
-        count_fragments(mol);
+       bickel_count_fragments(mol);
     }
 
     anchor_positions.clear();
@@ -385,34 +386,41 @@ AG_Conformer_Search::extend_segments(int atom_num, int segment, DOCKMol & mol)
 bool
 AG_Conformer_Search::atom_in_anchor_segments(SEGMENT seg)
 {
-    bool flag = false;
-    int i;
-    stringstream s;
-    string atomname, current_atomname,temp;
-    int atomid, current_atomid ;
-    s << atom_in_anchor;
-    getline(s,atomname,',');
-    s >> atomid;
+ bool flag = false;
+ int i;
+ stringstream s;
+ string atomname, current_atomname,temp;
+ int atomid, current_atomid ;
+ s << atom_in_anchor;
+ getline(s,atomname,',');
+ s >> atomid;
+// cout <<"lets see" <<atomname << " " << atomid << endl;
 
-    for (i = 0; i < seg.atoms.size(); i++){
-        // the atom num is not stored in dockmol.
-        current_atomid      = seg.atoms[i];
-        current_atomname = orig.atom_names[current_atomid];
+ //cout << atom_in_anchor << " :: " << atomname << "," << atomid <<endl;
 
-        if (atomname == current_atomname && (current_atomid+1) == atomid){
-            flag = true;
-            break;
-        }
-    }
+ for (i = 0; i < seg.atoms.size(); i++){
+     // the atom num is not stored in dockmol.
+     current_atomid      = seg.atoms[i];
+//     cout << current_atomid << "," ;
+     current_atomname = orig.atom_names[current_atomid];
+//     cout << current_atomname << endl;
 
-    if (flag){
-        for (i = 0; i < seg.atoms.size(); i++){
-            int current_atomid      = seg.atoms[i]; // the atom num is not stored.
-            string current_atomname = orig.atom_names[current_atomid];
-        }
-    }
+     if (atomname == current_atomname && (current_atomid+1) == atomid){
+//         cout << "condition met!" << endl;
+         flag = true;
+         break;
+     }
+ }
 
-    return flag;
+ if (flag){
+   for (i = 0; i < seg.atoms.size(); i++){
+     int current_atomid      = seg.atoms[i]; // the atom num is not stored.
+     string current_atomname = orig.atom_names[current_atomid];
+//     cout << current_atomname << "," << current_atomid << endl;
+   }
+ }
+
+return flag;
 }
 
 // TEB ADDED 2019/06/17
@@ -515,9 +523,11 @@ AG_Conformer_Search::id_anchor_segments()
     // print out the list of anchors with one atom specified: 
     if (verbose) {
        cout << "-----------------------------------" << '\n';
-       //if (verbose){cout << "ANCHOR ATOMS." << "\n" << endl;}
+       cout << "ANCHOR ATOMS." << "\n" << endl;
        for (i = 0; i < anchors.size(); i++){
-            if (anchors[i].first < anchor_size) break;
+            if ((i != 0) && (anchors[i].first < anchor_size)){ 
+               break;
+            }
             cout << "ANCHOR #"<< (i+1) << ": ";
             print_atom_in_anchor_segments(orig_segments[anchors[i].second]);
        } 
@@ -1110,7 +1120,7 @@ AG_Conformer_Search::grow_periphery(Master_Score & score,
 
             // loop over seed conformers
             for (j = 0; j < seeds.size(); j++) {
-		// Required for supporting multiple grid docking
+        // Required for supporting multiple grid docking
                 // Duplicates of each exp_seed is made for each grid with the corresponding grid_num
                 if (score.ir_ensemble) { 
                         segment_torsion_drive(seeds[j], l, exp_seeds, score.c_mg_nrg.numgrids);
@@ -1702,6 +1712,255 @@ AG_Conformer_Search::next_conformer(DOCKMol & mol)
 // Store fragment fingerprints, frequencies, and in certain cases the DOCKMol
 // object in a map as molecules are dissected at rotatable bonds
 void
+AG_Conformer_Search::bickel_count_fragments(DOCKMol & mol)
+{
+
+//TODO
+// Output some statistics about the input library, e.g. max number of layers, max number of
+// scaffolds per layer, etc. Stuff that will help us constrict growth space during dn design
+
+    // Make a temporary DOCKMol and Fingerprint object
+    DOCKMol tmp_mol;
+    Fingerprint finger;
+
+    // Send DOCKMol to fingerprint function and return a list of allowable
+    // torsion environments for this molecule only
+    vector <string> tmp_torsions;
+    finger.write_torsion_environments(mol, tmp_torsions);
+
+    // Add the allowable torsions to a map
+    for (int i=0; i<tmp_torsions.size(); i++){
+        if (!torsions_map[tmp_torsions[i]]){
+            torsions_map[tmp_torsions[i]] = 1;
+        } else {
+            torsions_map[tmp_torsions[i]]++;
+        }
+    }
+    /*
+    for (int i=0; i<tmp_torsions.size(); ++i){
+        cout << tmp_torsions[i] << endl;
+    }
+    */
+    tmp_torsions.clear();
+
+
+    copy_molecule(tmp_mol, orig);
+    vector<pair<int,int> > rot_bond_atom_vect;
+
+
+    //check all bonds in molecule 
+    for (int i=0; i<tmp_mol.num_bonds; i++){
+        //if bond is rotatable, save origin and target for later search
+        if (mol.bond_is_rotor(i)){
+            rot_bond_atom_vect.push_back(make_pair(mol.bonds_origin_atom[i],mol.bonds_target_atom[i]));
+/*
+            cout << "ORIGIN: " << mol.bonds_origin_atom[i] << " TARGET   " << mol.bonds_target_atom[i];
+            cout << "  A: " << finger.return_noH_environment(tmp_mol, mol.bonds_origin_atom[i]) <<
+            " B: " << finger.return_noH_environment(tmp_mol, mol.bonds_target_atom[i]) << endl << endl;
+
+*/
+            if (Parameter_Reader::verbosity_level() > 1 ) {
+                cout << "Rot_Bond_Check  " << "Origin: " << mol.bonds_origin_atom[i] 
+                << "\tTarget: " << mol.bonds_target_atom[i] << endl;
+
+            }
+        }
+    }
+
+    vector<pair<int,int> > seg_pairs; //pairs of bound segments
+    vector<pair<pair<int,string>,pair<int,string> > > half_tors_pairs;
+    
+    //for all segments
+    for (int i=0; i<orig_segments.size(); i++){
+        //for all atoms in each segment
+        for (int x=0; x<orig_segments[i].atoms.size(); x++){
+            //for all rotable bonds in the molecule
+            for (int y=0; y<rot_bond_atom_vect.size(); y++) {
+                //if the current atom matches the first atom in the rotatable bond pair
+                if (orig_segments[i].atoms[x] == rot_bond_atom_vect[y].first){
+                    //for all other segments
+                    for (int sec_seg=0; sec_seg<orig_segments.size(); ++sec_seg){
+                        //if it's the current segment, skip it (can't be bound to itself)
+                        if (sec_seg == i){
+                            continue;
+                        }
+                        //checks all atoms on the second segment for the second half of the rot bond pair
+                        for (int atoms_seg2=0; atoms_seg2<orig_segments[sec_seg].atoms.size(); ++atoms_seg2){
+                            //if the second atom is in this segment, the segments are bound together
+                            if (orig_segments[sec_seg].atoms[atoms_seg2] == rot_bond_atom_vect[y].second){
+
+                                if (Parameter_Reader::verbosity_level() > 1 ) {
+                                    cout << "ATOM " << orig_segments[i].atoms[x] << " ON SEGMENT " << i << 
+                                        " IS ATTACHED TO ATOM " << orig_segments[sec_seg].atoms[atoms_seg2] <<
+                                        " ON SEGMENT " << sec_seg << endl;
+
+                                    cout << "Segment: " << i << "  w/ half torsion " << 
+                                        finger.return_noH_environment(tmp_mol, orig_segments[i].atoms[x]) << " is bound to" << 
+                                        " Segment: " << sec_seg << " w/ half torsion " << 
+                                        finger.return_noH_environment(tmp_mol, orig_segments[sec_seg].atoms[atoms_seg2]) << "CAT" << endl;
+                                }
+
+                                half_tors_pairs.push_back(make_pair(
+                                                    make_pair(i,finger.return_noH_environment(tmp_mol,orig_segments[i].atoms[x])),
+                                                    make_pair(sec_seg,finger.return_noH_environment(tmp_mol,orig_segments[sec_seg].atoms[atoms_seg2]))));        
+                                //push bound segment pair together for later use
+                                seg_pairs.push_back(make_pair(i,sec_seg));
+                            }
+                        }//all atoms in second segment 
+                    } // all other segments
+                } //if current atom matches first in pair
+            } //all rotable bonds in molecule
+        } // all atoms in each segment
+    } // all segments
+    if (Parameter_Reader::verbosity_level() > 1 ) {
+        for (int i=0; i<half_tors_pairs.size();++i){
+            cout << half_tors_pairs[i].first.first << "   " << half_tors_pairs[i].second.first << endl;
+            cout << half_tors_pairs[i].first.second << "  " << half_tors_pairs[i].second.second << endl;
+        }
+    }
+    //at this point, all segment pairs for this molecule have been found - fragmentation can happen
+    vector<pair<int,string> > seg_with_fingerprints; //pair.first = segment #, .second = fingerprint
+
+
+    // Loop through each of the segments in tmp_mol and activate those atoms/
+    // bond plus neighbor_atoms and neighbor_bonds for the given segment
+    for (int i=0; i<orig_segments.size(); i++) {
+        // And activate the segment + neighbor atoms / bonds
+        copy_molecule(tmp_mol, orig);
+        activate_fragment(tmp_mol, i);
+
+        // Compute a fingerprint for just the active segment of the molecule
+        string tmp_string;
+        tmp_string = finger.compute_unique_string_active(tmp_mol);
+        seg_with_fingerprints.push_back(make_pair(i,tmp_string));
+
+        // Check to see if the tmp_string has already been seen as part of the
+        // following hash (if it has not yet been seen):
+        if (!segment_fingerprints[tmp_string].second){
+
+            // Then add it to the hash with a frequency of '1'
+            segment_fingerprints[tmp_string].second = 1;
+
+        } else { // Else it has already been added to the hash,
+
+            // So increment the frequency counter
+            segment_fingerprints[tmp_string].second++;
+        }
+
+
+        // If the frequency counter is exactly the number of the 
+        // fragment_library_freq_cutoff, then remember the mol object
+        // Note: 
+        if (segment_fingerprints[tmp_string].second == fragment_library_freq_cutoff){
+
+            // Translate one of the dummy atoms to the origin
+            if (fragment_library_trans_origin){
+
+                // Declare a dockvector for the translation
+                DOCKVector trans_vec;
+    
+                // Look through the atoms to identify the first that is active 
+                // and a dummy
+                for (int j=0; j<tmp_mol.num_atoms; j++){
+    
+                    if (tmp_mol.atom_active_flags[j] && tmp_mol.atom_types[j].compare("Du")==0){
+                        trans_vec.x = -tmp_mol.x[j];
+                        trans_vec.y = -tmp_mol.y[j];
+                        trans_vec.z = -tmp_mol.z[j];
+                        break;    
+                    }
+                }
+    
+                // Translate the whole dockmol based on the coordinates of that 
+                // dummy atom
+                tmp_mol.translate_mol(trans_vec);
+            }
+
+            // Add the dockmol object to the hash
+            copy_molecule(segment_fingerprints[tmp_string].first, tmp_mol);
+        }    
+    }
+    //frags_with_half_tors == map < string, map < string, map < string, map < string, int >>>>
+    //fragment_binding_pairs == map < string, map < string, int> >
+    //half_tors_pairs is from up above - vector<pair<pair<int,string>,pair<int,string>>>
+    //map<string,map<string,int>>
+    //vector<pair<int,int>> seg_pairs; //pairs of bound segments
+    //for all bound pairs (segment numbers) 
+
+    for (int entry=0; entry<half_tors_pairs.size(); ++entry) {
+    }
+    for (int entry=0; entry<seg_pairs.size(); entry++){
+        //for all segments with associated footprints
+        for (int i=0; i<seg_with_fingerprints.size(); i++) { 
+            //if segment # in bonding pairs matches with segment # for fingerprints
+            if (seg_with_fingerprints[i].first == seg_pairs[entry].first ){
+
+
+                //if the footprint hasn't been stored here before
+                if (fragment_binding_pairs.count(seg_with_fingerprints[i].second) == 0) {
+
+                    //runs through all other segment fingerprints
+                    for (int x=0; x<seg_with_fingerprints.size();x++){\
+                        if (x == i){ // can't be bound to self 
+                            continue;
+                        }
+                        //checks if the segment fingerprint matches the second in the pair
+                        if (seg_with_fingerprints[x].first == seg_pairs[entry].second){
+                            fragment_binding_pairs[seg_with_fingerprints[i].second][seg_with_fingerprints[x].second] =1;
+
+
+                            for (int half_tor_int=0; half_tor_int < half_tors_pairs.size(); ++half_tor_int){
+                                if ((half_tors_pairs[half_tor_int].first.first == seg_pairs[entry].first) 
+                                    && (half_tors_pairs[half_tor_int].second.first == seg_pairs[entry].second)) {
+                                    frags_with_half_tors[seg_with_fingerprints[i].second]
+                                                        [seg_with_fingerprints[x].second]
+                                                        [half_tors_pairs[half_tor_int].first.second]
+                                                        [half_tors_pairs[half_tor_int].second.second] = 1;
+
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+
+                } else if (fragment_binding_pairs.count(seg_with_fingerprints[i].second) > 0){
+                    for (int x=0; x<seg_with_fingerprints.size();x++){
+                        if (x == i){ //can't be bound to self
+                            continue;
+                        }
+                        if (seg_with_fingerprints[x].first == seg_pairs[entry].second){
+                            fragment_binding_pairs[seg_with_fingerprints[i].second][seg_with_fingerprints[x].second]+=1;
+
+
+                            for (int half_tor_int=0; half_tor_int < half_tors_pairs.size(); ++half_tor_int){
+                                if ((half_tors_pairs[half_tor_int].first.first == seg_pairs[entry].first) 
+                                    && (half_tors_pairs[half_tor_int].second.first == seg_pairs[entry].second)){
+
+                                    frags_with_half_tors[seg_with_fingerprints[i].second]
+                                                        [seg_with_fingerprints[x].second]
+                                                        [half_tors_pairs[half_tor_int].first.second]
+                                                        [half_tors_pairs[half_tor_int].second.second] +=1;
+                                    break;
+
+                                }
+                            }      
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return;
+} //end bickel_count_fragments
+
+
+
+
+// +++++++++++++++++++++++++++++++++++++++++
+// Store fragment fingerprints, frequencies, and in certain cases the DOCKMol
+// object in a map as molecules are dissected at rotatable bonds
+void
 AG_Conformer_Search::count_fragments(DOCKMol & mol)
 {
 
@@ -2279,6 +2538,358 @@ AG_Conformer_Search::activate_fragment(DOCKMol & mol, int curr_seg)
 
 } // end AG_Conformer_Search::activate_fragment()
 
+// +++++++++++++++++++++++++++++++++++++++++
+// Post-processes fragment libraries to make them unique
+void
+AG_Conformer_Search::bickel_write_unique_fragments()
+{
+   // These are the same as those in Base_Score.
+   const string DELIMITER    = Base_Score::DELIMITER;
+   const int    FLOAT_WIDTH  = Base_Score::FLOAT_WIDTH;
+   const int    STRING_WIDTH = Base_Score::STRING_WIDTH;
+
+    // Make a vector for sorting the torsion environments
+    vector <string> tmp_torsions;
+    map <string, int>::iterator iter;
+    for ( iter = torsions_map.begin(); iter != torsions_map.end(); iter++ ){
+        ostringstream tmp_string;
+        tmp_string <<iter->first <<"-" <<iter->second;
+        tmp_torsions.push_back(tmp_string.str());
+    }
+    sort(tmp_torsions.begin(), tmp_torsions.end());
+
+    // Write the torsion environments to file
+    ostringstream file_torenv;
+    file_torenv <<fragment_library_prefix <<"_torenv.dat";
+    fstream fout_torenv;
+    fout_torenv.open (file_torenv.str().c_str(), fstream::out|fstream::app);
+    for (int i=0; i<tmp_torsions.size(); i++){
+        fout_torenv <<tmp_torsions[i] <<"\n";
+    }
+
+    // Clear some memory
+    fout_torenv.close();
+    tmp_torsions.clear();
+    torsions_map.clear();
+
+
+
+    // Make a vector for sorting the fragments
+    vector <pair <string, int> > tmp_vector;
+
+    // given the map, remove elements that don't have the dockmol object attached
+    map < string, pair < DOCKMol , int > >::iterator it;
+    for( it = segment_fingerprints.begin(); it != segment_fingerprints.end(); it++){
+        if (it->second.second >= fragment_library_freq_cutoff){
+            pair <string, int> tmp_pair;
+            tmp_pair.first = it->first;
+            tmp_pair.second = it->second.second;
+            tmp_vector.push_back(tmp_pair);
+        }
+    }
+
+    // Sort the vector by frequency or by fingerprint
+    if (fragment_library_sort_method.compare("freq") == 0){
+        sort( tmp_vector.begin(), tmp_vector.end(), frequency_sort );
+    }
+    else if (fragment_library_sort_method.compare("fingerprint") == 0){
+        sort( tmp_vector.begin(), tmp_vector.end(), fingerprint_sort );
+    }
+    else {
+        cout <<"Note :: Unrecognized fragment library sorting method" <<endl;
+    }
+
+
+    // Create the output filenames
+    ostringstream file_scaffold, file_linker, file_sidechain, file_rigid;
+
+    file_scaffold << fragment_library_prefix << "_scaffold.mol2";
+    file_linker << fragment_library_prefix << "_linker.mol2";
+    file_sidechain << fragment_library_prefix << "_sidechain.mol2";
+    file_rigid << fragment_library_prefix << "_rigid.mol2";
+
+    // Use those filenames to open output filestreams
+    fstream fout_scaffold, fout_linker, fout_sidechain, fout_rigid;
+
+    fout_scaffold.open (file_scaffold.str().c_str(), fstream::out|fstream::trunc);
+    fout_linker.open (file_linker.str().c_str(), fstream::out|fstream::trunc);
+    fout_sidechain.open (file_sidechain.str().c_str(), fstream::out|fstream::trunc);
+    fout_rigid.open (file_rigid.str().c_str(), fstream::out|fstream::trunc);
+    
+    global_frag_index=0;//initialize global_counter for fragments
+
+    //11.15.2020 - tracker vector for the matrix
+    std::vector<string> fragment_names_ordered;
+
+
+    std::map<string,string> frag_name_with_fingerprints;
+    // Iterate over the strings in the vector, to print the dockmols from the map
+    for (int i=0; i<tmp_vector.size(); i++) {
+
+        int counter = 0;
+        for(int j=0; j<segment_fingerprints[tmp_vector[i].first].first.num_atoms; j++) {
+            if(segment_fingerprints[tmp_vector[i].first].first.atom_types[j].compare("Du") == 0){
+                counter++;
+            }
+        }
+
+
+        // And print to the correct filehandle
+        if (counter > 2) {
+
+            ostringstream fragment_name;
+            fragment_name << "scf." <<global_frag_index << "-" << tmp_vector[i].second;
+            frag_name_with_fingerprints[tmp_vector[i].first] = fragment_name.str();
+            segment_fingerprints[tmp_vector[i].first].first.energy = fragment_name.str();
+            fragment_names_ordered.push_back(fragment_name.str());
+            global_frag_index++;
+
+            fout_scaffold <<DELIMITER<<setw(STRING_WIDTH)<<"TYPE:" << setw(FLOAT_WIDTH) << "Scaffold" <<endl;
+            fout_scaffold <<DELIMITER<<setw(STRING_WIDTH)<<"FR_NAME:"<<setw(FLOAT_WIDTH)<<fragment_name.str() <<endl;
+            fout_scaffold <<DELIMITER<<setw(STRING_WIDTH)<<"FREQ:"<<setw(FLOAT_WIDTH)<<fixed<<tmp_vector[i].second <<endl;
+            fout_scaffold <<DELIMITER<<setw(STRING_WIDTH)<<"CONN_PTS:"<<setw(FLOAT_WIDTH)<<fixed << counter <<endl;
+            fout_scaffold <<DELIMITER<<endl;
+            Write_Mol2(segment_fingerprints[tmp_vector[i].first].first, fout_scaffold);
+
+        } else if (counter == 2){
+
+            ostringstream fragment_name;
+            fragment_name << "lnk." <<global_frag_index  << "-" << tmp_vector[i].second;
+            frag_name_with_fingerprints[tmp_vector[i].first] = fragment_name.str();
+            segment_fingerprints[tmp_vector[i].first].first.energy = fragment_name.str();
+            fragment_names_ordered.push_back(fragment_name.str());
+            global_frag_index++;
+
+            fout_linker<<DELIMITER<<setw(STRING_WIDTH)<<"TYPE:"<<setw(FLOAT_WIDTH) <<"Linker"<<endl;
+            fout_linker<<DELIMITER<<setw(STRING_WIDTH)<<"FR_NAME:"<<setw(FLOAT_WIDTH) << fragment_name.str()<<endl;
+            fout_linker<<DELIMITER<<setw(STRING_WIDTH)<<"FREQ:"<<setw(FLOAT_WIDTH)<<fixed<<tmp_vector[i].second<<endl;
+            fout_linker<<DELIMITER<<setw(STRING_WIDTH)<<"CONN_PTS:"<<setw(FLOAT_WIDTH)<<fixed<<counter <<endl;
+            fout_linker<<DELIMITER<<endl;
+            
+
+            Write_Mol2(segment_fingerprints[tmp_vector[i].first].first, fout_linker);
+
+        } else if (counter == 1){
+
+            ostringstream fragment_name;
+            fragment_name <<"sid." <<global_frag_index  << "-" << tmp_vector[i].second;
+            frag_name_with_fingerprints[tmp_vector[i].first] = fragment_name.str();
+            segment_fingerprints[tmp_vector[i].first].first.energy = fragment_name.str();
+            fragment_names_ordered.push_back(fragment_name.str());
+            global_frag_index++;
+
+            fout_sidechain <<DELIMITER<<setw(STRING_WIDTH)<<"TYPE:"<<setw(FLOAT_WIDTH) <<"Sidechain"<<endl;
+            fout_sidechain <<DELIMITER<<setw(STRING_WIDTH)<<"FR_NAME:"<<setw(FLOAT_WIDTH) << fragment_name.str()<<endl;
+            fout_sidechain <<DELIMITER<<setw(STRING_WIDTH)<<"FREQ:"<<setw(FLOAT_WIDTH)<<fixed<<tmp_vector[i].second <<endl;
+            fout_sidechain <<DELIMITER<<setw(STRING_WIDTH)<<"CONN_PTS:"<<setw(FLOAT_WIDTH)<<fixed<<counter <<endl;
+            fout_sidechain <<DELIMITER<<endl;
+            Write_Mol2(segment_fingerprints[tmp_vector[i].first].first, fout_sidechain);
+
+        } else if (counter == 0){
+
+            ostringstream fragment_name;
+            fragment_name <<"rig."  <<global_frag_index  << "-" << tmp_vector[i].second;
+            frag_name_with_fingerprints[tmp_vector[i].first] = fragment_name.str();
+            segment_fingerprints[tmp_vector[i].first].first.energy = fragment_name.str();
+            fragment_names_ordered.push_back(fragment_name.str());
+            global_frag_index++;
+
+            fout_rigid <<DELIMITER<<setw(STRING_WIDTH)<<"TYPE:"<<setw(FLOAT_WIDTH)<<"Rigid"<<endl;
+            fout_rigid <<DELIMITER<<setw(STRING_WIDTH)<<"FR_NAME:"<<setw(FLOAT_WIDTH)<< fragment_name.str()<<endl;
+            fout_rigid <<DELIMITER<<setw(STRING_WIDTH)<<"FREQ:"<<setw(FLOAT_WIDTH)<<fixed<<tmp_vector[i].second <<endl;
+            fout_rigid <<DELIMITER<<setw(STRING_WIDTH)<<"CONN_PTS:"<<setw(FLOAT_WIDTH)<<fixed<<counter <<endl;
+            fout_rigid <<DELIMITER<<endl;
+            Write_Mol2(segment_fingerprints[tmp_vector[i].first].first, fout_rigid);
+
+        } else {
+            cout <<"Warning :: This type of molecule should not exist " << endl;
+        }
+        
+    }
+
+        //for (std::map<std::string,map<std::string,int>>::iterator it = fragment_binding_pairs.begin();
+        //        it != fragment_binding_pairs.end(); ++it) {
+
+        //    cout << "Key " << it->first.second <<endl;
+
+    // Clear some memory
+    fout_scaffold.close();
+    fout_linker.close();
+    fout_sidechain.close();
+    fout_rigid.close();
+    tmp_vector.clear();
+    segment_fingerprints.clear();
+
+
+    std::map < std::string, std::map <std::string, int> > frag_names_with_attachments;
+
+    /*
+    for (std::map<std::string,string>::iterator it = frag_name_with_fingerprints.begin();
+            it != frag_name_with_fingerprints.end(); ++it) {
+        cout << "Fragment name:   " << it->second << endl;
+    }
+    */
+
+
+    //fragment_binding_pairs == map < string, map < string, int> >
+    //  It contains a map with 
+
+    //std::map<string,string> frag_name_with_fingerprints (first is key, second is name)
+    fstream fout_fragment_attachments;
+    fout_fragment_attachments.open("zzz.attachments.dat", fstream::out|fstream::trunc);
+
+
+    //ent1.first is first key, ent2.first is second key, ent2.second is data
+    std::vector < std::vector < int> > mat_vector(fragment_names_ordered.size(), vector<int> (fragment_names_ordered.size(), 0));
+    //runs through all binding pairs
+    for (auto const &ent1 : fragment_binding_pairs) {
+        string start_fragment;
+        //runs through all fragments by footprint
+        for(auto const &frags : frag_name_with_fingerprints){
+            if (ent1.first == frags.first){
+                start_fragment = frags.second;
+                break;
+            }
+        }
+        //If we aren't keeping all fragments, there'll be some empty spots. This ensures they're aren't written.
+        if(start_fragment.size() == 0) {
+            continue;
+        }
+        for (auto const &ent2 : ent1.second) {
+            for (auto const &frags : frag_name_with_fingerprints ){
+                if (ent2.first == frags.first) {
+                    frag_names_with_attachments[start_fragment][frags.second] =
+                                ent2.second;
+                    //cout << ent2.second;
+                }
+            }
+        }
+    }
+    //runs through all fragments by fragment name (ex. sid-1)
+    std::string origin_fingerprint;
+    for (auto const &ent1 : frag_names_with_attachments){
+        std::vector< std::string > temp_tors_vect;
+        for(auto const &frags : frag_name_with_fingerprints){
+            if (frags.second == ent1.first){
+                origin_fingerprint = frags.first;
+                //cout << endl << "ORIGIN " << ent1.first << endl;
+                //cout << "ORG TORSIONS START" << endl;
+                fout_fragment_attachments << endl << "ORIGIN " << ent1.first << endl;
+                fout_fragment_attachments << "ORG TORSIONS START" << endl;
+                for (auto const &f0s : frags_with_half_tors) {
+                    for(auto const &f1s : f0s.second){
+                        for (auto const &t0s : f1s.second){
+                            if (f0s.first == frags.first){
+
+                                if (find(temp_tors_vect.begin(), temp_tors_vect.end(), t0s.first) != temp_tors_vect.end()){
+                                    continue;
+                                } else {
+                                    temp_tors_vect.push_back(t0s.first);
+                                }
+                                
+
+                            
+                            }
+                        }
+                        
+                    }
+                }
+            }
+        }
+        for (int i=0; i<temp_tors_vect.size(); ++i){
+            //cout << temp_tors_vect[i] << endl;
+            fout_fragment_attachments << temp_tors_vect[i] << endl;
+        }
+        temp_tors_vect.clear();
+        //cout << "ORG TORSIONS END" << endl << "BOUND TO | FREQUENCY" << endl;
+        fout_fragment_attachments << "ORG TORSIONS END" << endl << "BOUND TO | FREQUENCY" << endl;
+        //frag_names_with_attachments, ent2 = pair < target fragment name, frequency > 
+        for (auto const &ent2 : ent1.second) { //target fragments, by name
+            //frag_name_with_fingerprints = map < fingerprint, fragment name (ex sid.1) >
+            for(auto const &frags : frag_name_with_fingerprints){
+                //if the fragment name in the fingerprint map matches the one in the attachment map
+                //this is done to correlate the attachments
+                if (frags.second == ent2.first){
+
+                    //this section prepares pieces of the fragment attachment matrix
+                    int str_start = ent1.first.find(".")+1;
+                    int str_end = ent1.first.find("-");
+                    int str2_start = ent2.first.find(".")+1;
+                    int str2_end = ent2.first.find("-");
+
+                    mat_vector[stoi(ent1.first.substr(str_start,str_start-str_end))][stoi(ent2.first.substr(str2_start,str2_start-str2_end))] += ent2.second;
+                    mat_vector[stoi(ent2.first.substr(str2_start,str2_start-str_end))][stoi(ent1.first.substr(str_start,str_start-str_end))] += ent2.second;
+
+
+                    for (auto const &t0s : frags_with_half_tors[origin_fingerprint][frags.first] ){
+                        for (auto const &t1s : t0s.second) {
+                            //cout << frags.second << " " << t0s.first << " " << t1s.first << " " << t1s.second << endl;
+
+
+                            fout_fragment_attachments << frags.second << " " << t1s.first << " " << t1s.second << endl;
+                        }
+                    }
+                }
+            } //end frag_name_with_fingerprints
+        } //end second set of attachments
+        temp_tors_vect.clear();
+
+        
+        //cout << "END" << endl;
+        fout_fragment_attachments << "END" << endl;
+    }
+
+    fstream fout_fragments_matrix;
+    fout_fragments_matrix.open("fraglib_matrix.dat", fstream::out|fstream::trunc);
+    //generates the ordered list of fragments for the matrix header
+    std::string all_segments_string;
+    for(int segment=0; segment<fragment_names_ordered.size(); ++segment){
+        int str_start = fragment_names_ordered[segment].find(".") + 1;
+        int str_end = fragment_names_ordered[segment].find("-");
+
+        all_segments_string += fragment_names_ordered[segment] + ",";
+
+    }
+
+    //outputs ordered header to matrix file
+    fout_fragments_matrix << all_segments_string << endl;
+    all_segments_string.clear();
+
+    for(int x=0; x<mat_vector.size(); ++x){
+        for (int y=0; y<mat_vector[x].size(); ++y){
+            fout_fragments_matrix << mat_vector[x][y] << ",";
+        }
+        fout_fragments_matrix << endl;
+    }
+    fout_fragments_matrix.close();
+
+
+
+    if (Parameter_Reader::verbosity_level() > 1 ) {
+        //ent1.first is first key, ent2.first is second key, ent2.second is data
+        //frags_with_half_tors == map < string, map < string, map < string, map < string, int >>>>
+        // f0,f1,t0,t1,freq
+        for (auto const &ent1 : frags_with_half_tors) {
+            for(auto const &ent2 : ent1.second){
+                for(auto const &ent3 : ent2.second){
+                    for(auto const &ent4 : ent3.second){
+                        cout << "First fragment:  " << ent1.first <<endl;
+                        cout << "Second fragment: " << ent2.first << endl;
+                        cout << "First torsion:   " << ent3.first << endl;
+                        cout << "Second torsion:  " << ent4.first << endl;
+                        cout << "Frequency:       " << ent4.second << endl << endl;
+                    }
+                }
+            }
+        }
+
+    }
+
+    fout_fragment_attachments.close();
+    
+    return;
+
+} // end AG_Conformer_Search::bickel_write_unique_fragments()
 
 
 // +++++++++++++++++++++++++++++++++++++++++
@@ -2325,9 +2936,9 @@ AG_Conformer_Search::write_unique_fragments()
         for (int i=0; i<tmp_torsions_ref.size(); i++){
             fout_torenv_ref <<tmp_torsions_ref[i] <<"\n";
         }
-	//CLear some memory
-	fout_torenv_ref.close();
-	tmp_torsions_ref.clear();
+    //CLear some memory
+    fout_torenv_ref.close();
+    tmp_torsions_ref.clear();
     }
 
     // Clear some memory

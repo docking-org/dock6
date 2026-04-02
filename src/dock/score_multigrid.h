@@ -15,7 +15,7 @@ class Parameter_Reader;
 using namespace std;
 
 #define VDWOFF -0.09
-#define MAX_ATOM_REC 1000
+#define MAX_ATOM_REC 2000
 #define MAX_ATOM_LIG 200
 //#define bltzmn_const 0.0019872041 // kcal/mol/K
 

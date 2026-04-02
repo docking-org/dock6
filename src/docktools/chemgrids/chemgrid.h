@@ -3,7 +3,7 @@ c                        distribution version
 c      header file for CHEMGRID                             ECMeng  4/91
 c-------------------------------------------------------------------------
       integer maxpts
-      parameter (maxpts=10000000)
+      parameter (maxpts=20000000)
 c  maxpts--maximum number of grid points
       integer npts
 c  npts--number of grid points

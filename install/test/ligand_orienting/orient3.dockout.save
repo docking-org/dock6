@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released September 2024
 Copyright UCSF
 --------------------------------------
 
@@ -58,17 +58,20 @@ flex_drive_file                                              ../../../parameters
 Molecule Library Output Parameters
 ------------------------------------------------------------------------------------------
 ligand_outfile_prefix                                        orient3
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
 Initializing Library File Routines...
+
 Initializing Orienting Routines...
 
 -----------------------------------
 Molecule:  C1 
 
- Elapsed time for docking:	0.019 seconds
+ Elapsed time for docking:	0.008 seconds
 
  Anchors:		1
  Orientations:		50
@@ -77,4 +80,7 @@ Molecule:  C1
 
 
 1 Molecules Processed
-Total elapsed time:	0.023 seconds
+Total elapsed time:	0.011 seconds
+Number of molecules per second:	93.965
+Virtual memory used for this process: 83744 kilobytes
+Physical memory used for this process: 13628 kilobytes

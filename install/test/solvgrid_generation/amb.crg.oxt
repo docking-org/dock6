@@ -1,79 +1,42 @@
-! amber charges, based on kollman, weiner et al
-! j. comp chem, vol 7, p 230 (1986)
-atom__resnumbc_charge_
-N     ala       -0.520      ALANINE  nonpolar
+! Automatically converted by prot2crg.py
+aaaaaarrrnnnncqqqqqqqq    format (A6, A3, A4, A1, F8.3)
+N     ala       -0.520            ALANINE
 CA    ala        0.215
-C     ala        0.526
+C     ala        0.526          
 O     ala       -0.500
-HN    ala        0.248
+H     ala        0.248
 CB    ala        0.031
-N     alb       -0.520      ALANINE  nonpolar more polar 0.4 per polar atom (alb)
-CA    alb        0.215
-C     alb        0.526
-O     alb       -0.900
-HN    alb        0.648
-CB    alb        0.031
-N     arg       -0.520    ARGININE      basic
-C     arg        0.526
-O     arg       -0.500
+N     arg       -0.520            ARGININE (+)
+C     arg        0.526     
+O     arg       -0.500    
 CA    arg        0.237
 CB    arg        0.049
 CG    arg        0.058
 CD    arg        0.111
 NE    arg       -0.493
-CZ    arg        0.813
+CZ    arg        0.813    
 NH1   arg       -0.635
 NH2   arg       -0.634
-HN    arg        0.248
-HNE   arg        0.294
-HN11  arg        0.361
-HN12  arg        0.362
-HN21  arg        0.361
-HN22  arg        0.362
-N     arh       -0.520    ARGININE      basic
-C     arh        0.526
-O     arh       -0.900
-CA    arh        0.237
-CB    arh        0.049
-CG    arh        0.058
-CD    arh        0.111
-NE    arh       -0.493
-CZ    arh        0.813
-NH1   arh       -0.635
-NH2   arh       -0.634
-HN    arh        0.648
-HNE   arh        0.294
-HN11  arh        0.361
-HN12  arh        0.362
-HN21  arh        0.361
-HN22  arh        0.362
-N     asn       -0.520     ASPARAGINE    polar neutral
+H     arg        0.248
+HE    arg        0.294
+HH11  arg        0.361
+HH12  arg        0.362    
+HH21  arg        0.361    
+HH22  arg        0.362
+N     asn       -0.520            ASPARAGINE
 CA    asn        0.217
-C     asn        0.526
-O     asn       -0.500
+C     asn        0.526     
+O     asn       -0.500      
 CB    asn        0.003
-ND2   asn       -0.867
+ND2   asn       -0.867       
 AD2   asn       -0.867
-CG    asn        0.675
-OD1   asn       -0.470
+CG    asn        0.675      
+OD1   asn       -0.470      
 AD1   asn       -0.470
-HN    asn        0.248
-HND1  asn        0.344
-HND2  asn        0.344
-N     aso       -0.520     ASPARAGINE    polar neutral more polar 0.4 per polar atom (aso)
-CA    aso        0.217
-C     aso        0.526
-O     aso       -0.900
-CB    aso        0.003
-ND2   aso       -0.867
-AD2   aso       -0.867
-CG    aso        0.675
-OD1   aso       -0.870
-AD1   aso       -0.870
-HN    aso        0.648
-HND1  aso        0.544
-HND2  aso        0.544
-OD1   asp       -0.706      ASPARTIC ACID       acidic
+H     asn        0.248
+HD21  asn        0.344
+HD22  asn        0.344
+OD1   asp       -0.706            ASPARTIC ACID (-)
 OD2   asp       -0.706
 CA    asp        0.246
 CB    asp       -0.208
@@ -81,47 +44,30 @@ CG    asp        0.620
 N     asp       -0.520
 C     asp        0.526
 O     asp       -0.500
-HN    asp        0.248
-OD1   asq       -0.706      ASPARTIC ACID       acidic more polar 0.4 per polar atom (asq)
-OD2   asq       -0.706
-CA    asq        0.246
-CB    asq       -0.208
-CG    asq        0.620
-N     asq       -0.520
-C     asq        0.526
-O     asq       -0.900
-HN    asq        0.648
-N     cys       -0.520        CYSTEINE     polar neutral
+H     asp        0.248
+N     cys       -0.520            CYSTEINE
 C     cys        0.526
 O     cys       -0.500
 CA    cys        0.146
 CB    cys        0.100
 SG    cys       -0.135
-HN    cys        0.248
-HSG   cys        0.135
-N     cyt       -0.520        CYSTEINE     polar neutral more polar by 0.4 per polar atom (cyt)
-C     cyt        0.526
-O     cyt       -0.900
-CA    cyt        0.146
-CB    cyt        0.100
-SG    cyt       -0.535
-HN    cyt        0.648
-HSG   cyt        0.535
-N     cyx       -0.520        CYSTINE       polar neutral
+H     cys        0.248
+HG    cys        0.135
+N     cym       -0.463           CYSTEINE NEGATIVE CHARGE - COORDINATING METAL
+C     cym        0.616   
+O     cym       -0.504   
+CA    cym        0.083   
+CB    cym       -0.248   
+SG    cym       -0.736   
+H     cym        0.252   
+N     cyx       -0.520            CYSTINE (disulfide bridge)
 C     cyx        0.526
 O     cyx       -0.500
-CA    cyx        0.088
+CA    cyx        0.088      
 CB    cyx        0.143
 SG    cyx        0.015
-HN    cyx        0.248
-N     cyy       -0.520        CYSTINE       polar neutral more polar by 0.4 per polar atom (cyy)
-C     cyy        0.526
-O     cyy       -0.900
-CA    cyy        0.088
-CB    cyy        0.143
-SG    cyy        0.015
-HN    cyy        0.648
-N     gln       -0.520        GLUTAMINE    polar neutral
+H     cyx        0.248    
+N     gln       -0.520            GLUTAMINE
 CA    gln        0.210
 C     gln        0.526
 O     gln       -0.500
@@ -132,24 +78,10 @@ AE2   gln       -0.867
 CD    gln        0.675
 OE1   gln       -0.470
 AE1   gln       -0.470
-HN    gln        0.248
-HNE1  gln        0.344
-HNE2  gln        0.344
-N     glo       -0.520        GLUTAMINE polar neutral more polar by 0.4 per polar atom (glo)
-CA    glo        0.210
-C     glo        0.526
-O     glo       -0.900
-CB    glo        0.053
-CG    glo       -0.043
-NE2   glo       -0.867
-AE2   glo       -0.867
-CD    glo        0.675
-OE1   glo       -0.870
-AE1   glo       -0.870
-HN    glo        0.648
-HNE1  glo        0.544
-HNE2  glo        0.544
-OE1   glu       -0.706     GLUTAMIC ACID     acidic
+H     gln        0.248
+HE21  gln        0.344
+HE22  gln        0.344       
+OE1   glu       -0.706            GLUTAMIC ACID (-)
 OE2   glu       -0.706
 CD    glu        0.620
 N     glu       -0.520
@@ -158,28 +90,13 @@ O     glu       -0.500
 CA    glu        0.246
 CB    glu        0.000
 CG    glu       -0.208
-HN    glu        0.248
-OE1   glv       -0.706     GLUTAMIC ACID     acidic more polar by 0.4 per polar atom (glv)
-OE2   glv       -0.706
-CD    glv        0.620
-N     glv       -0.520
-C     glv        0.526
-O     glv       -0.900
-CA    glv        0.246
-CB    glv        0.000
-CG    glv       -0.208
-HN    glv        0.648
-N     gly       -0.520            GLYCINE   nonpolar
+H     glu        0.248
+N     gly       -0.520            GLYCINE
 CA    gly        0.246
 C     gly        0.526
 O     gly       -0.500
-HN    gly        0.248
-N     glz       -0.520            GLYCINE   nonpolar more polar by 0.4 per polar atom (glz)
-CA    glz        0.246
-C     glz        0.526
-O     glz       -0.900
-HN    glz        0.648
-N     hid       -0.520           HISTIDINE   +0.25 on each N
+H     gly        0.248
+N     hid       -0.520            HISTIDINE  neutral delta proton  
 C     hid        0.526
 O     hid       -0.500
 CA    hid        0.219
@@ -192,62 +109,10 @@ AE1   hid        0.384
 ND1   hid       -0.444
 AD1   hid       -0.444
 NE2   hid       -0.527
-AE2   hid       -0.277
-HN    hid        0.248
-HND   hid        0.320
+AE2   hid       -0.527
+H     hid        0.248
 HD1   hid        0.320
-N     hic       -0.520           HISTIDINE   +0.25 on each N  more polar by 0.4 (hic)
-C     hic        0.526
-O     hic       -0.900
-CA    hic        0.219
-CB    hic        0.060
-CG    hic        0.089
-CD2   hic        0.145
-AD2   hic        0.145
-CE1   hic        0.384
-AE1   hic        0.384
-ND1   hic       -0.444
-AD1   hic       -0.444
-NE2   hic       -0.527
-AE2   hic       -0.277
-HN    hic        0.648
-HND   hic        0.320
-HD1   hic        0.320
-N     hiz       -0.520           HISTIDINE   +0.25 on each N
-C     hiz        0.526           coordinating zinc 0.2 electron shift to M
-O     hiz       -0.500
-CA    hiz        0.219
-CB    hiz        0.060
-CG    hiz        0.089
-CD2   hiz        0.145
-AD2   hiz        0.145
-CE1   hiz        0.384
-AE1   hiz        0.384
-ND1   hiz       -0.444
-AD1   hiz       -0.444
-NE2   hiz       -0.327       note 0.2 electrons to zinc
-AE2   hiz       -0.277
-HN    hiz        0.248
-HND   hiz        0.320
-HD1   hiz        0.320
-N     hia       -0.520           HISTIDINE   +0.25 on each N (more polar by 0.4 hia)
-C     hia        0.526           coordinating zinc 0.2 electron shift to M
-O     hia       -0.900
-CA    hia        0.219
-CB    hia        0.060
-CG    hia        0.089
-CD2   hia        0.145
-AD2   hia        0.145
-CE1   hia        0.384
-AE1   hia        0.384
-ND1   hia       -0.444
-AD1   hia       -0.444
-NE2   hia       -0.327       note 0.2 electrons to zinc
-AE2   hia       -0.277
-HN    hia        0.648
-HND   hia        0.320
-HD1   hia        0.320
-N     hie       -0.520    histidine +1.00
+N     hie       -0.520            HISTIDINE  neutral epsilon proton
 C     hie        0.526
 O     hie       -0.500
 CA    hie        0.219
@@ -260,96 +125,10 @@ AE1   hie        0.384
 ND1   hie       -0.527
 AD1   hie       -0.527
 NE2   hie       -0.444
-AE2   hie       -0.194
-HN    hie        0.248
+AE2   hie       -0.444
+H     hie        0.248
 HE2   hie        0.320
-HNE   hie        0.320
-N     hif       -0.520    histidine +1.00 more polar by 0.4 (hif)
-C     hif        0.526
-O     hif       -0.900
-CA    hif        0.219
-CB    hif        0.060
-CG    hif        0.112
-CD2   hif        0.122
-AD2   hif        0.122
-CE1   hif        0.384
-AE1   hif        0.384
-ND1   hif       -0.527
-AD1   hif       -0.527
-NE2   hif       -0.444
-AE2   hif       -0.194
-HN    hif        0.648
-HE2   hif        0.320
-HNE   hif        0.320
-N     hiy       -0.520    histidine +1.00
-C     hiy        0.526    0.2 electrons to zinc
-O     hiy       -0.500
-CA    hiy        0.219
-CB    hiy        0.060
-CG    hiy        0.112
-CD2   hiy        0.122
-AD2   hiy        0.122
-CE1   hiy        0.384
-AE1   hiy        0.384
-ND1   hiy       -0.327     0.2 electrons from this atom to zinc
-AD1   hiy       -0.527
-NE2   hiy       -0.444
-AE2   hiy       -0.194
-HN    hiy        0.248
-HE2   hiy        0.320
-HNE   hiy        0.320
-N     hix       -0.520    histidine +1.00 more polar by 0.4 (hix)
-C     hix        0.526    0.2 electrons to zinc
-O     hix       -0.900
-CA    hix        0.219
-CB    hix        0.060
-CG    hix        0.112
-CD2   hix        0.122
-AD2   hix        0.122
-CE1   hix        0.384
-AE1   hix        0.384
-ND1   hix       -0.327     0.2 electrons from this atom to zinc
-AD1   hix       -0.527
-NE2   hix       -0.444
-AE2   hix       -0.194
-HN    hix        0.648
-HE2   hix        0.320
-HNE   hix        0.320
-N     his       -0.520  histidine    +0.5
-C     his        0.526
-O     his       -0.500
-CA    his        0.219
-CB    his        0.060
-CG    his        0.112
-CD2   his        0.122
-AD2   his        0.122
-CE1   his        0.384
-AE1   his        0.384
-ND1   his       -0.277
-AD1   his       -0.277
-NE2   his       -0.194
-AE2   his       -0.194
-HN    his        0.248
-HND   his        0.320
-HD1   his        0.320
-N     hit       -0.520  histidine    +0.5 more polar by 0.4 per polar atom (hit)
-C     hit        0.526
-O     hit       -0.900
-CA    hit        0.219
-CB    hit        0.060
-CG    hit        0.112
-CD2   hit        0.122
-AD2   hit        0.122
-CE1   hit        0.384
-AE1   hit        0.384
-ND1   hit       -0.277
-AD1   hit       -0.277
-NE2   hit       -0.194
-AE2   hit       -0.194
-HN    hit        0.648
-HND   hit        0.320
-HD1   hit        0.320
-N     hip       -0.520    histidine basic +1.0
+N     hip       -0.520            HISTIDINE (+)
 C     hip        0.526
 O     hip       -0.500
 CA    hip        0.195
@@ -363,31 +142,10 @@ ND1   hip       -0.613
 AD1   hip       -0.613
 NE2   hip       -0.686
 AE2   hip       -0.686
-HN    hip        0.248
-HND   hip        0.478
+H     hip        0.248
 HD1   hip        0.478
-HNE   hip        0.486
 HE2   hip        0.486
-N     hiq       -0.520    histidine basic +1.0 more polar by 0.4 (hiq)
-C     hiq        0.526
-O     hiq       -0.500
-CA    hiq        0.195
-CB    hiq        0.211
-CG    hiq        0.103
-CD2   hiq        0.353
-AD2   hiq        0.353
-CE1   hiq        0.719
-AE1   hiq        0.719
-ND1   hiq       -0.613
-AD1   hiq       -0.613
-NE2   hiq       -0.686
-AE2   hiq       -0.686
-HN    hiq        0.248
-HND   hiq        0.478
-HD1   hiq        0.478
-HNE   hiq        0.486
-HE2   hiq        0.486
-N     ile       -0.520   isoleucine    nonpolar
+N     ile       -0.520            ISOLEUCINE
 C     ile        0.526
 O     ile       -0.500
 CA    ile        0.199
@@ -395,17 +153,8 @@ CB    ile        0.030
 CG1   ile        0.017
 CG2   ile        0.001
 CD1   ile       -0.001
-HN    ile        0.248
-N     ilf       -0.520   isoleucine    nonpolar more polar by 0.4 per polar atom (ilf)
-C     ilf        0.526
-O     ilf       -0.900
-CA    ilf        0.199
-CB    ilf        0.030
-CG1   ilf        0.017
-CG2   ilf        0.001
-CD1   ilf       -0.001
-HN    ilf        0.648
-N     leu       -0.520       LEUCINE   nonpolar
+H     ile        0.248
+N     leu       -0.520            LEUCINE
 C     leu        0.526
 O     leu       -0.500
 CA    leu        0.204
@@ -413,17 +162,8 @@ CB    leu        0.016
 CG    leu        0.054
 CD1   leu       -0.014
 CD2   leu       -0.014
-HN    leu        0.248
-N     lev       -0.520       LEUCINE   nonpolar more polar by 0.4 per polar atom (lev)
-C     lev        0.526
-O     lev       -0.900
-CA    lev        0.204
-CB    lev        0.016
-CG    lev        0.054
-CD1   lev       -0.014
-CD2   lev       -0.014
-HN    lev        0.648
-N     lys       -0.520          LYSINE     basic
+H     leu        0.248    
+N     lys       -0.520            LYSINE (+)
 C     lys        0.526
 O     lys       -0.500
 CA    lys        0.227
@@ -432,24 +172,11 @@ CG    lys        0.053
 CD    lys        0.048
 CE    lys        0.218
 NZ    lys       -0.272
-HN    lys        0.248
-HNZ1  lys        0.311
-HNZ2  lys        0.311
-HNZ3  lys        0.311
-N     lyt       -0.520          LYSINE basic more polar by 0.4 per polar atom (0.8/bond)
-C     lyt        0.526
-O     lyt       -0.900
-CA    lyt        0.227
-CB    lyt        0.039
-CG    lyt        0.053
-CD    lyt        0.048
-CE    lyt        0.218
-NZ    lyt       -0.272
-HN    lyt        0.648
-HNZ1  lyt        0.311
-HNZ2  lyt        0.311
-HNZ3  lyt        0.311
-N     met       -0.520         METHIONINE   nonpolar
+H     lys        0.248
+HZ1   lys        0.311
+HZ2   lys        0.311
+HZ3   lys        0.311
+N     met       -0.520            METHIONINE
 C     met        0.526
 O     met       -0.500
 CA    met        0.137
@@ -457,17 +184,8 @@ CB    met        0.037
 CG    met        0.090
 SD    met       -0.025
 CE    met        0.007
-HN    met        0.248
-N     meu       -0.520         METHIONINE   nonpolar more polar by 0.4 per polar atom (meu)
-C     meu        0.526
-O     meu       -0.900
-CA    meu        0.137
-CB    meu        0.037
-CG    meu        0.090
-SD    meu       -0.025
-CE    meu        0.007
-HN    meu        0.648
-N     phe       -0.520             PHENYLALANINE   nonpolar
+H     met        0.248    
+N     phe       -0.520            PHENYLALANINE
 C     phe        0.526
 O     phe       -0.500
 CA    phe        0.214
@@ -478,68 +196,32 @@ CD2   phe       -0.011
 CE1   phe        0.004
 CE2   phe        0.004
 CZ    phe       -0.003
-HN    phe        0.248
-N     phf       -0.520             PHENYLALANINE   nonpolar more polar by 0.4 per polar atom (phf)
-C     phf        0.526
-O     phf       -0.900
-CA    phf        0.214
-CB    phf        0.038
-CG    phf        0.011
-CD1   phf       -0.011
-CD2   phf       -0.011
-CE1   phf        0.004
-CE2   phf        0.004
-CZ    phf       -0.003
-HN    phf        0.648
-N     pro       -0.257  PROLINE          nonpolar
+H     phe        0.248    
+N     pro       -0.257            PROLINE
 CA    pro        0.112
 C     pro        0.526
 O     pro       -0.500
 CB    pro       -0.001
 CG    pro        0.036
 CD    pro        0.084
-N     prp       -0.257  PROLINE          nonpolar more polar by 0.4 (prp)
-CA    prp        0.112
-C     prp        0.526
-O     prp       -0.500
-CB    prp       -0.001
-CG    prp        0.036
-CD    prp        0.084
-N     ser       -0.520       SERINE   polar neutral
+N     ser       -0.520            SERINE
 C     ser        0.526
 O     ser       -0.500
 CA    ser        0.292
 CB    ser        0.194
 OG    ser       -0.550
-HN    ser        0.248
-HOG   ser        0.310
-N     ses       -0.520       SERINE   polar neutral more polar by 0.4 per polar atom (ses)
-C     ses        0.526
-O     ses       -0.900
-CA    ses        0.292
-CB    ses        0.194
-OG    ses       -0.950
-HN    ses        0.648
-HOG   ses        0.710
-N     thr       -0.520           THREONINE   polar neutral
+H     ser        0.248    
+HG    ser        0.310
+N     thr       -0.520            THREONINE
 C     thr        0.526
 O     thr       -0.500
 OG1   thr       -0.550
 CA    thr        0.268
 CB    thr        0.211
 CG2   thr        0.007
-HN    thr        0.248
-HOG   thr        0.310
-N     ths       -0.520           THREONINE   polar neutral more polar by 0.4 per polar atom (ths)
-C     ths        0.526
-O     ths       -0.900
-OG1   ths       -0.950
-CA    ths        0.268
-CB    ths        0.211
-CG2   ths        0.007
-HN    ths        0.648
-HOG   ths        0.710
-N     trp       -0.520     TRYPTOPHAN   nonpolar
+H     thr        0.248
+HG1   thr        0.310
+N     trp       -0.520            TRYPTOPHAN
 C     trp        0.526
 O     trp       -0.500
 CA    trp        0.248
@@ -553,25 +235,9 @@ CE3   trp        0.145
 CZ2   trp        0.029
 CZ3   trp       -0.082
 CH2   trp        0.034
-HN    trp        0.248
-HNE   trp        0.294
-N     trq       -0.520     TRYPTOPHAN   nonpolar more polar by 0.4 per polar atom (trq)
-C     trq        0.526
-O     trq       -0.900
-CA    trq        0.248
-CB    trq        0.020
-CG    trq        0.046
-CD1   trq        0.117
-CD2   trq       -0.275
-NE1   trq       -0.730
-CE2   trq        0.000
-CE3   trq        0.145
-CZ2   trq        0.029
-CZ3   trq       -0.082
-CH2   trq        0.034
-HN    trq        0.648
-HNE   trq        0.694
-N     tyr       -0.520       TYROSINE    neutral/acidic
+H     trp        0.248
+HE1   trp        0.294
+N     tyr       -0.520            TYROSINE
 C     tyr        0.526
 O     tyr       -0.500
 OH    tyr       -0.368
@@ -583,395 +249,602 @@ CD2   tyr       -0.035
 CE1   tyr        0.100
 CE2   tyr        0.100
 CZ    tyr       -0.121
-HN    tyr        0.248
-HOH   tyr        0.339
-N     tys       -0.520       TYROSINE    neutral/acidic more polar by 0.4 per polar atom (tys)
-C     tys        0.526
-O     tys       -0.900
-OH    tys       -0.768
-CA    tys        0.245
-CB    tys        0.022
-CG    tys       -0.001
-CD1   tys       -0.035
-CD2   tys       -0.035
-CE1   tys        0.100
-CE2   tys        0.100
-CZ    tys       -0.121
-HN    tys        0.648
-HOH   tys        0.739
-N     val       -0.520          VALINE   nonpolar
+H     tyr        0.248
+HH    tyr        0.339
+N     val       -0.520            VALINE
 C     val        0.526
 O     val       -0.500
 CA    val        0.201
 CB    val        0.033
 CG1   val        0.006
 CG2   val        0.006
-HN    val        0.248
-N     vam       -0.520          VALINE   nonpolar more polar by 0.4 per polar atom (vam)
-C     vam        0.526
-O     vam       -0.900
-CA    vam        0.201
-CB    vam        0.033
-CG1   vam        0.006
-CG2   vam        0.006
-HN    vam        0.648
-OH2   tip       -0.820       TIP3 WATER OF CHARMM
-OW    wat       -0.834        TIP3 WATER OF AMBER
-O1    wat       -0.834        WATER OF PDB
+H     val        0.248
+O     ace       -0.500            ACETYL END GROUP
+C     ace        0.526
+CH3   ace       -0.026
+N     nme       -0.520            N-METHYL END GROUP
+H     nme        0.248
+CM    nme        0.272
+N     nma       -0.520            N-METHYL END GROUP (MAESTRO)
+H     nma        0.248
+CM    nma        0.272
+OH2   tip       -0.834            TIP3P WATER CHARGES
+H1    tip        0.417
+H2    tip        0.417
+OW    wat       -0.834            TIP3P WATER CHARGES
 HW1   wat        0.417
 HW2   wat        0.417
-!P1    ndp        1.390
-!OP1   ndp       -0.990
-!OP2   ndp       -0.990
-!OP3   ndp       -0.990
-!O5X   ndp       -0.510
-!O2X   ndp       -0.510
-!OP6   ndp       -0.510
-!OP4   ndp       -0.847
-!OP5   ndp       -0.847
-!OP7   ndp       -0.847
-!OP8   ndp       -0.847
-!C     ndp       -0.000
-H1    tip        0.410
-H2    tip        0.410
-HN1              0.416
-HN2              0.416
-HN3              0.416
-oxt             -1.000
-oct1            -0.750
-oct2            -0.750
-ht1              0.416
-ht2              0.416
-ht3              0.416
-cu               1.400
-zn               1.400
-!zn               2.000             niu, see tack's paper in med.chem.res.
-ca               2.000            calcium iron
-fe               1.400
-C1    PVL       -0.052           PYRUVOYL GROUP - s.mcgovern adometdc
-C2    PVL        0.526
-C3    PVL        0.526
-O3    PVL       -0.500
-O2    PVL       -0.500
-c     cbx        0.000           added by jji - carbamblated lysine
-o1    cbx       -0.500
-o2    cbx       -0.500
-P1    NAP        1.390         NADP+ s.mcgovern
-O2    NAP       -0.500
-O3    NAP       -0.500
-O4    NAP       -0.500
-C5    NAP        0.353
-C6    NAP        0.353
-O7    NAP       -0.500
-C8    NAP        0.353
-O9    NAP       -0.500
-C10   NAP        0.353
-O11   NAP       -0.500
-C12   NAP        0.353
-N13   NAP       -0.520
-C14   NAP        0.353
-N15   NAP       -0.520
-C16   NAP        0.353
-C17   NAP        0.353
-N18   NAP       -0.520
-N19   NAP       -0.520
-C20   NAP        0.353
-N21   NAP       -0.520
-C22   NAP        0.353
-O23   NAP       -0.500
-P24   NAP        1.390
-O25   NAP       -0.500
-O26   NAP       -0.500
-O27   NAP       -0.500
-C28   NAP        0.353
-C29   NAP        0.353
-O30   NAP       -0.500
-C31   NAP        0.353
-O32   NAP       -0.500
-C33   NAP        0.353
-O34   NAP       -0.500
-C35   NAP        0.353
-N36   NAP        0.113
-C37   NAP        0.140
-C38   NAP        0.133
-C39   NAP        0.233
-O40   NAP       -0.199
-N41   NAP        0.085
-C42   NAP        0.158
-C43   NAP        0.068
-C44   NAP        0.271
-P45   NAP        1.390
-O46   NAP       -0.500
-O47   NAP       -0.500
-O48   NAP       -0.500
-P1    ndp        1.390           NADPH S.mcgovern  (DHFR)
-OP1   ndp       -0.990
-OP2   ndp       -0.990
-OP3   ndp       -0.990
-O5X   ndp       -0.510
-O2X   ndp       -0.510
-OP6   ndp       -0.510
-OP4   ndp       -0.847
-OP5   ndp       -0.847
-OP7   ndp       -0.847
-OP8   ndp       -0.847
-HOP   ndp        0.284
-C     ndp       -0.000
-P1    NAH        1.390          copy of nap above - necessary or do a rename?
-O2    NAH       -0.500
-O3    NAH       -0.500
-O4    NAH       -0.500
-C5    NAH        0.353
-C6    NAH        0.353
-O7    NAH       -0.500
-C8    NAH        0.353
-O9    NAH       -0.500
-C10   NAH        0.353
-O11   NAH       -0.500
-C12   NAH        0.353
-N13   NAH       -0.520
-C14   NAH        0.353
-N15   NAH       -0.520
-C16   NAH        0.353
-C17   NAH        0.353
-N18   NAH       -0.520
-N19   NAH       -0.520
-C20   NAH        0.353
-N21   NAH       -0.520
-C22   NAH        0.353
-O23   NAH       -0.500
-P24   NAH        1.390
-O25   NAH       -0.500
-O26   NAH       -0.500
-O27   NAH       -0.500
-C28   NAH        0.353
-C29   NAH        0.353
-O30   NAH       -0.500
-C31   NAH        0.353
-O32   NAH       -0.500
-C33   NAH        0.353
-O34   NAH       -0.500
-C35   NAH        0.353
-N36   NAH        0.213
-C37   NAH        0.240
-C38   NAH       -0.133
-C39   NAH        0.333
-O40   NAH       -0.299
-N41   NAH        0.085
-C42   NAH        0.258
-C43   NAH        0.068
-C44   NAH        0.371
-P45   NAH        1.390
-O46   NAH       -0.500
-O47   NAH       -0.500
-O48   NAH       -0.500
-
-N1    UMP       -0.235  UMP - niu from susan
-C2    UMP        0.315
-N3    UMP       -0.077
-C4    UMP        0.245
-C5    UMP        0.083
-C6    UMP        0.087
-O2    UMP       -0.252
-O4    UMP       -0.270
-C1'   UMP        0.216
-C2'   UMP        0.085
-C3'   UMP        0.149
-C4'   UMP        0.175
-O3'   UMP       -0.179
-O4'   UMP       -0.350
-C5'   UMP        0.199
-O5'   UMP       -0.352
-P     UMP        0.061
-O1P   UMP       -0.633
-O2P   UMP       -0.633
-O3P   UMP       -0.633
-
-C1    GAR        0.194    GAR for GART - niu fro susan
-O6    GAR       -0.240
-C2    GAR        0.194
-O8    GAR       -0.240
-C3    GAR        0.292
-O4    GAR       -0.510
-C5    GAR        0.211
-C10   GAR        0.211
-O12   GAR       -0.510
-N19   GAR       -0.272
-C21   GAR        0.526
-O22   GAR       -0.500
-C23   GAR        0.246
-N24   GAR        1.000
-P15   GAR        1.390
-O16   GAR       -0.847
-O17   GAR       -0.847
-O18   GAR       -0.847
-
-HOP   NDP        0.000   NDP - niu from susan
-P1    NDP        1.390
-P     NDP        1.390
-P2    NDP        1.390
-O2    NDP       -0.500
-O1    NDP       -0.500
-O3    NDP       -0.500
-O4    NDP       -0.500
-C5    NDP        0.353
-C6    NDP        0.353
-O7    NDP       -0.500
-C8    NDP        0.353
-O9    NDP       -0.500
-C10   NDP        0.353
-O11   NDP       -0.500
-C12   NDP        0.353
-N13   NDP       -0.520
-C14   NDP        0.353
-N15   NDP       -0.520
-C16   NDP        0.353
-C17   NDP        0.353
-N18   NDP       -0.520
-N19   NDP       -0.520
-C20   NDP        0.353
-N21   NDP       -0.520
-C22   NDP        0.353
-O23   NDP       -0.500
-P24   NDP        1.390
-O25   NDP       -0.500
-O26   NDP       -0.500
-O27   NDP       -0.500
-C28   NDP        0.353
-C29   NDP        0.353
-O30   NDP       -0.500
-C31   NDP        0.353
-O32   NDP       -0.500
-C33   NDP        0.353
-O34   NDP       -0.500
-C35   NDP        0.353
-N36   NDP       -0.520
-C37   NDP        0.353
-C38   NDP        0.353
-C39   NDP        0.353
-O40   NDP       -0.500
-N41   NDP       -0.520
-C42   NDP        0.353
-C43   NDP        0.353
-C44   NDP        0.353
-P45   NDP        1.390
-O46   NDP       -0.847
-O47   NDP       -0.847
-O48   NDP       -0.847
-
-P1    nd1        1.390   the other ndp
-OP3   nd1       -0.500
-P1    nd1        1.390
-OP2   nd1       -0.500
-OP1   nd1       -0.500
-O2'   nd1       -0.500
-C2'   nd1        0.353
-C1'   nd1        0.353
-N9    nd1       -0.520
-C4    nd1        0.353
-N3    nd1       -0.520
-C2    nd1        0.353
-N1    nd1       -0.520
-C6    nd1        0.353
-N6    nd1       -0.520
-C5    nd1        0.353
-N7    nd1       -0.520
-C8    nd1        0.353
-O4'   nd1       -0.500
-C4'   nd1        0.353
-C3'   nd1        0.353
-O3'   nd1       -0.500
-C5'   nd1        0.353
-O5'   nd1       -0.500
-OP4   nd1       -0.500
-OP1   nd1       -0.500
-OP2   nd1       -0.500
-OP5   nd1       -0.500
-
-P1    nd2        1.390
-OP1   nd2       -0.990
-OP2   nd2       -0.990
-OP3   nd2       -0.990
-O5X   nd2       -0.510
-O2X   nd2       -0.510
-OP6   nd2       -0.510
-OP4   nd2       -0.847
-OP5   nd2       -0.847
-OP7   nd2       -0.847
-OP8   nd2       -0.847
-C     nd2       -0.000
-ni               1.400
-mg               1.400
-FE               1.400
-CHA   HEM        0.065
-CHB   HEM        0.084
-CHC   HEM       -0.290
-CHD   HEM       -0.220
-NA    HEM       -0.368
-C1A   HEM       -0.029
-C2A   HEM       -0.182
-C3A   HEM       -0.223
-C4A   HEM       -0.047
-CMA   HEM       -0.051
-CAA   HEM       -0.004
-CBA   HEM       -0.160
-CGA   HEM        0.488
-O1A   HEM       -0.708
-O2A   HEM       -0.719
-NB    HEM       -0.364
-C1B   HEM       -0.058
-C2B   HEM       -0.101
-C3B   HEM       -0.169
-C4B   HEM        0.152
-CMB   HEM       -0.086
-CAB   HEM       -0.012
-CBB   HEM       -0.245
-NC    HEM       -0.539
-C1C   HEM        0.181
-C2C   HEM       -0.130
-C3C   HEM       -0.123
-C4C   HEM        0.130
-CMC   HEM       -0.077
-CAC   HEM       -0.027
-CBC   HEM       -0.242
-ND    HEM       -0.377
-C1D   HEM        0.146
-C2D   HEM       -0.149
-C3D   HEM       -0.101
-C4D   HEM       -0.028
-CMD   HEM       -0.053
-CAD   HEM       -0.035
-CBD   HEM       -0.168
-CGD   HEM        0.498
-O1D   HEM       -0.695
-O2D   HEM       -0.718
-H1    HEM        0.091
-H2    HEM        0.084
-H3    HEM        0.084
-H4    HEM        0.082
-H6    HEM        0.049
-H7    HEM        0.026
-H8    HEM        0.022
-H9    HEM        0.031
-H10   HEM        0.038
-H11   HEM        0.042
-H12   HEM        0.050
-H13   HEM        0.051
-H14   HEM        0.044
-H15   HEM        0.051
-H16   HEM        0.097
-H17   HEM        0.083
-H18   HEM        0.086
-H20   HEM        0.047
-H21   HEM        0.036
-H22   HEM        0.052
-H23   HEM        0.111
-H24   HEM        0.085
-H25   HEM        0.084
-H26   HEM        0.054
-H27   HEM        0.053
-H28   HEM        0.037
-H29   HEM        0.039
-H30   HEM        0.054
-H31   HEM        0.052
-H32   HEM        0.038
+O     hoh       -0.834            TIP3P WATER CHARGES
+H01   hoh        0.417
+H02   hoh        0.417
+OH2   spc       -0.82             SPC WATER CHARGES
+H1    spc        0.41 
+H2    spc        0.41 
+HN1              0.416            N-TERMINAL H
+HN2              0.416            N-TERMINAL H
+HN3              0.416            N-TERMINAL H
+H1               0.416            N-TERMINAL H
+H2               0.416            N-TERMINAL H
+H3               0.416            N-TERMINAL H
+HN1   pro        0.500            N-TERMINAL H OF PRO
+HN2   pro        0.500            N-TERMINAL H OF PRO
+HN3   pro        0.500            N-TERMINAL H OF PRO
+H1    pro        0.500            N-TERMINAL H OF PRO
+H2    pro        0.500            N-TERMINAL H OF PRO
+H3    pro        0.500            N-TERMINAL H OF PRO
+OT              -1.00             C-TERMINAL OXT
+OXT             -1.00             C-TERMINAL OXT
+OT1             -0.75             C-TERMINAL OXYGENS,
+OT2             -0.75               CHARGE-EQUALIZED
+NA               1.00 
+CU               1.40 
+ZN               1.40 
+CO               2.00 
+FE               1.40 
+MG               1.40 
+MN               2.00 
+LI               1.00 
+AL               3.00 
+NI               1.40 
+CA               2.00 
+CL              -1.00 
+NA               1.00 
+CU               1.40 
+ZN               1.40 
+CO               2.00 
+FE               1.40 
+MG               1.40 
+MN               2.00 
+LI               1.00 
+AL               3.00 
+NI               1.40 
+CA               2.00 
+CL              -1.00 
+LJ               0.00             LENNARD-JONES WATER PARTICLE
+LP               0.00             LONE PAIR
+C     cbx        0.000            created by S. McGovern, JJI
+O1    cbx       -0.500
+O2    cbx       -0.500
+C1    gar        0.194            GAR for GART - susan
+O6    gar       -0.240
+C2    gar        0.194
+O8    gar       -0.240
+C3    gar        0.292
+O4    gar       -0.510
+C5    gar        0.211
+C10   gar        0.211
+O12   gar       -0.510
+N19   gar       -0.272
+C21   gar        0.526
+O22   gar       -0.500
+C23   gar        0.246
+N24   gar        1.000
+P15   gar        1.390
+O16   gar       -0.847
+O17   gar       -0.847
+O18   gar       -0.847            
+PA    nap        1.468            NAP AM1-BCC summed to heavies (MMM)
+O1A   nap       -0.862
+O2A   nap       -0.886
+O5B   nap       -0.576
+C5B   nap        0.282
+C4B   nap        0.186
+O4B   nap       -0.401
+C3B   nap        0.127
+O3B   nap       -0.157
+C2B   nap        0.277
+O2B   nap       -0.569
+C1B   nap        0.546
+N9A   nap       -0.630
+C8A   nap        0.632
+N7A   nap       -0.572
+C5A   nap       -0.207
+C6A   nap        0.671
+N6A   nap       -0.082
+N1A   nap       -0.814
+C2A   nap        0.693
+N3A   nap       -0.713
+C4A   nap        0.568
+O3    nap       -0.680
+PN    nap        1.450
+O1N   nap       -0.879
+O2N   nap       -0.814
+O5D   nap       -0.578
+C5D   nap        0.332
+C4D   nap        0.259
+O4D   nap       -0.384
+C3D   nap        0.227
+O3D   nap       -0.178
+C2D   nap        0.129
+O2D   nap       -0.188
+C1D   nap        0.235
+N1N   nap        0.001
+C2N   nap        0.238
+C3N   nap       -0.153
+C7N   nap        0.635
+O7N   nap       -0.582
+N7N   nap       -0.035
+C4N   nap        0.230
+C5N   nap        0.039
+C6N   nap        0.350
+P2B   nap        1.429
+O1X   nap       -0.688
+O2X   nap       -0.688
+O3X   nap       -0.688
+C1    pvl       -0.052            PYRUVOYL GROUP
+C2    pvl        0.526
+C3    pvl        0.526
+O3    pvl       -0.500
+O2    pvl       -0.500
+PA    ndp        1.456            NDP AM1-BCC summed to heavies (MMM)
+O1A   ndp       -0.863
+O2A   ndp       -0.863
+O5B   ndp       -0.572
+C5B   ndp        0.281
+C4B   ndp        0.187
+O4B   ndp       -0.395
+C3B   ndp        0.122
+O3B   ndp       -0.156
+C2B   ndp        0.266
+O2B   ndp       -0.567
+C1B   ndp        0.543
+N9A   ndp       -0.628
+C8A   ndp        0.643
+N7A   ndp       -0.575
+C5A   ndp       -0.206
+C6A   ndp        0.680
+N6A   ndp       -0.087
+N1A   ndp       -0.821
+C2A   ndp        0.685
+N3A   ndp       -0.715
+C4A   ndp        0.566
+O3    ndp       -0.679
+PN    ndp        1.447
+O1N   ndp       -0.856
+O2N   ndp       -0.856
+O5D   ndp       -0.580
+C5D   ndp        0.317
+C4D   ndp        0.240
+O4D   ndp       -0.391
+C3D   ndp        0.188
+O3D   ndp       -0.199
+C2D   ndp        0.122
+O2D   ndp       -0.204
+C1D   ndp        0.461
+N1N   ndp       -0.526
+C2N   ndp        0.294
+C3N   ndp       -0.303
+C7N   ndp        0.683
+O7N   ndp       -0.666
+N7N   ndp       -0.117
+C4N   ndp        0.137
+C5N   ndp       -0.094
+C6N   ndp        0.240
+P2B   ndp        1.437
+O1X   ndp       -0.692
+O2X   ndp       -0.692
+O3X   ndp       -0.692
+PA    nad        1.461            NAD AM1-BCC summed to heavies (MMM)
+O1A   nad       -0.857
+O2A   nad       -0.875
+O5B   nad       -0.575
+C5B   nad        0.298
+C4B   nad        0.186
+O4B   nad       -0.389
+C3B   nad        0.125
+O3B   nad       -0.177
+C2B   nad        0.172
+O2B   nad       -0.167
+C1B   nad        0.562
+N9A   nad       -0.645
+C8A   nad        0.628
+N7A   nad       -0.546
+C5A   nad       -0.209
+C6A   nad        0.686
+N6A   nad       -0.056
+N1A   nad       -0.807
+C2A   nad        0.709
+N3A   nad       -0.747
+C4A   nad        0.568
+O3    nad       -0.681
+PN    nad        1.440
+O1N   nad       -0.878
+O2N   nad       -0.813
+O5D   nad       -0.575
+C5D   nad        0.328
+C4D   nad        0.265
+O4D   nad       -0.386
+C3D   nad        0.222
+O3D   nad       -0.176
+C2D   nad        0.134
+O2D   nad       -0.188
+C1D   nad        0.259
+N1N   nad        0.036
+C2N   nad        0.188
+C3N   nad       -0.159
+C7N   nad        0.652
+O7N   nad       -0.569
+N7N   nad       -0.015
+C4N   nad        0.224
+C5N   nad        0.055
+C6N   nad        0.292
+N1    ump       -0.235
+C2    ump        0.315
+N3    ump       -0.077
+C4    ump        0.245
+C5    ump        0.083
+C6    ump        0.087
+O2    ump       -0.252
+O4    ump       -0.270
+C1'   ump        0.216
+C2'   ump        0.085
+C3'   ump        0.149
+C4'   ump        0.175
+O3'   ump       -0.179
+O4'   ump       -0.350
+C5'   ump        0.199
+O5'   ump       -0.352
+P     ump        0.061
+OP1   ump       -0.633
+OP2   ump       -0.633
+OP3   ump       -0.633
+P     acp        1.390            For AK, niu
+O2    acp       -0.500
+O1    acp       -0.500
+O3    acp       -0.500
+C3    acp        0.353
+O2'   acp       -0.500
+C2'   acp        0.353    
+C1'   acp        0.353
+N9    acp       -0.520    
+C4    acp        0.353    
+N3    acp       -0.520    
+C2    acp        0.353
+N1    acp       -0.520
+C6    acp        0.353
+N6    acp       -0.520
+C5    acp        0.353
+N7    acp       -0.520
+C8    acp        0.353
+O4'   acp       -0.500
+C4'   acp        0.353
+C3'   acp        0.353
+O3'   acp       -0.500
+C5'   acp        0.353
+O5'   acp       -0.500
+N1    llp       -0.520            Niu, for GPB 
+C6    llp        0.210    
+C5    llp        0.210    
+C5'   llp        0.210
+OP4   llp       -0.500    
+P     llp        1.390
+OP3   llp       -0.500
+OP2   llp       -0.500
+OP1   llp       -0.500
+C4    llp        0.210
+C4'   llp        0.210
+NZ    llp       -0.520
+CE    llp        0.210
+CD    llp        0.210
+CG    llp        0.210
+CB    llp        0.210
+CA    llp        0.210
+C     llp        0.210    
+O     llp       -0.500    
+N     llp       -0.520
+C3    llp        0.210
+O3    llp       -0.500
+C2    llp        0.210
+C2'   llp        0.210
+N     sam       -0.520            Niu, for COMT (correct charge on S now)
+CA    sam        0.210
+CB    sam        0.210
+CG    sam        0.410
+SD    sam        0.575
+C5'   sam        0.410
+C4'   sam        0.210
+C3'   sam        0.210
+C2'   sam        0.210
+C1'   sam        0.210
+N9    sam       -0.520    
+C4    sam        0.210    
+N3    sam       -0.520
+C2    sam        0.210
+N1    sam       -0.520
+C6    sam        0.210
+N6    sam       -0.520    
+C5    sam        0.210
+N7    sam       -0.520
+C8    sam        0.210
+O4'   sam       -0.500
+O2'   sam       -0.500
+O3'   sam       -0.500
+CE    sam        0.410
+C     sam        0.210
+OXT   sam       -0.500    
+O     sam       -0.500
+S     so4        1.400            Niu for TK 
+O2    so4       -0.600
+O1    so4       -0.600
+O3    so4       -0.600
+O4    so4       -0.600
+CHA   hem        0.041            Heme group AM1-BCC summed to heavies (MMM)
+CHB   hem        0.053
+CHC   hem        0.066
+CHD   hem       -0.078
+C1A   hem        0.477
+C2A   hem       -0.163
+C3A   hem       -0.170
+C4A   hem        0.146
+CMA   hem        0.084
+CAA   hem        0.099
+CBA   hem       -0.110
+CGA   hem        0.895
+O1A   hem       -0.850
+O2A   hem       -0.850
+C1B   hem       -0.044
+C2B   hem       -0.116
+C3B   hem       -0.120
+C4B   hem       -0.060
+CMB   hem        0.097
+CAB   hem        0.050
+CBB   hem       -0.016
+C1C   hem        0.100
+C2C   hem       -0.122
+C3C   hem       -0.209
+C4C   hem        0.466
+CMC   hem        0.069
+CAC   hem        0.033
+CBC   hem       -0.024
+C1D   hem        0.126
+C2D   hem       -0.152
+C3D   hem       -0.046
+C4D   hem        0.105
+CMD   hem        0.108
+CAD   hem        0.110
+CBD   hem       -0.104
+CGD   hem        0.895
+O1D   hem       -0.849
+O2D   hem       -0.849
+NA    hem       -0.622
+NB    hem       -0.622
+NC    hem       -0.622
+ND    hem       -0.622
+PA    fad        1.621
+O1A   fad       -0.895
+O2A   fad       -0.895
+O5B   fad       -0.590
+C5B   fad        0.286
+C4B   fad        0.254
+O4B   fad       -0.425
+C3B   fad        0.241
+O3B   fad       -0.185
+C2B   fad        0.119
+O2B   fad       -0.213
+C1B   fad        0.513
+N9A   fad       -0.659
+C8A   fad        0.628
+N7A   fad       -0.570
+C5A   fad       -0.185
+C6A   fad        0.728
+N6A   fad       -0.084
+N1A   fad       -0.846
+C2A   fad        0.714
+N3A   fad       -0.700
+C4A   fad        0.564
+N1    fad       -0.748
+C2    fad        0.867
+O2    fad       -0.603
+N3    fad       -0.306
+C4    fad        0.638
+O4    fad       -0.608
+C4X   fad        0.212
+N5    fad       -0.420
+C5X   fad        0.034
+C6    fad        0.095
+C7    fad       -0.107
+C7M   fad        0.075
+C8    fad       -0.001
+C8M   fad        0.098
+C9    fad        0.042
+C9A   fad        0.173
+N10   fad       -0.509
+C10   fad        0.635
+C1'   fad        0.365
+C2'   fad        0.243
+O2'   fad       -0.177
+C3'   fad        0.161
+O3'   fad       -0.202
+C4'   fad        0.175
+O4'   fad       -0.146
+C5'   fad        0.209
+O5'   fad       -0.601
+P     fad        1.578
+O1P   fad       -0.913
+O2P   fad       -0.913
+O3P   fad       -0.767
+s12   sph        0.000                  receptor desolvation spheres, no charge
+s13   sph        0.000
+s14   sph        0.000
+s15   sph        0.000
+s16   sph        0.000
+s17   sph        0.000
+s17   sph        0.000
+s18   sph        0.000
+s19   sph        0.000
+s20   sph        0.000
+s21   sph        0.000
+s22   sph        0.000
+s23   sph        0.000
+s24   sph        0.000
+s25   sph        0.000
+s30   sph        0.000
+s35   sph        0.000
+PB    ADP        1.455 
+O1B   ADP       -0.675
+O2B   ADP       -0.675
+O3B   ADP       -0.675
+PA    ADP        1.455 
+O1A   ADP       -0.872
+O2A   ADP       -0.872
+O3A   ADP       -0.736
+O5'   ADP       -0.564
+C5'   ADP        0.275
+C4'   ADP        0.248
+O4'   ADP       -0.352 
+C3'   ADP        0.216
+O3'   ADP       -0.194
+C2'   ADP        0.120
+O2'   ADP       -0.239
+C1'   ADP        0.499
+N9    ADP       -0.651
+C8    ADP        0.632
+N7    ADP       -0.572
+C5    ADP       -0.193
+C6    ADP        0.729
+N6    ADP       -0.086
+N1    ADP       -0.859
+C2    ADP        0.734
+N3    ADP       -0.703
+C4    ADP        0.555
+N1    FMN       -0.768
+C2    FMN        0.863
+O2    FMN       -0.603
+N3    FMN       -0.287
+C4    FMN        0.639
+O4    FMN       -0.605
+C4A   FMN        0.164
+N5    FMN       -0.410
+C5A   FMN        0.020
+C6    FMN        0.139
+C7    FMN       -0.128
+C7M   FMN        0.081
+C8    FMN       -0.052
+C8M   FMN        0.090
+C9    FMN        0.021
+C9A   FMN        0.139
+N10   FMN       -0.500
+C10   FMN        0.649
+C1'   FMN        0.413
+C2'   FMN        0.244
+O2'   FMN       -0.174
+C3'   FMN        0.168
+O3'   FMN       -0.185
+C4'   FMN        0.135
+O4'   FMN       -0.235
+C5'   FMN        0.104
+O5'   FMN       -0.625 
+P     FMN        0.239
+O1P   FMN       -0.512
+O2P   FMN       -0.512
+O3P   FMN       -0.512
+N     tys       -0.520      SULFOTYROSINE (Fudged from AM1-BCC calculation)
+C     tys        0.526      Charged -1
+O     tys       -0.500
+HN    tys        0.248
+CA    tys        0.184
+CB    tys        0.087
+CG    tys       -0.151
+CD1   tys        0.011
+CD2   tys        0.019
+CE1   tys       -0.009
+CE2   tys       -0.017
+CZ    tys        0.212
+OH    tys       -0.495
+S     tys        1.687
+O1    tys       -0.784
+O2    tys       -0.785
+O3    tys       -0.713
+C01   lig        0.042
+C02   lig       -0.168
+C03   lig        0.022
+C04   lig       -0.182
+C05   lig        0.109
+N06   lig       -0.005
+C07   lig        0.197
+C08   lig        0.066
+C09   lig        0.083
+C10   lig        0.108
+O11   lig       -0.412
+C12   lig        0.182
+O13   lig       -0.608
+P14   lig        1.590
+O15   lig       -0.853
+O16   lig       -0.853
+O17   lig       -0.619
+O18   lig       -0.591
+C19   lig        0.675
+N20   lig       -0.640
+O21   lig       -0.652
+H22   lig        0.229
+H23   lig        0.185
+H24   lig        0.170
+H25   lig        0.224
+H26   lig        0.083
+H27   lig        0.195
+H28   lig        0.129
+H29   lig        0.078
+H30   lig        0.046
+H31   lig        0.046
+H32   lig        0.337
+H33   lig        0.337
+H34   lig        0.406
+H35   lig        0.418
+O36   lig       -0.821
+P37   lig        1.602
+O38   lig       -0.883
+O39   lig       -0.883
+O40   lig       -0.921
+P41   lig        1.311
+O42   lig       -0.921
+O43   lig       -0.921
+O44   lig       -0.544
+C45   lig        0.171
+C46   lig        0.200
+O47   lig       -0.421
+C48   lig        0.099
+C49   lig        0.107
+O50   lig       -0.646
+C51   lig        0.191
+O52   lig       -0.592
+N53   lig       -0.211
+C54   lig        0.451
+C55   lig       -0.185
+N56   lig       -0.617
+C57   lig        0.479
+C58   lig        0.653
+N59   lig       -0.809
+C60   lig        0.619
+N61   lig       -0.673
+N62   lig       -0.911
+H63   lig        0.077
+H64   lig        0.107
+H65   lig        0.090
+H66   lig        0.014
+H67   lig        0.027
+H68   lig        0.027
+H69   lig        0.094
+H70   lig        0.014
+H71   lig        0.481
+H72   lig        0.379
+H73   lig        0.379

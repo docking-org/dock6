@@ -13,7 +13,7 @@ class Parameter_Reader;
 
 
 #define VDWOFF -0.09
-#define MAX_ATOM_REC 1000
+#define MAX_ATOM_REC 2000
 #define MAX_ATOM_LIG 200
 
 #define SQR(x) ((x)*(x))
@@ -68,9 +68,13 @@ class           Energy_Score:public Base_Score {
     std::string     grid_file_name;
     float           vdw_scale;
     float           es_scale;
-
+    bool            grid_lig_efficiency;
+    float           grid_total;
     float           vdw_component;
     float           es_component;
+    float           vdw_eff;
+    float           es_eff;
+    float           total_eff;
 
                     Energy_Score();
                     virtual ~ Energy_Score();

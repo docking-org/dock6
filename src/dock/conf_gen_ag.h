@@ -275,20 +275,30 @@ class           AG_Conformer_Search {
     void            print_atom_in_anchor_segments(SEGMENT); // TEB ADD 2019-06-17
 
     // For generating fragment libraries and torsion environments for de novo growth
-    bool            write_fragment_libraries;		// if true, libraries are written, most of dock.cpp is skipped
-    std::string     fragment_library_prefix;		// prefix for libraries (four files total)
-    int             fragment_library_freq_cutoff;	// frequency cutoff for writing fragments to library
+    bool            write_fragment_libraries;       // if true, libraries are written, most of dock.cpp is skipped
+    std::string     fragment_library_prefix;        // prefix for libraries (four files total)
+    int             fragment_library_freq_cutoff;   // frequency cutoff for writing fragments to library
     std::string     fragment_library_sort_method;       // method for sorting libraries, freq or fingerprint
-    bool            fragment_library_trans_origin;	// if true, trans frags to origin before writing libs
+    bool            fragment_library_trans_origin;  // if true, trans frags to origin before writing libs
 
     std::map < std::string, std::pair <DOCKMol, int> > segment_fingerprints; // hash for writing fragments
     std::map < std::string, int >                      torsions_map;         // hash for writing tor envs
     std::map < std::string, std::string >              torsions_map_ref;     // hash for writing tor envs
 
+
+    //JDB - hash for writing fragments w/ associated attachment frequencies
+    std::map < std::string, std::map < std::string, int> > fragment_binding_pairs;
+    std::map < std::string, //f0
+                std::map < std::string, //f1
+                std::map < std::string, //t0
+                std::map < std::string, int > > > > frags_with_half_tors; //t1,freq
+
     int             global_frag_index;
 
-    void            count_fragments(DOCKMol &);		// writes fragments to libraries depending on # of attachment points
-    void            activate_fragment(DOCKMol &, int);	// activates atoms/bonds of a segment + neighbors
+    void            count_fragments(DOCKMol &);     // writes fragments to libraries depending on # of attachment points
+    void            bickel_count_fragments(DOCKMol &); // JDB
+    void            activate_fragment(DOCKMol &, int);  // activates atoms/bonds of a segment + neighbors
+    void            bickel_write_unique_fragments();    //JDB 
     void            write_unique_fragments();           // rewrites unique fragment libraries
     void            calc_mol_wt(DOCKMol &);
     std::vector <float>                               calc_atoms_wt(std::vector<std::string>, bool); 

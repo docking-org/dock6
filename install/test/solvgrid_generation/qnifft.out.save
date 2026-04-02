@@ -1,0 +1,499 @@
+    
+ ------------------QNIFFT22--------------------------
+ * Version 2.2                                            *
+ * a program to solve the non-linear P-B equation         *
+ * 2 dielectric regions, ionic strength, periodic         *
+ * and focussing boundary conditions.                     *
+ * Does nonlinear salt analysis                           *
+ * uses mike holsts inexact newton method                 *
+ * implemented by jonathan hecht, new input style         *
+ * and multigridding by kas 6 sept, 1993                  *
+ * dielectric smoothing added july 95, kas                *
+ * 2nd, site potl. charge file added. Reads atom          *
+ * names of form 2H2                                      *
+ * charge anti-aliasing added may 96                      *
+ * Mixed salt NLPB added Oct 99 by Vinod Misra/KAS        *
+ * Mixed salt NLPB doesnt work with channel ionic diffrnce*
+ * reduce memory requirements- 7-feb-01                   *
+ * cleaned up mkmaps 14-feb-01                            *
+ * read radii, charges from *.atm file 10-apr-01          *
+ * compute atomic forces               10-apr-01          *
+ * output reaction field, potl.        27-apr-01          *
+ * improved surface mapping            18-may-01          *
+ * include reentrant surface remapping 28-may-01          *
+ * added parameter for addtl pdb files rgc 7-aug-12       *
+ ------------------QNIFFT22--------------------------
+   
+ max grid dimension:           193
+   
+  last modified:  Tue Feb 11 23:30:02 PST 2014 
+   
+ trying to read default file delphi.def in directory
+ 
+  
+ Default parameter file 
+ ----------------------- 
+  
+  
+ WARNING: cannot find parameter file, or file is empty
+ valid keywords found                :             0
+ parsing errors                      :             0
+ invalid parameter keywords          :             0
+ invalid parameter values            :             0
+ parameter values overidden          :             0
+  
+ trying to read user parameter file 
+ qnifft.parm                                                                     
+  
+ User parameter file 
+ ----------------------- 
+  
+ NOTE: overriding previous value for GRID*SIZE            
+ NOTE: overriding previous value for CHAR*GE_FILE         
+ NOTE: overriding previous value for RADI*US_FILE         
+ NOTE: overriding previous value for PDB_IN*PUT_FILE      
+ NOTE: overriding previous value for PDB_OUT*PUT_FILE     
+ NOTE: overriding previous value for PHI_OUT*PUT_FILE     
+  
+ lines read                          :           128
+ valid keywords found                :            52
+ parsing errors                      :             0
+ invalid parameter keywords          :             0
+ invalid parameter values            :             0
+ parameter values overidden          :             6
+  
+ values transferred to variables
+ NOTE: Using explicit anion, cation concentrations
+ and ignoring salt concentration variable       
+ Summary of parameter assignments
+ --------------------------------
+  
+ Name                  | Def |  Value
+ ----------------------------------------------------------
+                              real parameters
+ FILL*                 |     | ignored              
+ XCEN*TER              |     | ignored              
+ YCEN*TER              |     | ignored              
+ ZCEN*TER              |     | ignored              
+ SCAL*E                |     | ignored              
+ BORD*ER_SOLVENT       | no  |     10.00000         
+ SOLV*ENT_DIELECTRIC   | no  |     80.00000         
+ SOLU*TE_DIELECTRIC    | no  |     2.000000         
+ PROB*E_RADIUS         | no  |     1.400000         
+ IONI*C_RADIUS         | no  |     2.000000         
+ SALT*_CONCENTRATION   |     | ignored              
+ CONV*ERGENCE          | no  |    1.0000000E-03     
+ RELA*XATION PARAMETER | no  |     1.000000         
+ TEMP*ERATURE          | no  |     298.0000         
+ LENG*TH_SMOOTH        |     | ignored              
+ ISALT*_CONCENTRATION  |     | ignored              
+ OSALT*_CONCENTRATION  |     | ignored              
+ IMEMB*RANE_POSITION   |     | ignored              
+ OMEMB*RANE_POSITION   |     | ignored              
+ CAT_DIV*ALENT         | no  |     0.000000         
+ CAT_MON*OVALENT       | no  |    0.1450000         
+ ANI_DIV*ALENT         | no  |     0.000000         
+ ANI_MON*OVALENT       | no  |    0.1450000         
+ FIELD*_BOUNDARY       |     | ignored              
+                           integer parameters
+ GRID*SIZE             | no  |           193        
+ NEWT*ON_ITERATIONS    | no  |            20        
+ LEVEL0*_MULTI_GRID_IT | no  |             2        
+ LEVEL1*_MULTI_GRID_IT | no  |             4        
+ LEVEL2*_MULTI_GRID_IT | no  |             8        
+ LEVEL3*_MULTI_GRID_IT | no  |            16        
+ CHEC*K_FREQUENCY      | no  |             2        
+ SMOO*TH_DIELECTRIC    | no  |             0        
+                           logical parameters
+ XPER*IODIC            | no  |   F                  
+ YPER*IODIC            | no  |   F                  
+ ZPER*IODIC            | no  |   F                  
+ NONL*INEAR_EQUATION   | no  |   F                  
+ CONC*ENTRATION OUTPUT | no  |   F                  
+ INSI*GHT_FORMAT       | no  |   F                  
+ SITE_POT*ENTIALS      | no  |   F                  
+ ATOM*_FILE_OUTPUT     | no  |   T                  
+ SPHE*RICAL_CHARGE_DIS | no  |   F                  
+ ANAL*YSE_MAP          | no  |   T                  
+ INPU*T_ATM*_FILE      | no  |   F                  
+ FAST*_DIELECTRIC_MAP  | no  |   F                  
+ FORC*E_CALCULATION    | no  |   F                  
+                             ascii parameters
+ SIZI*NG               | no  | border               
+ BOUN*DARY_CONDITION   | no  | dipolar              
+ TITL*E                | no  | untitled             
+ RADI*US_FILE          | no  | vdw.siz              
+ CHAR*GE_FILE          | no  | amb.crg.oxt          
+ PDB_IN*PUT_FILE       | no  | rec+sph.crg          
+ PDB_OUT*PUT_FILE      | no  | qnifft.atm           
+ PHI_IN*PUT_FILE       |     | ignored              
+ PHI_OUT*PUT_FILE      | no  | qnifft.electrostatics
+ DIEL*ECTRIC_MAP_FILE  | no  | qnifft.eps           
+ SITE_IN*PUT_FILE      |     | ignored              
+ SITE_OUT*PUT_FILE     |     | ignored              
+ SITE_CH*ARGE_FILE     |     | ignored              
+ PDB2_IN*PUT_FILE      |     | ignored              
+  
+ # of assigned parameters            :            42
+ # of default parameters             :             0
+ # of missing parameters             :             0
+ # of ignored parameters             :            17
+  
+ cion:     0.000000       0.1450000        0.000000       0.1450000    
+ zion:     2.000000        1.000000       -2.000000       -1.000000    
+ Debye length (A):     8.001814    
+ reading radii from file
+ vdw.siz                                                                         
+ ! default extended atom radii based loosely                 
+ ! on mike connolly's MS program- note H's are 0             
+ # of radius parameter records:           17
+ reading charges from file
+ amb.crg.oxt                                                                     
+ ! amber charges, based on kollman, weiner et al             
+ ! j. comp chem, vol 7, p 230 (1986)                         
+ # of charge parameter records:          974
+    
+ assigning radii and charges to atoms...
+ using *.siz/*.crg files
+    
+ atomic coordinates, charges and radii written to
+ qnifft.atm                                                                      
+    
+ reading coordinates from file
+ rec+sph.crg                                                                     
+    
+ number of atom coordinates read  :          1662
+ total number of source charged atoms    :          1596
+ net assigned source charge              :    -1.014998    
+ assigned positive charge                :     258.1924    
+ centred at (A)  :   0.2141522        27.08427        23.33011    
+ assigned negative charge                :    -259.2073    
+ centred at (A)  :   0.3268957        26.95721        23.49744    
+    
+   
+ scaling by solvent border
+ xmin,xmax     (A)   :   -25.61900        27.38700    
+ ymin,ymax     (A)   :    2.308000        47.06100    
+ zmin,zma      (A)   :  -0.8900000        47.04000    
+ x,y,z range   (A)   :     53.00600        44.75300        47.93000    
+ object centre (A)   :    0.8840008        24.68450        23.07500    
+ scale=2.62992072105408              
+ xcen=0.884000778198242             
+ ycen=24.6844978332520              
+ zcen=23.0750007629395              
+ low,up x borders (A):    10.00000        10.00000    
+ low,up y borders (A):    14.12650        14.12650    
+ low,up z borders (A):    12.53800        12.53800    
+ longest dimension of molecule(s) as % of box length:     72.60499    
+ minimum solvent border (A) :     10.00000    
+   
+ total number of source charged atoms    :          1596
+ net assigned source charge              :    -1.014832    
+ assigned positive charge                :     258.1924    
+ centred at (gu) :    95.23835        103.3112        97.67093    
+ assigned negative charge                :    -259.2073    
+ centred at (gu) :    95.53486        102.9771        98.11098    
+    
+ assigning charges to grid...
+ # of atoms charged by trilinear interpolation:         1585
+ # of atoms charged by anti-aliasing:            0
+ time to charge grid:    0.000000    
+   
+ setting boundary conditions...
+   
+ Using accurate dielectric mapping- Please wait!
+  
+ in mapgen, initializing arrays....
+  exrad,radprb,scale     2.000000        1.400000        2.629921    
+ natom, ngrid,igrid:          1662          193          193
+ scaled probe ionic radii:     3.681889        5.259841    
+ generating debye map and solvent accessible volume...
+ max radius (grids):     4.996850    
+ nin,ninter,nout,ndeb:        958422       871466     19737283       702950
+ cpu time (s) used so far in mapgen:     1.000000    
+ calling girdgen...
+ generating GIRDLE points...
+ max radius (grids)          :     8.678739    
+ # of circle points, coarsest spacing (grids) :           200   0.2726506    
+ Recommend increasing ncrc above           200  to           218
+ if time and memory permit
+ Atom:             1
+ Atom:           168
+ Atom:           335
+ Atom:           502
+ Atom:           669
+ Atom:           836
+ Atom:          1003
+ Atom:          1170
+ Atom:          1337
+ Atom:          1504
+ number of pairs:         64184
+  
+ pair time:     0.000000    
+  
+ # of accessible girdle points found:         55695
+ pairs checked:         32092
+ girdle time:     0.000000    
+ generating triples....
+ atom:             1
+ atom:           168
+ atom:           335
+ atom:           502
+ atom:           669
+ atom:           836
+ atom:          1003
+ atom:          1170
+ atom:          1337
+ atom:          1504
+ number of triples:        275207
+ # of accessible triple points found:           648
+ total number of accessible intersection points:         56343
+  
+ triple time:     0.000000    
+ generating SAS points...
+  
+ Geometric center of molecule:     97.00000        98.04015        96.76463    
+ average center of molecule  :     95.33842        103.0693        98.04004    
+ max radius (grids)          :     8.678739    
+ # of zero radius atoms to skip:           284
+ # of sphere points, coarsest spacing (grids),slabs :           578 
+   0.7232282               24
+ Recommend increasing nsph above           600  to          4761
+ if time and memory permit
+ Atom:             1
+ Atom:           168
+ Atom:           335
+ Atom:           502
+ Atom:           669
+ Atom:           836
+ Atom:          1003
+ Atom:          1170
+ Atom:          1337
+ Atom:          1504
+ number of SAS points:         39632
+ number of SAS+GIRDLE points:         95975
+ Area time:     0.000000    
+ total SAS area:     8541.771    
+ cpu time (s) used so far in mapgen:     1.000000    
+ reading sas points from qnifft_sas.usr...
+ expecting # of points:         95975
+ DOTS      
+ probe cutoffs:             6    13.30631    
+ point             1
+ point          9599
+ point         19197
+ point         28795
+ point         38393
+ point         47991
+ point         57589
+ point         67187
+ point         76785
+ point         86383
+ making linked list of girdle points...
+ cpu time (s) used so far in mapgen:     2.000000    
+ nin,ninter,nout,ndeb:        958422       269031     20339718       702950
+ icutl for girdle search:             5
+ mapping boundary points to nearest probe or atom surface....
+ boundary point assignment slop (grids):    0.5000000    
+ # of grid points on molecular surface=         41681
+ # of contact molecular surface points assigned to an atom =             0
+ worst contact surface distance error ratios:     1000000.       -1000000.    
+ worst contact surface distance errors:     1000000.       -1000000.    
+ # of reentrant molecular surface points assigned to girdle =         41681
+ worst reentrant surface distance error ratios:    0.8814958     
+    1.156575    
+ worst reentrant surface distance errors:   -0.4984484       0.4949762    
+ # of molecular surface points unassigned =             0
+ # of unassigned molecular surface points assigned to an atom =             0
+ worst reassigned surface distance errors:     1000000.       -1000000.    
+ total mapgen cpu time (s):     3.000000    
+  generating compact epsilon array...
+ inside, outside dielectric points:       1227453     20339718
+  generating compact debye array...
+ inside, outside debye points:        702950      6486107
+  writing to compact epsilon file
+  
+ dielectric map written to file
+ qnifft.eps                                                                      
+  
+ debye factors:     0.000000       3.2199326E-04   3.2199326E-04 
+   3.2199326E-04
+ dieletric factors:    0.1426025       3.5650623E-03
+   
+ total setup time was (sec)     3.000000    
+   
+ using inexact Newton method to solve NLPB eqn...
+ dphi relaxation parameter:     1.000000    
+ dphi multigrid iterations:             2            4            8 
+           16
+  
+ NEWTON ITERATION#,norm:             1    81770.44210408772     
+ LEVEL  #it    Norm of dphi residual
+ 0        1109786.824816
+ 0        2 29980.614530
+ 0        2  5608.894463
+ 1        1  2523.422095
+ 1        2  1138.064678
+ 1        3   638.761661
+ 1        4   311.591676
+    pre1        5   138.410942
+      pre2        9     2.464099
+       post3       17     0.000005
+     post2        9     0.120755
+   post1        5     8.500747
+ 0        3  5379.095177
+ 0        4  1266.017751
+ 0        4   325.380736
+ NEWTON ITERATION#,norm:             2    325.3807366173903     
+ LEVEL  #it    Norm of dphi residual
+ 0        1   561.421922
+ 0        2   319.175067
+ 0        2   111.099445
+ 1        1    71.399050
+ 1        2    71.191408
+ 1        3    36.462314
+ 1        4    19.214204
+    pre1        5     8.894813
+      pre2        9     0.310679
+       post3       17     0.000000
+     post2        9     0.015746
+   post1        5     0.741624
+ 0        3   144.711724
+ 0        4    51.241484
+ 0        4    14.601025
+ NEWTON ITERATION#,norm:             3    14.60102327810205     
+ LEVEL  #it    Norm of dphi residual
+ 0        1    26.175119
+ 0        2    18.105103
+ 0        2     7.211024
+ 1        1     5.313532
+ 1        2     7.992163
+ 1        3     4.104449
+ 1        4     2.152178
+    pre1        5     0.995285
+      pre2        9     0.030565
+       post3       17     0.000000
+     post2        9     0.001492
+   post1        5     0.094568
+ 0        3    11.206288
+ 0        4     4.383528
+ 0        4     1.278215
+ NEWTON ITERATION#,norm:             4    1.278214904786264     
+ LEVEL  #it    Norm of dphi residual
+ 0        1     2.324551
+ 0        2     1.743503
+ 0        2     0.737650
+ 1        1     0.577794
+ 1        2     1.068293
+ 1        3     0.569883
+ 1        4     0.280242
+    pre1        5     0.126961
+      pre2        9     0.003044
+       post3       17     0.000000
+     post2        9     0.000142
+   post1        5     0.012843
+ 0        3     1.224060
+ 0        4     0.499842
+ 0        4     0.149942
+ NEWTON ITERATION#,norm:             5   0.1499416362353858     
+ LEVEL  #it    Norm of dphi residual
+ 0        1     0.275214
+ 0        2     0.215774
+ 0        2     0.094180
+ 1        1     0.075977
+ 1        2     0.156939
+ 1        3     0.086909
+ 1        4     0.039779
+    pre1        5     0.017397
+      pre2        9     0.000305
+       post3       17     0.000000
+     post2        9     0.000013
+   post1        5     0.001836
+ 0        3     0.158343
+ 0        4     0.066360
+ 0        4     0.020468
+ NEWTON ITERATION#,norm:             6   2.0467980843333202E-002
+ LEVEL  #it    Norm of dphi residual
+ 0        1     0.037815
+ 0        2     0.030468
+ 0        2     0.013538
+ 1        1     0.011094
+ 1        2     0.024446
+ 1        3     0.013937
+ 1        4     0.005994
+    pre1        5     0.002512
+      pre2        9     0.000031
+       post3       17     0.000000
+     post2        9     0.000001
+   post1        5     0.000274
+ 0        3     0.022513
+ 0        4     0.009614
+ 0        4     0.003044
+ NEWTON ITERATION#,norm:             7   3.0439215470434910E-003
+ LEVEL  #it    Norm of dphi residual
+ 0        1     0.005652
+ 0        2     0.004639
+ 0        2     0.002085
+ 1        1     0.001724
+ 1        2     0.003956
+ 1        3     0.002305
+ 1        4     0.000944
+    pre1        5     0.000378
+      pre2        9     0.000003
+       post3       17     0.000000
+     post2        9     0.000000
+   post1        5     0.000043
+ 0        3     0.003392
+ 0        4     0.001470
+ 0        4     0.000477
+ final normal:    4.7686446622113274E-004
+ total time for newton iterations (sec):     3.000000    
+  
+ 0.5*sum(phi.q) (kT) =      112356.1    
+ Interaction of source charges with themselves (kT)    112356.1    
+ (Includes Grid+Coulombic+Solvation energy)
+ Equals Total energy for Linear PB only
+ For net fixed charge of :    -1.014970    
+ net charge from gauss integral:   -0.7090148    
+ integrating over zrange:    -13.04776        59.19776    
+ kT =    0.5930200      kcal at     298.0000     K
+  
+ Q net                       :    0.2987275    
+ Q+ excess,ratio             :    0.1493638       0.5000000    
+ Q- excess,ratio             :    0.1493638       0.5000000    
+  
+ rho.phi or TdS          (kT):    -4.258533    
+    rho.phi(++)             (kT):     0.000000    
+    rho.phi(+)              (kT):    -2.129266    
+    rho.phi(--)             (kT):     0.000000    
+    rho.phi(-)              (kT):    -2.129266    
+ E.D                     (kT):     126.1660    
+ dPI                     (kT):    1.9689903E-09
+    dPI(++)                 (kT):     0.000000    
+    dPI(+)                  (kT):    0.1493638    
+    dPI(--)                 (kT):     0.000000    
+    dPI(-)                  (kT):   -0.1493638    
+  
+ E.D/2 - rho.phi - dPI   (kT):     67.34155    
+  
+ Salt analysis took     0.000000      sec
+ total atomic charge:    -1.014993    
+ Coulombic energy in uniform Epsin (kT):    -32770.30    
+ Coulombic energy took     0.000000      sec
+ using list of corrected boundary points ...        41681
+ readjusted surface points:         41681
+ surface points with, without fixed charge:             8        41673
+ expected, actual induced surface charge:    0.4948090     
+   0.5010962350751855     
+ Dielectric rxn field energy from surface Q (kT):    -1880.479522812179     
+ sum 1/rr q-surface:     85.87982675918028     
+ mean surface position correction (A):    0.2430184860609934     
+ max  surface position correction (A):    0.4984505    
+ Dielectric Reaction energy took     0.000000      sec
+ potential map written to file
+ qnifft.electrostatics.phi                                                       
+   
+   
+ total cpu time was (sec)     6.000000    
+   
+ QNIFFT QNIFF QNIF. QNI.. QN... Q....

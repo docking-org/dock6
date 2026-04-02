@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released September 2024
 Copyright UCSF
 --------------------------------------
 
@@ -22,6 +22,7 @@ min_anchor_size                                              40
 pruning_use_clustering                                       yes
 pruning_max_orients                                          10
 pruning_clustering_cutoff                                    10
+pruning_orient_score_cutoff                                  1000.0
 pruning_conformer_score_cutoff                               100.0
 pruning_conformer_score_scaling_factor                       1.0
 use_clash_overlap                                            no
@@ -62,6 +63,10 @@ contact_score_primary                                        no
 Grid Score Parameters
 ------------------------------------------------------------------------------------------
 grid_score_primary                                           no
+
+GIST Score Parameters
+------------------------------------------------------------------------------------------
+gist_score_primary                                           no
 
 MultiGrid Score Parameters
 ------------------------------------------------------------------------------------------
@@ -141,6 +146,7 @@ Amber Score Parameters
 Simplex Minimization Parameters
 ------------------------------------------------------------------------------------------
 minimize_ligand                                              no
+simplex_final_min                                            no
 
 Atom Typing Parameters
 ------------------------------------------------------------------------------------------
@@ -151,15 +157,18 @@ flex_drive_file                                              ../../../parameters
 
 Molecule Library Output Parameters
 ------------------------------------------------------------------------------------------
-ligand_outfile_prefix                                        grid1
+ligand_outfile_prefix                                        fpsgrid
+write_mol_solvation                                          no
 write_footprints                                             no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
 
 Initializing Conformer Generator Routines...
 Initializing Library File Routines...
+
 To cite Multigrid Energy Score use: 
  Balius, T. E.; Mukherjee, S.; Rizzo, R. C. Implementation and Evaluation of a Docking-rescoring Method using Molecular Footprint Comparisons. J. Comput. Chem., 2011, 32, 2273-2289
 
@@ -229,7 +238,7 @@ Reading in 15 grids
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.258 seconds
+ Elapsed time for docking:	0.392 seconds
 
  Anchors:		1
  Orientations:		1
@@ -245,4 +254,7 @@ Molecule: 1M17.lig
 
 
 1 Molecules Processed
-Total elapsed time:	0.311 seconds
+Total elapsed time:	0.440 seconds
+Number of molecules per second:	2.273
+Virtual memory used for this process: 129580 kilobytes
+Physical memory used for this process: 59400 kilobytes

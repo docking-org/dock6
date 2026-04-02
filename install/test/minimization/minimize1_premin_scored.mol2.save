@@ -2,13 +2,13 @@
 ##########                                Name:                 C1 
 ##########                    Molecular_Weight:             314.468
 ##########                DOCK_Rotatable_Bonds:                   1
-##########                       Formal_Charge:         0.000100061
+##########                       Formal_Charge:                   0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                  23
-##########                          Grid_Score:          -45.040234
-##########                     Grid_vdw_energy:          -40.486992
-##########                      Grid_es_energy:           -4.553243
+##########                          Grid_Score:          -45.040241
+##########                     Grid_vdw_energy:          -40.486996
+##########                      Grid_es_energy:           -4.553244
 
 @<TRIPOS>MOLECULE
  C1 
@@ -18,7 +18,7 @@ bcc
 
 
 @<TRIPOS>ATOM
-      1 C1         21.3093    9.6635   62.8796 C.3     1  C1         -0.0688
+      1 C1         21.3093    9.6635   62.8795 C.3     1  C1         -0.0688
       2 C10        22.7076    9.8638   62.2365 C.3     1  C1         -0.0061
       3 C19        23.4333   11.1277   62.8374 C.3     1  C1         -0.0852
       4 H27        23.6354   11.8207   62.0625 H       1  C1          0.0425

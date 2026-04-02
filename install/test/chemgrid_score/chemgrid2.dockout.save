@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released September 2024
 Copyright UCSF
 --------------------------------------
 
@@ -22,6 +22,7 @@ min_anchor_size                                              10
 pruning_use_clustering                                       yes
 pruning_max_orients                                          25
 pruning_clustering_cutoff                                    25
+pruning_orient_score_cutoff                                  1000.0
 pruning_conformer_score_cutoff                               100.0
 pruning_conformer_score_scaling_factor                       1.0
 use_clash_overlap                                            no
@@ -31,7 +32,7 @@ Internal Energy Parameters
 ------------------------------------------------------------------------------------------
 use_internal_energy                                          yes
 internal_energy_rep_exp                                      12
-internal_energy_cutoff                                       100.0
+internal_energy_cutoff                                       25.0
 Note: Internal energy only includes repulsive VDW for growth and/or minimization.
 
 Molecule Library Input Parameters
@@ -72,6 +73,10 @@ Grid Score Parameters
 ------------------------------------------------------------------------------------------
 grid_score_primary                                           no
 
+GIST Score Parameters
+------------------------------------------------------------------------------------------
+gist_score_primary                                           no
+
 MultiGrid Score Parameters
 ------------------------------------------------------------------------------------------
 multigrid_score_primary                                      no
@@ -80,12 +85,12 @@ Dock3.5 Score Parameters
 ------------------------------------------------------------------------------------------
 dock3.5_score_primary                                        yes
 dock3.5_vdw_score                                            yes
-dock3.5_grd_prefix                                           ../solvgrid_generation/chem52
+dock3.5_grd_prefix                                           ../chemgrid_generation/chem52
 dock3.5_electrostatic_score                                  yes
-dock3.5_ligand_internal_energy                               no
 dock3.5_ligand_desolvation_score                             volume
 dock3.5_solvent_occlusion_file                               ../solvgrid_generation/solvmap
 dock3.5_redistribute_positive_desolvation                    no
+dock3.5_hydrogen_desolvation_grid                            no
 dock3.5_receptor_desolvation_score                           no
 dock3.5_write_atomic_energy_contrib                          no
 dock3.5_score_vdw_scale                                      1
@@ -135,36 +140,42 @@ simplex_trans_step                                           1.0
 simplex_rot_step                                             0.1
 simplex_tors_step                                            10.0
 simplex_anchor_max_iterations                                10
+simplex_final_min                                            no
 simplex_random_seed                                          0
 simplex_restraint_min                                        no
 
 Atom Typing Parameters
 ------------------------------------------------------------------------------------------
-atom_model                                                   all
-vdw_defn_file                                                ../../../parameters/vdw_AMBER_parm99.defn
+atom_model                                                   united
+vdw_defn_file                                                ../../../parameters/vdw_AMBER_parm94.dock3_7.defn
 flex_defn_file                                               ../../../parameters/flex.defn
 flex_drive_file                                              ../../../parameters/flex_drive.tbl
 
 Molecule Library Output Parameters
 ------------------------------------------------------------------------------------------
-ligand_outfile_prefix                                        ligand
+ligand_outfile_prefix                                        ligand2
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              -10.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
 
 Initializing Conformer Generator Routines...
 Initializing Library File Routines...
+
 Initializing Orienting Routines...
+Entering Chemgrid_Score::initialize
 Initializing Dock3.5 Score Routines...
- Reading chemgrids from ../solvgrid_generation/chem52.cmg
- Reading DelPhi grid from ../solvgrid_generation/chem52.phi
+ Reading chemgrids from ../chemgrid_generation/chem52.cmg
+ Reading DelPhi grid from ../chemgrid_generation/chem52.phi
  Reading ligand desolvation grid from ../solvgrid_generation/solvmap
+Exiting Chemgrid_Score::initialize
 
 -----------------------------------
 Molecule: ZINC00000113
 
- Elapsed time:	1.168 seconds
+ Elapsed time:	0.561 seconds
 
  ERROR:  Could not complete growth.
          Confirm that the grid box is large enough to contain the ligand,
@@ -173,39 +184,44 @@ Molecule: ZINC00000113
 -----------------------------------
 Molecule: ZINC00000250
 
- Elapsed time for docking:	1.300 seconds
+ Elapsed time for docking:	0.490 seconds
 
  Anchors:		1
  Orientations:		100
- Conformations:		1
+ Conformations:		5
 
-                      Chemgrid_Score:           98.686127
-                 Chemgrid_vdw_energy:           82.502785
-                  Chemgrid_es_energy:           -3.151639
+                      Chemgrid_Score:           17.711067
+                 Chemgrid_vdw_energy:           -3.073218
+                  Chemgrid_es_energy:           -0.275336
                  Chemgrid_rec_desolv:            0.000000
-                 Chemgrid_lig_polsol:           20.820711
-                Chemgrid_lig_apolsol:           -1.485730
+                 Chemgrid_lig_polsol:           22.698124
+                Chemgrid_lig_apolsol:           -1.638496
                Chemgrid_conf_entropy:            0.000000
-           Internal_energy_repulsive:           21.626488
+           Internal_energy_repulsive:           21.021349
+score > score_thres:17.711 > -10.000
 
 -----------------------------------
 Molecule: ZINC00000257
 
- Elapsed time for docking:	2.966 seconds
+ Elapsed time for docking:	1.114 seconds
 
  Anchors:		1
  Orientations:		100
- Conformations:		19
+ Conformations:		4
 
-                      Chemgrid_Score:            4.385145
-                 Chemgrid_vdw_energy:           -6.002686
-                  Chemgrid_es_energy:            0.479271
+                      Chemgrid_Score:           37.971245
+                 Chemgrid_vdw_energy:            8.334430
+                  Chemgrid_es_energy:            3.489244
                  Chemgrid_rec_desolv:            0.000000
-                 Chemgrid_lig_polsol:            9.041441
-                Chemgrid_lig_apolsol:            0.867120
+                 Chemgrid_lig_polsol:           26.161823
+                Chemgrid_lig_apolsol:           -0.014251
                Chemgrid_conf_entropy:            0.000000
-           Internal_energy_repulsive:           21.170004
+           Internal_energy_repulsive:           23.999762
+score > score_thres:37.971 > -10.000
 
 
 3 Molecules Processed
-Total elapsed time:	5.465 seconds
+Total elapsed time:	2.231 seconds
+Number of molecules per second:	1.345
+Virtual memory used for this process: 133416 kilobytes
+Physical memory used for this process: 71736 kilobytes

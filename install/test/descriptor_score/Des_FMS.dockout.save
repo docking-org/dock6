@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released September 2024
 Copyright UCSF
 --------------------------------------
 
@@ -22,6 +22,7 @@ min_anchor_size                                              5
 pruning_use_clustering                                       yes
 pruning_max_orients                                          10
 pruning_clustering_cutoff                                    100
+pruning_orient_score_cutoff                                  1000.0
 pruning_conformer_score_cutoff                               100.0
 pruning_conformer_score_scaling_factor                       1.0
 use_clash_overlap                                            no
@@ -74,6 +75,10 @@ Grid Score Parameters
 ------------------------------------------------------------------------------------------
 grid_score_primary                                           no
 
+GIST Score Parameters
+------------------------------------------------------------------------------------------
+gist_score_primary                                           no
+
 MultiGrid Score Parameters
 ------------------------------------------------------------------------------------------
 multigrid_score_primary                                      no
@@ -113,6 +118,8 @@ descriptor_use_pharmacophore_score                           yes
 descriptor_use_tanimoto                                      no
 descriptor_use_hungarian                                     no
 descriptor_use_volume_overlap                                no
+descriptor_use_gist                                          no
+descriptor_use_dock3.5                                       no
 
 --- Descriptor Score Parameters: Pharmacophore ---
 descriptor_fms_score_use_ref_mol2                            yes
@@ -168,6 +175,7 @@ simplex_tors_step                                            10.0
 simplex_anchor_max_iterations                                500
 simplex_grow_max_iterations                                  500
 simplex_grow_tors_premin_iterations                          0
+simplex_final_min                                            no
 simplex_random_seed                                          0
 simplex_restraint_min                                        no
 
@@ -182,41 +190,47 @@ pharmacophore_defn_file                                      ../../../parameters
 Molecule Library Output Parameters
 ------------------------------------------------------------------------------------------
 ligand_outfile_prefix                                        Des_FMS
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
 
 Initializing Conformer Generator Routines...
 Initializing Library File Routines...
+
 Initializing Orienting Routines...
 Initializing typer for Pharmacophore Similarity Score within Descriptor Score...
 
 -----------------------------------
 Molecule:  C1 
 
- Elapsed time for docking:	0.414 seconds
+ Elapsed time for docking:	0.571 seconds
 
  Anchors:		1
  Orientations:		100
  Conformations:		60
 
-                    Descriptor_Score:            2.889475
-                 Pharmacophore_Score:            2.889475
-              desc_FMS_num_match_tot:                   5
+                    Descriptor_Score:            3.962827
+                 Pharmacophore_Score:            3.962827
+              desc_FMS_num_match_tot:                   3
               desc_FMS_max_match_ref:                   9
               desc_FMS_max_match_mol:                   9
-                 desc_FMS_match_rate:            0.444444
-                desc_FMS_match_resid:            0.667253
-    desc_FMS_num_hydrophobic_matched:                   3
+                 desc_FMS_match_rate:            0.666667
+                desc_FMS_match_resid:            0.629494
+    desc_FMS_num_hydrophobic_matched:                   2
           desc_FMS_num_donor_matched:                   0
-       desc_FMS_num_acceptor_matched:                   2
+       desc_FMS_num_acceptor_matched:                   1
        desc_FMS_num_aromatic_matched:                   0
        desc_FMS_num_positive_matched:                   0
        desc_FMS_num_negative_matched:                   0
            desc_FMS_num_ring_matched:                   0
-           Internal_energy_repulsive:            6.093311
+           Internal_energy_repulsive:            6.193914
 
 
 1 Molecules Processed
-Total elapsed time:	0.422 seconds
+Total elapsed time:	0.579 seconds
+Number of molecules per second:	1.726
+Virtual memory used for this process: 99244 kilobytes
+Physical memory used for this process: 27696 kilobytes

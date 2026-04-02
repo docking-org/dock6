@@ -8,6 +8,7 @@ calculate_rmsd                                               no
 use_database_filter                                          no
 orient_ligand                                                yes
 automated_matching                                           no
+automated_matching_iteration                                 no
 distance_tolerance                                           0.25
 distance_minimum                                             2.0
 nodes_minimum                                                3
@@ -24,6 +25,8 @@ vdw_defn_file                                                ../../../parameters
 flex_defn_file                                               ../../../parameters/flex.defn
 flex_drive_file                                              ../../../parameters/flex_drive.tbl
 ligand_outfile_prefix                                        orient2
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no

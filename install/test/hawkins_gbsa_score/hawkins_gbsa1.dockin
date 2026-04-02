@@ -11,6 +11,7 @@ bump_filter                                                  no
 score_molecules                                              yes
 contact_score_primary                                        no
 grid_score_primary                                           no
+gist_score_primary                                           no
 multigrid_score_primary                                      no
 dock3.5_score_primary                                        no
 continuous_score_primary                                     no
@@ -30,11 +31,14 @@ gbsa_hawkins_score_vdw_att_exp                               6
 gbsa_hawkins_score_vdw_rep_exp                               12
 grid_score_rep_rad_scale                                     1
 minimize_ligand                                              no
+simplex_final_min                                            no
 atom_model                                                   all
 vdw_defn_file                                                ../../../parameters/vdw_AMBER_parm99.defn
 flex_defn_file                                               ../../../parameters/flex.defn
 flex_drive_file                                              ../../../parameters/flex_drive.tbl
 ligand_outfile_prefix                                        hawkins_gbsa1
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no

@@ -21,15 +21,17 @@ c	minor mods to deal with HETATM residues indicated by a * in dms output
 c				DAG 5/23/96
 c	minor mods to fix bug introduced with chain specifier handling
 c				DAG 5/28/96
+c	bugfix for chain identifiers when residue numbers are > 999
+c				Michael M Mysinger (MMM) 1/25/2012!
 c
 c     implicit none
 c
 c     parameters --
       integer nsmax
-      parameter (nsmax = 250000)
+      parameter (nsmax = 300000)
 c        nsmax:  maximun number of surface points.
       integer natmax
-      parameter (natmax = 15000)
+      parameter (natmax = 30000)
 c        natmax:  maximum number of atoms.
       integer normax
       parameter (normax = 250000)
@@ -38,7 +40,7 @@ c        normax:  maximum number of surface normals.
       parameter(ncmax=200)
 c        ncmax:  maximum number of clusters.
       integer nspmax
-      parameter(nspmax=50000)
+      parameter(nspmax=90000)
 c        nspmax:  maximum number of spheres (bigger than radmin)
 c        note: if nspmax > 99999, change format 651 (and in main.f)
 c
@@ -160,6 +162,7 @@ c
   176 format(' radmax = ',f8.3)
         WRITE(6,*) 'Minimum radius of acceptable spheres?'
         READ(5,*)RADMIN
+        !WRITE(6,*)RADMIN
         WRITE(6, '(1f12.7)') RADMIN
       IF(RADMIN.GE.RADMAX)THEN
           WRITE(6,*)'RADMAX MUST BE > THAN RADMIN - TRY AGAIN'
@@ -303,18 +306,24 @@ c
       read(4,'(A)',end=200) line
       read(line,12,err=2000) resnam,nres,atnam,(c(jj),jj=1,3),
      &tag,(an(jj),jj=1,3)
-   12 format(a3,i5,1x,a4,f8.3,2f9.3,1x,a3,7x,3f7.3)
+   12 format(a3,i6,a4,f8.3,2f9.3,1x,a3,7x,3f7.3)
 	 goto 2001
 c
 c     section to read chain specifier and add amount to
 c     nres to correct for it.
+c     adjusted to handle nres > 999 (MMM)
 c
-2000  read(line,2012,err=2014) resnam,nres,chain,atnam,
+2000  read(line,2002,err=2010) resnam,nres,chain,atnam,
+     &(c(jj),jj=1,3),tag,(an(jj),jj=1,3)
+2002  format(a3,i5,a1,1x,a4,f8.3,2f9.3,1x,a3,7x,3f7.3)
+      goto 2040
+2010  read(line,2012,err=2014) resnam,nres,chain,atnam,
      &(c(jj),jj=1,3),tag,(an(jj),jj=1,3)
 2012  format(a3,i4,a1,1x,a4,f8.3,2f9.3,1x,a3,7x,3f7.3)
       goto 2040
-
+c
 c     this section added to deal with HETATM * residues, e.g. "ZN   1A*" (DAG)
+c
 2014  read(line,2016) resnam,nres,chain,atnam,(c(jj),jj=1,3),
      &tag,(an(jj),jj=1,3)
 2016  format(a3,i3,a1,2x,a4,f8.3,2f9.3,1x,a3,7x,3f7.3)
@@ -340,7 +349,7 @@ c
 
 c
       write(3,15) j,nres,resnam,atnam,(c(jj),jj=1,3)
-   15 format(2i4,a3,1x,a4,1x,3f8.3)
+   15 format(i6,i4,a3,1x,a4,1x,3f8.3)
 c
       elseif(dentag.eq.'X'.or.tag(3:3).eq.dentag) then
          i=i+1
@@ -913,7 +922,7 @@ c
 c     entry point: read atom file
   350 continue
       read(3,355,end=500) iatom,nres,resnam,atnam,(acor(jj),jj=1,3)
-  355 format(2i4,a3,1x,a4,1x,3f8.3)
+  355 format(i6,i4,a3,1x,a4,1x,3f8.3)
       rtmax=0.
       ick=0
       if(fpass) goto 360

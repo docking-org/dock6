@@ -151,6 +151,7 @@ class           AMBER_TYPER {
                                      bool use_chem, bool use_ph4, bool use_volume);
     void            assign_hbond_labels(DOCKMol &);
     void            prepare_molecule(DOCKMol &, bool read_vdw, bool use_chem, bool use_ph4, bool use_volume);
+    void            prepare_for_torsions( DOCKMol & );
     float           getMW (DOCKMol & mol);
 
 };

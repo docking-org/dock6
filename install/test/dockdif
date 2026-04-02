@@ -121,6 +121,14 @@ fi
 ## 10/10 anchor orients retained (max 10) t=0s
 ## Lyr:1 Seg:0 12/60 retained, Pruning: 48-clustered  t=0.16s
 # 
+# Delete lines with timing info for version 6.12, eg,
+##Number of attachments per second: 7.222
+##Number of molecules per second:  96.342
+# 
+# Remove memory values for version 6.12 from, eg,
+##Virtual  memory used for this process: 84728 kilobytes
+##Physical memory used for this process: 6764 kilobytes
+# 
 # grid transformations:
 #
 # Delete lines with timing info and other platform specific info
@@ -224,6 +232,9 @@ do
         -e 's|[a-zA-Z0-9\._/-]*dock[_/0-9]*[0-9]*/\([a-zA-Z0-9\._/]*\)|\1|' \
         -e 's@ t=0s$@@' \
         -e 's@ t=[0-9][0-9]*\.[0-9]*[0-9]s$@@' \
+        -e '\@Number of attachments per second:@d' \
+        -e '\@Number of molecules per second:@d' \
+        -e 's@.emory .sed for this process: .*ytes$@memory used for this process:@' \
         -e '\@^launch_time @d' \
         -e '\@^host_name @d' \
         -e '\@^memory_limit @d' \

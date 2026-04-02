@@ -66,6 +66,7 @@ class Fingerprint {
     void          write_torsion_environments( DOCKMol &, std::vector <std::string> & );
     void          return_torsion_environments( DOCKMol &, std::pair <std::string, std::string> & );
     std::string   return_environment( DOCKMol &, int );
+    std::string   return_noH_environment( DOCKMol&, int); //JDB
 
 
     // Goes through the DOCKMol and writes two vectors of necessary atom / bond information

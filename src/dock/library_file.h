@@ -57,6 +57,7 @@ class           Library_File:public Base_MPI {
     int             max_mols;
     bool            read_solvation,
                     read_color;
+    bool            write_solv_mol2; // for writing solv section to mol2 file. 
     int             initial_skip;
     int             total_mols;
     std::string     input_file_name;
@@ -89,6 +90,7 @@ class           Library_File:public Base_MPI {
     //DOCKMol         bestmol;
     //float           bestscore;
     //std::string     bestdata;
+    float           score_thres;  // worst energy to print out.
 
     std::vector < RANKMol > ranked_poses;
     int             high_position;
@@ -129,6 +131,7 @@ class           Library_File:public Base_MPI {
     void            input_parameters_input(Parameter_Reader & parm);
     void            input_parameters_output(Parameter_Reader &, Master_Score &, bool);
 
+    void            initialize_input();
     void            initialize(int, char **, bool);
     void            open_files();
     void            close_files();
@@ -152,11 +155,12 @@ class           Library_File:public Base_MPI {
                                        Simplex_Minimizer & min);
     void            secondary_rescore_poses(Master_Score &,
                                        Simplex_Minimizer &);
-    void            write_scored_poses(bool, bool, Master_Score &);
-    void            sort_write(bool, bool, Master_Score &, Simplex_Minimizer &);
+//    void            write_scored_poses(bool, Master_Score &);
+    void            write_scored_poses(bool,bool, Master_Score &, Simplex_Minimizer &);
+    void            sort_write(bool, bool, Master_Score &, Simplex_Minimizer & );
     void            write_ranked_ligands(bool,Master_Score &);
-    void            old_submit_scored_pose(DOCKMol &, Master_Score &);
-    void            old_write_scored_poses();
+    //void            old_submit_scored_pose(DOCKMol &, Master_Score &);
+    //void            old_write_scored_poses();
 
     void            submit_rmsd_reference(DOCKMol &, AMBER_TYPER &);
     void            calculate_rmsd(DOCKMol &,double *);
@@ -176,7 +180,13 @@ class           Library_File:public Base_MPI {
     //bool            read_hierarchy_db2(DOCKMol & mol, ifstream & ifs)
     //bool            read_hierarchy_db2(std::string, HDB_Mol &);
     //bool            read_hierarchy_db2(std::ifstream &, HDB_Mol &);
-    bool            read_hierarchy_db2(igzstream &, HDB_Mol &);
+    bool            read_hierarchy_db2(igzstream &, HDB_Mol & );
+    bool            read_sdifile(std::string, std::vector < std::string> & );
+
+    //void            sort_top_X_mol(DOCKMol &, int );
+    //void            sort_top_X_mol(std::vector <SCOREMol> &, int );
+    //void            sort_top_X_mol(std::vector <SCOREMol> &, int , int*);
+    bool            sort_top_X_mol(std::vector <SCOREMol> &, int , int*);
 
 };
 

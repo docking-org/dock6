@@ -106,6 +106,8 @@ class           Ph4_Score:public Base_Score {
                                                  bool & secondary_score);    
     void            input_parameters_main(Parameter_Reader & parm, std::string parm_head);
     void            initialize(AMBER_TYPER &);//prepare the reference ph4
+    void            initialize(AMBER_TYPER & typer, DOCKMol & ref_mol); //overloaded initialize for dmax and more modular usage
+
     void            refresh_file(std::string);
     void            submit_ph4_mol2(Ph4_Struct &, std::string, std::string, bool);
     void            submit_ph4_txt(Ph4_Struct &, std::string);
@@ -114,6 +116,15 @@ class           Ph4_Score:public Base_Score {
     double          calc_ph4_similarity(Ph4_Struct &, char);
 
     bool            compute_score(DOCKMol &);//output to .out file
+    bool            compute_score(DOCKMol & mol, DOCKMol & ref_mol, std::string ph4_compare_type, AMBER_TYPER & c_typer); //alternative score computation meant for when the reference may be changing a lot
     std::string     output_score_summary(DOCKMol &);//output to the mol2
+  private:
+   //initialization subroutines
+   void              initialize_prepare_Ph4_components_helper(AMBER_TYPER & typer);
+   void              initialize_read_Mol2_helper(AMBER_TYPER & typer); 
+   void              initialize_prepare_Mol2_helper(AMBER_TYPER & typer, DOCKMol & reference);
+   void              initialize_read_ph4_helper(AMBER_TYPER & typer);
+   void              initialize_output_helper();
+   void              initialize_define_score_coeffecients_helper();
 };
 #endif // SCORE_PH4_H

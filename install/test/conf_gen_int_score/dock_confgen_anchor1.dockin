@@ -5,6 +5,7 @@ atom_in_anchor                                               C,19
 pruning_use_clustering                                       yes
 pruning_max_orients                                          300
 pruning_clustering_cutoff                                    300
+pruning_orient_score_cutoff                                  1000.0
 pruning_conformer_score_cutoff                               100.0
 pruning_conformer_score_scaling_factor                       1.0
 use_clash_overlap                                            no
@@ -21,6 +22,7 @@ bump_filter                                                  no
 score_molecules                                              yes
 contact_score_primary                                        no
 grid_score_primary                                           no
+gist_score_primary                                           no
 multigrid_score_primary                                      no
 dock3.5_score_primary                                        no
 continuous_score_primary                                     no
@@ -28,7 +30,7 @@ footprint_similarity_score_primary                           no
 pharmacophore_score_primary                                  no
 hbond_score_primary                                          no
 internal_energy_score_primary                                yes
-internal_energy_rep_exp                                      12
+internal_energy_score_rep_exp                                12
 minimize_ligand                                              yes
 minimize_anchor                                              no
 minimize_flexible_growth                                     yes
@@ -42,6 +44,7 @@ simplex_rot_step                                             0.1
 simplex_tors_step                                            5
 simplex_grow_max_iterations                                  0
 simplex_grow_tors_premin_iterations                          20
+simplex_final_min                                            no
 simplex_random_seed                                          0
 simplex_restraint_min                                        yes
 simplex_coefficient_restraint                                100
@@ -50,8 +53,10 @@ vdw_defn_file                                                ../../../parameters
 flex_defn_file                                               ../../../parameters/flex.defn
 flex_drive_file                                              ../../../parameters/flex_drive.tbl
 ligand_outfile_prefix                                        output_anchor1
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        5000
 write_conformations                                          no
 cluster_conformations                                        no
+score_threshold                                              100.0
 rank_ligands                                                 no

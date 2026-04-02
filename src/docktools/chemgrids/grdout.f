@@ -23,11 +23,10 @@ c
     1 format (A17)
     2 format (4F8.3, 3I4)
     3 format (80A1)
-      open (unit=unitno, file=grdfil(1:namend)//'.bmp', status='new',
-     &form='unformatted')
-      write (unitno) 'bump map         '
-      write (unitno) grddiv, (offset(i), i=1,3), (grdpts(i), i=1,3)
-      write (unitno) (bump(i), i=1, npts)
+      open (unit=unitno, file=grdfil(1:namend)//'.bmp', status='new')
+      write (unitno, 1) 'bump map         '
+      write (unitno, 2) grddiv, (offset(i), i=1,3), (grdpts(i), i=1,3)
+      write (unitno, 3) (bump(i), i=1, npts)
       close (unitno)
       open (unit=unitno, file=grdfil(1:namend)//'.vdw', status='new',
      &form='unformatted')

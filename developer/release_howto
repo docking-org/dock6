@@ -5,7 +5,8 @@ There are four stages each of which is subdivided into steps.
 Steps (for everyone) to finalize development:
 
 .  Run all tests including chemgrid and parallel by defining:
-   DELPHI_PATH and MPICH_HOME.
+   DELPHI_PATH and MPICH_HOME.  Note that mpi test .dockin's need to be
+   updated manually for input parameter changes.
    If tests fail, debug and/or update tests.
 
 .  Make sure there are tests for each newly added function.
@@ -17,7 +18,7 @@ Steps (for everyone) to finalize development:
    functions and parameters.  Remember to include any new images in the
    docs/images folder.
 
-.  Generate release notes for the web site, eg, docs/new_in_6.11.txt.
+.  Generate release notes for the web site, eg, docs/new_in_6.12.txt.
 
 
 Steps to get the repository ready:
@@ -47,6 +48,8 @@ Steps to get the repository ready:
    docs/tutorials to tutorials.  This step runs the tutorials, but they should
    still be run during exercising of the pre release; see the next step.
    If things don't look correct after making this once then make it again.
+   See the Makefile for elaboration, but note that this can be ignored:
+   Could not open ../3_grid/1VRT.rec.nrg for reading. Program will terminate.
    (As of 6.3 the sphere and grid files are from glenn so only the dock ones may
    have to be rerun.  But Scott has not updated these since 6.6 and maybe should
    have since g77 was changed to gfortran.)
@@ -60,7 +63,7 @@ Steps to get the repository ready:
 
 .  Update FAQ current release question to new release.
 
-.  Create new bug fixes file, eg, docs/bugfixes611/6.11_bugfixes.htm
+.  Create new bug fixes file, eg, docs/bugfixes612/6.12_bugfixes.htm
    and update docs/bugfixes.htm
 
 .  Update docs/index.htm
@@ -68,7 +71,7 @@ Steps to get the repository ready:
 
 Steps to make the tarballs from the repository and to post on the server:
 
-.  Update the DISTRIBUTION_TAG in install/Makefile, eg, dock6-11-beta.
+.  Update the DISTRIBUTION_TAG in install/Makefile, eg, dock6-12-beta.
 
 .  Generate tarballs for beta testing.  In install/ directory, Makefile target
    archive_export creates tarballs for the distribution and the web site.  Add
@@ -81,7 +84,7 @@ Steps to make the tarballs from the repository and to post on the server:
    testing via a private email to friendly users.
    Incorporate feedback per stages above and then proceed to the next step.
 
-.  Update the DISTRIBUTION_TAG in install/Makefile, eg, dock6-11-release.
+.  Update the DISTRIBUTION_TAG in install/Makefile, eg, dock6-12-release.
 
 .  Generate tarballs for distribution:  cd install/; make archive_export;
 
@@ -93,19 +96,16 @@ Steps to make the tarballs from the repository and to post on the server:
 
    cd /var/www/html/distributions
    df
-   tar zcf /tmp/var.www.html.distributions.tgz .
-   df
-   chmod 400 /tmp/var.www.html.distributions.tgz
-   mv -i /tmp/var.www.html.distributions.tgz ~/dock/backup
-   sudo mv ~/tmp/dock6.dock6-11-release.tgz .
-   sudo chmod 644 dock6.dock6-11-release.tgz
-   sudo ln -s dock6.dock6-11-release.tgz dock.6.11_source.tar.gz
-   sudo ln -s dock.6.11_source.tar.gz dock.6.11_linux.tar.gz
+   tar zcf /tmp/var.www.html.distributions.pre612partialbackup.tgz \
+      retrieve_dock_distribution.html
+   chmod 400 /tmp/var.www.html.distributions.pre612partialbackup.tgz
+   mv -i ~/tmp/dock6.dock6-12-release.tgz ./dock.6.12_source.tar.gz
+   chmod 644 dock.6.12_source.tar.gz
 
 .  Enter /var/www/html/distributions on dock.  Update (1 line) version
    number in retrieve_dock_distribution.html :
 
-   sudo vi retrieve_dock_distribution.html
+   vi retrieve_dock_distribution.html
 
 .  Enter /var/www/cgi-bin/distributions on dock.
    Open file retrieve_dock_distribution.py.  Change the following line:
@@ -122,32 +122,21 @@ Steps to make the tarballs from the repository and to post on the server:
       where X = newest version
 
    cd /var/www/cgi-bin/distributions
-   df
-   tar zcf /tmp/var.www.cgi-bin.distributions.tgz .
-   df
-   chmod 400 /tmp/var.www.cgi-bin.distributions.tgz
-   mv -i /tmp/var.www.cgi-bin.distributions.tgz ~/dock/backup
-   sudo vi retrieve_dock_distribution.py retrieve_industry_distribution.py
+   tar zcf /tmp/var.www.cgi-bin.distributions.pre612partialbackup.tgz \
+      retrieve_dock_distribution.py retrieve_industry_distribution.py
+   chmod 400 /tmp/var.www.cgi-bin.distributions.pre612partialbackup.tgz
+   vi retrieve_dock_distribution.py retrieve_industry_distribution.py
 
 .  Move to /var/www/html/kuntz.  Accommodate recent hacks to release process.
    Update (1 line) index.html to current version :
 
    cd /var/www/html/kuntz
    df
-   tar zcf /tmp/var.www.html.kuntz.tgz .
-   df
-   chmod 400 /tmp/var.www.html.kuntz.tgz
-   mv -i /tmp/var.www.html.kuntz.tgz ~/dock/backup
-   sudo ln -s ../distributions/dock.6.11_source.tar.gz
-   sudo ln -s ../distributions/dock.6.11_source.tar.gz dock.6.11_linux.tar.gz
-   sudo vi index.html
-
-.  Test for academic distribution by applying for fake license and going
-   through downloading process.  Have an independent third party attempt to
-   download code (just in case).  Do Not skip the academic check !
-   Test for industry using the password from the test industry license
-   "AAAAAAAAA" on the industry license site and then download from the web site
-   https://dock.compbio.ucsf.edu/retrieve_industry_distribution.html
+   tar zcf /tmp/var.www.html.kuntz.pre612partialbackup.tgz index.html
+   chmod 400 /tmp/var.www.html.kuntz.pre612partialbackup.tgz
+   ln -s ../distributions/dock.6.12_source.tar.gz
+   ln -s ../distributions/dock.6.12_source.tar.gz dock.6.12_linux.tar.gz
+   vi index.html
 
 .  Enter /var/www/html/kuntz/DOCK_6.  This directory tree is doc/ in the
    repository.  Unwrap the web tarball to update the manual, faq, tutorials, ...
@@ -155,9 +144,17 @@ Steps to make the tarballs from the repository and to post on the server:
    Remember to double check that the updates are now live on the web site :
 
    cd /var/www/html/kuntz/DOCK_6
-   sudo tar zxf ~/tmp/webarchiveexport.dock6-11-release.tgz
-   sudo ln -s dock6_manual.html dock6_manual.htm
-   sudo ln -s index.htm index.html
+   tar zxf ~/tmp/webarchiveexport.dock6-12-release.tgz
+   ln -s dock6_manual.html dock6_manual.htm
+   ln -s index.htm index.html
+
+.  Test for academic distribution by applying for fake license and going
+   through downloading process.  Have an independent third party attempt to
+   download code (just in case).  Do Not skip the academic check !:
+   https://dock.docking.org/cgi-bin/distributions/retrieve_dock_distribution.py
+   We use to test for industry using the password from the test industry license
+   "AAAAAAAAA" on the industry license site and then download from the web site
+   https://dock.compbio.ucsf.edu/retrieve_industry_distribution.html
 
 
 Misc. final steps:
@@ -173,18 +170,18 @@ Misc. final steps:
 .  Celebrate!
 
 .  Branch repository; plan to use lightweight tags for prereleases, eg;
-   git tag dock6-11-beta
+   git tag dock6-12-beta
    For the next release consider switching from lightweight to annotated tags
    for prereleases for better documentation.
    Annotated tags don't seem useful for releases, eg:
-   git tag -a dock6-11-release
+   git tag -a dock6-12-release
    So shortly after the release create a branch and plan to use it for bugfixes:
-   git checkout -b dock6-11-release
-   git push -u origin dock6-11-release
+   git checkout -b dock6-12-release
+   git push -u origin dock6-12-release
 
 .  Archive backups:
    cd ~/dock/backup
-   scptopit var.www.html.distributions.tgz
-   scptopit var.www.cgi-bin.distributions.tgz
-   scptopit var.www.html.kuntz.tgz
+   scptopit var.www.cgi-bin.distributions.pre612partialbackup.tgz
+   scptopit var.www.html.distributions.pre612partialbackup.tgz
+   scptopit var.www.html.kuntz.pre612partialbackup.tgz
 

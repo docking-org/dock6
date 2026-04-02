@@ -85,6 +85,8 @@ class           Orient {
     double         *sph_dist_mat;
     double         *lig_dist_mat;
     double         *residual_mat;
+//    double        **residual_mat;
+    int             residual_mat_size;
     std::vector < CLIQUE_EDGE > edges;
 
     // matching data structures
@@ -171,14 +173,17 @@ class           Orient {
     void            id_all_cliques();   // test fxn to find all cliques
     bool            new_next_orientation(DOCKMol &);
     bool            new_next_orientation(DOCKMol &, bool);
-    void            orientation_HDB(DOCKMol &); // TEB for HDB
+    bool            orientation_HDB(DOCKMol &, bool); // TEB for HDB
+    //bool            orientation_HDB(DOCKMol &); // TEB for HDB
     void            new_extract_coords_from_clique(CLIQUE &);
     bool            check_clique_critical_points(CLIQUE &);
     bool            check_clique_chemical_match(CLIQUE &);
     void            read_chem_match_tbl();
 
 // added for covalent docking.
-    void            match_ligand_covalent(DOCKMol & mol, float lenth);
+    //void            match_ligand_covalent(DOCKMol & mol, float lenth, float lenth2, float angle);
+    void            match_ligand_covalent(DOCKMol & mol, float lenth, float lenth2, float angle, bool flag_adjust_bond, bool flag_orient, bool flag_first);
+    //bool            new_next_orientation_covalent(DOCKMol & mol, float angle);
     void            new_next_orientation_covalent(DOCKMol & mol, float angle);
     void            set_torsion(float x0, float x1, float x2, float x3,
                                 float y0 , float y1, float y2, float y3,

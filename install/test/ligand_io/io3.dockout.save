@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released September 2024
 Copyright UCSF
 --------------------------------------
 
@@ -46,11 +46,14 @@ score_molecules                                              no
 Molecule Library Output Parameters
 ------------------------------------------------------------------------------------------
 ligand_outfile_prefix                                        io3
+write_mol_solvation                                          no
 write_orientations                                           yes
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
 Initializing Library File Routines...
+
  Skipped 2 ligands
 
 
@@ -87,3 +90,6 @@ Molecule: ZINC00150863
 
 3 Molecules Processed
 Total elapsed time:	0.004 seconds
+Number of molecules per second:	754.653
+Virtual memory used for this process: 83480 kilobytes
+Physical memory used for this process: 11528 kilobytes

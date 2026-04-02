@@ -20,6 +20,7 @@ def extract_all_molecules(filename):
                 line_list.append(line)
             else:
                 line_list.append(line)
+        molecule_list.append(line_list)
     return(molecule_list) #returns a list
 
 #takes all the fragments and only keeps the ones > freq_cutoff

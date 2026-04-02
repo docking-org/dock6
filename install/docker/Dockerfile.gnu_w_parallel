@@ -1,0 +1,46 @@
+FROM ubuntu:latest
+
+RUN apt-get update
+
+RUN apt-get install -y make &&\
+    apt-get install -y g++ &&\
+    apt-get install -y libz-dev &&\
+    apt-get install -y gfortran &&\
+    apt-get install -y bison flex &&\
+    apt-get install -y mpich && \ 
+    apt-get install -y vim nano
+
+RUN mkdir /app && mkdir /app/workspace
+
+COPY ../../ /app/dock6
+
+RUN cd /app/dock6/install && \
+        make -i distclean && \
+          ./configure gnu && \
+                  make install || true
+
+RUN cd /app/dock6/src/dock/nab &&\
+    make clean &&\
+    make copy.lex.mm_options.c &&\
+    make -e DOCKBUILDFLAGS='-Dflex' all &&\
+    cd /app/dock6/install &&\
+    make install
+
+RUN cd /app/dock6/install && \
+        make -i cleandock && \
+        ./configure gnu.parallel && \
+                  make dock || true
+
+RUN cd /app/dock6/src/dock/nab &&\
+    make clean &&\
+    make copy.lex.mm_options.c &&\
+    make -e DOCKBUILDFLAGS='-Dflex' all &&\
+    cd /app/dock6/install &&\
+    make dock
+
+ENV PATH="/app/dock6/bin:$PATH"
+
+RUN chmod +x /app/dock6/bin/*
+RUN chmod +x /app/dock6/install/docker/dispatcher.sh
+
+ENTRYPOINT ["/app/dock6/install/docker/dispatcher.sh"]

@@ -13,6 +13,7 @@ bump_filter                                                  no
 score_molecules                                              yes
 contact_score_primary                                        no
 grid_score_primary                                           no
+gist_score_primary                                           no
 multigrid_score_primary                                      no
 dock3.5_score_primary                                        no
 continuous_score_primary                                     no
@@ -29,6 +30,8 @@ descriptor_use_pharmacophore_score                           no
 descriptor_use_tanimoto                                      no
 descriptor_use_hungarian                                     no
 descriptor_use_volume_overlap                                no
+descriptor_use_gist                                          no
+descriptor_use_dock3.5                                       no
 descriptor_cont_score_rec_filename                           rec.mol2
 descriptor_cont_score_att_exp                                6
 descriptor_cont_score_rep_exp                                12
@@ -39,7 +42,8 @@ descriptor_cont_score_vdw_scale                              1
 descriptor_cont_score_es_scale                               1
 descriptor_fps_score_use_footprint_reference_mol2            yes
 descriptor_fps_score_footprint_reference_mol2_filename       lig.mol2
-descriptor_fps_score_foot_compare_type                       d
+descriptor_fps_score_foot_compare_type                       Euclidean
+descriptor_fps_score_normalize_foot                          no
 descriptor_fps_score_foot_comp_all_residue                   no
 descriptor_fps_score_choose_foot_range_type                  threshold
 descriptor_fps_score_vdw_threshold                           1
@@ -58,13 +62,16 @@ descriptor_fps_score_hb_fp_scale                             0
 descriptor_weight_cont_score                                 1
 descriptor_weight_fps_score                                  0
 minimize_ligand                                              no
+simplex_final_min                                            no
 atom_model                                                   all
 vdw_defn_file                                                ../../../parameters/vdw_AMBER_parm99.defn
 flex_defn_file                                               ../../../parameters/flex.defn
 flex_drive_file                                              ../../../parameters/flex_drive.tbl
 ligand_outfile_prefix                                        important_residues
+write_mol_solvation                                          no
 write_footprints                                             no
 write_hbonds                                                 no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no

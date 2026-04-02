@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released September 2024
 Copyright UCSF
 --------------------------------------
 
@@ -55,6 +55,10 @@ Grid Score Parameters
 ------------------------------------------------------------------------------------------
 grid_score_primary                                           no
 
+GIST Score Parameters
+------------------------------------------------------------------------------------------
+gist_score_primary                                           no
+
 MultiGrid Score Parameters
 ------------------------------------------------------------------------------------------
 multigrid_score_primary                                      no
@@ -94,6 +98,8 @@ descriptor_use_pharmacophore_score                           no
 descriptor_use_tanimoto                                      no
 descriptor_use_hungarian                                     no
 descriptor_use_volume_overlap                                no
+descriptor_use_gist                                          no
+descriptor_use_dock3.5                                       no
 
 --- Descriptor Score Parameters: Continuous Energy Score ---
 descriptor_cont_score_rec_filename                           receptor.mol2
@@ -150,6 +156,7 @@ Amber Score Parameters
 Simplex Minimization Parameters
 ------------------------------------------------------------------------------------------
 minimize_ligand                                              no
+simplex_final_min                                            no
 
 Atom Typing Parameters
 ------------------------------------------------------------------------------------------
@@ -161,13 +168,16 @@ flex_drive_file                                              ../../../parameters
 Molecule Library Output Parameters
 ------------------------------------------------------------------------------------------
 ligand_outfile_prefix                                        Des_FPS+DCE
+write_mol_solvation                                          no
 write_footprints                                             yes
 write_hbonds                                                 yes
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
 Initializing Library File Routines...
+
 Initializing typer for Continuous Score within Descriptor Score...
 Initializing typer for Footprint Similarity Score within Descriptor Score...
 To cite Footprint Similarity Score use: 
@@ -178,7 +188,7 @@ WARNING: sum of squares close to zero in norm calculation.
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.071 seconds
+ Elapsed time for docking:	0.092 seconds
 
  Anchors:		1
  Orientations:		1
@@ -205,7 +215,7 @@ WARNING: sum of squares close to zero in norm calculation.
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.072 seconds
+ Elapsed time for docking:	0.111 seconds
 
  Anchors:		1
  Orientations:		1
@@ -232,7 +242,7 @@ WARNING: sum of squares close to zero in norm calculation.
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.071 seconds
+ Elapsed time for docking:	0.125 seconds
 
  Anchors:		1
  Orientations:		1
@@ -259,7 +269,7 @@ WARNING: sum of squares close to zero in norm calculation.
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.071 seconds
+ Elapsed time for docking:	0.085 seconds
 
  Anchors:		1
  Orientations:		1
@@ -286,7 +296,7 @@ WARNING: sum of squares close to zero in norm calculation.
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.071 seconds
+ Elapsed time for docking:	0.086 seconds
 
  Anchors:		1
  Orientations:		1
@@ -313,7 +323,7 @@ WARNING: sum of squares close to zero in norm calculation.
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.070 seconds
+ Elapsed time for docking:	0.071 seconds
 
  Anchors:		1
  Orientations:		1
@@ -340,7 +350,7 @@ WARNING: sum of squares close to zero in norm calculation.
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.109 seconds
+ Elapsed time for docking:	0.114 seconds
 
  Anchors:		1
  Orientations:		1
@@ -368,7 +378,7 @@ WARNING: sum of squares close to zero in norm calculation.
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.119 seconds
+ Elapsed time for docking:	0.130 seconds
 
  Anchors:		1
  Orientations:		1
@@ -396,7 +406,7 @@ WARNING: sum of squares close to zero in norm calculation.
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.081 seconds
+ Elapsed time for docking:	0.078 seconds
 
  Anchors:		1
  Orientations:		1
@@ -448,4 +458,7 @@ Molecule: MOL
 
 
 10 Molecules Processed
-Total elapsed time:	2.343 seconds
+Total elapsed time:	3.032 seconds
+Number of molecules per second:	3.298
+Virtual memory used for this process: 90176 kilobytes
+Physical memory used for this process: 18284 kilobytes

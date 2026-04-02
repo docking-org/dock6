@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released September 2024
 Copyright UCSF
 --------------------------------------
 
@@ -49,6 +49,10 @@ Grid Score Parameters
 ------------------------------------------------------------------------------------------
 grid_score_primary                                           no
 
+GIST Score Parameters
+------------------------------------------------------------------------------------------
+gist_score_primary                                           no
+
 MultiGrid Score Parameters
 ------------------------------------------------------------------------------------------
 multigrid_score_primary                                      no
@@ -88,6 +92,8 @@ descriptor_use_pharmacophore_score                           no
 descriptor_use_tanimoto                                      no
 descriptor_use_hungarian                                     no
 descriptor_use_volume_overlap                                yes
+descriptor_use_gist                                          no
+descriptor_use_dock3.5                                       no
 
 --- Descriptor Score Parameters: Volume Overlap Score ---
 descriptor_volume_score_reference_mol2_filename              volume_ligand.mol2
@@ -117,6 +123,7 @@ Amber Score Parameters
 Simplex Minimization Parameters
 ------------------------------------------------------------------------------------------
 minimize_ligand                                              no
+simplex_final_min                                            no
 
 Atom Typing Parameters
 ------------------------------------------------------------------------------------------
@@ -129,11 +136,14 @@ chem_defn_file                                               ../../../parameters
 Molecule Library Output Parameters
 ------------------------------------------------------------------------------------------
 ligand_outfile_prefix                                        Des_VOS
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
 Initializing Library File Routines...
+
 Initializing typer for Volume Overlap Score within Descriptor Score...
  Volume reference mol2 file was read in successfully
 Making the box...
@@ -141,7 +151,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.061 seconds
+ Elapsed time for docking:	0.033 seconds
 
  Anchors:		1
  Orientations:		1
@@ -160,7 +170,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.053 seconds
+ Elapsed time for docking:	0.041 seconds
 
  Anchors:		1
  Orientations:		1
@@ -179,7 +189,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.044 seconds
+ Elapsed time for docking:	0.039 seconds
 
  Anchors:		1
  Orientations:		1
@@ -198,7 +208,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.040 seconds
+ Elapsed time for docking:	0.042 seconds
 
  Anchors:		1
  Orientations:		1
@@ -217,7 +227,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.034 seconds
+ Elapsed time for docking:	0.040 seconds
 
  Anchors:		1
  Orientations:		1
@@ -236,7 +246,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.036 seconds
+ Elapsed time for docking:	0.046 seconds
 
  Anchors:		1
  Orientations:		1
@@ -255,7 +265,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.040 seconds
+ Elapsed time for docking:	0.050 seconds
 
  Anchors:		1
  Orientations:		1
@@ -274,7 +284,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.039 seconds
+ Elapsed time for docking:	0.050 seconds
 
  Anchors:		1
  Orientations:		1
@@ -293,7 +303,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.032 seconds
+ Elapsed time for docking:	0.040 seconds
 
  Anchors:		1
  Orientations:		1
@@ -312,7 +322,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.035 seconds
+ Elapsed time for docking:	0.045 seconds
 
  Anchors:		1
  Orientations:		1
@@ -331,7 +341,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.028 seconds
+ Elapsed time for docking:	0.036 seconds
 
  Anchors:		1
  Orientations:		1
@@ -350,7 +360,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.037 seconds
+ Elapsed time for docking:	0.047 seconds
 
  Anchors:		1
  Orientations:		1
@@ -369,7 +379,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.036 seconds
+ Elapsed time for docking:	0.045 seconds
 
  Anchors:		1
  Orientations:		1
@@ -388,7 +398,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.041 seconds
+ Elapsed time for docking:	0.061 seconds
 
  Anchors:		1
  Orientations:		1
@@ -407,7 +417,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.050 seconds
+ Elapsed time for docking:	0.103 seconds
 
  Anchors:		1
  Orientations:		1
@@ -426,7 +436,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.034 seconds
+ Elapsed time for docking:	0.044 seconds
 
  Anchors:		1
  Orientations:		1
@@ -445,7 +455,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.045 seconds
+ Elapsed time for docking:	0.053 seconds
 
  Anchors:		1
  Orientations:		1
@@ -464,7 +474,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.038 seconds
+ Elapsed time for docking:	0.045 seconds
 
  Anchors:		1
  Orientations:		1
@@ -483,7 +493,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.046 seconds
+ Elapsed time for docking:	0.052 seconds
 
  Anchors:		1
  Orientations:		1
@@ -502,7 +512,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.046 seconds
+ Elapsed time for docking:	0.055 seconds
 
  Anchors:		1
  Orientations:		1
@@ -521,7 +531,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.041 seconds
+ Elapsed time for docking:	0.048 seconds
 
  Anchors:		1
  Orientations:		1
@@ -540,7 +550,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.035 seconds
+ Elapsed time for docking:	0.041 seconds
 
  Anchors:		1
  Orientations:		1
@@ -559,7 +569,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.041 seconds
+ Elapsed time for docking:	0.045 seconds
 
  Anchors:		1
  Orientations:		1
@@ -578,7 +588,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.053 seconds
+ Elapsed time for docking:	0.064 seconds
 
  Anchors:		1
  Orientations:		1
@@ -597,7 +607,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.041 seconds
+ Elapsed time for docking:	0.048 seconds
 
  Anchors:		1
  Orientations:		1
@@ -616,7 +626,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.045 seconds
+ Elapsed time for docking:	0.053 seconds
 
  Anchors:		1
  Orientations:		1
@@ -635,7 +645,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.037 seconds
+ Elapsed time for docking:	0.043 seconds
 
  Anchors:		1
  Orientations:		1
@@ -654,7 +664,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.040 seconds
+ Elapsed time for docking:	0.047 seconds
 
  Anchors:		1
  Orientations:		1
@@ -673,7 +683,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.042 seconds
+ Elapsed time for docking:	0.049 seconds
 
  Anchors:		1
  Orientations:		1
@@ -692,7 +702,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.051 seconds
+ Elapsed time for docking:	0.058 seconds
 
  Anchors:		1
  Orientations:		1
@@ -711,7 +721,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.061 seconds
+ Elapsed time for docking:	0.071 seconds
 
  Anchors:		1
  Orientations:		1
@@ -730,7 +740,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.048 seconds
+ Elapsed time for docking:	0.056 seconds
 
  Anchors:		1
  Orientations:		1
@@ -749,7 +759,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.051 seconds
+ Elapsed time for docking:	0.063 seconds
 
  Anchors:		1
  Orientations:		1
@@ -768,7 +778,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.059 seconds
+ Elapsed time for docking:	0.069 seconds
 
  Anchors:		1
  Orientations:		1
@@ -787,7 +797,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.057 seconds
+ Elapsed time for docking:	0.063 seconds
 
  Anchors:		1
  Orientations:		1
@@ -806,45 +816,45 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
+ Elapsed time for docking:	0.104 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.000000
+               Property_Volume_Score:            0.000000
+               desc_VOS_geometric_vo:            0.000000
+                desc_VOS_hvy_atom_vo:            0.000000
+            desc_VOS_pos_chrg_atm_vo:            0.000000
+            desc_VOS_neg_chrg_atm_vo:            0.000000
+         desc_VOS_hydrophobic_atm_vo:            0.000000
+         desc_VOS_hydrophilic_atm_vo:            0.000000
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
+ Elapsed time for docking:	0.099 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                    Descriptor_Score:            0.000000
+               Property_Volume_Score:            0.000000
+               desc_VOS_geometric_vo:            0.000000
+                desc_VOS_hvy_atom_vo:            0.000000
+            desc_VOS_pos_chrg_atm_vo:            0.000000
+            desc_VOS_neg_chrg_atm_vo:            0.000000
+         desc_VOS_hydrophobic_atm_vo:            0.000000
+         desc_VOS_hydrophilic_atm_vo:            0.000000
+Making the box...
+
+-----------------------------------
+Molecule: 1M17.lig
+
  Elapsed time for docking:	0.089 seconds
-
- Anchors:		1
- Orientations:		1
- Conformations:		1
-
-                    Descriptor_Score:            0.000000
-               Property_Volume_Score:            0.000000
-               desc_VOS_geometric_vo:            0.000000
-                desc_VOS_hvy_atom_vo:            0.000000
-            desc_VOS_pos_chrg_atm_vo:            0.000000
-            desc_VOS_neg_chrg_atm_vo:            0.000000
-         desc_VOS_hydrophobic_atm_vo:            0.000000
-         desc_VOS_hydrophilic_atm_vo:            0.000000
-Making the box...
-
------------------------------------
-Molecule: 1M17.lig
-
- Elapsed time for docking:	0.083 seconds
-
- Anchors:		1
- Orientations:		1
- Conformations:		1
-
-                    Descriptor_Score:            0.000000
-               Property_Volume_Score:            0.000000
-               desc_VOS_geometric_vo:            0.000000
-                desc_VOS_hvy_atom_vo:            0.000000
-            desc_VOS_pos_chrg_atm_vo:            0.000000
-            desc_VOS_neg_chrg_atm_vo:            0.000000
-         desc_VOS_hydrophobic_atm_vo:            0.000000
-         desc_VOS_hydrophilic_atm_vo:            0.000000
-Making the box...
-
------------------------------------
-Molecule: 1M17.lig
-
- Elapsed time for docking:	0.077 seconds
 
  Anchors:		1
  Orientations:		1
@@ -863,7 +873,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.085 seconds
+ Elapsed time for docking:	0.100 seconds
 
  Anchors:		1
  Orientations:		1
@@ -882,7 +892,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.048 seconds
+ Elapsed time for docking:	0.058 seconds
 
  Anchors:		1
  Orientations:		1
@@ -901,7 +911,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.075 seconds
+ Elapsed time for docking:	0.088 seconds
 
  Anchors:		1
  Orientations:		1
@@ -920,7 +930,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.078 seconds
+ Elapsed time for docking:	0.102 seconds
 
  Anchors:		1
  Orientations:		1
@@ -939,7 +949,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.050 seconds
+ Elapsed time for docking:	0.062 seconds
 
  Anchors:		1
  Orientations:		1
@@ -958,7 +968,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.029 seconds
+ Elapsed time for docking:	0.038 seconds
 
  Anchors:		1
  Orientations:		1
@@ -977,7 +987,7 @@ Making the box...
 -----------------------------------
 Molecule: 1M17.lig
 
- Elapsed time for docking:	0.094 seconds
+ Elapsed time for docking:	0.115 seconds
 
  Anchors:		1
  Orientations:		1
@@ -994,4 +1004,7 @@ Molecule: 1M17.lig
 
 
 45 Molecules Processed
-Total elapsed time:	2.271 seconds
+Total elapsed time:	2.715 seconds
+Number of molecules per second:	16.572
+Virtual memory used for this process: 83712 kilobytes
+Physical memory used for this process: 11976 kilobytes

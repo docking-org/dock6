@@ -10,11 +10,14 @@ Written by Todd Ewing
 typedef struct score_grid_struct
 {
   int flag;			/* Flag for precomputed grid use */
+  int flag37;			/* Flag for using grid generated with dock3.7 */
+  int flagqnifft;		/* Flag for using QNIFFT grid (True) or DelPhi grid (False)  */
   int init_flag;		/* Flag for grid initialization */
   float version;		/* Chemgrid version format */
 
   int size;			/* Number of grid points */
   int psize;            /* Number of Delphi grid points */
+  int nsize;            /* Number of Delphi grid points in one dimension */
   int span[3];			/* Number of points along each grid edge */
   int pspan[3];	            /* Number of points along each Delphi grid edge */
   float origin[3];		/* Coordinates of origin of grids */

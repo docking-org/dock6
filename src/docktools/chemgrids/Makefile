@@ -4,7 +4,8 @@ include ../../../install/rules.h
 include ../../../install/config.h
 
 BIN = ../../../bin
-PROGS =  chemgrid distmap
+#PROGS =  chemgrid distmap
+PROGS =  chemgrid 
 
 OBJS1 = chemgrid.o dist.o ddist.o dconst.o grdout.o parmrec.o 
 

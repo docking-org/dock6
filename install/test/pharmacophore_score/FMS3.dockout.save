@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released September 2024
 Copyright UCSF
 --------------------------------------
 
@@ -22,6 +22,7 @@ min_anchor_size                                              5
 pruning_use_clustering                                       yes
 pruning_max_orients                                          10
 pruning_clustering_cutoff                                    100
+pruning_orient_score_cutoff                                  1000.0
 pruning_conformer_score_cutoff                               100.0
 pruning_conformer_score_scaling_factor                       1.0
 use_clash_overlap                                            no
@@ -73,6 +74,10 @@ contact_score_primary                                        no
 Grid Score Parameters
 ------------------------------------------------------------------------------------------
 grid_score_primary                                           no
+
+GIST Score Parameters
+------------------------------------------------------------------------------------------
+gist_score_primary                                           no
 
 MultiGrid Score Parameters
 ------------------------------------------------------------------------------------------
@@ -136,6 +141,7 @@ Amber Score Parameters
 Simplex Minimization Parameters
 ------------------------------------------------------------------------------------------
 minimize_ligand                                              no
+simplex_final_min                                            no
 
 Atom Typing Parameters
 ------------------------------------------------------------------------------------------
@@ -148,13 +154,16 @@ pharmacophore_defn_file                                      ../../../parameters
 Molecule Library Output Parameters
 ------------------------------------------------------------------------------------------
 ligand_outfile_prefix                                        ref_flex_FMS
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
 
 Initializing Conformer Generator Routines...
 Initializing Library File Routines...
+
 Initializing Orienting Routines...
 To cite Pharmacophore Score use: 
  Jiang, L.; Rizzo, R. C. Pharmacophore-Based Similarity Scoring for DOCK, J. Phys. Chem. B., 2015, 119, 1083-1102. 
@@ -163,7 +172,7 @@ To cite Pharmacophore Score use:
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	2.456 seconds
+ Elapsed time for docking:	3.450 seconds
 
  Anchors:		2
  Orientations:		200
@@ -182,8 +191,11 @@ Molecule: MOL
             FMS_num_positive_matched:                   0
             FMS_num_negative_matched:                   0
                 FMS_num_ring_matched:                   0
-           Internal_energy_repulsive:           26.203617
+           Internal_energy_repulsive:           26.203644
 
 
 1 Molecules Processed
-Total elapsed time:	2.466 seconds
+Total elapsed time:	3.464 seconds
+Number of molecules per second:	0.289
+Virtual memory used for this process: 101332 kilobytes
+Physical memory used for this process: 30164 kilobytes

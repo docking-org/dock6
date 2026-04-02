@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released April 2024
 Copyright UCSF
 --------------------------------------
 Parallel dock running 2 MPI processes
@@ -24,6 +24,7 @@ min_anchor_size                                              40
 pruning_use_clustering                                       yes
 pruning_max_orients                                          100
 pruning_clustering_cutoff                                    100
+pruning_orient_score_cutoff                                  1000
 pruning_conformer_score_cutoff                               25
 pruning_conformer_score_scaling_factor                       1.0
 use_clash_overlap                                            no
@@ -73,7 +74,11 @@ grid_score_primary                                           yes
 grid_score_rep_rad_scale                                     1
 grid_score_vdw_scale                                         1
 grid_score_es_scale                                          1
+grid_lig_efficiency                                          no
 grid_score_grid_prefix                                       ../grid_generation/grid
+
+GIST Score Parameters
+------------------------------------------------------------------------------------------
 
 MultiGrid Score Parameters
 ------------------------------------------------------------------------------------------
@@ -114,6 +119,8 @@ Amber Score Parameters
 Simplex Minimization Parameters
 ------------------------------------------------------------------------------------------
 minimize_ligand                                              no
+Warning:  No legal value found for parameter simplex_final_min.
+  The default value of "no" will be used.
 
 Atom Typing Parameters
 ------------------------------------------------------------------------------------------
@@ -125,13 +132,16 @@ flex_drive_file                                              ../../../parameters
 Molecule Library Output Parameters
 ------------------------------------------------------------------------------------------
 ligand_outfile_prefix                                        mpi_rd
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100
 rank_ligands                                                 yes
 max_ranked_ligands                                           500
 
 Initializing Conformer Generator Routines...
 Initializing Library File Routines...
+
 Initializing Orienting Routines...
 Initializing Grid Score Routines...
  Reading the energy grid from ../grid_generation/grid.nrg
@@ -157,9 +167,9 @@ Molecule: ZINC00013564
  Orientations:		50
  Conformations:		16
 
-                          Grid_Score:          -15.287382
+                          Grid_Score:          -15.287383
                      Grid_vdw_energy:          -17.370550
-                      Grid_es_energy:            2.083168
+                      Grid_es_energy:            2.083167
 
 -----------------------------------
 Molecule: ZINC01555236
@@ -168,9 +178,9 @@ Molecule: ZINC01555236
  Orientations:		50
  Conformations:		18
 
-                          Grid_Score:           -6.092680
-                     Grid_vdw_energy:           -6.812087
-                      Grid_es_energy:            0.719407
+                          Grid_Score:           -6.092642
+                     Grid_vdw_energy:           -6.812057
+                      Grid_es_energy:            0.719414
 
 -----------------------------------
 Molecule: ZINC00150863
@@ -179,8 +189,8 @@ Molecule: ZINC00150863
  Orientations:		50
  Conformations:		30
 
-                          Grid_Score:          -13.396927
-                     Grid_vdw_energy:          -13.679748
+                          Grid_Score:          -13.396925
+                     Grid_vdw_energy:          -13.679746
                       Grid_es_energy:            0.282820
 
 -----------------------------------
@@ -190,9 +200,9 @@ Molecule: ZINC00152265
  Orientations:		50
  Conformations:		21
 
-                          Grid_Score:          -15.165411
-                     Grid_vdw_energy:          -14.006889
-                      Grid_es_energy:           -1.158522
+                          Grid_Score:          -15.165412
+                     Grid_vdw_energy:          -14.006888
+                      Grid_es_energy:           -1.158523
 
 -----------------------------------
 Molecule: ZINC00152280
@@ -201,9 +211,9 @@ Molecule: ZINC00152280
  Orientations:		50
  Conformations:		64
 
-                          Grid_Score:          -17.706253
-                     Grid_vdw_energy:          -16.459993
-                      Grid_es_energy:           -1.246260
+                          Grid_Score:          -17.706257
+                     Grid_vdw_energy:          -16.459995
+                      Grid_es_energy:           -1.246262
 
 -----------------------------------
 Molecule: ZINC00157111
@@ -212,9 +222,9 @@ Molecule: ZINC00157111
  Orientations:		50
  Conformations:		45
 
-                          Grid_Score:          -14.459966
-                     Grid_vdw_energy:          -12.837439
-                      Grid_es_energy:           -1.622527
+                          Grid_Score:          -14.462634
+                     Grid_vdw_energy:          -12.839486
+                      Grid_es_energy:           -1.623148
 
 -----------------------------------
 Molecule: ZINC00157152
@@ -223,9 +233,9 @@ Molecule: ZINC00157152
  Orientations:		50
  Conformations:		18
 
-                          Grid_Score:          -15.555840
-                     Grid_vdw_energy:          -15.114218
-                      Grid_es_energy:           -0.441622
+                          Grid_Score:          -15.555817
+                     Grid_vdw_energy:          -15.114187
+                      Grid_es_energy:           -0.441629
 
 -----------------------------------
 Molecule: ZINC00157402
@@ -245,9 +255,9 @@ Molecule: ZINC00157467
  Orientations:		50
  Conformations:		37
 
-                          Grid_Score:          -14.412565
-                     Grid_vdw_energy:          -13.521505
-                      Grid_es_energy:           -0.891060
+                          Grid_Score:          -14.412553
+                     Grid_vdw_energy:          -13.521490
+                      Grid_es_energy:           -0.891063
 
 -----------------------------------
 Molecule: ZINC00157960
@@ -256,11 +266,14 @@ Molecule: ZINC00157960
  Orientations:		50
  Conformations:		4
 
-                          Grid_Score:          -16.670240
-                     Grid_vdw_energy:          -14.198773
-                      Grid_es_energy:           -2.471467
+                          Grid_Score:          -16.670109
+                     Grid_vdw_energy:          -14.198644
+                      Grid_es_energy:           -2.471465
 
 
 12 Molecules Processed
-Total elapsed time:	0.911 seconds
+Total elapsed time:	2.659 seconds
+4.512 # mols / sec
+Virtual Memory Used for this process: 153328 KiloBytes
+Physical Memory Used for this process: 19060 KiloBytes
 Finalizing MPI Routines...

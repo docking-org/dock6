@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released September 2024
 Copyright UCSF
 --------------------------------------
 
@@ -33,6 +33,7 @@ Orient Ligand Parameters
 ------------------------------------------------------------------------------------------
 orient_ligand                                                yes
 automated_matching                                           no
+automated_matching_iteration                                 no
 distance_tolerance                                           0.25
 distance_minimum                                             2.0
 nodes_minimum                                                3
@@ -61,17 +62,20 @@ flex_drive_file                                              ../../../parameters
 Molecule Library Output Parameters
 ------------------------------------------------------------------------------------------
 ligand_outfile_prefix                                        orient2
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
 Initializing Library File Routines...
+
 Initializing Orienting Routines...
 
 -----------------------------------
 Molecule:  C1 
 
- Elapsed time for docking:	0.122 seconds
+ Elapsed time for docking:	0.081 seconds
 
  Anchors:		1
  Orientations:		50
@@ -80,4 +84,7 @@ Molecule:  C1
 
 
 1 Molecules Processed
-Total elapsed time:	0.125 seconds
+Total elapsed time:	0.084 seconds
+Number of molecules per second:	11.967
+Virtual memory used for this process: 83908 kilobytes
+Physical memory used for this process: 12756 kilobytes

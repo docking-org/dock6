@@ -1,0 +1,253 @@
+DOCK 6.12
+
+This is a release of DOCK6 with a new sampling method for hierarchical 
+traversal through precomputed ligand conformations, as is done in DOCK 3.7.
+We have also updated the Chemgrid (DOCK3.5) scoring function to agree with
+DOCK3.7.  Both of these changes are presented in reference [1].  DOCK_DN
+sampling has been rewritten to allow more molecules to be constructed
+in a similar amount of time, with no duplicates within a given run.
+Additional features are the covalent docking algorithm, called attach-and-grow, 
+and the new scoring function GIST Score both of which are descibed in [2].
+
+
+NEW IN DOCK 6.12
+
+Implementation of Hierarchical database (HDB) search 
+    New features include the Hierarchical database (HDB) search [1], an 
+    alternative method to anchor-and-grow, to search the ligand degrees
+    of freedom.  This is the method used in DOCK 3.  This includes a db2 
+    reader and a search routine for hierarchical traversal through 
+    precomputed ligand conformations, stored in the db2 files, and it
+    enables large-scale docking.  We provide example scripts for building
+    ligands as db2 files (and mol2 files) here:
+          $DOCK6PATH/template_pipeline/hdb_lig_gen/
+    And we are also providing example scripts for large-scale docking here:
+          $DOCK6PATH/template_pipeline/VS_submit_scripts/ 
+
+Implementation of Attach-and-grow
+    We implemented a covalent ligand sampling method called
+    attach-and-grow [2].  In this method the covalent residue is defined by
+    spheres (for cysteine C_alpha, C_beta, and S_gamma) and dummy atoms on
+    the ligand are aligned to these spheres.  The molecule is then grown
+    using the anchor-and-grow machinery (the grow_periphery function). For
+    minimization we use only torsion premin; so, only the ligand internal
+    degrees of freedom are explored.
+
+Rework of pruning scheme for DOCK_DN
+    The pruning scheme in DOCK_DN has been modified from a 'serial' approach,
+    where molecules were only HRMSD pruned within the same attachment, to a
+    'parallel' approach, where the entire ensemble is pruned at multiple
+    stages. This allows for many more molecules to be constructed in a
+    similar time, ie higher efficiency, with no duplicates in the final output. 
+
+Overhaul on DOCK_DN output
+    The output of the DOCK_DN has been overhauled to be cleaner and more
+    informative. It keeps track of the number of attachments DOCK_DN is
+    working on at the root sampling level. Also it keeps track of the
+    number of molecules being written out to the environment.  Further,
+    pruned molecules will no longer be output to a single file. They will
+    be outputted based on where DOCK6 is pruning those molecules. 
+
+Dockerization of DOCK6 for better installation experience
+    While DOCK6 has been relatively easy to compile in Linux-based systems, 
+    there has been many issues with compatibility with other operating systems. 
+    Hence, an installation protocol that involves the Dockerization of DOCK6 
+    and its tools has been developed. This new tool will help streamline
+    the installation in almost any computational environment as long as
+    the user has the Docker engine installed.
+
+Update of DOCK3.5 score
+    DOCK3.5 score, also called chemgrid score, was updated to match that 
+    in DOCK 3.7 [1].  And it was integrated into descriptor score.
+ 
+Implementation of GIST score 
+    GIST score is a way to calculate receptor desolvation [2].  It was
+    integrated into descriptor score to allow it to be used with other
+    Scoring functions including grid score and chemgrid score.  
+
+Miscellaneous
+    Final min was added back in for mirroring DOCK 3.7 behavior.  A score
+    cut off was added to prevent poorly scoring molecules from being written.
+    A parameter was added to write per-atom desolvation values (values read
+    in from mol2 or db2 files), so DOCK3.5 (chemgrid) score may be used to 
+    rescore these poses.     
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+BUG FIXES
+
+None.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+INPUT PARAMETER CHANGES AND THEIR DEFAULT VALUES
+
+Example:
+    parameter_name                      [default_value] (options):
+
+
+Added:
+
+For HDB:
+
+conformer_search_type                                        HDB 
+num_per_search                                               1 (an integer) 
+skip_broken                                                  yes (yes no)
+hdb_db2_input_file                                           ligand.db2.gz (this is a db2 file or a sdi.txt file)
+hdb_db2_search_score_threshold                               10.0
+
+For GIST:
+
+gist_score_primary                                           yes
+gist_score_att_exp                                           6
+gist_score_rep_exp                                           12
+gist_score_gist_scale                                        -1
+gist_score_gist_type                                         blurry_displace [trilinear] (trilinear displace blurry_displace)
+gist_score_grid_file                                         gist-EswPlusEww_ref2.dx
+gist_score_blurry_gist_div                                   2.0
+
+
+For Attach-and-grow:
+
+conformer_search_type                                        covalent
+
+covalent_bondlength                                          1.6:0.1:2.0
+ # covalent_bondlength format options:
+ # 'blstart:blstep:blstop' ; 'blstart:blstop' ; or bl
+ # number of values = 3
+covalent_bondlength2                                         -1.0
+ # covalent_bondlength2 format options:
+ # 'blstart2:blstep2:blstop2' ; 'blstart2:blstop2' ; or bl2
+ # number of values = 1
+ # just on bond length2 is used -1
+ # covalent_bondlength2 < 0.0: input bond length will be used for D1--A1.
+covalent_angle                                               -1.0
+ # covalent_angle format options:
+ # 'avstart:avstep:avstop' ; 'avstart:avstop' ; or av
+ # number of values = 1
+ # just on angle_val is used -1
+ # angle_val < 0.0: input angle length will be used for D2--D1--A1 .)
+covalent_dihedral_step                                       10.0
+
+For DOCK_DN:
+
+dn_remove_duplicates                                         yes (yes no)
+dn_max_duplicates_per_mol                                    0
+dn_write_pruned_duplicates                                   no (yes no)
+
+dn_advanced_pruning                                          yes (yes no)
+
+~with advanced pruning on~
+dn_prune_initial_sample                                      yes (yes no)
+dn_sample_torsions                                           yes (yes no)
+dn_prune_individual_torsions                                 yes (yes no)
+dn_prune_combined_torsions                                   yes (yes no)
+dn_random_root_selection                                     no  (yes no)
+
+
+For descriptor_score: 
+
+descriptor_use_gist                                          no (yes no)
+descriptor_use_dock3.5                                       no (yes no)
+
+--- Descriptor Score Parameters: GIST Score ---
+descriptor_gist_score_att_exp                                6
+descriptor_gist_score_rep_exp                                12
+descriptor_gist_score_gist_scale                             1
+descriptor_gist_score_gist_type                              trilinear (trilinear displace blurry_displace)
+descriptor_gist_score_grid_file                              gist-EswPlusEww_ref2_cap_blury_1p8.dx
+descriptor_gist_score_Hydrogen_grid_file                     gist-EswPlusEww_ref2_cap_blury_1p0.dx
+
+--- Descriptor Score Parameters: DOCK3.5 Score ---
+descriptor_dock3.5_vdw_score                                  [yes] (yes no):
+descriptor_dock3.5_grd_prefix                                 [chem5] ():
+descriptor_dock3.5_electrostatic_score                        [yes] (yes no):
+descriptor_dock3.5_ligand_desolvation_score                   [no] (no total volume):
+descriptor_dock3.5_receptor_desolvation_score                 [no] (yes no):
+descriptor_dock3.5_write_atomic_energy_contrib                [no] (yes no):
+descriptor_dock3.5_score_vdw_scale                            [1] ():
+descriptor_dock3.5_score_es_scale                             [1] ():
+
+--- Descriptor Score Weights ---
+descriptor_weight_gist_score                                 -1
+descriptor_weight_dock3.5_score                               [1] ():
+
+
+
+Miscellaneous
+
+automated_matching_iteration                                 yes (yes no)
+simplex_final_min                                            no (yes no)
+write_mol_solvation                                          no (yes no)
+score_threshold                                              100.0 (real number)
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+OUTPUT COMPONENTS
+
+For HDB:
+    1. In both the dockout file and the mol2 header the following components
+       are written: 
+                HDB_Conf_Number:                  11
+                HDB_Internal_energy1:            4.530000
+                HDB_Internal_energy2:            0.000000
+       This is tne conf_number from the db2 file and the internal energy 
+       values also read in from the db2 file.  
+
+for GIST Score 
+    1. In both the dockout file and the mol2 header the following component
+       is written:
+                          GIST_Score:           -0.494120
+
+
+For Database Filter:
+    1. ${output}.rejected.mol2 is the mol2 file containing scored molecules
+       that got rejected by dbfilter.
+
+For overhauled output DOCK_DN:
+    1. output.completed.denovo_build.mol2
+    2. ${output}.anchor_{#}.filtered_comp_layer_{##}.mol2
+    3. ${output}.anchor_{#}.prune_root_layer_{##}.mol2
+    4. ${output}.anchor_{#}.prune_rmsd_mw_layer_{##}.mol2
+    5. ${output}.anchor_{#}.cand_root_ign_layer_{##}.mol2
+    6. ${output}.anchor_{#}.root_layer_{##}.mol2
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+KNOWN BUGS
+
+    1. When selecting both internal energy and internal energy score, the
+       parameter "internal_energy_rep_exp" appears twice in the question tree,
+       and it will be queried during user input when DOCK is invoked from the
+       command-line even if the value is already set.
+
+    2. Scoring functions are only able to handle receptors with less than
+       2000 atoms. It's possible to use more, but that may introduce
+       undefined behavior in the current implementation. If users wish to
+       use more, they should contact the developers. 
+
+    3. In the flex.defn file, there is a flag minimize which is disabled.
+       (The flag has no impact on the calculation.) All torsions are 
+       Minimized. 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+RELEASE DATE
+
+September 2024
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+REFERENCES
+
+1. Balius, T.E.; Tan, Y.S.; Chakrabarti, M.; DOCK 6: Incorporating
+hierarchical traversal through precomputed ligand conformations to 
+enable large-scale docking. J. Comput. Chem. 2024, 45(1), 47-63.
+https://doi.org/10.1002/jcc.27218
+
+2. Tan, Y.S.; Chakrabarti, M.; Stein, R.M.; Prentis, L.E.; Rizzo,             
+R.C.; Kurtzman, T.; Fischer, M.; Balius, T.E.; Development of
+receptor desolvation scoring and covalent sampling in DOCK 6: Methods
+evaluated on a RAS test set.  Submitted.  2024.
+https://chemrxiv.org/engage/chemrxiv/article-details/66db73a512ff75c3a19f4370
+

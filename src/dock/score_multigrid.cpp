@@ -314,6 +314,7 @@ Multigrid_Energy_Score::read_mgfootprint_txt(istream & ifs){
                if (!(tokens[0].compare("resname") == 0) && !(tokens[0].compare(0,1,"#") == 0)){
                //if ((tokens[0].compare("gridname") == 0) ){
                    // terminate if wrong number of coloms in a line.
+                   //if (tokens.size() != 6){
                    if (tokens.size() != 8){
                        cout << "A line in the  multigrid fp reference txt file has an incorrect" << endl
                             << "number of entries. Lines must have 6 entries separated by"
@@ -596,6 +597,7 @@ Multigrid_Energy_Score::compute_multigrid(DOCKMol & mol,float * vdw_array, float
         }
     return true;
     }
+    return false;
 }
 
 // modified from code in descriptor score;

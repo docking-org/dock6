@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released September 2024
 Copyright UCSF
 --------------------------------------
 
@@ -54,6 +54,10 @@ contact_score_primary                                        no
 Grid Score Parameters
 ------------------------------------------------------------------------------------------
 grid_score_primary                                           no
+
+GIST Score Parameters
+------------------------------------------------------------------------------------------
+gist_score_primary                                           no
 
 MultiGrid Score Parameters
 ------------------------------------------------------------------------------------------
@@ -120,6 +124,7 @@ Amber Score Parameters
 Simplex Minimization Parameters
 ------------------------------------------------------------------------------------------
 minimize_ligand                                              no
+simplex_final_min                                            no
 
 Atom Typing Parameters
 ------------------------------------------------------------------------------------------
@@ -131,13 +136,16 @@ flex_drive_file                                              ../../../parameters
 Molecule Library Output Parameters
 ------------------------------------------------------------------------------------------
 ligand_outfile_prefix                                        FPS2
+write_mol_solvation                                          no
 write_footprints                                             yes
 write_hbonds                                                 yes
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
 Initializing Library File Routines...
+
 To cite Footprint Similarity Score use: 
  Balius, T. E.; Mukherjee, S.; Rizzo, R. C. Implementation and Evaluation of a Docking-rescoring Method using Molecular Footprint Comparisons. J. Comput. Chem., 2011, 32, 2273-2289.
 
@@ -145,7 +153,7 @@ To cite Footprint Similarity Score use:
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.034 seconds
+ Elapsed time for docking:	0.036 seconds
 
  Anchors:		1
  Orientations:		1
@@ -167,7 +175,7 @@ Molecule: MOL
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.035 seconds
+ Elapsed time for docking:	0.038 seconds
 
  Anchors:		1
  Orientations:		1
@@ -189,7 +197,7 @@ Molecule: MOL
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.034 seconds
+ Elapsed time for docking:	0.038 seconds
 
  Anchors:		1
  Orientations:		1
@@ -211,7 +219,7 @@ Molecule: MOL
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.034 seconds
+ Elapsed time for docking:	0.036 seconds
 
  Anchors:		1
  Orientations:		1
@@ -233,7 +241,7 @@ Molecule: MOL
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.034 seconds
+ Elapsed time for docking:	0.035 seconds
 
  Anchors:		1
  Orientations:		1
@@ -255,7 +263,7 @@ Molecule: MOL
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.034 seconds
+ Elapsed time for docking:	0.036 seconds
 
  Anchors:		1
  Orientations:		1
@@ -277,7 +285,7 @@ Molecule: MOL
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.034 seconds
+ Elapsed time for docking:	0.037 seconds
 
  Anchors:		1
  Orientations:		1
@@ -300,7 +308,7 @@ WARNING: sum of squares close to zero in norm calculation.
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.034 seconds
+ Elapsed time for docking:	0.035 seconds
 
  Anchors:		1
  Orientations:		1
@@ -323,7 +331,7 @@ WARNING: sum of squares close to zero in norm calculation.
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.034 seconds
+ Elapsed time for docking:	0.036 seconds
 
  Anchors:		1
  Orientations:		1
@@ -366,4 +374,7 @@ Molecule: MOL
 
 
 10 Molecules Processed
-Total elapsed time:	1.145 seconds
+Total elapsed time:	1.389 seconds
+Number of molecules per second:	7.197
+Virtual memory used for this process: 87092 kilobytes
+Physical memory used for this process: 15384 kilobytes

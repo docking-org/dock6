@@ -73,7 +73,8 @@ class           Simplex_Minimizer {
     float           flex_min_ramp_trans_step_size;
     float           flex_min_ramp_rot_step_size;
     float           flex_min_ramp_tors_step_size;
-/*    // final minimization parameters
+
+/**/    // final minimization parameters
     bool            final_min;
     int             final_min_max_iterations;
     int             final_min_max_cycles;
@@ -83,7 +84,7 @@ class           Simplex_Minimizer {
     float           final_min_rot_step_size;
     float           final_min_tors_step_size;
     float	    final_min_rep_radius_scale;
-*/
+/**/
 
     // parameters for minimization with secondary score
     bool            secondary_min_pose;
@@ -115,6 +116,7 @@ class           Simplex_Minimizer {
     void            minimize_flexible_growth(DOCKMol &, Master_Score &, INTVec & ); // for growth
     void            minimize_flexible_ramp_growth(DOCKMol &, Master_Score &, INTVec &, int current_layer, int num_layers ); // for rampgrowth 	
     void            minimize_final_pose(DOCKMol &, Master_Score &, AMBER_TYPER &);  
+    void            minimize_pose_final_min(DOCKMol &, Master_Score &);  
     void            secondary_minimize_pose(DOCKMol &, Master_Score &);
     float           calc_active_rmsd2(DOCKMol &, DOCKMol &);
 

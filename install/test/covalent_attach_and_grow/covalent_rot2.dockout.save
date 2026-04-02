@@ -1,0 +1,235 @@
+
+
+
+--------------------------------------
+DOCK v6.11
+
+Released November 2023
+Copyright UCSF
+--------------------------------------
+
+
+Conformational Sampling Parameters
+------------------------------------------------------------------------------------------
+conformer_search_type                                        covalent
+
+Covalent & Grow Parameters
+------------------------------------------------------------------------------------------
+pruning_use_clustering                                       yes
+pruning_max_orients                                          100
+pruning_clustering_cutoff                                    100
+covalent_bondlength                                          1.8
+ #  covalent_bondlength format options: 
+ # 'blstart:blstep:blstop' ; 'blstart:blstop' ; or bl 
+  # number of values = 1
+ # just on bond length is used 1.8
+covalent_bondlength2                                         -1.0
+ # covalent_bondlength2 format options: 
+ # 'blstart2:blstep2:blstop2' ; 'blstart2:blstop2' ; or bl2 
+  # number of values = 1
+ # just on bond length2 is used 1.8
+ # covalent_bondlength2 < 0.0: input bond length will be used for D1--A1.  
+covalent_angle                                               -1.0
+ # covalent_angle format options: 
+ # 'avstart:avstep:avstop' ; 'avstart:avstop' ; or av 
+  # number of values = 1
+ # just on angle_val is used -1
+covalent_dihedral_step                                       10.0
+pruning_conformer_score_cutoff                               100.0
+use_clash_overlap                                            no
+write_growth_tree                                            no
+
+Internal Energy Parameters
+------------------------------------------------------------------------------------------
+use_internal_energy                                          yes
+internal_energy_rep_exp                                      12
+internal_energy_cutoff                                       100.0
+Note: Internal energy only includes repulsive VDW for growth and/or minimization.
+
+Molecule Library Input Parameters
+------------------------------------------------------------------------------------------
+ligand_atom_file                                             ligand_rot.mol2
+limit_max_ligands                                            no
+skip_molecule                                                no
+read_mol_solvation                                           no
+calculate_rmsd                                               no
+
+Database Filter Parameters
+------------------------------------------------------------------------------------------
+use_database_filter                                          no
+
+Orient Ligand Parameters
+------------------------------------------------------------------------------------------
+orient_ligand                                                yes
+automated_matching                                           yes
+receptor_site_file                                           rec_sph.sph
+max_orientations                                             1000
+critical_points                                              no
+chemical_matching                                            no
+use_ligand_spheres                                           no
+
+Bump Filter Parameters
+------------------------------------------------------------------------------------------
+bump_filter                                                  no
+
+Master Score Parameters
+------------------------------------------------------------------------------------------
+score_molecules                                              yes
+
+Contact Score Parameters
+------------------------------------------------------------------------------------------
+contact_score_primary                                        no
+
+Grid Score Parameters
+------------------------------------------------------------------------------------------
+grid_score_primary                                           yes
+grid_score_rep_rad_scale                                     1
+grid_score_vdw_scale                                         1
+grid_score_es_scale                                          1
+grid_lig_efficiency                                          no
+grid_score_grid_prefix                                       rec.grid
+
+GIST Score Parameters
+------------------------------------------------------------------------------------------
+
+MultiGrid Score Parameters
+------------------------------------------------------------------------------------------
+
+Dock3.5 Score Parameters
+------------------------------------------------------------------------------------------
+
+Continuous Energy Score Parameters
+------------------------------------------------------------------------------------------
+
+Footprint Similarity Score Parameters
+------------------------------------------------------------------------------------------
+
+Pharmacophore Similarity Score Parameters
+------------------------------------------------------------------------------------------
+
+Hbond Energy Score Parameters
+------------------------------------------------------------------------------------------
+
+Internal Energy Score Parameters
+------------------------------------------------------------------------------------------
+
+Descriptor Score Parameters
+------------------------------------------------------------------------------------------
+
+Zou GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+
+Hawkins GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+
+SASA Score Parameters
+------------------------------------------------------------------------------------------
+
+Amber Score Parameters
+------------------------------------------------------------------------------------------
+
+Simplex Minimization Parameters
+------------------------------------------------------------------------------------------
+minimize_ligand                                              yes
+minimize_anchor                                              no
+minimize_flexible_growth                                     yes
+use_advanced_simplex_parameters                              no
+minimize_flexible_growth_ramp                                no
+simplex_max_cycles                                           1
+simplex_score_converge                                       0.1
+simplex_cycle_converge                                       1.0
+simplex_trans_step                                           1.0
+simplex_rot_step                                             0.1
+simplex_tors_step                                            10.0
+simplex_grow_max_iterations                                  0
+simplex_grow_tors_premin_iterations                          1000
+simplex_final_min                                            no
+simplex_random_seed                                          0
+simplex_restraint_min                                        yes
+simplex_coefficient_restraint                                10.0
+
+Atom Typing Parameters
+------------------------------------------------------------------------------------------
+atom_model                                                   all
+vdw_defn_file                                                ../../../parameters/vdw_AMBER_parm99.defn
+flex_defn_file                                               ../../../parameters/flex.defn
+flex_drive_file                                              ../../../parameters/flex_drive.tbl
+
+Molecule Library Output Parameters
+------------------------------------------------------------------------------------------
+ligand_outfile_prefix                                        covalent_rot2
+write_mol_solvation                                          no
+write_orientations                                           yes
+num_scored_conformers                                        1
+score_threshold                                              100.0
+rank_ligands                                                 no
+------------------------------------------------------------------------------------------
+Initializing Covalent Conformer Generator Routines...
+Initializing Library File Routines...
+
+Initializing Orienting Routines...
+Read in 3 spheres for orienting.
+Initializing Grid Score Routines...
+ Reading the energy grid from rec.grid.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from rec.grid.bmp
+	size = 755300
+	spacing = 0.3
+	origin = -11.119,-13.0255,-21.5055
+	span = 83,100,91
+ Done reading the grid box quantifiers.
+
+-----------------------------------
+VERBOSE MOLECULE STATS
+
+  Number of heavy atoms = 33
+  Number of rotatable bonds = 6
+  Formal Charge = 0.747
+  Molecular Weight = 467.933
+  Heavy Atoms = 33
+-----------------------------------
+COVALENT ORIENTING INFO :
+
+input bond lengths: 
+bondlength D1--A1 = 1.76171
+bondlength D2--D1 = 1.76791
+ajusted bond lengths: 
+bondlength D1--A1 = 1.76171
+bondlength D2--D1 = 1.8
+ set angle is not used. because value is negative.  
+# of anchor positions: 36
+-----------------------------------
+VERBOSE GROWTH STATS : COVALENT_BOND_CONFIGURATION  #1
+
+32/36 anchor orients retained (max 100) t=0.035025s
+Lyr 1-1 Segs|Lyr 2-2 Segs|Lyr 3-1 Segs|Lyr 4-1 Segs|Lyr 5-1 Segs|
+Lyr:1 Seg:0 Bond:0 : Sampling 4 dihedrals D2(Du)  D1(Du)  C26(C.3)  C25(C.2)
+Lyr:1 Seg:0 68/128 retained, Pruning: 60-clustered  t=0.224407s
+Lyr:2 Seg:0 Bond:15 : Sampling 6 dihedrals C27(C.3)  C26(C.3)  C25(C.2)  N24(N.am)
+Lyr:2 Seg:0 83/408 retained, Pruning: 325-clustered  t=0.986354s
+Lyr:2 Seg:1 Bond:16 : Sampling 3 dihedrals C25(C.2)  C26(C.3)  C27(C.3)  N28(N.4)
+Lyr:2 Seg:1 80/249 retained, Pruning: 169-clustered  t=1.4802s
+Lyr:3 Seg:0 Bond:45 : Sampling 2 dihedrals C23(C.3)  N24(N.am)  C25(C.2)  C26(C.3)
+Lyr:3 Seg:0 97/160 retained, Pruning: 43-score 20-clustered  t=1.9691s
+Lyr:4 Seg:0 Bond:9 : Sampling 2 dihedrals N19(N.ar)  C20(C.ar)  N21(N.pl3)  C22(C.3)
+Lyr:4 Seg:0 83/194 retained, Pruning: 31-outside grid 50-score 30-clustered  t=2.88805s
+Lyr:5 Seg:0 Bond:21 : Sampling 2 dihedrals C02(C.ar)  C03(C.ar)  C04(C.ar)  C12(C.ar)
+Lyr:5 Seg:0 57/166 retained, Pruning: 33-outside grid 62-score 14-clustered  t=4.2009s
+
+-----------------------------------
+Molecule: 5V6V
+
+ Elapsed time for docking:	4.000 seconds
+
+ Anchors:		0
+ Orientations:		36
+ Conformations:		57
+
+                          Grid_Score:          -76.417442
+                     Grid_vdw_energy:          -66.134583
+                      Grid_es_energy:          -10.282859
+           Internal_energy_repulsive:           25.977060
+                             bl;bl2;a           1.8;-1;-1
+Total elapsed time:	4.247 seconds
+Virtual Memory Used for this process: 151636 KiloBytes
+Physical Memory Used for this process: 73360 KiloBytes

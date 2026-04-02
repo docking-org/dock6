@@ -17,7 +17,7 @@ bcc
 
 @<TRIPOS>ATOM
       1 C1         25.0150   11.2823   56.0146 C.3     1  <0>         0.0859
-      2 N1         23.6294   10.7425   56.3801 N.4     1  <0>        -0.6064
+      2 N1         23.6294   10.7425   56.3802 N.4     1  <0>        -0.6064
       3 C2         22.5319   11.6558   55.7892 C.3     1  <0>         0.1202
       4 C3         22.4815   13.0111   56.4738 C.3     1  <0>        -0.1031
       5 C4         22.2753   12.8661   57.9704 C.3     1  <0>        -0.0967
@@ -78,7 +78,7 @@ bcc
 ##########                                Name:        ZINC00158751
 ##########                    Molecular_Weight:             112.152
 ##########                DOCK_Rotatable_Bonds:                   1
-##########                       Formal_Charge:         0.000100005
+##########                       Formal_Charge:                   0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                   7
@@ -93,7 +93,7 @@ bcc
 
 @<TRIPOS>ATOM
       1 C1         25.2278    8.2089   62.9714 C.2     1  <0>        -0.1703
-      2 C2         25.3779    9.6259   62.9630 C.2     1  <0>        -0.1083
+      2 C2         25.3779    9.6259   62.9629 C.2     1  <0>        -0.1083
       3 C3         24.1678   10.2770   62.8492 C.2     1  <0>        -0.2551
       4 S1         22.8619    9.1785   62.7535 S.3     1  <0>         0.1462
       5 C4         23.9089    7.8298   62.8643 C.2     1  <0>        -0.1800
@@ -122,7 +122,7 @@ bcc
 ##########                                Name:        ZINC00013564
 ##########                    Molecular_Weight:             140.206
 ##########                DOCK_Rotatable_Bonds:                   0
-##########                       Formal_Charge:         0.000199944
+##########                       Formal_Charge:                   0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                   9
@@ -178,7 +178,7 @@ bcc
 ##########                                Name:        ZINC01555236
 ##########                    Molecular_Weight:             150.244
 ##########                DOCK_Rotatable_Bonds:                   2
-##########                       Formal_Charge:              0.9999
+##########                       Formal_Charge:                   1
 ##########                     HBond_Acceptors:                   1
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                  11
@@ -254,7 +254,7 @@ bcc
 ##########                                Name:        ZINC00150863
 ##########                    Molecular_Weight:             113.183
 ##########                DOCK_Rotatable_Bonds:                   0
-##########                       Formal_Charge:         9.99719e-05
+##########                       Formal_Charge:                   0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                   7
@@ -304,7 +304,7 @@ bcc
 ##########                                Name:        ZINC00152265
 ##########                    Molecular_Weight:             126.179
 ##########                DOCK_Rotatable_Bonds:                   1
-##########                       Formal_Charge:         9.99914e-05
+##########                       Formal_Charge:                   0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                   8
@@ -354,7 +354,7 @@ bcc
 ##########                                Name:        ZINC00152280
 ##########                    Molecular_Weight:             140.206
 ##########                DOCK_Rotatable_Bonds:                   2
-##########                       Formal_Charge:        -4.65661e-08
+##########                       Formal_Charge:                  -0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                   9
@@ -410,7 +410,7 @@ bcc
 ##########                                Name:        ZINC00157111
 ##########                    Molecular_Weight:             123.178
 ##########                DOCK_Rotatable_Bonds:                   2
-##########                       Formal_Charge:         7.45058e-08
+##########                       Formal_Charge:                   0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                   8
@@ -458,7 +458,7 @@ bcc
 ##########                                Name:        ZINC00157152
 ##########                    Molecular_Weight:             126.179
 ##########                DOCK_Rotatable_Bonds:                   1
-##########                       Formal_Charge:         1.49012e-08
+##########                       Formal_Charge:                   0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                   8
@@ -475,7 +475,7 @@ bcc
       1 C1         22.7366   10.5944   59.0893 C.3     1  <0>        -0.0441
       2 C2         23.0204   11.0747   60.4742 C.2     1  <0>        -0.0523
       3 C3         24.1777   10.6868   61.2275 C.2     1  <0>        -0.1695
-      4 C4         24.2175   11.2613   62.4776 C.2     1  <0>        -0.1774
+      4 C4         24.2175   11.2613   62.4777 C.2     1  <0>        -0.1774
       5 S1         22.8690   12.2672   62.7557 S.3     1  <0>         0.1438
       6 C5         22.2235   11.9418   61.2063 C.2     1  <0>        -0.2589
       7 C6         20.9754   12.5602   60.8121 C.2     1  <0>         0.6098
@@ -508,7 +508,7 @@ bcc
 ##########                                Name:        ZINC00157402
 ##########                    Molecular_Weight:             126.179
 ##########                DOCK_Rotatable_Bonds:                   1
-##########                       Formal_Charge:         9.99123e-05
+##########                       Formal_Charge:                   0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                   8
@@ -558,7 +558,7 @@ bcc
 ##########                                Name:        ZINC00157467
 ##########                    Molecular_Weight:             114.168
 ##########                DOCK_Rotatable_Bonds:                   2
-##########                       Formal_Charge:        -0.000199951
+##########                       Formal_Charge:                  -0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   1
 ##########                         Heavy_Atoms:                   7
@@ -606,7 +606,7 @@ bcc
 ##########                                Name:        ZINC00157960
 ##########                    Molecular_Weight:             154.233
 ##########                DOCK_Rotatable_Bonds:                   1
-##########                       Formal_Charge:          0.00010002
+##########                       Formal_Charge:                   0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                  10
@@ -631,7 +631,7 @@ bcc
       9 C7         24.4951   11.1081   57.5693 C.3     1  <0>        -0.2045
      10 C8         20.8592   13.0719   53.4190 C.3     1  <0>        -0.0315
      11 H1         18.8354   11.7416   58.0457 H       1  <0>         0.0402
-     12 H2         19.9883   10.4745   58.4827 H       1  <0>         0.0667
+     12 H2         19.9883   10.4745   58.4828 H       1  <0>         0.0667
      13 H3         20.2237   12.1409   59.0654 H       1  <0>         0.0661
      14 H4         19.0831   12.5430   55.6520 H       1  <0>         0.1576
      15 H5         25.0400   10.7277   58.4389 H       1  <0>         0.0713

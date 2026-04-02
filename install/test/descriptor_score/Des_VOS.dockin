@@ -11,6 +11,7 @@ bump_filter                                                  no
 score_molecules                                              yes
 contact_score_primary                                        no
 grid_score_primary                                           no
+gist_score_primary                                           no
 multigrid_score_primary                                      no
 dock3.5_score_primary                                        no
 continuous_score_primary                                     no
@@ -27,6 +28,8 @@ descriptor_use_pharmacophore_score                           no
 descriptor_use_tanimoto                                      no
 descriptor_use_hungarian                                     no
 descriptor_use_volume_overlap                                yes
+descriptor_use_gist                                          no
+descriptor_use_dock3.5                                       no
 descriptor_volume_score_reference_mol2_filename              volume_ligand.mol2
 descriptor_volume_score_overlap_compute_method               grid
 descriptor_volume_score_number_of_layers_in_one_dimension    30
@@ -34,12 +37,15 @@ descriptor_volume_score_maximum_grid_point_separation        0.3
 descriptor_volume_score_write_points_cloud                   no
 descriptor_weight_volume_overlap_score                       1
 minimize_ligand                                              no
+simplex_final_min                                            no
 atom_model                                                   all
 vdw_defn_file                                                ../../../parameters/vdw_AMBER_parm99.defn
 flex_defn_file                                               ../../../parameters/flex.defn
 flex_drive_file                                              ../../../parameters/flex_drive.tbl
 chem_defn_file                                               ../../../parameters/chem.defn
 ligand_outfile_prefix                                        Des_VOS
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no

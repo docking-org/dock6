@@ -1,0 +1,245 @@
+
+
+
+--------------------------------------
+DOCK v6.12
+
+Released September 2024
+Copyright UCSF
+--------------------------------------
+
+
+Conformational Sampling Parameters
+------------------------------------------------------------------------------------------
+conformer_search_type                                        flex
+write_fragment_libraries                                     no
+
+Anchor & Grow Parameters
+------------------------------------------------------------------------------------------
+user_specified_anchor                                        no
+limit_max_anchors                                            no
+min_anchor_size                                              10
+pruning_use_clustering                                       yes
+pruning_max_orients                                          100
+pruning_clustering_cutoff                                    100
+pruning_orient_score_cutoff                                  1000.0
+pruning_conformer_score_cutoff                               100.0
+pruning_conformer_score_scaling_factor                       1.0
+use_clash_overlap                                            no
+write_growth_tree                                            no
+
+Internal Energy Parameters
+------------------------------------------------------------------------------------------
+use_internal_energy                                          yes
+internal_energy_rep_exp                                      12
+internal_energy_cutoff                                       100.0
+Note: Internal energy only includes repulsive VDW for growth and/or minimization.
+
+Molecule Library Input Parameters
+------------------------------------------------------------------------------------------
+ligand_atom_file                                             multi_lig.mol2
+limit_max_ligands                                            no
+skip_molecule                                                no
+read_mol_solvation                                           yes
+calculate_rmsd                                               no
+
+Database Filter Parameters
+------------------------------------------------------------------------------------------
+use_database_filter                                          no
+
+Orient Ligand Parameters
+------------------------------------------------------------------------------------------
+orient_ligand                                                yes
+automated_matching                                           yes
+receptor_site_file                                           match2.sph
+max_orientations                                             1000
+critical_points                                              no
+chemical_matching                                            no
+use_ligand_spheres                                           no
+
+Bump Filter Parameters
+------------------------------------------------------------------------------------------
+bump_filter                                                  no
+
+Master Score Parameters
+------------------------------------------------------------------------------------------
+score_molecules                                              yes
+
+Contact Score Parameters
+------------------------------------------------------------------------------------------
+contact_score_primary                                        no
+
+Grid Score Parameters
+------------------------------------------------------------------------------------------
+grid_score_primary                                           no
+
+GIST Score Parameters
+------------------------------------------------------------------------------------------
+gist_score_primary                                           no
+
+MultiGrid Score Parameters
+------------------------------------------------------------------------------------------
+multigrid_score_primary                                      no
+
+Dock3.5 Score Parameters
+------------------------------------------------------------------------------------------
+dock3.5_score_primary                                        yes
+dock3.5_vdw_score                                            yes
+dock3.5_grd_prefix                                           ../chemgrid_generation/chem52
+dock3.5_electrostatic_score                                  yes
+dock3.5_ligand_desolvation_score                             volume
+dock3.5_solvent_occlusion_file                               ../solvgrid_generation/solvmapsev
+dock3.5_redistribute_positive_desolvation                    no
+dock3.5_hydrogen_desolvation_grid                            yes
+dock3.5_hydrogen_solvent_occlusion_file                      ../solvgrid_generation/hydrogen/solvmapsev
+dock3.5_receptor_desolvation_score                           no
+dock3.5_write_atomic_energy_contrib                          no
+dock3.5_score_vdw_scale                                      1
+dock3.5_score_es_scale                                       1
+
+Continuous Energy Score Parameters
+------------------------------------------------------------------------------------------
+
+Footprint Similarity Score Parameters
+------------------------------------------------------------------------------------------
+
+Pharmacophore Similarity Score Parameters
+------------------------------------------------------------------------------------------
+
+Hbond Energy Score Parameters
+------------------------------------------------------------------------------------------
+
+Internal Energy Score Parameters
+------------------------------------------------------------------------------------------
+
+Descriptor Score Parameters
+------------------------------------------------------------------------------------------
+
+Zou GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+
+Hawkins GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+
+SASA Score Parameters
+------------------------------------------------------------------------------------------
+
+Amber Score Parameters
+------------------------------------------------------------------------------------------
+
+Simplex Minimization Parameters
+------------------------------------------------------------------------------------------
+minimize_ligand                                              yes
+minimize_anchor                                              yes
+minimize_flexible_growth                                     no
+use_advanced_simplex_parameters                              no
+minimize_flexible_growth_ramp                                no
+simplex_max_cycles                                           1
+simplex_score_converge                                       0.1
+simplex_cycle_converge                                       1.0
+simplex_trans_step                                           1.0
+simplex_rot_step                                             0.1
+simplex_tors_step                                            10.0
+simplex_anchor_max_iterations                                100
+simplex_final_min                                            no
+simplex_random_seed                                          0
+simplex_restraint_min                                        no
+
+Atom Typing Parameters
+------------------------------------------------------------------------------------------
+atom_model                                                   united
+vdw_defn_file                                                ../../../parameters/vdw_AMBER_parm94.dock3_7.defn
+flex_defn_file                                               ../../../parameters/flex.defn
+flex_drive_file                                              ../../../parameters/flex_drive.tbl
+
+Molecule Library Output Parameters
+------------------------------------------------------------------------------------------
+ligand_outfile_prefix                                        ligand3
+write_mol_solvation                                          no
+write_orientations                                           no
+num_scored_conformers                                        1
+score_threshold                                              10.0
+rank_ligands                                                 no
+------------------------------------------------------------------------------------------
+
+Initializing Conformer Generator Routines...
+Initializing Library File Routines...
+
+Initializing Orienting Routines...
+Entering Chemgrid_Score::initialize
+Initializing Dock3.5 Score Routines...
+ Reading chemgrids from ../chemgrid_generation/chem52.cmg
+ Reading DelPhi grid from ../chemgrid_generation/chem52.phi
+ Reading ligand desolvation grid from ../solvgrid_generation/solvmapsev
+ Reading ligand hydrogen desolvation grid from ../solvgrid_generation/hydrogen/solvmapsev
+Exiting Chemgrid_Score::initialize
+
+-----------------------------------
+Molecule: ZINC00000113
+
+ Elapsed time for docking:	2.360 seconds
+
+ Anchors:		1
+ Orientations:		1000
+ Conformations:		22
+
+                      Chemgrid_Score:           40.604263
+                 Chemgrid_vdw_energy:           37.870968
+                  Chemgrid_es_energy:           -6.607812
+                 Chemgrid_rec_desolv:            0.000000
+                 Chemgrid_lig_polsol:            7.759536
+                Chemgrid_lig_apolsol:            1.581570
+               Chemgrid_conf_entropy:            0.000000
+           Internal_energy_repulsive:           20.857834
+score > score_thres:40.604 > 10.000
+Warning: desolvation scaling factor from grid exceeds 1.0:1.010
+Warning: desolvation scaling factor from grid exceeds 1.0:1.010
+Warning: desolvation scaling factor from grid exceeds 1.0:1.009
+Warning: desolvation scaling factor from grid exceeds 1.0:1.009
+Warning: desolvation scaling factor from grid exceeds 1.0:1.015
+Warning: desolvation scaling factor from grid exceeds 1.0:1.004
+Warning: desolvation scaling factor from grid exceeds 1.0:1.015
+Warning: desolvation scaling factor from grid exceeds 1.0:1.004
+
+-----------------------------------
+Molecule: ZINC00000250
+
+ Elapsed time for docking:	1.510 seconds
+
+ Anchors:		1
+ Orientations:		1000
+ Conformations:		37
+
+                      Chemgrid_Score:          -22.203602
+                 Chemgrid_vdw_energy:          -26.964258
+                  Chemgrid_es_energy:           -1.966145
+                 Chemgrid_rec_desolv:            0.000000
+                 Chemgrid_lig_polsol:            8.588614
+                Chemgrid_lig_apolsol:           -1.861814
+               Chemgrid_conf_entropy:            0.000000
+           Internal_energy_repulsive:           40.247578
+
+-----------------------------------
+Molecule: ZINC00000257
+
+ Elapsed time for docking:	3.309 seconds
+
+ Anchors:		1
+ Orientations:		1000
+ Conformations:		62
+
+                      Chemgrid_Score:           -7.966344
+                 Chemgrid_vdw_energy:          -18.507467
+                  Chemgrid_es_energy:            4.186511
+                 Chemgrid_rec_desolv:            0.000000
+                 Chemgrid_lig_polsol:            6.748268
+                Chemgrid_lig_apolsol:           -0.393656
+               Chemgrid_conf_entropy:            0.000000
+           Internal_energy_repulsive:           14.224708
+
+
+3 Molecules Processed
+Total elapsed time:	7.266 seconds
+Number of molecules per second:	0.413
+Virtual memory used for this process: 148264 kilobytes
+Physical memory used for this process: 90420 kilobytes

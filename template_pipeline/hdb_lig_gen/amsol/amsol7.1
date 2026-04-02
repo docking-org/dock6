@@ -1,0 +1,11 @@
+#!/bin/csh
+
+#set dir = /home/baliuste/zzz.github/DOCK_dev_2020_12_01/ucsfdock/ligand/amsol 
+set dir = /home/baliuste/zzz.github/dock6_10_merge/rizzo_branch/template_pipeline/hdb_lig_gen/amsol
+
+if ('NAME="CentOS Linux"' == `cat /etc/os-release | grep ^NAME`) then 
+    $dir/amsol7.1_centos
+else 
+    $dir/amsol7.1_oel8
+endif
+

@@ -10,6 +10,7 @@
 #include "amber_typer.h"
 #include "dockmol.h"
 #include "fragment.h"
+#include "limit_max_change.h"
 #include "orient.h"
 #include "master_score.h"
 #include "simplex.h"
@@ -193,6 +194,12 @@ class           GA_Recomb {
     std::vector  <Fragment>  tmp_linkers;
     std::vector  <Fragment>  tmp_sidechains;
     //std::vector  <Fragment>  rigids;
+
+    // BTB Max change vars
+    bool                     use_limit_max_change;                // BTB - Limit max change control variable (if true we do lmc/delta max)
+    LimitMaxChange           delta_max;                           // BTB - Limit max change object declaration    
+    int                      limit_max_change_ramp_gens;
+
     
     //LEP stuff for ga debug
     std:: vector <DOCKMol>   shitty_molecules_go_here;           // array filled in distance calculator
@@ -210,6 +217,10 @@ class           GA_Recomb {
     std::vector  <DOCKMol>   pruned_children;                    // DOCKMol vector of energy scored conformers to be pruned
     std::vector  <DOCKMol>   scored_generation;                  // DOCKMol vector of final scored, pruned ensemble 
     std::vector  <DOCKMol>   mutants;                            // DOCKMol vector of mutated offspring 
+    // BTB mol vec for dmax
+    std::vector  <DOCKMol>   divergent_children; 
+    // BTB mol vecs for diagnostics
+    std::vector  <DOCKMol>   pruned_parents; 
 
     std::vector  <SEGMENTS>  orig_segments;                      // Hold segment index of each molecule
 
@@ -343,7 +354,7 @@ class           GA_Recomb {
    
     // Pruning and fitness functions
     void                    uniqueness_prune( std::vector <DOCKMol> &, std::vector <DOCKMol> & , Master_Score &, AMBER_TYPER & );
-    void                    uniqueness_prune_mut( std::vector <DOCKMol> &, std::vector <DOCKMol> & , Master_Score &, AMBER_TYPER & );
+    void                    uniqueness_prune_mut( std::vector <DOCKMol> &, std::vector <DOCKMol> & , std::vector <DOCKMol> &, Master_Score &, AMBER_TYPER & );
     void                    fitness_pruning( std::vector <DOCKMol> &, std::vector <DOCKMol> &, Master_Score &, Simplex_Minimizer &, AMBER_TYPER & );
     void                    hard_filter( std::vector <DOCKMol> & ); // COMMENT
     bool                    hard_filter_mol( DOCKMol & ); // COMMENT
@@ -385,13 +396,17 @@ class           GA_Recomb {
     void                    is_active_vec( std::vector <DOCKMol> & );
     void                    print_torenv( std::vector <Tor_Env>  );
 
+    void                   print_molecules(std::string fout_molecules_name, std::vector <DOCKMol> & parents, int i, std::string); //BTB - save on space/redundant code
 
     //Counters
     double                  time_seconds();
     /** Constructor and Destructor **/
 
+    //Special functions for frag vectors because the default ones dont work no more :(
+    void                   frag_erase(std::vector<Fragment> & vec_frag, int position); //erase for vecs of fragments
+
     // Naming function
-    void                   naming_function ( DOCKMol & , int, int);
+    void                   naming_function ( DOCKMol & , int, int, std::string);
     void                   renumber_atom_numbering( DOCKMol & , bool );    
     //Utilities
     void                   calc_pairwise_distance ( DOCKMol & ); //JDB

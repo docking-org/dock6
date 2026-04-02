@@ -11,8 +11,8 @@
  __________________          ____________________/ 
                      DelPhi II                      
    
-  program started on Fri Dec  8 2006
-              at 02:12:55
+  program started on Sun Jul  7 2024
+              at 17:01:52
  opening parameter file fort.10
  atom radii read from file
  fort.11
@@ -39,10 +39,10 @@
 !!! WARNING: WAT    2 has a net charge of   0.4170
 !!! WARNING: WAT    3 has a net charge of   0.4170
   
- time to read in and/or assign rad/chrg=  5.9999999E-02
+ time to read in and/or assign rad/chrg=  2.0000000E-02
    
- grid size                  :          65
- scale,in grids/A, set to be:  0.2414821    
+ grid size                  :         193
+ scale,in grids/A, set to be:  0.7244463    
  object centred at (gu)     :  0.0000000E+00  0.0000000E+00  0.0000000E+00
  inner,outer dielectrics    :   2.000000       78.00000    
  ionic strength (M)         :  0.1000000    
@@ -69,81 +69,78 @@ qdiffxas: qdiffxs4 with an improved surfacing routine
  ymin,ymax     (A):   2.308000       47.06100    
  zmin,zma      (A): -0.8900000       47.04000    
  x,y,z range   (A):    53.00600       44.75300       47.93000    
- scale   (grids/A):   0.2414821    
+ scale   (grids/A):   0.7244463    
  object centre (A):   0.8840008       24.68450       23.07500    
  number of atom coordinates read  :         1662
  total number of charged atoms    :         1585
  net assigned charge              :   -1.014998    
  assigned positive charge         :    258.1924    
- centred at (gu) :   32.83821       33.57947       33.06157    
+ centred at (gu) :   96.51450       98.73847       97.18466    
  assigned negative charge         :   -259.2073    
- centred at (gu) :   32.86544       33.54877       33.10200    
+ centred at (gu) :   96.59626       98.64632       97.30597    
     
- start vw surface at   5.9999999E-02
- fill in re-entrant regions at   5.9999999E-02
- boundary points on vw surface=          446
+ start vw surface at   7.9999998E-02
+ fill in re-entrant regions at   7.9999998E-02
+ boundary points on vw surface=         6277
  nv =           96 ne =           84
  npr =        32076
  no. pairs analyzed =        32076
  no. exposed pairs  =         2163
  no. arc points  =        15527
  no. surface atoms  =          727 nbur =          935
- mkacc time =   0.1700000    
+ mkacc time =   2.9999994E-02
  writing accessible surface arcs data to file ARCDAT
- initial cube size too small, 
- in assigning accessible points to a grid
- therefore rescaling...
- grid for indexing accessible points =    1.512000    
- m=            3 mr =          152
- m=            0 mr =            0
- time to grow re-entrant surface =   0.1900000    
- no. cavity mid-points inaccessible to solvent =            0
+ grid for indexing accessible points =    1.400000    
+ m=          403 mr =         3522
+ m=            0 mr =           70
+ time to grow re-entrant surface =   3.9999992E-02
+ no. cavity mid-points inaccessible to solvent =           55
  scaling boundary grid points
- % of contact boundary points =    45.45454    
- time taken =   6.0000002E-02
-            1 points had to be assigned by global comparison
- time to turn everything in is  0.2500000    
- number of dielectric boundary points         297
+ % of contact boundary points =    37.62953    
+ time taken =   9.0000004E-02
+            0 points had to be assigned by global comparison
+ time to turn everything in is  0.1300000    
+ number of dielectric boundary points        3088
  no. dielectric boundary points in salt =            0
- no. grid points charged and at boundary=         590
- ##          293 charges are in solution ##
- iepsmp to db, and charging done at  0.2600000    
- number of grid points assigned charge         774
+ no. grid points charged and at boundary=        1369
+ ##          126 charges are in solution ##
+ iepsmp to db, and charging done at  0.1800000    
+ number of grid points assigned charge        6701
   
    setting boundary conditions
   
   some initial phi values: 
   midg,midg,1; midg,midg,igrid 
-   2.0685457E-07 -3.5418068E-07
+   2.0687982E-07 -3.5420703E-07
   midg,1,midg; midg,igrid,midg 
-  -2.0822354E-07  1.9841893E-07
+  -2.0835616E-07  1.9864149E-07
   1,midg,midg; igrid,midg,midg 
-   1.3458181E-07 -2.3219748E-07
+   1.3479381E-07 -2.3238488E-07
   
- gauss-seidel spectral radius is  0.9397475    
+ gauss-seidel spectral radius is  0.9930309    
   
- estimated iterations to convergence          35
+ estimated iterations to convergence          97
    
- setup time was (sec)   0.2700000    
+ setup time was (sec)   0.2400000    
    
- now iterating at: 02:12:56
+ now iterating at: 17:01:52
   
   
    rms-change     max change       #iterations
-   5.0292332E-03  0.6440191     at           10iterations
-   2.7977241E-05  3.3903122E-03 at           20iterations
-   1.7093139E-07  2.2888184E-05 at           30iterations
-   2.3525969E-08  3.8146973E-06 at           40iterations
-   2.7087276E-08  7.6293945E-06 at           50iterations
+   0.2584784       41.52465     at           10iterations
+   4.6292644E-02   8.357981     at           20iterations
+   8.2032317E-03   1.437729     at           30iterations
+   1.4842908E-03  0.2400026     at           40iterations
+   2.6242630E-04  4.5845032E-02 at           50iterations
  finished qdiffx linear iterations
- at                       : 02:12:56
- total time elapsed so far:   0.5100000    
+ at                       : 17:01:53
+ total time elapsed so far:    1.240000    
  # loops                  :           50
- mean,max change (kT/e)   :   2.7087276E-08  7.6293945E-06
-total s.charge =    -0.1090
- corrected reaction field energy:        -1013.056     kt
+ mean,max change (kT/e)   :   2.6242630E-04  4.5845032E-02
+total s.charge =     1.8253
+ corrected reaction field energy:        -1821.951     kt
   
- energy calculations done at  0.5300000    
+ energy calculations done at   1.260000    
    
  writing potential map in DELPHI format
    
@@ -151,10 +148,10 @@ total s.charge =    -0.1090
  fort.14                                                                         
    
    
- total cpu time was (sec)   0.5300000    
+ total cpu time was (sec)    1.260000    
    
- DelPhi exited at 02:12:56
-0.530u 0.050s 0:00.57 101.7%	0+0k 0+0io 132pf+0w
+ DelPhi exited at 17:01:53
+1.263u 0.135s 0:01.40 99.2%	0+0k 0+56568io 0pf+0w
     
   ___________________DelPhi II____________________  
  /                                                 
@@ -168,8 +165,8 @@ total s.charge =    -0.1090
  __________________          ____________________/ 
                      DelPhi II                      
    
-  program started on Fri Dec  8 2006
-              at 02:12:56
+  program started on Sun Jul  7 2024
+              at 17:01:54
  opening parameter file fort.10
  atom radii read from file
  fort.11
@@ -196,10 +193,10 @@ total s.charge =    -0.1090
 !!! WARNING: WAT    2 has a net charge of   0.4170
 !!! WARNING: WAT    3 has a net charge of   0.4170
   
- time to read in and/or assign rad/chrg=  5.9999999E-02
+ time to read in and/or assign rad/chrg=  2.9999999E-02
    
- grid size                  :          65
- scale,in grids/A, set to be:  0.7244463    
+ grid size                  :         193
+ scale,in grids/A, set to be:   2.173339    
  object centred at (gu)     :  0.0000000E+00  0.0000000E+00  0.0000000E+00
  inner,outer dielectrics    :   2.000000       78.00000    
  ionic strength (M)         :  0.1000000    
@@ -226,37 +223,39 @@ qdiffxas: qdiffxs4 with an improved surfacing routine
  ymin,ymax     (A):   2.308000       47.06100    
  zmin,zma      (A): -0.8900000       47.04000    
  x,y,z range   (A):    53.00600       44.75300       47.93000    
- scale   (grids/A):   0.7244463    
+ scale   (grids/A):    2.173339    
  object centre (A):   0.8840008       24.68450       23.07500    
  number of atom coordinates read  :         1662
  total number of charged atoms    :         1585
  net assigned charge              :   -1.014998    
  assigned positive charge         :    258.1924    
- centred at (gu) :   32.51468       34.73848       33.18476    
+ centred at (gu) :   95.54407       102.2156       97.55437    
  assigned negative charge         :   -259.2073    
- centred at (gu) :   32.59639       34.64646       33.30601    
+ centred at (gu) :   95.78909       101.9393       97.91807    
     
- start vw surface at   7.0000000E-02
- fill in re-entrant regions at   9.0000004E-02
- boundary points on vw surface=         6277
+ start vw surface at   7.9999998E-02
+ fill in re-entrant regions at   0.1200000    
+ boundary points on vw surface=        66298
  reading accessible surface arcs data from file ARCDAT    
  no. of arc points read =        15527
  grid for indexing accessible points =    1.400000    
- m=          403 mr =         3522
- m=            0 mr =           70
- time to grow re-entrant surface =   3.9999999E-02
- no. cavity mid-points inaccessible to solvent =           55
+ m=        26060 mr =        45738
+ m=         4905 mr =        20104
+ m=          464 mr =         3345
+ m=           19 mr =          284
+ m=            0 mr =            2
+ time to grow re-entrant surface =   7.9999998E-02
+ no. cavity mid-points inaccessible to solvent =         1691
  scaling boundary grid points
- % of contact boundary points =    37.62953    
- time taken =   0.1200000    
+ % of contact boundary points =    36.55431    
+ time taken =   0.1600000    
             0 points had to be assigned by global comparison
- time to turn everything in is  0.1600000    
- number of dielectric boundary points        3088
+ time to turn everything in is  0.2400000    
+ number of dielectric boundary points       28273
  no. dielectric boundary points in salt =            0
- no. grid points charged and at boundary=        1369
- ##          126 charges are in solution ##
- iepsmp to db, and charging done at  0.1800000    
- number of grid points assigned charge        6701
+ no. grid points charged and at boundary=          64
+ iepsmp to db, and charging done at  0.2800000    
+ number of grid points assigned charge       12617
   
    setting boundary conditions
   
@@ -268,49 +267,49 @@ qdiffxas: qdiffxs4 with an improved surfacing routine
   
   focussing potential map:
 qdiffxas: qdiffxs4 with an improved surfacing routine       
- original scale (grids/A)      :   0.2414821    
+ original scale (grids/A)      :   0.7244463    
  object centre at (A) :   0.8840008       24.68450       23.07500    
   
  pulling boundary values out of old potential map...
   some initial phi values: 
   midg,midg,1; midg,midg,igrid 
-   1.3153355E-02 -5.1189046E-02
+   1.4368518E-02 -4.9849525E-02
   midg,1,midg; midg,igrid,midg 
-  -4.9452800E-02  3.8107101E-02
+  -4.4329617E-02  4.2415824E-02
   1,midg,midg; igrid,midg,midg 
-  -1.3856421E-02 -6.0712826E-02
+  -1.6616618E-02 -5.6937084E-02
   
- gauss-seidel spectral radius is  0.9919934    
+ gauss-seidel spectral radius is  0.9991042    
   
- estimated iterations to convergence          91
+ estimated iterations to convergence         264
    
- setup time was (sec)   0.2000000    
+ setup time was (sec)   0.3400000    
    
- now iterating at: 02:12:56
+ now iterating at: 17:01:54
   
   
    rms-change     max change       #iterations
-    1.221577       37.57742     at           10iterations
-   0.1933296       6.545782     at           20iterations
-   3.0363997E-02   1.001419     at           30iterations
-   4.8697037E-03  0.1477489     at           40iterations
-   7.6328591E-04  2.5215149E-02 at           50iterations
-   1.2082035E-04  3.5514832E-03 at           60iterations
-   1.8677280E-05  5.4168701E-04 at           70iterations
-   3.0614181E-06  8.3923340E-05 at           80iterations
-   7.1426354E-07  3.0517578E-05 at           90iterations
-   5.2777682E-07  3.0517578E-05 at          100iterations
-   5.2758179E-07  3.0517578E-05 at          110iterations
-   5.2268001E-07  3.0517578E-05 at          120iterations
+    4.425872       207.4811     at           10iterations
+    2.376777       102.6576     at           20iterations
+    1.284872       48.57595     at           30iterations
+   0.6893003       25.19569     at           40iterations
+   0.3727525       13.79029     at           50iterations
+   0.2009712       6.932755     at           60iterations
+   0.1079889       4.154733     at           70iterations
+   5.8401506E-02   2.019789     at           80iterations
+   3.1531479E-02   1.175594     at           90iterations
+   1.7002525E-02  0.6242256     at          100iterations
+   9.1791991E-03  0.3378525     at          110iterations
+   4.9630613E-03  0.1875896     at          120iterations
  finished qdiffx linear iterations
- at                       : 02:12:57
- total time elapsed so far:   0.8000000    
+ at                       : 17:01:57
+ total time elapsed so far:    3.060000    
  # loops                  :          120
- mean,max change (kT/e)   :   5.2268001E-07  3.0517578E-05
-total s.charge =     1.8252
- corrected reaction field energy:        -1821.962     kt
+ mean,max change (kT/e)   :   4.9630613E-03  0.1875896    
+total s.charge =     0.9895
+ corrected reaction field energy:        -1891.415     kt
   
- energy calculations done at   1.070000    
+ energy calculations done at   3.210000    
    
  writing potential map in DELPHI format
    
@@ -318,10 +317,10 @@ total s.charge =     1.8252
  fort.14                                                                         
    
    
- total cpu time was (sec)    1.070000    
+ total cpu time was (sec)    3.210000    
    
- DelPhi exited at 02:12:57
-1.070u 0.000s 0:01.02 104.9%	0+0k 0+0io 131pf+0w
+ DelPhi exited at 17:01:57
+3.215u 0.257s 0:03.48 99.4%	0+0k 0+56176io 0pf+0w
     
   ___________________DelPhi II____________________  
  /                                                 
@@ -335,8 +334,8 @@ total s.charge =     1.8252
  __________________          ____________________/ 
                      DelPhi II                      
    
-  program started on Fri Dec  8 2006
-              at 02:12:57
+  program started on Sun Jul  7 2024
+              at 17:01:57
  opening parameter file fort.10
  atom radii read from file
  fort.11
@@ -363,10 +362,10 @@ total s.charge =     1.8252
 !!! WARNING: WAT    2 has a net charge of   0.4170
 !!! WARNING: WAT    3 has a net charge of   0.4170
   
- time to read in and/or assign rad/chrg=  5.0000001E-02
+ time to read in and/or assign rad/chrg=  2.0000000E-02
    
- grid size                  :          65
- scale,in grids/A, set to be:   1.086669    
+ grid size                  :         193
+ scale,in grids/A, set to be:   3.260008    
  object centred at (gu)     :  0.0000000E+00  0.0000000E+00  0.0000000E+00
  inner,outer dielectrics    :   2.000000       78.00000    
  ionic strength (M)         :  0.1000000    
@@ -393,38 +392,41 @@ qdiffxas: qdiffxs4 with an improved surfacing routine
  ymin,ymax     (A):   2.308000       47.06100    
  zmin,zma      (A): -0.8900000       47.04000    
  x,y,z range   (A):    53.00600       44.75300       47.93000    
- scale   (grids/A):    1.086669    
+ scale   (grids/A):    3.260008    
  object centre (A):   0.8840008       24.68450       23.07500    
  number of atom coordinates read  :         1662
  total number of charged atoms    :         1585
  net assigned charge              :   -1.014998    
  assigned positive charge         :    258.1924    
- centred at (gu) :   32.27204       35.60778       33.27721    
+ centred at (gu) :   94.81616       104.8233       97.83158    
  assigned negative charge         :   -259.2073    
- centred at (gu) :   32.39460       35.46968       33.45905    
+ centred at (gu) :   95.18372       104.4091       98.37717    
     
- start vw surface at   5.0000001E-02
- fill in re-entrant regions at   9.0000004E-02
- boundary points on vw surface=        15355
+ start vw surface at   7.0000000E-02
+ fill in re-entrant regions at   0.2700000    
+ boundary points on vw surface=       152804
  reading accessible surface arcs data from file ARCDAT    
  no. of arc points read =        15527
  grid for indexing accessible points =    1.400000    
- m=         2243 mr =         9530
- m=           51 mr =         1088
- m=            0 mr =            0
- time to grow re-entrant surface =   7.9999998E-02
- no. cavity mid-points inaccessible to solvent =          225
+ m=        81426 mr =       110124
+ m=        33031 mr =        68157
+ m=         9260 mr =        27646
+ m=         1875 mr =         7366
+ m=          305 mr =         1419
+ m=           12 mr =          225
+ m=            0 mr =            4
+ time to grow re-entrant surface =   0.2400000    
+ no. cavity mid-points inaccessible to solvent =         5346
  scaling boundary grid points
- % of contact boundary points =    36.95065    
- time taken =   0.1600000    
+ % of contact boundary points =    36.58345    
+ time taken =   0.3600000    
             0 points had to be assigned by global comparison
- time to turn everything in is  0.2400000    
- number of dielectric boundary points        7031
+ time to turn everything in is  0.6000000    
+ number of dielectric boundary points       63772
  no. dielectric boundary points in salt =            0
- no. grid points charged and at boundary=         473
- ##           39 charges are in solution ##
- iepsmp to db, and charging done at  0.2500000    
- number of grid points assigned charge        9945
+ no. grid points charged and at boundary=           0
+ iepsmp to db, and charging done at  0.6400000    
+ number of grid points assigned charge       12680
   
    setting boundary conditions
   
@@ -436,55 +438,55 @@ qdiffxas: qdiffxs4 with an improved surfacing routine
   
   focussing potential map:
 qdiffxas: qdiffxs4 with an improved surfacing routine       
- original scale (grids/A)      :   0.7244463    
+ original scale (grids/A)      :    2.173339    
  object centre at (A) :   0.8840008       24.68450       23.07500    
   
  pulling boundary values out of old potential map...
   some initial phi values: 
   midg,midg,1; midg,midg,igrid 
-   6.1037336E-02 -0.6312994    
+   4.4716045E-02 -0.5917581    
   midg,1,midg; midg,igrid,midg 
-  -0.4003839      0.3765115    
+  -0.4062321      0.3704678    
   1,midg,midg; igrid,midg,midg 
-  -2.7219506E-02 -0.3300020    
+  -3.2735214E-02 -0.3157678    
   
- gauss-seidel spectral radius is  0.9947750    
+ gauss-seidel spectral radius is  0.9994144    
   
- estimated iterations to convergence         111
+ estimated iterations to convergence         326
    
- setup time was (sec)   0.2600000    
+ setup time was (sec)   0.6900000    
    
- now iterating at: 02:12:57
+ now iterating at: 17:01:58
   
   
    rms-change     max change       #iterations
-    4.205398       101.8574     at           10iterations
-   0.9566364       19.58974     at           20iterations
-   0.2155785       3.861083     at           30iterations
-   4.9023885E-02  0.8807488     at           40iterations
-   1.1150355E-02  0.1893255     at           50iterations
-   2.5560728E-03  4.3849945E-02 at           60iterations
-   5.8789423E-04  1.0410309E-02 at           70iterations
-   1.3212231E-04  2.7523041E-03 at           80iterations
-   3.0211140E-05  5.6457520E-04 at           90iterations
-   6.9825019E-06  1.2969971E-04 at          100iterations
-   2.0129983E-06  6.1035156E-05 at          110iterations
-   1.3040985E-06  3.0517578E-05 at          120iterations
-   1.2901581E-06  6.1035156E-05 at          130iterations
-   1.2535177E-06  6.1035156E-05 at          140iterations
-   1.2621064E-06  6.1035156E-05 at          150iterations
-   1.2586380E-06  6.1035156E-05 at          160iterations
-   1.2860905E-06  6.1035156E-05 at          170iterations
-   1.2700557E-06  6.1035156E-05 at          180iterations
+    9.328941       349.1180     at           10iterations
+    5.672956       128.4682     at           20iterations
+    3.460594       79.95514     at           30iterations
+    2.105369       45.98040     at           40iterations
+    1.281499       26.11679     at           50iterations
+   0.7806035       16.05571     at           60iterations
+   0.4754056       9.573135     at           70iterations
+   0.2891816       5.993912     at           80iterations
+   0.1762214       3.856962     at           90iterations
+   0.1070461       2.178157     at          100iterations
+   6.5334313E-02   1.404278     at          110iterations
+   3.9769124E-02  0.8267822     at          120iterations
+   2.4192626E-02  0.5228729     at          130iterations
+   1.4771068E-02  0.2969542     at          140iterations
+   8.9731896E-03  0.1782856     at          150iterations
+   5.4505756E-03  0.1081467     at          160iterations
+   3.3203242E-03  6.8323135E-02 at          170iterations
+   2.0242655E-03  4.1324615E-02 at          180iterations
  finished qdiffx linear iterations
- at                       : 02:12:58
- total time elapsed so far:    1.250000    
+ at                       : 17:02:02
+ total time elapsed so far:    4.460000    
  # loops                  :          180
- mean,max change (kT/e)   :   1.2700557E-06  6.1035156E-05
-total s.charge =     1.0975
- corrected reaction field energy:        -1888.720     kt
+ mean,max change (kT/e)   :   2.0242655E-03  4.1324615E-02
+total s.charge =     0.9890
+ corrected reaction field energy:        -1883.643     kt
   
- energy calculations done at   1.850000    
+ energy calculations done at   4.800000    
    
  writing potential map in DELPHI format
    
@@ -492,7 +494,7 @@ total s.charge =     1.0975
  fort.14                                                                         
    
    
- total cpu time was (sec)    1.850000    
+ total cpu time was (sec)    4.800000    
    
- DelPhi exited at 02:12:59
-1.850u 0.040s 0:01.87 101.0%	0+0k 0+0io 131pf+0w
+ DelPhi exited at 17:02:02
+4.804u 0.196s 0:05.01 99.6%	0+0k 0+56184io 0pf+0w

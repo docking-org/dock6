@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released September 2024
 Copyright UCSF
 --------------------------------------
 
@@ -22,6 +22,7 @@ min_anchor_size                                              40
 pruning_use_clustering                                       yes
 pruning_max_orients                                          100
 pruning_clustering_cutoff                                    100
+pruning_orient_score_cutoff                                  1000.0
 pruning_conformer_score_cutoff                               25.0
 pruning_conformer_score_scaling_factor                       1.0
 use_clash_overlap                                            no
@@ -74,7 +75,11 @@ grid_score_primary                                           yes
 grid_score_rep_rad_scale                                     1
 grid_score_vdw_scale                                         1
 grid_score_es_scale                                          1
+grid_lig_efficiency                                          no
 grid_score_grid_prefix                                       ../3_grid/grid
+
+GIST Score Parameters
+------------------------------------------------------------------------------------------
 
 MultiGrid Score Parameters
 ------------------------------------------------------------------------------------------
@@ -128,6 +133,7 @@ simplex_tors_step                                            10.0
 simplex_anchor_max_iterations                                500
 simplex_grow_max_iterations                                  500
 simplex_grow_tors_premin_iterations                          0
+simplex_final_min                                            no
 simplex_random_seed                                          0
 simplex_restraint_min                                        no
 
@@ -141,13 +147,16 @@ flex_drive_file                                              ../../../parameters
 Molecule Library Output Parameters
 ------------------------------------------------------------------------------------------
 ligand_outfile_prefix                                        anchor_and_grow
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
 
 Initializing Conformer Generator Routines...
 Initializing Library File Routines...
+
 Initializing Orienting Routines...
 Initializing Grid Score Routines...
  Reading the energy grid from ../3_grid/grid.nrg
@@ -158,17 +167,20 @@ Initializing Grid Score Routines...
 -----------------------------------
 Molecule: UNNAMED
 
- Elapsed time for docking:	1.000 seconds
+ Elapsed time for docking:	1.090 seconds
 
  Anchors:		1
  Orientations:		500
- Conformations:		49
+ Conformations:		51
 
-                          Grid_Score:          -29.340557
-                     Grid_vdw_energy:          -21.791225
-                      Grid_es_energy:           -7.549331
-           Internal_energy_repulsive:            0.528639
+                          Grid_Score:          -29.188925
+                     Grid_vdw_energy:          -22.276169
+                      Grid_es_energy:           -6.912756
+           Internal_energy_repulsive:            0.528627
 
 
 1 Molecules Processed
-Total elapsed time:	1.012 seconds
+Total elapsed time:	1.101 seconds
+Number of molecules per second:	0.909
+Virtual memory used for this process: 114540 kilobytes
+Physical memory used for this process: 37700 kilobytes

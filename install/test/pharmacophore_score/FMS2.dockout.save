@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released September 2024
 Copyright UCSF
 --------------------------------------
 
@@ -48,6 +48,10 @@ contact_score_primary                                        no
 Grid Score Parameters
 ------------------------------------------------------------------------------------------
 grid_score_primary                                           no
+
+GIST Score Parameters
+------------------------------------------------------------------------------------------
+gist_score_primary                                           no
 
 MultiGrid Score Parameters
 ------------------------------------------------------------------------------------------
@@ -114,6 +118,7 @@ Amber Score Parameters
 Simplex Minimization Parameters
 ------------------------------------------------------------------------------------------
 minimize_ligand                                              no
+simplex_final_min                                            no
 
 Atom Typing Parameters
 ------------------------------------------------------------------------------------------
@@ -126,11 +131,14 @@ pharmacophore_defn_file                                      ../../../parameters
 Molecule Library Output Parameters
 ------------------------------------------------------------------------------------------
 ligand_outfile_prefix                                        lig_rigid_txt_ref
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
 Initializing Library File Routines...
+
 To cite Pharmacophore Score use: 
  Jiang, L.; Rizzo, R. C. Pharmacophore-Based Similarity Scoring for DOCK, J. Phys. Chem. B., 2015, 119, 1083-1102. 
 
@@ -138,7 +146,7 @@ To cite Pharmacophore Score use:
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.003 seconds
+ Elapsed time for docking:	0.002 seconds
 
  Anchors:		1
  Orientations:		1
@@ -161,7 +169,7 @@ Molecule: MOL
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.003 seconds
+ Elapsed time for docking:	0.002 seconds
 
  Anchors:		1
  Orientations:		1
@@ -184,7 +192,7 @@ Molecule: MOL
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.003 seconds
+ Elapsed time for docking:	0.002 seconds
 
  Anchors:		1
  Orientations:		1
@@ -207,7 +215,7 @@ Molecule: MOL
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.003 seconds
+ Elapsed time for docking:	0.002 seconds
 
  Anchors:		1
  Orientations:		1
@@ -230,7 +238,7 @@ Molecule: MOL
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.003 seconds
+ Elapsed time for docking:	0.002 seconds
 
  Anchors:		1
  Orientations:		1
@@ -253,7 +261,7 @@ Molecule: MOL
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.003 seconds
+ Elapsed time for docking:	0.002 seconds
 
  Anchors:		1
  Orientations:		1
@@ -276,7 +284,7 @@ Molecule: MOL
 -----------------------------------
 Molecule: MOL
 
- Elapsed time for docking:	0.003 seconds
+ Elapsed time for docking:	0.002 seconds
 
  Anchors:		1
  Orientations:		1
@@ -367,4 +375,7 @@ Molecule: MOL
 
 
 10 Molecules Processed
-Total elapsed time:	0.058 seconds
+Total elapsed time:	0.049 seconds
+Number of molecules per second:	205.194
+Virtual memory used for this process: 83612 kilobytes
+Physical memory used for this process: 11984 kilobytes

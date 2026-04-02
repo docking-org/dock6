@@ -2,23 +2,23 @@
 ##########                                Name:                 C1 
 ##########                    Molecular_Weight:             314.468
 ##########                DOCK_Rotatable_Bonds:                   1
-##########                       Formal_Charge:         0.000100061
+##########                       Formal_Charge:                   0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                  23
 ##########                            HA_RMSDs:               0.420
 ##########                            HA_RMSDh:               0.420
 ##########                            HA_RMSDm:               0.420
-##########                    Descriptor_Score:          -35.979496
-##########                          Grid_Score:          -35.967720
-##########                desc_Grid_vdw_energy:          -33.422718
-##########                 desc_Grid_es_energy:           -2.545002
-##########                 Pharmacophore_Score:            2.656024
+##########                    Descriptor_Score:          -35.979778
+##########                          Grid_Score:          -35.967995
+##########                desc_Grid_vdw_energy:          -33.423004
+##########                 desc_Grid_es_energy:           -2.544989
+##########                 Pharmacophore_Score:            2.656023
 ##########              desc_FMS_num_match_tot:                   5
 ##########              desc_FMS_max_match_ref:                   9
 ##########              desc_FMS_max_match_mol:                   9
 ##########                 desc_FMS_match_rate:            0.444444
-##########                desc_FMS_match_resid:            0.433802
+##########                desc_FMS_match_resid:            0.433801
 ##########    desc_FMS_num_hydrophobic_matched:                   3
 ##########          desc_FMS_num_donor_matched:                   0
 ##########       desc_FMS_num_acceptor_matched:                   2
@@ -27,18 +27,18 @@
 ##########       desc_FMS_num_negative_matched:                   0
 ##########           desc_FMS_num_ring_matched:                   0
 ##########                      Tanimoto_Score:            1.000000
-########## Hungarian_Matching_Similarity_Score:           -4.579762
+########## Hungarian_Matching_Similarity_Score:           -4.579763
 ##########       desc_HMS_num_unmtchd_hvy_atms:                   0
 ##########           desc_HMS_num_ref_hvy_atms:                  23
-##########        desc_HMS_rmsd_mtchd_hvy_atms:            0.420238
+##########        desc_HMS_rmsd_mtchd_hvy_atms:            0.420236
 ##########               Property_Volume_Score:            0.911959
 ##########               desc_VOS_geometric_vo:            0.934697
 ##########                desc_VOS_hvy_atom_vo:            0.936269
-##########            desc_VOS_pos_chrg_atm_vo:            0.850164
-##########            desc_VOS_neg_chrg_atm_vo:            0.930311
+##########            desc_VOS_pos_chrg_atm_vo:            0.850165
+##########            desc_VOS_neg_chrg_atm_vo:            0.930312
 ##########         desc_VOS_hydrophobic_atm_vo:            0.929411
-##########         desc_VOS_hydrophilic_atm_vo:            0.890903
-##########           Internal_energy_repulsive:            6.769831
+##########         desc_VOS_hydrophilic_atm_vo:            0.890902
+##########           Internal_energy_repulsive:            6.769813
 
 @<TRIPOS>MOLECULE
  C1 
@@ -78,7 +78,7 @@ bcc
      28 H17        25.2304    9.8571   57.4902 H       1  C1          0.0487
      29 C14        23.2450    9.8045   58.3093 C.3     1  C1         -0.0579
      30 H16        22.4425    9.1372   58.1316 H       1  C1          0.0514
-     31 C8         23.6688    9.7140   59.7789 C.3     1  C1         -0.0473
+     31 C8         23.6688    9.7140   59.7790 C.3     1  C1         -0.0473
      32 H10        24.4688   10.3757   59.9871 H       1  C1          0.0616
      33 C7         24.0978    8.2621   60.1137 C.3     1  C1         -0.0791
      34 H9         23.2978    7.6236   59.8439 H       1  C1          0.0444
@@ -86,7 +86,7 @@ bcc
      36 C6         24.4416    8.0538   61.6008 C.3     1  C1         -0.0520
      37 H7         24.5743    7.0161   61.7639 H       1  C1          0.0559
      38 H6         25.3496    8.5608   61.8011 H       1  C1          0.0564
-     39 C5         23.3510    8.5785   62.5277 C.2     1  C1         -0.0433
+     39 C5         23.3510    8.5786   62.5277 C.2     1  C1         -0.0433
      40 C4         22.9528    7.8182   63.5312 C.2     1  C1         -0.2513
      41 H5         23.3630    6.8259   63.6150 H       1  C1          0.1514
      42 C3         21.9856    8.2904   64.5101 C.2     1  C1          0.5626

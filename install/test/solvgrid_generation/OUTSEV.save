@@ -1,0 +1,73 @@
+    name of input pdb file: rec.crg                                                                         
+    name of output contact grid file: solvmapsev                                                                      
+    atomic radii (A):
+         1. for O N C S P Other [1.4 1.3 1.7 2.22.2 1.8]?
+   1.3999999999999999        1.3000000000000000        1.7000000000000000        2.2000000000000002        2.2000000000000002        1.8000000000000000     
+         2. for water probe (exclusion) [1.4]?   1.3999999999999999     
+    number of grid points/angstrom?(1-10)                    1
+ pdb file of limiting box:box                                                                             
+ surface type: SEV
+ assumed ligand atomic radius (A):   1.3999999999999999     
+ maximum receptor atomic radius (A):   2.2000000000000002     
+ grid resolution (A):    1.0000000000000000     
+ integration cutoff (A):   10.000000000000000     
+ receptor minimum and maximum x y z (A):
+  -24.018999999999998        3.9079999999999999       0.70999999999999996     
+   25.786999999999999        45.460999999999999        45.261000000000003     
+ box minimum and maximum x y z (A):
+  -21.707000000000001        13.686999999999999        3.4920000000000000     
+   16.667000000000002        50.706000000000003        42.798999999999999     
+ dielectric grid expansion size (points/edge)
+                    6                   10                    6
+                   10                    0                    6
+ dielectric grid minimum and maximum x y z (A):
+  -27.707000000000001        3.6869999999999994       -2.5080000000000000     
+   26.667000000000002        50.706000000000003        48.798999999999999     
+ solvation grid x, y, z dimensions:                   38                   37                   39
+ finished initializing dielectric grid
+ finished creating receptor molecular surface grid
+ dV is   7.9577471636878186E-002
+ Precalculating solvmap lookup table
+ Starting solvmap calculation.
+   1 /   40 the way there!
+   2 /   40 the way there!
+   3 /   40 the way there!
+   4 /   40 the way there!
+   5 /   40 the way there!
+   6 /   40 the way there!
+   7 /   40 the way there!
+   8 /   40 the way there!
+   9 /   40 the way there!
+  10 /   40 the way there!
+  11 /   40 the way there!
+  12 /   40 the way there!
+  13 /   40 the way there!
+  14 /   40 the way there!
+  15 /   40 the way there!
+  16 /   40 the way there!
+  17 /   40 the way there!
+  18 /   40 the way there!
+  19 /   40 the way there!
+  20 /   40 the way there!
+  21 /   40 the way there!
+  22 /   40 the way there!
+  23 /   40 the way there!
+  24 /   40 the way there!
+  25 /   40 the way there!
+  26 /   40 the way there!
+  27 /   40 the way there!
+  28 /   40 the way there!
+  29 /   40 the way there!
+  30 /   40 the way there!
+  31 /   40 the way there!
+  32 /   40 the way there!
+  33 /   40 the way there!
+  34 /   40 the way there!
+  35 /   40 the way there!
+  36 /   40 the way there!
+  37 /   40 the way there!
+  38 /   40 the way there!
+  39 /   40 the way there!
+  40 /   40 the way there!
+ successful completion
+elapsed time (sec):        8.5940

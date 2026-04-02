@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released September 2024
 Copyright UCSF
 --------------------------------------
 
@@ -22,6 +22,7 @@ min_anchor_size                                              40
 pruning_use_clustering                                       yes
 pruning_max_orients                                          10
 pruning_clustering_cutoff                                    10
+pruning_orient_score_cutoff                                  1000.0
 pruning_conformer_score_cutoff                               25.0
 pruning_conformer_score_scaling_factor                       1.0
 use_clash_overlap                                            no
@@ -74,13 +75,16 @@ flex_drive_file                                              ../../../parameters
 Molecule Library Output Parameters
 ------------------------------------------------------------------------------------------
 ligand_outfile_prefix                                        flex4
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
 
 Initializing Conformer Generator Routines...
 Initializing Library File Routines...
+
 Initializing Orienting Routines...
 Read in 38 spheres for orienting.
 
@@ -93,12 +97,15 @@ VERBOSE MOLECULE STATS
   Molecular Weight = 207.134
   Heavy Atoms = 10
 -----------------------------------
+ANCHOR ATOMS.
+
+ANCHOR #1: C1,1 ; N1,2 ; C2,3 ; C3,4 ; C4,5 ; C5,6 ; C6,7 ; H12,22 ; H10,20 ; H11,21 ; H8,18 ; H9,19 ; H6,16 ; H7,17 ; H4,14 ; H5,15 ; C8,10 ; H15,25 ; H16,26 ; H17,27 ; H1,11 ; H2,12 ; H3,13 ; 
 -----------------------------------
 VERBOSE ORIENTING STATS :
 
 Orienting 9 anchor heavy atom centers
 Sphere Center Matching Parameters:
-   tolerance: 0.25; dist_min: 2; min_nodes: 3; max_nodes: 10
+   tolerance: 0.25; dist_min: 0; min_nodes: 3; max_nodes: 10
 Num of cliques generated: 512
  Residual Info:
    min residual:    0.0472
@@ -110,20 +117,24 @@ Num of cliques generated: 512
    min nodes:    3
    max nodes:    3
    mean nodes:   3.0000
+Current clique:50
 # of anchor positions: 10
 -----------------------------------
 VERBOSE GROWTH STATS : ANCHOR #1
 
-10/10 anchor orients retained (max 10) t=0.01s
+10/10 anchor orients retained (max 10) t=0s
 Lyr 1-1 Segs|number of layers:2
 Lyr:1 Seg:0 Bond:19 : Sampling 3 dihedrals C5(C.3)  C6(C.3)  C7(C.3)  Br1(Br)
-Lyr:1 Seg:0 19/30 retained, Pruning: 11-clustered  t=0.03s
+Lyr:1 Seg:0 19/30 retained, Pruning: 11-clustered  t=0.01s
+Current clique:50
+(last_orient_flag==true)Current clique:50
+(last_orient_flag==true)Current clique:0
 No more anchor fragments to be docked.
 
 -----------------------------------
 Molecule: ZINC00158442
 
- Elapsed time for docking:	0.047 seconds
+ Elapsed time for docking:	0.021 seconds
 
  Anchors:		1
  Orientations:		50
@@ -139,12 +150,15 @@ VERBOSE MOLECULE STATS
   Molecular Weight = 112.152
   Heavy Atoms = 7
 -----------------------------------
+ANCHOR ATOMS.
+
+ANCHOR #1: C1,1 ; C2,2 ; C3,3 ; S1,4 ; C4,5 ; H3,10 ; H2,9 ; H1,8 ; 
 -----------------------------------
 VERBOSE ORIENTING STATS :
 
 Orienting 6 anchor heavy atom centers
 Sphere Center Matching Parameters:
-   tolerance: 0.250; dist_min: 2.000; min_nodes: 3; max_nodes: 10
+   tolerance: 0.250; dist_min: 0.000; min_nodes: 3; max_nodes: 10
 Num of cliques generated: 87
  Residual Info:
    min residual:    0.0706
@@ -156,6 +170,7 @@ Num of cliques generated: 87
    min nodes:    3
    max nodes:    3
    mean nodes:   3.0000
+Current clique:50
 # of anchor positions: 10
 -----------------------------------
 VERBOSE GROWTH STATS : ANCHOR #1
@@ -163,13 +178,16 @@ VERBOSE GROWTH STATS : ANCHOR #1
 10/10 anchor orients retained (max 10) t=0s
 Lyr 1-1 Segs|number of layers:2
 Lyr:1 Seg:0 Bond:6 : Sampling 2 dihedrals S1(S.3)  C3(C.2)  C5(C.2)  O1(O.2)
-Lyr:1 Seg:0 15/20 retained, Pruning: 5-clustered  t=0.01s
+Lyr:1 Seg:0 15/20 retained, Pruning: 5-clustered  t=0s
+Current clique:50
+(last_orient_flag==true)Current clique:50
+(last_orient_flag==true)Current clique:0
 No more anchor fragments to be docked.
 
 -----------------------------------
 Molecule: ZINC00158751
 
- Elapsed time for docking:	0.013 seconds
+ Elapsed time for docking:	0.007 seconds
 
  Anchors:		1
  Orientations:		50
@@ -185,12 +203,15 @@ VERBOSE MOLECULE STATS
   Molecular Weight = 140.206
   Heavy Atoms = 9
 -----------------------------------
+ANCHOR ATOMS.
+
+ANCHOR #1: C1,1 ; S1,2 ; O1,3 ; C2,4 ; C3,5 ; C4,6 ; C5,7 ; C6,8 ; C7,9 ; H8,17 ; H7,16 ; H6,15 ; H5,14 ; H4,13 ; H1,10 ; H2,11 ; H3,12 ; 
 -----------------------------------
 VERBOSE ORIENTING STATS :
 
 Orienting 9 anchor heavy atom centers
 Sphere Center Matching Parameters:
-   tolerance: 0.250; dist_min: 2.000; min_nodes: 3; max_nodes: 10
+   tolerance: 0.250; dist_min: 0.000; min_nodes: 3; max_nodes: 10
 Num of cliques generated: 376
  Residual Info:
    min residual:    0.0226
@@ -202,18 +223,22 @@ Num of cliques generated: 376
    min nodes:    3
    max nodes:    3
    mean nodes:   3.0000
+Current clique:50
 # of anchor positions: 10
 -----------------------------------
 VERBOSE GROWTH STATS : ANCHOR #1
 
 10/10 anchor orients retained (max 10) t=0s
 number of layers:1
+Current clique:50
+(last_orient_flag==true)Current clique:50
+(last_orient_flag==true)Current clique:0
 No more anchor fragments to be docked.
 
 -----------------------------------
 Molecule: ZINC00013564
 
- Elapsed time for docking:	0.012 seconds
+ Elapsed time for docking:	0.006 seconds
 
  Anchors:		1
  Orientations:		50
@@ -229,12 +254,15 @@ VERBOSE MOLECULE STATS
   Molecular Weight = 150.244
   Heavy Atoms = 11
 -----------------------------------
+ANCHOR ATOMS.
+
+ANCHOR #1: C5,6 ; C6,7 ; C7,8 ; C8,9 ; C9,10 ; C10,11 ; H16,27 ; H15,26 ; H14,25 ; H13,24 ; H12,23 ; 
 -----------------------------------
 VERBOSE ORIENTING STATS :
 
 Orienting 7 anchor heavy atom centers
 Sphere Center Matching Parameters:
-   tolerance: 0.250; dist_min: 2.000; min_nodes: 3; max_nodes: 10
+   tolerance: 0.250; dist_min: 0.000; min_nodes: 3; max_nodes: 10
 Num of cliques generated: 104
  Residual Info:
    min residual:    0.0553
@@ -246,6 +274,7 @@ Num of cliques generated: 104
    min nodes:    3
    max nodes:    3
    mean nodes:   3.0000
+Current clique:50
 # of anchor positions: 10
 -----------------------------------
 VERBOSE GROWTH STATS : ANCHOR #1
@@ -255,13 +284,16 @@ Lyr 1-1 Segs|Lyr 2-1 Segs|number of layers:3
 Lyr:1 Seg:0 Bond:13 : Sampling 6 dihedrals N1(N.4)  C4(C.3)  C5(C.ar)  C6(C.ar)
 Lyr:1 Seg:0 10/54 retained, Pruning: 44-clustered  t=0.03s
 Lyr:2 Seg:0 Bond:6 : Sampling 3 dihedrals C1(C.3)  N1(N.4)  C4(C.3)  C5(C.ar)
-Lyr:2 Seg:0 17/30 retained, Pruning: 13-clustered  t=0.05s
+Lyr:2 Seg:0 17/30 retained, Pruning: 13-clustered  t=0.04s
+Current clique:50
+(last_orient_flag==true)Current clique:50
+(last_orient_flag==true)Current clique:0
 No more anchor fragments to be docked.
 
 -----------------------------------
 Molecule: ZINC01555236
 
- Elapsed time for docking:	0.059 seconds
+ Elapsed time for docking:	0.040 seconds
 
  Anchors:		1
  Orientations:		50
@@ -277,12 +309,15 @@ VERBOSE MOLECULE STATS
   Molecular Weight = 113.183
   Heavy Atoms = 7
 -----------------------------------
+ANCHOR ATOMS.
+
+ANCHOR #1: C1,1 ; C2,2 ; C3,3 ; S1,4 ; C4,5 ; N1,6 ; C5,7 ; H5,12 ; H6,13 ; H7,14 ; H4,11 ; H1,8 ; H2,9 ; H3,10 ; 
 -----------------------------------
 VERBOSE ORIENTING STATS :
 
 Orienting 7 anchor heavy atom centers
 Sphere Center Matching Parameters:
-   tolerance: 0.250; dist_min: 2.000; min_nodes: 3; max_nodes: 10
+   tolerance: 0.250; dist_min: 0.000; min_nodes: 3; max_nodes: 10
 Num of cliques generated: 165
  Residual Info:
    min residual:    0.0365
@@ -294,18 +329,22 @@ Num of cliques generated: 165
    min nodes:    3
    max nodes:    3
    mean nodes:   3.0000
+Current clique:50
 # of anchor positions: 10
 -----------------------------------
 VERBOSE GROWTH STATS : ANCHOR #1
 
-10/10 anchor orients retained (max 10) t=0.01s
+10/10 anchor orients retained (max 10) t=0s
 number of layers:1
+Current clique:50
+(last_orient_flag==true)Current clique:50
+(last_orient_flag==true)Current clique:0
 No more anchor fragments to be docked.
 
 -----------------------------------
 Molecule: ZINC00150863
 
- Elapsed time for docking:	0.006 seconds
+ Elapsed time for docking:	0.005 seconds
 
  Anchors:		1
  Orientations:		50
@@ -321,12 +360,15 @@ VERBOSE MOLECULE STATS
   Molecular Weight = 126.179
   Heavy Atoms = 8
 -----------------------------------
+ANCHOR ATOMS.
+
+ANCHOR #1: C1,1 ; C2,2 ; C3,3 ; C4,4 ; C5,5 ; S1,6 ; H5,13 ; H4,12 ; H1,9 ; H2,10 ; H3,11 ; 
 -----------------------------------
 VERBOSE ORIENTING STATS :
 
 Orienting 7 anchor heavy atom centers
 Sphere Center Matching Parameters:
-   tolerance: 0.250; dist_min: 2.000; min_nodes: 3; max_nodes: 10
+   tolerance: 0.250; dist_min: 0.000; min_nodes: 3; max_nodes: 10
 Num of cliques generated: 160
  Residual Info:
    min residual:    0.0401
@@ -338,6 +380,7 @@ Num of cliques generated: 160
    min nodes:    3
    max nodes:    3
    mean nodes:   3.0000
+Current clique:50
 # of anchor positions: 10
 -----------------------------------
 VERBOSE GROWTH STATS : ANCHOR #1
@@ -346,12 +389,15 @@ VERBOSE GROWTH STATS : ANCHOR #1
 Lyr 1-1 Segs|number of layers:2
 Lyr:1 Seg:0 Bond:11 : Sampling 2 dihedrals C4(C.2)  C5(C.2)  C6(C.2)  O1(O.2)
 Lyr:1 Seg:0 15/20 retained, Pruning: 5-clustered  t=0.01s
+Current clique:50
+(last_orient_flag==true)Current clique:50
+(last_orient_flag==true)Current clique:0
 No more anchor fragments to be docked.
 
 -----------------------------------
 Molecule: ZINC00152265
 
- Elapsed time for docking:	0.010 seconds
+ Elapsed time for docking:	0.008 seconds
 
  Anchors:		1
  Orientations:		50
@@ -367,12 +413,15 @@ VERBOSE MOLECULE STATS
   Molecular Weight = 140.206
   Heavy Atoms = 9
 -----------------------------------
+ANCHOR ATOMS.
+
+ANCHOR #1: C3,3 ; C4,4 ; C5,5 ; C6,6 ; S1,7 ; H7,16 ; H6,15 ; 
 -----------------------------------
 VERBOSE ORIENTING STATS :
 
 Orienting 7 anchor heavy atom centers
 Sphere Center Matching Parameters:
-   tolerance: 0.250; dist_min: 2.000; min_nodes: 3; max_nodes: 10
+   tolerance: 0.250; dist_min: 0.000; min_nodes: 3; max_nodes: 10
 Num of cliques generated: 162
  Residual Info:
    min residual:    0.0434
@@ -384,6 +433,7 @@ Num of cliques generated: 162
    min nodes:    3
    max nodes:    3
    mean nodes:   3.0000
+Current clique:50
 # of anchor positions: 10
 -----------------------------------
 VERBOSE GROWTH STATS : ANCHOR #1
@@ -394,12 +444,15 @@ Lyr:1 Seg:0 Bond:4 : Sampling 6 dihedrals C1(C.3)  C2(C.3)  C3(C.2)  C4(C.2)
 Lyr:1 Seg:0 12/60 retained, Pruning: 48-clustered  t=0.02s
 Lyr:1 Seg:1 Bond:14 : Sampling 2 dihedrals C5(C.2)  C6(C.2)  C7(C.2)  O1(O.2)
 Lyr:1 Seg:1 12/24 retained, Pruning: 12-clustered  t=0.02s
+Current clique:50
+(last_orient_flag==true)Current clique:50
+(last_orient_flag==true)Current clique:0
 No more anchor fragments to be docked.
 
 -----------------------------------
 Molecule: ZINC00152280
 
- Elapsed time for docking:	0.027 seconds
+ Elapsed time for docking:	0.024 seconds
 
  Anchors:		1
  Orientations:		50
@@ -415,12 +468,15 @@ VERBOSE MOLECULE STATS
   Molecular Weight = 123.178
   Heavy Atoms = 8
 -----------------------------------
+ANCHOR ATOMS.
+
+ANCHOR #1: C1,1 ; C2,2 ; S1,3 ; C3,4 ; C4,5 ; H3,11 ; H2,10 ; H1,9 ; 
 -----------------------------------
 VERBOSE ORIENTING STATS :
 
 Orienting 6 anchor heavy atom centers
 Sphere Center Matching Parameters:
-   tolerance: 0.250; dist_min: 2.000; min_nodes: 3; max_nodes: 10
+   tolerance: 0.250; dist_min: 0.000; min_nodes: 3; max_nodes: 10
 Num of cliques generated: 85
  Residual Info:
    min residual:    0.0690
@@ -432,6 +488,7 @@ Num of cliques generated: 85
    min nodes:    3
    max nodes:    3
    mean nodes:   3.0000
+Current clique:50
 # of anchor positions: 10
 -----------------------------------
 VERBOSE GROWTH STATS : ANCHOR #1
@@ -442,12 +499,15 @@ Lyr:1 Seg:0 Bond:8 : Sampling 6 dihedrals C1(C.2)  C4(C.2)  C5(C.3)  C6(C.1)
 Lyr:1 Seg:0 13/60 retained, Pruning: 47-clustered  t=0.02s
 Lyr:2 Seg:0 Bond:9 : Sampling 3 dihedrals C4(C.2)  C5(C.3)  C6(C.1)  N1(N.1)
 Lyr:2 Seg:0 10/39 retained, Pruning: 29-clustered  t=0.03s
+Current clique:50
+(last_orient_flag==true)Current clique:50
+(last_orient_flag==true)Current clique:0
 No more anchor fragments to be docked.
 
 -----------------------------------
 Molecule: ZINC00157111
 
- Elapsed time for docking:	0.025 seconds
+ Elapsed time for docking:	0.030 seconds
 
  Anchors:		1
  Orientations:		50
@@ -463,12 +523,15 @@ VERBOSE MOLECULE STATS
   Molecular Weight = 126.179
   Heavy Atoms = 8
 -----------------------------------
+ANCHOR ATOMS.
+
+ANCHOR #1: C1,1 ; C2,2 ; C3,3 ; C4,4 ; S1,5 ; C5,6 ; H5,13 ; H4,12 ; H1,9 ; H2,10 ; H3,11 ; 
 -----------------------------------
 VERBOSE ORIENTING STATS :
 
 Orienting 7 anchor heavy atom centers
 Sphere Center Matching Parameters:
-   tolerance: 0.250; dist_min: 2.000; min_nodes: 3; max_nodes: 10
+   tolerance: 0.250; dist_min: 0.000; min_nodes: 3; max_nodes: 10
 Num of cliques generated: 154
  Residual Info:
    min residual:    0.0652
@@ -480,6 +543,7 @@ Num of cliques generated: 154
    min nodes:    3
    max nodes:    3
    mean nodes:   3.0000
+Current clique:50
 # of anchor positions: 10
 -----------------------------------
 VERBOSE GROWTH STATS : ANCHOR #1
@@ -487,13 +551,16 @@ VERBOSE GROWTH STATS : ANCHOR #1
 10/10 anchor orients retained (max 10) t=0s
 Lyr 1-1 Segs|number of layers:2
 Lyr:1 Seg:0 Bond:11 : Sampling 2 dihedrals S1(S.3)  C5(C.2)  C6(C.2)  O1(O.2)
-Lyr:1 Seg:0 15/20 retained, Pruning: 5-clustered  t=0s
+Lyr:1 Seg:0 15/20 retained, Pruning: 5-clustered  t=0.01s
+Current clique:50
+(last_orient_flag==true)Current clique:50
+(last_orient_flag==true)Current clique:0
 No more anchor fragments to be docked.
 
 -----------------------------------
 Molecule: ZINC00157152
 
- Elapsed time for docking:	0.008 seconds
+ Elapsed time for docking:	0.017 seconds
 
  Anchors:		1
  Orientations:		50
@@ -509,12 +576,15 @@ VERBOSE MOLECULE STATS
   Molecular Weight = 126.179
   Heavy Atoms = 8
 -----------------------------------
+ANCHOR ATOMS.
+
+ANCHOR #1: C3,4 ; C4,5 ; C5,6 ; C6,7 ; S1,8 ; H6,14 ; H5,13 ; H4,12 ; 
 -----------------------------------
 VERBOSE ORIENTING STATS :
 
 Orienting 6 anchor heavy atom centers
 Sphere Center Matching Parameters:
-   tolerance: 0.250; dist_min: 2.000; min_nodes: 3; max_nodes: 10
+   tolerance: 0.250; dist_min: 0.000; min_nodes: 3; max_nodes: 10
 Num of cliques generated: 91
  Residual Info:
    min residual:    0.0762
@@ -526,20 +596,24 @@ Num of cliques generated: 91
    min nodes:    3
    max nodes:    3
    mean nodes:   3.0000
+Current clique:50
 # of anchor positions: 10
 -----------------------------------
 VERBOSE GROWTH STATS : ANCHOR #1
 
-10/10 anchor orients retained (max 10) t=0s
+10/10 anchor orients retained (max 10) t=0.01s
 Lyr 1-1 Segs|number of layers:2
 Lyr:1 Seg:0 Bond:5 : Sampling 2 dihedrals C1(C.3)  C2(C.2)  C3(C.2)  S1(S.3)
-Lyr:1 Seg:0 17/20 retained, Pruning: 3-clustered  t=0s
+Lyr:1 Seg:0 17/20 retained, Pruning: 3-clustered  t=0.01s
+Current clique:50
+(last_orient_flag==true)Current clique:50
+(last_orient_flag==true)Current clique:0
 No more anchor fragments to be docked.
 
 -----------------------------------
 Molecule: ZINC00157402
 
- Elapsed time for docking:	0.007 seconds
+ Elapsed time for docking:	0.015 seconds
 
  Anchors:		1
  Orientations:		50
@@ -555,12 +629,15 @@ VERBOSE MOLECULE STATS
   Molecular Weight = 114.168
   Heavy Atoms = 7
 -----------------------------------
+ANCHOR ATOMS.
+
+ANCHOR #1: C1,1 ; C2,2 ; C3,3 ; S1,4 ; C4,5 ; H4,11 ; H3,10 ; H2,9 ; 
 -----------------------------------
 VERBOSE ORIENTING STATS :
 
 Orienting 6 anchor heavy atom centers
 Sphere Center Matching Parameters:
-   tolerance: 0.250; dist_min: 2.000; min_nodes: 3; max_nodes: 10
+   tolerance: 0.250; dist_min: 0.000; min_nodes: 3; max_nodes: 10
 Num of cliques generated: 91
  Residual Info:
    min residual:    0.0521
@@ -572,6 +649,7 @@ Num of cliques generated: 91
    min nodes:    3
    max nodes:    3
    mean nodes:   3.0000
+Current clique:50
 # of anchor positions: 10
 -----------------------------------
 VERBOSE GROWTH STATS : ANCHOR #1
@@ -579,15 +657,18 @@ VERBOSE GROWTH STATS : ANCHOR #1
 10/10 anchor orients retained (max 10) t=0s
 Lyr 1-1 Segs|Lyr 2-1 Segs|number of layers:3
 Lyr:1 Seg:0 Bond:6 : Sampling 6 dihedrals S1(S.3)  C3(C.2)  C5(C.3)  O1(O.3)
-Lyr:1 Seg:0 13/60 retained, Pruning: 47-clustered  t=0.01s
+Lyr:1 Seg:0 13/60 retained, Pruning: 47-clustered  t=0.02s
 Lyr:2 Seg:0 Bond:9 : Sampling 3 dihedrals C3(C.2)  C5(C.3)  O1(O.3)  H1(H)
-Lyr:2 Seg:0 8/39 retained, Pruning: 31-clustered  t=0.01s
+Lyr:2 Seg:0 8/39 retained, Pruning: 31-clustered  t=0.03s
+Current clique:50
+(last_orient_flag==true)Current clique:50
+(last_orient_flag==true)Current clique:0
 No more anchor fragments to be docked.
 
 -----------------------------------
 Molecule: ZINC00157467
 
- Elapsed time for docking:	0.022 seconds
+ Elapsed time for docking:	0.039 seconds
 
  Anchors:		1
  Orientations:		50
@@ -603,12 +684,15 @@ VERBOSE MOLECULE STATS
   Molecular Weight = 154.233
   Heavy Atoms = 10
 -----------------------------------
+ANCHOR ATOMS.
+
+ANCHOR #1: C1,1 ; C2,2 ; C3,3 ; C4,4 ; S1,5 ; C5,6 ; C8,10 ; H8,18 ; H9,19 ; H10,20 ; H4,14 ; H1,11 ; H2,12 ; H3,13 ; 
 -----------------------------------
 VERBOSE ORIENTING STATS :
 
 Orienting 8 anchor heavy atom centers
 Sphere Center Matching Parameters:
-   tolerance: 0.250; dist_min: 2.000; min_nodes: 3; max_nodes: 10
+   tolerance: 0.250; dist_min: 0.000; min_nodes: 3; max_nodes: 10
 Num of cliques generated: 256
  Residual Info:
    min residual:    0.0409
@@ -620,6 +704,7 @@ Num of cliques generated: 256
    min nodes:    3
    max nodes:    3
    mean nodes:   3.0000
+Current clique:50
 # of anchor positions: 10
 -----------------------------------
 VERBOSE GROWTH STATS : ANCHOR #1
@@ -627,13 +712,16 @@ VERBOSE GROWTH STATS : ANCHOR #1
 10/10 anchor orients retained (max 10) t=0s
 Lyr 1-1 Segs|number of layers:2
 Lyr:1 Seg:0 Bond:11 : Sampling 2 dihedrals S1(S.3)  C5(C.2)  C6(C.2)  C7(C.3)
-Lyr:1 Seg:0 16/20 retained, Pruning: 4-clustered  t=0s
+Lyr:1 Seg:0 16/20 retained, Pruning: 4-clustered  t=0.01s
+Current clique:50
+(last_orient_flag==true)Current clique:50
+(last_orient_flag==true)Current clique:0
 No more anchor fragments to be docked.
 
 -----------------------------------
 Molecule: ZINC00157960
 
- Elapsed time for docking:	0.010 seconds
+ Elapsed time for docking:	0.015 seconds
 
  Anchors:		1
  Orientations:		50
@@ -642,4 +730,7 @@ Molecule: ZINC00157960
 
 
 12 Molecules Processed
-Total elapsed time:	0.252 seconds
+Total elapsed time:	0.232 seconds
+Number of molecules per second:	51.700
+Virtual memory used for this process: 87148 kilobytes
+Physical memory used for this process: 15704 kilobytes

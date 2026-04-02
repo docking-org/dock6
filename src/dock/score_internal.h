@@ -11,7 +11,7 @@ class Parameter_Reader;
 
 
 #define VDWOFF -0.09
-#define MAX_ATOM_REC 1000
+#define MAX_ATOM_REC 2000
 #define MAX_ATOM_LIG 200
 
 #define SQR(x) ((x)*(x))

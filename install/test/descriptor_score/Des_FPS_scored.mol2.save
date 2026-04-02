@@ -2,7 +2,7 @@
 ##########                                Name:                 MOL
 ##########                    Molecular_Weight:             393.442
 ##########                DOCK_Rotatable_Bonds:                  10
-##########                       Formal_Charge:         -0.00099998
+##########                       Formal_Charge:                  -0
 ##########                     HBond_Acceptors:                   7
 ##########                        HBond_Donors:                   1
 ##########                         Heavy_Atoms:                  29
@@ -145,7 +145,7 @@ AMBER_CHARGES
 ##########                                Name:                 MOL
 ##########                    Molecular_Weight:             393.442
 ##########                DOCK_Rotatable_Bonds:                  10
-##########                       Formal_Charge:         -0.00099998
+##########                       Formal_Charge:                  -0
 ##########                     HBond_Acceptors:                   7
 ##########                        HBond_Donors:                   1
 ##########                         Heavy_Atoms:                  29
@@ -288,7 +288,7 @@ AMBER_CHARGES
 ##########                                Name:                 MOL
 ##########                    Molecular_Weight:             393.442
 ##########                DOCK_Rotatable_Bonds:                  10
-##########                       Formal_Charge:         -0.00099998
+##########                       Formal_Charge:                  -0
 ##########                     HBond_Acceptors:                   7
 ##########                        HBond_Donors:                   1
 ##########                         Heavy_Atoms:                  29
@@ -431,7 +431,7 @@ AMBER_CHARGES
 ##########                                Name:                 MOL
 ##########                    Molecular_Weight:             393.442
 ##########                DOCK_Rotatable_Bonds:                  10
-##########                       Formal_Charge:         -0.00099998
+##########                       Formal_Charge:                  -0
 ##########                     HBond_Acceptors:                   7
 ##########                        HBond_Donors:                   1
 ##########                         Heavy_Atoms:                  29
@@ -574,7 +574,7 @@ AMBER_CHARGES
 ##########                                Name:                 MOL
 ##########                    Molecular_Weight:             393.442
 ##########                DOCK_Rotatable_Bonds:                  10
-##########                       Formal_Charge:         -0.00099998
+##########                       Formal_Charge:                  -0
 ##########                     HBond_Acceptors:                   7
 ##########                        HBond_Donors:                   1
 ##########                         Heavy_Atoms:                  29
@@ -717,7 +717,7 @@ AMBER_CHARGES
 ##########                                Name:                 MOL
 ##########                    Molecular_Weight:             393.442
 ##########                DOCK_Rotatable_Bonds:                  10
-##########                       Formal_Charge:         -0.00099998
+##########                       Formal_Charge:                  -0
 ##########                     HBond_Acceptors:                   7
 ##########                        HBond_Donors:                   1
 ##########                         Heavy_Atoms:                  29
@@ -860,7 +860,7 @@ AMBER_CHARGES
 ##########                                Name:                 MOL
 ##########                    Molecular_Weight:             393.442
 ##########                DOCK_Rotatable_Bonds:                  10
-##########                       Formal_Charge:         -0.00099998
+##########                       Formal_Charge:                  -0
 ##########                     HBond_Acceptors:                   7
 ##########                        HBond_Donors:                   1
 ##########                         Heavy_Atoms:                  29
@@ -1003,7 +1003,7 @@ AMBER_CHARGES
 ##########                                Name:                 MOL
 ##########                    Molecular_Weight:             393.442
 ##########                DOCK_Rotatable_Bonds:                  10
-##########                       Formal_Charge:         -0.00099998
+##########                       Formal_Charge:                  -0
 ##########                     HBond_Acceptors:                   7
 ##########                        HBond_Donors:                   1
 ##########                         Heavy_Atoms:                  29
@@ -1146,7 +1146,7 @@ AMBER_CHARGES
 ##########                                Name:                 MOL
 ##########                    Molecular_Weight:             393.442
 ##########                DOCK_Rotatable_Bonds:                  10
-##########                       Formal_Charge:         -0.00099998
+##########                       Formal_Charge:                  -0
 ##########                     HBond_Acceptors:                   7
 ##########                        HBond_Donors:                   1
 ##########                         Heavy_Atoms:                  29
@@ -1289,7 +1289,7 @@ AMBER_CHARGES
 ##########                                Name:                 MOL
 ##########                    Molecular_Weight:             393.442
 ##########                DOCK_Rotatable_Bonds:                  10
-##########                       Formal_Charge:         -0.00099998
+##########                       Formal_Charge:                  -0
 ##########                     HBond_Acceptors:                   7
 ##########                        HBond_Donors:                   1
 ##########                         Heavy_Atoms:                  29

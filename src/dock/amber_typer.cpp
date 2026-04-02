@@ -4,6 +4,7 @@
 #include <limits.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 #include "amber_typer.h"
 #include "dockmol.h"
 #include "fingerprint.h"
@@ -487,11 +488,13 @@ ATOM_TYPER::assign_vdw_labels(DOCKMol & mol, int atom_model)
         }
         // check that no atom's valence is violated
         if (count_atom_neighbors(mol, i) > types[atom_types[i]].valence) {
-
+            
+	    //cout << "get_atom_neighbors" << endl;
             // loop over neighbor atoms
             nbrs = mol.get_atom_neighbors(i);
             k = 0;
 
+	    //cout << "strcmps " << endl;
             for (j = 0; j < nbrs.size(); j++)
                 if ((strcmp(mol.atom_types[nbrs[j]].c_str(), "LP"))
                     && (strcmp(mol.atom_types[nbrs[j]].c_str(), "Du")))
@@ -539,12 +542,36 @@ BOND_TYPER::get_flex_labels(string fname)
     int             i;
     int             definition_count;
 
+    char result[ 256];
+    ssize_t count = readlink( "/proc/self/exe", result, 256);
+
+    std::string EXE_PATH( result, (count > 0) ? count : 0 ) ;
+    std::size_t botDirPos = EXE_PATH.find_last_of("/");
+    std::string BINDIR    = EXE_PATH.substr(0, botDirPos); 
+    botDirPos             = BINDIR.find_last_of("/");
+    std::string BASEDIR   = BINDIR.substr(0, botDirPos); 
+
+    std::ostringstream oss; 
+    oss << BASEDIR << "/parameters/flex.defn";
+    std::string parameter_path = oss.str();
+
     ifp = fopen(fname.c_str(), "r");
 
     if (ifp == NULL) {
+        //cout << "\n\nCould not open " << fname <<
+        //    " for reading.  Program will terminate." << endl << endl;
+        //exit(0);
         cout << "\n\nCould not open " << fname <<
-            " for reading.  Program will terminate." << endl << endl;
-        exit(0);
+              " for reading. Therefore we will use default parameters: "
+              << parameter_path  << endl<<endl;
+
+        ifp = fopen(parameter_path.c_str(), "r");
+        if (ifp == NULL) {
+            
+            cout << "\n\nAgain...could not open " << parameter_path <<
+                " for reading. Program will terminate." << endl << endl;
+            exit(0);
+        }
     }
 
     while (fgets(line, 100, ifp)) {
@@ -603,12 +630,36 @@ BOND_TYPER::get_flex_search(string fname)
     int             torsion_total;
     FLOATVec        torsions;
 
+    char result[ 256];
+    ssize_t count = readlink( "/proc/self/exe", result, 256);
+
+    std::string EXE_PATH( result, (count > 0) ? count : 0 ) ;
+    std::size_t botDirPos = EXE_PATH.find_last_of("/");
+    std::string BINDIR    = EXE_PATH.substr(0, botDirPos); 
+    botDirPos             = BINDIR.find_last_of("/");
+    std::string BASEDIR   = BINDIR.substr(0, botDirPos); 
+
+    std::ostringstream oss; 
+    oss << BASEDIR << "/parameters/flex_drive.tbl";
+    std::string parameter_path = oss.str();
+
     ifp = fopen(fname.c_str(), "r");
 
     if (ifp == NULL) {
+        //cout << "\n\nCould not open " << fname <<
+        //    " for reading.  Program will terminate." << endl << endl;
+        //exit(0);
         cout << "\n\nCould not open " << fname <<
-            " for reading.  Program will terminate." << endl << endl;
-        exit(0);
+              " for reading. Therefore we will use default parameters: "
+              << parameter_path  << endl<<endl;
+
+        ifp = fopen(parameter_path.c_str(), "r");
+        if (ifp == NULL) {
+            
+            cout << "\n\nAgain...could not open " << parameter_path <<
+                " for reading. Program will terminate." << endl << endl;
+            exit(0);
+        }
     }
 
     for (i = 0; i < types.size(); i++)
@@ -676,6 +727,11 @@ BOND_TYPER::get_flex_search(string fname)
                     types[i].torsion_total = torsion_total;
                     types[i].torsions = torsions;
                 }
+                if (types[i].drive_id == -1) {
+                    types[i].torsion_total = 0;
+                    types[i].torsions.clear();
+                    //flex_ids[i] = -1; // make it not rotatable.  
+                }
             }
 
         }                       // End if drive_id
@@ -685,9 +741,10 @@ BOND_TYPER::get_flex_search(string fname)
 
     for (i = 0; i < types.size(); i++) {
         if (types[i].torsion_total < 1) {
-            cout << "ERROR get_flex_search: Missing torsion parameters in ";
+            //cout << "ERROR get_flex_search: Missing torsion parameters in ";
+            cout << "Warning... get_flex_search: Missing torsion parameters in ";
             cout << fname << endl;
-            exit(0);
+            //exit(0);
         }
     }
 
@@ -700,6 +757,7 @@ BOND_TYPER::get_flex_search(string fname)
 void
 BOND_TYPER::apply_flex_labels(DOCKMol & mol)
 {
+    //cout << "In BOND_TYPER::apply_flex_labels ... "<< endl;
     int             i,
                     j;
 
@@ -711,11 +769,13 @@ BOND_TYPER::apply_flex_labels(DOCKMol & mol)
         flex_ids.push_back(0);
         flex_ids[i] = -1;
 
+        //cout << "mol.bond_ring_flags[i] = " << mol.bond_ring_flags[j] << endl;
         if (mol.bond_ring_flags[i])
             continue;
 
         if (!count_bond_neighbors(mol, i))
             continue;
+        //cout << " I AM HERE ***" << endl;
 
         for (j = 0; j < types.size(); j++) {    // Loop over bond type (1 to
                                                 // size)
@@ -735,10 +795,23 @@ BOND_TYPER::apply_flex_labels(DOCKMol & mol)
 
         }                       // End loop over bond types
 
+       
+
         if (flex_ids[i] != -1)
             total_torsions++;
     }
 
+    for (i = 0; i < mol.num_bonds; i++) {
+	if (flex_ids[i] >= 0){
+	   
+	
+            if (types[flex_ids[i]].drive_id == -1){ //make it not rotatable.
+                //cout << "I AM HERE " << i << " " << mol.bonds_target_atom[i] <<" -- "<< mol.bonds_origin_atom[i] << endl;  
+                //cout << " The following bond is marked as non rotatable because it has drive_id = -1 in flex.defn file: " << i << " " << mol.atom_names[mol.bonds_target_atom[i]] <<" -- "<< mol.atom_names[mol.bonds_origin_atom[i]] << endl;  
+                flex_ids[i] = -1; 
+            }
+	}
+    }
 }
 
 /***********************************/
@@ -761,13 +834,38 @@ CHEM_TYPER::get_chem_labels(string fname)
     CHEM_TYPE       tmp_type;
     ATOM_TYPE_NODE  tmp_node;
 
+    char result[ 256];
+    ssize_t count = readlink( "/proc/self/exe", result, 256);
+
+    std::string EXE_PATH( result, (count > 0) ? count : 0 ) ;
+    std::size_t botDirPos = EXE_PATH.find_last_of("/");
+    std::string BINDIR    = EXE_PATH.substr(0, botDirPos); 
+    botDirPos             = BINDIR.find_last_of("/");
+    std::string BASEDIR   = BINDIR.substr(0, botDirPos); 
+
+    std::ostringstream oss; 
+    oss << BASEDIR << "/parameters/chem.defn";
+    std::string parameter_path = oss.str();
+
     ifp = fopen(fname.c_str(), "r");
 
     if (ifp == NULL) {
+        //cout << "\n\nCould not open " << fname <<
+        //    " for reading.  Program will terminate." << endl << endl;
+        //exit(0);
         cout << "\n\nCould not open " << fname <<
-            " for reading.  Program will terminate." << endl << endl;
-        exit(0);
+              " for reading. Therefore we will use default parameters: "
+              << parameter_path  << endl<<endl;
+
+        ifp = fopen(parameter_path.c_str(), "r");
+        if (ifp == NULL) {
+            
+            cout << "\n\nAgain...could not open " << parameter_path <<
+                " for reading. Program will terminate." << endl << endl;
+            exit(0);
+        }
     }
+
 
     while (fgets(line, 100, ifp) != NULL) {
 
@@ -834,12 +932,36 @@ PH4_TYPER::get_ph4_labels(string fname)
     PH4_TYPE       tmp_type;
     ATOM_TYPE_NODE  tmp_node;
 
+    char result[ 256];
+    ssize_t count = readlink( "/proc/self/exe", result, 256);
+
+    std::string EXE_PATH( result, (count > 0) ? count : 0 ) ;
+    std::size_t botDirPos = EXE_PATH.find_last_of("/");
+    std::string BINDIR    = EXE_PATH.substr(0, botDirPos); 
+    botDirPos             = BINDIR.find_last_of("/");
+    std::string BASEDIR   = BINDIR.substr(0, botDirPos); 
+
+    std::ostringstream oss; 
+    oss << BASEDIR << "/parameters/ph4.defn";
+    std::string parameter_path = oss.str();
+
     ifp = fopen(fname.c_str(), "r");
 
     if (ifp == NULL) {
+        //cout << "\n\nCould not open " << fname <<
+        //    " for reading.  Program will terminate." << endl << endl;
+        //exit(0);
         cout << "\n\nCould not open " << fname <<
-            " for reading.  Program will terminate." << endl << endl;
-        exit(0);
+              " for reading. Therefore we will use default parameters: "
+              << parameter_path  << endl<<endl;
+
+        ifp = fopen(parameter_path.c_str(), "r");
+        if (ifp == NULL) {
+            
+            cout << "\n\nAgain...could not open " << parameter_path <<
+                " for reading. Program will terminate." << endl << endl;
+            exit(0);
+        }
     }
 
     while (fgets(line, 100, ifp) != NULL) {
@@ -1015,6 +1137,8 @@ AMBER_TYPER::assign_hbond_labels( DOCKMol & mol )
 }
 
 
+
+
 /***********************************/
 void
 AMBER_TYPER::prepare_molecule(DOCKMol & mol, bool read_vdw, bool use_chem, bool use_ph4, bool use_volume)
@@ -1165,6 +1289,35 @@ AMBER_TYPER::prepare_molecule(DOCKMol & mol, bool read_vdw, bool use_chem, bool 
 
 }
 
+/***********************************/
+void
+AMBER_TYPER::prepare_for_torsions(DOCKMol & mol)
+{
+
+    atom_typer.assign_vdw_labels(mol, atom_model);
+    bond_typer.apply_flex_labels(mol);
+    // copy bond types to molecule
+    for (int i = 0; i < mol.num_bonds; i++) {
+        mol.amber_bt_id[i] = bond_typer.flex_ids[i];
+
+        if (bond_typer.flex_ids[i] != -1) {
+
+            mol.amber_bt_minimize[i] =
+                bond_typer.types[bond_typer.flex_ids[i]].minimize;
+            mol.amber_bt_torsion_total[i] =
+                bond_typer.types[bond_typer.flex_ids[i]].torsion_total;
+            mol.amber_bt_torsions[i] =
+                bond_typer.types[bond_typer.flex_ids[i]].torsions;
+
+        } else {
+            mol.amber_bt_minimize[i] = 0;
+            mol.amber_bt_torsion_total[i] = 0;
+            mol.amber_bt_torsions[i].clear();
+        }
+
+    }
+    mol.amber_bt_assigned = true;
+}
 /***********************************/
 float AMBER_TYPER::getMW(DOCKMol & mol)
 {

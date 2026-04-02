@@ -1,0 +1,40 @@
+#!/bin/bash
+#
+# Use 
+# 
+set -e
+
+DIR=$( readlink -f $( dirname $0 ) )
+
+if [ "$1" == '-v' ]; then
+	VERBOSE='yes'
+	shift
+else
+	VERBOSE=''
+fi
+
+if [ $# -lt 2 ]; then
+	echo "Usage: $DIR/on-one-core [-v] <PARENT_PID> <COMMAND>"
+        echo "Options:"
+        echo "  -v : Verbose (Print pinned processor to stderr"
+        echo 
+	echo "	Example: Restrict pinning a processor to the caller's PID" 
+        echo "    $DIR/on-one-core \$\$ a-processor-greedy-command"
+	echo "	Example: Restrict pinning a processor to the on-one-core wrapper's PID"
+        echo "     $DIR/on-one-core - a-processor-greedy-command"
+	exit -1
+fi
+
+if [ $1 == '-' ]; then
+	PID=$$
+else
+	PID=$1
+fi
+shift
+
+QUEUE_CMD="request-reserved-slot.py"
+SLOT=$( ${DIR}/${QUEUE_CMD} $PID )
+if [ "$VERBOSE" == 'yes' ]; then
+	echo "Pinning to processor $SLOT with PID $PID" 1>&2
+fi
+taskset -c $SLOT "$@"

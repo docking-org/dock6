@@ -93,9 +93,11 @@ read_spheres( string sphere_file_name, SphereVec & spheres )
         // assign the proper color label
         tmp.color = "null";
 
+        //cout <<  "color =" << color_int << endl;
         if (color_int > 0) {
             for (size_t i = 0; i < site_color_ints.size(); ++i) {
                 if (color_int == site_color_ints[i]) {
+                    //cout << " color = " <<  color_int << " " << site_color_ints[i] << endl;
                     tmp.color = site_color_labels[i];
                     break;
                 }

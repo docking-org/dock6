@@ -364,6 +364,63 @@ Fingerprint::return_environment( DOCKMol & mol, int atom_num )
 
 } // end Fingerprint::return_environment();
 
+string
+Fingerprint::return_noH_environment( DOCKMol & mol, int atom_num )
+{
+    // Declare some temporary vectors to describe the mol without Hydrogens
+    vector <int> tmp_atom_vec;
+    vector < pair< pair<int,int>, string > > tmp_bond_vec;
+    // Fill the vectors with atom / bond information for all atoms except hydrogens
+    prepare_vectors(mol, tmp_atom_vec, tmp_bond_vec);
+
+/*
+    cout << endl;
+    for (int i=0; i<tmp_atom_vec.size(); ++i){
+        cout << "ATOM_VEC: " << tmp_atom_vec[i] << endl;
+        cout << "ATOM_NUM: " << mol.atom_number[i] << endl << endl;
+    }
+    cout << "PASSED_NUM: " << atom_num << endl << endl; 
+    for (int i=0; i<tmp_bond_vec.size(); ++i){
+        cout << "BOND_VEC: " << tmp_bond_vec[i].first.first << " " << tmp_bond_vec[i].first.second << " " 
+            << tmp_bond_vec[i].second << 
+            endl;
+    }
+    
+*/
+    // Generate sets of atom keys for each molecule to different depths
+    vector <string> atom_keys_1 = generate_keys( mol, 1, tmp_atom_vec, tmp_bond_vec );
+
+    /*
+    for (int i=0; i<atom_keys_1.size(); ++i){
+        cout << "atom_keys: " << atom_keys_1[i] << endl;
+        cout << "stringy s: " << i << endl;
+    }
+    */
+
+    string return_string = atom_keys_1[atom_num];
+
+
+    // Clear the atom and bond vecs for this molecule
+    // alpha.clear();
+
+    if (return_string.find("Z") != std::string::npos) {
+        //cout << "THERE IS A HYDROGEN IN HERE!!!!" << endl;
+        while (return_string.find("Z") != std::string::npos) {
+            size_t pos = return_string.find("Z");
+            string new_string = return_string.substr(0,pos-2) + return_string.substr(pos+1);
+            return_string = new_string;
+        }
+
+    }
+    //cout << "RETURN STRING: " << return_string << endl; 
+    
+    atom_keys_1.clear();
+    tmp_atom_vec.clear();
+    tmp_bond_vec.clear();
+
+    return return_string;
+
+} // end Fingerprint::return_noH_environment();
 
 
 // +++++++++++++++++++++++++++++++++++++++++

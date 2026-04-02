@@ -1,0 +1,164 @@
+
+
+
+--------------------------------------
+DOCK v6.12
+
+Released September 2024
+Copyright UCSF
+--------------------------------------
+
+
+Conformational Sampling Parameters
+------------------------------------------------------------------------------------------
+conformer_search_type                                        rigid
+
+Internal Energy Parameters
+------------------------------------------------------------------------------------------
+use_internal_energy                                          yes
+internal_energy_rep_exp                                      12
+internal_energy_cutoff                                       100.0
+Note: Internal energy only includes repulsive VDW for growth and/or minimization.
+
+Molecule Library Input Parameters
+------------------------------------------------------------------------------------------
+ligand_atom_file                                             xtal-lig.mol2
+limit_max_ligands                                            no
+skip_molecule                                                no
+read_mol_solvation                                           no
+calculate_rmsd                                               no
+
+Database Filter Parameters
+------------------------------------------------------------------------------------------
+use_database_filter                                          no
+
+Orient Ligand Parameters
+------------------------------------------------------------------------------------------
+orient_ligand                                                no
+
+Bump Filter Parameters
+------------------------------------------------------------------------------------------
+bump_filter                                                  no
+
+Master Score Parameters
+------------------------------------------------------------------------------------------
+score_molecules                                              yes
+
+Contact Score Parameters
+------------------------------------------------------------------------------------------
+contact_score_primary                                        no
+
+Grid Score Parameters
+------------------------------------------------------------------------------------------
+grid_score_primary                                           no
+
+GIST Score Parameters
+------------------------------------------------------------------------------------------
+gist_score_primary                                           yes
+gist_score_att_exp                                           6
+gist_score_rep_exp                                           12
+gist_score_gist_scale                                        -1
+gist_score_gist_type                                         displace
+gist_score_grid_file                                         gist-EswPlusEww_ref2.dx
+
+MultiGrid Score Parameters
+------------------------------------------------------------------------------------------
+
+Dock3.5 Score Parameters
+------------------------------------------------------------------------------------------
+
+Continuous Energy Score Parameters
+------------------------------------------------------------------------------------------
+
+Footprint Similarity Score Parameters
+------------------------------------------------------------------------------------------
+
+Pharmacophore Similarity Score Parameters
+------------------------------------------------------------------------------------------
+
+Hbond Energy Score Parameters
+------------------------------------------------------------------------------------------
+
+Internal Energy Score Parameters
+------------------------------------------------------------------------------------------
+
+Descriptor Score Parameters
+------------------------------------------------------------------------------------------
+
+Zou GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+
+Hawkins GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+
+SASA Score Parameters
+------------------------------------------------------------------------------------------
+
+Amber Score Parameters
+------------------------------------------------------------------------------------------
+
+Simplex Minimization Parameters
+------------------------------------------------------------------------------------------
+minimize_ligand                                              no
+simplex_final_min                                            no
+
+Atom Typing Parameters
+------------------------------------------------------------------------------------------
+atom_model                                                   united
+vdw_defn_file                                                ../../../parameters/vdw_AMBER_parm94.dock3_7.defn
+flex_defn_file                                               ../../../parameters/flex.defn
+flex_drive_file                                              ../../../parameters/flex_drive.tbl
+
+Molecule Library Output Parameters
+------------------------------------------------------------------------------------------
+ligand_outfile_prefix                                        output_full_gist
+write_mol_solvation                                          no
+write_orientations                                           no
+num_scored_conformers                                        1
+score_threshold                                              100.0
+rank_ligands                                                 no
+------------------------------------------------------------------------------------------
+Initializing Library File Routines...
+
+Initializing GIST Grid Score Routines...
+ Reading the gist grid from gist-EswPlusEww_ref2.dx
+40 40 40
+34.412 25.694 21.825
+0.5 0.5 0.5
+64000
+64000 21333 1
+20 20 20
+ Done reading the gist grid.
+
+-----------------------------------
+VERBOSE MOLECULE STATS
+
+  Number of heavy atoms = 9
+  Number of rotatable bonds = 0
+  Formal Charge = 1.003
+  Molecular Weight = 119.146
+  Heavy Atoms = 9
+vdwB = 0, force radius to be 0.8.
+vdwB = 0, force radius to be 0.8.
+vdwB = 0, force radius to be 0.8.
+vdwB = 0, force radius to be 0.8.
+vdwB = 0, force radius to be 0.8.
+
+-----------------------------------
+Molecule: xtal-lig.pdb
+
+ Elapsed time for docking:	0.001 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+                          GIST_Score:            0.483776
+           Internal_energy_repulsive:            0.057162
+
+
+1 Molecules Processed
+Total elapsed time:	0.031 seconds
+Number of molecules per second:	32.422
+Virtual memory used for this process: 83864 kilobytes
+Physical memory used for this process: 12072 kilobytes

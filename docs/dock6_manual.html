@@ -3,7 +3,7 @@
 
 
 
-  <title>DOCK 6.11 User Manual</title>
+  <title>DOCK 6.12 User Manual</title>
   <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
   <style type="text/css">
@@ -26,15 +26,16 @@ font-size: 36px;
 </head><body>
 
 
-<h1 class="style4" align="center">DOCK 6.11 Users Manual</h1>
+<h1 class="style4" align="center">DOCK 6.12 Users Manual</h1>
 <p class="style4" align="center">&nbsp; </p>
 <p class="style2" align="center"><strong>Principal contributors to the current code:</strong></p>
 
-<p class="style2" align="center">William Joseph Allen (TACC)<br>
+<p class="style2" align="center">
+William Joseph Allen (TACC)<br>
 Trent Balius (FNLCR) <br>
 John Bickel (SUNY-Stony Brook)<br>
 Brock Boysan (SUNY-Stony Brook)<br>
-Scott Brozell (Rutgers University)<br>
+Scott R. Brozell (Rutgers University)<br>
 Chris Corbo (SUNY-Stony Brook)<br>
 Brian Fochtman (SUNY-Stony Brook)<br>
 Lingling Jiang (Columbia University) <br>
@@ -62,7 +63,7 @@ For more information about previous contributors, please see the <a href="#Histo
 
 <p class="style1" align="center">&nbsp;</p>
 <p class="style1" align="center">&nbsp;</p>
-<p class="style2" align="center">Copyright &copy; 2006-2023<br>
+<p class="style2" align="center">Copyright &copy; 2006-2024<br>
 
 
 
@@ -72,7 +73,7 @@ All Rights Reserved <br>
 </p>
 
 
-<p class="style2" align="center">Last updated November 14, 2023 <br>
+<p class="style2" align="center">Last updated August 21, 2024 <br>
 </p>
 
 
@@ -204,8 +205,8 @@ Sampling Methods</a></p>
 		
 	<p class="style2"><a href="#denovoLigandDesign">2.5.2. 
 	De novo Design</a></p>
-      <blockquote>	
-	  
+
+        <blockquote>	
 		<p class="style2"><a href="#denovoInputParameters">2.5.2.1.
 	DOCK_DN Input Parameters</a></p>
 
@@ -214,17 +215,30 @@ Sampling Methods</a></p>
 	
 	
 	  </blockquote>
+
 	 <p class="style2"><a href="#genetic">2.5.3. 
 	DOCK_GA: Molecular Evolution using a Genetic Algorithm</a></p>
-      <blockquote>	
-	  
+
+        <blockquote>	
 		<p class="style2"><a href="#GAInputParameters">2.5.3.1 
 	DOCK_GA Input Parameters</a></p>
 		<p class="style2"><a href="#GARDKITInputParameters">2.5.3.2
 	DOCK_GA RDKit Input Parameters</a></p>
+        </blockquote>
 	
+         <p class="style2"><a href="#HierarchicalDataBaseSearch">2.5.4. Hierarchical DataBase (HDB) Search</a></p>
+        <blockquote>	
+		<p class="style2"><a href="#HDBInputParameters">2.5.4.1 
+	HDB Input Parameters</a></p>
 	 
-  </blockquote>
+	</blockquote>
+
+         <p class="style2"><a href="#CovalentAttachAndGrow">2.5.5. Covalent Attach-and-Grow</a></p>
+        <blockquote>	
+		<p class="style2"><a href="#CovalentInputParameters">2.5.5.1 
+	Covalent Input Parameters</a></p>
+	 
+	</blockquote>
 </blockquote>
 
   <p class="style2"><a href="#FragmentLibraryGeneration">2.6.
@@ -364,15 +378,17 @@ Input Parameters</a></p>
     <p class="style2"><a href="#InternalEnergyScore">2.11.12.  Internal Energy Score</a></p>
     <p class="style2"><a href="#SASASscore">2.11.13.  SASA Score</a></p>
 
-    <p class="style2"><a href="#DescriptorScore">2.11.14.  Descriptor Score</a></p>
+    <p class="style2"><a href="#GISTScore">2.11.14. GIST Score</a></p>
+
+    <p class="style2"><a href="#DescriptorScore">2.11.15. Descriptor Score</a></p>
 
       <blockquote>
         <p class="style2"><a href="#TanimotoScore">
-            2.11.14.1. Tanimoto Score </a> </p>
+            2.11.15.1. Tanimoto Score </a> </p>
         <p class="style2"><a href="#HungarianScore">
-            2.11.14.2. Hungarian Matching Similarity Score </a> </p>
+            2.11.15.2. Hungarian Matching Similarity Score </a> </p>
         <p class="style2"><a href="#VolumeScore">
-            2.11.14.3. Volume Overlap Score</a></p>
+            2.11.15.3. Volume Overlap Score</a></p>
       </blockquote>
     
 
@@ -386,8 +402,10 @@ Input Parameters</a></p>
 
 
 
+  <p class="style2"><a href="#MiscellaneousParameters">2.13.
+Miscellaneous Parameters</a></p>
 
-  <p class="style2"><a href="#ParameterFiles">2.13.
+  <p class="style2"><a href="#ParameterFiles">2.14.
 Parameter Files</a></p>
 
 
@@ -397,46 +415,46 @@ Parameter Files</a></p>
   <blockquote>
 
 
-    <p class="style2"><a href="#AtomDefinitionRules">2.13.1.
+    <p class="style2"><a href="#AtomDefinitionRules">2.14.1.
 Atom Definition Rules</a> </p>
 
 
 
 
 
-    <p class="style2"><a href="#vdwdefn">2.13.2.
+    <p class="style2"><a href="#vdwdefn">2.14.2.
 vdw.defn</a></p>
 
 
 
 
 
-    <p class="style2"><a href="#chemdefn">2.13.3.
+    <p class="style2"><a href="#chemdefn">2.14.3.
 chem.defn</a></p>
 
 
 
 
 
-    <p class="style2"> <a href="#chem_matchtbl">2.13.4.
+    <p class="style2"> <a href="#chem_matchtbl">2.14.4.
 chem_match.tbl</a></p>
 
 
 
 
-    <p class="style2"> <a href="#ph4defn">2.13.5.
+    <p class="style2"> <a href="#ph4defn">2.14.5.
 ph4.defn</a></p>
 
 
 
 
-    <p class="style2"> <a href="#flexdefn">2.13.6.
+    <p class="style2"> <a href="#flexdefn">2.14.6.
 flex.defn</a></p>
 
 
 
 
-    <p class="style2"> <a href="#flex_drivetbl">2.13.7.
+    <p class="style2"> <a href="#flex_drivetbl">2.14.7.
 flex_drive.tbl</a></p>
 
 
@@ -447,7 +465,7 @@ flex_drive.tbl</a></p>
 
 
 
-  <p class="style2"><a href="#ParallelProcessing">2.14.
+  <p class="style2"><a href="#ParallelProcessing">2.15.
 Parallel Processing</a> </p>
 
 
@@ -766,6 +784,14 @@ examining small molecules that are computationally derived </li>
     DOCK-Fans</a> mailing list archive.
   </p>
 
+  <p class="style2" align="left">
+    General use of DOCK does not require setting environment variables.
+    However, we recommend the name DOCK_HOME for referencing DOCK6.  During
+    installation, paths to some critical locations are hard coded.  In
+    version 6.12, some auxiliary scripts were added in directory
+    template_pipeline that do employ DOCK_HOME.
+  </p>
+
   <p class="style2" align="left">NOTE FOR WINDOWS
 USERS: DOCK and its accessories must be run using a Unix-like
 environment such as Cygwin
@@ -976,6 +1002,8 @@ a subdirectory of the test directory, one should explicitly execute make clean.
 <a href="http://honig.c2b2.columbia.edu/delphi">DelPhi</a>
     is not distributed with DOCK; see also
 <a href=" https://en.wikipedia.org/wiki/DelPhi_%28software%29">Wikipedia.</a>
+    Qnifft may now be used to calculate the electrostatic potential map (as is done with DOCK 3.7 and 3.8), instead of Delphi. 
+    Testing of these features with Qnifft requires that the environment variable QNIFFT_PATH be defined (and not DELPHI_PATH) to the full path of the Qnifft executable (this executable is available with DOCK 3.7).  
     </p>
 
     <p class="style2">DOCK with
@@ -1094,6 +1122,107 @@ This looks errant
 
 
 </blockquote>
+
+<blockquote class="style2">
+    <p class="style2">(7) Build the DOCK executables via Docker
+    </p>
+  <blockquote>
+    In the 6.12 DOCK6 release, DOCK6 can now be compiled in Docker images
+    (no relation to DOCK6). To start, you must have the <a href="https://docs.docker.com/engine/install/">
+    Docker engine</a> installed your local computer. The Docker engine is necessary
+    to generate the images from Docker files, then to run to DOCK6 program and tools
+    in a Docker container. 
+  </blockquote>
+
+  <blockquote>
+<h3 id="instructions-on-how-to-dockerize">Instructions on how to Dockerize</h3>
+<ol>
+  <li><code>cd</code> in <code>install/docker</code></li>
+  <li><code>./dockerize Dockerfile.gnu_w_parallel</code>. This will start dockerizing the dock6 build. </li>
+  <li>
+    Then the <code>dock6-suite.docker</code> &quot;binary&quot; will be generated in the <code>bin</code> folder.
+    Please be patient, this will take awhile.
+  </li>
+</ol>
+
+<h3 id="usage">Example Usage</h3>
+<h3 id="non-interactive-mode-">Non-interactive mode:</h3>
+<p><code>dock6-suite.docker -b &quot;dock6 -i dn.in -o dn.out&quot;</code></p>
+<p><code>dock6-suite.docker -b &quot;grid -i grid.in -o grid.out&quot;</code></p>
+<p><code>dock6-suite.docker -b &quot;dock6 -i dn.in -o dn.out&quot; -v /PATH/TO/FILE1 -v ../../PATH/TO/FILE2 -v /PATH/TO/DIR</code></p>
+<p><code>dock6-suite.docker -b &quot;mpirun -n 4 dock6.mpi -i dn.in -o dn.out&quot;</code></p>
+<h3 id="interactive-mode-">Interactive mode:</h3>
+<p><code>dock6-suite.docker</code></p>
+<p><code>dock6-suite.docker -v /PATH/TO/FILE1 -v ../../PATH/TO/FILE2 -v /PATH/TO/DIR</code></p>
+<h3 id="usage-flags">Usage flags</h2>
+<pre><code>Usage: dock6-suite.docker [ -h <span class="hljs-keyword">help</span> ] [ -b <span class="hljs-built_in">BINARY</span> <span class="hljs-keyword">CALL</span> <span class="hljs-keyword">WITH</span> ARGUMENTS ] [ -v mounting files <span class="hljs-keyword">and</span> folders ]
+Interactive <span class="hljs-keyword">Mode</span> <span class="hljs-keyword">Usage</span>: dock6-suite.docker [ -h <span class="hljs-keyword">help</span> ] [ -v mounting files <span class="hljs-keyword">and</span> folders ]
+</code></pre><h3 id="available-binary-calls">Available binary calls</h3>
+<pre><code>am1bcc
+amberize_complex
+amberize_ligand
+amberize_receptor
+antechamber
+atomtype
+bondtype
+chemgrid
+dock6
+dock6.mpi
+espgen
+<span class="hljs-built_in">grid</span>
+<span class="hljs-built_in">grid</span>-<span class="hljs-built_in">convert</span>
+<span class="hljs-built_in">grid</span>-convrds
+make_phimap
+mopac
+nchemgrid_GB
+nchemgrid_SA
+parmcal
+parmchk
+prepgen
+resp
+respgen
+sevsolv
+showbox
+showsphere
+solvgrid
+solvmap
+sphere_selector
+sphgen
+teLeap
+tleap
+mpirun
+</code></pre><h3 id="some-caveats">Caveats</h3>
+<ol>
+<li><p>When you use the <code>-v</code> flag, you have to repeat this flag for every file you want to mount. 
+  If you want to mount multiple files in folder, you can target the folder path.</p>
+</li>
+<li><p>By default, the path you call <code>dock6-suite.docker</code> at will be mounted to the container. </p>
+</li>
+<li><p>For non-interactive mode, make sure that input parameters that are referencing input files is just the name of the file.
+  This is because the file is mounted to the path <code>/app/workspace</code> in the Docker container. 
+  Or you can prepend all files you mounted with <code>/app/workspace</code> </p>
+</li>
+<li><p>If you like to use logical paths, 
+  you can use interactive mode to mount folders and files.
+  Then, you can start making your own dock6 input file with logical paths. </p>
+</li>
+<li><p>In non-interactive mode, you MUST enclose all binary calls within <code>&quot;&quot;</code>. </p>
+</li>
+<li><p>Unfortunately, right now calling <code>dock6-suite.docker -b &quot;dock6 -i dock6.in&quot;</code>, 
+  won't allow you to input parameters manually one by one. The <code>dock.in</code> file must be filled out first. 
+  If you want to have this behavior you must use interactive mode.</p>
+</li>
+<li><p>The wrapper functions that hide away the 
+Docker calls are assuming that your host 
+environment is in a linux based system. This is 
+because it requires <code>#!/bin/bash</code> in your 
+environment.
+</li>
+</ol>
+
+  </blockquote>
+</blockquote>
+
 
 
 <p class="style2" align="center"><a href="#TableofContents"><strong>RETURN TO TABLE OF
@@ -1230,16 +1359,54 @@ in this version.
 
   <p class="style1">Version 6.11 </p>
   <p class="style2" align="left"><font face="Arial, Helvetica, sans-serif">
-New feature includes the integration of the open-source toolkit RDKit with the 
+New features include the integration of the open-source toolkit RDKit with the 
 DOCK6 codebase, allowing users to calculate important drug-based descriptors for molecules.
 On top of the ability to calculate these descriptors, DOCK6.11 include an enhanced version of 
 DOCK_DN, termed "descriptor-driven de novo design" (DOCK_D3N). This method allows users 
 to specify descriptors (and their target ranges) to bias the on-the-fly molecular construction.
 This powerful and flexible routine tailors ligand growth towards desirable 
 regions of chemical space. Further, RDKit is utilized in a wide array of DOCK features to
-calculate descriptors for resulting molecules. (DOCK_GA, Database Filtering, Rigid/Flexible Docking)
+calculate descriptors for resulting molecules. (DOCK_GA, Database Filtering, Rigid/Flexible Docking).
+</font></p>
+
+  <p class="style1">Version 6.12 </p>
+  <p class="style2" align="left"><font face="Arial, Helvetica, sans-serif">
+New features include: An implementation of Hierarchical DataBase (HDB) 
+search method to enable large scale docking.  HDB search allows us to 
+dock db2 files as is done with DOCK3.7 and 3.8. An update to DOCK3.5 
+Score (also called ChemGrid_Score) to be compatible with DOCK3.7 and 
+3.8 scoring.  This includes using QNIFFT instead of Delphi.  
+A new scoring function called GIST_Score, (with three 
+scoring options) which accounts for receptor desolvation.  Both GIST and
+DOCK3.5 Scoring functions are now available in descriptor_score, so they
+can be combined with other methods within descriptor score. 
+(<a href="#BaliusJComputChem2024">Balius, <i>J.Comput. Chem.</i> 2024</a>).
+A covalent docking algorithm called attach-and-grow has been added.
+  
+</font></p>
+  <p class="style2" align="left"><font face="Arial, Helvetica, sans-serif">
+DOCK_DN has been rewritten to allow for a "parallel" pruning methodology
+between each layer, greatly increasing construction efficiency. A final
+Tanimoto comparison step has been added when molecules are written to 
+file as well, effectively removing duplicate molecules from a given DN
+run. The output of DOCK_DN has been overhauled to include significantly 
+more information about each step of growth, providing an
+easy-to-read description of each run.  The memory footprint of DN runs
+has been greatly improved, with pruned molecules being written out to 
+prune_dump files on-the-fly rather than at the end of each layer, or 
+discarded once pruned. An option to Grid Score has been added to 
+instead utilize Ligand Efficiency (Grid Score/# active heavy atoms) as 
+the scoring function during any given run.
+</font></p>
 
 </font></p>
+  <p class="style2" align="left"><font face="Arial, Helvetica, sans-serif">
+DOCK6 can now be containerizable by using Docker. This will help with installing
+programs that are sometimes difficult to compile. The wrapper funcitons were created
+to ease the process of generating Docker images. Further, the user can call the dock6 binary
+and tools in interactive and non-interactive mode. Note that this feature can only be
+used if your local environment has the bash scripting environment and the Docker engine.
+Look at the installation section for more information. 
 </blockquote>
 
 
@@ -1270,7 +1437,7 @@ be described below. </p>
 
 
 
-  <p class="style2" align="center"><img src="dock6_manual_files/dock_workflow.jpg" height="215" width="376"></p>
+  <p class="style2" align="center"><img src="images/dock_workflow.jpg" height="215" width="376"></p>
 
 
 
@@ -1541,7 +1708,7 @@ in the set, </p>
 
 
 
-    <p class="style2" align="center">  <img src="dock6_manual_files/sphere_match_dist.JPG" height="35" width="109"></p>
+    <p class="style2" align="center">  <img src="images/sphere_match_dist.JPG" height="35" width="109"></p>
 
 
 
@@ -2166,7 +2333,7 @@ CONTENTS</strong></a></p>
 
 
   <p class="style2">Before you can dock a ligand, you will need atom
-types and charges for every atom in the ligand. Currently, DOCK only
+types and charges for every atom in the ligand. Currently, DOCK
 reads the Tripos MOL2 format. For a single ligand (or several ligands),
 you can use Chimera in combination with <a href="#antechamber">antechamber</a> to prepare a MOL2
 file for the ligand (see <a href="http://dock.compbio.ucsf.edu/DOCK_6/tutorials/index.htm">Structure
@@ -2174,14 +2341,32 @@ Preparation Tutorial</a>)
 or various other visualization packages. During the docking procedure,
 ligands are read in from a single MOL2 or multi-MOL2 file. Atom and
 bond types are assigned using the DOCK 4 atom/bond typing <a href="#ParameterFiles">parameter files</a>.</p>
+<br>
 
+<p class="style2">
+For hierarchical database search, dock will read in db2 files which efficiently store multiple ligand conformations.  
+</p>
+<br>
 
 <p class="style2">
 Many new sampling methods have been fully integrated into DOCK6, where users will be 
 able to access powerful virtual screening capabilities, from scratch de novo growth 
-(DOCK_DN), and evolution-based searching (DOCK_GA).</p>  
+(DOCK_DN), and evolution-based searching (DOCK_GA). We have added hierarchical database search (HDB) which performs hierarchical traversal through precomputed ligand conformations to enable large-scale docking. (<a href="#BaliusJComputChem2024">Balius, <i>J.Comput. Chem.</i> 2024</a>) We also now have a covalent docking method called attach-and-grow (this method is still in development). </p>  
 
+  <p class="style2" align="left"><em><em><a name="sampling methods"></a> Sampling Method Input Parameter </em></em></p>
+<table style="border:1px solid black; width:100%">
 
+  <tr>
+    <th style="border:1px solid black;">Parameter</th>
+    <th style="border:1px solid black;">Description</th>
+    <th style="border:1px solid black;">Default Value</th>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">conformer_search_type</td>
+    <td style="border:1px solid black;">Choose the type of docking calculation: Rigid body docking (rigid), Flexible ligand docking (flex), de novo ligand design (denovo), Genetic Algorithm ligand construction (genetic), hierarchical database search (HDB), attach-and-grow (covalent)</td>
+    <td style="border:1px solid black;">flex</td>
+  </tr>
+</table>
 
 </blockquote>
 
@@ -2232,7 +2417,7 @@ most relevant for the receptor geometry. </p>
     <p class="style2">&nbsp;</p>
 
 
-  <p class="style2" align="center"><strong><strong><a name="WorkflowforAnchorandGrowAlgorithm"></a></strong></strong><img src="dock6_manual_files/anchor_grow_workflow.JPG" align="center"> </p>
+  <p class="style2" align="center"><strong><strong><a name="WorkflowforAnchorandGrowAlgorithm"></a></strong></strong><img src="images/anchor_grow_workflow.JPG" align="center"> </p>
 
   <p class="style2" align="center"><strong>Workflow
 for Anchor-and-Grow Algorithm</strong></p>
@@ -2300,7 +2485,7 @@ Specification of Non-rotatable Bonds</a>). </p>
 
 
 
-    <p class="style2" align="center"><img src="dock6_manual_files/rigid_anchor_identification.JPG" height="140" width="264"></p>
+    <p class="style2" align="center"><img src="images/rigid_anchor_identification.JPG" height="140" width="264"></p>
 
 
 
@@ -2427,7 +2612,7 @@ points):
 <br><br>
 </p>
 
-    <p class="style2" align="center"><img src="dock6_manual_files/overlapping_segments.JPG" height="132" width="306"></p>
+    <p class="style2" align="center"><img src="images/overlapping_segments.JPG" height="132" width="306"></p>
 
     <p class="style2" align="center"><strong>Identification
 of Overlapping Segments</strong></p>
@@ -2438,7 +2623,7 @@ then arranged concentrically about the anchor segment. Segments are
 reattached to the anchor according to the innermost layer first and
 within a layer to the largest segment first. </p>
 
-    <p class="style2" align="center"><img src="dock6_manual_files/layered_segments.JPG" height="304" width="316"></p>
+    <p class="style2" align="center"><img src="images/layered_segments.JPG" height="304" width="316"></p>
 
 
 
@@ -2493,7 +2678,7 @@ Each candidate is then evaluated for removal
 based on its rank and RMSD using the inequality:
 </p>
 
-    <p class="style2" align="center"><img src="dock6_manual_files/pruning.JPG" height="54" width="144" align="middle"> </p>
+    <p class="style2" align="center"><img src="images/pruning.JPG" height="54" width="144" align="middle"> </p>
 
     <p class="style2">
 If the factor is greater than
@@ -2560,7 +2745,7 @@ as </p>
 
 
 
-    <p class="style2" align="center"> <img src="dock6_manual_files/time.JPG" height="34" width="239" align="middle"></p>
+    <p class="style2" align="center"> <img src="images/time.JPG" height="34" width="239" align="middle"></p>
 
 
 
@@ -2692,11 +2877,6 @@ Lyr:5 Seg:0 104/882 retained, Pruning: 15-outside grid 22-score 741-clustered  t
     <th style="border:1px solid black;">Default Value</th>
   </tr>
   <tr>
-    <td style="border:1px solid black;">conformer_search_type</td>
-    <td style="border:1px solid black;">Choose the type of docking simulation: Rigid body docking (rigid), Flexible ligand docking (flex), de novo ligand design (denovo), Construction using a Genetic Algorithm (genetic)</td> 
-    <td style="border:1px solid black;">flex</td>
-  </tr>
-  <tr>
     <td style="border:1px solid black;">user_specified_anchor</td>
     <td style="border:1px solid black;">Will the user specify an anchor file?</td> 
     <td style="border:1px solid black;">no</td>
@@ -2735,6 +2915,11 @@ Lyr:5 Seg:0 104/882 retained, Pruning: 15-outside grid 22-score 741-clustered  t
     <td style="border:1px solid black;">pruning_clustering_cutoff</td>
     <td style="border:1px solid black;">Maximum number of clusterheads retained from pruning</td> 
     <td style="border:1px solid black;">100</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">pruning_orient_score_cutoff</td>
+    <td style="border:1px solid black;">Maximum score allowed for orientation of the anchor (kcal/mol)</td> 
+    <td style="border:1px solid black;">1000.0</td>
   </tr>
   <tr>
     <td style="border:1px solid black;">pruning_conformer_score_cutoff</td>
@@ -2805,17 +2990,16 @@ De novo  Design </strong></p>
 	iterative growth approach, sampling different fragments from sidechain, linker, and scaffold
 	libraries (see next section). The overall flowchart  for iterative growth can be seen below. 
 	</p>
-	<p class="style2" align="center"> <img src="dock6_manual_files/DOCK_DN_flowchart.jpg" align="middle"></p>
+	<p class="style2" align="center"> <img src="images/DOCK_DN_flowchart.jpg" align="middle"></p>
 	<p class="style2">All "complete" molecules, as the growth become completed (no additional 
 	attachment points possible), are written to output files that contain the prefix of
 	the recently completed layer number.  In addition, the final output file contains
-	all complete molecules that were created over the course of the run.  Depending on 
-	the protocols employed users should note that at this time output files may contain
-	different conformers for the various grown molecules (similar to standard docking 
-	runs that specify multi-conformer output).  If only a single unique conformer for 
-	each de novo grown molecule is desired, at this time, users would need to post-process
-	their results (see <a href="https://ringo.ams.stonybrook.edu/index.php/Make_Unique_script_usage">Make Unique Script Usage</a>).  A more elegant solution to 
-	this issue is being explored. </p>
+	all complete molecules that were created over the course of the run. Introduced in DOCK6.12
+  is a parameter (<i>dn_remove_duplicates</i>) that will write out only one conformer for each
+  molecule. If users wish to save more conformers, they may turn this parameter off or apply the 
+  associated parameter (<i>dn_max_duplicates_per_mol</i>) to retain more structures on write-out. If this
+  parameter is turned off and a single unique conformer is desired, users may need to post-process
+  their results. (see <a href="https://ringo.ams.stonybrook.edu/index.php/Make_Unique_script_usage">Make Unique Script Usage</a>).</p>
 
   <p class="style2">
     WARNING: Use of de novo design methods, including the genetic algorithm, must include a vdw_defn file that contains parameters for dummy atoms or unintended clashes can occur during growth. This parameter file is included with DOCK6 as vdw_de_novo.defn. 
@@ -2906,11 +3090,6 @@ De novo  Design </strong></p>
     <th style="border:1px solid black;">Default Value</th>
   </tr>
   <tr>
-    <td style="border:1px solid black;">conformer_search_type</td>
-    <td style="border:1px solid black;">Choose the type of docking simulation: Rigid body docking (rigid), Flexible ligand docking (flex), de novo ligand design (denovo), Construction using a Genetic Algorithm (genetic)</td> 
-    <td style="border:1px solid black;">flex</td>
-  </tr>
-  <tr>
     <td style="border:1px solid black;">dn_fraglib_scaffold_file</td>
     <td style="border:1px solid black;">The path to the fragment library for just scaffolds</td> 
     <td style="border:1px solid black;"> </td>
@@ -2990,7 +3169,51 @@ De novo  Design </strong></p>
     <td style="border:1px solid black;">Parameter which impacts clustering of anchor orients. The lower value the more anchor orients are kept. </td> 
     <td style="border:1px solid black;">100.0</td>
   </tr>
+  <tr>
+    <td style="border:1px solid black;">dn_remove_duplicates</td>
+    <td style="border:1px solid black;">Determines whether duplicates of complete molecules are removed at the end of growth, based on Tanimoto.</td> 
+    <td style="border:1px solid black;">yes</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dn_max_duplicates_per_mol</td>
+    <td style="border:1px solid black;">Specifies the number of molecules to be kept in the ensemble - defaulted to no duplicates.</td> 
+    <td style="border:1px solid black;">0</td>
+  </tr>
     <tr>
+    <td style="border:1px solid black;">dn_write_pruned_duplicates</td>
+    <td style="border:1px solid black;">If turned on, any duplicates that are pruned by Tanimoto will be written to their own file.</td> 
+    <td style="border:1px solid black;">no</td>
+  <tr>
+    <td style="border:1px solid black;">dn_advanced_pruning</td>
+    <td style="border:1px solid black;">Master parameter for advanced pruning.</td> 
+    <td style="border:1px solid black;">yes</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dn_prune_initial_sample</td>
+    <td style="border:1px solid black;">Controls pruning of the initial attachments performed on a growing molecule</td> 
+    <td style="border:1px solid black;">yes</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dn_sample_torsions</td>
+    <td style="border:1px solid black;">Controls whether or not torsions are sampled. Constructing with internal energy only as the scoring function is the major reason to turn this off.</td> 
+    <td style="border:1px solid black;">yes</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dn_prune_individual_torsions</td>
+    <td style="border:1px solid black;">Controls pruning of each individual torsional sampling. Each growing molecule will have all of its potential growth paths pruned for each individual attempted attachment.</td> 
+    <td style="border:1px solid black;">yes</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dn_prune_combined_torsions</td>
+    <td style="border:1px solid black;">Controls ensemble pruning for each attachment point. This is performed after all attachments for a given attachment point have been attempted and all torsions sampled.</td> 
+    <td style="border:1px solid black;">yes</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">dn_random_root_selection</td>
+    <td style="border:1px solid black;">Controls whether or not roots for the next layer will be selected randomly, rather than the best by scoring function. Constructing with internal energy only as the scoring function is the major reason to turn this off.</td> 
+    <td style="border:1px solid black;">no</td>
+  </tr>
+  <tr>
     <td style="border:1px solid black;">dn_mol_wt_cutoff_type</td>
     <td style="border:1px solid black;">Parameter which determines the use of a "hard" upper and lower cutoff for molecular weight (no molecules beyond those values) or a "soft" cutoff (accepted based on standard deviation).</td> 
     <td style="border:1px solid black;">soft</td>
@@ -3068,7 +3291,7 @@ De novo  Design </strong></p>
   <tr>
     <td style="border:1px solid black;">dn_write_prune_dump</td>
     <td style="border:1px solid black;">Write all molecules pruned out at every step (large memory output)</td> 
-    <td style="border:1px solid black;">no</td>
+    <td style="border:1px solid black;">yes</td>
   </tr>
    <tr>
     <td style="border:1px solid black;">dn_write_orients</td>
@@ -3087,14 +3310,171 @@ De novo  Design </strong></p>
   </tr>
 </table>
 <p class='style2'><em> DOCK_DN Output Components</em></p>
-	<p class='style2'>1. ${output}.denovo_build.mol2 is the mol2 file containing the complete top scoring molecules. Molecules are
-      appended to this file as molecules are built to completion.</p>
+In the 6.12 release, The output of the DOCK_DN method has been overhauled. Below is an example portion of the new output, where the given run has finished Layer 8.
 
-   <p class='style2'>2. ${output}.anchor_{#}.root_layer_{##}.mol2 is the partial molecules for each anchor (#) at each layer
-      (##). These files are generated as the algorithm is running. This feature is turned on/off by the input parameter "dn_write_checkpoints".</p>
+<br></br>
 
-   <p class='style2'>3. ${output}.anchor_{#}.prune_dump_layer_{##}.mol2 is the partial and complete molecules that were filtered out for having undesirable properties
-      for each anchor (#) at each layer (##) of growth. This feature is turned on/off by the input parameter "dn_write_prune_dump".</p>
+<pre>
+        <code>
+``` dn.out
+1  ##### Entering layer of growth #8
+2  Root size at the beginning of this layer = 6
+3    In Root [ 0], sccf atts 322 |acc mols 98 |cmpd 59 |fltrd cmpd 59 |Prnd 39 |Kpt 0 |S 16.83|A/S 19.13
+4    In Root [ 1], sccf atts 413 |acc mols 98 |cmpd 47 |fltrd cmpd 47 |Prnd 51 |Kpt 0 |S 24.50|A/S 16.85
+5    In Root [ 2], sccf atts 297 |acc mols 101|cmpd 30 |fltrd cmpd 30 |Prnd 71 |Kpt 0 |S 16.02|A/S 18.54
+6    In Root [ 3], sccf atts 390 |acc mols 83 |cmpd 39 |fltrd cmpd 38 |Prnd 44 |Kpt 0 |S 21.97|A/S 17.75
+7    In Root [ 4], sccf atts 168 |acc mols 33 |cmpd 24 |fltrd cmpd 25 |Prnd 9  |Kpt 0 |S 10.97|A/S 15.32
+8    In Root [ 5], sccf atts 28  |acc mols 0  |cmpd 0  |fltrd cmpd 0  |Prnd 0  |Kpt 0 |S  3.90|A/S 7.18
+9      From all attachments events, 1618 fragments were collected in layer 8 prior to all pruning/filtering.
+10      From accepted frags ( N= 413 ) in layer 8,
+11          Collected a total of 0 candidate root fragments, then that number goes down to 0 due to pruning by the RMSD heuristic.
+12          -------------------------------------------
+13          0    duplicate fragments were found.
+14          199  complete molecules were filtered
+15          214  root fragments were filtered
+16          0    completed molecules were written to file
+17          -------------------------------------------
+18          0    root frags intended for the next layer were further pruned via rmsd.
+19          0    candidate root frags intended for the next layer were ignored due to limit on root size.
+20          For prune_root frags, 17 frags couldn't be written out due to failed H-capping protocol
+21                                        1 frags couldn't be written out due to failed torsion checks on H-caps.
+22      
+23      Layer 8 completed! Moving on the next layer with 0 root fragments.
+24      For Layer 8, time duration is: 94.20 seconds with 17.18 with attachments per second.
+```</code></pre>
+
+<p>
+  Lines 3 to 8 shows the basic break down on how many attachments there are per working root
+molecule. The following columns show more details on each attachment type. Those columns definitions are
+shown below:
+</p>
+
+<pre>
+<code>
+DEFINITONS: 
+sccf atts: number of successful attachments.
+
+acc mols: number of accepted attachments after pruning.
+
+cmpd: number of completed number generated.
+
+fltrd cmpd: number of completed molecule that were filtered based on Molecular Weight, Formal Charge, and Number of Rotatable Bonds.
+
+Prnd: number of partially grown molecules that were pruned due to the limit set by dn_max_layer_size. 
+
+Kpt: number of partially grown molecules kept during the growth iterations via sampling the root. 
+
+S: how many seconds it took to run for a given root sampling.
+
+A/S: The number of successful attachments per second. 
+
+</code>
+</pre>
+
+
+<p>
+  Lines 9 to 21 outline the statistics on how many molecules were written out and
+  how many were further filtered for an easier understanding on how DOCK_DN is behaving. 
+  <br><br/>
+  Lines 13 to 21 displays the number of molecules that were written out and more details on why 
+  some molecules are not eligible for a write out. Further, the write out system of pruned molecules
+  has been changed to be more comprehensive. Below shows the types of output .mol2 files that are
+  written out on-the-fly.
+</p>
+{#} represents anchor number and {##} represents the layer number they have been outputted
+<br></br>
+<style type="text/css">
+.tg  {border:1px solid black; width:100%}
+.tg td{border:1px solid black; width:100%}
+.tg th{border:1px solid black; width:100%}
+.tg .tg-w2dt{border:1px solid black; width:100%}
+.tg .tg-nrix{border:1px solid black; width:100%}
+</style>
+<table class="tg">
+  <tr>
+    <td class="tg-nrix">&nbsp;&nbsp;&nbsp;<br> &nbsp;&nbsp;&nbsp;</td>
+    <td class="tg-nrix" colspan="3">&nbsp;&nbsp;&nbsp;<br>Details&nbsp;&nbsp;&nbsp;</td>
+    <td class="tg-nrix" colspan="4">&nbsp;&nbsp;&nbsp;<br>Filtering and Pruning Reasons&nbsp;&nbsp;&nbsp;</td>
+    <td class="tg-nrix">&nbsp;&nbsp;&nbsp;<br> &nbsp;&nbsp;&nbsp;</td>
+  </tr>
+  <tr>
+    <td class="tg-w2dt">Nomenclature   <br></td>
+    <td class="tg-w2dt">Finalized with?   <br></td>
+    <td class="tg-w2dt">Partially grown?<br></td>
+    <td class="tg-w2dt">Valid molecules?<br></td>
+    <td class="tg-w2dt">Prune via size max Layer   <br></td>
+    <td class="tg-w2dt">Filter via MW/ROT/FC   <br></td>
+    <td class="tg-w2dt">Prune via size of max Root   <br></td>
+    <td class="tg-w2dt">PruneRMSD via hRMSD   <br></td>
+    <td class="tg-w2dt">Output .mol2 nomenclature<br></td>
+  </tr>
+  <tr>
+    <td class="tg-nrix">   Completed</td>
+    <td class="tg-nrix">   Sidechains   </td>
+    <td class="tg-nrix">   N   </td>
+    <td class="tg-nrix">Y</td>
+    <td class="tg-nrix">   N/A   </td>
+    <td class="tg-nrix">   Pass   </td>
+    <td class="tg-nrix">   N/A   </td>
+    <td class="tg-nrix">   N/A   </td>
+    <td class="tg-nrix">   output.completed.denovo_build.mol2</td>
+  </tr>
+  <tr>
+    <td class="tg-nrix">Completed: Filtered</td>
+    <td class="tg-nrix">   Sidechains   </td>
+    <td class="tg-nrix">   N   </td>
+    <td class="tg-nrix">   Y   </td>
+    <td class="tg-nrix">   N/A   </td>
+    <td class="tg-nrix">   Failed   </td>
+    <td class="tg-nrix">   N/A   </td>
+    <td class="tg-nrix">   N/A   </td>
+    <td class="tg-nrix">   ${output}.anchor_{#}.filtered_comp_layer_{##}.mol2</td>
+  </tr>
+  <tr>
+    <td class="tg-nrix">Pruned via Root</td>
+    <td class="tg-nrix">   Hydrogens   </td>
+    <td class="tg-nrix">   Y   </td>
+    <td class="tg-nrix">   Y   </td>
+    <td class="tg-nrix">   Failed   </td>
+    <td class="tg-nrix">   Failed   </td>
+    <td class="tg-nrix">   N/A   </td>
+    <td class="tg-nrix">   N/A   </td>
+    <td class="tg-nrix">   ${output}.anchor_{#}.prune_root_layer_{##}.mol2</td>
+  </tr>
+  <tr>
+    <td class="tg-nrix">Pruned via RMSD</td>
+    <td class="tg-nrix">   Hydrogens   </td>
+    <td class="tg-nrix">   Y   </td>
+    <td class="tg-nrix">   Y   </td>
+    <td class="tg-nrix">   N/A   </td>
+    <td class="tg-nrix">   N/A   </td>
+    <td class="tg-nrix">   N/A   </td>
+    <td class="tg-nrix">   Failed   </td>
+    <td class="tg-nrix">   ${output}.anchor_{#}.prune_rmsd_mw_layer_{##}.mol2</td>
+  </tr>
+  <tr>
+    <td class="tg-nrix">Ignored Candidate Root</td>
+    <td class="tg-nrix">   Hydrogens   </td>
+    <td class="tg-nrix">   Y   </td>
+    <td class="tg-nrix">   Y   </td>
+    <td class="tg-nrix">N/A</td>
+    <td class="tg-nrix">   N/A   </td>
+    <td class="tg-nrix">   Failed   </td>
+    <td class="tg-nrix">   N/A   </td>
+    <td class="tg-nrix">   ${output}.anchor_{#}.cand_root_ign_layer_{##}.mol2</td>
+  </tr>
+  <tr>
+    <td class="tg-nrix">Propagated Root</td>
+    <td class="tg-nrix">   Attachment   Points   </td>
+    <td class="tg-nrix">   Y   </td>
+    <td class="tg-nrix">   N   </td>
+    <td class="tg-nrix">   N/A   </td>
+    <td class="tg-nrix">   N/A   </td>
+    <td class="tg-nrix">   N/A   </td>
+    <td class="tg-nrix">   N/A   </td>
+    <td class="tg-nrix">   ${output}.anchor_{#}.root_layer_{##}.mol2</td>
+  </tr>
+</table>
 
 </p>	
 </blockquote>
@@ -3338,7 +3718,7 @@ DOCK_GA: Small Molecule Evolution using a Genetic Algorithm</strong></p>
     </p>
 	</blockquote>
 
-  <div align="center"><img src="dock6_manual_files/ga_types.jpg" height="578" width="636"> </div>
+  <div align="center"><img src="images/ga_types.jpg" height="578" width="636"> </div>
 
 
 	<blockquote>
@@ -3570,6 +3950,8 @@ DOCK_GA: Small Molecule Evolution using a Genetic Algorithm</strong></p>
 
    <p class='style2'>2. ${ga_output_prefix}.restart####.mol2 is the molecules from each generation (####). This file can be used as a restart file where the user only needs to
       change simplex_random_seed to the number of the generation last completed.</p>
+</blockquote>
+
 
 
   <p class="style2" align="left"><em><em><a name="GARDKITInputParameters"></a></em> 2.5.3.2 DOCK_GA RDKit Input Parameters </em></p>
@@ -3595,12 +3977,113 @@ DOCK_GA: Small Molecule Evolution using a Genetic Algorithm</strong></p>
     </tr>
   </table>
 
+</blockquote>
+</blockquote>
+
+<p class="style1" align="center"><a href="#TableofContents">RETURN TO TABLE OF CONTENTS</a></p>
+
+<p class="style2"><strong><strong><a name="HierarchicalDataBaseSearch"></a></strong>2.5.4. Hierarchical DataBase (HDB) Search </strong></p>
+
+<blockquote>
+
+<p class="style2"> For the hierarchical database (HDB) search routine, we precompute molecule conformations, store the conformations in a DB2 file (<a href="#ColemanPlosOne2013">Coleman, <i>Plos One</i> 2013</a>; <a href="#BaliusJComputChem2024">Balius, <i>J.Comput. Chem.</i> 2024</a>) with a defined format, read these DB2 files in DOCK, and orient and search through these conformations to find the best scoring poses. For more information about HDB search see Balius et al. (<a href="#BaliusJComputChem2024">Balius, <i>J.Comput. Chem.</i> 2024</a>).  This was implemented to mimic DOCK 3.7 and to enable large scale docking with DOCK 6.  DB2 files can be downloaded from the ZINC database (<a href="https://cartblanche22.docking.org/">zinc22</a>;<a href="https://zinc20.docking.org">zinc20</a>).  
+<br>
+Example scripts for building DB2 files can be found here: "[DOCK6path]/template_pipeline/hdb_lig_gen/" 
+<br>
+<br>
+To use HDB set <strong>conformer_search_type</strong> to HDB. 
+</p>
+<br>
+  </blockquote>
+
+       </p>
+        </blockquote>
+        <p class="style2" align="left"><em><em><a name="HDBInputParameters"></a></em> 2.5.4.1 HDB Input Parameters </em></p>
+        <table style="border:1px solid black; width:100%">
+
+  <tr>
+    <th style="border:1px solid black;">Parameter</th>
+    <th style="border:1px solid black;">Description</th>
+    <th style="border:1px solid black;">Default Value</th>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">num_per_search</td>
+    <td style="border:1px solid black;">Number of poses kept for each orient.  The HDB hierarchy is oriented, and then the hierarchy is searched, and a user-specified number of poses are kept. (If the minimizer is turned on, these poses are all minimized.)</td>
+    <td style="border:1px solid black;">1</td>
+  </tr>
+    <tr>
+    <td style="border:1px solid black;">skip_broken</td>
+    <td style="border:1px solid black;">If atoms within a conformation (a branch in the hierarchy) are too close, the conformation is flagged as broken in the DB2 file. If this parameter is "yes", these conformations are skipped.</td>
+    <td style="border:1px solid black;">no</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">hdb_db2_input_file</td>
+    <td style="border:1px solid black;">This parameter is for reading in DB2 files.  The parameter can take a split_database_index file (as in DOCK 3), which contains a list of db2.gz files; or the parameter can take a single db2.gz file.</td>
+    <td style="border:1px solid black;">sdi.txt</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">hdb_db2_search_score_threshold</td>
+    <td style="border:1px solid black;">This is the score cutoff for each segment of the branch. If the score-cutoff is exceeded, then the segment is flagged and all branches containing the segment are halted. (for Grid score and ChemGrid score only VDW term is considered.)</td>
+    <td style="border:1px solid black;">10.0</td>
+  </tr>
+  </table>
+  
+  </blockquote>
+
+<p class="style1" align="center"><a href="#TableofContents">RETURN TO TABLE OF CONTENTS</a></p>
+
+
+<p class="style2"><strong><strong><a name="CovalentAttachAndGrow"></a></strong>2.5.5. Covalent Attach-and-Grow. </strong></p>
+
+<blockquote>
+
+<p class="style2"> Covalent docking can be performed in DOCK6 with the attach-and-grow method (This method is still in development. Use with caution).  Attach-and-grow requires two dummy atoms attached to the ligand atom involved in the covalent bond. Attach-and-grow should only be run with the torsion pre-minimizer (the regular minimizer will allow the molecule including the attachment point to move which is undesirable).  It uses three spheres to define the attachment location on the receptor.  For a cysteine residue these spheres correspond to SG, CB, CA.  The dummy atoms are aligned to these spheres.  The bond environment is defined by exploring the bondlength, bondlength2 and angle.  The dihedral is also sampled.  The ligand internal degrees of freedom are explored in the same way as in anchor-and-grow (using the grow periphery functionality).
+<br>
+  <p class="style2" align="center"><strong><strong><a name="CovalentBondEnvironmentForAttachAndGrow"></a></strong></strong><img src="images/attach_and_grow_covalent.JPG" align="center"> </p>
+<br>
+To use attach-and-grow set <strong>conformer_search_type</strong> to covalent. 
+</p>
+<br>
 
   </blockquote>
-  
+
+       </p>
+        </blockquote>
+        <p class="style2" align="left"><em><em><a name="CovalentInputParameters"></a></em> 2.5.5.1 Covalent Input Parameters </em></p>
+        <table style="border:1px solid black; width:100%">
+  <tr>
+    <th style="border:1px solid black;">Parameter</th>
+    <th style="border:1px solid black;">Description</th>
+    <th style="border:1px solid black;">Default Value</th>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">covalent_bondlength</td>
+    <td style="border:1px solid black;"> This defines the bond length between dummy1 (SG) and dummy2 (CB). The user can give a value, or define a range of values. start:step:stop or start:stop (assumes a step size of 0.1). </td>
+    <td style="border:1px solid black;"> 1.8 </td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">covalent_bondlength2</td>
+    <td style="border:1px solid black;"> This defines the bond length between dummy1 (SG) and the ligand atom attachment point. The user can give a value, or define a range of values. start:step:stop or start:stop (assumes a step size of 0.1).  A value of -1 will use the bond length of the input structure. </td>
+    <td style="border:1px solid black;"> -1 </td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">covalent_angle</td>
+    <td style="border:1px solid black;"> This defines the angle between dummy2 (CB), dummy1 (SG) and the ligand atom attachment point. The user can give a value, or define a range of values. start:step:stop or start:stop (assumes a step size of 0.1).  A value of -1 will use the angle of the input structure. </td>
+    <td style="border:1px solid black;"> -1 </td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">covalent_dihedral_step </td>
+    <td style="border:1px solid black;"> Parameter that defines the dihedral step size (0 to 360). The dihedral is defined by sphere 3(CA), dummy2 (CB), dummy1 (SG) and the ligand atom attachment point. a value of 10 means that 36 dihedral are explored.  </td>
+    <td style="border:1px solid black;"> 10 </td>
+  </tr>
+  </table>
+
+
+</blockquote>
+</blockquote>
+
 <p class="style1" align="center"><a href="#TableofContents">RETURN TO TABLE OF CONTENTS</a></p>
-</blockquote>
-</blockquote>
+
 	<p class="style2"><strong><strong><a name="FragmentLibraryGeneration"></a></strong>2.6.
 Fragment Library Generation </strong></p>
 <blockquote>
@@ -3949,21 +4432,21 @@ Database Filter </strong></p>
 
       <p class="style2"> (1) Standard heavy-atom RMSD (HA_RMSDs): This is the standard pair-wise RMSD calculation between the non-hydrogen atoms of a reference conformation <i>a</i> and a pose conformation <i>b</i> for a ligand with <i>N</i> total heavy atoms of index <i>i</i>:
 
-      <p class="style2" align="center"><img src="dock6_manual_files/rmsd_standard.JPG"></p><br>
+      <p class="style2" align="center"><img src="images/rmsd_standard.JPG"></p><br>
 
       
       <p class="style2"> If the HA_RMSDs is "-1000.0", then there is an inconsistency in the number of heavy atoms between the reference and the docked conformer.</p>
 
       <p class="style2"> (2) Minimum-distance heavy-atom RMSD (HA_RMSDm): This measure is based on the RMSD implementation used in AutoDock Vina (<a href="#TrottandOlsonJComputChem2010">Trott and Olson, <i>J. Comput. Chem.</i> 2010</a>), which does not explicitly enforce one-to-one mapping. Rather, atom pairings between reference conformation <i>a</i> and pose conformation <i>b</i> are determined by the minimum distance to any atom of the same element type, and it may be an under-prediction of the true RMSD.
 
-      <p class="style2" align="center"><img src="dock6_manual_files/rmsd_minimum1.JPG"></p>
-      <p class="style2" align="center"><img src="dock6_manual_files/rmsd_minimum2.JPG"></p><br>
+      <p class="style2" align="center"><img src="images/rmsd_minimum1.JPG"></p>
+      <p class="style2" align="center"><img src="images/rmsd_minimum2.JPG"></p><br>
 
       <p class="style2"> (3) Hungarian (symmetry-corrected) heavy-atom RMSD (HA_RMSDh):
 The final RMSD implementation is based on an <i>O(N^4)</i> implementation of the <i>Hungarian algorithm</i> (<a href="#KuhnNavResLogistQ1955">Kuhn, <i>Nav. Res. Logist. Q.</i> 1955</a>; <a href="#MunkresJSocIndustApplMath1957">Munkres, <i>J. Soc. Indust. Appl. Math.</i> 1957</a>). The algorithm solves the optimal assignment between a set of reference ligand atoms <i>a</i> and a set of pose ligand atoms <i>b</i> of the same size. For all groups of atoms of the same Sybyl atom type, a cost matrix <i>M</i> is populated where each matrix element <i>mij</i> is equal to the distance-squared between reference atom <i>ai</i> and pose atom <i>bj</i>. The Hungarian algorithm is used to determine one-to-one assignments between reference and pose ligand atoms such that the total distance between atoms is minimized. The new assignments <i>c(i)</i> are fed into the standard RMSD function in order to compute a symmetry-corrected RMSD. If the HA_RMSDh is "-1000.0",
 then there is an inconsistency in the number of atoms of at least one atom type between the reference and the docked conformer.  
 
-      <p class="style2" align="center"><img src="dock6_manual_files/rmsd_hungarian.JPG"></p><br>
+      <p class="style2" align="center"><img src="images/rmsd_hungarian.JPG"></p><br>
 </blockquote>
 	  <p class="style2" align="left"><em><em><a name="LigandRMSDInputParameters"></a></em>2.8.1 Ligand RMSD Parameters </em></p>
 <table style="border:1px solid black; width:100%">
@@ -4260,7 +4743,7 @@ macromolecular docking. </p>
   <tr>
     <td style="border:1px solid black;">distance_minimum</td>
     <td style="border:1px solid black;">The shortest distance allowed between 2 spheres - any sphere pair with a shorter distance is disregarded (only turned on with manually matching is used)</td> 
-    <td style="border:1px solid black;">2.0</td>
+    <td style="border:1px solid black;">0.0</td>
   </tr>
   <tr>
     <td style="border:1px solid black;">nodes_minimum</td>
@@ -4595,6 +5078,11 @@ for more background). </p>
     <td style="border:1px solid black;">1</td>
   </tr>
   <tr>
+    <td style="border:1px solid black;">grid_lig_efficiency</td>
+    <td style="border:1px solid black;">Flag to control use of ligand efficiency (Grid Score / # active heavy atoms) as primary score. </td> 
+    <td style="border:1px solid black;">no</td>
+  </tr>
+  <tr>
     <td style="border:1px solid black;">grid_score_turn_off_es</td>
     <td style="border:1px solid black;">A flag to turn off es portion of scoring function when grid score es scale = 0</td> 
     <td style="border:1px solid black;">yes</td>
@@ -4698,9 +5186,9 @@ calculation; however,
 <a href=" https://en.wikipedia.org/wiki/DelPhi_%28software%29">here.</a>
 </p>
 
+      <p class="style2">In DOCK 6.12, DOCK3.5 Score has been updated to match the DOCK 3.7 scoring function.  We can convert electrostatic grids producted with Qnifft (<a href="#ColemanPlosOne2013">Coleman, <i>Plos One</i> 2013</a>).  We can convert grids genereated with blastermaster.py to work with DOCK 6.  SolvMap has also been updated to use solvent-excluded volume (<a href="#MySingerJChemInfModel2010">MySinger, <i>J Chem Inf Model</i> 2010</a>). solvent-excluded volume solvation grids are calculated with sevsol program. 
 
-      <p class="style2">In the DOCK scoring hierarchy DOCK3.5 Score
-follows GridScore.</p>
+      <p class="style2">In the DOCK scoring hierarchy DOCK3.5 Score follows GridScore.</p>
 
 
 
@@ -5588,7 +6076,7 @@ section for every ligand.
   <a href="http://ambermd.org/">AMBER</a>.
   In particular,
   examine the amberize*.out and *.log files for warnings and errors.
-  (Note that the environment variable AMBERHOME should be undefined
+  (Note that the environment variable AMBERHOME should Not be defined
   when using AMBER score.)
   Experience using AMBER will help in understanding and judging
   the impact of the messages in these files.  Correcting problems may
@@ -6250,15 +6738,15 @@ This grid program produces the temp grid files which are then renamed by the pyt
     <td style="border:1px solid black;">Scale both VDW terms in the molecular mechanics interaction function by this amount.</td> 
     <td style="border:1px solid black;">1.0</td>
   </tr>
-  <tr>
+   <tr>
     <td style="border:1px solid black;">multigrid_score_es_scale</td>
-    <td style="border:1px solid black;">The number of grids to be used, which typically includes N selected grids plus one remainder grid.</td> 
+    <td style="border:1px solid black;">Scale both ES terms in the molecular mechanics interaction function by this amount.</td>
     <td style="border:1px solid black;">20</td>
   </tr>
   <tr>
     <td style="border:1px solid black;">multigrid_score_number_of_grids</td>
-    <td style="border:1px solid black;">Path to the reference txt file - only used when footprint reference txt is turned on.</td> 
-    <td style="border:1px solid black;">ligand_footprint.txt</td>
+    <td style="border:1px solid black;">The number of grids to be used, which typically includes N selected grids plus one remainder grid.</td> 
+    <td style="border:1px solid black;">20</td>
   </tr>
   <tr>
     <td style="border:1px solid black;">multigrid_score_grid_prefix0</td>
@@ -6523,7 +7011,7 @@ HBA        12   15.0957    0.1565   53.3356    0.3976    0.3143    0.8621    1.0
            <p class="style2"> The functional form for quantifying the pharmacophore overlap in a virtual screening experiment using DOCK, termed pharmacophore matching similarity (FMS), is as follows.
            </p>
 
-           <div align="center"><img src="dock6_manual_files/fms_equation.JPG" height="69" width="391">
+           <div align="center"><img src="images/fms_equation.JPG" height="69" width="391">
            </div>
 
            <p class="style2"> Here, <i>k</i> and <i>X</i> are constant parameters, <i>n</i> stands for the total number of matches, and <i>N</i> is the number of pharmacophore points in the reference pharmacophore. &#948<sup>+</sup><sub>A<sub>j</sub></sub> represents residual of the best match to the reference pharmacophore point A<sub>j</sub> .  See <a href="#jiangetal2015">Jiang et al.</a> for a detailed description of the matching protocols. 
@@ -6901,14 +7389,94 @@ HBA        12   15.0957    0.1565   53.3356    0.3976    0.3143    0.8621    1.0
 
 
 </blockquote>
+</blockquote>
+
+
+
+<blockquote>
+    <p class="style2" align="left"><strong><strong><a name="GISTScore"></a></strong>2.11.14. GIST Score </strong></p>
+        <blockquote>
+        <p class="style2"> 
+<b>Grid inhomogeneous solvation theory (GIST) Score.</b>  
+<br>
+Implementation is unpublished.  Based on DOCK 3.7 implementations (<a href="#BaliusPNAS2017">Balius, PNAS</a>, Stein, UCSF Thesis chapter, 2021).  (This scoring method is still in development, so use with caution ). 
+<br>
+ <b>GIST</b>
+<br>
+GIST uses the ligand atoms and their atomic radii to calculate which voxels are displaced.  Voxels are only contribute once per pose even if they are displaced by multiple atoms.   This may be used for single point and minimization.  It will work for docking with Anchor-and-grow but will be slow.  (This is currently incompatible with HDB search as implemented in DOCK 6 because we have not dealt with issues of double counting, although in DOCK 3.7, we have an implementation that avoids double counting).  
+<br>
+<b>Blurry GIST </b>
+<br>
+Blurry GIST uses the ligand atom and the atomic radius to calculate the displacement.  It uses a gaussian to scale the voxels by proximity to the atomic center.  We can then sum up voxels without concerns of double counting.  Voxels located in areas with high atomic overlap will have a higher weight then areas of low overlap by design.     
+<br>
+<b>Precomputing blurry displacement.</b>  
+<br>
+We can approximate the Blurry GIST result by using tri-linear interpolation performed on a GIST grid where the displacement has been precalculated.  This precalculated grid is generated by placing a probe sphere on each grid point summing up the displaced voxels using a gaussian weighting from the center.  These new grids will be smaller than the original grids (we only use precomputed points that to not go outside the original grid).  (The python program to calculate this is called dx-gist_precalculate_sphere_gausian.py and is available in on github: https://github.com/tbalius/GIST_DX_tools).   
+
+<br>
+<b> Caveat.</b>  
+<br>  GIST score only calculates receptor desolvation energies.  To include ligand-receptor sterics (vdw) and electrostatics, users should combine GIST score with DOCK 3.5 score or Grid score in descriptor score (see below). 
+        </p>
+</blockquote>
+
+<blockquote>
+
+   <a name="GISTScoreParameters"></a>
+<p class="style2" align="left"><em>2.11.14.1. GIST Score Parameters </em></p>
+<table style="border:1px solid black; width:100%">
+  <tr>
+    <td style="border:1px solid black;">gist_score_primary</td>
+    <td style="border:1px solid black;">Yes or no.  Use gist as the scoring function.</td> 
+    <td style="border:1px solid black;">no</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">gist_score_att_exp</td>
+    <td style="border:1px solid black;">The attactive van der Waals exponent. This is used to calculate atomic radius.</td> 
+    <td style="border:1px solid black;">6</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">gist_score_rep_exp</td>
+    <td style="border:1px solid black;">The repulsive van der Waals exponent. This is used to calculate atomic radius.</td> 
+    <td style="border:1px solid black;">12</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">gist_score_gist_scale</td>
+    <td style="border:1px solid black;">The value to scale the gist energies by. GIST quantifies how favoarable a water is a voxel.  If the voxel is favorable, then it is unfavorable to displace and vise versa. So this value should be negative. </td> 
+    <td style="border:1px solid black;">-1</td>
+  </tr>
+
+  <tr>
+    <td style="border:1px solid black;">gist_score_gist_type</td>
+    <td style="border:1px solid black;">See discussion above. There are three options: trilinear, displace, and blurry_displace.</td> 
+    <td style="border:1px solid black;">trilinear</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">gist_score_grid_file</td>
+    <td style="border:1px solid black;">GIST grid. For trilinear option then use precomputed displacement grid.</td> 
+    <td style="border:1px solid black;">grid.dx</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">gist_score_blurry_gist_div</td>
+    <td style="border:1px solid black;">Sigma determines the sharpness of the peak of the Gaussian.  Sigma equals the radius divided by this value(D): &#x3C3_a = r_a / D.  This parameter is only used for blurry displacement.  </td>
+    <td style="border:1px solid black;">2.0</td>
+  </tr>
+
+  <tr>
+    <td style="border:1px solid black;">gist_score_Hydrogen_grid_file</td>
+    <td style="border:1px solid black;">Only asked if trilinear option is selected. Use precomputed displacement grid computed with probe with a smaller radius. </td> 
+    <td style="border:1px solid black;">grid_h.dx</td>
+  </tr>
+</table>  
 
 </blockquote>
+</blockquote>
+
 
 <p class="style1" align="center"><a href="#TableofContents">RETURN TO TABLE OF CONTENTS</a></p>
 
 
 <blockquote>
-    <p class="style2" align="left"><strong><strong><a name="DescriptorScore"></a></strong>2.11.14. Descriptor Score </strong></p>
+    <p class="style2" align="left"><strong><strong><a name="DescriptorScore"></a></strong>2.11.15. Descriptor Score </strong></p>
     <blockquote>
         <p class="style2">The Descriptor Score is a newly developed scoring function that is a linear combination of scoring functions that allows users to guide sampling and evaluate docked molecules with one or more scoring criteria that emphasize different properties of the molecule.  </p>
         <p class="style2"> Note: Users should be aware that in versions 6.7 and earlier of DOCK, Descriptor Score was only used for Footprint Score. </p>
@@ -6920,7 +7488,7 @@ HBA        12   15.0957    0.1565   53.3356    0.3976    0.3143    0.8621    1.0
            <p class="style2">Descriptor score, as defined above, is a linear combination of various existing and newly developed scoring functions of DOCK, in the following formula:
            </p>
 
-           <div align="center"><img src="dock6_manual_files/descriptorscore.jpg" height="52" width="630">
+           <div align="center"><img src="images/descriptorscore.jpg" height="52" width="630">
            </div>
 
            <p class="style2">Here the total score can consist of different scoring functions including <a href="#GridBasedScore">grid-based score</a>, <a href="#MultiGridScore">multigrid FPS score</a>, <a href="#ContinuousScore">continuous score</a>, <a href="#FootprintScore">footprint score</a>, <a href="#PharmacophoreScore"> pharmacophore matching similarity score</a>, <a href="#TanimotoScore">Tanimoto score</a>, <a href="#HungarianScore">Hungarian matching similarity score</a> and <a href="#VolumeScore">volume overlap score</a>.
@@ -6960,7 +7528,7 @@ are roughly in the same range; this ensures that different properties are equall
         </p>
 
    <a name="DescriptorScoreParameters"></a>
-<p class="style2" align="left"><em>2.11.14 Descriptor Score Parameters </em></p>
+<p class="style2" align="left"><em>2.11.15 Descriptor Score Parameters </em></p>
 <table style="border:1px solid black; width:100%">
 
   <tr> 
@@ -7011,6 +7579,16 @@ are roughly in the same range; this ensures that different properties are equall
   <tr>
     <td style="border:1px solid black;">descriptor_use_volume_overlap</td>
     <td style="border:1px solid black;">Flag to use volume overlap score as a component of descriptor score.</td> 
+    <td style="border:1px solid black;">no</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">descriptor_use_gist</td>
+    <td style="border:1px solid black;">Flag to use gist score as a component of descriptor score.</td> 
+    <td style="border:1px solid black;">no</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">descriptor_use_dock3.5</td>
+    <td style="border:1px solid black;">Flag to use chemgrid score (and its components) as part of descriptor score.</td> 
     <td style="border:1px solid black;">no</td>
   </tr>
 </table>  
@@ -7081,6 +7659,16 @@ are roughly in the same range; this ensures that different properties are equall
     <td style="border:1px solid black;">Weight for volume overlap score</td> 
     <td style="border:1px solid black;">-1</td>
   </tr>
+  <tr>
+    <td style="border:1px solid black;">descriptor_weight_dock_3.5_score</td>
+    <td style="border:1px solid black;">Weight for dock_3.5 score</td> 
+    <td style="border:1px solid black;">1</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">descriptor_weight_gist_score</td>
+    <td style="border:1px solid black;">Weight for gist score.  Pay attention to the internal weight (if both are negative one that is going to give a weight of +1).</td> 
+    <td style="border:1px solid black;">-1</td>
+  </tr>
   </table>
      
 
@@ -7093,7 +7681,7 @@ are roughly in the same range; this ensures that different properties are equall
            </p>
 
     <blockquote>
-        <p class="style2" align="left"><em><em><a name="TanimotoScore"></a></em>2.11.14.1. Tanimoto Score </em></p>
+        <p class="style2" align="left"><em><em><a name="TanimotoScore"></a></em>2.11.15.1. Tanimoto Score </em></p>
         <blockquote>
 
         <p class="style2">The Tanimoto score is a two-dimensional (i.e. does not consider three-dimensional position or conformation) chemical similarity between a candidate molecule and a user-supplied reference molecule.
@@ -7102,7 +7690,7 @@ are roughly in the same range; this ensures that different properties are equall
         <p class="style2">In DOCK, molecular fingerprints, or unique molecule identifiers, are computed in a manner inspired by the MOLPRINT 2D method described by <a href="#benderetal2004">Bender et al. 2004</a>. Briefly, for every atom in a candidate molecule, its local topology in all directions one, two, and three bonds away is computed and stored as a string. The atom hybridization, as well as bond order are considered in these environments. The collection of all atom environments in a molecule constitutes its fingerprint. Fingerprints between a candidate molecule (<i>a</i>) and a reference molecule (<i>b</i>) can be compared based on the number of features they have in common (<i>F<sub>a,b</sub></i>), and the number of features found in only either the candidate (<i>F<sub>a</sub></i>) or in the reference (<i>F<sub>b</sub></i>):
         </p>
 
-                   <div align="center"><img src="dock6_manual_files/tanimoto.jpg" height="60" width="240">
+                   <div align="center"><img src="images/tanimoto.jpg" height="60" width="240">
                    </div>
 
         <p class="style2">The user provides a <i>mol2</i> file containing the reference molecule for comparison. A perfect match between two identical molecules will return a Tanimoto score of 1.0, and two molecules which share no features will return a Tanimoto score of 0.0. Molecules which share some, but not all, features, will return a value between 0.0 and 1.0.
@@ -7139,7 +7727,7 @@ are roughly in the same range; this ensures that different properties are equall
     </blockquote>
 
     <blockquote>
-        <p class="style2" align="left"><em><em><a name="HungarianScore"></a></em>2.11.14.2. Hungarian Matching Similarity Score </em></p>
+        <p class="style2" align="left"><em><em><a name="HungarianScore"></a></em>2.11.15.2. Hungarian Matching Similarity Score </em></p>
         <blockquote>
 
         <p class="style2">The Hungarian matching similarity score is a combined two- and three-dimensional (i.e. it considers both chemical composition and three-dimensional position and conformation) similarity between a candidate molecule and a user-supplied reference molecule.
@@ -7147,7 +7735,7 @@ are roughly in the same range; this ensures that different properties are equall
         <p class="style2">The Hungarian algorithm in DOCK was originally implemented to correct for molecule symmetry in RMSD calculations as described previously <a href="#allenetal2014">Allen et al., 2014</a>. It has been adapted as a scoring function for comparing dissimilar molecules based on both chemical composition and spatial position / conformation at the same time. The function used to compute Hungarian RMSD is as follows:
         </p>
 
-                   <div align="center"><img src="dock6_manual_files/hungarian.jpg" height="70" width="420">
+                   <div align="center"><img src="images/hungarian.jpg" height="70" width="420">
                    </div>
 
         <p class="style2">Where <i>#<sub>ref</sub></i> is the number of atoms in the larger molecule (whichever has more atoms), <i>#<sub>unmatched</sub></i> is the number of atoms that are dissimilar between the two molecules, <i>RMSD<sub>matched</sub></i> is the symmetry-corrected RMSD between the atoms that are in common, and <i>C<sub>1</sub></i> and <i>C<sub>2</sub></i> are weighted coefficients. Given the default coefficients of <i>C<sub>1</sub></i> = -5 and <i>C<sub>2</sub></i> = 1, the two terms will be weighted approximately the same, and a larger negative value (or a positive value closer to zero), will be considered more favorable.
@@ -7203,7 +7791,7 @@ are roughly in the same range; this ensures that different properties are equall
     </blockquote>
 
     <blockquote>
-        <p class="style2" align="left"><em><em><a name="VolumeScore"></a></em>2.11.14.3. Volume Overlap Score </em></p>
+        <p class="style2" align="left"><em><em><a name="VolumeScore"></a></em>2.11.15.3. Volume Overlap Score </em></p>
         <blockquote>
 
         <p class="style2">The volume overlap score is a scoring function that calculates property-based spacial occupation similarity between a reference molecule and a candidate molecule in three dimensional space.
@@ -7220,12 +7808,12 @@ are roughly in the same range; this ensures that different properties are equall
         <p class="style2">The analytical method used to calculate volume overlap score employs an algorithm developed and published by <a href="#sastryetal2015">Sastry et al.</a>, in which <i>o<sub>ab</sub></i> is defined as the overlapping volume of two atoms <i>a</i> and <i>b</i>, from two sets of atoms <i>A</i> and <i>B</i>, respectively, and <i>O<sub>AB</sub></i> is defined as the total overlap:
         </p>
 
-                   <div align="center"><img src="dock6_manual_files/overlap.jpg" height="60" width="200">
+                   <div align="center"><img src="images/overlap.jpg" height="60" width="200">
                    </div>
 
         <p class="style2">The volume overlap is defined as follows:</p>
 
-                   <div align="center"><img src="dock6_manual_files/volume.jpg" height="60" width="200">
+                   <div align="center"><img src="images/volume.jpg" height="60" width="200">
                    </div>
 
         <p class="style2">The analytical method reports a very efficient but slightly rough estimation of volume overlap between two sets of atoms, so it is good to be used for on-the-fly sampling purposes.
@@ -7236,7 +7824,7 @@ are roughly in the same range; this ensures that different properties are equall
         <p class="style2">Another method to calculate overlapping volume of two sets of atoms is a grid-based method.  With this method, a bounding box that contains all the atoms is first generated, and within the box, grid points are generated with user defined grid separation.  The overlapping volume is then determined by counting the number of grid points only in set <i>A</i> and set <i>B</i> and in both set <i>A</i> and <i>B</i>, which is calculated by the following form:
         </p>
 
-                   <div align="center"><img src="dock6_manual_files/volumescore.jpg" height="50" width="250">
+                   <div align="center"><img src="images/volumescore.jpg" height="50" width="250">
                    </div>
 
         <p class="style2">With the grid-based method, the accuracy of overlapping volume can be very high with a very small grid separation, but is more computationally expensive when compared to the analytical method, so it is recommended to be used for rescoring but not on-the-fly sampling.
@@ -7286,28 +7874,39 @@ are roughly in the same range; this ensures that different properties are equall
   </tr>
 </table>
 
-             <p class="style2"><em>Volume Overlap Score Output Components</em></p>
+             <p class="style2"><em>Volume Overlap Score Output Components</em>
+            
+            </p>
+            <p>
+              Below are the components for Volumne Overlap Score. Property_Volume_Score is an average 
+              of 6 different types of volumn overlap.
+              It is possible that two different molecules with the exact same chemical structure with perfect overlap 
+              may result in a Property_Volume_Score less than 1.0 if one of the components is not present. For example, 
+              a perfect overlap of two benzene ring would report a 0.0 for hydrophilic overlap, lowering Property_Volume_Score
+              to ~0.83, while all other components would be almost exactly 1.0.
+
+            </p>
              <ul>
                <li class="style2"> Property_Volume_Score: <br>
-               #volume overlap similarity<br>
+               #volume overlap similarity (VOS)<br>
                </li>
                <li class="style2">desc_VOS_geometric_vo: <br>
-               #geometric volume overlap<br>
+               #geometric volume overlap (VOG)<br>
                </li>
                <li class="style2">desc_VOS_hvy_atom_vo: <br>
-               #heavy atom volume overlap between the reference and candidate molecule<br>
+               #heavy atom volume overlap between the reference and candidate molecule (VOH)<br>
                </li>
                <li class="style2">desc_VOS_pos_chrg_atm_vo: <br>
-               #positive charge atom volume overlap between the reference and candidate molecule<br>
+               #positive charge atom volume overlap between the reference and candidate molecule (VOP)<br>
                </li>
                <li class="style2">desc_VOS_neg_chrg_atm_vo: <br>
-               #negative charge atom volume overlap between the reference and candidate molecule<br>
+               #negative charge atom volume overlap between the reference and candidate molecule (VON)<br>
                </li>
                <li class="style2">desc_VOS_hydrophobic_atm_vo: <br>
-               #hydrophobic atom volume overlap between the reference and candidate molecule<br>
+               #hydrophobic atom volume overlap between the reference and candidate molecule (VOB)<br>
                </li>
                <li class="style2">desc_VOS_hydrophilic_atm_vo: <br>
-               #hydrophilic atom volume overlap between the reference and candidate molecule<br>
+               #hydrophilic atom volume overlap between the reference and candidate molecule (VOC)<br>
                </li>
              </ul>
              </p>
@@ -7358,7 +7957,9 @@ The units of <strong> XXX_tors_step </strong> are degrees.
   <p class="style2">
 Users can choose to minimize the rigid anchors and minimize during flexible growth.
 Note that the <strong>simplex_final_min</strong> (minimize the final conformation)
-option has been removed starting with version 6.4.
+option was removed starting with version 6.4.
+Note that the <strong>simplex_final_min</strong> (minimize the final conformation(s))
+option has been added back in starting with version 6.12. We added back simplex final min. (It is useful for mirroring DOCK3.7 behavior.) It will only minimize those molecule being written to mol2 file (<a href="#BaliusJComputChem2024">Balius, <i>J.Comput. Chem.</i> 2024</a>).
 The recommendation now is to use the internal energy function;
 it is included as part of the minimization routine at each stage of growth.
 If a user wishes to do a final step of minimization, DOCK can be run an additional time
@@ -7417,7 +8018,7 @@ The minimizer may be performing too much sampling by moving partially grown conf
 RMSD and RMSD<sup>2</sup> are metrics for the distances between two molecules.
 RMSD<sup>2</sup> can be thought of as the mean squared distance.
 </p>
-<p class="style2" align="center"><strong><strong><a name="RMSD equation"></a></strong></strong><img src="dock6_manual_files/RMSD.jpg"> </p>
+<p class="style2" align="center"><strong><strong><a name="RMSD equation"></a></strong></strong><img src="images/RMSD.jpg"> </p>
 <p class="style2">
 where the variables ai and bi are the Cartesian coordinates of the same atom from two conformers of the same molecule.  An intuitive way to restrain a (partial or fully grown) conformer is to use Hooke's law: 
 </p>
@@ -7504,13 +8105,8 @@ TO TABLE OF CONTENTS</a></span></p>
     <td style="border:1px solid black;">10.0</td>
   </tr>
   <tr>
-    <td style="border:1px solid black;">simplex_secondary_minimize_pose</td>
-    <td style="border:1px solid black;">Flag to perform an additional step of minimization using the secondary scoring function.</td> 
-    <td style="border:1px solid black;">yes</td>
-  </tr>
-  <tr>
-    <td style="border:1px solid black;">use_advanced_secondary_simplex_parameters</td>
-    <td style="border:1px solid black;">Flag to use a simplified set of common minimization parameters for each of the minimization steps listed above.</td> 
+    <td style="border:1px solid black;">simplex_final_min</td>
+    <td style="border:1px solid black;">Flag for using a final minimization step on poses before writing them out.  If yes then minimize poses before writing out. if no then just write out poses. Useful for HDB search. </td> 
     <td style="border:1px solid black;">no</td>
   </tr>
   <tr>
@@ -7533,8 +8129,6 @@ Generic Minimizer Parameters</a> </em></p>
     <li class="style2">if use_advanced_simplex_parameters = no AND minimize_anchor = yes, XXX = simplex_anchor</li>
 
     <li class="style2">if use_advanced_simplex_parameters = no AND minimize_flexible_growth = yes, XXX = simplex_grow</li>
-
-    <li class="style2">if simplex_secondary_minimize_pose AND use_advanced_secondary_simplex_parameters, XXX = simplex_secondary</li>
 
   </ol>
 
@@ -7570,11 +8164,85 @@ Generic Minimizer Parameters</a> </em></p>
 </blockquote>
 
 
+<p align="center"><span class="style1"><a href="#TableofContents">RETURN TO TABLE OF CONTENTS</a></span></p>
+
+
+<p class="style2" align="left"><strong><a name="MiscellaneousParameters"></a>2.13.
+Miscellaneous Parameters</strong></p>
+
+
+<blockquote>
+
+  <p class="style2" align="left"> There are a few parameters that govern the output of the mol2 files produced by DOCK6, presented in the table below.  
+</p>
+
+<p class="style2"><em>Miscellaneous Parameters </em></p>
+ <table style="border:1px solid black; width:100%">
+
+  <tr>
+    <th style="border:1px solid black;">Parameter</th>
+    <th style="border:1px solid black;">Description</th>
+    <th style="border:1px solid black;">Default Value</th>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">ligand_outfile_prefix</td>
+    <td style="border:1px solid black;">prefix for the output mol2 files including the {ligand_outfile_prefix}_scored.mol2 file.</td>
+    <td style="border:1px solid black;">output</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">write_mol_solvation</td>
+    <td style="border:1px solid black;">for ChemGrid Score, per-atom solvation parameters are needed.  These parameters, per-atom values, maybe written into the output mol2 file ({ligand_outfile_prefix}_scored.mol2) in the "@&ltTRIPOS&gtSOLVATION" section of the mol2 file. They will be the same values that are read in (controlled by read_mol_solvation).</td>
+    <td style="border:1px solid black;">no</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">write_orientations</td>
+    <td style="border:1px solid black;"> controls whether to write out orientations into the {ligand_outfile_prefix}_orients.mol2 file. This is useful for debugging purposes.</td>
+    <td style="border:1px solid black;">no</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">num_scored_conformers</td>
+    <td style="border:1px solid black;">controls the number of conformers (poses) written out into the {ligand_outfile_prefix}_scored.mol2 file.</td>
+    <td style="border:1px solid black;">1</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">write_conformations</td>
+    <td style="border:1px solid black;">This parameter only appears if num_scored_conformers greater than 1.  controls whether to write out conformers (poses) into the {ligand_outfile_prefix}_conformers.mol2 file. useful for debugging purposes</td>
+    <td style="border:1px solid black;">yes</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">cluster_conformations</td>
+    <td style="border:1px solid black;">This parameter only appears if num_scored_conformers greater than 1. This parameter controls whether to cluster the poses (conformers) and write out only conformationally divers poses to the {ligand_outfile_prefix}_scored.mol2 file.  If cluster_conformations is no, then {ligand_outfile_prefix}_conformers.mol2 and {ligand_outfile_prefix}_scored.mol2 will contain the same poses, if yes then {ligand_outfile_prefix}_scored.mol2 will contain only distinct poses, a subset of the poses in {ligand_outfile_prefix}_conformers.mol2. </td>
+    <td style="border:1px solid black;">yes</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">cluster_rmsd_threshold</td>
+    <td style="border:1px solid black;"> defines the threshold used for the best-first clustering of poses (conformers) written to {ligand_outfile_prefix}_scored.mol2. It controls how distinct the poses are from one another. The larger the threshold the more encompassing the cluster (bigger clusters) and the fewer poses written out. </td>
+    <td style="border:1px solid black;">2.0</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">score_threshold</td>
+    <td style="border:1px solid black;"> only poses whose scores are below this threshold will be written out to the {ligand_outfile_prefix}_scored.mol2 file.  This is important for large-scale docking so that only molecules with good scores will be written out (this helps control the disk footprint of the calculation). The more negative the fewer poses are written.</td>
+    <td style="border:1px solid black;">100</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">rank_ligands</td>
+    <td style="border:1px solid black;"> when a multi-mol2 file is docked this parameter will sort the poses by score and rank the ligands poses in order of score within the {ligand_outfile_prefix}_scored.mol2 file. (currently, this parameter should not be uses with the mpi version of DOCK).</td>
+    <td style="border:1px solid black;">no</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid black;">max_ranked_ligands</td>
+    <td style="border:1px solid black;"> This parameter only appears if rank_ligands is set to yes. It controls the number of poses (molecules) written to the {ligand_outfile_prefix}_scored.mol2 file.</td>
+    <td style="border:1px solid black;">500</td>
+  </tr>
+
+</table>
+
+</blockquote>
 
 <p align="center"><span class="style1"><a href="#TableofContents">RETURN TO TABLE OF CONTENTS</a></span></p>
 
 
-<p class="style2" align="left"><strong><a name="ParameterFiles"></a>2.13.
+<p class="style2" align="left"><strong><a name="ParameterFiles"></a>2.14.
 Parameter Files</strong></p>
 
 
@@ -7597,7 +8265,7 @@ DOCK distribution. </p>
 
   <blockquote>
 
-    <p class="style2"><em><em><a name="AtomDefinitionRules"></a></em>2.13.1.
+    <p class="style2"><em><em><a name="AtomDefinitionRules"></a></em>2.14.1.
 Atom Definition Rules </em></p>
 
     <blockquote>
@@ -7938,7 +8606,7 @@ nitrogen). </p>
 
   <blockquote>
 
-    <p class="style2"><em><em><a name="vdwdefn"></a></em>2.13.2. vdw.defn </em></p>
+    <p class="style2"><em><em><a name="vdwdefn"></a></em>2.14.2. vdw.defn </em></p>
 
     <blockquote>
 
@@ -8141,7 +8809,7 @@ TO TABLE OF CONTENTS</a></span> </p>
   <blockquote>
 
 
-    <p class="style2"><em><a name="chemdefn"></a>2.13.3.
+    <p class="style2"><em><a name="chemdefn"></a>2.14.3.
 chem.defn</em> </p>
 
 
@@ -8291,7 +8959,7 @@ ________________________________________________________ </p>
   <blockquote>
 
 
-    <p class="style2"><em><em><a name="chem_matchtbl"></a></em>2.13.4.
+    <p class="style2"><em><em><a name="chem_matchtbl"></a></em>2.14.4.
 chem_match.tbl </em></p>
 
 
@@ -8424,7 +9092,7 @@ table <br>
   <blockquote>
 
 
-    <p class="style2"><em><em><a name="ph4defn"></a></em>2.13.5. ph4.defn </em></p>
+    <p class="style2"><em><em><a name="ph4defn"></a></em>2.14.5. ph4.defn </em></p>
 
 
     <blockquote>
@@ -8507,7 +9175,7 @@ ________________________________________________________</p>
   <blockquote>
 
 
-    <p class="style2"><em><em><a name="flexdefn"></a></em>2.13.6. flex.defn </em></p>
+    <p class="style2"><em><em><a name="flexdefn"></a></em>2.14.6. flex.defn </em></p>
 
 
     <blockquote>
@@ -8518,7 +9186,7 @@ definitions for
 flexible bond identification. The drive_id field corresponds to a
 torsion type in the <a href="#flex_drivetbl">flex_drive.tbl</a>
 file.
-The minimize field is a flag for whether the bond may be minimized. Two
+The minimize field is a flag for whether the bond may be minimized (This is currently disabled and this flag has no effect on the calculation). Two
 definition lines must be present. Each definition corresponds to an
 atom at either end of the bond. </p>
 
@@ -8662,7 +9330,7 @@ ______________________________________ </p>
   <blockquote>
 
 
-    <p class="style2"><em><em><a name="flex_drivetbl"></a></em>2.13.7.
+    <p class="style2"><em><em><a name="flex_drivetbl"></a></em>2.14.7.
 flex_drive.tbl </em></p>
 
 
@@ -8894,7 +9562,7 @@ These parameters are indicated below by additional indentation. </p>
   </strong></p>
 
 
-  <p class="style2" align="left"><strong><strong><a name="ParallelProcessing" id="ParallelProcessing"></a></strong>2.14.
+  <p class="style2" align="left"><strong><strong><a name="ParallelProcessing" id="ParallelProcessing"></a></strong>2.15.
     Parallel Processing </strong></p>
   <blockquote>
 
@@ -9080,6 +9748,42 @@ These parameters are indicated below by additional indentation. </p>
     <td style="border:1px solid black;">receptor_out.mol2</td>
   </tr>
   <tr>
+<td style="border:1px solid black;">atom_model</td>
+    <td style="border:1px solid black;"> Choice of atom model. united atom, u, or all atom, a. </td> 
+    <td style="border:1px solid black;">a (CHECK)</td>
+  </tr>
+  <tr>
+<td style="border:1px solid black;">attractive_exponent</td>
+    <td style="border:1px solid black;"> Specify the attractive van der Waals exponent. </td> 
+    <td style="border:1px solid black;"> 6 </td>
+  </tr>
+  <tr>
+<td style="border:1px solid black;">repulsive_exponent</td>
+    <td style="border:1px solid black;"> Specify the repulsive van der Waals exponent. most offten 12, hard, or 9, Soft. </td> 
+    <td style="border:1px solid black;"> 12 (CHECK) </td>
+  </tr>
+  <tr>
+<td style="border:1px solid black;">distance_dielectric</td>
+    <td style="border:1px solid black;"> Indicates wether to use a disance dependent dielectic or not.  if "yes", distance dependent dielectic is used.  if "no" standared is used.   </td> 
+    <td style="border:1px solid black;">yes (CHECK)</td>
+  </tr>
+  <tr>
+<td style="border:1px solid black;">dielectric_factor</td>
+    <td style="border:1px solid black;"> specify the dielectic_factor. (a value of 1 will have no screening, if distance_dielectric is turned off).  4 is often used for protein (little screening).  80 is often used for water.  </td> 
+    <td style="border:1px solid black;">4</td>
+  </tr>
+  <tr>
+<td style="border:1px solid black;">bump_filter</td>
+    <td style="border:1px solid black;">Weither to generate a bump grid.</td> 
+    <td style="border:1px solid black;">yes</td>
+  </tr>
+  <tr>
+<td style="border:1px solid black;">bump_overlap</td>              0.75
+    <td style="border:1px solid black;">bump grid parameter. (more details?) </td> 
+    <td style="border:1px solid black;">0.75 (check)</td>
+  </tr>
+
+  <tr>
     <td style="border:1px solid black;">receptor_file</td>
     <td style="border:1px solid black;">Receptor coordinate file. Partial charges and atom types need to be present.</td> 
     <td style="border:1px solid black;">receptor.mol2</td>
@@ -9180,7 +9884,7 @@ These parameters are indicated below by additional indentation. </p>
 
 
 
-    <p class="style2" align="center"><img src="dock6_manual_files/contact_score.JPG" height="306" width="556" align="middle"></p>
+    <p class="style2" align="center"><img src="images/contact_score.JPG" height="306" width="556" align="middle"></p>
 
 
 
@@ -9250,7 +9954,7 @@ These parameters are indicated below by additional indentation. </p>
 
 
   </blockquote>
-    <div align="center"><img src="dock6_manual_files/grid_score_function.JPG" height="76" width="322"> </div>
+    <div align="center"><img src="images/grid_score_function.JPG" height="76" width="322"> </div>
     <blockquote>
 
 
@@ -9278,7 +9982,7 @@ These parameters are indicated below by additional indentation. </p>
 
 
   </blockquote>
-    <div align="center"><img src="dock6_manual_files/grid_vdw_term.JPG" height="70" width="311">
+    <div align="center"><img src="images/grid_vdw_term.JPG" height="70" width="311">
     </div>
     <blockquote>
 
@@ -9291,10 +9995,10 @@ These parameters are indicated below by additional indentation. </p>
 
 
   </blockquote>
-    <p align="center"><img src="dock6_manual_files/grid_vdw_energy_deriv.JPG" height="46" width="99" align="middle"> <span class="style2">at</span>
-    <img src="dock6_manual_files/grid_radius.JPG" height="19" width="74"></p>
-    <p align="center"><img src="dock6_manual_files/grid_vdw_energy.JPG" height="24" width="99" align="middle"><span class="style2">
-    at</span> <img src="dock6_manual_files/grid_radius.JPG" height="19" width="74"></p>
+    <p align="center"><img src="images/grid_vdw_energy_deriv.JPG" height="46" width="99" align="middle"> <span class="style2">at</span>
+    <img src="images/grid_radius.JPG" height="19" width="74"></p>
+    <p align="center"><img src="images/grid_vdw_energy.JPG" height="24" width="99" align="middle"><span class="style2">
+    at</span> <img src="images/grid_radius.JPG" height="19" width="74"></p>
     <blockquote>
 
 
@@ -9306,7 +10010,7 @@ These parameters are indicated below by additional indentation. </p>
 
 
   </blockquote>
-    <div align="center"><img src="dock6_manual_files/grid_generic_vdw.JPG" height="69" width="420">
+    <div align="center"><img src="images/grid_generic_vdw.JPG" height="69" width="420">
     </div>
     <blockquote>
 
@@ -9319,7 +10023,7 @@ These parameters are indicated below by additional indentation. </p>
 
 
   </blockquote>
-    <div align="center"><img src="dock6_manual_files/grid_graph_vdw_potentials.JPG" height="304" width="488"> </div>
+    <div align="center"><img src="images/grid_graph_vdw_potentials.JPG" height="304" width="488"> </div>
     <p class="style2" align="center"><strong>Distance
     dependence of the Lennard -Jones Function </strong></p>
     <p class="style2" align="center"><u>Precomputing
@@ -9335,8 +10039,8 @@ These parameters are indicated below by additional indentation. </p>
 
 
   </blockquote>
-    <p align="center"><img src="dock6_manual_files/grid_generic_A.JPG" height="64" width="202"></p>
-    <p align="center"><img src="dock6_manual_files/grid_generic_B.JPG" height="64" width="201"></p>
+    <p align="center"><img src="images/grid_generic_A.JPG" height="64" width="202"></p>
+    <p align="center"><img src="images/grid_generic_B.JPG" height="64" width="201"></p>
     <blockquote>
 
 
@@ -9348,8 +10052,8 @@ These parameters are indicated below by additional indentation. </p>
 
 
   </blockquote>
-    <p align="center"><img src="dock6_manual_files/grid_A.JPG" height="43" width="184"></p>
-    <p align="center"><img src="dock6_manual_files/grid_B.JPG" height="39" width="166" border="0"></p>
+    <p align="center"><img src="images/grid_A.JPG" height="43" width="184"></p>
+    <p align="center"><img src="images/grid_B.JPG" height="39" width="166" border="0"></p>
     <blockquote>
 
 
@@ -9359,7 +10063,7 @@ These parameters are indicated below by additional indentation. </p>
 
 
   </blockquote>
-    <div align="center"><img src="dock6_manual_files/grid_vdw_by_molecule.JPG" height="82" width="540"> </div>
+    <div align="center"><img src="images/grid_vdw_by_molecule.JPG" height="82" width="540"> </div>
     <blockquote>
 
 
@@ -9371,9 +10075,9 @@ These parameters are indicated below by additional indentation. </p>
 
 
   </blockquote>
-    <p align="center"><img src="dock6_manual_files/grid_A_store.JPG" height="74" width="147"></p>
-    <p align="center"><img src="dock6_manual_files/grid_B_store.JPG" height="74" width="146"></p>
-    <p align="center"><img src="dock6_manual_files/grid_charge_store.JPG" height="61" width="173"></p>
+    <p align="center"><img src="images/grid_A_store.JPG" height="74" width="147"></p>
+    <p align="center"><img src="images/grid_B_store.JPG" height="74" width="146"></p>
+    <p align="center"><img src="images/grid_charge_store.JPG" height="61" width="173"></p>
     <blockquote>
 
 
@@ -9466,10 +10170,10 @@ These parameters are indicated below by additional indentation. </p>
     ligand and receptor desolvation grids. Dock3.5 scoring functionality
     in DOCK 6 is an alternate scoring approach to electrostatic interaction
     energy and also includes different grid-based methods for calculating
-   ligand and receptor desolvation. Docktools consists of chemgrid, solvmap, solvgrid, grid-convert and
+   ligand and receptor desolvation. Docktools consists of chemgrid, solvmap, solvgrid (and sevsolv), grid-convert and
    grid-convrds.&nbsp;&nbsp;This section will briefly review the
    theory behind each of the programs
-    and the describe the usage.</p>
+    and describe the usage.  The sevsolv program is included so that the chemgrid (dock3.5) scoring function matches DOCK 3.7 (or 3.8). </p>
 
 
 
@@ -9515,7 +10219,7 @@ These parameters are indicated below by additional indentation. </p>
 
 
 
-    <p style="text-align: center;" class="style2"><img style="width: 395px; height: 36px;" alt="npbe_score_eqn" title="linearized PB equation" src="dock6_manual_files/npbe_elec_score.jpg"></p>
+    <p style="text-align: center;" class="style2"><img style="width: 395px; height: 36px;" alt="npbe_score_eqn" title="linearized PB equation" src="images/npbe_elec_score.jpg"></p>
 
 
 
@@ -9535,7 +10239,7 @@ These parameters are indicated below by additional indentation. </p>
 
 
 
-    <div style="text-align: center;"><img style="width: 195px; height: 78px;" alt="delphi_elec_score" title="Electrostatic energy" src="dock6_manual_files/delphi_elec_score.jpg"><br>
+    <div style="text-align: center;"><img style="width: 195px; height: 78px;" alt="delphi_elec_score" title="Electrostatic energy" src="images/delphi_elec_score.jpg"><br>
 
     </div>
 
@@ -9711,13 +10415,14 @@ output_prefix ; output grid prefix name</p>
   volume displaced by the protein that
   is stored for each grid element in the active site. Thus the volume based ligand desolvation energy is calculated as:</p>
 
+   
 
       <p class="style2">&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
 &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
-&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <img style="width: 234px; height: 76px;" alt="Edesol_equation" src="dock6_manual_files/ldsol_eqn1.JPG"></p>
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <img style="width: 234px; height: 76px;" alt="Edesol_equation" src="images/ldsol_eqn1.JPG"></p>
 
     <span style="font-family: Arial,Helvetica,sans-serif;">Here <span style="font-style: italic;">L</span> is the ligand atom desolvation, volume summed over <span style="font-style: italic;">k</span> volume elements, <span style="font-style: italic;">V</span>.
   This method is only an approximation to GB solvation and works within
@@ -9825,6 +10530,7 @@ output_prefix ; output grid prefix name</p>
       </ul>
 
 
+    <p class="style2"> Starting in 6.11, The solvmap program program from DOCK 3.7 is also now included and is called solvmapsev (<a href="#MySingerJChemInfModel2010">MySinger, <i>J Chem Inf Model</i> 2010</a>). </p>
 
 
 
@@ -9863,9 +10569,9 @@ output_prefix ; output grid prefix name</p>
  &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
  &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;
  &nbsp; <big><span style="font-family: Times New Roman,Times,serif; font-style: italic;">&nbsp;
-   E<sub>dsol</sub></span> &nbsp;=&nbsp; <span style="font-style: italic; font-family: Times New Roman,Times,serif;">S</span><sub style="font-style: italic; font-family: Times New Roman,Times,serif;">i</sub><span style="font-family: Times New Roman,Times,serif;"> </span>ø<sup style="font-family: Times New Roman,Times,serif;">DES,EXPL</sup>(<span style="font-style: italic; font-family: Times New Roman,Times,serif;">x</span><sub style="font-style: italic; font-family: Times New Roman,Times,serif;">i</sub>)
+   E<sub>dsol</sub></span> &nbsp;=&nbsp; <span style="font-style: italic; font-family: Times New Roman,Times,serif;">S</span><sub style="font-style: italic; font-family: Times New Roman,Times,serif;">i</sub><span style="font-family: Times New Roman,Times,serif;"> </span><span>&#981;</span><sup style="font-family: Times New Roman,Times,serif;">DES,EXPL</sup>(<span style="font-style: italic; font-family: Times New Roman,Times,serif;">x</span><sub style="font-style: italic; font-family: Times New Roman,Times,serif;">i</sub>)
    + &nbsp;<span style="font-style: italic; font-family: Times New Roman,Times,serif;">f</span><sub style="font-style: italic; font-family: Times New Roman,Times,serif;">i</sub>
- ø<sup style="font-family: Times New Roman,Times,serif;">DES,BULK</sup>(<span style="font-family: Times New Roman,Times,serif; font-style: italic;">x</span><sub style="font-family: Times New Roman,Times,serif; font-style: italic;">i</sub>)</big></p>
+ <span>&#981;</span><sup style="font-family: Times New Roman,Times,serif;">DES,BULK</sup>(<span style="font-family: Times New Roman,Times,serif; font-style: italic;">x</span><sub style="font-family: Times New Roman,Times,serif; font-style: italic;">i</sub>)</big></p>
 
 
 
@@ -9885,7 +10591,7 @@ output_prefix ; output grid prefix name</p>
  &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
  &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
  &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img style="height: 18px; width: 86px;" alt="lig_atm_sol" src="dock6_manual_files/lig_atom_sol.jpg"></p>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img style="height: 18px; width: 86px;" alt="lig_atm_sol" src="images/lig_atom_sol.jpg"></p>
 
 
 
@@ -9897,8 +10603,8 @@ output_prefix ; output grid prefix name</p>
    and beta = -0.005 kcal/mol.<span style="font-family: Times New Roman,Times,serif; font-style: italic;">
    f<sub>i</sub></span> is the volume of ligand atom i,
    calculated from the amber radius of the ligand atom. For the receptor,
-   these can be precalculated and stored on a grid.&nbsp;<big>ø<sup style="font-family: Times New Roman,Times,serif;">DES,BULK</sup>(<span style="font-style: italic; font-family: Times New Roman,Times,serif;">x</span><sub style="font-style: italic; font-family: Times New Roman,Times,serif;">i</sub>)</big><span style="font-style: italic; font-family: Times New Roman,Times,serif;"></span>
- &nbsp;and&nbsp;<big>ø<sup style="font-family: Times New Roman,Times,serif;">DES,EXPL</sup>(<span style="font-family: Times New Roman,Times,serif; font-style: italic;">x</span><sub style="font-family: Times New Roman,Times,serif; font-style: italic;">i</sub>)</big><span style="font-family: Times New Roman,Times,serif; font-style: italic;"></span>
+   these can be precalculated and stored on a grid.&nbsp;<big><span>&#981;</span><sup style="font-family: Times New Roman,Times,serif;">DES,BULK</sup>(<span style="font-style: italic; font-family: Times New Roman,Times,serif;">x</span><sub style="font-style: italic; font-family: Times New Roman,Times,serif;">i</sub>)</big><span style="font-style: italic; font-family: Times New Roman,Times,serif;"></span>
+ &nbsp;and&nbsp;<big><span>&#981;</span><sup style="font-family: Times New Roman,Times,serif;">DES,EXPL</sup>(<span style="font-family: Times New Roman,Times,serif; font-style: italic;">x</span><sub style="font-family: Times New Roman,Times,serif; font-style: italic;">i</sub>)</big><span style="font-family: Times New Roman,Times,serif; font-style: italic;"></span>
    are interpolated from grids calculated using the solvgrid program
    during docking. It requires the calculation of&nbsp;two separate
    grids:</p>
@@ -9912,7 +10618,7 @@ output_prefix ; output grid prefix name</p>
  &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
  &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
  &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;
- &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <img style="width: 422px; height: 157px;" alt="blk_exp_dsol_grd" src="dock6_manual_files/blk_exp_dsol_grd.jpg"></p>
+ &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; <img style="width: 422px; height: 157px;" alt="blk_exp_dsol_grd" src="images/blk_exp_dsol_grd.jpg"></p>
 
 
 
@@ -10109,8 +10815,9 @@ and prot.table.ambcrg.sybH)
    produced grids, such grids do not need conversion - to wit the contact grid.
    </p>
 
-
-
+  
+    <p class="style2"> Update grid-convert.  Updated grid-convert to convert qnifft grids and to convert grid generated with <i>blastermaster.py</i> from DOCK3.7. (<a href="#BaliusJComputChem2024">Balius, <i>J.Comput. Chem.</i> 2024</a>) 
+   </p>
 
 
     <p class="style2">USAGE: grid-convert -i gconv.in
@@ -11559,17 +12266,25 @@ References<span class="style2"></span></p>
       <p class="style2"><a name="allenetal2015"></a>Allen, W.J.; Balius, T.E.;
   Mukherjee, S.; Brozell, S. R.; Moustakas, D. T.; Lang, P. T.; Case, D. A.;
   Kuntz, I. D.; Rizzo, R. C.  DOCK 6: Impact of New Features and Current
-  Docking Performance.  J. Comput. Chem. 36: 1132-1156, 2015. </p>
+  Docking Performance.  J. Comput. Chem. 36(15): 1132-1156, 2015. </p>
   
   <p class='style2'><a name="allenetal2017"></a> Allen, W.J.; Fochtman, B.C.; 
   Balius, T.E.; Rizzo, R.C. Customizable de novo design strategies for DOCK: Application to 
-  HIVgp41 and other therapeutic targets J. Comput. Chem. 38: 2641-2663, 2017.</p>
+  HIVgp41 and other therapeutic targets J. Comput. Chem. 38(30): 2641-2663, 2017.</p>
 
       <p class="style2"><a name="Baliusetal2011"></a>Balius, T.E., Mukherjee, S.,
   and Rizzo, R.C., Implementation and Evaluation of a Docking-Rescoring Method
   using Molecular Footprint Comparisons. J. Comput. Chem. 32(10): 2273-2289, 2011. </p>
 
-      <p class="style2"><a name="Baliusetal2013"></a>Balius, T.E., Allen, W.J., Mukherjee, S. and Rizzo, R.C. Grid-based Molecular Footprint Comparison Method for Docking and De Novo Design: Application to HIVgp41. J. Comput. Chem. 34:1226-1240, 2013.</p>
+      <p class="style2"><a name="Baliusetal2013"></a>Balius, T.E., Allen, W.J., Mukherjee, S. and Rizzo, R.C. Grid-based Molecular Footprint Comparison Method for Docking and De Novo Design: Application to HIVgp41. J. Comput. Chem. 34(14): 1226-1240, 2013.</p>
+
+      <p class="style2"><a name="BaliusJComputChem2024"></a>Balius, T.E.,
+  Tan, Y.S., Chakrabarti, M., DOCK 6: Incorporating hierarchical traversal
+  through precomputed ligand conformations to enable large-scale docking.
+  J. Comput. Chem. 45(1): 47-63, 2024.
+  https://doi.org/10.1002/jcc.27218 </p>
+
+<p class="style2"><a name="BaliusPNAS2017"></a> Balius, T. E., Fischer, M., Stein, R. M., Adler, T. B., Nguyen C. N., Cruz A., Gilsonc M. K., Kurtzman, T., Shoichet, B. K., Testing inhomogeneous solvation theory in structure-based ligand discovery. Proc. Natl. Acad. Sci. USA., 114 (33): E6839-E6846,  2017</p>
 
       <p class="style2"><a name="benderetal2004"></a>Bender, A., Mussa, H.Y.,
   Glen, R.C., Reiling, S. Similarity Searching of Chemical Databases Using 
@@ -11581,7 +12296,9 @@ References<span class="style2"></span></p>
   a Pose Generation and Database Enrichment Tool. J. Comput. Aided Mol. Design.
   26(6): 749-773, 2012. </p>
 
-  <p class="style2"><a name="debetall2002"></a>Deb,
+      <p class="style2"><a name="ColemanPlosOne2013"></a> Coleman, R.G., Carchia, M., Sterling, T., Irwin, J.J., Shoichet, B.K., Ligand Pose and Orientational Sampling in Molecular Docking. PLOS ONE 8(10): e75992, 2013.</p> 
+
+      <p class="style2"><a name="debetall2002"></a>Deb,
   K.; Pratap, A.; Agarwal, S.; Meyarivan, T. A fast and elitist multiobjective genetic algorithm: NSGA-II. IEEE Transactions on Evolutionary Computation. 6: 182-97, 2002. </p>
   
       <p class="style2"><a name="DesJarlaisetalJComputAidedMolecDesign1994"></a>DesJarlais,
@@ -11631,7 +12348,7 @@ Case, D. A.; Cheatham, T. E., Calculating structures and free energies
 of complex molecules: combining molecular mechanics and continuum
 models. Acc. Chem. Res. 33: 889-897, 2000</p>
 
-      <p class="style2"><a name="KuhletalJComputChem1984"></a>Kuhl,
+    <p class="style2"><a name="KuhletalJComputChem1984"></a>Kuhl,
   F.S., Crippen, G.M., and Friesen, D.K. A Combinatorial Algorithm for
   Calculating Ligand Binding. J. Comput. Chem. 5:24-34, 1984. </p>
 
@@ -11670,26 +12387,28 @@ Interactions. J. Comput. Chem. 16:454-464, 1995.</p>
   rigid-body minimization in molecular docking. Proteins. 17(3): 266-278,
   1993. </p>
 
-    <p class="style2"><a name="MengetalJCompChem1992"></a>Meng, E.C.,
+      <p class="style2"><a name="MengetalJCompChem1992"></a>Meng, E.C.,
   Shoichet, B.K. and Kuntz, I.D. Automated docking with grid-based energy
   evaluation. J. Comp. Chem. 13: 505-524, 1992. </p>
 
-    <p class="style2"><a name="MilleretalJComputAidedMolDesign1994"></a>Miller,
+      <p class="style2"><a name="MilleretalJComputAidedMolDesign1994"></a>Miller,
   M.D., Kearsley, S.K., Underwood, D.J. and Sheridan, R.P. FLOG -A system
   to select quasi-flexible ligands complementary to a receptor of known
   three-dimensional structure. J. Comput. Aided Mol. Design. 8: 153-174,
   1994. </p>
 
-    <p class="style2"><a name="Moustakasetal2006"></a>Moustakas, D.T.,
+      <p class="style2"><a name="Moustakasetal2006"></a>Moustakas, D.T.,
   Lang, P.T., Pegg, S., Pettersen, E.T., Kuntz, I.D., Broojimans, N.,
   Rizzo, R.C. Development and Validation of a Modular, Extensible Docking
   Program: DOCK 5. J. Comput. Aided Mol. Design. 20:601-609, 2006. </p>
 
-    <p class="style2"><a name="Mukherjeeetal2010"></a>Mukherjee, S., Balius, T.E., and Rizzo, R.C., Docking Validation Resources: Protein Family and Ligand Flexibility Experiments. J. Chem. Inf. Model.,  50(11): 1986-2000, 2010. </p>
+      <p class="style2"><a name="Mukherjeeetal2010"></a>Mukherjee, S., Balius, T.E., and Rizzo, R.C., Docking Validation Resources: Protein Family and Ligand Flexibility Experiments. J. Chem. Inf. Model.,  50(11): 1986-2000, 2010. </p>
 
-    <p class="style2"><a name="MunkresJSocIndustApplMath1957"></a>Munkres,
+      <p class="style2"><a name="MunkresJSocIndustApplMath1957"></a>Munkres,
 J. Algorithms for the assignment and transportation problems. J. Soc. Indust.
 Appl. Math. 5:32-38, 1957.</p>
+
+      <p class="style2"><a name="MySingerJChemInfModel2010"></a> MySinger, M.M., and Shoichet, B.K., Rapid context-dependent ligand desolvation in molecular docking. J. Chem. Inf. Model., 50(9): 1561-1573, 2010.  </p> 
 
       <p class="style2"><a name="NelderetalComputerJournal1964"></a>Nelder, J.A. and Mead, R., A Simplex-Method for Function Minimization. Computer Journal, 7:  308-313, 1964. </p>
 

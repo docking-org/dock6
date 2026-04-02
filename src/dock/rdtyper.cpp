@@ -618,6 +618,70 @@ void RDTYPER::calculate_descriptors(DOCKMol &mol, std::map<unsigned int, double>
          
 }
 
+void RDTYPER::calculate_descriptors_drive(DOCKMol &mol, std::map<unsigned int, double> fragMap, bool create_smiles, std::map<std::string,std::string> PAINSmap){    
+    if (create_smiles == true){
+        // Start calculation
+        try {
+            // Create RDKit mol object
+            RDKit::ROMol tmp_rdmol = mol.DOCKMol_to_ROMol( create_smiles );
+            if (mol.smiles == ""){
+                throw mol.title + "_has_no_SMILES_string"; 
+            }
+            // Create RDKit mol object that needs to be used (no H)
+            // intializing pointers
+            RDKit::RWMol *rwmol = RDKit::SmilesToMol(mol.smiles, 0, true, nullptr);
+            RDKit::ROMol noH_rdmol {*rwmol};
+
+            //initialize datastructs that is unique to MACCSfingerprinting 
+            //ExplicitBitVect *MACCSfp = RDKit::MACCSFingerprints::getFingerprintAsBitVect(tmp_rdmol);
+            ExplicitBitVect *MACCSfp = RDKit::MACCSFingerprints::getFingerprintAsBitVect(noH_rdmol);
+            boost::dynamic_bitset<> tmp_bitset = *(MACCSfp->dp_bits); 
+
+            mol.num_arom_rings = RDKit::Descriptors::calcNumAromaticRings(noH_rdmol);
+            mol.num_alip_rings = RDKit::Descriptors::calcNumAliphaticRings(noH_rdmol);
+            mol.num_sat_rings = RDKit::Descriptors::calcNumSaturatedRings(noH_rdmol);
+            mol.num_stereocenters = RDKit::Descriptors::numAtomStereoCenters(noH_rdmol);
+            mol.num_spiro_atoms = RDKit::Descriptors::calcNumSpiroAtoms(noH_rdmol);
+            mol.tpsa = RDKit::Descriptors::calcTPSA(noH_rdmol);
+            mol.clogp = RDKit::Descriptors::calcClogP(noH_rdmol);
+
+
+
+            //This uses a rdkit mol object that comes from SMILES. 
+            mol.qed_score = calculate_qed_score(noH_rdmol, mol.clogp, mol.tpsa, WEIGHT_MEAN);
+            mol.sa_score = calculate_sa_score(noH_rdmol, mol.num_stereocenters, mol.num_spiro_atoms, fragMap);
+            mol.esol = calculate_esol(noH_rdmol, mol.clogp, true);
+            mol.pns = get_pns(mol, tmp_rdmol, PAINSmap);
+
+
+
+            //to assign MACCS fingerprints
+            mol.MACCS = tmp_bitset;
+            mol.MACCS_size = tmp_bitset.size();
+
+            //delete MACCS pointer
+            delete MACCSfp;
+
+            //delete pointer
+            delete rwmol;
+
+        } catch (const char* message){
+            std::cout << message << std::endl;
+            mol.smiles = mol.title + " RDKIT ERROR";
+            mol.bad_molecule = true;
+          
+        } catch (...) {
+            // RDKit could not read this molecule
+            mol.smiles = mol.title + " RDKIT ERROR";
+            mol.bad_molecule = true;
+        }
+    } else {
+        std::cout << "Warning: SMILES are needed to calculate the descriptors" << std::endl;
+        mol.smiles = mol.title + " NO SMILES";
+    }
+         
+}
+
 #else
   // Configured to Not BUILD_DOCK_WITH_RDKIT
 #endif

@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <functional>
 //#include <cstdlib>
 
 #include "amber_typer.h"
@@ -15,6 +16,11 @@
 #include "orient.h"
 #include "simplex.h"
 #include "utils.h"
+#include "iso_align.h"
+#include "mem_info.h"
+
+
+class Iso_Parm;
 
 // These covalent radii are defined according to the CRC Handbook
 // of Chemistry and Physics, 94th Ed., 2013-2014, pp 9-49 to 9-50
@@ -115,18 +121,30 @@ class           DN_Build {
     static const int         FLOAT_WIDTH;
     static const int         STRING_WIDTH;
 
+    // DN mode 
+    std::string        dn_mode;
+    std::string        dn_ult_method;
+    std::string        dn_ult_file;
+    std::string        dn_ult_score;
+    float              dn_ult_clust_tol;
+    int                dn_ult_clust_size_lim;
+    float              dn_ult_hun_rmsd_coeff;
+    float              dn_ult_hun_matching_coeff;
+    bool               dn_ult_bf_anc_diverse;
+    std::string        dn_ult_vol_type;
+    int                dn_ult_num_clusters;
+    
+
     // Input parameters: files / filenames
     std::string        dn_fraglib_scaffold_file;
     std::string        dn_fraglib_linker_file;
     std::string        dn_fraglib_sidechain_file;
-    std::string        dn_fraglib_iso_scaffold_file;
-    std::string        dn_fraglib_iso_linker_file;
-    std::string        dn_fraglib_iso_sidechain_file;
     //std::string      dn_fraglib_rigid_file;
     bool               dn_user_specified_anchor;    // user can specify anchor(s) (good for lead opt)
     std::string        dn_fraglib_anchor_file;
     bool               dn_use_torenv_table;         // use torsion environment table?
     bool               dn_use_roulette;             //
+    std::string        dn_frequencies_matrix_file;  //JDB - file for matrixL
     std::string        dn_torenv_table;
     std::string        denovo_name;                 // LEP- unique denovo name
 
@@ -137,6 +155,8 @@ class           DN_Build {
     bool               dn_sampling_method_ex;
     bool               dn_sampling_method_rand;
     bool               dn_sampling_method_graph;
+    bool               dn_sampling_method_isoswap;
+    bool               dn_sampling_method_matrix;
     int                dn_num_random_picks;         // number of random picks for samp method rand
     int                dn_graph_max_picks;
     int                dn_graph_breadth;
@@ -144,6 +164,18 @@ class           DN_Build {
     float              dn_graph_temperature;
     float              dn_temp_begin;
 
+    //Input parameters: Specific pruning steps
+    bool               dn_advanced_pruning;
+    bool               dn_prune_initial_sample;
+    bool               dn_prune_individual_torsions;
+    bool               dn_sample_torsions;
+    bool               dn_prune_combined_torsions;
+    bool               dn_perform_torsional_sampling;
+    bool               dn_random_root_selection;
+    bool               dn_make_unique;
+    bool               dn_write_out_duplicates;
+    std::string        dn_duplicate_dump_file;
+    int                dn_max_duplicates_per_molecule;
     // Input parameters: pruning
     float              dn_pruning_conformer_score_cutoff;  // hard upper cutoff for the score during torsion sampling
     float              dn_pruning_conformer_score_cutoff_begin;  // hard upper cutoff for the score during torsion sampling
@@ -154,6 +186,44 @@ class           DN_Build {
     std::string        dn_MW_cutoff_type;           // user specified cutoff type
     bool               dn_MW_cutoff_type_hard;      //  specified type == hard eval true and type == soft eval false
     float              dn_MW_std_dev;              //user defined standard deviation when using a soft MW cutoff
+    bool               dn_legacy_pruning; // JDB controls 6.9-style pruning
+    bool               dn_legacy_prune; // JDB controls 6.9 style pruning
+    bool               dn_legacy_prune_complete; // JDB controls 6.9 style pruning of complete molecules
+    bool               dn_legacy_prune_hrmsd; // JDB will skip added hrmsd step before assessing each root -> layer
+    int                evaluate_upper_lower;      // Passed to mw_cutoff function so know whether parameter is evaluated at upper or lower bound
+
+    //input parametets: iso_swapping 
+    std::string        dn_fraglib_iso_scaffold_file;
+    std::string        dn_fraglib_iso_linker_file;
+    std::string        dn_fraglib_iso_sidechain_file;
+    std::string        dn_iso_write_libraries;
+    std::string        dn_iso_output_path_libraries;
+    std::string        dn_iso_fraglib;
+    std::string        dn_iso_fraglib_dir;
+    float              dn_iso_bond_angle_tol_sid; 
+    float              dn_iso_bond_angle_tol_lnk; 
+    float              dn_iso_bond_angle_tol_scf; 
+    float              dn_iso_dist_du_du_inter;
+    float              dn_iso_dist_tol_sid;     
+    float              dn_iso_dist_tol_lnk;
+    float              dn_iso_dist_du_du_lnk;
+    float              dn_iso_dist_du_du_scf;
+    std::string        dn_iso_rank;
+    int                dn_iso_diff_num_atoms;
+    int                dn_num_iso_picks;
+    int                dn_iso_num_gets;
+    int                dn_iso_num_top;
+    std::string        dn_iso_score_sel;
+    std::string        dn_iso_rank_score_sel;
+    int                dn_num_rand_head_picks;
+    std::string        dn_iso_pick_meth;
+    std::string        dn_iso_skip;
+    std::string        dn_iso_print_out;
+    std::string        dn_iso_output_verbose_path;
+    int                dn_iso_write_it;
+    std::string        dn_iso_reverse;
+    int                dn_iso_freq_cutoff;
+    float              dn_iso_cos_score_cutoff;
 
     // Directed de novo parameters
     #ifdef BUILD_DOCK_WITH_RDKIT
@@ -212,6 +282,7 @@ class           DN_Build {
     int                dn_max_layer_size;           // control over combinatorics
     int                dn_max_current_aps;          // maximum number of aps one frag can have
     int                dn_max_scaffolds_per_layer;  // maximum number of scaffolds you can add at each layer of growth
+    int                dn_max_sccful_att_per_root;  // Max number of sucessful attachments per root
 
     // Input parameters: output
     bool               dn_write_checkpoints;        // write checkpoint files at each layer
@@ -223,11 +294,28 @@ class           DN_Build {
     //GA parameters
     bool               dn_ga_flag;                  // for mutation, make sure 1 valid molecule is produced
 
+    // Fragment Frequency selection - JDB
+    bool                        dn_bias_with_fraglib;
+    bool                        dn_sel_frag_by_freq_bool;
+    bool                        dn_acc_frag_by_freq_bool;  
+    std::string                 dn_frag_frequency_file;
+    std::vector< std::string >  ordered_fragments;
+    std::vector< float >        ordered_fragment_frequencies;
+    void                        read_frag_frequencies( std::string frequencies_file );
+    void                        sample_fraglib_frequency( Fragment &, int, std::vector <Fragment> &, std::vector <Fragment> &,
+                                         Master_Score &, Simplex_Minimizer &, AMBER_TYPER &, bool );    
+    int                         select_frag_by_frequency( vector <Fragment> & fraglib );
+    void                        new_select_frag_by_frequency( vector <Fragment> &, vector<int> &, vector<int> &, int);
+    void                        accept_frags_by_frequency(vector <int> &);
+
+
+
     // Vectors of fragments and other important things
     std::vector <Fragment>     scaffolds;
     std::vector <Fragment>     linkers;
     std::vector <Fragment>     sidechains;
 
+    // Fragment vec for isoswapping
     std::vector <Fragment>     isoscaffolds;
     std::vector <Fragment>     isolinkers;
     std::vector <Fragment>     isosidechains;
@@ -238,6 +326,8 @@ class           DN_Build {
     std::vector <TorEnv>       torenv_vector;
     std::vector <FragGraph>    scaf_link_sid_graph; // for the combined fragment vector
     std::vector <Fragment>     tmp_mutants;         // save mutation results to pass to GA
+
+    std::vector <DOCKMol>      vec_utilities;       // for a vector of utilites
 
     // Variables for calculating internal energy (same as in conf_gen_ag.h)
     bool               use_internal_energy;    // int energy function superseded by funct in base_score
@@ -250,6 +340,33 @@ class           DN_Build {
     // Miscellaneous
     int                molecule_counter;       // for counting molecules
     int                growth_tree_index;      // for naming growth trees
+    int                num_all_frags_layer;      // for counting all frags in layer
+    int                num_prune_frags_layer;      // for counting all frags in layer
+    int                num_pruned_roots;
+    int                num_filtered_comp;
+    int                num_completed;
+    int                num_att_layer;
+    int                num_att_root;
+
+    // To keep track of the pruning numbers
+    int                prune_rmsd_mw_counter_prune;
+    int                prune_root_counter_prune;
+    int                cand_root_ign_counter_prune;
+    int                filtered_comp_counter_prune;
+    int                duplicate_dump_counter_prune; 
+
+    int                failed_cap_H_prune_rmsd_mw;
+    int                failed_cap_H_prune_root;
+    int                failed_cap_H_cand_root_ign;
+    int                failed_cap_H_filtered_comp;
+    int                failed_cap_H_duplicate_dump;
+
+    int                failed_vtm_prune_rmsd_mw;
+    int                failed_vtm_prune_root;
+    int                failed_vtm_cand_root_ign;
+    int                failed_vtm_filtered_comp;
+    int                failed_vtm_duplicate_dump;
+
     std::vector <int>  bond_tors_vectors;      // for the minimizer
 
     //JDB - roulette params
@@ -262,66 +379,115 @@ class           DN_Build {
     bool tmp_second_check;
 
     //PAK
-    bool            dn_iso_align;
+    Iso_Parm        iso_parm;
+    std::pair<std::vector<Iso_Acessory::Scored_Triangle>,std::vector<Fragment>> 
+    frag_iso_align(Fragment&);
+    //JDB - frequencies params
+    std::vector<string> ordered_frag_list;
+    std::vector<vector<int> > fragment_frequency_matrix;
+    std::vector<std::vector<float> > rel_fragment_frequency_matrix;
     /** Functions **/
 
     // Read parameters from file, initialize stuff, prepare vectors and molecules
     void            input_parameters( Parameter_Reader & parm );
-    void            iso_initialize();
     void            initialize();
     void            initialize_internal_energy_parms( bool, int, int, float, float );
     void            read_library_anchor( std::vector <Fragment> &, std::string );
+    void            read_library( std::vector <DOCKMol>  &, std::string );
     void            read_library( std::vector <Fragment> &, std::string );
+    void            read_frag_library( std::vector <Fragment> &, std::string);
     void            read_torenv_table( std::string );
     void            prepare_fragment_graph( std::vector<Fragment> &, std::vector <FragGraph> & );
-    void            read_roulette( string roulette_table);
+    void            read_roulette( std::string roulette_table);
     void            generate_roulette();
+    void            read_frequencies_matrix( std::string freq_matrix_file );
     // Main build functions
     void            build_molecules( Master_Score &, Simplex_Minimizer &, AMBER_TYPER &, Orient & );
-    void            frag_iso_align();
     void            orient_fragments( std::vector <Fragment> &, Fragment &, Master_Score &, Simplex_Minimizer &,
                                       AMBER_TYPER &, Orient & );
-    void            simple_build( Master_Score &, Simplex_Minimizer &, AMBER_TYPER & );
-    void            sample_fraglib_exhaustive( Fragment &, int, std::vector <Fragment> &, std::vector <Fragment> &,
-                                               Master_Score &, Simplex_Minimizer &, AMBER_TYPER &, bool );
-    void            sample_fraglib_rand( Fragment &, int, std::vector <Fragment> &, std::vector <Fragment> &,
-                                         Master_Score &, Simplex_Minimizer &, AMBER_TYPER &, bool );
+    void            sample_fraglib_exhaustive ( Fragment &, int , std::vector <Fragment> &, vector <Fragment> &,
+                                                Master_Score &, Simplex_Minimizer &, AMBER_TYPER &, bool );
+    void            sample_isofraglib_isoswap( Fragment &, int, std::vector <Fragment> &, std::vector <Fragment> &,
+                                                Master_Score &, Simplex_Minimizer &, AMBER_TYPER &, bool, Iso_Table::Iso_Tab &, int );
     void            sample_fraglib_graph( Fragment &, int, std::vector <Fragment> &, std::vector <FragGraph> &,
-                                          std::vector <Fragment> &,
-                                          Master_Score &, Simplex_Minimizer &, AMBER_TYPER &, bool );
+                                          std::vector <Fragment> &, Master_Score &, Simplex_Minimizer &, AMBER_TYPER &, 
+                                          vector<int> &, vector<int> &, bool ); //JDB JDB JDB
+    void            sample_fraglib_rand( Fragment &, int, std::vector <Fragment> &,
+                                          std::vector <Fragment> &, Master_Score &, Simplex_Minimizer &, AMBER_TYPER &, 
+                                          vector<int> &, vector<int> &, bool ); // JDB JDB JDB 
+    void            sample_fraglib_matrix( Fragment &, int, std::vector <Fragment> &, std::vector <Fragment> &,
+                                           Master_Score &, Simplex_Minimizer &, AMBER_TYPER &, bool );
 
     // Functions for attaching two fragments together
-    Fragment        combine_fragments( Fragment &, int, int, Fragment, int, int );
+    Fragment        combine_fragments( Fragment &, int, Fragment, int );
+    std::pair<std::vector<std::vector<double>>,Fragment>        
+                    combine_fragments_iso( Fragment &, int, Fragment, int);
     float           calc_cov_radius( std::string atom );
     Fragment        attach( Fragment &, int, int, Fragment &, int, int );
     bool            valid_torenv( Fragment & );
     bool            valid_torenv_multi( Fragment & );
     bool            compare_atom_environments( std::string, std::string );
-    bool            compare_dummy_bonds( Fragment, int, int, Fragment &, int, int );
+    bool            compare_dummy_bonds( Fragment &, int, Fragment &, int);
     bool            roulette_valid_torenv ( Fragment & );
+    void            attach_selected_frags( Fragment &, int, vector <Fragment> &, vector<int> &, vector< pair <Fragment, int> > &); // JDB JDB JDB
+    void            attach_single_frag( Fragment &, int, vector <Fragment> &, int &, vector<Fragment> &); // JDB JDB JDB 
+    void            select_frags_from_fraglib(vector <Fragment> &, vector<int> &, vector<int> &, int &, bool, bool); // JDB JDB JDB
+    
+
     // Functions for sampling torsions, computing energy, and minimizing
     void            sample_minimized_torsions( Fragment &, std::vector <Fragment> &, Master_Score &,
                                                Simplex_Minimizer &, AMBER_TYPER & );
+    float           sample_minimized_torsions_iso( Fragment &, std::vector <Fragment> &, Master_Score &,
+                                               Simplex_Minimizer &, AMBER_TYPER & );
+    void            just_minimize(Fragment &, std::vector <Fragment> &, Master_Score &,
+                                               Simplex_Minimizer &, AMBER_TYPER & ,bool ,bool);
     float           calc_fragment_rmsd( Fragment &, Fragment & );
     void            frag_torsion_drive( Fragment &, std::vector <Fragment> & );
+    std::vector<float> frag_torsion_drive_iso( Fragment &, std::vector <Fragment> & );
+    void            just_turn_one_tors( Fragment &, float);
+    std::pair<std::vector<float>,std::vector<Fragment> > attach_and_get_torsions (Fragment, int , Fragment, int, 
+                                Master_Score & , Simplex_Minimizer & , AMBER_TYPER & );
+    Fragment attach_isosteres(Fragment &, int, Fragment, int  );
+
+    std::pair<float,Fragment>
+    get_best_iso_head_tors( Fragment , int , std::pair<std::vector<float>,std::vector<Fragment> > , int , 
+                                  Master_Score & , Simplex_Minimizer & , AMBER_TYPER & );
     void            prepare_internal_energy( Fragment &, Master_Score & );
 
     // Horizontal pruning functions specific to denovo
     bool            mw_cutoff( Fragment &, int ); 
     void            prune_h_rmsd( std::vector <Fragment> & );
+    void            prune_h_rmsd( std::vector <Fragment> & , std::vector <Fragment> & );
+    void            prune_h_rmsd( std::vector <Fragment> & , std::vector <Fragment> & , int , int);
+    void            prune_h_rmsd_vec_pair( std::vector < std::pair <Fragment, int> > & ); // JDB JDB
+    void            prune_h_rmsd_and_mw( std::vector <Fragment> &);
+    void            prune_h_rmsd_and_mw( std::vector <Fragment> &, std::vector <Fragment> &);
+    void            prune_h_rmsd_and_mw( std::vector <Fragment> &, std::vector <Fragment> &, int , int);
     void            calc_mol_wt( DOCKMol & );
     void            calc_rot_bonds( DOCKMol & );
     void            calc_formal_charge( DOCKMol & );
     void            calc_num_HA_HD( DOCKMol & );
 
+    //mid run IO functions
+    void            write_mols_to_file(string dn_output_prefix, string frag_vec_name, vector<Fragment> & frag_vec, int anchor_num, int counter); //BTB 2023.09.26
+    void            write_mol_to_file(string , string , Fragment & , int , int ); //PAK 2023.01.12
+
     // Miscellaneous functions
     void            activate_mol( DOCKMol & );
+    void            deactivate_mol( DOCKMol & );
     bool            dummy_in_mol( DOCKMol & );
     void            dummy_to_H( Fragment &, int, int );
     void            print_torenv( std::vector <TorEnv> );
     void            print_fraggraph();
     void            convert_H_to_Du( DOCKMol &, int );
-
+    void            calc_pairwise_distance( DOCKMol & );
+    void            print_out_coordinates( DOCKMol &, string);
+    void            bickel_write_out(std::vector<Fragment>, std::string, int, bool);
+    //necessary function to sort the fragment class!!!
+    void            frag_sort(std::vector<Fragment> &, std::function<bool(const Fragment&,const Fragment&)>);
+    void            frag_sort(std::vector< std::pair <Fragment, int>> &, 
+                              std::function<bool(const std::pair<Fragment, int> &, const std::pair <Fragment, int> &)>);
+    void make_unique(vector <Fragment> &, vector <Fragment> &);
     // RDKit-related functions for descriptor-driven processes
     #ifdef BUILD_DOCK_WITH_RDKIT
     bool            clogp_cutoff( Fragment &,ostringstream& ); 
@@ -337,6 +503,9 @@ class           DN_Build {
     // Functions that are turned off right now
     //bool            prune_molecular_weight( DOCKMol & );
     //bool            prune_rotatable_bonds( DOCKMol & );
+
+    // DN ultilies
+    void            utilities_methods( AMBER_TYPER & );
 
 
     /** Constructor and Destructor **/
@@ -371,6 +540,9 @@ class           DN_Build {
 // Sort Functions
 // Used with 'sort()' to sort frag vectors by a given descriptor
 bool            fragment_sort(const Fragment &, const Fragment &);
+bool            fragment_sort_by_name(const Fragment &, const Fragment &);
+bool            mw_then_score_sort_fragments(const Fragment &, const Fragment &);
+bool            fragment_vec_pair_sort( const std::pair<Fragment, int> &, const std::pair<Fragment, int> &);
 bool            fgpair_sort(const std::pair<float,int> & a, const std::pair<float,int> & b);
 bool            size_sort(const Fragment &, const Fragment &);
 //Comparator functions JDB

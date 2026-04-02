@@ -1,4 +1,6 @@
-/** HDB_IS_NOT_YET_COMPLETELY_IMPLEMENTED **/
+
+// Implemented by Trent Balius, at FNLCR, 2019-2023
+// Based on DOCK3.7 and 3.8 . 
 
 #include <algorithm>
 #include <iostream>
@@ -45,7 +47,7 @@ HDB_Conformer_Search::input_parameters(Parameter_Reader &parm)
         //tmp = parm.query_param("hdb_conf_search","no","yes no");
         //num_per_hierarchy = atoi(parm.query_param("num_per_hierarchy", "10").c_str());
         num_per_search = atoi(parm.query_param("num_per_search", "10").c_str());
-
+        skip_broken = (parm.query_param("skip_broken", "no", "yes no") == "yes"); 
         //if(tmp == "yes")
         //        flexible_ligand = true;
         //else
@@ -71,19 +73,44 @@ HDB_Conformer_Search::initialize()
 
 // +++++++++++++++++++++++++++++++++++++++++
 void 
-HDB_Conformer_Search::prepare_molecule(HDB_Mol &mol) 
+HDB_Conformer_Search::prepare_molecule(DOCKMol &mol) 
 {
-
-
+    //for (j=0; j < mol.num_of_bonds; j++){
+    for (int j=0; j < mol.num_bonds; j++){
+        mol.amber_bt_minimize[j] = -1;
+        mol.amber_bt_id[j] = -1;
+        mol.bond_active_flags[j] = -1;
+    }
+}
+// +++++++++++++++++++++++++++++++++++++++++
+void 
+HDB_Conformer_Search::set_rigid_active(DOCKMol &mol, HDB_Mol &hmol) 
+{
+    //cout << "Entering HDB_Conformer_Search::set_rigid_active ..." << endl;
+    for (int i=0; i<mol.num_atoms;i++){
+         mol.atom_active_flags[i] = false;
+    }
+    for (int i=0; i<mol.num_atoms;i++){
+       for (int l=0; l<hmol.num_of_rigid;l++){
+           //if ((mol.x[i] == hmol.rigid[l].x) && (mol.y[i] == hmol.rigid[l].y) && (mol.z[i] == hmol.rigid[l].z) ) {  
+           if ((pow((mol.x[i] - hmol.rigid[l].x),2.0) + pow((mol.y[i] - hmol.rigid[l].y),2.0) + pow((mol.z[i] - hmol.rigid[l].z),2.0)) < 0.00001) {  
+                //cout << "make active i = "<< i << " ..." << endl;
+                //cout << "make active i = "<< i <<" " << mol.atom_names[i] << " ..." << endl;
+                mol.atom_active_flags[i] = true;
+                //mol.amber_at_heavy_flag[i] = true;
+           }
+       }
+         
+    }
+    //cout << "Exiting HDB_Conformer_Search::set_rigid_active ..." << endl;
 
 }
-
 // +++++++++++++++++++++++++++++++++++++++++
 void 
 HDB_Conformer_Search::create_mol(DOCKMol &mol, DOCKMol & mol_ac, HDB_Mol &hmol, int confnum) 
 {
     int i,j,k,l; 
-    cout << "HDB_Conformer_Search::create_mol" << endl;
+    //cout << "HDB_Conformer_Search::create_mol" << endl;
     mol.allocate_arrays(hmol.num_of_atoms, hmol.num_of_bonds,0);
 
     // copy atoms
@@ -98,7 +125,8 @@ HDB_Conformer_Search::create_mol(DOCKMol &mol, DOCKMol & mol_ac, HDB_Mol &hmol, 
         mol.atom_residue_numbers[i] = "";
         mol.atom_psol[i]            = hmol.atoms[i].p_desolv;    // kxr205
         mol.atom_apsol[i]           = hmol.atoms[i].a_desolv;  // kxr205
-        //mol.subst_names[i]          = original.subst_names[i];
+        mol.subst_names[i]          = "LIG";
+        mol.atom_residue_numbers[i] = "1";
         //mol.atom_color[i]           = hmol.atoms[i].atom_color;  // kxr205
     }
     // copy bonds
@@ -116,6 +144,9 @@ HDB_Conformer_Search::create_mol(DOCKMol &mol, DOCKMol & mol_ac, HDB_Mol &hmol, 
       mol.bonds_origin_atom[j] = hmol.bonds[j].atom1_num-1;
       mol.bonds_target_atom[j] = hmol.bonds[j].atom2_num-1;
       mol.bond_types[j]        = hmol.bonds[j].bond_name;
+      //mol.amber_bt_minimize[j] = -1;
+      mol.amber_bt_id[j] = -1;
+      //mol.bond_active_flags[j] = -1;
     }
 
     // look up coordenates for a branch.  confs -> seg -> coord -> atom . 
@@ -221,6 +252,17 @@ HDB_Conformer_Search::set_branch_mol(DOCKMol &mol, DOCKMol &mol_ac, HDB_Mol &hmo
        }
        
     }
+    // Add important information to hdb_data string to be printed to header.
+    // including internal energy, conf number ...
+    int FLOAT_WIDTH = 20;
+    int STRING_WIDTH = 17 + 19;
+    string DELIMITER    = "########## ";
+
+    ostringstream text;
+    text << DELIMITER << setw(STRING_WIDTH) << "HDB_Conf_Number:"      << setw(FLOAT_WIDTH) << fixed << hmol.confs[confnum].conf_num  << endl;
+    text << DELIMITER << setw(STRING_WIDTH) << "HDB_Internal_energy1:" << setw(FLOAT_WIDTH) << fixed << hmol.confs[confnum].internal_energy1  << endl;
+    text << DELIMITER << setw(STRING_WIDTH) << "HDB_Internal_energy2:" << setw(FLOAT_WIDTH) << fixed << hmol.confs[confnum].internal_energy2 << endl;
+    mol.hdb_data = text.str();
 
 
 }
@@ -262,8 +304,9 @@ HDB_Conformer_Search::generate_mols_from_confs(HDB_MULTICONF &conf, DOCKMol &ret
 }
 */
 
-float score_segment( Master_Score &score, Orient &orient, DOCKMol &mol, DOCKMol & mol_ac, HDB_Mol &hmol, int i ){
+float score_segment( Master_Score &score, Orient &orient, DOCKMol &mol, DOCKMol & mol_ac, HDB_Mol &hmol, int i , float &seg_score_for_check){
        float seg_score;
+       //float seg_score_for_check;
        //activate the segment atoms
        int atom_start = hmol.segs[i].start_coord;
        int atom_stop = hmol.segs[i].stop_coord;
@@ -286,17 +329,31 @@ float score_segment( Master_Score &score, Orient &orient, DOCKMol &mol, DOCKMol 
        //if (score.compute_primary_score(mol)){
        //float s_flag = score.compute_primary_score(mol_ac);
        //cout << "I AM HERE" << endl;
-       orient.orientation_HDB(mol);
-       bool seg_flag = score.compute_primary_score(mol);
+       if (i == 0)
+          orient.orientation_HDB(mol,true);
+       else
+          orient.orientation_HDB(mol,false);
+
+       bool seg_flag_score = score.compute_primary_score(mol);
        //float s_flag = score.compute_primary_score(mol);
        //seg_flag[i] = score.compute_primary_score(mol_ac);
-       if (seg_flag){
+       if (seg_flag_score){
            float s = mol.current_score;
            seg_score = s;
            //cout << "seg_score, seg = " << i << " score = " << s << endl;
+           if (score.c_cmg.use_primary_score) {
+              seg_score_for_check =  score.c_cmg.vdw_component;
+              //cout << "seg_vdw_score, seg = " << i << " chemgrid vdw score = " << score.c_cmg.vdw_component << "; score = "<< s << endl;
+           } else if (score.c_nrg.use_primary_score) {
+              seg_score_for_check =  score.c_nrg.vdw_component;
+              //cout << "seg_vdw_score, seg = " << i << " grid vdw score = " << score.c_nrg.vdw_component << "; score = "<< s << endl;
+           } else {
+               seg_score_for_check = seg_score;
+           }
        }
        else{  
            seg_score = 100000.0;
+           seg_score_for_check = seg_score;
        }
        //myfile << "###### score1:   " << seg_scores[i] << endl;
        //Write_Mol2(mol_ac, myfile);
@@ -320,6 +377,7 @@ void
 HDB_Conformer_Search::search(Master_Score &score, Orient &orient, Bump_Filter &bump, DOCKMol &mol, DOCKMol & mol_ac, HDB_Mol &hmol, int num ) 
 {
 
+   //cout << "Entering HDB search function..." << endl;
    //ofstream myfile;
    //myfile.open ("debug3.mol2");
    //Write_Mol2(mol_ac, myfile);
@@ -333,9 +391,11 @@ HDB_Conformer_Search::search(Master_Score &score, Orient &orient, Bump_Filter &b
    //cout << filename << endl;
 
    float *seg_scores;
+   float *seg_scores_check;
    bool *seg_flag;
 
    seg_scores = new float[hmol.num_of_segs];
+   seg_scores_check = new float[hmol.num_of_segs];
    seg_flag = new bool[hmol.num_of_segs];
 
    for (int i=0; i< hmol.num_of_segs; i++){
@@ -389,34 +449,56 @@ HDB_Conformer_Search::search(Master_Score &score, Orient &orient, Bump_Filter &b
    } 
    //myfile.close();
 */
+   for (int i=0; i< hmol.num_of_confs; i++){
+           conf_scores[i] = 0;
+   }
 
+   //float s_check = score_thres+1;
+   float s_check = score_thres;
    //float score_thres = 10.0;
    // loop over all conformations.  
    float s = 0.0;
    for (int i=0; i< hmol.num_of_confs; i++){
       conf_flag[i] = true;
+      if (skip_broken and hmol.confs[i].broken){
+          //cout << "clash skiping branch ... " << i << endl; 
+          conf_flag[i] = false;
+          continue;
+      } 
       //cout << i << " num of seg " << hmol.confs[i].num_of_seg<< endl;
       for (int k=0;k<hmol.confs[i].num_of_seg;k++){ // loop of each seg in conformation.  
            //hmol.segs[hmol.confs[i].list_of_seg[k]-1]
            //if (seg_flag[hmol.confs[i].list_of_seg[k]-1]){ 
            if (seg_flag[hmol.confs[i].list_of_seg[k]-1]) { // if segment score has not been calculated;
               //seg_scores[hmol.confs[i].list_of_seg[k]-1] < score_thres){ 
-              s = score_segment( score, orient, mol, mol_ac, hmol, (hmol.confs[i].list_of_seg[k]-1) );
+              s = score_segment( score, orient, mol, mol_ac, hmol, (hmol.confs[i].list_of_seg[k]-1), s_check );
               //cout << "seg " << hmol.confs[i].list_of_seg[k] << ": "<< seg_scores[hmol.confs[i].list_of_seg[k]-1] << endl;
+	      //cout << "s = " << s << "; s_check =  "<< s_check << endl;
               seg_scores[hmol.confs[i].list_of_seg[k]-1] = s;
+              seg_scores_check[hmol.confs[i].list_of_seg[k]-1] = s_check;
               seg_flag[hmol.confs[i].list_of_seg[k]-1] = false; // already seen once
            }else{ 
-              s = seg_scores[hmol.confs[i].list_of_seg[k]-1];
+              s       = seg_scores[hmol.confs[i].list_of_seg[k]-1];
+              s_check = seg_scores_check[hmol.confs[i].list_of_seg[k]-1];
            }
            conf_scores[i] = conf_scores[i] + seg_scores[hmol.confs[i].list_of_seg[k]-1];
 
-           if (s > score_thres) { 
-              if (i == 0) {// this is the anchor or rigid segment. if it is clashing then skip the whole orient.  
+           //if (s > score_thres) { 
+           // if grid score or chemgrid score use the vdw componant otherwise use the whole score. 
+           if (s_check > score_thres) { 
+              if (k == 0) {// this is the anchor or rigid segment. if it is clashing then skip the whole orient.  
                   //cout << " anchor or rigid segment is clashing, so skip orient" << endl;
+                  //cout << " s_check = " << s_check << "; s = " << s << "; score_thres = " << score_thres << endl;
+                  delete[]seg_scores ;
+                  delete[]seg_scores_check ;
+                  delete[]seg_flag ;
+                  delete[]conf_scores;
+                  delete[]conf_flag;
                   return;
               }
-              conf_scores[i] = 10000.000;
+              //conf_scores[i] = 10000.000;
               conf_flag[i] = false;
+              //cout << "break out of loop: s_check = " << s_check << "; s = " << s << "; score_thres = " << score_thres << endl;
               //cout << "break out of loop" << endl;
               break;
            }
@@ -428,9 +510,12 @@ HDB_Conformer_Search::search(Master_Score &score, Orient &orient, Bump_Filter &b
    //
    vector <INT_FLOAT_Pair> conf_score_index ;
    conf_score_index.clear();
-
    for (int i=0; i< hmol.num_of_confs; i++){
       if (conf_flag[i]){
+         //if (conf_scores[i] >= 10000.000) {
+         //  cout << "Warning.  conf_scores[i] is greater than 10000.0000 :: " << conf_scores[i] << endl;
+         //}
+         //cout << "conf_scores["<< i <<"] = " << conf_scores[i] << endl;
          INT_FLOAT_Pair val;
          val.first = i;
          val.second = conf_scores[i];
@@ -451,9 +536,13 @@ HDB_Conformer_Search::search(Master_Score &score, Orient &orient, Bump_Filter &b
    //myfile.open (filename);
    SCOREMol smol;
    for (int i=0; i< num_to_add; i++){
-       //cout << conf_score_index[i].first << " " << conf_score_index[i].second << endl;
+       //if (conf_score_index[i].second >= 10000.000) {
+       //   //cout << "Warning.  conf_score_index is greater than 10000.0000 :: " << conf_score_index[i].second<< endl;
+       //   continue;
+       //}
+       //cout << i << " "<< conf_score_index[i].first << " " << conf_score_index[i].second << endl;
        set_branch_mol(mol, mol_ac, hmol, conf_score_index[i].first) ;
-       orient.orientation_HDB(mol);
+       orient.orientation_HDB(mol,false);
        score.compute_primary_score(mol);
        //myfile << "###### score1:   " << conf_score_index[i].second << endl;
        //cout << "###### score1:   " << conf_score_index[i].second << endl;
@@ -466,7 +555,13 @@ HDB_Conformer_Search::search(Master_Score &score, Orient &orient, Bump_Filter &b
    }
    //cout <<  "all_poses size = " << all_poses.size()<<endl;
    //myfile.close();
+   delete[]seg_scores ;
+   delete[]seg_scores_check ;
+   delete[]seg_flag ;
+   delete[]conf_scores;
+   delete[]conf_flag;
 
+   return;
 }
 
 

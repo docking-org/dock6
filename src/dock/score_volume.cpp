@@ -15,8 +15,226 @@
 
 using namespace std;
 
+// +++++++++++++++++++++++++++++++++++++++++
+// Volume_Score_Comp BEGIN  methods
+// The initialization of Volume Score Comp
+Volume_Score_Comp::Volume_Score_Comp()
+{
+
+        (*this).total_component       =-1;
+        (*this).heavy_atom_component  =-1;
+        (*this).positive_component    =-1;
+        (*this).negative_component    =-1;
+        (*this).hydrophobic_component =-1;
+        (*this).hydrophilic_component =-1;
+        (*this).VOS =-1;
+}
+
+Volume_Score_Comp::~Volume_Score_Comp()
+{
+        (*this).total_component       =-1;
+        (*this).heavy_atom_component  =-1;
+        (*this).positive_component    =-1;
+        (*this).negative_component    =-1;
+        (*this).hydrophobic_component =-1;
+        (*this).hydrophilic_component =-1;
+        (*this).VOS =-1;
+}
+
+void
+Volume_Score_Comp::clear()
+{
+        (*this).total_component       =-1;
+        (*this).heavy_atom_component  =-1;
+        (*this).positive_component    =-1;
+        (*this).negative_component    =-1;
+        (*this).hydrophobic_component =-1;
+        (*this).hydrophilic_component =-1;
+        (*this).VOS =-1;
+}
+
+Volume_Score_Comp::Volume_Score_Comp( const Volume_Score_Comp &original)
+{
+    (*this).total_component       = original.total_component;
+    (*this).heavy_atom_component  = original.heavy_atom_component;
+    (*this).positive_component    = original.positive_component;
+    (*this).negative_component    = original.negative_component;
+    (*this).hydrophobic_component = original.hydrophobic_component;
+    (*this).hydrophilic_component = original.hydrophilic_component;
+    (*this).VOS = original.VOS;
+}
+
+void Volume_Score_Comp::operator=(const Volume_Score_Comp &original)
+{
+    (*this).total_component       = original.total_component;
+    (*this).heavy_atom_component  = original.heavy_atom_component;
+    (*this).positive_component    = original.positive_component;
+    (*this).negative_component    = original.negative_component;
+    (*this).hydrophobic_component = original.hydrophobic_component;
+    (*this).hydrophilic_component = original.hydrophilic_component;
+    (*this).VOS = original.VOS;
+}
+
+// Volume_Score_Comp END methods
+
+// A standalone function that doesn't require input parameters. 
+// This is one of many ways to calculate volume overlap
+Volume_Score_Comp
+Volume_Score_Comp::compute_score_analytical( DOCKMol & mol, DOCKMol & ref_mol )
+{
+
+    Volume_Score_Comp final_comp {}; 
+
+    int         i,
+                j;
+    float       pi = 3.14,
+                d_sqr,
+                overlap_temp;
+    float alone_overlap_ref_ref = 0;     // general geometric overlap (all atoms)
+    float alone_overlap_ref_ref_hvy = 0; // heavy atoms
+    float alone_overlap_ref_ref_pho = 0; // hydrophobic atoms
+    float alone_overlap_ref_ref_phi = 0; // hydrophilic atoms
+    float alone_overlap_ref_ref_neg = 0; // negatively charged atoms
+    float alone_overlap_ref_ref_pos = 0; // positively charged atoms
 
 
+    for (i = 0; i < ref_mol.num_atoms; i++){
+        for (j = 0; j < ref_mol.num_atoms; j++){
+            d_sqr = pow(ref_mol.x[i] - ref_mol.x[j], 2.0) + pow(ref_mol.y[i] - ref_mol.y[j], 2.0) + pow(ref_mol.z[i] - ref_mol.z[j], 2.0);
+            if (d_sqr < (ref_mol.amber_at_radius[i] + ref_mol.amber_at_radius[j]) * (ref_mol.amber_at_radius[i] + ref_mol.amber_at_radius[j])) {
+                if (d_sqr > 0.00001){ //begin if 1 for geometric overlap
+                    overlap_temp = pi / 12 * pow((ref_mol.amber_at_radius[i] + ref_mol.amber_at_radius[j] - sqrt(d_sqr)), 2.0)  * (sqrt(d_sqr) + 2 * (ref_mol.amber_at_radius[i] + ref_mol.amber_at_radius[j]) - 3 / sqrt(d_sqr) * pow(ref_mol.amber_at_radius[i] - ref_mol.amber_at_radius[j], 2.0));
+                } //end if 1
+                else { //else 1 for geometric overlap 
+                    overlap_temp = pi / 12 * 2 * pow(ref_mol.amber_at_radius[i] + ref_mol.amber_at_radius[j], 3.0); 
+                }
+                alone_overlap_ref_ref  = alone_overlap_ref_ref + overlap_temp;
+                if (ref_mol.atom_types[i] != "H" && ref_mol.atom_types[j] != "H"){
+                    alone_overlap_ref_ref_hvy = alone_overlap_ref_ref_hvy + overlap_temp;
+		}
+                if (ref_mol.chem_types[i] == "hydrophobic" && ref_mol.chem_types[j] == "hydrophobic"){
+                    alone_overlap_ref_ref_pho = alone_overlap_ref_ref_pho + overlap_temp;
+		}
+                if ((ref_mol.chem_types[i] == "donar" || ref_mol.chem_types[i] == "acceptor" || ref_mol.chem_types[i] == "polar") && (ref_mol.chem_types[j] == "donar" || ref_mol.chem_types[j] == "acceptor" || ref_mol.chem_types[j] == "polar")){
+                    alone_overlap_ref_ref_phi = alone_overlap_ref_ref_phi + overlap_temp;
+                }
+                if (ref_mol.charges[i] < 0 && ref_mol.charges[j] < 0){
+                    alone_overlap_ref_ref_neg = alone_overlap_ref_ref_neg + overlap_temp;
+		}
+                if (ref_mol.charges[i] > 0 && ref_mol.charges[j] > 0){
+                    alone_overlap_ref_ref_pos = alone_overlap_ref_ref_pos + overlap_temp;
+		}
+
+            }
+        }
+    }
+
+    float overlap_mol_ref = 0;
+    float overlap_mol_ref_hvy = 0;
+    float overlap_mol_ref_pho = 0;
+    float overlap_mol_ref_phi = 0;
+    float overlap_mol_ref_neg = 0;
+    float overlap_mol_ref_pos = 0;
+    float overlap_mol_mol = 0;
+    float overlap_mol_mol_hvy = 0;
+    float overlap_mol_mol_pho = 0;
+    float overlap_mol_mol_phi = 0;
+    float overlap_mol_mol_neg = 0;
+    float overlap_mol_mol_pos = 0;
+
+
+    for (i = 0; i < mol.num_atoms; i++){
+        if (mol.atom_active_flags[i]) {
+            for (j = 0; j < ref_mol.num_atoms; j++){
+                d_sqr = (mol.x[i] - ref_mol.x[j]) * (mol.x[i] - ref_mol.x[j]) + (mol.y[i] - ref_mol.y[j]) * (mol.y[i] - ref_mol.y[j]) + (mol.z[i] - ref_mol.z[j]) * (mol.z[i] - ref_mol.z[j]);
+                if (d_sqr < (mol.amber_at_radius[i] + ref_mol.amber_at_radius[j]) * (mol.amber_at_radius[i] + ref_mol.amber_at_radius[j])) {
+                    if (d_sqr > 0.00001)
+                        overlap_temp = pi / 12 * (mol.amber_at_radius[i] + ref_mol.amber_at_radius[j] - sqrt(d_sqr)) * (mol.amber_at_radius[i] + ref_mol.amber_at_radius[j] - sqrt(d_sqr)) * (sqrt(d_sqr) + 2 * (mol.amber_at_radius[i] + ref_mol.amber_at_radius[j]) - 3 / sqrt(d_sqr) * (mol.amber_at_radius[i] - ref_mol.amber_at_radius[j]) * (mol.amber_at_radius[i] - ref_mol.amber_at_radius[j]));
+                    else
+                        overlap_temp = pi / 12 * 2 * (mol.amber_at_radius[i] + ref_mol.amber_at_radius[j]) * (mol.amber_at_radius[i] + ref_mol.amber_at_radius[j]) * (mol.amber_at_radius[i] + ref_mol.amber_at_radius[j]);
+                    overlap_mol_ref = overlap_mol_ref + overlap_temp;
+                    if (mol.atom_types[i] != "H" && ref_mol.atom_types[j] != "H") 
+                        overlap_mol_ref_hvy = overlap_mol_ref_hvy + overlap_temp;
+                    if (mol.chem_types[i] == "hydrophobic" && ref_mol.chem_types[j] == "hydrophobic")
+                        overlap_mol_ref_pho = overlap_mol_ref_pho + overlap_temp;
+                    if ((mol.chem_types[i] == "donar" || mol.chem_types[i] == "acceptor" || mol.chem_types[i] == "polar") && (ref_mol.chem_types[j] == "donar" || ref_mol.chem_types[j] == "acceptor" || ref_mol.chem_types[j] == "polar"))
+                        overlap_mol_ref_phi = overlap_mol_ref_phi + overlap_temp;
+                    if (mol.charges[i] < 0 && ref_mol.charges[j] < 0)
+                        overlap_mol_ref_neg = overlap_mol_ref_neg + overlap_temp;
+                    if (mol.charges[i] > 0 && ref_mol.charges[j] > 0)
+                        overlap_mol_ref_pos = overlap_mol_ref_pos + overlap_temp;
+    
+                }
+            }
+        }
+    }
+
+    for (i = 0; i < mol.num_atoms; i++){
+        if (mol.atom_active_flags[i]) {
+            for (j = 0; j < mol.num_atoms; j++){
+                if (mol.atom_active_flags[j]) {
+                    d_sqr = (mol.x[i] - mol.x[j]) * (mol.x[i] - mol.x[j]) + (mol.y[i] - mol.y[j]) * (mol.y[i] - mol.y[j]) + (mol.z[i] - mol.z[j]) * (mol.z[i] - mol.z[j]);
+                    if (d_sqr < (mol.amber_at_radius[i] + mol.amber_at_radius[j]) * (mol.amber_at_radius[i] + mol.amber_at_radius[j])) {
+                        if (d_sqr > 0.00001)
+                            overlap_temp = pi / 12 * (mol.amber_at_radius[i] + mol.amber_at_radius[j] - sqrt(d_sqr)) * (mol.amber_at_radius[i] + mol.amber_at_radius[j] - sqrt(d_sqr)) * (sqrt(d_sqr) + 2 * (mol.amber_at_radius[i] + mol.amber_at_radius[j]) - 3 / sqrt(d_sqr) * (mol.amber_at_radius[i] - mol.amber_at_radius[j]) * (mol.amber_at_radius[i] - mol.amber_at_radius[j]));
+                        else
+                            overlap_temp = pi / 12 * 2 * (mol.amber_at_radius[i] + mol.amber_at_radius[j]) * (mol.amber_at_radius[i] + mol.amber_at_radius[j]) * (mol.amber_at_radius[i] + mol.amber_at_radius[j]);
+                        overlap_mol_mol = overlap_mol_mol + overlap_temp;
+                        if (mol.atom_types[i] != "H" && mol.atom_types[j] != "H")
+                            overlap_mol_mol_hvy = overlap_mol_mol_hvy + overlap_temp;
+                        if (mol.chem_types[i] == "hydrophobic" && mol.chem_types[j] == "hydrophobic")
+                            overlap_mol_mol_pho = overlap_mol_mol_pho + overlap_temp;
+                        if ((mol.chem_types[i] == "donar" || mol.chem_types[i] == "acceptor" || mol.chem_types[i] == "polar") && (mol.chem_types[j] == "donar" || mol.chem_types[j] == "acceptor" || mol.chem_types[j] == "polar"))
+                            overlap_mol_mol_phi = overlap_mol_mol_phi + overlap_temp;
+                        if (mol.charges[i] < 0 && mol.charges[j] < 0)
+                            overlap_mol_mol_neg = overlap_mol_mol_neg + overlap_temp;
+                        if (mol.charges[i] > 0 && mol.charges[j] > 0)
+                            overlap_mol_mol_pos = overlap_mol_mol_pos + overlap_temp;
+
+                    }
+                }
+            }
+        }
+    }
+
+
+    //cout << overlap_mol_mol << endl;
+
+    if (overlap_mol_mol == 0 && alone_overlap_ref_ref == 0)
+        final_comp.total_component = 0;
+    else
+        final_comp.total_component = overlap_mol_ref / max(overlap_mol_mol, alone_overlap_ref_ref);
+    if (overlap_mol_mol_hvy == 0 && alone_overlap_ref_ref_hvy == 0)
+        final_comp.heavy_atom_component = 0;
+    else
+        final_comp.heavy_atom_component = overlap_mol_ref_hvy / max(overlap_mol_mol_hvy, alone_overlap_ref_ref_hvy );
+    if (overlap_mol_mol_pho == 0 && alone_overlap_ref_ref_pho == 0)
+        final_comp.hydrophobic_component = 0;
+    else
+        final_comp.hydrophobic_component = overlap_mol_ref_pho / max(overlap_mol_mol_pho, alone_overlap_ref_ref_pho );
+    if (overlap_mol_mol_phi == 0 && alone_overlap_ref_ref_phi == 0)
+        final_comp.hydrophilic_component = 0;
+    else
+        final_comp.hydrophilic_component = overlap_mol_ref_phi / max(overlap_mol_mol_phi, alone_overlap_ref_ref_phi );
+    if (overlap_mol_mol_neg == 0 && alone_overlap_ref_ref_neg == 0)
+        final_comp.negative_component = 0;
+    else
+        final_comp.negative_component = overlap_mol_ref_neg / max(overlap_mol_mol_neg, alone_overlap_ref_ref_neg);
+    if (overlap_mol_mol_pos == 0 && alone_overlap_ref_ref_pos == 0)
+        final_comp.positive_component = 0;
+    else
+        final_comp.positive_component = overlap_mol_ref_pos / max(overlap_mol_mol_pos, alone_overlap_ref_ref_pos);
+
+
+    final_comp.VOS =  (final_comp.total_component + 
+                         final_comp.heavy_atom_component + 
+                         final_comp.hydrophobic_component + 
+                         final_comp.hydrophilic_component + 
+                         final_comp.negative_component + 
+                         final_comp.positive_component) / 6;
+    return final_comp;
+
+}
 // +++++++++++++++++++++++++++++++++++++++++
 Volume_Score::Volume_Score()
 {
@@ -127,7 +345,64 @@ Volume_Score::input_parameters_main(Parameter_Reader & parm, string parm_head)
 } // end Volume_Score::input_parameters()
 
 
+// +++++++++++++++++++++++++++++++++++++++++
+void
+Volume_Score::initialize_reference_overlap_helper(){
+    int         i,
+                j;
+    float       pi = 3.14,
+                d_sqr,
+                overlap_temp;
+    overlap_ref_ref = 0;     // general geometric overlap (all atoms)
+    overlap_ref_ref_hvy = 0; // heavy atoms
+    overlap_ref_ref_pho = 0; // hydrophobic atoms
+    overlap_ref_ref_phi = 0; // hydrophilic atoms
+    overlap_ref_ref_neg = 0; // negatively charged atoms
+    overlap_ref_ref_pos = 0; // positively charged atoms
 
+
+    for (i = 0; i < volume_ref_mol.num_atoms; i++){
+        for (j = 0; j < volume_ref_mol.num_atoms; j++){
+            d_sqr = pow(volume_ref_mol.x[i] - volume_ref_mol.x[j], 2.0) + pow(volume_ref_mol.y[i] - volume_ref_mol.y[j], 2.0) + pow(volume_ref_mol.z[i] - volume_ref_mol.z[j], 2.0);
+            if (d_sqr < (volume_ref_mol.amber_at_radius[i] + volume_ref_mol.amber_at_radius[j]) * (volume_ref_mol.amber_at_radius[i] + volume_ref_mol.amber_at_radius[j])) {
+                if (d_sqr > 0.00001){ //begin if 1 for geometric overlap
+                    overlap_temp = pi / 12 * pow((volume_ref_mol.amber_at_radius[i] + volume_ref_mol.amber_at_radius[j] - sqrt(d_sqr)), 2.0)  * (sqrt(d_sqr) + 2 * (volume_ref_mol.amber_at_radius[i] + volume_ref_mol.amber_at_radius[j]) - 3 / sqrt(d_sqr) * pow(volume_ref_mol.amber_at_radius[i] - volume_ref_mol.amber_at_radius[j], 2.0));
+                } //end if 1
+                else { //else 1 for geometric overlap 
+                    overlap_temp = pi / 12 * 2 * pow(volume_ref_mol.amber_at_radius[i] + volume_ref_mol.amber_at_radius[j], 3.0); 
+                }
+                overlap_ref_ref = overlap_ref_ref + overlap_temp;
+                if (volume_ref_mol.atom_types[i] != "H" && volume_ref_mol.atom_types[j] != "H"){
+                    overlap_ref_ref_hvy = overlap_ref_ref_hvy + overlap_temp;
+		}
+                if (volume_ref_mol.chem_types[i] == "hydrophobic" && volume_ref_mol.chem_types[j] == "hydrophobic"){
+                    overlap_ref_ref_pho = overlap_ref_ref_pho + overlap_temp;
+		}
+                if ((volume_ref_mol.chem_types[i] == "donar" || volume_ref_mol.chem_types[i] == "acceptor" || volume_ref_mol.chem_types[i] == "polar") && (volume_ref_mol.chem_types[j] == "donar" || volume_ref_mol.chem_types[j] == "acceptor" || volume_ref_mol.chem_types[j] == "polar")){
+                    overlap_ref_ref_phi = overlap_ref_ref_phi + overlap_temp;
+                }
+                if (volume_ref_mol.charges[i] < 0 && volume_ref_mol.charges[j] < 0){
+                    overlap_ref_ref_neg = overlap_ref_ref_neg + overlap_temp;
+		}
+                if (volume_ref_mol.charges[i] > 0 && volume_ref_mol.charges[j] > 0){
+                    overlap_ref_ref_pos = overlap_ref_ref_pos + overlap_temp;
+		}
+
+            }
+        }
+    }
+
+}
+
+// +++++++++++++++++++++++++++++++++++++++++
+// lightweight overloaded initialize function which ignores IO (meant for dmax)
+void
+Volume_Score::initialize(AMBER_TYPER & typer, DOCKMol & ref_mol)
+{
+    volume_ref_mol = ref_mol;
+    typer.prepare_molecule(volume_ref_mol, true, false, false, true);
+    initialize_reference_overlap_helper();
+}
 // +++++++++++++++++++++++++++++++++++++++++
 void
 Volume_Score::initialize(AMBER_TYPER & typer)
@@ -153,43 +428,7 @@ Volume_Score::initialize(AMBER_TYPER & typer)
 
     }
 
-    int         i,
-                j;
-    float       pi = 3.14,
-                d_sqr,
-                overlap_temp;
-    overlap_ref_ref = 0;
-    overlap_ref_ref_hvy = 0;
-    overlap_ref_ref_pho = 0;
-    overlap_ref_ref_phi = 0;
-    overlap_ref_ref_neg = 0;
-    overlap_ref_ref_pos = 0;
-
-
-    for (i = 0; i < volume_ref_mol.num_atoms; i++){
-        for (j = 0; j < volume_ref_mol.num_atoms; j++){
-            d_sqr = (volume_ref_mol.x[i] - volume_ref_mol.x[j]) * (volume_ref_mol.x[i] - volume_ref_mol.x[j]) + (volume_ref_mol.y[i] - volume_ref_mol.y[j]) * (volume_ref_mol.y[i] - volume_ref_mol.y[j]) + (volume_ref_mol.z[i] - volume_ref_mol.z[j]) * (volume_ref_mol.z[i] - volume_ref_mol.z[j]);
-            if (d_sqr < (volume_ref_mol.amber_at_radius[i] + volume_ref_mol.amber_at_radius[j]) * (volume_ref_mol.amber_at_radius[i] + volume_ref_mol.amber_at_radius[j])) {
-                if (d_sqr != 0)
-                    overlap_temp = pi / 12 * (volume_ref_mol.amber_at_radius[i] + volume_ref_mol.amber_at_radius[j] - sqrt(d_sqr)) * (volume_ref_mol.amber_at_radius[i] + volume_ref_mol.amber_at_radius[j] - sqrt(d_sqr)) * (sqrt(d_sqr) + 2 * (volume_ref_mol.amber_at_radius[i] + volume_ref_mol.amber_at_radius[j]) - 3 / sqrt(d_sqr) * (volume_ref_mol.amber_at_radius[i] - volume_ref_mol.amber_at_radius[j]) * (volume_ref_mol.amber_at_radius[i] - volume_ref_mol.amber_at_radius[j]));
-                else
-                    overlap_temp = pi / 12 * 2 * (volume_ref_mol.amber_at_radius[i] + volume_ref_mol.amber_at_radius[j]) * (volume_ref_mol.amber_at_radius[i] + volume_ref_mol.amber_at_radius[j]) * (volume_ref_mol.amber_at_radius[i] + volume_ref_mol.amber_at_radius[j]);
-                overlap_ref_ref = overlap_ref_ref + overlap_temp;
-                if (volume_ref_mol.atom_types[i] != "H" && volume_ref_mol.atom_types[j] != "H")
-                    overlap_ref_ref_hvy = overlap_ref_ref_hvy + overlap_temp;
-                if (volume_ref_mol.chem_types[i] == "hydrophobic" && volume_ref_mol.chem_types[j] == "hydrophobic")
-                    overlap_ref_ref_pho = overlap_ref_ref_pho + overlap_temp;
-                if ((volume_ref_mol.chem_types[i] == "donar" || volume_ref_mol.chem_types[i] == "acceptor" || volume_ref_mol.chem_types[i] == "polar") && (volume_ref_mol.chem_types[j] == "donar" || volume_ref_mol.chem_types[j] == "acceptor" || volume_ref_mol.chem_types[j] == "polar"))
-                    overlap_ref_ref_phi = overlap_ref_ref_phi + overlap_temp;
-                if (volume_ref_mol.charges[i] < 0 && volume_ref_mol.charges[j] < 0)
-                    overlap_ref_ref_neg = overlap_ref_ref_neg + overlap_temp;
-                if (volume_ref_mol.charges[i] > 0 && volume_ref_mol.charges[j] > 0)
-                    overlap_ref_ref_pos = overlap_ref_ref_pos + overlap_temp;
-
-            }
-        }
-    }
-
+    initialize_reference_overlap_helper();
 
 
     return;
@@ -603,7 +842,7 @@ Volume_Score::Analytical_method(DOCKMol & mol,float & overlap_ref_ref,float & ov
             for (j = 0; j < volume_ref_mol.num_atoms; j++){
                 d_sqr = (mol.x[i] - volume_ref_mol.x[j]) * (mol.x[i] - volume_ref_mol.x[j]) + (mol.y[i] - volume_ref_mol.y[j]) * (mol.y[i] - volume_ref_mol.y[j]) + (mol.z[i] - volume_ref_mol.z[j]) * (mol.z[i] - volume_ref_mol.z[j]);
                 if (d_sqr < (mol.amber_at_radius[i] + volume_ref_mol.amber_at_radius[j]) * (mol.amber_at_radius[i] + volume_ref_mol.amber_at_radius[j])) {
-                    if (d_sqr != 0)
+                    if (d_sqr > 0.00001)
                         overlap_temp = pi / 12 * (mol.amber_at_radius[i] + volume_ref_mol.amber_at_radius[j] - sqrt(d_sqr)) * (mol.amber_at_radius[i] + volume_ref_mol.amber_at_radius[j] - sqrt(d_sqr)) * (sqrt(d_sqr) + 2 * (mol.amber_at_radius[i] + volume_ref_mol.amber_at_radius[j]) - 3 / sqrt(d_sqr) * (mol.amber_at_radius[i] - volume_ref_mol.amber_at_radius[j]) * (mol.amber_at_radius[i] - volume_ref_mol.amber_at_radius[j]));
                     else
                         overlap_temp = pi / 12 * 2 * (mol.amber_at_radius[i] + volume_ref_mol.amber_at_radius[j]) * (mol.amber_at_radius[i] + volume_ref_mol.amber_at_radius[j]) * (mol.amber_at_radius[i] + volume_ref_mol.amber_at_radius[j]);
@@ -630,7 +869,7 @@ Volume_Score::Analytical_method(DOCKMol & mol,float & overlap_ref_ref,float & ov
                 if (mol.atom_active_flags[j]) {
                     d_sqr = (mol.x[i] - mol.x[j]) * (mol.x[i] - mol.x[j]) + (mol.y[i] - mol.y[j]) * (mol.y[i] - mol.y[j]) + (mol.z[i] - mol.z[j]) * (mol.z[i] - mol.z[j]);
                     if (d_sqr < (mol.amber_at_radius[i] + mol.amber_at_radius[j]) * (mol.amber_at_radius[i] + mol.amber_at_radius[j])) {
-                        if (d_sqr != 0)
+                        if (d_sqr > 0.00001)
                             overlap_temp = pi / 12 * (mol.amber_at_radius[i] + mol.amber_at_radius[j] - sqrt(d_sqr)) * (mol.amber_at_radius[i] + mol.amber_at_radius[j] - sqrt(d_sqr)) * (sqrt(d_sqr) + 2 * (mol.amber_at_radius[i] + mol.amber_at_radius[j]) - 3 / sqrt(d_sqr) * (mol.amber_at_radius[i] - mol.amber_at_radius[j]) * (mol.amber_at_radius[i] - mol.amber_at_radius[j]));
                         else
                             overlap_temp = pi / 12 * 2 * (mol.amber_at_radius[i] + mol.amber_at_radius[j]) * (mol.amber_at_radius[i] + mol.amber_at_radius[j]) * (mol.amber_at_radius[i] + mol.amber_at_radius[j]);
@@ -688,6 +927,14 @@ Volume_Score::Analytical_method(DOCKMol & mol,float & overlap_ref_ref,float & ov
 
 }
 
+//version of compute score meant to require no IO, takes a working DOCKMol and a reference DOCKMol and computes the score between the two.
+bool
+Volume_Score::compute_score(DOCKMol & mol, DOCKMol & ref_mol, AMBER_TYPER & c_typer){
+    use_score = true;
+    initialize(c_typer, ref_mol);
+    Analytical_method(mol,overlap_ref_ref,overlap_ref_ref_hvy,overlap_ref_ref_pho,overlap_ref_ref_phi,overlap_ref_ref_neg,overlap_ref_ref_pos);
+    return true;
+}
 
 bool
 Volume_Score::compute_score(DOCKMol & mol)

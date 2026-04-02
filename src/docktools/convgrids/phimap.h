@@ -33,12 +33,14 @@ c oldmid (center of DelPhi phimap)
       character*80 phifil
 
 c DelPhi
-      real  phimap(NSIZE, NSIZE, NSIZE)
+      !real  phimap(NSIZE, NSIZE, NSIZE)
+      real, allocatable :: phimap(:, :, :)
+      !real  phimap(nsize, nsize, nsize)
 
       common /phiv/scale, oldmid 
 
       common /phic/phifil
 
-      common /phia/phimap
+      !common /phia/phimap
 
  

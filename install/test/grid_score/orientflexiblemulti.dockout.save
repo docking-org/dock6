@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released September 2024
 Copyright UCSF
 --------------------------------------
 
@@ -22,6 +22,7 @@ min_anchor_size                                              40
 pruning_use_clustering                                       yes
 pruning_max_orients                                          10
 pruning_clustering_cutoff                                    100
+pruning_orient_score_cutoff                                  1000.0
 pruning_conformer_score_cutoff                               100.0
 pruning_conformer_score_scaling_factor                       1.0
 use_clash_overlap                                            no
@@ -71,7 +72,11 @@ grid_score_primary                                           yes
 grid_score_rep_rad_scale                                     1
 grid_score_vdw_scale                                         1
 grid_score_es_scale                                          1
+grid_lig_efficiency                                          no
 grid_score_grid_prefix                                       ../grid_generation/grid
+
+GIST Score Parameters
+------------------------------------------------------------------------------------------
 
 MultiGrid Score Parameters
 ------------------------------------------------------------------------------------------
@@ -112,6 +117,7 @@ Amber Score Parameters
 Simplex Minimization Parameters
 ------------------------------------------------------------------------------------------
 minimize_ligand                                              no
+simplex_final_min                                            no
 
 Atom Typing Parameters
 ------------------------------------------------------------------------------------------
@@ -123,13 +129,16 @@ flex_drive_file                                              ../../../parameters
 Molecule Library Output Parameters
 ------------------------------------------------------------------------------------------
 ligand_outfile_prefix                                        orientflexiblemulti
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
 
 Initializing Conformer Generator Routines...
 Initializing Library File Routines...
+
 Initializing Orienting Routines...
 Initializing Grid Score Routines...
  Reading the energy grid from ../grid_generation/grid.nrg
@@ -140,20 +149,20 @@ Initializing Grid Score Routines...
 -----------------------------------
 Molecule: ZINC00158442
 
- Elapsed time for docking:	0.066 seconds
+ Elapsed time for docking:	0.052 seconds
 
  Anchors:		1
  Orientations:		100
  Conformations:		4
 
-                          Grid_Score:           -0.554125
-                     Grid_vdw_energy:           -1.959602
-                      Grid_es_energy:            1.405477
+                          Grid_Score:           -0.554075
+                     Grid_vdw_energy:           -1.959551
+                      Grid_es_energy:            1.405475
 
 -----------------------------------
 Molecule: ZINC00158751
 
- Elapsed time for docking:	0.018 seconds
+ Elapsed time for docking:	0.014 seconds
 
  Anchors:		1
  Orientations:		100
@@ -166,20 +175,20 @@ Molecule: ZINC00158751
 -----------------------------------
 Molecule: ZINC00013564
 
- Elapsed time for docking:	0.013 seconds
+ Elapsed time for docking:	0.009 seconds
 
  Anchors:		1
  Orientations:		100
  Conformations:		10
 
-                          Grid_Score:          -15.287382
+                          Grid_Score:          -15.287383
                      Grid_vdw_energy:          -17.370550
-                      Grid_es_energy:            2.083168
+                      Grid_es_energy:            2.083167
 
 -----------------------------------
 Molecule: ZINC01555236
 
- Elapsed time:	0.134 seconds
+ Elapsed time:	0.144 seconds
 
  ERROR:  Could not complete growth.
          Confirm that the grid box is large enough to contain the ligand,
@@ -188,67 +197,67 @@ Molecule: ZINC01555236
 -----------------------------------
 Molecule: ZINC00150863
 
- Elapsed time for docking:	0.006 seconds
+ Elapsed time for docking:	0.007 seconds
 
  Anchors:		1
  Orientations:		100
  Conformations:		10
 
-                          Grid_Score:          -13.396927
-                     Grid_vdw_energy:          -13.679748
+                          Grid_Score:          -13.396925
+                     Grid_vdw_energy:          -13.679746
                       Grid_es_energy:            0.282820
 
 -----------------------------------
 Molecule: ZINC00152265
 
- Elapsed time for docking:	0.010 seconds
+ Elapsed time for docking:	0.013 seconds
 
  Anchors:		1
  Orientations:		100
  Conformations:		19
 
-                          Grid_Score:          -15.236704
+                          Grid_Score:          -15.236702
                      Grid_vdw_energy:          -13.851338
-                      Grid_es_energy:           -1.385365
+                      Grid_es_energy:           -1.385364
 
 -----------------------------------
 Molecule: ZINC00152280
 
- Elapsed time for docking:	0.124 seconds
+ Elapsed time for docking:	0.073 seconds
 
  Anchors:		1
  Orientations:		100
  Conformations:		64
 
-                          Grid_Score:          -17.706253
-                     Grid_vdw_energy:          -16.459993
-                      Grid_es_energy:           -1.246260
+                          Grid_Score:          -17.706257
+                     Grid_vdw_energy:          -16.459995
+                      Grid_es_energy:           -1.246262
 
 -----------------------------------
 Molecule: ZINC00157111
 
- Elapsed time for docking:	0.084 seconds
+ Elapsed time for docking:	0.074 seconds
 
  Anchors:		1
  Orientations:		100
  Conformations:		19
 
-                          Grid_Score:          -14.073079
-                     Grid_vdw_energy:          -12.586664
-                      Grid_es_energy:           -1.486415
+                          Grid_Score:          -14.073266
+                     Grid_vdw_energy:          -12.575704
+                      Grid_es_energy:           -1.497562
 
 -----------------------------------
 Molecule: ZINC00157152
 
- Elapsed time for docking:	0.012 seconds
+ Elapsed time for docking:	0.014 seconds
 
  Anchors:		1
  Orientations:		100
  Conformations:		19
 
-                          Grid_Score:          -15.555840
-                     Grid_vdw_energy:          -15.114218
-                      Grid_es_energy:           -0.441622
+                          Grid_Score:          -15.555817
+                     Grid_vdw_energy:          -15.114187
+                      Grid_es_energy:           -0.441629
 
 -----------------------------------
 Molecule: ZINC00157402
@@ -266,29 +275,32 @@ Molecule: ZINC00157402
 -----------------------------------
 Molecule: ZINC00157467
 
- Elapsed time for docking:	0.069 seconds
+ Elapsed time for docking:	0.080 seconds
 
  Anchors:		1
  Orientations:		100
  Conformations:		31
 
-                          Grid_Score:          -14.412565
-                     Grid_vdw_energy:          -13.521505
-                      Grid_es_energy:           -0.891060
+                          Grid_Score:          -14.412553
+                     Grid_vdw_energy:          -13.521490
+                      Grid_es_energy:           -0.891063
 
 -----------------------------------
 Molecule: ZINC00157960
 
- Elapsed time for docking:	0.013 seconds
+ Elapsed time for docking:	0.021 seconds
 
  Anchors:		1
  Orientations:		100
  Conformations:		6
 
-                          Grid_Score:          -17.022007
-                     Grid_vdw_energy:          -16.388033
-                      Grid_es_energy:           -0.633974
+                          Grid_Score:          -17.022034
+                     Grid_vdw_energy:          -16.388054
+                      Grid_es_energy:           -0.633980
 
 
 12 Molecules Processed
-Total elapsed time:	0.571 seconds
+Total elapsed time:	0.538 seconds
+Number of molecules per second:	22.319
+Virtual memory used for this process: 97676 kilobytes
+Physical memory used for this process: 21148 kilobytes

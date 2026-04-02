@@ -522,17 +522,73 @@ Ph4_Score::input_parameters_main(Parameter_Reader & parm, string parm_head)
     }
 } //end Ph4_Score::input_parameters_main()
 
-// +++++++++++++++++++++++++++++++++++++++++
-void
-Ph4_Score::initialize(AMBER_TYPER & typer)
-{
-    ifstream        ref_file;
-//    ifstream        rec_file; // in case we are doing receptor based scoring
-    bool            read_vdw,
-                    use_chem,
-                    use_ph4,
-                    use_volume;
 
+// +++++++++++++++++++++++++++++++++++++++++
+// This functions reads in the reference based on the DOCKMol ref file provided by input
+void 
+Ph4_Score::initialize_read_Mol2_helper(AMBER_TYPER & typer){
+    ifstream ref_file;
+    ref_file.open(constant_ph4_ref_file.c_str());
+
+    if (ref_file.fail()) {
+        cout << "Error Opening Reference File!" << endl;
+        exit(0);
+    }
+
+    if (!Read_Mol2(reference, ref_file, false, false, false)) {
+        cout << "Error Reading Reference Molecule!" << endl;
+        exit(0);
+    }
+
+    ref_file.close();
+}
+
+// +++++++++++++++++++++++++++++++++++++++++
+// This function reads in the reference based on a Ph4 file provided by input
+void
+Ph4_Score::initialize_read_ph4_helper(AMBER_TYPER & typer){
+    ifstream ref_file;
+    ref_file.open(constant_ph4_ref_file.c_str());
+    if (ref_file.fail()) {
+        cout << "Error Opening Reference File!" << endl;
+        exit(0);
+    }
+
+    if (!read_ph4_txt(Ph4_ref, ref_file)) {
+                     //make ph4 ref from ref txt
+                     cout << "Error reading in Reference ph4!" << endl;
+                     exit(0);
+    }
+
+    ref_file.close();
+    // read in ph4 ref from txt and set ph4
+}
+
+
+// +++++++++++++++++++++++++++++++++++++++++
+// Write out a ph4 struct or mol2 from the other
+void
+Ph4_Score::initialize_output_helper(){
+    if(bool_out_ref_ph4_mol2){
+       refresh_file(ref_ph4_out_mol2_filename);
+       submit_ph4_mol2(Ph4_ref, ref_ph4_out_mol2_filename, reference.title, false);
+    }
+    if(bool_out_ref_ph4_txt){
+       refresh_file(ref_ph4_out_txt_filename);
+       submit_ph4_txt(Ph4_ref, ref_ph4_out_txt_filename);
+    }
+
+    if(bool_out_cad_ph4)
+       refresh_file(cad_ph4_out_filename);
+
+    if(bool_out_mat_ph4)
+       refresh_file(mat_ph4_out_filename);
+}
+
+// +++++++++++++++++++++++++++++++++++++++++
+//
+void
+Ph4_Score::initialize_prepare_Ph4_components_helper(AMBER_TYPER & typer){
     int att_exp = 6, rep_exp = 9;
 
     // Hardcoded for now.  Read from the ph4.defn file in the future;
@@ -542,91 +598,80 @@ Ph4_Score::initialize(AMBER_TYPER & typer)
     char const *const list_types[] = {"hydrophobic", "donor", "acceptor",
                           "aromatic", "aroAcc", "positive", "negative", "ring"};
     int const num_types = sizeof list_types / sizeof list_types[0];
-    
+
     list_comp.clear();// initialize the list of components.
     for (int i=0;i<num_types;i++) {
          list_comp.push_back(list_types[i]);
     }
-    
+
     match_comp = new int [list_comp.size()];
     components = new double [list_comp.size()];
     match_num  = new int [3];
     match_term = new double [2];
- 
+    //we also initialize the vdw energy here
+
+
+    if (use_score || true){
+        init_vdw_energy(typer, att_exp, rep_exp);
+    }
+
+}
+
+// +++++++++++++++++++++++++++++++++++++++++
+// Takes a reference DOCKMol and prepares it for use in pharmacohphore scoring
+void 
+Ph4_Score::initialize_prepare_Mol2_helper(AMBER_TYPER & typer, DOCKMol & reference){
+    bool read_vdw = true;
+    bool use_chem = false;
+    bool use_ph4  = true;
+    bool use_volume = false;
+    typer.prepare_molecule(reference, read_vdw, use_chem, use_ph4, use_volume);
+
+    compute_ph4(reference,Ph4_ref);
+    // make ph4 ref from ref mol2
+
+}
+
+// +++++++++++++++++++++++++++++++++++++++++
+// subroutine designed to initialize important values for score calculations when the parameters are not read in from input (i.e. in dmax)
+void
+Ph4_Score::initialize_define_score_coeffecients_helper(){
+    this->ph4_rate_k = 5.0; //hard coded default values
+    this->ph4_dist_r = 1.0;
+    this->ph4_proj_cos = 0.7071;
+    this->ph4_max_x = 20;
+}
+
+// +++++++++++++++++++++++++++++++++++++++++
+// An overloaded version of initialize meant to be more lightweight and use any DOCKMol object as a reference without having to worry about IO (i.e. for dmax)
+void
+Ph4_Score::initialize(AMBER_TYPER & typer, DOCKMol & ref_mol){
+	Ph4_Score::use_score = true;
+	initialize_define_score_coeffecients_helper();
+	initialize_prepare_Ph4_components_helper(typer);
+	this->reference = ref_mol;
+	initialize_prepare_Mol2_helper(typer, ref_mol);
+}
+
+// +++++++++++++++++++++++++++++++++++++++++
+// The primary initialize function used in routine DOCK6 FMS function, dependent on IO from input
+void
+Ph4_Score::initialize(AMBER_TYPER & typer)
+{
+    ifstream        ref_file;
+//    ifstream        rec_file; // in case we are doing receptor based scoring
+     
+    initialize_prepare_Ph4_components_helper(typer); //prepare the definitions for different pharmacophore component, init vdw energy term 
     if (use_score) {
         if (bool_ph4_ref_mol2){
-            
-            init_vdw_energy(typer, att_exp, rep_exp);
-            ref_file.open(constant_ph4_ref_file.c_str());
-
-            if (ref_file.fail()) {
-                cout << "Error Opening Reference File!" << endl;
-                exit(0);
-            }
-
-            if (!Read_Mol2(reference, ref_file, false, false, false)) {
-                cout << "Error Reading Reference Molecule!" << endl;
-                exit(0);
-            }
-
-            ref_file.close();
-           
-            read_vdw = true;
-            use_chem = false;
-            use_ph4  = true;
-            use_volume = false;
-            typer.prepare_molecule(reference, read_vdw, use_chem, use_ph4, use_volume);
-
-            compute_ph4(reference,Ph4_ref);
-            // make ph4 ref from ref mol2
-
-            if(bool_out_ref_ph4_mol2){
-               refresh_file(ref_ph4_out_mol2_filename);
-               submit_ph4_mol2(Ph4_ref, ref_ph4_out_mol2_filename, reference.title, false);
-            }
-            if(bool_out_ref_ph4_txt){
-               refresh_file(ref_ph4_out_txt_filename);
-               submit_ph4_txt(Ph4_ref, ref_ph4_out_txt_filename);
-            }
-
-            if(bool_out_cad_ph4)
-               refresh_file(cad_ph4_out_filename);
-            
-            if(bool_out_mat_ph4)
-               refresh_file(mat_ph4_out_filename);
-    
+            initialize_read_Mol2_helper(typer); 
+	    initialize_prepare_Mol2_helper(typer, reference);
+	    initialize_output_helper();
         }
         else if (bool_ph4_ref_txt){
-                 ref_file.open(constant_ph4_ref_file.c_str());
-                 if (ref_file.fail()) {
-                     cout << "Error Opening Reference File!" << endl;
-                     exit(0);
-                 }
-
-                 if (!read_ph4_txt(Ph4_ref, ref_file)) {
-                     //make ph4 ref from ref txt
-                     cout << "Error reading in Reference ph4!" << endl;
-                     exit(0);
-                 }
-            
-                 ref_file.close();
-                 // read in ph4 ref from txt and set ph4
-
-                 if(bool_out_ref_ph4_mol2){
-                    refresh_file(ref_ph4_out_mol2_filename);
-                    submit_ph4_mol2(Ph4_ref, ref_ph4_out_mol2_filename, reference.title, false);
-                 }
-                 if(bool_out_ref_ph4_txt){
-                    refresh_file(ref_ph4_out_txt_filename);
-                    submit_ph4_txt(Ph4_ref, ref_ph4_out_txt_filename);
-                 }
-
-                 if(bool_out_cad_ph4)
-                    refresh_file(cad_ph4_out_filename);
-
-                 if(bool_out_mat_ph4)
-                    refresh_file(mat_ph4_out_filename);
-        }
+	    initialize_read_ph4_helper(typer);
+	    initialize_output_helper();
+	}
         else {
                 cout << "Initialize Error: No reference specified!" << endl;
                 exit(0);
@@ -1617,9 +1662,28 @@ Ph4_Score::calc_ph4_similarity(Ph4_Struct & ph4_mol, char comparison_type){
     return value;
 }
 
+// +++++++++++++++++++++++++++++++++++++++++
+// A light weight version of compute score which uses the ligand based pharmacophore
+// Reads in a mol to score, a mol to use as the reference, and a compute type. Will modify the input mol's score and featues. Initializes the ref_mol as a reference and computes the score, should not overwrite the score of mol
+// ph4_compare_type can either be 'overlap' or 'compatible'
+bool Ph4_Score::compute_score(DOCKMol & mol, DOCKMol & ref_mol, std::string ph4_compare_type, AMBER_TYPER & c_typer){
+      Ph4_Struct Ph4_pose;
+      compute_ph4(mol,Ph4_pose); // compare Ph4_pose with the Ph4_ref
+      this->ph4_compare_type = ph4_compare_type;
+      char *compare_type;
+      compare_type = new char [ph4_compare_type.size()+1];
+      strcpy (compare_type, ph4_compare_type.c_str());
+
+      initialize(c_typer, ref_mol); //initilize the ref mol as Ph4 reference
+      //float Ph4_sim      = calc_ph4_similarity(Ph4_pose);
+      mol.current_score  = calc_ph4_similarity(Ph4_pose,compare_type[0]);
+      mol.current_data   = output_score_summary(mol);
+      delete [] compare_type;
+      return true;
+
+}
 
 // +++++++++++++++++++++++++++++++++++++++++
-
 bool
 Ph4_Score::compute_score(DOCKMol & mol)
 {

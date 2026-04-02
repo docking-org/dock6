@@ -1,0 +1,18 @@
+
+This test is based on CcP-ga Gist grid publisched in Balius et al. PNAS 2017
+
+  1455	7:55	ls -l
+  1456	7:56	cp ../workingdir/align_CcP_C/gist_grids/gist-EswPlusEww_ref2.dx .
+  1457	7:57	cp ../workingdir/align_CcP_A.B.C_M_1.0/1.2.6.8.pdb rec.pdb
+  1458	7:57	ls -ltr
+  1459	7:57	vim
+  1460	7:57	history | tail -6 > README
+  # following this tutoral. http://ringo.ams.sunysb.edu/index.php/2018_DOCK_tutorial_1_with_PDBID_2NNQ
+  # run chimiera, dockprep with FE at +3
+  # calculate dms in chimera
+  # 
+  /mnt/nfs/home/tbalius/zzz.github/dock6/bin/sphgen
+  cp ../workingdir/align_CcP_A.B.C_M_1.0/xtal-lig.pdb .
+  # add h and charge in chimera.
+  /mnt/nfs/home/tbalius/zzz.github/dock6/bin/sphere_selector rec.sph xtal-lig.mol2 10.0 
+   

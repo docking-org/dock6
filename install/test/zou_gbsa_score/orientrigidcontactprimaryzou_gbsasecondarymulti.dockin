@@ -21,11 +21,14 @@ contact_score_clash_overlap                                  0.75
 contact_score_clash_penalty                                  50
 contact_score_grid_prefix                                    ../gbsa_grid_generation/grid
 minimize_ligand                                              no
+simplex_final_min                                            no
 atom_model                                                   all
 vdw_defn_file                                                ../../../parameters/vdw_AMBER_parm99.defn
 flex_defn_file                                               ../../../parameters/flex.defn
 flex_drive_file                                              ../../../parameters/flex_drive.tbl
 ligand_outfile_prefix                                        orientrigidcontactprimaryzou_gbsasecondarymulti
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no

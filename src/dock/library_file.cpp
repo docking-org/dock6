@@ -140,6 +140,54 @@ Library_File::hdb_atom_type_converter(int numeric_type)
     return type;
 
 }
+bool
+Library_File::read_sdifile(string filename, vector <string> & list)
+{
+   cout << "filename = " << filename << endl;
+   ifstream  ss;
+   char line[1000];
+   char str_temp[1000];
+   string extension = "";
+
+   cout << filename.rfind(".") << " " << filename.size() << endl;
+   if (filename.rfind(".") < filename.size()){
+      extension =
+              filename.substr(filename.rfind("."),
+                                     filename.size());
+      //extension2 =
+      //        input_file_name.substr(filename.rfind("."),
+      //                               filename.size()-1);
+   }
+   cout << " extension = " << extension << endl;
+
+   if (extension == ".gz"){
+        string str = filename;
+        cout << str << endl;
+        list.push_back (str);
+        return true;
+   }
+      
+   ss.open(filename.c_str());
+   if (ss.fail()) {
+      cout << "\n\nCould not open " << filename <<
+              " for reading.  Program will terminate." << endl << endl;
+      exit(0);
+   }
+   while (ss.getline(line, 1000)) {
+        sscanf(line, "%s", &str_temp);
+        //cout << str_temp << endl;
+        string str = str_temp;
+        cout << str << endl;
+        list.push_back (str);
+   }
+
+   //if !(fileopen){ // if the file is not open yet, then open it. 
+      // check if it if it is a db2.gz file or if it is a splitdatabase index file (else)
+      
+   //}
+   return true;
+
+}
 
 /************************************************/
 /* 
@@ -181,7 +229,7 @@ bool
 //Library_File::read_hierarchy_db2(ifstream & db2, HDB_Mol & db2_data)
 Library_File::read_hierarchy_db2(igzstream & db2, HDB_Mol & db2_data)
 {
-    cout << "Library_File::read_hierarchy_db2 entering..." << endl;
+    //cout << "Library_File::read_hierarchy_db2 entering..." << endl;
     char line[1000];
     char zname[100];
     char pname[100];
@@ -195,6 +243,7 @@ Library_File::read_hierarchy_db2(igzstream & db2, HDB_Mol & db2_data)
     int count_branch = 0;
     int setline = 1; // set also a branch. 
     int numofsetline; // read in this from the frist line
+    int sscanf_num; // used for error checking.  sscanf returns the number of values read in properly. 
     //bool flag_header = false;
     bool flag_atom   = false;
     bool flag_bond   = false;
@@ -207,15 +256,28 @@ Library_File::read_hierarchy_db2(igzstream & db2, HDB_Mol & db2_data)
     char s_char = 'S';
     char d_char = 'D';
 
-    ranked_poses.clear();
+    db2_data.clear_molecule();
+
+    ranked_poses.clear(); // import to clear this array for the main dock loop
     num_confs = 0;
 
     while (db2.getline(line, 1000)) {
         //cout << line << endl;
         char first_char = line[0];
+
+        // // what if it is a tar file of db2 files
+        //if ((first_char != 'M') and (first_char != 'A') and (first_char != 'B') and (first_char != 'X') and (first_char != 'R') and (first_char != 'C') and (first_char != 'S') and (first_char != 'D') and (first_char != 'E')) { 
+        //    cout << "first char of line is: " << first_char << endl;
+        //    cout << line << endl;
+        //    cout << "continue to next line" << endl;
+        //    continue;
+        //}
+ 
         if (count == 1) {
+            total_mols++; // keep track of number of hierarchies read in. 
             //cout << line << endl;
-            sscanf(line, "M %s %s %d %d %d %d %d %d %d %d", &zname, &pname, &num_atoms, &num_bonds, &num_xyz, &num_seg, &num_branch, &num_rigid, &num_M, &num_cluster);
+            sscanf_num = sscanf(line, "M %s %s %d %d %d %d %d %d %d %d", &zname, &pname, &num_atoms, &num_bonds, &num_xyz, &num_seg, &num_branch, &num_rigid, &num_M, &num_cluster);
+            if (sscanf_num != 10) {cout << "Error in M line of db2...\n"<<line<<endl; return false;}
             // flag_header = true;
             //db2_data.name          = zname ;
             strncpy(db2_data.name, zname, 100);
@@ -291,7 +353,8 @@ Library_File::read_hierarchy_db2(igzstream & db2, HDB_Mol & db2_data)
             char tmp_atom_name[10], tmp_atom_sybyl[10];
             string tmp_s_atom_name, tmp_s_atom_sybyl;
             float tmp_crg, tmp_pdesolv, tmp_adesolv, tmp_tot_desolv, tmp_sasa;
-            sscanf(line, "A %d %s %s %d %d %f %f %f %f %f", &tmp_atom_num, &tmp_atom_name, &tmp_atom_sybyl, &tmp_docktype, &tmp_seg_num, &tmp_crg, &tmp_pdesolv, &tmp_adesolv, &tmp_tot_desolv, &tmp_sasa);
+            sscanf_num = sscanf(line, "A %d %s %s %d %d %f %f %f %f %f", &tmp_atom_num, &tmp_atom_name, &tmp_atom_sybyl, &tmp_docktype, &tmp_seg_num, &tmp_crg, &tmp_pdesolv, &tmp_adesolv, &tmp_tot_desolv, &tmp_sasa);
+            if (sscanf_num != 10) {cout << "Error in A line of db2...\n"<<line<<endl; return false;}
             //cout <<  tmp_atom_num <<" "<< tmp_atom_name <<" "<< tmp_atom_sybyl <<" "<< tmp_docktype <<" "<< tmp_seg_num <<" "<< tmp_crg <<" "<< tmp_pdesolv <<" "<< tmp_adesolv <<" "<< tmp_tot_desolv <<" "<< tmp_sasa << endl;
             tmp_s_atom_name = string(tmp_atom_name); tmp_s_atom_sybyl = string(tmp_atom_sybyl);
             
@@ -305,7 +368,8 @@ Library_File::read_hierarchy_db2(igzstream & db2, HDB_Mol & db2_data)
         //
            int bond_num, atom_num1, atom_num2;
            char bond_type[3]; 
-           sscanf(line, "B %d %d %d %s", &bond_num, &atom_num1, &atom_num2, &bond_type);
+           sscanf_num = sscanf(line, "B %d %d %d %s", &bond_num, &atom_num1, &atom_num2, &bond_type);
+           if (sscanf_num != 4) {cout << "Error in B line of db2...\n"<<line<<endl; return false;}
            //cout << bond_num <<" "<< atom_num1 <<" "<< atom_num2 <<" "<< bond_type << endl;
            db2_data.bonds[count_bond].initialize(bond_num,atom_num1,atom_num2,bond_type);
            count_bond++;
@@ -314,7 +378,8 @@ Library_File::read_hierarchy_db2(igzstream & db2, HDB_Mol & db2_data)
         // X         2   2      1   -2.2603   +3.7291   -1.4583
            int coord_num, atom_num, seg_num; 
            float x,y,z;
-           sscanf(line, "X %d %d %d %f %f %f", &coord_num, &atom_num, &seg_num, &x, &y, &z);
+           sscanf_num = sscanf(line, "X %d %d %d %f %f %f", &coord_num, &atom_num, &seg_num, &x, &y, &z);
+           if (sscanf_num != 6) {cout << "Error in X line of db2...\n"<<line<<endl; return false;}
            //cout << coord_num << " " << atom_num << " " << seg_num << " " << x << " " << y << " " << z << endl;
            db2_data.coords[count_coord].initialize(coord_num,atom_num,seg_num,x,y,z);
            count_coord++;
@@ -323,7 +388,8 @@ Library_File::read_hierarchy_db2(igzstream & db2, HDB_Mol & db2_data)
         //R      2  7   -2.2603   +3.7291   -1.4583
            int rig_num, t_num;
            float x, y, z;
-           sscanf(line, "R %d %d %f %f %f", &rig_num, &t_num, &x, &y, &z);
+           sscanf_num = sscanf(line, "R %d %d %f %f %f", &rig_num, &t_num, &x, &y, &z);
+           if (sscanf_num != 5) {cout << "Error in R line of db2...\n"<<line<<endl; return false;}
            //cout << rig_num << " " << t_num << " " << x << " " << y << " " << z << endl;
            db2_data.rigid[count_rigid].initialize(rig_num,t_num,1,x,y,z);
            count_rigid++;
@@ -332,7 +398,8 @@ Library_File::read_hierarchy_db2(igzstream & db2, HDB_Mol & db2_data)
         //C      2        15        18
         //C      3        19        32
            int seg_num, coord_num_start, coord_num_stop;
-           sscanf(line, "C %d %d %d", &seg_num, &coord_num_start, &coord_num_stop);  
+           sscanf_num = sscanf(line, "C %d %d %d", &seg_num, &coord_num_start, &coord_num_stop);  
+           if (sscanf_num != 3) {cout << "Error in C line of db2...\n"<<line<<endl; return false;}
            //cout << seg_num << " " << coord_num_start << " " << coord_num_stop << endl;
            db2_data.segs[count_seg].initialize(seg_num, coord_num_start, coord_num_stop);
            count_seg++;
@@ -345,19 +412,35 @@ Library_File::read_hierarchy_db2(igzstream & db2, HDB_Mol & db2_data)
         //S      2      1 8      1     13    145    146    147    457    501    502
         //S      2      2 8    503    682    683    684    927   1169   1178   1179
         //S      2      3 1   1253
-           int set_num, num_of_seg, temp1, temp2;
+        //
+           int set_num, num_of_seg, broken_temp1, temp2;
+           bool broken = false; // if false then branch is not broken
            float internal_energy;
+           float internal_energy2;
            int t_set_num, t_line_count, num_of_seg_line, t_seg_c_num;
            string stemp1, stemp2, stemp3, stemp4;
            //cout << "I AM HERE in seg" << endl;
+           //cout << line <<"::: setline = "<< setline<< endl;
            if (setline == 1) {
-             sscanf(line, "S %d %d %d %d %d %f", &set_num, &numofsetline, &num_of_seg, &temp1, &temp2, &internal_energy);
-             //cout << "Line 1. " << set_num << " " << numofsetline << " " << num_of_seg << " " << temp1 << " " << temp2 << " " << internal_energy << endl;
-             db2_data.confs[count_branch].initialize(set_num, num_of_seg, internal_energy);
+             //sscanf(line, "S %d %d %d %d %d %f", &set_num, &numofsetline, &num_of_seg, &temp1, &temp2, &internal_energy);
+             int num_sscanf = sscanf(line, "S %d %d %d %d %d %f %f", &set_num, &numofsetline, &num_of_seg, &broken_temp1, &temp2, &internal_energy, &internal_energy2 );
+             
+             if (num_sscanf != 6 and num_sscanf != 7) {cout << "Error in S line of db2..."<< num_sscanf <<" is not 6 or 7\n"<<line<<endl; return false;}
+             //cout << "number of values read in by sscanf:" << num_sscanf << endl;
+             if (num_sscanf == 6) {
+                 //cout << "only one internal energy value spesified... set other value to zero. " << endl;
+                 internal_energy2 = 0.0;
+             }
+             if (broken_temp1 != 0 ){ // if broken_temp1 == 1 (meaning it is broken/clashing) 
+                 broken = true;
+             }
+             db2_data.confs[count_branch].initialize(set_num, num_of_seg, broken, internal_energy, internal_energy2);
+                 
              //cout << "I AM HERE in seg" << endl;
            } else {
              //cout << "I AM HERE in seg" << endl;
-             sscanf(line, "S %d %d %d", &t_set_num, &t_line_count, &num_of_seg_line);
+             sscanf_num = sscanf(line, "S %d %d %d", &t_set_num, &t_line_count, &num_of_seg_line);
+             if (sscanf_num != 3) {cout << "Error in S line of db2...\n"<<line<<endl; return false;}
              //cout << "Line 2+. " << t_set_num << " " << t_line_count << " " << num_of_seg_line << endl;
              stringstream ss, ss2;
              ss << line; // put string in stringstream
@@ -386,7 +469,7 @@ Library_File::read_hierarchy_db2(igzstream & db2, HDB_Mol & db2_data)
 
         count++;
     }
-    cout << "Library_File::read_hierarchy_db2 exiting..." << endl;
+    //cout << "Library_File::read_hierarchy_db2 exiting..." << endl;
     return false;
 }
  
@@ -783,6 +866,22 @@ Library_File::read_hierarchy_db(DOCKMol & mol, ifstream & ifs)
 
 }
 
+
+/************************************************/
+void
+Library_File::initialize_input()
+{
+    input_file_name = "";
+    max_mol_limit = false;
+    max_mols = -1;
+    initial_skip = 0;
+    read_solvation = false;
+    read_color = false;
+    calc_rmsd = false;
+    constant_rmsd_ref_file = "";
+    constant_rmsd_ref = false;
+}
+
 /************************************************/
 void
 Library_File::input_parameters_input(Parameter_Reader & parm)
@@ -828,6 +927,8 @@ Library_File::input_parameters_input(Parameter_Reader & parm)
 
     read_solvation =
         parm.query_param("read_mol_solvation", "no", "yes no") == "yes";
+
+
     // read_color = parm.query_param("read_mol_color","no","yes no") == "yes";
     read_color = false;         // silenced keyword for now
 
@@ -858,6 +959,8 @@ Library_File::input_parameters_output(Parameter_Reader & parm, Master_Score & sc
     write_secondary_conformers = false;
     num_scored_poses = 1;
     num_clusterheads_rescore = 1;
+    score_thres = 10000.0;
+    write_solv_mol2 = false;
 
     db2flag = false;
 
@@ -871,6 +974,15 @@ Library_File::input_parameters_output(Parameter_Reader & parm, Master_Score & sc
 
     output_file_prefix = parm.query_param("ligand_outfile_prefix", "output");
 
+    write_solv_mol2 =
+        (parm.query_param("write_mol_solvation", "no", "yes no") == "yes") ? true : false;
+
+    //trace.boolean( "score.c_fps.use_score", score.c_fps.use_score );
+    //trace.boolean( "score.c_mg_nrg.use_score", score.c_mg_nrg.use_score );
+    //trace.boolean( "score.c_desc.use_score", score.c_desc.use_score );
+    //if (score.use_score && (score.c_fps.use_score || score.c_mg_nrg.use_score || (score.c_desc.use_score
+    //        && score.c_desc.desc_use_fps && score.c_desc.desc_c_fps.use_score) || (score.c_desc.use_score
+    //        && score.c_desc.desc_use_mg_nrg && score.c_desc.desc_c_mg_nrg.use_score))) {
     trace.boolean( "score.use_score", score.use_score );
     if (score.use_score &&
         (score.c_fps.use_score ||
@@ -1002,6 +1114,9 @@ Library_File::input_parameters_output(Parameter_Reader & parm, Master_Score & sc
                 }
             }
         } 
+        score_thres = atof(parm.query_param(
+//                     "score_threshold", "-10.0").c_str());
+                     "score_threshold", "100.0").c_str());
     }
     if(score.use_secondary_score){
         rank_ligands = (parm.query_param("rank_primary_ligands", "no", "yes no") == "yes");
@@ -1054,6 +1169,7 @@ void
 Library_File::initialize(int argc, char **argv, bool USE_MPI)
 {
     cout << "Initializing Library File Routines...\n";
+    cout << endl;
     total_mols = 0;
     completed = 0;
 
@@ -1565,9 +1681,73 @@ Library_File::write_hbond_file(DOCKMol & pose, Master_Score & score, std::ofstre
      << endl;
 }
 
+
+/************************************************/
+// function writen by Trent Balius, FNLCR, Dec 2021)
+// get the top X poses sorted by score. 
+/************************************************/
+//void
+bool
+//Library_File::sort_top_X_mol(vector <SCOREMol> & mol, int number)
+//{
+//  int *list; // list of indexies
+Library_File::sort_top_X_mol(vector <SCOREMol> & mol, int number, int *list)
+{
+//  int *list; // list of indexies
+  float *list_mol;
+  bool *list_mol_bool;
+  bool all_min_found = false;
+  //int i,j; 
+  //list = new int [number];
+  list_mol = new float [mol.size()];
+  list_mol_bool = new bool [mol.size()]; // mark if you pick as min
+  
+  //for ( j=0; j<mol.size(); j++){
+  for(int j=0;j<mol.size();j++){
+       list_mol[j] = mol[j].first;
+       list_mol_bool[j] = false;
+       //cout << "index:" << j << "   score:"<< mol[j].first << endl;
+  }
+  
+  // 
+  //cout << "Idenify the min scoring molecules" << endl;
+  for(int i=0;i<number;i++){
+      list[i]=-1.0;
+      bool min_found = false;
+      float min = 10000.0;
+      int min_ind = mol.size()-1;
+      for ( int j=0; j<mol.size(); j++){
+           if ((list_mol[j] < min) && (!list_mol_bool[j])){ 
+                min_ind = j;
+                min = list_mol[j];
+                list_mol_bool[j] = true;
+                min_found = true;
+                all_min_found = true;
+                //cout << "index:" << min_ind << "   score:"<< min << endl;
+           }
+      }
+      if (! min_found ){
+           //cout << "Error..." << endl;
+           //exit(0);
+           //min_ind = 0;
+           cout << "Warning. Min scoring molecule not found for i = " << i << endl;
+      }
+      list[i]=min_ind;
+  }
+  // for debuging. 
+  //for(int i=0;i<number;i++)
+  //    cout << "index:" << list[i] << "   score:"<< mol[list[i]].first <<" "<< list_mol[list[i]] << endl;
+  delete[]list_mol ;
+  delete[]list_mol_bool ; // mark if you pick as min
+  //return;
+  return all_min_found;
+}
+
+/************************************************/
+
 // TEB added this. 
 //
-void Library_File::sort_write(bool USE_FILT, bool USE_MPI,Master_Score & score, Simplex_Minimizer & min){
+void Library_File::sort_write(bool USE_FILT, bool USE_MPI, Master_Score & score, Simplex_Minimizer & min){
     if (ranked_poses.size() > 0) {
         // sort ranked_poses
         sort(ranked_poses.begin(), ranked_poses.end());
@@ -1578,7 +1758,7 @@ void Library_File::sort_write(bool USE_FILT, bool USE_MPI,Master_Score & score, 
         }
         
         //write out data for conformers
-        write_scored_poses(USE_FILT, USE_MPI, score );
+        write_scored_poses(USE_FILT,USE_MPI, score, min);
         
         //analyze and write data for secondary scored conformers
         if(num_scored_poses > 1)
@@ -1895,6 +2075,7 @@ Library_File::submit_scored_pose(DOCKMol & mol, Master_Score & score,
     if (score.use_score) {
         if(!min.minimize_ligand){
                 score.compute_primary_score(mol);
+                mol.current_data = mol.current_data + mol.hdb_data; // 
         }
     } else {
         mol.current_score = 0.0;
@@ -1951,13 +2132,15 @@ Library_File::submit_scored_pose(DOCKMol & mol, Master_Score & score,
 
 /************************************************/
 void
-Library_File::write_scored_poses(bool USE_FILT, bool USE_MPI, Master_Score & score)
+//Library_File::write_scored_poses(bool USE_FILT, bool USE_MPI, Master_Score & score)
+//Library_File::write_scored_poses(bool USE_MPI, Master_Score & score, Simplex_Minimizer & min)
+Library_File::write_scored_poses(bool USE_FILT, bool USE_MPI, Master_Score & score, Simplex_Minimizer & min)
 {
     Trace trace( "Library_File::write_scored_poses" );
     int             i,
                     j;
     // int insert_point;
-    ofstream        ofs;
+    //ofstream        ofs;
     SCOREMol        tmp_mol;
     DOCKMol         tmp_dockmol;
     //PAK
@@ -2006,6 +2189,18 @@ Library_File::write_scored_poses(bool USE_FILT, bool USE_MPI, Master_Score & sco
                 //filterXlogP.getXLogP(ranked_poses[i].mol);
 
                 if (ranked_poses[i].mol.num_atoms > 0) {
+
+                    if (min.final_min){ // TEB added in final_min for HDB
+                        min.minimize_pose_final_min(ranked_poses[i].mol, score);
+                        ranked_poses[i].score = ranked_poses[i].mol.current_score;
+                        ranked_poses[i].mol.current_data = ranked_poses[i].mol.current_data + ranked_poses[i].mol.hdb_data;
+                    }
+
+                    if (ranked_poses[i].score > score_thres) {
+                        cout << "score > score_thres:" << ranked_poses[i].score << " > " << score_thres << endl;
+                        continue;
+                        //break;
+                    }
                     // if clustering is used, and molecule is a
                     // clusterhead, write it out
                     if (cluster_assignments[i] > 0) {
@@ -2021,7 +2216,8 @@ Library_File::write_scored_poses(bool USE_FILT, bool USE_MPI, Master_Score & sco
                         ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "DOCK_Rotatable_Bonds:"
                             << setw(FLOAT_WIDTH) << ranked_poses[i].mol.rot_bonds << endl;
                         ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "Formal_Charge:"
-                            << setw(FLOAT_WIDTH) << ranked_poses[i].mol.formal_charge << endl;
+                          //<< setw(FLOAT_WIDTH) << round(ranked_poses[i].mol.formal_charge) << endl;
+                            << setw(FLOAT_WIDTH) << round(ranked_poses[i].mol.formal_charge*10.0)/10.0 << endl;
                         ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "HBond_Acceptors:"
                             << setw(FLOAT_WIDTH) << ranked_poses[i].mol.hb_acceptors << endl;
                         ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "HBond_Donors:"
@@ -2107,6 +2303,18 @@ Library_File::write_scored_poses(bool USE_FILT, bool USE_MPI, Master_Score & sco
                  //filterXlogP.getXLogP(ranked_poses[i].mol);
                
                 if (ranked_poses[i].mol.num_atoms > 0) {
+                    if (min.final_min){ // TEB added in final_min for HDB
+                        min.minimize_pose_final_min(ranked_poses[i].mol, score);
+                        ranked_poses[i].score = ranked_poses[i].mol.current_score;
+                        ranked_poses[i].mol.current_data = ranked_poses[i].mol.current_data + ranked_poses[i].mol.hdb_data;
+                    }
+
+                    if (ranked_poses[i].score > score_thres) {
+                        cout << "score > score_thres:" << ranked_poses[i].score << " > " << score_thres << endl;
+                        continue;
+                        //break;
+                    }
+
                     #ifdef BUILD_DOCK_WITH_RDKIT 
                     if ( USE_FILT && (ranked_poses[i].mol.fails_filt || ranked_poses[i].mol.bad_molecule) ) {
                         ligand_out_rejected << "\n" << DELIMITER << setw(STRING_WIDTH) << "Name:"
@@ -2116,7 +2324,8 @@ Library_File::write_scored_poses(bool USE_FILT, bool USE_MPI, Master_Score & sco
                         ligand_out_rejected << DELIMITER << setw(STRING_WIDTH) << "DOCK_Rotatable_Bonds:"
                             << setw(FLOAT_WIDTH) << ranked_poses[i].mol.rot_bonds << endl;
                         ligand_out_rejected << DELIMITER << setw(STRING_WIDTH) << "Formal_Charge:"
-                            << setw(FLOAT_WIDTH) << ranked_poses[i].mol.formal_charge << endl;
+                          //<< setw(FLOAT_WIDTH) << ranked_poses[i].mol.formal_charge << endl;
+                            << setw(FLOAT_WIDTH) << round(ranked_poses[i].mol.formal_charge*10.0)/10.0 << endl;
                         ligand_out_rejected << DELIMITER << setw(STRING_WIDTH) << "HBond_Acceptors:"
                             << setw(FLOAT_WIDTH) << ranked_poses[i].mol.hb_acceptors << endl;
                         ligand_out_rejected << DELIMITER << setw(STRING_WIDTH) << "HBond_Donors:"
@@ -2144,12 +2353,15 @@ Library_File::write_scored_poses(bool USE_FILT, bool USE_MPI, Master_Score & sco
                         ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "DOCK_Rotatable_Bonds:"
                             << setw(FLOAT_WIDTH) << ranked_poses[i].mol.rot_bonds << endl;
                         ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "Formal_Charge:"
-                            << setw(FLOAT_WIDTH) << ranked_poses[i].mol.formal_charge << endl;
+                          //<< setw(FLOAT_WIDTH) << ranked_poses[i].mol.formal_charge << endl;
+                            << setw(FLOAT_WIDTH) << round(ranked_poses[i].mol.formal_charge*10.0)/10.0 << endl;
                         ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "HBond_Acceptors:"
                             << setw(FLOAT_WIDTH) << ranked_poses[i].mol.hb_acceptors << endl;
                         ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "HBond_Donors:"
                             << setw(FLOAT_WIDTH) << ranked_poses[i].mol.hb_donors << endl;
-                        ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "Heavy_Atoms:"
+
+                        if (ranked_poses[i].mol.heavy_atoms > 0)
+                            ligand_out_scored << DELIMITER << setw(STRING_WIDTH) << "Heavy_Atoms:"
                             << setw(FLOAT_WIDTH) << ranked_poses[i].mol.heavy_atoms << endl;
                         #ifdef BUILD_DOCK_WITH_RDKIT
                         //if dbfilter is used...write theses scores
@@ -2281,7 +2493,8 @@ Library_File::write_ranked_ligands(bool USE_FILT , Master_Score & score )
             ligand_out_ranked << DELIMITER << setw(STRING_WIDTH) << "DOCK_Rotatable_Bonds:"
                 << setw(FLOAT_WIDTH) << ranked_list[i].second.rot_bonds << endl;
             ligand_out_ranked << DELIMITER << setw(STRING_WIDTH) << "Formal_Charge:"
-                << setw(FLOAT_WIDTH) << ranked_list[i].second.formal_charge << endl;
+              //<< setw(FLOAT_WIDTH) << ranked_list[i].second.formal_charge << endl;
+                << setw(FLOAT_WIDTH) << round(ranked_list[i].second.formal_charge*10.0)/10.0 << endl;
             ligand_out_ranked << DELIMITER << setw(STRING_WIDTH) << "HBond_Acceptors:"
                 << setw(FLOAT_WIDTH) << ranked_list[i].second.hb_acceptors << endl;
             ligand_out_ranked << DELIMITER << setw(STRING_WIDTH) << "HBond_Donors:"
@@ -2567,6 +2780,7 @@ Library_File::calculate_min_cor_rmsd(DOCKMol & refmol, DOCKMol & mol)
     rmsd = sqrt(rmsd);
     return rmsd;
    }
+   return rmsd;
 }
 
 /************************************************/

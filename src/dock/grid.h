@@ -120,9 +120,12 @@ public:
     GIST_Grid();
     void   clear_grid();
     void get_instance(std::string filename);
-    float atomic_displacement(float, float, float, float, bool* & );
+    //float atomic_displacement(float, float, float, float, bool* & );
+    //float atomic_displacement(float, float, float, float, bool*  );
+    float atomic_displacement(float, float, float, float, std::map<unsigned int, bool> &  );
     float atomic_blurry_displacement(float, float, float, float, float );
-    void write_gist_grid(std::string, bool* & );
+    //void write_gist_grid(std::string, bool* & );
+    void write_gist_grid(std::string, bool* );
 
 private:
 

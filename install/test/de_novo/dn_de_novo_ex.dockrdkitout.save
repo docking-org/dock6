@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released April 2024
 Copyright UCSF
 --------------------------------------
 
@@ -26,6 +26,15 @@ dn_num_ex_picks                                              200
 dn_pruning_conformer_score_cutoff                            100.0
 dn_pruning_conformer_score_scaling_factor                    2.0
 dn_pruning_clustering_cutoff                                 100.0
+dn_remove_duplicates                                         yes
+dn_max_duplicates_per_mol                                    0
+dn_write_pruned_duplicates                                   no
+dn_advanced_pruning                                          yes
+dn_prune_initial_sample                                      yes
+dn_sample_torsions                                           yes
+dn_prune_individual_torsions                                 yes
+dn_prune_combined_torsions                                   yes
+dn_random_root_selection                                     no
 dn_mol_wt_cutoff_type                                        soft
 dn_upper_constraint_mol_wt                                   550.0
 dn_lower_constraint_mol_wt                                   0.0
@@ -59,6 +68,7 @@ dn_max_root_size                                             25
 dn_max_layer_size                                            25
 dn_max_current_aps                                           5
 dn_max_scaffolds_per_layer                                   1
+dn_max_successful_att_per_root                               50000
 dn_write_checkpoints                                         yes
 dn_write_prune_dump                                          yes
 dn_write_orients                                             no
@@ -102,6 +112,10 @@ Grid Score Parameters
 ------------------------------------------------------------------------------------------
 grid_score_primary                                           no
 
+GIST Score Parameters
+------------------------------------------------------------------------------------------
+gist_score_primary                                           no
+
 MultiGrid Score Parameters
 ------------------------------------------------------------------------------------------
 multigrid_score_primary                                      no
@@ -139,6 +153,8 @@ descriptor_use_pharmacophore_score                           no
 descriptor_use_tanimoto                                      no
 descriptor_use_hungarian                                     no
 descriptor_use_volume_overlap                                no
+descriptor_use_gist                                          no
+descriptor_use_dock3.5                                       no
 
 --- Descriptor Score Parameters: Multigrid Score ---
 descriptor_multigrid_score_rep_rad_scale                     1
@@ -229,6 +245,7 @@ simplex_tors_step                                            10.0
 simplex_anchor_max_iterations                                500
 simplex_grow_max_iterations                                  500
 simplex_grow_tors_premin_iterations                          0
+simplex_final_min                                            no
 simplex_random_seed                                          0
 simplex_restraint_min                                        no
 
@@ -383,225 +400,214 @@ Reading in 31 grids
 ##### Now orienting anchor #1
   ##### Entering layer of growth #1
   Root size at the beginning of this layer = 40
-    From Root[0], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[0],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[1], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[1],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[2], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[2],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[3], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[3],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[4], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[4],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[5], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[5],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[6], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[6],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[7], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[7],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[8], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[8],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[9], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[9],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[10], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[10],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[11], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[11],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[12], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[12],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[13], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[13],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[14], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[14],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[15], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[15],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[16], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[16],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[17], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[17],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[18], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[18],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[19], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[19],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[20], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[20],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[21], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[21],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[22], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[22],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[23], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[23],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[24], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[24],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[25], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[25],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[26], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[26],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[27], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[27],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[28], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[28],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[29], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[29],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[30], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[30],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[31], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[31],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[32], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[32],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[33], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[33],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[34], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[34],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[35], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[35],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[36], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[36],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[37], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[37],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[38], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[38],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-    From Root[39], created 6 new fragments with an added layer
-        From RD_layer[1]anchor[0]Root[39],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[1],the number of rejected molecules is 0
-      From all frags in root, kept a total of 240 new fragments with an added layer
-      After pruning by the RMSD heuristic, that number goes down to 5
-      From this ensemble, the average molecular weight is 94.9714
-      From this ensemble, the average number of rotatable bonds is 1
-      From this ensemble, the average formal_charge is -2
-      After writing 0 of those to file, 5 are returned to root for the next iteration
+    Root [  0], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  92.60
+        RDKIT: the number of rejected molecules is 0
+    Root [  1], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  90.03
+        RDKIT: the number of rejected molecules is 0
+    Root [  2], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  91.47
+        RDKIT: the number of rejected molecules is 0
+    Root [  3], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  82.16
+        RDKIT: the number of rejected molecules is 0
+    Root [  4], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  88.16
+        RDKIT: the number of rejected molecules is 0
+    Root [  5], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  89.68
+        RDKIT: the number of rejected molecules is 0
+    Root [  6], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  83.70
+        RDKIT: the number of rejected molecules is 0
+    Root [  7], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  83.67
+        RDKIT: the number of rejected molecules is 0
+    Root [  8], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  84.03
+        RDKIT: the number of rejected molecules is 0
+    Root [  9], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.03 |A/S  79.07
+        RDKIT: the number of rejected molecules is 0
+    Root [ 10], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  86.74
+        RDKIT: the number of rejected molecules is 0
+    Root [ 11], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  87.51
+        RDKIT: the number of rejected molecules is 0
+    Root [ 12], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  89.18
+        RDKIT: the number of rejected molecules is 0
+    Root [ 13], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  93.54
+        RDKIT: the number of rejected molecules is 0
+    Root [ 14], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.03 |A/S  79.23
+        RDKIT: the number of rejected molecules is 0
+    Root [ 15], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  80.83
+        RDKIT: the number of rejected molecules is 0
+    Root [ 16], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  80.04
+        RDKIT: the number of rejected molecules is 0
+    Root [ 17], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  91.92
+        RDKIT: the number of rejected molecules is 0
+    Root [ 18], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  82.32
+        RDKIT: the number of rejected molecules is 0
+    Root [ 19], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  95.30
+        RDKIT: the number of rejected molecules is 0
+    Root [ 20], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  85.73
+        RDKIT: the number of rejected molecules is 0
+    Root [ 21], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.03 |A/S  69.92
+        RDKIT: the number of rejected molecules is 0
+    Root [ 22], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.03 |A/S  79.73
+        RDKIT: the number of rejected molecules is 0
+    Root [ 23], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.03 |A/S  77.30
+        RDKIT: the number of rejected molecules is 0
+    Root [ 24], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.03 |A/S  69.57
+        RDKIT: the number of rejected molecules is 0
+    Root [ 25], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.03 |A/S  73.88
+        RDKIT: the number of rejected molecules is 0
+    Root [ 26], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.03 |A/S  79.89
+        RDKIT: the number of rejected molecules is 0
+    Root [ 27], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.03 |A/S  75.49
+        RDKIT: the number of rejected molecules is 0
+    Root [ 28], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S 102.21
+        RDKIT: the number of rejected molecules is 0
+    Root [ 29], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  86.51
+        RDKIT: the number of rejected molecules is 0
+    Root [ 30], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.03 |A/S  76.97
+        RDKIT: the number of rejected molecules is 0
+    Root [ 31], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  91.91
+        RDKIT: the number of rejected molecules is 0
+    Root [ 32], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.03 |A/S  68.73
+        RDKIT: the number of rejected molecules is 0
+    Root [ 33], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  86.97
+        RDKIT: the number of rejected molecules is 0
+    Root [ 34], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  89.50
+        RDKIT: the number of rejected molecules is 0
+    Root [ 35], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.03 |A/S  67.36
+        RDKIT: the number of rejected molecules is 0
+    Root [ 36], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  84.99
+        RDKIT: the number of rejected molecules is 0
+    Root [ 37], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.03 |A/S  71.95
+        RDKIT: the number of rejected molecules is 0
+    Root [ 38], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.03 |A/S  70.44
+        RDKIT: the number of rejected molecules is 0
+    Root [ 39], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.03 |A/S  68.55
+        RDKIT: the number of rejected molecules is 0
+      From all attachments events, 80 fragments were collected in layer 1 prior to all pruning/filtering.
+      From accepted frags ( N= 0 ) in layer 1, 
+          Collected a total of 40 candidate root fragments, then that number goes down to 3 due to pruning by the RMSD heuristic.
+          The average molecular weight is 94.97
+          The average number of rotatable bonds is 1.00
+          The average formal_charge is -2.00
+          -------------------------------------------
+          0    duplicate fragments were found.
+          0    complete molecules were filtered
+          0    root fragments were filtered
+          0    completed molecules were written to file
+          -------------------------------------------
+          37   root frags intended for the next layer were further pruned via rmsd.
+          0    candidate root frags intended for the next layer were ignored due to limit on root size.
+
+    Layer 1 completed! Moving on the next layer with 3 root fragments.
+    For Layer 1, time duration is: 3.76 seconds with 21.28 with attachments per second.
 
   ##### Entering layer of growth #2
-  Root size at the beginning of this layer = 5
-    From Root[0], created 6 new fragments with an added layer
-        From RD_layer[2]anchor[0]Root[0],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[2],the number of rejected molecules is 0
-    From Root[1], created 6 new fragments with an added layer
-        From RD_layer[2]anchor[0]Root[1],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[2],the number of rejected molecules is 0
-    From Root[2], created 5 new fragments with an added layer
-        From RD_layer[2]anchor[0]Root[2],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[2],the number of rejected molecules is 0
-    From Root[3], created 6 new fragments with an added layer
-        From RD_layer[2]anchor[0]Root[3],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[2],the number of rejected molecules is 0
-    From Root[4], created 4 new fragments with an added layer
-        From RD_layer[2]anchor[0]Root[4],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[2],the number of rejected molecules is 0
-      From all frags in root, kept a total of 27 new fragments with an added layer
-      After pruning by the RMSD heuristic, that number goes down to 4
-      From this ensemble, the average molecular weight is 108.998
-      From this ensemble, the average number of rotatable bonds is 2
-      From this ensemble, the average formal_charge is -2
-      After writing 0 of those to file, 4 are returned to root for the next iteration
+  Root size at the beginning of this layer = 3
+    Root [  0], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.03 |A/S  60.01
+        RDKIT: the number of rejected molecules is 0
+    Root [  1], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.06 |A/S  31.38
+        RDKIT: the number of rejected molecules is 0
+    Root [  2], sccf atts      2 |acc mols    2 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    2 |S     0.06 |A/S  35.25
+        RDKIT: the number of rejected molecules is 0
+      From all attachments events, 6 fragments were collected in layer 2 prior to all pruning/filtering.
+      From accepted frags ( N= 0 ) in layer 2, 
+          Collected a total of 4 candidate root fragments, then that number goes down to 3 due to pruning by the RMSD heuristic.
+          The average molecular weight is 109.00
+          The average number of rotatable bonds is 2.00
+          The average formal_charge is -2.00
+          -------------------------------------------
+          0    duplicate fragments were found.
+          0    complete molecules were filtered
+          0    root fragments were filtered
+          0    completed molecules were written to file
+          -------------------------------------------
+          1    root frags intended for the next layer were further pruned via rmsd.
+          0    candidate root frags intended for the next layer were ignored due to limit on root size.
+
+    Layer 2 completed! Moving on the next layer with 3 root fragments.
+    For Layer 2, time duration is: 0.43 seconds with 13.89 with attachments per second.
 
   ##### Entering layer of growth #3
-  Root size at the beginning of this layer = 4
-    From Root[0], created 6 new fragments with an added layer
-        From RD_layer[3]anchor[0]Root[0],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[3],the number of rejected molecules is 0
-    From Root[1], created 2 new fragments with an added layer
-        From RD_layer[3]anchor[0]Root[1],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[3],the number of rejected molecules is 0
-    From Root[2], created 6 new fragments with an added layer
-        From RD_layer[3]anchor[0]Root[2],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[3],the number of rejected molecules is 0
-    From Root[3], created 4 new fragments with an added layer
-        From RD_layer[3]anchor[0]Root[3],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[3],the number of rejected molecules is 0
-      From all frags in root, kept a total of 18 new fragments with an added layer
-      After pruning by the RMSD heuristic, that number goes down to 5
-      From this ensemble, the average molecular weight is 137.009
-      From this ensemble, the average number of rotatable bonds is 3
-      From this ensemble, the average formal_charge is -2
-      After writing 0 of those to file, 5 are returned to root for the next iteration
+  Root size at the beginning of this layer = 3
+    Root [  0], sccf atts      1 |acc mols    2 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    2 |S     0.05 |A/S  18.58
+        RDKIT: the number of rejected molecules is 0
+    Root [  1], sccf atts      1 |acc mols    4 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    4 |S     0.11 |A/S   9.04
+        RDKIT: the number of rejected molecules is 0
+    Root [  2], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.14 |A/S   7.05
+        RDKIT: the number of rejected molecules is 0
+      From all attachments events, 3 fragments were collected in layer 3 prior to all pruning/filtering.
+      From accepted frags ( N= 0 ) in layer 3, 
+          Collected a total of 7 candidate root fragments, then that number goes down to 6 due to pruning by the RMSD heuristic.
+          The average molecular weight is 137.01
+          The average number of rotatable bonds is 3.00
+          The average formal_charge is -2.00
+          -------------------------------------------
+          0    duplicate fragments were found.
+          0    complete molecules were filtered
+          0    root fragments were filtered
+          0    completed molecules were written to file
+          -------------------------------------------
+          1    root frags intended for the next layer were further pruned via rmsd.
+          0    candidate root frags intended for the next layer were ignored due to limit on root size.
+
+    Layer 3 completed! Moving on the next layer with 6 root fragments.
+    For Layer 3, time duration is: 0.80 seconds with 3.76 with attachments per second.
 
   ##### Entering layer of growth #4
-  Root size at the beginning of this layer = 5
-    From Root[0], created 1 new fragments with an added layer
-        From RD_layer[4]anchor[0]Root[0],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[4],the number of rejected molecules is 0
-    From Root[1], created 1 new fragments with an added layer
-        From RD_layer[4]anchor[0]Root[1],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[4],the number of rejected molecules is 0
-    From Root[2], created 1 new fragments with an added layer
-        From RD_layer[4]anchor[0]Root[2],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[4],the number of rejected molecules is 0
-    From Root[3], created 1 new fragments with an added layer
-        From RD_layer[4]anchor[0]Root[3],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[4],the number of rejected molecules is 0
-    From Root[4], created 1 new fragments with an added layer
-        From RD_layer[4]anchor[0]Root[4],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[4],the number of rejected molecules is 0
-      From all frags in root, kept a total of 5 new fragments with an added layer
-      After pruning by the RMSD heuristic, that number goes down to 5
-      From this ensemble, the average molecular weight is 152.023
-      From this ensemble, the average number of rotatable bonds is 4
-      From this ensemble, the average formal_charge is -2
-      After writing 0 of those to file, 5 are returned to root for the next iteration
+  Root size at the beginning of this layer = 6
+    Root [  0], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  96.15
+        RDKIT: the number of rejected molecules is 0
+    Root [  1], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  64.92
+        RDKIT: the number of rejected molecules is 0
+    Root [  2], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  84.20
+        RDKIT: the number of rejected molecules is 0
+    Root [  3], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  77.40
+        RDKIT: the number of rejected molecules is 0
+    Root [  4], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  95.19
+        RDKIT: the number of rejected molecules is 0
+    Root [  5], sccf atts      1 |acc mols    0 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    0 |S     0.02 |A/S  64.48
+        RDKIT: the number of rejected molecules is 0
+      From all attachments events, 6 fragments were collected in layer 4 prior to all pruning/filtering.
+      From accepted frags ( N= 0 ) in layer 4, 
+          Collected a total of 5 candidate root fragments, then that number goes down to 5 due to pruning by the RMSD heuristic.
+          The average molecular weight is 152.02
+          The average number of rotatable bonds is 4.00
+          The average formal_charge is -2.00
+          -------------------------------------------
+          0    duplicate fragments were found.
+          0    complete molecules were filtered
+          0    root fragments were filtered
+          0    completed molecules were written to file
+          -------------------------------------------
+          0    root frags intended for the next layer were further pruned via rmsd.
+          0    candidate root frags intended for the next layer were ignored due to limit on root size.
+
+    Layer 4 completed! Moving on the next layer with 5 root fragments.
+    For Layer 4, time duration is: 0.43 seconds with 13.97 with attachments per second.
 
   ##### Entering layer of growth #5
   Root size at the beginning of this layer = 5
-    From Root[0], created 6 new fragments with an added layer
-        From RD_layer[5]anchor[0]Root[0],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[5],the number of rejected molecules is 0
-    From Root[1], created 6 new fragments with an added layer
-        From RD_layer[5]anchor[0]Root[1],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[5],the number of rejected molecules is 0
-    From Root[2], created 2 new fragments with an added layer
-        From RD_layer[5]anchor[0]Root[2],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[5],the number of rejected molecules is 0
-    From Root[3], created 5 new fragments with an added layer
-        From RD_layer[5]anchor[0]Root[3],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[5],the number of rejected molecules is 0
-    From Root[4], created 1 new fragments with an added layer
-        From RD_layer[5]anchor[0]Root[4],the number of rejected molecules is 0
-        Cumulatively, in RD_layer[5],the number of rejected molecules is 0
-      From all frags in root, kept a total of 20 new fragments with an added layer
-      After pruning by the RMSD heuristic, that number goes down to 6
-      From this ensemble, the average molecular weight is 169.03
-      From this ensemble, the average number of rotatable bonds is 5
-      From this ensemble, the average formal_charge is -2
-      After writing 6 of those to file, 0 are returned to root for the next iteration
+    Root [  0], sccf atts      1 |acc mols    1 |cmpd    1 |fltrd cmpd    0 |Prnd    0 |Kpt    0 |S     0.05 |A/S  18.56
+        RDKIT: the number of rejected molecules is 0
+    Root [  1], sccf atts      1 |acc mols    1 |cmpd    1 |fltrd cmpd    0 |Prnd    0 |Kpt    0 |S     0.05 |A/S  19.95
+        RDKIT: the number of rejected molecules is 0
+    Root [  2], sccf atts      1 |acc mols    1 |cmpd    1 |fltrd cmpd    0 |Prnd    0 |Kpt    0 |S     0.09 |A/S  11.63
+        RDKIT: the number of rejected molecules is 0
+    Root [  3], sccf atts      1 |acc mols    0 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    0 |S     0.11 |A/S   8.86
+        RDKIT: the number of rejected molecules is 0
+    Root [  4], sccf atts      1 |acc mols    1 |cmpd    1 |fltrd cmpd    0 |Prnd    0 |Kpt    0 |S     0.04 |A/S  22.62
+        RDKIT: the number of rejected molecules is 0
+      From all attachments events, 5 fragments were collected in layer 5 prior to all pruning/filtering.
+      From accepted frags ( N= 4 ) in layer 5, 
+          Collected a total of 0 candidate root fragments, then that number goes down to 0 due to pruning by the RMSD heuristic.
+          -------------------------------------------
+          3    duplicate fragments were found.
+          0    complete molecules were filtered
+          0    root fragments were filtered
+          1    completed molecules were written to file
+          -------------------------------------------
+          0    root frags intended for the next layer were further pruned via rmsd.
+          0    candidate root frags intended for the next layer were ignored due to limit on root size.
+
+    Layer 5 completed! Moving on the next layer with 0 root fragments.
+    For Layer 5, time duration is: 0.35 seconds with 14.35 with attachments per second.
 
 Root is empty, continuing.
 
@@ -609,5 +615,8 @@ There are no more anchors. Exiting.
 
 
 
-310 Molecules Processed
-Total elapsed time:	10.476 seconds
+100 Attachments Processed
+Total elapsed time:	12.882 seconds
+7.763 # atts / sec
+Virtual Memory Used for this process: 225044 KiloBytes
+Physical Memory Used for this process: 111120 KiloBytes

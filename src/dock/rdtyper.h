@@ -50,6 +50,7 @@ public:
     int get_pns(DOCKMol &, RDKit::ROMol &,std::map<std::string,std::string> &);
     int get_num_pns(RDKit::ROMol &, std::vector<std::string>&);
     void calculate_descriptors(DOCKMol &, std::map<unsigned int, double> &, bool, std::map<std::string, std::string> &);
+    void calculate_descriptors_drive(DOCKMol &, std::map<unsigned int, double> , bool, std::map<std::string, std::string> );
     //void calculate_descriptors(DOCKMol &, std::map<unsigned int, double> &, bool);
     //void assign_descriptors(DOCKMol &);
 

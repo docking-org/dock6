@@ -57,13 +57,7 @@ minimize	0
 
 definition	.2 [ 2 H ]
 definition	.2 [ 2 H ]
-______________________________________________________________________
-name		sp2-aromatic
-drive_id	2
-minimize	0
 
-definition	.2 [ 2 H ]
-definition	.ar
 ______________________________________________________________________
 name            aromatic-aromatic
 drive_id        2
@@ -71,6 +65,13 @@ minimize        0
 
 definition      .ar
 definition      .ar
+______________________________________________________________________
+name		sp2-aromatic
+drive_id	2
+minimize	0
+
+definition	.2 [ 2 H ]
+definition	.ar
 ______________________________________________________________________
 name		sp2-n4
 drive_id	6
@@ -285,6 +286,41 @@ minimize	1
 definition	Si [ 3 H ]
 definition	O.3
 ______________________________________________________________________
+name            disulf with dummy
+drive_id        6
+minimize        1
+
+definition      S ( C.* )
+definition      Du ( Du )
+______________________________________________________________________
+name		dummy-sulf
+drive_id	3
+minimize	1
+
+definition	S ( 2 O [ * ] )
+definition	Du ( Du )
+______________________________________________________________________
+name		dummy(C)-dummy(S)-C
+drive_id	4
+minimize	1
+
+definition	C.3 
+definition	Du ( Du )
+______________________________________________________________________
+name		dummy(C)-dummy(S)-S
+drive_id	6
+minimize	1
+
+definition	S.3 
+definition	Du ( Du )
+______________________________________________________________________
+name            amide
+drive_id        1
+minimize        0
+
+definition      N ( H )
+definition      C.2 ( O.2 )
+______________________________________________________________________
 name            amide
 drive_id        1
 minimize        0
@@ -292,4 +328,24 @@ minimize        0
 definition      N.am ( H )
 definition      C.2 ( O.2 )
 ______________________________________________________________________
+name            Amidine
+drive_id        1
+minimize        1
 
+definition      C ( 2 N ( 2 H ) )
+definition      C 
+______________________________________________________________________
+name            Guanidine
+drive_id        1
+minimize        1
+
+definition      C ( 2 N ( 2 H ) )
+definition      N 
+______________________________________________________________________
+name            Dicarbonyl
+drive_id        1
+minimize        1
+
+definition      C ( O.2 )
+definition      C ( O.2 ) 
+______________________________________________________________________

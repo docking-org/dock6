@@ -1,18 +1,30 @@
 include ../default_targets.h
 
+# run this test only if a grid producing executable exists
 test:
-	@# run this test only if the DelPhi executable exists
 	@(if [ -x "$(DELPHI_PATH)" ] ; then \
+	        echo "This DelPhi executable was found:" ;\
+	        echo "    $(DELPHI_PATH)" ;\
 		make solvgrid_generation ;\
-		make delphi_grid_generation ;\
-		make grid_convrds ;\
+		make sevsolvgrid_generation ;\
+		cd hydrogen && make sevsolvgrid_generation_h;\
+	elif [ -x "$(QNIFFT_PATH)" ] ; then \
+	        echo "This Qnifft executable was found:" ;\
+	        echo "    $(QNIFFT_PATH)" ;\
+		make solvgrid_generation ;\
+		make sevsolvgrid_generation ;\
+		cd hydrogen && make sevsolvgrid_generation_h;\
 	else \
 		echo "" ;\
-		echo "The DelPhi executable was not found." ;\
-		echo "    Define DELPHI_PATH to the full path of DelPhi." ;\
+		echo "An executable to produce grids was not found." ;\
+	        echo "    DELPHI_PATH = $(DELPHI_PATH)" ;\
+	        echo "    QNIFFT_PATH = $(QNIFFT_PATH)" ;\
+		echo "    Define DELPHI_PATH or QNIFFT_PATH to its full path." ;\
 		echo "    Skipping this test." ;\
 		echo "" ;\
 	fi ;\
 	)
 
-clean: clean_solvgrid_generation clean_delphi_grid_generation clean_grid_convrds
+
+# clean: clean_solvgrid_generation clean_chemgrid_generation clean_delphi_grid_generation clean_grid_convert
+clean: clean_solvgrid_generation 

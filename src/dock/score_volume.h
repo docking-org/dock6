@@ -13,7 +13,7 @@ class Parameter_Reader;
 
 
 #define VDWOFF -0.09
-#define MAX_ATOM_REC 1000
+#define MAX_ATOM_REC 2000
 #define MAX_ATOM_LIG 200
 
 #define SQR(x) ((x)*(x))
@@ -31,6 +31,32 @@ class           Cloud_Struct {
 
     void                 initialize();
     void                 clear();
+};
+
+/*****************************************************************/
+// To calculate Volume overlap without using input parameters
+// This focuses on the analytical method only
+class           Volume_Score_Comp {
+
+    public:
+        float           total_component;
+        float           heavy_atom_component;
+        float           positive_component;
+        float           negative_component;
+        float           hydrophobic_component;
+        float           hydrophilic_component;
+        float           VOS;
+  
+        // reset the scores to null
+        void            clear();
+        Volume_Score_Comp compute_score_analytical(DOCKMol & , DOCKMol &);
+        Volume_Score_Comp();
+        ~Volume_Score_Comp();
+        Volume_Score_Comp( const Volume_Score_Comp & );
+        void operator=(const Volume_Score_Comp &);
+
+        
+
 };
 
 /*****************************************************************/
@@ -84,8 +110,15 @@ class           Volume_Score:public Base_Score {
     bool            Grid_method(DOCKMol & mol);
     bool            Analytical_method(DOCKMol & mol,float &,float &,float &,float &,float &,float &);
     bool            compute_score(DOCKMol & mol);
+    bool            compute_score(DOCKMol & mol, DOCKMol & ref_mol, AMBER_TYPER & c_typer);
     void            write_cloud(Cloud_Struct &);
     std::string     output_score_summary(DOCKMol & mol);
+
+  private:
+    //subroutines
+    void            initialize_reference_overlap_helper();
+    //light weight initialize function (not sure to make this public or private yet)
+    void            initialize(AMBER_TYPER &, DOCKMol &);
 
 };
 #endif // SCORE_VOLUME_H

@@ -303,8 +303,11 @@ GB_Pairwise::compute_score(DOCKMol & mol)
     float           total;
 
     if (use_score) {
+        //cout << "I AM HERE"<<endl;
         get_gb_solvation_score(mol);
+        //cout << "I AM HERE"<<endl;
         get_sa_solvation_score(mol);
+        //cout << "I AM HERE"<<endl;
 
         if (vdw_score.compute_score(mol))
             vdw_component = vdw_score.vdw_component;
@@ -735,8 +738,8 @@ GB_Pairwise::get_sa_solvation_score(DOCKMol & mol)
     int             nearpt[3];
     int             neighbor_num[MAX_ATOM_LIG],
                     neighbors[MAX_ATOM_LIG][MAX_ATOM_LIG];
-    int             neighbor_num1[MAX_ATOM_REC],
-                    neighbors1[MAX_ATOM_REC][MAX_ATOM_LIG];
+    int             neighbor_num1[MAX_ATOM_REC+MAX_ATOM_LIG],
+                    neighbors1[MAX_ATOM_REC+MAX_ATOM_LIG][MAX_ATOM_LIG];
     int             nsas_lig,
                     delta_nsas_rec,
                     delta_nsas_lig;
@@ -748,6 +751,11 @@ GB_Pairwise::get_sa_solvation_score(DOCKMol & mol)
                     delta_nsas_pol_lig;
     float           score[2],
                     factor;
+
+    // conider making neighbor_num, neighbors, neighbor_num1, neighbors1 allocated dynamicly
+    // int* neighbor_num1;
+    // int** neighbors1;
+    // neighbor_num1 = new [MAX_ATOM_LIG] int
 
     if (use_score) {
         // clear all ligand parameters
@@ -779,6 +787,12 @@ GB_Pairwise::get_sa_solvation_score(DOCKMol & mol)
             }
         }
 
+        //cout << "I AM HERE in SA (1)"<<endl;
+        //cout << "mol.num_atoms = " << mol.num_atoms <<endl;
+        //cout << "sa_grid->sa_rec_total_atoms = " << sa_grid->sa_rec_total_atoms <<endl;
+        if (MAX_ATOM_REC< sa_grid->sa_rec_total_atoms){
+            cout << "Error in get_sa_solvation_score :: MAX_ATOM_REC< sa_grid->sa_rec_total_atoms :: "<< MAX_ATOM_REC << "<" << sa_grid->sa_rec_total_atoms << endl;
+        } 
         for (i = 0; i < sa_grid->sa_rec_total_atoms; i++) {
             n = i + mol.num_atoms;
             neighbor_num1[n] = 0;
@@ -786,6 +800,7 @@ GB_Pairwise::get_sa_solvation_score(DOCKMol & mol)
                 neighbors1[n][j] = 0;
         }
 
+        //cout << "I AM HERE in SA (2)"<<endl;
         // Pure ligand atoms
         for (i = 0; i < mol.num_atoms; i++) {
             if (mol.amber_at_well_depth[i] != 0.0) {
@@ -1432,6 +1447,8 @@ GB_Hawkins::compute_score(DOCKMol & mol)
 
         mol.current_score = total_score;
         mol.current_data = output_score_summary(mol);
+
+        //cout << mol.current_data<<endl;
 
     }
 

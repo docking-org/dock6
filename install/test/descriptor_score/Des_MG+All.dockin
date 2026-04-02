@@ -6,6 +6,7 @@ min_anchor_size                                              40
 pruning_use_clustering                                       yes
 pruning_max_orients                                          10
 pruning_clustering_cutoff                                    10
+pruning_orient_score_cutoff                                  1000.0
 pruning_conformer_score_cutoff                               100.0
 pruning_conformer_score_scaling_factor                       1.0
 use_clash_overlap                                            no
@@ -22,6 +23,7 @@ bump_filter                                                  no
 score_molecules                                              yes
 contact_score_primary                                        no
 grid_score_primary                                           no
+gist_score_primary                                           no
 multigrid_score_primary                                      no
 dock3.5_score_primary                                        no
 continuous_score_primary                                     no
@@ -36,6 +38,8 @@ descriptor_use_pharmacophore_score                           yes
 descriptor_use_tanimoto                                      yes
 descriptor_use_hungarian                                     yes
 descriptor_use_volume_overlap                                yes
+descriptor_use_gist                                          no
+descriptor_use_dock3.5                                       no
 descriptor_multigrid_score_rep_rad_scale                     1.0
 descriptor_multigrid_score_vdw_scale                         1.0
 descriptor_multigrid_score_es_scale                          1.0
@@ -87,6 +91,7 @@ descriptor_weight_fingerprint_tanimoto                       1
 descriptor_weight_hms_score                                  1
 descriptor_weight_volume_overlap_score                       1
 minimize_ligand                                              no
+simplex_final_min                                            no
 atom_model                                                   all
 vdw_defn_file                                                ../../../parameters/vdw_AMBER_parm99.defn
 flex_defn_file                                               ../../../parameters/flex.defn
@@ -94,7 +99,9 @@ flex_drive_file                                              ../../../parameters
 chem_defn_file                                               ../../../parameters/chem.defn
 pharmacophore_defn_file                                      ../../../parameters/ph4.defn
 ligand_outfile_prefix                                        Des_MG+All
+write_mol_solvation                                          no
 write_footprints                                             no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no

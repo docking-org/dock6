@@ -1,0 +1,5 @@
+101c101,102
+<             IF(YZA.LT.1.D-4)GOTO 70 
+---
+>             GOTO 70
+> C           IF(YZA.LT.1.D-4)GOTO 70 

@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released September 2024
 Copyright UCSF
 --------------------------------------
 
@@ -21,6 +21,7 @@ atom_in_anchor                                               C,19
 pruning_use_clustering                                       yes
 pruning_max_orients                                          300
 pruning_clustering_cutoff                                    300
+pruning_orient_score_cutoff                                  1000.0
 pruning_conformer_score_cutoff                               100.0
 pruning_conformer_score_scaling_factor                       1.0
 use_clash_overlap                                            no
@@ -62,6 +63,10 @@ Grid Score Parameters
 ------------------------------------------------------------------------------------------
 grid_score_primary                                           no
 
+GIST Score Parameters
+------------------------------------------------------------------------------------------
+gist_score_primary                                           no
+
 MultiGrid Score Parameters
 ------------------------------------------------------------------------------------------
 multigrid_score_primary                                      no
@@ -89,7 +94,7 @@ hbond_score_primary                                          no
 Internal Energy Score Parameters
 ------------------------------------------------------------------------------------------
 internal_energy_score_primary                                yes
-internal_energy_rep_exp                                      12
+internal_energy_score_rep_exp                                12
 
 Descriptor Score Parameters
 ------------------------------------------------------------------------------------------
@@ -121,6 +126,7 @@ simplex_rot_step                                             0.1
 simplex_tors_step                                            5
 simplex_grow_max_iterations                                  0
 simplex_grow_tors_premin_iterations                          20
+simplex_final_min                                            no
 simplex_random_seed                                          0
 simplex_restraint_min                                        yes
 simplex_coefficient_restraint                                100
@@ -135,15 +141,18 @@ flex_drive_file                                              ../../../parameters
 Molecule Library Output Parameters
 ------------------------------------------------------------------------------------------
 ligand_outfile_prefix                                        output_anchor1
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        5000
 write_conformations                                          no
 cluster_conformations                                        no
+score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
 
 Initializing Conformer Generator Routines...
 Initializing Library File Routines...
+
 
 -----------------------------------
 VERBOSE MOLECULE STATS
@@ -154,33 +163,39 @@ VERBOSE MOLECULE STATS
   Molecular Weight = 506.822
   Heavy Atoms = 36
 -----------------------------------
+ANCHOR ATOMS.
+
+ANCHOR #1: C,19 ; C,42 ; C,41 ; C,22 ; C,21 ; C,20 ; H,67 ; H,68 ; H,93 ; H,94 ; 
 # of anchor positions: 1
 -----------------------------------
 VERBOSE GROWTH STATS : ANCHOR #1
 
-1/1 anchor orients retained (max 300) t=0.002874s
+1/1 anchor orients retained (max 300) t=0.01s
 Lyr 1-2 Segs|Lyr 2-2 Segs|number of layers:3
 Lyr:1 Seg:0 Bond:1 : Sampling 6 dihedrals N(N.4)  C(C.3)  C(C.ar)  C(C.ar)
-Lyr:1 Seg:0 6/6 retained, Pruning:  t=0.008509s
+Lyr:1 Seg:0 6/6 retained, Pruning:  t=0.02s
 Lyr:1 Seg:1 Bond:49 : Sampling 6 dihedrals C(C.ar)  C(C.ar)  C(C.3)  N(N.4)
-Lyr:1 Seg:1 36/36 retained, Pruning:  t=0.064958s
+Lyr:1 Seg:1 36/36 retained, Pruning:  t=0.13s
 Lyr:2 Seg:0 Bond:0 : Sampling 3 dihedrals C(C.ar)  C(C.3)  N(N.4)  C(C.3)
-Lyr:2 Seg:0 72/108 retained, Pruning: 36-score  t=0.287455s
+Lyr:2 Seg:0 72/108 retained, Pruning: 36-score  t=0.48s
 Lyr:2 Seg:1 Bond:51 : Sampling 3 dihedrals C(C.ar)  C(C.3)  N(N.4)  C(C.3)
-Lyr:2 Seg:1 199/216 retained, Pruning: 14-score 3-clustered  t=0.828324s
+Lyr:2 Seg:1 198/216 retained, Pruning: 14-score 4-clustered  t=1.28s
 No more anchor fragments to be docked.
 
 -----------------------------------
 Molecule: CHEMBL543895
 
- Elapsed time for docking:	0.880 seconds
+ Elapsed time for docking:	1.348 seconds
 
  Anchors:		1
  Orientations:		1
- Conformations:		199
+ Conformations:		198
 
-                      Internal_Score:           13.288239
+                      Internal_Score:           13.288229
 
 
 1 Molecules Processed
-Total elapsed time:	1.107 seconds
+Total elapsed time:	1.679 seconds
+Number of molecules per second:	0.596
+Virtual memory used for this process: 172444 kilobytes
+Physical memory used for this process: 100804 kilobytes

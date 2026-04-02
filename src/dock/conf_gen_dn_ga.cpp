@@ -6,6 +6,7 @@
 #include <iomanip>
 #include "trace.h"
 //#include <cstdlib>
+#include <list>
 #include <time.h>
 using namespace std;
 
@@ -48,6 +49,8 @@ DN_GA_Build::DN_GA_Build(){
     dn_ga_flag = false;
     dn_ga_gen = 0;
     dn_ga_mut_attempt = 0;
+    tmp_first_check = false;
+    tmp_second_check = false; //temporary fix for uninitialized value, set to true to be conservative, takes extra time but checks both direction sof the torenv (?)
 }
 DN_GA_Build::~DN_GA_Build(){
     scaffolds.clear();
@@ -871,7 +874,8 @@ DN_GA_Build::build_molecules( Master_Score & score, Simplex_Minimizer & simplex,
     }
 
     // Sort anchors by # of heavy atoms, in case of a tie, by # aps
-    sort(anchors.begin(), anchors.end(), ga_size_sort);
+    //sort(anchors.begin(), anchors.end(), ga_size_sort);
+    frag_sort(anchors, ga_size_sort);
 
     // Resize dn_unique_anchors in case the user requests more anchors than are provided
     if (dn_unique_anchors > anchors.size()){
@@ -1023,7 +1027,8 @@ DN_GA_Build::build_molecules( Master_Score & score, Simplex_Minimizer & simplex,
     
                     // sort growing on the mol object primary score
                     cout << "Sorting molecules made after denovo" << endl;
-                    sort(growing.begin(), growing.end(), ga_fragment_sort);
+                    //sort(growing.begin(), growing.end(), ga_fragment_sort);
+		    frag_sort(growing, ga_fragment_sort);
                     molecule_counter += growing.size();
                 cout << endl << "Molecules made after denovo: " << growing.size() << endl << endl;
 
@@ -1153,7 +1158,8 @@ DN_GA_Build::build_molecules( Master_Score & score, Simplex_Minimizer & simplex,
             root.clear();
             cout << "Sorting denovo molecules based on score." << endl;
             // choose the sort function based on input parameters
-            sort(next_layer.begin(), next_layer.end(), ga_fragment_sort);
+            // sort(next_layer.begin(), next_layer.end(), ga_fragment_sort);
+	    frag_sort(next_layer, ga_fragment_sort);
             if (dn_ga_flag == false){ 
                cout <<"      From all frags in root, kept a total of " <<next_layer.size() 
                     <<" new fragments with an added layer" <<endl;
@@ -1564,7 +1570,8 @@ DN_GA_Build::orient_fragments( vector <Fragment> & root, Fragment & frag, Master
     }
 
     // Sort the orients by score
-    sort(orients.begin(), orients.end(), ga_fragment_sort);
+    //sort(orients.begin(), orients.end(), ga_fragment_sort);
+    frag_sort(orients, ga_fragment_sort);
 
     // First filter by the score
     // (the value of 1000.0 is also hard-coded in anchor and grow when clustering is on)
@@ -4303,3 +4310,27 @@ DN_GA_Build::print_fraggraph( )
     // We just wrote a ton of stuff to disk, so exit:
     exit(0);
 }
+
+void DN_GA_Build::frag_sort(std::vector<Fragment> & vec_frag, std::function<bool(const Fragment&, const Fragment&)> func){
+
+    std::list<Fragment> list_growing(vec_frag.begin(), vec_frag.end());
+    list_growing.sort(func);
+
+    vec_frag.clear();
+    for (Fragment tmp_frag : list_growing){
+        vec_frag.push_back(tmp_frag);
+    }
+
+}
+
+void DN_GA_Build::frag_sort(std::vector< std::pair <Fragment, int> > & vec_frag,
+                         std::function<bool(const std::pair <Fragment, int> &, const std::pair <Fragment, int> &)> func){
+
+    std::list< pair < Fragment, int >> list_growing(vec_frag.begin(), vec_frag.end());
+    list_growing.sort(func);
+    for (pair<Fragment,int> tmp_frag : list_growing){
+        vec_frag.push_back(tmp_frag);
+    }
+
+}
+

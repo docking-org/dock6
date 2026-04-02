@@ -70,6 +70,21 @@ delphi_grid_generation:
 	$(DOCK_BIN)/make_phimap $(DELPHI_PATH) 1> delphi.out
 	../dockdif -w -t 1 delphi.out.save delphi.out
 
+qnifft_grid_generation:
+	# generate DelPhi grid for CHEMGRID score
+	#$(QNIFFT_PATH) qnifft.parm > qnifft.out
+	$(QNIFFT_PATH) qnifft.parm | grep -v --binary-files=text "  run on" > qnifft.out
+	../dockdif -w -t 1 qnifft.out.save qnifft.out
+
+sevsolvgrid_generation:
+	# generate dock3.5.54 sevsolvgrids for CHEMGRID score
+	#../../../bin/solvmap
+	#../dockdif solvmap.save solvmap
+	#../dockdif -w -t 1 OUTSOLV.save OUTSOLV
+	../../../bin/sevsolv
+	../dockdif solvmapsev.save solvmapsev
+	../dockdif -w -t 1 OUTSEV.save OUTSEV
+
 solvgrid_generation:
 	# generate dock3.5.54 solvgrids for CHEMGRID score
 	../../../bin/solvmap
@@ -77,6 +92,9 @@ solvgrid_generation:
 	../dockdif -w -t 1 OUTSOLV.save OUTSOLV
 	../../../bin/solvgrid
 	../dockdif -w -t 1 OUTRDSL.save OUTRDSL
+
+sevsolvgrid_generation_h:
+	../../../../bin/sevsolv 
 
 grid_convert:
 	# convert dock3.5.54 chemgrids for CHEMGRID score
@@ -169,9 +187,9 @@ clean_delphi_grid_generation:
 	/bin/rm -f rec+sph.phi delphi.out delphi.out.dif
 
 clean_solvgrid_generation:
-	/bin/rm -f OUTSOLV solvmap distmap.box OUTRDSL OUTPARM PDBPARM chem.bmp \
-		chem.dsl chem.esp chem.vdw solvmap.dif OUTSOLV.dif OUTRDSL.dif
-
+	/bin/rm -f OUTSOLV solvmap sevsolv OUTSEV hydrogen/OUTSEV hydrogen/sevsolv distmap.box OUTRDSL OUTPARM PDBPARM chem.bmp \
+		chem.dsl chem.esp chem.vdw solvmap.dif sevsolv.dif hydrogen/sevsolv.dif OUTSOLV.dif OUTRDSL.dif
+ 
 clean_grid_convert:
 	/bin/rm -f gconv.out gconv.out.dif \
 		chem52.bmp chem52.chm chem52.cmg chem52.dsl chem52.phi

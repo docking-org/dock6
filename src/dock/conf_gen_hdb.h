@@ -122,6 +122,7 @@ class           HDB_Conformer_Search {
     float           score_thres;
     //int             num_per_hierarchy;
     int             num_per_search;
+    bool            skip_broken;
 
     // Here is what TEB thinks we need, 2019. 
     // atoms ^A -- type number charge
@@ -153,7 +154,8 @@ class           HDB_Conformer_Search {
     virtual ~ HDB_Conformer_Search();
     void            initialize();
     void            input_parameters(Parameter_Reader &);
-    void            prepare_molecule(HDB_Mol &);
+    void            prepare_molecule(DOCKMol &);
+    //void            prepare_molecule(HDB_Mol &);
     void            create_mol(DOCKMol &,DOCKMol &,HDB_Mol &, int); // this will put the conf in a dockmol and activate the atoms
     void            set_conf_mol(DOCKMol &,HDB_Mol &); // this will put the conf in a dockmol and activate the atoms
     void            set_branch_mol(DOCKMol &, DOCKMol &, HDB_Mol &, int); // this will put the confs from a branch in dockmol and activate all the atoms
@@ -165,6 +167,7 @@ class           HDB_Conformer_Search {
     void            activate_anchor(DOCKMol &);
     bool            next_conformer(DOCKMol &);
     //bool            generate_mols_from_confs(HDB_MULTICONF &, DOCKMol &);
+    void            set_rigid_active(DOCKMol &, HDB_Mol &) ;
 
 };
 

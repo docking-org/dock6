@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released September 2024
 Copyright UCSF
 --------------------------------------
 
@@ -22,6 +22,7 @@ min_anchor_size                                              40
 pruning_use_clustering                                       yes
 pruning_max_orients                                          10
 pruning_clustering_cutoff                                    10
+pruning_orient_score_cutoff                                  1000.0
 pruning_conformer_score_cutoff                               25.0
 pruning_conformer_score_scaling_factor                       1.0
 use_clash_overlap                                            no
@@ -70,13 +71,16 @@ flex_drive_file                                              ../../../parameters
 Molecule Library Output Parameters
 ------------------------------------------------------------------------------------------
 ligand_outfile_prefix                                        fad6_growthtree
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
 
 Initializing Conformer Generator Routines...
 Initializing Library File Routines...
+
 
 -----------------------------------
 VERBOSE MOLECULE STATS
@@ -87,6 +91,9 @@ VERBOSE MOLECULE STATS
   Molecular Weight = 314.468
   Heavy Atoms = 23
 -----------------------------------
+ANCHOR ATOMS.
+
+ANCHOR #1: C1,1 ; C10,2 ; C19,3 ; H27,4 ; H26,5 ; H25,6 ; C9,7 ; C11,8 ; C12,9 ; C13,10 ; C18,11 ; H24,12 ; H23,13 ; H22,14 ; C17,15 ; H21,22 ; C16,23 ; H20,24 ; H19,25 ; C15,26 ; H18,27 ; H17,28 ; C14,29 ; H16,30 ; C8,31 ; H10,32 ; C7,33 ; H9,34 ; H8,35 ; C6,36 ; H7,37 ; H6,38 ; C5,39 ; C4,40 ; H5,41 ; C3,42 ; O1,43 ; C2,44 ; H4,45 ; H3,46 ; H15,47 ; H14,48 ; H13,49 ; H12,50 ; H11,51 ; H2,52 ; H1,53 ; 
 # of anchor positions: 1
 -----------------------------------
 VERBOSE GROWTH STATS : ANCHOR #1
@@ -94,13 +101,13 @@ VERBOSE GROWTH STATS : ANCHOR #1
 1/1 anchor orients retained (max 10) t=0s
 Lyr 1-1 Segs|number of layers:2
 Lyr:1 Seg:0 Bond:25 : Sampling 6 dihedrals C16(C.3)  C17(C.3)  C20(C.2)  C21(C.3)
-Lyr:1 Seg:0 5/6 retained, Pruning: 1-clustered  (6 in growth tree) t=0.01s
+Lyr:1 Seg:0 5/6 retained, Pruning: 1-clustered  (6 in growth tree) t=0s
 No more anchor fragments to be docked.
 
 -----------------------------------
 Molecule: LIG1
 
- Elapsed time for docking:	0.031 seconds
+ Elapsed time for docking:	0.022 seconds
 
  Anchors:		1
  Orientations:		1
@@ -109,4 +116,7 @@ Molecule: LIG1
 
 
 1 Molecules Processed
-Total elapsed time:	0.034 seconds
+Total elapsed time:	0.025 seconds
+Number of molecules per second:	40.026
+Virtual memory used for this process: 86572 kilobytes
+Physical memory used for this process: 15524 kilobytes

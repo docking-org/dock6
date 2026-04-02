@@ -6,6 +6,7 @@ min_anchor_size                                              40
 pruning_use_clustering                                       yes
 pruning_max_orients                                          10
 pruning_clustering_cutoff                                    10
+pruning_orient_score_cutoff                                  1000.0
 pruning_conformer_score_cutoff                               25.0
 pruning_conformer_score_scaling_factor                       1.0
 use_clash_overlap                                            no
@@ -25,6 +26,7 @@ grid_score_primary                                           yes
 grid_score_rep_rad_scale                                     1
 grid_score_vdw_scale                                         1
 grid_score_es_scale                                          1
+grid_lig_efficiency                                          no
 grid_score_grid_prefix                                       ../grid_generation/grid
 minimize_ligand                                              yes
 minimize_anchor                                              yes
@@ -40,6 +42,7 @@ simplex_tors_step                                            10.0
 simplex_anchor_max_iterations                                10
 simplex_grow_max_iterations                                  10
 simplex_grow_tors_premin_iterations                          0
+simplex_final_min                                            no
 simplex_random_seed                                          0
 simplex_restraint_min                                        no
 atom_model                                                   all
@@ -47,6 +50,8 @@ vdw_defn_file                                                ../../../parameters
 flex_defn_file                                               ../../../parameters/flex.defn
 flex_drive_file                                              ../../../parameters/flex_drive.tbl
 ligand_outfile_prefix                                        minimize4
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no

@@ -2,13 +2,13 @@
 ##########                                Name:                ADA 
 ##########                    Molecular_Weight:             78.1137
 ##########                DOCK_Rotatable_Bonds:                   0
-##########                       Formal_Charge:         9.99123e-05
+##########                       Formal_Charge:                   0
 ##########                     HBond_Acceptors:                   0
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                   6
-##########                      Zou_GBSA_Score:            8.338846
-##########                 Zou_GBSA_vdw_energy:           -0.319814
-##########                  Zou_GBSA_gb_energy:            5.076160
+##########                      Zou_GBSA_Score:            8.338712
+##########                 Zou_GBSA_vdw_energy:           -0.319943
+##########                  Zou_GBSA_gb_energy:            5.076154
 ##########                  Zou_GBSA_sa_energy:            6.438750
 ##########        Zou_GBSA_delta_SAS_hp_energy:           -2.856250
 ##########           Internal_energy_repulsive:            0.000000

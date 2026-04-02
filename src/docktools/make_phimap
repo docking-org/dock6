@@ -17,7 +17,8 @@ endif
 setenv DELPHI $1
 
 set RECCRG = rec+sph.crg
-set GRID = 65
+# pre 6.12 GRID was 65 for DelPhi only; changed to 193 for Qnifft and DelPhi.
+set GRID = 193
 set n1 = 50
 set n2 = 120
 set n3 = 180
@@ -49,3 +50,4 @@ set PRM = genric.prm
      if ($status != 0) exit(100)
 /bin/rm fort.1[0-3] fort.18 ARCDAT
 mv fort.14 $RECCRG:r.phi
+cp -p rec+sph.phi chem.phi

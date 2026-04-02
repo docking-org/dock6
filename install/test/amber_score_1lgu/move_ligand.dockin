@@ -11,6 +11,7 @@ bump_filter                                                  no
 score_molecules                                              yes
 contact_score_primary                                        no
 grid_score_primary                                           no
+gist_score_primary                                           no
 multigrid_score_primary                                      no
 dock3.5_score_primary                                        no
 continuous_score_primary                                     no
@@ -34,6 +35,8 @@ amber_score_nonbonded_cutoff                                 18.0
 amber_score_temperature                                      300.0
 amber_score_abort_on_unprepped_ligand                        yes
 ligand_outfile_prefix                                        move_ligand
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no

@@ -71,6 +71,10 @@ Base_Grid::calc_corner_coords()
     float dx = (span[0] - 1) * spacing;
     float dy = (span[1] - 1) * spacing;
     float dz = (span[2] - 1) * spacing;
+    //float pad = 0.001; // this make sure that we are not on the edge. 
+    //float dx = (span[0]) * spacing - pad;  // teb and yst mod on 2024/03/05
+    //float dy = (span[1]) * spacing - pad;
+    //float dz = (span[2]) * spacing - pad;
 
     x_min = origin[0];
     x_max = origin[0] + dx;
@@ -191,19 +195,24 @@ Base_Grid::find_grid_neighbors(float x, float y, float z)
     cube_coords[2] = corrected_coords[2] / spacing - (float) (INTFLOOR(corrected_coords[2] / spacing)); 
 }
 
+/*
+float check_if_too_big(float val,float toobigval){
+     //cout << val << " " << toobigval << endl;
+     if (val > toobigval){
+         // cout << val << " " << toobigval << endl;
+         val = toobigval;
+      }
+      return val;
+}
+*/
+
 // +++++++++++++++++++++++++++++++++++++++++
 //function for interpolating values from a set of 8 grid points
 float
 Base_Grid::interpolate(float *grid)
 {
-    float           a1,
-                    a2,
-                    a3,
-                    a4,
-                    a5,
-                    a6,
-                    a7,
-                    a8;
+    float           a1, a2, a3, a4, a5, a6, a7, a8;
+//    float           g1, g2, g3, g4, g5, g6, g7, g8;
     float           value;
     int             out_of_bounds,
                     i;
@@ -212,6 +221,10 @@ Base_Grid::interpolate(float *grid)
     for (i = 0; i < 8; i++)
         if ((neighbors[i] > size) || (neighbors[i] < 0))
             out_of_bounds = 1;
+
+//    float toobig = 100000.0;
+//    move check to when reading in grid (chemgrid vdw). 
+
 
     if (out_of_bounds == 0) {
         a8 = grid[neighbors[7]];
@@ -222,7 +235,26 @@ Base_Grid::interpolate(float *grid)
         a3 = grid[neighbors[2]] - a8 - a7 - a5;
         a2 = grid[neighbors[1]] - a8 - a6 - a5;
         a1 = grid[neighbors[0]] - a8 - a7 - a6 - a5 - a4 - a3 - a2;
+/*
+        g8 = check_if_too_big(grid[neighbors[7]],toobig);
+        g7 = check_if_too_big(grid[neighbors[6]],toobig);
+        g6 = check_if_too_big(grid[neighbors[5]],toobig);
+        g5 = check_if_too_big(grid[neighbors[4]],toobig);
+        g4 = check_if_too_big(grid[neighbors[3]],toobig);
+        g3 = check_if_too_big(grid[neighbors[2]],toobig);
+        g2 = check_if_too_big(grid[neighbors[1]],toobig);
+        g1 = check_if_too_big(grid[neighbors[0]],toobig);
 
+
+        a8 = g8;
+        a7 = g7 - a8;
+        a6 = g6 - a8;
+        a5 = g5 - a8;
+        a4 = g4 - a8 - a7 - a6;
+        a3 = g3 - a8 - a7 - a5;
+        a2 = g2 - a8 - a6 - a5;
+        a1 = g1 - a8 - a7 - a6 - a5 - a4 - a3 - a2;
+*/
         value =
             a1 * cube_coords[0] * cube_coords[1] * cube_coords[2] +
             a2 * cube_coords[0] * cube_coords[1] +

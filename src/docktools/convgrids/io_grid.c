@@ -15,6 +15,7 @@ Written by Todd Ewing
 #include "score.h"
 #include "io_grid.h"
 #include "io_pdb.h"
+#include <stdbool.h>
 
 void read_grids
 (
@@ -33,15 +34,17 @@ void read_grids
   STRING20 *name = NULL;
   int gridnum;
   int *grid2label = NULL;
+  int nsize = grid->nsize;
+  fprintf (global.outfile, "Reading grid using size = %d.\n",nsize);
 
 #ifdef BUILD_FOR_RDSOL
-  void readgrid_ (char *, int *, float *, int [], float [],
+  void readgrid_ (char *, int *, int *, int *, float *, int [], float [], int *, 
     float [], float [], float [], float [], float [], unsigned char [],
-    int *, float *, int [], float [], float []);
+    int *, float *, int [], float [], float [] );
 #else 
-  void readgrid_ (char *, int *, float *, int [], float [],
+  void readgrid_ (char *, int *, int *, int *, float *, int [], float [], int *, 
     float [], float [], float [], unsigned char [], int *, float *, 
-    int [], float [], float []);
+    int [], float [], float [] );
 #endif
 
   grid->init_flag = TRUE;
@@ -51,7 +54,6 @@ void read_grids
 * 3/96 te
 /
   if (grid->version < 3.99)
-  {
 */
     emalloc
     (
@@ -106,7 +108,8 @@ void read_grids
     emalloc
     (
       (void **) &energy->phi,
-	grid->size * sizeof (float),
+	//grid->size * sizeof (float),
+	nsize*nsize*nsize * sizeof (float),
 	"Delphi grid array",
 	global.outfile
     );
@@ -121,10 +124,14 @@ void read_grids
     readgrid_
     (
       grid->file_prefix,
+      &grid->flag37,
+      &grid->flagqnifft,
       &grid->size,
       &grid->spacing,
       grid->span,
       grid->origin,
+      //grid->nsize,
+      &nsize, 
       energy->avdw,
       energy->bvdw,
       energy->es,
@@ -167,6 +174,10 @@ void write_grids
   STRING100 grid_file_name;
   FILE *grid_file;
   char new_fname[]="chem";
+  //int nsize = 193;
+  //int nsize = &grid->nsize;
+  int nsize = grid->nsize;
+  fprintf (global.outfile, "Writing grid using size = %d.\n",nsize);
 
 /*
 * Write out bump grid
@@ -234,7 +245,8 @@ void write_grids
     (
       energy->phi,
 	sizeof (float),
-	grid->size,
+	//grid->size,
+	(nsize*nsize*nsize),
 	grid_file
     );
 
@@ -330,7 +342,15 @@ void write_grids
       grid->size,
       grid_file
     );
-
+/*
+// for debuging // TEB 2021/10/09
+    fprintf(global.outfile,"I AM HERE\n");
+    for (i = 0; i < grid->size; i++) {
+        if ((energy->avdw[i]-energy->bvdw[i]) < -1.0) {
+           fprintf(global.outfile,"avdw = %f,  bvdw = %f \n",energy->avdw[i],energy->bvdw[i]);
+        }
+    } 
+*/
     fprintf (global.outfile, "  Writing electrostatic energy grid\n");
     fflush (global.outfile);
     fwrite

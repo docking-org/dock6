@@ -6,6 +6,7 @@ min_anchor_size                                              5
 pruning_use_clustering                                       yes
 pruning_max_orients                                          1
 pruning_clustering_cutoff                                    1
+pruning_orient_score_cutoff                                  1000.0
 pruning_conformer_score_cutoff                               0.0
 pruning_conformer_score_scaling_factor                       1.0
 use_clash_overlap                                            no
@@ -25,6 +26,8 @@ vdw_defn_file                                                ../../../parameters
 flex_defn_file                                               ../../../parameters/flex.defn
 flex_drive_file                                              ../../../parameters/flex_drive.tbl
 ligand_outfile_prefix                                        output
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no

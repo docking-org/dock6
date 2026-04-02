@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released September 2024
 Copyright UCSF
 --------------------------------------
 
@@ -86,6 +86,10 @@ Grid Score Parameters
 ------------------------------------------------------------------------------------------
 grid_score_primary                                           no
 
+GIST Score Parameters
+------------------------------------------------------------------------------------------
+gist_score_primary                                           no
+
 MultiGrid Score Parameters
 ------------------------------------------------------------------------------------------
 multigrid_score_primary                                      no
@@ -122,6 +126,8 @@ descriptor_use_pharmacophore_score                           no
 descriptor_use_tanimoto                                      no
 descriptor_use_hungarian                                     no
 descriptor_use_volume_overlap                                yes
+descriptor_use_gist                                          no
+descriptor_use_dock3.5                                       no
 
 --- Descriptor Score Parameters: Grid Score ---
 descriptor_grid_score_rep_rad_scale                          1
@@ -167,6 +173,7 @@ simplex_tors_step                                            10.0
 simplex_anchor_max_iterations                                500
 simplex_grow_max_iterations                                  250
 simplex_grow_tors_premin_iterations                          0
+simplex_final_min                                            no
 simplex_random_seed                                          0
 simplex_restraint_min                                        yes
 simplex_coefficient_restraint                                10.0
@@ -371,7 +378,7 @@ Random number - index_seg (mutation_selection): 0
 Atoms of segment for mutation: C1,C2,H1,C3,C4,O1,C5,H2,C6,H3,C7,H4,H5,C8,H6,H7,C9,H8,H9,C10,H10,C11,C12,H11
 Calling Mutation Function: Replacement
 Selecting frag: scf.209
-deleted frag from vector because no ring
+Deleted frag from vector because no ring
 Number with invalid torenv 0
 Offspring size: 0, only single best scoring offspring retained
 
@@ -910,7 +917,7 @@ Random number - index_seg (mutation_selection): 0
 Atoms of segment for mutation: C1,C2,H2,C3,H3,C4,C5,C6,H4,C7,H5,N1,C14,H11,H12,C15,H13,H14
 Calling Mutation Function: Replacement
 Selecting frag: scf.209
-deleted frag from vector because no ring
+Deleted frag from vector because no ring
 Number with invalid torenv 0
 Offspring size: 0, only single best scoring offspring retained
 
@@ -2385,14 +2392,17 @@ scoredgen, parents
 ### Parents size before P-O pruning 25 Parents size after pruning 13
 
 -----------------------------------
-Average Score offspring gen 1: -38.9115
+Average Score offspring gen 1: -40.285
 #### Final parent size before selection: 13
 #### Final offspring size before selection: 60
 Selection Method: Elitism
-Average score survivors gen 1: -58.3428
+Average score survivors gen 1: -58.3426
 
 -----------------------------------
 
 
 0 Molecules Processed
-Total elapsed time:	26.612 seconds
+Total elapsed time:	33.732 seconds
+Number of molecules per second:	0.000
+Virtual memory used for this process: 120140 kilobytes
+Physical memory used for this process: 50228 kilobytes

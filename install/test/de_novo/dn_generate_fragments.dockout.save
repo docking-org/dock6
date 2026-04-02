@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released September 2024
 Copyright UCSF
 --------------------------------------
 
@@ -56,8 +56,10 @@ flex_drive_file                                              ../../../parameters
 Molecule Library Output Parameters
 ------------------------------------------------------------------------------------------
 ligand_outfile_prefix                                        output
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
 
@@ -65,5 +67,9 @@ Initializing Conformer Generator Routines...
 Initializing Library File Routines...
 
 
+
 1 Molecules Processed
-Total elapsed time:	0.006 seconds
+Total elapsed time:	0.020 seconds
+Number of molecules per second:	49.332
+Virtual memory used for this process: 85724 kilobytes
+Physical memory used for this process: 6676 kilobytes

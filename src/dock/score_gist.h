@@ -22,6 +22,7 @@ class           GIST_Score:public Base_Score {
     float           gist_component;
     float           att_exp;
     float           rep_exp;
+    float           bgist_div;
 
                     GIST_Score();
                     virtual ~ GIST_Score();

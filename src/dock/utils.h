@@ -9,6 +9,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+class DOCKMol;
 
 
 #define PI  3.1415926535897932384626433f
@@ -77,9 +78,9 @@ class           XYZCRD {
 class           DOCKVector {
 
   public:
-    float           x;
-    float           y;
-    float           z;
+    double           x;
+    double           y;
+    double           z;
 
     DOCKVector      operator=(const DOCKVector &);
                     DOCKVector & operator+=(const DOCKVector &);
@@ -173,6 +174,7 @@ std::string     parse_commandline_argument(char **, int, const char *);
 
 void            Tokenizer(std::string , std::vector < std::string > & , char );
 float           check_neg_angle(float v1[3],float v2[3],float M[3][3]);
+void            rotate_on_x_axis(DOCKMol &, int, int, float);
 
 
 #endif  // UTILS_H

@@ -14,6 +14,7 @@ FILES USED:
 	grid1.dockin		#energy grid scoring (single)
 	orientflexiblemulti.dockin		#energy grid scoring (library)
 	grid3.dockin		#cut electrostatics and vdw terms in half
+    grid4.dockin        #score with ligand efficiency
 	lig.mol2		#ligand structure file
 	multi_lig.mol2		#multiple ligand structure file
 	struct.sph		#receptor sphere file

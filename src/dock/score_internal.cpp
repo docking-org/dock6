@@ -82,7 +82,7 @@ Internal_Energy_Score::input_parameters(Parameter_Reader & parm,
     ie_att_exp = 6;
     ie_diel = 4.0;
     if (use_primary_score || use_secondary_score){
-        ie_rep_exp = atoi(parm.query_param("internal_energy_rep_exp", "12").c_str());
+        ie_rep_exp = atoi(parm.query_param("internal_energy_score_rep_exp", "12").c_str());
         use_score = true;
     }
     else

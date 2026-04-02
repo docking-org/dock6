@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released September 2024
 Copyright UCSF
 --------------------------------------
 
@@ -22,6 +22,7 @@ min_anchor_size                                              40
 pruning_use_clustering                                       yes
 pruning_max_orients                                          10
 pruning_clustering_cutoff                                    1
+pruning_orient_score_cutoff                                  1000.0
 pruning_conformer_score_cutoff                               100.0
 pruning_conformer_score_scaling_factor                       1.0
 use_clash_overlap                                            no
@@ -68,6 +69,10 @@ contact_score_primary                                        no
 Grid Score Parameters
 ------------------------------------------------------------------------------------------
 grid_score_primary                                           no
+
+GIST Score Parameters
+------------------------------------------------------------------------------------------
+gist_score_primary                                           no
 
 MultiGrid Score Parameters
 ------------------------------------------------------------------------------------------
@@ -119,6 +124,7 @@ Amber Score Parameters
 Simplex Minimization Parameters
 ------------------------------------------------------------------------------------------
 minimize_ligand                                              no
+simplex_final_min                                            no
 
 Atom Typing Parameters
 ------------------------------------------------------------------------------------------
@@ -130,171 +136,177 @@ flex_drive_file                                              ../../../parameters
 Molecule Library Output Parameters
 ------------------------------------------------------------------------------------------
 ligand_outfile_prefix                                        orientflexiblemulti
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
 
 Initializing Conformer Generator Routines...
 Initializing Library File Routines...
+
 Initializing Orienting Routines...
 
 -----------------------------------
 Molecule: ZINC00158442
 
- Elapsed time for docking:	1.450 seconds
+ Elapsed time for docking:	1.411 seconds
 
  Anchors:		1
  Orientations:		50
  Conformations:		2
 
-                    Continuous_Score:           -4.639491
-               Continuous_vdw_energy:           -3.619773
-                Continuous_es_energy:           -1.019718
+                    Continuous_Score:           -4.639445
+               Continuous_vdw_energy:           -3.619742
+                Continuous_es_energy:           -1.019702
 
 -----------------------------------
 Molecule: ZINC00158751
 
- Elapsed time for docking:	0.502 seconds
+ Elapsed time for docking:	0.427 seconds
 
  Anchors:		1
  Orientations:		50
  Conformations:		2
 
-                    Continuous_Score:          -15.894675
-               Continuous_vdw_energy:          -15.653869
-                Continuous_es_energy:           -0.240807
+                    Continuous_Score:          -15.894650
+               Continuous_vdw_energy:          -15.653867
+                Continuous_es_energy:           -0.240784
 
 -----------------------------------
 Molecule: ZINC00013564
 
- Elapsed time for docking:	0.671 seconds
+ Elapsed time for docking:	0.707 seconds
 
  Anchors:		1
  Orientations:		50
  Conformations:		3
 
-                    Continuous_Score:          -19.680984
+                    Continuous_Score:          -19.680979
                Continuous_vdw_energy:          -20.133223
-                Continuous_es_energy:            0.452239
+                Continuous_es_energy:            0.452244
 
 -----------------------------------
 Molecule: ZINC01555236
 
- Elapsed time for docking:	0.932 seconds
+ Elapsed time for docking:	1.046 seconds
 
  Anchors:		1
  Orientations:		50
  Conformations:		2
 
-                    Continuous_Score:           41.036903
-               Continuous_vdw_energy:           39.154434
-                Continuous_es_energy:            1.882468
+                    Continuous_Score:           41.038742
+               Continuous_vdw_energy:           39.156254
+                Continuous_es_energy:            1.882488
 
 -----------------------------------
 Molecule: ZINC00150863
 
- Elapsed time for docking:	0.544 seconds
+ Elapsed time for docking:	0.586 seconds
 
  Anchors:		1
  Orientations:		50
  Conformations:		3
 
-                    Continuous_Score:          -16.177170
-               Continuous_vdw_energy:          -15.992753
-                Continuous_es_energy:           -0.184416
+                    Continuous_Score:          -16.177168
+               Continuous_vdw_energy:          -15.992751
+                Continuous_es_energy:           -0.184417
 
 -----------------------------------
 Molecule: ZINC00152265
-
- Elapsed time for docking:	0.533 seconds
-
- Anchors:		1
- Orientations:		50
- Conformations:		2
-
-                    Continuous_Score:          -16.063633
-               Continuous_vdw_energy:          -15.430454
-                Continuous_es_energy:           -0.633179
-
------------------------------------
-Molecule: ZINC00152280
-
- Elapsed time for docking:	0.870 seconds
-
- Anchors:		1
- Orientations:		50
- Conformations:		2
-
-                    Continuous_Score:          -18.690922
-               Continuous_vdw_energy:          -18.074432
-                Continuous_es_energy:           -0.616490
-
------------------------------------
-Molecule: ZINC00157111
-
- Elapsed time for docking:	0.607 seconds
-
- Anchors:		1
- Orientations:		50
- Conformations:		1
-
-                    Continuous_Score:           -1.237884
-               Continuous_vdw_energy:           -0.519723
-                Continuous_es_energy:           -0.718161
-
------------------------------------
-Molecule: ZINC00157152
 
  Elapsed time for docking:	0.570 seconds
 
  Anchors:		1
  Orientations:		50
+ Conformations:		2
+
+                    Continuous_Score:          -16.063694
+               Continuous_vdw_energy:          -15.430477
+                Continuous_es_energy:           -0.633216
+
+-----------------------------------
+Molecule: ZINC00152280
+
+ Elapsed time for docking:	0.843 seconds
+
+ Anchors:		1
+ Orientations:		50
+ Conformations:		2
+
+                    Continuous_Score:          -18.690907
+               Continuous_vdw_energy:          -18.074425
+                Continuous_es_energy:           -0.616482
+
+-----------------------------------
+Molecule: ZINC00157111
+
+ Elapsed time for docking:	0.668 seconds
+
+ Anchors:		1
+ Orientations:		50
+ Conformations:		1
+
+                    Continuous_Score:           -1.320726
+               Continuous_vdw_energy:           -0.605695
+                Continuous_es_energy:           -0.715031
+
+-----------------------------------
+Molecule: ZINC00157152
+
+ Elapsed time for docking:	0.588 seconds
+
+ Anchors:		1
+ Orientations:		50
  Conformations:		3
 
-                    Continuous_Score:          -18.033497
-               Continuous_vdw_energy:          -17.797813
-                Continuous_es_energy:           -0.235684
+                    Continuous_Score:          -18.033487
+               Continuous_vdw_energy:          -17.797800
+                Continuous_es_energy:           -0.235688
 
 -----------------------------------
 Molecule: ZINC00157402
 
- Elapsed time for docking:	0.414 seconds
+ Elapsed time for docking:	0.425 seconds
 
  Anchors:		1
  Orientations:		50
  Conformations:		2
 
-                    Continuous_Score:          -17.583597
-               Continuous_vdw_energy:          -18.325937
-                Continuous_es_energy:            0.742339
+                    Continuous_Score:          -17.583609
+               Continuous_vdw_energy:          -18.325949
+                Continuous_es_energy:            0.742341
 
 -----------------------------------
 Molecule: ZINC00157467
 
- Elapsed time for docking:	0.618 seconds
+ Elapsed time for docking:	0.648 seconds
 
  Anchors:		1
  Orientations:		50
  Conformations:		2
 
-                    Continuous_Score:          -16.937094
-               Continuous_vdw_energy:          -16.433516
-                Continuous_es_energy:           -0.503579
+                    Continuous_Score:          -16.937088
+               Continuous_vdw_energy:          -16.433510
+                Continuous_es_energy:           -0.503578
 
 -----------------------------------
 Molecule: ZINC00157960
 
- Elapsed time for docking:	0.792 seconds
+ Elapsed time for docking:	0.752 seconds
 
  Anchors:		1
  Orientations:		50
  Conformations:		2
 
-                    Continuous_Score:          -18.870466
-               Continuous_vdw_energy:          -18.738770
-                Continuous_es_energy:           -0.131696
+                    Continuous_Score:          -18.870388
+               Continuous_vdw_energy:          -18.738729
+                Continuous_es_energy:           -0.131659
 
 
 12 Molecules Processed
-Total elapsed time:	9.137 seconds
+Total elapsed time:	9.418 seconds
+Number of molecules per second:	1.274
+Virtual memory used for this process: 89244 kilobytes
+Physical memory used for this process: 16460 kilobytes

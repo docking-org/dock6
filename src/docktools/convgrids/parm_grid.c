@@ -44,6 +44,23 @@ int get_parameters
     TRUE
   );
 
+  get_parameter
+  (
+    (void *) &score_grid->flag37,
+    &parm, Boolean, "DOCK3_7_grids",
+    "NO yes",
+    TRUE
+  );
+
+  get_parameter
+  (
+    (void *) &score_grid->flagqnifft,
+    &parm, Boolean, "QNIFFT_grid",
+    "NO yes",
+    TRUE
+  );
+
+
   if (score_grid->flag)
     label->vdw.flag = TRUE;
 
@@ -52,6 +69,13 @@ int get_parameters
     (void *) &score_grid->spacing,
     &parm, Real, "grid_spacing",
     score_grid->flag ? "0.3" : "0.0",
+    score_grid->flag
+  );
+  get_parameter
+  (
+    (void *) &score_grid->nsize,
+    &parm, Integer, "phi_grid_size",
+    score_grid->flag ? "193" : "0.0",
     score_grid->flag
   );
 

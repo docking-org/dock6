@@ -1,0 +1,163 @@
+
+
+
+--------------------------------------
+DOCK v6.12
+
+Released September 2024
+Copyright UCSF
+--------------------------------------
+
+
+Conformational Sampling Parameters
+------------------------------------------------------------------------------------------
+conformer_search_type                                        flex
+write_fragment_libraries                                     no
+
+Anchor & Grow Parameters
+------------------------------------------------------------------------------------------
+user_specified_anchor                                        no
+limit_max_anchors                                            no
+min_anchor_size                                              40
+pruning_use_clustering                                       yes
+pruning_max_orients                                          1
+pruning_clustering_cutoff                                    1
+pruning_orient_score_cutoff                                  1000.0
+pruning_conformer_score_cutoff                               100.0
+pruning_conformer_score_scaling_factor                       1.0
+use_clash_overlap                                            no
+write_growth_tree                                            no
+
+Internal Energy Parameters
+------------------------------------------------------------------------------------------
+use_internal_energy                                          no
+
+Molecule Library Input Parameters
+------------------------------------------------------------------------------------------
+ligand_atom_file                                             lig.mol2
+limit_max_ligands                                            no
+skip_molecule                                                no
+read_mol_solvation                                           no
+calculate_rmsd                                               no
+
+Database Filter Parameters
+------------------------------------------------------------------------------------------
+use_database_filter                                          no
+
+Orient Ligand Parameters
+------------------------------------------------------------------------------------------
+orient_ligand                                                no
+
+Bump Filter Parameters
+------------------------------------------------------------------------------------------
+bump_filter                                                  no
+
+Master Score Parameters
+------------------------------------------------------------------------------------------
+score_molecules                                              yes
+
+Contact Score Parameters
+------------------------------------------------------------------------------------------
+contact_score_primary                                        no
+
+Grid Score Parameters
+------------------------------------------------------------------------------------------
+grid_score_primary                                           yes
+grid_score_rep_rad_scale                                     1
+grid_score_vdw_scale                                         1
+grid_score_es_scale                                          1
+grid_lig_efficiency                                          yes
+grid_score_grid_prefix                                       ../grid_generation/grid
+
+GIST Score Parameters
+------------------------------------------------------------------------------------------
+
+MultiGrid Score Parameters
+------------------------------------------------------------------------------------------
+
+Dock3.5 Score Parameters
+------------------------------------------------------------------------------------------
+
+Continuous Energy Score Parameters
+------------------------------------------------------------------------------------------
+
+Footprint Similarity Score Parameters
+------------------------------------------------------------------------------------------
+
+Pharmacophore Similarity Score Parameters
+------------------------------------------------------------------------------------------
+
+Hbond Energy Score Parameters
+------------------------------------------------------------------------------------------
+
+Internal Energy Score Parameters
+------------------------------------------------------------------------------------------
+
+Descriptor Score Parameters
+------------------------------------------------------------------------------------------
+
+Zou GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+
+Hawkins GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+
+SASA Score Parameters
+------------------------------------------------------------------------------------------
+
+Amber Score Parameters
+------------------------------------------------------------------------------------------
+
+Simplex Minimization Parameters
+------------------------------------------------------------------------------------------
+minimize_ligand                                              no
+simplex_final_min                                            no
+
+Atom Typing Parameters
+------------------------------------------------------------------------------------------
+atom_model                                                   all
+vdw_defn_file                                                ../../../parameters/vdw_AMBER_parm99.defn
+flex_defn_file                                               ../../../parameters/flex.defn
+flex_drive_file                                              ../../../parameters/flex_drive.tbl
+
+Molecule Library Output Parameters
+------------------------------------------------------------------------------------------
+ligand_outfile_prefix                                        grid4_lig_eff
+write_mol_solvation                                          no
+write_orientations                                           no
+num_scored_conformers                                        1
+score_threshold                                              100.0
+rank_ligands                                                 no
+------------------------------------------------------------------------------------------
+
+Initializing Conformer Generator Routines...
+Initializing Library File Routines...
+
+Initializing Grid Score Routines...
+ Reading the energy grid from ../grid_generation/grid.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ../grid_generation/grid.bmp
+ Done reading the grid box quantifiers.
+
+-----------------------------------
+Molecule:  C1 
+
+ Elapsed time for docking:	0.010 seconds
+
+ Anchors:		1
+ Orientations:		1
+ Conformations:		1
+
+               Grid_Efficiency_Score:           -1.418693
+                 Grid_vdw_efficiency:           -1.260534
+                  Grid_es_efficiency:           -0.158159
+                          Grid_Score:          -32.629940
+                     Grid_vdw_energy:          -28.992287
+                      Grid_es_energy:           -3.637654
+
+
+1 Molecules Processed
+Total elapsed time:	0.014 seconds
+Number of molecules per second:	69.608
+Virtual memory used for this process: 86068 kilobytes
+Physical memory used for this process: 13244 kilobytes

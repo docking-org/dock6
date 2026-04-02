@@ -97,6 +97,7 @@ class           DOCKMol {
     std::string     energy;
     std::string     simplex_text;
     std::string     mol_data;   // misc data
+    std::string     hdb_data;   // hdb data to store internal energy 
 
     bool            bad_molecule; // errors in atom section of mol2 file
     
@@ -108,6 +109,25 @@ class           DOCKMol {
                                   // this is not the number in the receptor unless
                                   // the molecule is the receptor
     float           total_dsol; // kxr
+    bool            flag_write_solvation; //teb
+    
+/*
+    // use functions in filter class to assign these values.
+
+    // Molecule Descriptors for database filter
+    // these values are assigned by call in dock.cpp
+    // to filter class the function assign these values
+    // not though in that class this is sloppy and needs
+    // to be cleaned up.
+
+    unsigned int    rot_bonds;
+    unsigned int    heavy_atoms;
+    unsigned int    hb_donors;
+    unsigned int    hb_acceptors;
+    float           mol_wt;
+    float           formal_charge;
+    float           xlogp;
+*/
 
     // array allocation variable
     bool            arrays_allocated;
@@ -131,7 +151,7 @@ class           DOCKMol {
 
     // GA flags: for pruning conformers - CS
     bool           used;
-    bool           parent; // 0 if offspring, 1 if parent
+    bool           parent = 0; // 0 if offspring, 1 if parent, default value of 0
 
     //footprint info jwu
     std::string    *atom_number;
@@ -227,6 +247,8 @@ class           DOCKMol {
     std::string     current_data;  //components of score from scoring function
     std::string     primary_data;
     std::string     hbond_text_data;
+    float           vdw_comp;
+    float           es_comp;
 
 
     // Save specific descriptor score information - CS 06-05-16
@@ -291,10 +313,11 @@ class           DOCKMol {
     std::vector < int > get_atom_children(int, int);
     float          get_torsion(int, int, int, int);
     void           set_torsion(int, int, int, int, float);
+    void           set_angle(int , int , int , float );
     void           translate_mol(const DOCKVector & vec);
     void           translate_mol(const DOCKVector & vec, bool);
     void           rotate_mol(double mat[9], bool);
-    void           rotate_mol(double mat[9]);
+    //void           rotate_mol(double mat[9]);
     void           rotate_mol(double mat[3][3]);
     void           rotate_mol(double mat[3][3], bool);
     bool           atoms_are_one_three(int, int);
@@ -302,6 +325,7 @@ class           DOCKMol {
     void           prepare_molecule();
     void           setcharges(const double* charges, double units_factor = 1.0);
     void           setxyz( const double * xyz );
+    void           cout_information(); // jdb debug function
 
     #ifdef BUILD_DOCK_WITH_RDKIT
 
@@ -391,6 +415,7 @@ typedef         std::pair < float, DOCKMol > SCOREMol;
 int             less_than_pair(SCOREMol a, SCOREMol b);
 
 bool            Read_Mol2(DOCKMol &, std::istream &, bool, bool, bool);
+bool            Read_Mol2_retain(DOCKMol &, std::istream &, bool, bool, bool);
 bool            Write_Mol2(DOCKMol &, std::ostream &);
 void            copy_molecule(DOCKMol &, const DOCKMol &);
 void            copy_molecule_shallow(DOCKMol & , const DOCKMol & );
@@ -475,13 +500,15 @@ class           HDB_conformer {
   public:
     int conf_num;
     int num_of_seg;
-    float internal_energy;
+    bool broken;
+    float internal_energy1;
+    float internal_energy2;
     int * list_of_seg;
     //std::vector <int> list_of_seg;
 
 
      //void           initialize(int, int, float, int * );
-     void           initialize(int, int, float );
+     void           initialize(int, int, bool, float, float );
      HDB_conformer();
      ~HDB_conformer();
 };
@@ -511,6 +538,8 @@ class           HDB_Mol{
     //void           initialize();
     HDB_Mol();
     ~HDB_Mol();
+    void           clear_molecule();
 };
 
 #endif  // DOCKMOL_H
+

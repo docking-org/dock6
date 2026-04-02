@@ -6,6 +6,7 @@ min_anchor_size                                              40
 pruning_use_clustering                                       yes
 pruning_max_orients                                          100
 pruning_clustering_cutoff                                    100
+pruning_orient_score_cutoff                                  1000
 pruning_conformer_score_cutoff                               25
 pruning_conformer_score_scaling_factor                       1.0
 use_clash_overlap                                            no
@@ -31,6 +32,7 @@ grid_score_primary                                           yes
 grid_score_rep_rad_scale                                     1
 grid_score_vdw_scale                                         1
 grid_score_es_scale                                          1
+grid_lig_efficiency                                          no
 grid_score_grid_prefix                                       ../grid_generation/grid
 minimize_ligand                                              no
 atom_model                                                   all
@@ -38,7 +40,9 @@ vdw_defn_file                                                ../../../parameters
 flex_defn_file                                               ../../../parameters/flex.defn
 flex_drive_file                                              ../../../parameters/flex_drive.tbl
 ligand_outfile_prefix                                        mpi
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100
 rank_ligands                                                 yes
 max_ranked_ligands                                           500

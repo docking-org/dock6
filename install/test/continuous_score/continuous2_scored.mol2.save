@@ -80,7 +80,7 @@ bcc
 ##########                                Name:        ZINC00158751
 ##########                    Molecular_Weight:             112.152
 ##########                DOCK_Rotatable_Bonds:                   1
-##########                       Formal_Charge:         0.000100005
+##########                       Formal_Charge:                   0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                   7
@@ -126,7 +126,7 @@ bcc
 ##########                                Name:        ZINC00013564
 ##########                    Molecular_Weight:             140.206
 ##########                DOCK_Rotatable_Bonds:                   0
-##########                       Formal_Charge:         0.000199944
+##########                       Formal_Charge:                   0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                   9
@@ -184,7 +184,7 @@ bcc
 ##########                                Name:        ZINC01555236
 ##########                    Molecular_Weight:             150.244
 ##########                DOCK_Rotatable_Bonds:                   2
-##########                       Formal_Charge:              0.9999
+##########                       Formal_Charge:                   1
 ##########                     HBond_Acceptors:                   1
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                  11
@@ -262,7 +262,7 @@ bcc
 ##########                                Name:        ZINC00150863
 ##########                    Molecular_Weight:             113.183
 ##########                DOCK_Rotatable_Bonds:                   0
-##########                       Formal_Charge:         9.99719e-05
+##########                       Formal_Charge:                   0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                   7
@@ -314,7 +314,7 @@ bcc
 ##########                                Name:        ZINC00152265
 ##########                    Molecular_Weight:             126.179
 ##########                DOCK_Rotatable_Bonds:                   1
-##########                       Formal_Charge:         9.99914e-05
+##########                       Formal_Charge:                   0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                   8
@@ -366,7 +366,7 @@ bcc
 ##########                                Name:        ZINC00152280
 ##########                    Molecular_Weight:             140.206
 ##########                DOCK_Rotatable_Bonds:                   2
-##########                       Formal_Charge:        -4.65661e-08
+##########                       Formal_Charge:                  -0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                   9
@@ -424,7 +424,7 @@ bcc
 ##########                                Name:        ZINC00157111
 ##########                    Molecular_Weight:             123.178
 ##########                DOCK_Rotatable_Bonds:                   2
-##########                       Formal_Charge:         7.45058e-08
+##########                       Formal_Charge:                   0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                   8
@@ -474,7 +474,7 @@ bcc
 ##########                                Name:        ZINC00157152
 ##########                    Molecular_Weight:             126.179
 ##########                DOCK_Rotatable_Bonds:                   1
-##########                       Formal_Charge:         1.49012e-08
+##########                       Formal_Charge:                   0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                   8
@@ -526,7 +526,7 @@ bcc
 ##########                                Name:        ZINC00157402
 ##########                    Molecular_Weight:             126.179
 ##########                DOCK_Rotatable_Bonds:                   1
-##########                       Formal_Charge:         9.99123e-05
+##########                       Formal_Charge:                   0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                   8
@@ -578,7 +578,7 @@ bcc
 ##########                                Name:        ZINC00157467
 ##########                    Molecular_Weight:             114.168
 ##########                DOCK_Rotatable_Bonds:                   2
-##########                       Formal_Charge:        -0.000199951
+##########                       Formal_Charge:                  -0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   1
 ##########                         Heavy_Atoms:                   7
@@ -628,7 +628,7 @@ bcc
 ##########                                Name:        ZINC00157960
 ##########                    Molecular_Weight:             154.233
 ##########                DOCK_Rotatable_Bonds:                   1
-##########                       Formal_Charge:          0.00010002
+##########                       Formal_Charge:                   0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                  10

@@ -26,6 +26,7 @@
 // Author/s: Kaushik Raha
 // 
 // Other authors: Terry Lang
+// modfied by Trent E Balius (FNLCR) to make consistant with DOCK3.7 scoring, 2020
 // 
 // Copyright 2006-2016
 // University of California, San Francisco 
@@ -45,10 +46,16 @@ using namespace TNT;            // kxr
 const int MAXDIX = 130;         // max dimensions for distmap and Chemgrids kxr
 const int MAXDIY = 130;         // dyn. memory alloc. to be implemented.
 const int MAXDIZ = 130;         // for distmap grid kxr
-const int PSIZE = 65;           // for delphi kxr
+//const int MAXDIX = 193;         // max dimensions for distmap and Chemgrids kxr
+//const int MAXDIY = 193;         // dyn. memory alloc. to be implemented.
+//const int MAXDIZ = 193;         // for distmap grid kxr
+//const int PSIZE = 65;           // for delphi kxr
+//const int PSIZE = 100;           // for delphi kxr
+const int PSIZE = 193;           // for delphi kxr
 
 Array3D < float >phimap(PSIZE, PSIZE, PSIZE);
 Array3D < float >solvgrd(MAXDIX, MAXDIY, MAXDIZ);
+Array3D < float >hsolvgrd(MAXDIX, MAXDIY, MAXDIZ);
 Array3D < float >rdsol(MAXDIX, MAXDIY, MAXDIZ);
 Array3D < int  >shape(MAXDIX, MAXDIY, MAXDIZ);
 
@@ -270,6 +277,155 @@ Chemgrid_Score::~Chemgrid_Score()
 {
 }
 
+//  void            input_parameters_main(Parameter_Reader & parm, std::string parm_head)
+//
+void
+Chemgrid_Score::input_parameters_main(Parameter_Reader & parm, string parm_head){
+
+        string          tmp;
+        energy_score = 1;
+        use_chemgrid_score = false;
+        use_conf_entropy = false;
+        //add_ligand_internal = false;
+        use_delphi_score = false;
+        use_solv_score = false;
+        total_ligand_dsolv = false;
+        use_odm_score = false;
+        use_recep_dsolv = false;
+        write_atomic_energy = false;
+        redist_pos_desol = false;
+        interpol_method = 0;
+        hsolv_flag = false;
+        Chemgrid_Score::chem_grid = new Chemgrid_Grid();
+        tmp = parm.query_param(parm_head+"vdw_score", "yes", "yes no");
+        if (tmp == "yes") {
+            use_chemgrid_score = true;
+            //cout<< "I AM HERE" << endl;
+            chem_grid->file_prefix = parm.query_param(parm_head+"grd_prefix", "chem5");
+            //cout<< "I AM HERE" << endl;
+        } else
+            cout << " Warning: Steric interaction will not be calculated!!! " <<
+                endl;
+
+        // option to read in Delphi grids kxr 041305
+        tmp = parm.query_param(parm_head+"electrostatic_score", "yes", "yes no");
+        if (tmp == "yes") {
+            use_delphi_score = true;
+            interpol_method = 2;        // 1 for Demer method, 2 for dock3554 
+            //interpol_method = 1;        // 1 for Demer method, 2 for dock3554 
+        } else
+            cout <<
+                " Warning: Electrostatic interaction will not be calculated!!! "
+                << endl;
+
+        // silence conformational entropy for dock6 release
+        // tmp =
+        // parm.query_param(parm_head+"conformational_entropy_score","no","yes
+        // no");
+        // if(tmp == "yes") {
+        // use_conf_entropy = true;
+        // }
+
+        // removing the this option. TEB 2020
+        // option to add ligand internal energy to score kxr 010506
+        //tmp =
+        //    parm.query_param(parm_head+"ligand_internal_energy", "no", "yes no");
+        //if (tmp == "yes") {
+        //    add_ligand_internal = true;
+        //}
+
+        tmp =
+            parm.query_param(parm_head+"ligand_desolvation_score", "no",
+                             "no total volume");
+        if (tmp == "total") {
+            use_solv_score = true;
+            total_ligand_dsolv = true;
+        } else if (tmp == "volume") {
+            use_solv_score = true;
+            if (use_solv_score) {
+                chem_grid->solv_file_prefix =
+                    parm.query_param(parm_head+"solvent_occlusion_file",
+                                     "solvmap");
+                tmp = parm.
+                    query_param(parm_head+"redistribute_positive_desolvation",
+                                "no", "no yes");
+                if (tmp == "yes")
+                    redist_pos_desol = true;
+            }
+            tmp = parm.query_param(parm_head+"hydrogen_desolvation_grid", "yes", "yes no");
+            if (tmp == "yes") {
+               hsolv_flag = true;
+                chem_grid->hsolv_file_prefix =
+                    parm.query_param(parm_head+"hydrogen_solvent_occlusion_file",
+                                     "hsolvmap");
+            }
+                 
+        }
+
+
+        // Temporarily disabled by srb on December 4, 2006
+        // See the cvs log for the email thread.
+        //tmp = parm.query_param(parm_head+"occupancy_desolvation_score", "no",
+        //                     "no yes");
+        //if (tmp == "yes") {
+        //    use_solv_score = true;
+        //    use_odm_score = true;
+        //    use_recep_dsolv = true; 
+        //}
+
+        tmp = parm.query_param(parm_head+"receptor_desolvation_score", "no",
+                             "yes no");
+        if (tmp == "yes") {
+            use_solv_score = true;
+            use_recep_dsolv = false;
+            cout <<
+                " Warning: Receptor desolvation not functional. Only ligand desolvation will be calculated"
+                << endl;
+            use_odm_score = false;
+        }
+
+
+        tmp =
+            parm.query_param(parm_head+"write_atomic_energy_contrib", "no",
+                             "yes no");
+        if (tmp == "yes")
+            write_atomic_energy = true;
+
+
+        vdw_scale =
+            atof(parm.query_param(parm_head+"score_vdw_scale", "1").c_str());
+        if (vdw_scale <= 0.0) {
+            bool            off;
+            off =
+                (parm.
+                 query_param(parm_head+"score_turn_off_vdw", "yes",
+                             "yes no") == "yes") ? true : false;
+            if (!off) {
+                cout <<
+                    "ERROR: Parameter must be a float greater than zero.  Program will terminate."
+                    << endl;
+                exit(0);
+            }
+        }
+        es_scale =
+            atof(parm.query_param(parm_head+"score_es_scale", "1").c_str());
+        if (es_scale <= 0.0) {
+            bool            off;
+            off =
+                (parm.
+                 query_param(parm_head+"score_turn_off_es", "yes",
+                             "yes no") == "yes") ? true : false;
+            if (!off) {
+                cout <<
+                    "ERROR: Parameter must be a float greater than zero.  Program will terminate."
+                    << endl;
+                exit(0);
+            }
+        }
+
+        use_score = true;
+}
+
 /************************************************/
 void
 Chemgrid_Score::input_parameters(Parameter_Reader & parm, bool & primary_score,
@@ -284,17 +440,6 @@ Chemgrid_Score::input_parameters(Parameter_Reader & parm, bool & primary_score,
 
     use_primary_score = false;
     use_secondary_score = false;
-    use_chemgrid_score = false;
-    use_conf_entropy = false;
-    add_ligand_internal = false;
-    use_delphi_score = false;
-    use_solv_score = false;
-    total_ligand_dsolv = false;
-    use_odm_score = false;
-    use_recep_dsolv = false;
-    write_atomic_energy = false;
-    redist_pos_desol = false;
-
 
     cout << "\nDock3.5 Score Parameters" << endl;
     cout <<
@@ -314,7 +459,7 @@ Chemgrid_Score::input_parameters(Parameter_Reader & parm, bool & primary_score,
     if (!secondary_score) {
         //tmp = parm.query_param("dock3.5_score_secondary", "no", "yes no");
         tmp = "no";
-        if (tmp == "yes")
+	if (tmp == "yes")
             use_secondary_score = true;
         else
             use_secondary_score = false;
@@ -330,123 +475,8 @@ Chemgrid_Score::input_parameters(Parameter_Reader & parm, bool & primary_score,
 
     if (energy_score == 1) {
 
-        Chemgrid_Score::chem_grid = new Chemgrid_Grid();
 
-        tmp = parm.query_param("dock3.5_vdw_score", "yes", "yes no");
-        if (tmp == "yes") {
-            use_chemgrid_score = true;
-            chem_grid->file_prefix = parm.query_param("dock3.5_grd_prefix", "chem5");
-        } else
-            cout << " Warning: Steric interaction will not be calculated!!! " <<
-                endl;
-
-        // option to read in Delphi grids kxr 041305
-        tmp = parm.query_param("dock3.5_electrostatic_score", "yes", "yes no");
-        if (tmp == "yes") {
-            use_delphi_score = true;
-            interpol_method = 2;        // 1 for Demer method, 2 for dock3554 
-        } else
-            cout <<
-                " Warning: Electrostatic interaction will not be calculated!!! "
-                << endl;
-
-        // silence conformational entropy for dock6 release
-        // tmp =
-        // parm.query_param("dock3.5_conformational_entropy_score","no","yes
-        // no");
-        // if(tmp == "yes") {
-        // use_conf_entropy = true;
-        // }
-
-        // option to add ligand internal energy to score kxr 010506
-        tmp =
-            parm.query_param("dock3.5_ligand_internal_energy", "no", "yes no");
-        if (tmp == "yes") {
-            add_ligand_internal = true;
-        }
-
-        tmp =
-            parm.query_param("dock3.5_ligand_desolvation_score", "no",
-                             "no total volume");
-        if (tmp == "total") {
-            use_solv_score = true;
-            total_ligand_dsolv = true;
-        } else if (tmp == "volume") {
-            use_solv_score = true;
-            if (use_solv_score) {
-                chem_grid->solv_file_prefix =
-                    parm.query_param("dock3.5_solvent_occlusion_file",
-                                     "solvmap");
-                tmp = parm.
-                    query_param("dock3.5_redistribute_positive_desolvation",
-                                "no", "no yes");
-                if (tmp == "yes")
-                    redist_pos_desol = true;
-            }
-        }
-
-
-        // Temporarily disabled by srb on December 4, 2006
-        // See the cvs log for the email thread.
-        //tmp = parm.query_param("dock3.5_occupancy_desolvation_score", "no",
-        //                     "no yes");
-        //if (tmp == "yes") {
-        //    use_solv_score = true;
-        //    use_odm_score = true;
-        //    use_recep_dsolv = true; 
-        //}
-
-        tmp = parm.query_param("dock3.5_receptor_desolvation_score", "no",
-                             "yes no");
-        if (tmp == "yes") {
-            use_solv_score = true;
-            use_recep_dsolv = false;
-            cout <<
-                " Warning: Receptor desolvation not functional. Only ligand desolvation will be calculated"
-                << endl;
-            use_odm_score = false;
-        }
-
-
-        tmp =
-            parm.query_param("dock3.5_write_atomic_energy_contrib", "no",
-                             "yes no");
-        if (tmp == "yes")
-            write_atomic_energy = true;
-
-
-        vdw_scale =
-            atof(parm.query_param("dock3.5_score_vdw_scale", "1").c_str());
-        if (vdw_scale <= 0.0) {
-            bool            off;
-            off =
-                (parm.
-                 query_param("dock3.5_score_turn_off_vdw", "yes",
-                             "yes no") == "yes") ? true : false;
-            if (!off) {
-                cout <<
-                    "ERROR: Parameter must be a float greater than zero.  Program will terminate."
-                    << endl;
-                exit(0);
-            }
-        }
-        es_scale =
-            atof(parm.query_param("dock3.5_score_es_scale", "1").c_str());
-        if (es_scale <= 0.0) {
-            bool            off;
-            off =
-                (parm.
-                 query_param("dock3.5_score_turn_off_es", "yes",
-                             "yes no") == "yes") ? true : false;
-            if (!off) {
-                cout <<
-                    "ERROR: Parameter must be a float greater than zero.  Program will terminate."
-                    << endl;
-                exit(0);
-            }
-        }
-
-        use_score = true;
+        input_parameters_main(parm, "dock3.5_");
 
     }
 }
@@ -456,7 +486,7 @@ Chemgrid_Score::input_parameters(Parameter_Reader & parm, bool & primary_score,
 void
 Chemgrid_Score::initialize(AMBER_TYPER & typer)
 {
-
+    cout << "Entering Chemgrid_Score::initialize" << endl;
     if (energy_score == 1) {
 
         cout << "Initializing Dock3.5 Score Routines..." << endl;
@@ -476,7 +506,7 @@ Chemgrid_Score::initialize(AMBER_TYPER & typer)
                                                                         // desolvation 
                                                                         // only 
                                                                         // kxr
-            chem_grid->read_solv_grid();
+            chem_grid->read_solv_grid(hsolv_flag);
 
         if (use_solv_score && !total_ligand_dsolv && use_recep_dsolv)   // DelPhi 
                                                                         // computed 
@@ -495,6 +525,7 @@ Chemgrid_Score::initialize(AMBER_TYPER & typer)
     } else
         use_score = false;
 
+    cout << "Exiting Chemgrid_Score::initialize" << endl;
 
 }
 /************************************************/
@@ -535,6 +566,18 @@ Chemgrid_Grid::read_chm_grid()
     fread((void *) avdw, sizeof(float), size, grid_in);
     fread((void *) es, sizeof(float), size, grid_in);
 
+    // we could check that the vdw grid is not too big here. 
+    float toobig = 100000.0;
+    for (int i = 0; i < size; i++){
+         if (bvdw[i] > toobig){
+             //cout << "bvdw "<< bvdw[i] << " is too big.  capping"<< endl;
+             bvdw[i] = toobig;
+         } 
+         if (avdw[i] > toobig){
+             //cout << "avdw "<< avdw[i] << " is too big.  capping"<< endl;
+             avdw[i] = toobig;
+         } 
+    } 
 
     fclose(grid_in);
 
@@ -607,6 +650,8 @@ Chemgrid_Grid::read_phi_grid()
     fread(oldmid, sizeof(float), 3, grid_in);
     fread(dspan, sizeof(int), 3, grid_in);
 
+    // cout << dsize << " " << dspacing <<" " <<  oldmid << " " <<  dspan << endl;
+
     // phi = (float *)malloc(dsize * sizeof(float));
     phi = new float[dsize];
     fread((void *) phi, sizeof(float), dsize, grid_in);
@@ -619,10 +664,14 @@ Chemgrid_Grid::read_phi_grid()
         for (j = 0; j < dspan[1]; ++j) {
             for (k = 0; k < dspan[2]; ++k) {
                 phimap[i][j][k] = phi[l];
+                //cout << l << " " << phi[l] << endl;
+                //exit(0);
                 l++;
             }
         }
     }
+    //cout << phimap[i-1][j-1][k-1] << endl;
+    //exit(0);
 
 
 }
@@ -630,12 +679,13 @@ Chemgrid_Grid::read_phi_grid()
 
 /*****************************************************/
 void
-Chemgrid_Grid::read_solv_grid()
+Chemgrid_Grid::read_solv_grid(bool flag)
 {
     // Solvent Occlusion Grid reading and calculation
     // capability incorporated in DOCK 5.2. Code adapted
     // from dock 3.5.54 by BKS
     // kxr 050205 
+    // updating to be consistant with DOCK 3.7
 
 
     string          fname,
@@ -650,6 +700,10 @@ Chemgrid_Grid::read_solv_grid()
     int             cadif1,
                     cadif2,
                     cadif3;
+    int             temp1,temp2,temp3,temp4;
+    float           temp5, temp6, temp7;
+
+    hsolv_flag = flag; //pass if we are reading in h_solv_grids.   
 
     fname = solv_file_prefix;
     solv_grid_in = fopen(fname.c_str(), "rb");
@@ -664,8 +718,10 @@ Chemgrid_Grid::read_solv_grid()
     l = 0;
     while (fgets(line, 100, solv_grid_in) != NULL) {
         if (l == 0) {
-            sscanf(line, "%i %i %i %i %i %i %i", &cadif1, &cadif2, &cadif3,
+            //sscanf(line, "%i %i %i %i %i %i %i", &cadif1, &cadif2, &cadif3,
+            sscanf(line, "%i %i %i %i %f %f %f", &solv_grd_N[0], &solv_grd_N[1], &solv_grd_N[2],
                    &perang, &solv_grd_ex[0], &solv_grd_ex[1], &solv_grd_ex[2]);
+            cadif1 = solv_grd_N[0]; cadif2 = solv_grd_N[1]; cadif3 = solv_grd_N[2]; 
             l++;
             if (cadif1 > MAXDIX || cadif2 > MAXDIY || cadif3 > MAXDIZ) {
                 cout <<
@@ -705,7 +761,108 @@ Chemgrid_Grid::read_solv_grid()
         }
     }
 
+
+    /*
+    // for debuging. 
+    // added by Trent Balius, 2020/Feb/12
+    float thres = 0.7;
+    char            eline[100];
+    for (i = 0; i <= cadif1; i++) {
+        for (j = 0; j <= cadif2; j++) {
+            for (k = 0; k <= cadif3; k++) {
+                 if (solvgrd[i][j][k]>thres){
+                     float x,y,z;
+                     //x = (i - solv_grd_N[0])/perang + solv_grd_ex[0]; 
+                     //y = (j - solv_grd_N[1])/perang + solv_grd_ex[1]; 
+                     //z = (k - solv_grd_N[2])/perang + solv_grd_ex[2]; 
+                     x = (-i+ solv_grd_ex[0])/perang ; 
+                     y = (-j+ solv_grd_ex[1])/perang ; 
+                     z = (-k+ solv_grd_ex[2])/perang ; 
+                                 // ATOM      1  CA  GLY A   1      55.000   8.448  68.519      101.99           C 
+                                 // ATOM      1  N   GLY A 672      55.000   8.448  68.519  1.00101.99           N
+                                 // ATOM      1  CA  GLY A   1      16.000  41.000  31.000        0.71           C
+                                 // ATOM      1  CA  GLY A   1     16.000   41.000   30.000         0.71           C
+                                 // ATOM      1  CA  GLY A   1     16.000   40.000   31.000         0.72           C
+                                 //
+                    sprintf(eline, "ATOM      1  CA  GLY A   1    %8.3f%8.3f%8.3f      %6.2f           C\n",x,y,z,solvgrd[i][j][k]);
+                    cout << eline ; 
+                            //
+                 }
+            }
+        }
+    }
+    cout << endl;
+    */
+
     fclose(solv_grid_in);
+
+    if (hsolv_flag) { 
+
+    fname = hsolv_file_prefix;
+    hsolv_grid_in = fopen(fname.c_str(), "rb");
+
+    if (hsolv_grid_in == NULL) {
+        cout << "\n\nCould not open " << fname << endl;
+        exit(0);
+    }
+
+    cout << " Reading ligand hydrogen desolvation grid from " << fname << endl;
+
+    l = 0;
+    while (fgets(line, 100, hsolv_grid_in) != NULL) {
+        if (l == 0) {
+            //sscanf(line, "%i %i %i %i %i %i %i", &cadif1, &cadif2, &cadif3,
+            //sscanf(line, "%i %i %i %i %f %f %f", &solv_grd_N[0], &solv_grd_N[1], &solv_grd_N[2],
+            //       &perang, &solv_grd_ex[0], &solv_grd_ex[1], &solv_grd_ex[2]);
+            sscanf(line, "%i %i %i %i %f %f %f", &temp1, &temp2,&temp3,
+                   &temp4, &temp5, &temp6, &temp7);
+
+            if  (solv_grd_N[0] != temp1  ||  solv_grd_N[1] != temp2 ||  solv_grd_N[2] != temp3 ||  perang != temp4 ||  solv_grd_ex[0] != temp5 ||  solv_grd_ex[1] != temp6 ||  solv_grd_ex[2]!= temp7 ){
+                 cout << "Error. desolv and hdesolv grids are not consistant..." << endl;
+                 exit(0);
+            }         
+
+            cadif1 = solv_grd_N[0]; cadif2 = solv_grd_N[1]; cadif3 = solv_grd_N[2]; 
+            l++;
+            if (cadif1 > MAXDIX || cadif2 > MAXDIY || cadif3 > MAXDIZ) {
+                cout <<
+                    "\n\n Memory bounds exceeded for hsolvent occlusion grid.";
+                cout << " Program will terminate." << endl;
+                exit(0);
+            }
+        } else {
+            for (i = 0; i <= cadif1; i++) {
+                for (j = 0; j <= cadif2; j++) {
+                    for (k = 0; k <= cadif3; k = k + 13) {
+                        l++;
+                        if (k + 12 <= cadif3) {
+                            if (l > 2)
+                                fgets(line, 100, hsolv_grid_in);
+                            tmp = line;
+                            start = 0;
+                            for (kk = k; kk <= k + 12; kk++) {
+                                hsolvgrd[i][j][kk] =
+                                    atof(tmp.substr(start, 6).c_str());
+                                start = start + 6;
+                            }
+                        } else {
+                            if (l > 2)
+                                fgets(line, 100, hsolv_grid_in);
+                            tmp = line;
+                            start = 0;
+                            for (kk = k; kk <= cadif3; kk++) {
+                                hsolvgrd[i][j][kk] =
+                                    atof(tmp.substr(start, 6).c_str());
+                                start = start + 6;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    fclose(hsolv_grid_in);
+    } // h_solv_grid
 }
 
 /************************************************/
@@ -1269,6 +1426,138 @@ Chemgrid_Score::get_conf_entropy(DOCKMol & mol)
 
 /************************************************/
 // Calculate volume based ligand desolvation score kxr 0306
+    // mod by Trent Balius, 2020/Feb/11
+bool
+Chemgrid_Score::compute_ligand_desolvation_interpolate(DOCKMol & mol, int atom_id, float& temp_ps, float& temp_aps)
+{
+    int             lx,
+                    ly,
+                    lz;
+    float           flx,
+                    fly,
+                    flz;
+    float           polsolv_coeff,
+                    apolsolv_coeff,
+                    temp;
+    int             out_count = 0;
+    float           xgr,
+                    ygr,
+                    zgr;
+    float           a1,
+                    a2,
+                    a3,
+                    a4,
+                    a5,
+                    a6,
+                    a7,
+                    a8;
+
+
+    temp_ps = temp_aps = 0.0;
+    temp = 0.0;
+    //lx = chem_grid->solv_grd_ex[0] - NINT(mol.x[atom_id] * chem_grid->perang);
+    //ly = chem_grid->solv_grd_ex[1] - NINT(mol.y[atom_id] * chem_grid->perang);
+    //lz = chem_grid->solv_grd_ex[2] - NINT(mol.z[atom_id] * chem_grid->perang);
+    // mod by Trent Balius, 2020/Feb/11.  varified the this is the right mapping.  
+    flx = chem_grid->solv_grd_ex[0] - (mol.x[atom_id] * chem_grid->perang);
+    fly = chem_grid->solv_grd_ex[1] - (mol.y[atom_id] * chem_grid->perang);
+    flz = chem_grid->solv_grd_ex[2] - (mol.z[atom_id] * chem_grid->perang);
+
+    lx = int(flx);
+    ly = int(fly);
+    lz = int(flz);
+
+    xgr = flx - float(lx);
+    ygr = fly - float(ly);
+    zgr = flz - float(lz);
+
+    if ((lx >= 0 && ly >= 0 && lz >= 0) &&
+        (lx <= MAXDIX && ly <= MAXDIY && lz <= MAXDIZ)){
+      if (mol.atom_types[atom_id] == "H" && hsolv_flag){ // if atom is an H and the hsolv grid is turned on. 
+        a8 = hsolvgrd[lx][ly][lz];
+        a7 = hsolvgrd[lx][ly][lz + 1] - a8;
+        a6 = hsolvgrd[lx][ly + 1][lz] - a8;
+        a5 = hsolvgrd[lx + 1][ly][lz] - a8;
+        a4 = hsolvgrd[lx][ly + 1][lz + 1] - a8 - a7 - a6;
+        a3 = hsolvgrd[lx + 1][ly][lz + 1] - a8 - a7 - a5;
+        a2 = hsolvgrd[lx + 1][ly + 1][lz] - a8 - a6 - a5;
+        a1 = hsolvgrd[lx + 1][ly + 1][lz + 1] - a8 - a7 - a6 - a5 - a4 - a3 - a2;
+      }
+      else {
+        a8 = solvgrd[lx][ly][lz];
+        a7 = solvgrd[lx][ly][lz + 1] - a8;
+        a6 = solvgrd[lx][ly + 1][lz] - a8;
+        a5 = solvgrd[lx + 1][ly][lz] - a8;
+        a4 = solvgrd[lx][ly + 1][lz + 1] - a8 - a7 - a6;
+        a3 = solvgrd[lx + 1][ly][lz + 1] - a8 - a7 - a5;
+        a2 = solvgrd[lx + 1][ly + 1][lz] - a8 - a6 - a5;
+        a1 = solvgrd[lx + 1][ly + 1][lz + 1] - a8 - a7 - a6 - a5 - a4 - a3 - a2;
+      }
+        temp = a1 * xgr * ygr * zgr + a2 * xgr * ygr + a3 * xgr * zgr
+                  + a4 * ygr * zgr + a5 * xgr + a6 * ygr + a7 * zgr + a8;
+        
+      /*
+          if (volocl .ge. 1.0 ) then !max is 1, means completely desolvated
+            write(*,*) "Warning: volocl (desolvation grid) > 1.0",volocl
+            volocl = 1.0
+          elseif ( volocl .lt. 0.0) then !max is 1, means completely desolvated
+            write(*,*) "Warning: volocl (desolvation grid) < 0.0",volocl
+            volocl = 0.0
+          endif
+      */
+       // scaling of the desolvation should never be grater than 1 or less than 0.  
+       if (temp > 1.0 ){
+          cout << "Warning: desolvation scaling factor from grid exceeds 1.0:" << temp <<endl; 
+          temp = 1.0;
+       } else if (temp < 0.0) {
+          cout << "Warning: desolvation scaling factor from grid is less than 0.0:" << temp <<endl; 
+          temp;
+       }
+        //temp = solvgrd[lx][ly][lz];
+    }else {
+        out_count++;
+        return false; // outside box
+    }
+
+    //if (mol.atom_data[atom_id].size() != 0) {
+
+    //    polsolv_coeff = atof((mol.atom_data[atom_id].substr(23, 8)).c_str());
+    //    apolsolv_coeff = atof((mol.atom_data[atom_id].substr(33, 8)).c_str());
+    //    psolv_score += polsolv_coeff * temp;
+    //    apsolv_score += apolsolv_coeff * temp;
+    //    solv_score += polsolv_coeff * temp + apolsolv_coeff * temp;
+    //    temp_ps = temp; 
+    //    temp_aps = temp; 
+
+    //} else {
+
+        if (total_ligand_dsolv) {
+            psolv_score += mol.atom_psol[atom_id];
+            apsolv_score += mol.atom_apsol[atom_id];
+            solv_score += mol.atom_psol[atom_id] + mol.atom_apsol[atom_id];
+            temp_ps = mol.atom_psol[atom_id]; 
+            temp_aps = mol.atom_apsol[atom_id]; 
+        } else {
+            temp_ps = mol.atom_psol[atom_id] * temp;
+            temp_aps = mol.atom_apsol[atom_id] * temp;
+            //psolv_score += (mol.atom_psol[atom_id] * temp);
+            //apsolv_score += (mol.atom_apsol[atom_id] * temp);
+            //solv_score += 
+            //    (mol.atom_psol[atom_id] * temp + mol.atom_apsol[atom_id] * temp);
+            psolv_score += temp_ps;
+            apsolv_score +=  temp_aps; 
+            solv_score += temp_ps + temp_aps;
+        }
+
+    //}
+
+    //cout << temp_ps << " "<< temp_aps << endl;
+    return true;
+
+}
+
+/************************************************/
+// Calculate volume based ligand desolvation score kxr 0306
 bool
 Chemgrid_Score::compute_ligand_desolvation(DOCKMol & mol, int atom_id)
 {
@@ -1290,6 +1579,7 @@ Chemgrid_Score::compute_ligand_desolvation(DOCKMol & mol, int atom_id)
     else {
         out_count++;
         temp = 0.0;
+        return false; // outside box
     }
 
     if (mol.atom_data[atom_id].size() != 0) {
@@ -1397,21 +1687,17 @@ Chemgrid_Score::compute_score(DOCKMol & mol)
                     atom_name,
                     tezt;
     char            line[100];
+    float           temp1, temp2;
 
-
+    temp1=temp2=0;
     atm_num = 0;
-    grd_edge = -10000.0;
+    //grd_edge = -10000.0;
+    grd_edge = -100.0;
     total = vdw_val = es_val = 0.0;
     psolv_score = apsolv_score = 0.0;
     solb_val = solx_val = rdsol_score = 0.0;
     solv_score = shape_score = ligand_conf_entropy = 0.0;
 
-    // added by sudipto & trent to prevent breaking of the internal nrg
-    // function in this class
-    ie_att_exp = 6;
-    ie_rep_exp = 12;
-    ie_diel = 4.0;
-    initialize_internal_energy(mol);
 
     if (use_solv_score && redist_pos_desol)
         redist_positve_desolv(mol);
@@ -1425,30 +1711,55 @@ Chemgrid_Score::compute_score(DOCKMol & mol)
 
     if (energy_score == 1) {
 
+        // check to see if molecule is inside grid box
+        for (atom = 0; atom < mol.num_atoms; atom++) {
+            // is an active atom and is inside the grid
+            if (mol.atom_active_flags[atom] && !chem_grid->is_inside_grid_box(mol.x[atom], mol.y[atom], mol.z[atom])) {
+                mol.current_score = -MIN_FLOAT;  // arbitrarily large score
+                mol.current_data = "ERROR:  Conformation could not be scored."
+                    "\nConformation not completely within grid box.\n";
+                return false;
+            }
+        }
+
         for (atom = 0; atom < mol.num_atoms; atom++) {
 
             vdw_atom = 0.0;
             es_atom = 0.0;
             if (mol.atom_active_flags[atom]) {
 
-                if (chem_grid->is_inside_grid_box(mol.x[atom], mol.y[atom], mol.z[atom])) {
+                  //if (chem_grid->is_inside_grid_box(mol.x[atom], mol.y[atom], mol.z[atom])) {
                     chem_grid->find_grid_neighbors(mol.x[atom], mol.y[atom], mol.z[atom]);
 
                     vdw_atom =
                         ((vdwA[mol.amber_at_id[atom]] * chem_grid->interpolate(chem_grid->avdw)) -
                          (vdwB[mol.amber_at_id[atom]] * chem_grid->interpolate(chem_grid->bvdw))) *
                         vdw_scale;
-                    if (vdw_atom < grd_edge)
+                    //if (vdw_atom < grd_edge) // what is causing this?? 
+                    //    vdw_atom = -vdw_atom;
+                    //if (vdw_atom < -100){ // -100 is unresonable value for one atom to have
+                    if (vdw_atom < grd_edge){ // what is causing this?? 
+                        cout << "vdw_atom = " << vdw_atom << endl;
+                        cout << "something seems wrong ... " << endl;
+                        //cout << "avdw interpolate = " << chem_grid->interpolate(chem_grid->avdw) << endl;
+                        //cout << "avdw 8 = " << chem_grid->avdw[chem_grid->neighbors[7]] << endl;
+                        //cout << "avdw 7 = " << chem_grid->avdw[chem_grid->neighbors[6]] << endl;
+                        //cout << "avdw 6 = " << chem_grid->avdw[chem_grid->neighbors[5]] << endl;
+                        //cout << "avdw 5 = " << chem_grid->avdw[chem_grid->neighbors[4]] << endl;
+                        //cout << "avdw 4 = " << chem_grid->avdw[chem_grid->neighbors[3]] << endl;
+                        //cout << "avdw 3 = " << chem_grid->avdw[chem_grid->neighbors[2]] << endl;
+                        //cout << "avdw 2 = " << chem_grid->avdw[chem_grid->neighbors[1]] << endl;
+                        //cout << "avdw 1 = " << chem_grid->avdw[chem_grid->neighbors[0]] << endl;
+                        //cout << "bvdw interpolate = " << chem_grid->interpolate(chem_grid->bvdw) << endl;
+                        //cout << "set vdw_atom = -vdw_atom instead so it is positive.  " << endl;
+                        //vdw_atom = +100.0;
                         vdw_atom = -vdw_atom;
+                    }
                     vdw_val += vdw_atom;
 
-                } else {
-                    mol.current_score = -MIN_FLOAT;  // arbitrarily large score
-                    sprintf(line, "ERROR:  Conformation could not be scored by "
-                        "DOCK.\nConformation not completely within grid box.\n");
-                    mol.current_data = line;
-                    return false;
-                }
+                  //} else {
+                  //   cout << "atom outside grid box ..." << endl;
+                  //} 
 
                 if (interpol_method == 2) {
 
@@ -1457,41 +1768,56 @@ Chemgrid_Score::compute_score(DOCKMol & mol)
                     es_atom = mol.charges[atom] * phi_value * 0.5924 * es_scale;
                     es_val += es_atom;
 
-                    // Calculate volume based ligand desolvation for atom kxr 
-                    // if(use_solv_score && use_secondary_score) 
-                    if (use_solv_score)
-                        compute_ligand_desolvation(mol, atom);
-
 
                     // Calculate DelPhi receptor desolvation score for atom kxr
                     if (use_solv_score && use_recep_dsolv)
                         compute_rdsol_score(mol, atom);
 
-                    // Calculate occupancy desolvation score for atom kxr 
-                    if (use_solv_score && use_odm_score)
-                        compute_odm_score(mol, atom);
-
-
-                    if (write_atomic_energy && use_solv_score) {
-                        atm_num++;
-                        sprintf(eline,
-                                "ATOM %-4d%-6s%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.1f\n",
-                                atm_num, mol.atom_names[atom].c_str(), vdw_atom,
-                                es_atom, phi_value, mol.charges[atom],
-                                polsolv_coeff * temp, apolsolv_coeff * temp,
-                                atsh);
-                        // sprintf(eline,"ATOM %6d %-4sXXX 1
-                        // %8.3f%8.3f%8.3f%8.3f\n",
-                        // atm_num,mol.atom_names[atom].c_str(),mol.x[atom],mol.y[atom],mol.z[atom],
-                        // mol.charges[atom]);
-                        estring.append(eline);
-                    } else {
-                        atm_num++;
-                        sprintf(eline, "ATOM %-4d%-6s%8.3f%8.3f%8.3f%8.3f\n",
-                                atm_num, mol.atom_names[atom].c_str(), vdw_atom,
-                                es_atom, phi_value, mol.charges[atom]);
-                        estring.append(eline);
+                }
+                // Calculate volume based ligand desolvation for atom kxr 
+                // if(use_solv_score && use_secondary_score) 
+                if (use_solv_score){
+                    bool flag = compute_ligand_desolvation_interpolate(mol, atom, temp1, temp2);
+                    if (!flag){// if the compute_ligand_desolvation_interpolate returns false then it is outside the grid
+                       mol.current_score = -MIN_FLOAT;  // arbitrarily large score
+                       sprintf(line, "ERROR:  Conformation could not be scored by "
+                          "DOCK.\nConformation not completely within grid box.\n");
+                       mol.current_data = line;
+                       return false;
                     }
+                       
+                    //cout << temp1 << " " << temp2 << endl;
+                    //exit(0);
+                }
+
+                // Calculate occupancy desolvation score for atom kxr 
+                if (use_solv_score && use_odm_score)
+                    compute_odm_score(mol, atom);
+
+
+                if (write_atomic_energy) {
+                     if ( use_solv_score) {
+                         atm_num++;
+                         sprintf(eline,
+                                 //"ATOM %-4d%-6s%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.1f\n",
+                                 "ATOM %-4d%-6s%12.6f%12.6f%12.6f%12.6f%12.6f%12.6f%12.6f\n",
+                                 atm_num, mol.atom_names[atom].c_str(), vdw_atom,
+                                 es_atom, phi_value, mol.charges[atom],
+                                 //polsolv_coeff * temp1, apolsolv_coeff * temp2,
+                                  temp1, temp2,
+                                 atsh);
+                         // sprintf(eline,"ATOM %6d %-4sXXX 1
+                         // %8.3f%8.3f%8.3f%8.3f\n",
+                         // atm_num,mol.atom_names[atom].c_str(),mol.x[atom],mol.y[atom],mol.z[atom],
+                         // mol.charges[atom]);
+                         estring.append(eline);
+                     } else {
+                         atm_num++;
+                         sprintf(eline, "ATOM %-4d%-6s%8.3f%8.3f%8.3f%8.3f\n",
+                                 atm_num, mol.atom_names[atom].c_str(), vdw_atom,
+                                 es_atom, phi_value, mol.charges[atom]);
+                         estring.append(eline);
+                     }
                 }
 
                 if (interpol_method == 1) {
@@ -1536,12 +1862,14 @@ Chemgrid_Score::compute_score(DOCKMol & mol)
         }
 
 
+        if (write_atomic_energy)
+           atomic_contrib = estring;
 
-        solv_score = -solv_score;
         if (!use_solv_score)
             total = vdw_val + es_val;
 
         if (use_solv_score) {
+            solv_score = -solv_score;
             if (use_recep_dsolv)
                 total = vdw_val + es_val + solv_score + rdsol_score;
             else
@@ -1557,12 +1885,19 @@ Chemgrid_Score::compute_score(DOCKMol & mol)
             total = total + ligand_conf_entropy;
         }
 
-        // sudipto & trent: this returns only the repulsive vdw component now
-        // uncomment and rename the full version of this function in base_score
-        // if you want all the components
-        // using only rep_vdw improves speed dramatically during anchor and grow
-        if (add_ligand_internal)
-            total = total + compute_ligand_internal_energy(mol);
+//      // sudipto & trent: this returns only the repulsive vdw component now
+//      // uncomment and rename the full version of this function in base_score
+//      // if you want all the components
+//      // using only rep_vdw improves speed dramatically during anchor and grow
+//      if (add_ligand_internal){
+//          // added by sudipto & trent to prevent breaking of the internal nrg
+//          // function in this class
+//          ie_att_exp = 6;
+//          ie_rep_exp = 12;
+//          ie_diel = 4.0;
+//          initialize_internal_energy(mol);
+//          total = total + compute_ligand_internal_energy(mol);
+//      }
 
         vdw_component = vdw_val;
         es_component = es_val;
@@ -1581,8 +1916,6 @@ Chemgrid_Score::compute_score(DOCKMol & mol)
 
     }
 
-    if (write_atomic_energy)
-        atomic_contrib = estring;
     return true;
 }
 

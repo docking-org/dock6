@@ -51,10 +51,9 @@ GIST_Score::input_parameters_main(Parameter_Reader & parm, string parm_head)
         gist_scale = atof(parm.query_param(parm_head+"gist_scale", "-1").c_str());
         if (gist_scale == 0.0) {
              cout << gist_scale << endl;
-             cout << "ERROR:  Parameter must not be zero."
-                     " Program will terminate."
+             cout << "Warning:  Parameter is set to zero.  GIST will not contribute to score, but may impact the effective box size "
                   << endl;
-             exit(0);
+             //exit(0);
         }
         //if (gist_scale <= 0.0) {
         //     cout << "ERROR:  Parameter must be a float greater than zero."
@@ -71,6 +70,11 @@ GIST_Score::input_parameters_main(Parameter_Reader & parm, string parm_head)
         grid_file_name = parm.query_param( parm_head+"grid_file", "grid.dx" );
         if (gist_type == "trilinear") {
             grid_H_file_name = parm.query_param( parm_head+"Hydrogen_grid_file", "grid_h.dx" );
+        }
+
+        bgist_div = 1.0; // value to divide the radius by for defining sigma for Gausian.  
+        if (gist_type == "blurry_displace") {
+            bgist_div = atof(parm.query_param(parm_head+"blurry_gist_div", "3.0").c_str());
         }
 }
 
@@ -127,12 +131,34 @@ GIST_Score::initialize(AMBER_TYPER & typer)
         gist_grid->att_exp = att_exp;
         gist_grid->rep_exp = rep_exp;
         init_vdw_energy(typer, gist_grid->att_exp, gist_grid->rep_exp);
+        // cout << gist_type << endl;
+        //
+        //  For gist_score (both displacement methods), ligand that go outside the grid were attempted. 
+        //  the method finds the closes voxel and then looks at voxels close by,
+        //  the closest voxel was, I believe, always in the grid, but sometimes the nearby voxels were outside.
+        //  The fix is to reduce the box dimensions (by a pad value) before checking if it is inside the box.
+        //
+        if (gist_type == "displace" or gist_type == "blurry_displace") { // perform displacement
+           // cout << "pad..." <<endl;
+           float pad = 1.0;
+           gist_grid->x_min = gist_grid->x_min + pad;
+           gist_grid->x_max = gist_grid->x_max - pad;
+           gist_grid->y_min = gist_grid->y_min + pad;
+           gist_grid->y_max = gist_grid->y_max - pad;
+           gist_grid->z_min = gist_grid->z_min + pad;
+           gist_grid->z_max = gist_grid->z_max - pad;
+           //cout << " " << gist_grid->x_min << " " << gist_grid->x_max 
+           //     << " " << gist_grid->y_min << " " << gist_grid->y_max 
+           //     << " " << gist_grid->z_min << " " << gist_grid->z_max << endl;
+        }
+        //bool *displace;
         if (gist_type == "trilinear") {
            cout << "Initializing GIST H Grid..." << endl;
            gist_H_grid->got_the_grid = false;
            gist_H_grid = new GIST_Grid(); 
            gist_H_grid->get_instance(grid_H_file_name);
-           init_vdw_energy(typer, gist_H_grid->att_exp, gist_H_grid->rep_exp);
+           //init_vdw_energy(typer, gist_H_grid->att_exp, gist_H_grid->rep_exp);
+        //bool *displace;
         }
     } 
 }
@@ -143,7 +169,6 @@ GIST_Score::compute_score(DOCKMol & mol)
     int atom;
 
     if (use_score) {
-
         // check to see if molecule is inside grid box
         for (atom = 0; atom < mol.num_atoms; atom++) {
             // is an active atom and is inside the grid
@@ -184,24 +209,37 @@ GIST_Score::compute_score(DOCKMol & mol)
             gist_total = gist_grid->vol*gist_total; //
         } 
         else if (gist_type == "displace") { // perform displacement
-            bool *displace;
-            displace = new bool[gist_grid->size];
+            std::map<unsigned int, bool> displace; 
+            //bool *displace = NULL;
+            //displace = new bool[gist_grid->size];
+            //for (int gi = 0; gi < gist_grid->size; gi++) {
+            //     displace[gi] = false;
+            //}
             for (atom = 0; atom < mol.num_atoms; atom++) {
                   if (mol.atom_active_flags[atom]) {
                       gist_grid->find_grid_neighbors(mol.x[atom], mol.y[atom], mol.z[atom]);
 //                     radius = (sqrt(2.0)* sra(atom_vdwtype(atomindex)) /
 //                          &               srb(atom_vdwtype(atomindex)))**(1.0/3.0) / 2
+                      //cout << atom << " : " << vdwA[mol.amber_at_id[atom]] << " " << vdwB[mol.amber_at_id[atom]] << endl;
                       float radius = pow((sqrt(2.0)*vdwA[mol.amber_at_id[atom]]/vdwB[mol.amber_at_id[atom]]),(1.0/3.0)) / 2.0;
                       //cout << mol.amber_at_id[atom] << " " << mol.amber_at_id[atom] << endl;
+                      //cout << "radius = " << radius << endl;
+                      if (vdwB[mol.amber_at_id[atom]] == 0) {
+                          radius = 0.8;
+                          cout << "vdwB = 0, force radius to be 0.8." << endl;
+                      }
+                      //cout << setprecision(9) << "atom type: " << mol.atom_types[atom]  << ", radius = " << radius << endl;
+                      //cout << "atom type: " << mol.atom_types[atom]  << ", radius = " << radius << endl;
                       //cout << vdwA[mol.amber_at_id[atom]] << " " << vdwB[mol.amber_at_id[atom]] << endl;
-                      cout << mol.atom_types[atom] << " radius = "<< radius << endl;
+                      //cout << mol.atom_types[atom] << " radius = "<< radius << endl;
                       float gist_atom = gist_grid->atomic_displacement(mol.x[atom], mol.y[atom], mol.z[atom], radius, displace);
-                      cout << gist_atom << endl;
+                      //cout << gist_atom << endl;
                       gist_total = gist_total + gist_atom; 
                   }
             }
             //gist_grid->write_gist_grid("dis_gist.dx", displace); // this is for debuging
             gist_total = gist_grid->vol*gist_total;
+            //delete[] displace;
             //exit(0);//
         }
         else if (gist_type == "blurry_displace") {
@@ -210,16 +248,22 @@ GIST_Score::compute_score(DOCKMol & mol)
                       gist_grid->find_grid_neighbors(mol.x[atom], mol.y[atom], mol.z[atom]);
                       // consider moving this to so we percompute radius. 
                       float radius = pow((sqrt(2.0)*vdwA[mol.amber_at_id[atom]]/vdwB[mol.amber_at_id[atom]]),(1.0/3.0)) / 2.0;
+                      if (vdwB[mol.amber_at_id[atom]] == 0) {
+                          radius = 0.8;
+                          cout << "vdwB = 0, force radius to be 0.8." << endl;
+                      }
                       //cout << mol.amber_at_id[atom] << " " << mol.amber_at_id[atom] << endl;
                       //cout << vdwA[mol.amber_at_id[atom]] << " " << vdwB[mol.amber_at_id[atom]] << endl;
-                      cout << mol.atom_types[atom] << " radius = "<< radius << endl;
-                      float sigma2 = pow(radius/2.0,2.0);
+                      //cout << mol.atom_types[atom] << " radius = "<< radius << endl;
+                      //float sigma2 = pow(radius/2.0,2.0);
+                      float sigma2 = pow(radius/bgist_div,2.0);
                       float gist_atom = gist_grid->atomic_blurry_displacement(mol.x[atom], mol.y[atom], mol.z[atom], radius, sigma2);
-                      cout << gist_atom << endl;
+                      //cout << gist_atom << endl;
                       gist_total = gist_total + gist_atom; 
                   }
             }
             //gist_grid->write_gist_grid("dis_gist.dx", displace); // this is for debuging
+            //cout << "vol = "<< gist_grid->vol << endl;
             gist_total = gist_grid->vol*gist_total;
             //exit(0);//
 
@@ -250,6 +294,9 @@ GIST_Score::compute_score(DOCKMol & mol)
         mol.current_score = gist_scale*gist_total;
         mol.current_data = output_score_summary(mol);
 
+        //if (gist_type == "displace") { // perform displacement
+        //    delete displace;
+        //}
     }
 
     return true;

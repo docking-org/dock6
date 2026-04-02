@@ -152,23 +152,23 @@ Master_Score::input_parameters(Parameter_Reader & parm)
             }
         }
 
-      //if ((!primary_score_found) || (!secondary_score_found)) {
-      //    c_gist.input_parameters(parm, primary_score_found,
-      //                           secondary_score_found);
+        if ((!primary_score_found) || (!secondary_score_found)) {
+            c_gist.input_parameters(parm, primary_score_found,
+                                   secondary_score_found);
 
-      //    if (c_gist.use_primary_score) {
-      //        primary_score = &c_gist;
-      //        primary_min = true;
-      //        read_vdw = true;
-      //        use_nrg_grid = true;
-      //    }
-      //    if (c_gist.use_secondary_score) {
-      //        secondary_score = &c_gist;
-      //        secondary_min = true;
-      //        read_vdw = true;
-      //        use_nrg_grid = true;
-      //    }
-      //}
+            if (c_gist.use_primary_score) {
+                primary_score = &c_gist;
+                primary_min = true;
+                read_vdw = true;
+                use_nrg_grid = true;
+            }
+            if (c_gist.use_secondary_score) {
+                secondary_score = &c_gist;
+                secondary_min = true;
+                read_vdw = true;
+                use_nrg_grid = true;
+            }
+        }
 
         if ((!primary_score_found) || (!secondary_score_found)) {
             c_mg_nrg.input_parameters(parm, primary_score_found,

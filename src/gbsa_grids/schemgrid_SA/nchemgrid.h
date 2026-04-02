@@ -4,7 +4,7 @@ c      header file for CHEMGRID                             ECMeng  4/91
 c-------------------------------------------------------------------------
       integer maxpts
 c      parameter (maxpts=16700000)
-      parameter (maxpts=2000000)
+      parameter (maxpts=5000000)
 c  maxpts--maximum number of grid points
       integer npts
 c  npts--number of grid points
@@ -24,7 +24,7 @@ c***************************************************************************
 c add in original, offset and effective vdw radius for current receptor atom
       real rvdw, vdwoff, rvdweff0
       integer maxatm
-      parameter (maxatm=2500)
+      parameter (maxatm=6000)
       parameter (vdwoff=-0.09)
       real rvdweff(maxatm), rcrg_rec(maxatm)
       real crd_rec(maxatm,3)

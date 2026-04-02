@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released September 2024
 Copyright UCSF
 --------------------------------------
 
@@ -22,6 +22,7 @@ min_anchor_size                                              40
 pruning_use_clustering                                       yes
 pruning_max_orients                                          10
 pruning_clustering_cutoff                                    10
+pruning_orient_score_cutoff                                  1000.0
 pruning_conformer_score_cutoff                               25.0
 pruning_conformer_score_scaling_factor                       1.0
 use_clash_overlap                                            no
@@ -71,6 +72,10 @@ contact_score_primary                                        no
 Grid Score Parameters
 ------------------------------------------------------------------------------------------
 grid_score_primary                                           no
+
+GIST Score Parameters
+------------------------------------------------------------------------------------------
+gist_score_primary                                           no
 
 MultiGrid Score Parameters
 ------------------------------------------------------------------------------------------
@@ -125,6 +130,7 @@ Amber Score Parameters
 Simplex Minimization Parameters
 ------------------------------------------------------------------------------------------
 minimize_ligand                                              no
+simplex_final_min                                            no
 
 Atom Typing Parameters
 ------------------------------------------------------------------------------------------
@@ -136,13 +142,16 @@ flex_drive_file                                              ../../../parameters
 Molecule Library Output Parameters
 ------------------------------------------------------------------------------------------
 ligand_outfile_prefix                                        orientflexiblezou_gbsaprimary
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
 
 Initializing Conformer Generator Routines...
 Initializing Library File Routines...
+
 Initializing Orienting Routines...
 Initializing Zou GB/SA Score Routines...
 Initializing Grid Score Routines...
@@ -165,19 +174,22 @@ Done Initializing Zou GB/SA Score Routines.
 -----------------------------------
 Molecule: ADA 
 
- Elapsed time for docking:	0.027 seconds
+ Elapsed time for docking:	0.021 seconds
 
  Anchors:		1
  Orientations:		5
  Conformations:		5
 
-                      Zou_GBSA_Score:            8.337914
-                 Zou_GBSA_vdw_energy:           -0.319814
-                  Zou_GBSA_gb_energy:            5.075229
+                      Zou_GBSA_Score:            8.337781
+                 Zou_GBSA_vdw_energy:           -0.319943
+                  Zou_GBSA_gb_energy:            5.075223
                   Zou_GBSA_sa_energy:            6.438750
         Zou_GBSA_delta_SAS_hp_energy:           -2.856250
            Internal_energy_repulsive:            0.000000
 
 
 1 Molecules Processed
-Total elapsed time:	0.064 seconds
+Total elapsed time:	0.057 seconds
+Number of molecules per second:	17.647
+Virtual memory used for this process: 87800 kilobytes
+Physical memory used for this process: 15260 kilobytes

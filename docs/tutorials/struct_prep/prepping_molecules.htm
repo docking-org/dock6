@@ -25,7 +25,7 @@
 <div align="center">
 <p class="style2">Preparing Molecules for DOCKing</p>
 <p align="center" class="style6">Author: P. Therese Lang<br>
-Last updated October 7, 2023 by Scott Brozell</p>
+Last updated August 14, 2024 by Scott Brozell</p>
 
 <p align="left" class="style4">
 This tutorial describes the steps required to prepare receptor and ligand
@@ -41,8 +41,12 @@ in the form of the complex L-Arabinose-Binding Protein bound to
 However, these techniques should be transferable to any protein-ligand system.
 </p>
 
-  <p align="left" class="style4">This tutorial uses the program Chimera (Snapshot Release 1.2309), which can be downloaded from the UCSF Computer Graphics Lab at
-<a href="https://www.cgl.ucsf.edu/chimera">https://www.cgl.ucsf.edu/chimera</a>. Chimera is freely available to academics and relatively simple for novice users to learn. However, a variety of other packaged programs and script libraries are available to perform these types of modifications to the structure files (see  <a href="../../../DOCK_Links/index.htm">DOCK Related Links</a> for more information). </p>
+  <p align="left" class="style4">This tutorial uses the program Chimera (Snapshot Release 1.2309),
+which is now legacy software from the UCSF Computer Graphics Lab at
+<a href="https://www.cgl.ucsf.edu/chimera">https://www.cgl.ucsf.edu/chimera</a>.
+Users are encouraged to upgrade to 
+<a href="https://www.cgl.ucsf.edu/chimerax">UCSF ChimeraX</a>.
+Both are freely available to academics and relatively simple for novice users to learn. However, a variety of other packaged programs and script libraries are available to perform these types of modifications to the structure files (see  <a href="../../../DOCK_Links/index.htm">DOCK Related Links</a> for more information). </p>
 
   <p align="left" class="style4">
 For a receptor, an overview of the general procedure is to visualize the
@@ -212,20 +216,22 @@ Chimera will estimate the value based on the atom types and bonding. Here, Chime
 Save the molecule in mol2 format </p>
       <p align="center" class="style4"><img src="save_lig_mol2.jpg" width="543" height="638"> </p>
       <p align="left" class="style4">OPTION 2:
-Prepare your ligand(s) using the ZINC database. </p>
+Prepare your ligand(s) using a ZINC database. </p>
       <blockquote>
-        <p align="left" class="style4"> ZINC is a free database of
+        <p align="left" class="style4"> ZINC is a series of free databases of
 commercially-available compounds for virtual screening.
-It contains over 35 million compounds in ready-to-dock, 3D formats
-(Irwin, Sterling, Mysinger, Bolstad and Coleman,
+The original ZINC contained over 35 million compounds in ready-to-dock,
+3D formats (Irwin, Sterling, Mysinger, Bolstad and Coleman,
 <em>J.&nbsp; Chem.&nbsp; Inf.&nbsp; Model. </em>2012<em>. DOI: 10.1021/ci3001277). </em>
+<a href="https://zinc20.docking.org/">ZINC20</a> has a billion compounds
+in various formats.
 We recommend this procedure if you have a large library of ligands to
 prepare or if you would like a protonation state or conformation expansion.
 If you utilize this option, be sure to save your ligand preparation work 
 from the previous parts of STEP 2:  save the ligand in Tripos mol2 format
 (see part C of OPTION 1 of STEP 2f immediately above).
-The ZINC web site is
-<a href="https://zinc.docking.org/">zinc.docking.org</a>.
+See also the CartBlanche interface to ZINC at
+<a href="https://cartblanche22.docking.org/">cartblanche22.docking.org</a>.
 </p>
       </blockquote>
     </blockquote>

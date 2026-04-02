@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released September 2024
 Copyright UCSF
 --------------------------------------
 
@@ -45,17 +45,20 @@ score_molecules                                              no
 Molecule Library Output Parameters
 ------------------------------------------------------------------------------------------
 ligand_outfile_prefix                                        io2
+write_mol_solvation                                          no
 write_orientations                                           yes
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 yes
 max_ranked_ligands                                           500
 ------------------------------------------------------------------------------------------
 Initializing Library File Routines...
 
+
 -----------------------------------
 Molecule: ZINC00158442
 
- Elapsed time for docking:	0.001 seconds
+ Elapsed time for docking:	0.000 seconds
 
  Anchors:		1
  Orientations:		1
@@ -85,7 +88,7 @@ Molecule: ZINC00013564
 -----------------------------------
 Molecule: ZINC01555236
 
- Elapsed time for docking:	0.001 seconds
+ Elapsed time for docking:	0.000 seconds
 
  Anchors:		1
  Orientations:		1
@@ -115,7 +118,7 @@ Molecule: ZINC00152265
 -----------------------------------
 Molecule: ZINC00152280
 
- Elapsed time for docking:	0.001 seconds
+ Elapsed time for docking:	0.000 seconds
 
  Anchors:		1
  Orientations:		1
@@ -165,7 +168,7 @@ Molecule: ZINC00157467
 -----------------------------------
 Molecule: ZINC00157960
 
- Elapsed time for docking:	0.001 seconds
+ Elapsed time for docking:	0.000 seconds
 
  Anchors:		1
  Orientations:		1
@@ -174,4 +177,7 @@ Molecule: ZINC00157960
 
 
 12 Molecules Processed
-Total elapsed time:	0.016 seconds
+Total elapsed time:	0.007 seconds
+Number of molecules per second:	1603.224
+Virtual memory used for this process: 84296 kilobytes
+Physical memory used for this process: 11708 kilobytes

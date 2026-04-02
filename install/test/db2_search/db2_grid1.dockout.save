@@ -1,0 +1,218 @@
+
+
+
+--------------------------------------
+DOCK v6.12
+
+Released September 2024
+Copyright UCSF
+--------------------------------------
+
+
+Conformational Sampling Parameters
+------------------------------------------------------------------------------------------
+conformer_search_type                                        HDB
+
+Hierarchy DB Search Parameters
+------------------------------------------------------------------------------------------
+num_per_search                                               1
+skip_broken                                                  yes
+hdb_db2_input_file                                           1169145341.db2.gz
+hdb_db2_search_score_threshold                               10.0
+
+Internal Energy Parameters
+------------------------------------------------------------------------------------------
+use_internal_energy                                          no
+
+Database Filter Parameters
+------------------------------------------------------------------------------------------
+use_database_filter                                          no
+
+Orient Ligand Parameters
+------------------------------------------------------------------------------------------
+orient_ligand                                                yes
+automated_matching                                           no
+automated_matching_iteration                                 yes
+distance_tolerance                                           0.3
+distance_minimum                                             0.0
+nodes_minimum                                                4
+nodes_maximum                                                4
+receptor_site_file                                           ../grid_generation/struct.sph
+max_orientations                                             1000
+critical_points                                              no
+chemical_matching                                            no
+use_ligand_spheres                                           no
+
+Bump Filter Parameters
+------------------------------------------------------------------------------------------
+bump_filter                                                  no
+
+Master Score Parameters
+------------------------------------------------------------------------------------------
+score_molecules                                              yes
+
+Contact Score Parameters
+------------------------------------------------------------------------------------------
+contact_score_primary                                        no
+
+Grid Score Parameters
+------------------------------------------------------------------------------------------
+grid_score_primary                                           yes
+grid_score_rep_rad_scale                                     1
+grid_score_vdw_scale                                         1
+grid_score_es_scale                                          1
+grid_lig_efficiency                                          no
+grid_score_grid_prefix                                       ../grid_generation/grid
+
+GIST Score Parameters
+------------------------------------------------------------------------------------------
+
+MultiGrid Score Parameters
+------------------------------------------------------------------------------------------
+
+Dock3.5 Score Parameters
+------------------------------------------------------------------------------------------
+
+Continuous Energy Score Parameters
+------------------------------------------------------------------------------------------
+
+Footprint Similarity Score Parameters
+------------------------------------------------------------------------------------------
+
+Pharmacophore Similarity Score Parameters
+------------------------------------------------------------------------------------------
+
+Hbond Energy Score Parameters
+------------------------------------------------------------------------------------------
+
+Internal Energy Score Parameters
+------------------------------------------------------------------------------------------
+
+Descriptor Score Parameters
+------------------------------------------------------------------------------------------
+
+Zou GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+
+Hawkins GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+
+SASA Score Parameters
+------------------------------------------------------------------------------------------
+
+Amber Score Parameters
+------------------------------------------------------------------------------------------
+
+Simplex Minimization Parameters
+------------------------------------------------------------------------------------------
+minimize_ligand                                              yes
+simplex_max_iterations                                       1000
+simplex_tors_premin_iterations                               0
+simplex_max_cycles                                           1
+simplex_score_converge                                       0.1
+simplex_cycle_converge                                       1.0
+simplex_trans_step                                           1.0
+simplex_rot_step                                             0.1
+simplex_tors_step                                            10.0
+simplex_final_min                                            no
+simplex_random_seed                                          0
+simplex_restraint_min                                        no
+
+Atom Typing Parameters
+------------------------------------------------------------------------------------------
+atom_model                                                   all
+vdw_defn_file                                                ../../../parameters/vdw_AMBER_parm99.defn
+flex_defn_file                                               ../../../parameters/flex.defn
+flex_drive_file                                              ../../../parameters/flex_drive.tbl
+
+Molecule Library Output Parameters
+------------------------------------------------------------------------------------------
+ligand_outfile_prefix                                        db2_grid1
+write_mol_solvation                                          yes
+write_orientations                                           no
+num_scored_conformers                                        1
+score_threshold                                              100.0
+rank_ligands                                                 no
+------------------------------------------------------------------------------------------
+Initializing Orienting Routines...
+Read in 38 spheres for orienting.
+Initializing Grid Score Routines...
+ Reading the energy grid from ../grid_generation/grid.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ../grid_generation/grid.bmp
+	size = 35340
+	spacing = 0.5
+	origin = 15.9315,2.891,50.765
+	span = 30,31,38
+ Done reading the grid box quantifiers.
+Initializing Library File Routines...
+
+opening file: 1169145341.db2.gz
+filename = 1169145341.db2.gz
+14 17
+ extension = .gz
+1169145341.db2.gz
+1
+opening :1169145341.db2.gz
+
+-----------------------------------
+VERBOSE MOLECULE STATS
+
+  Number of heavy atoms = 11
+  Number of rotatable bonds = 9
+  Formal Charge = -0.000
+  Molecular Weight = 148.248
+  Heavy Atoms = 11
+
+-----------------------------------
+VERBOSE MOLECULE STATS
+
+  Number of heavy atoms = 34
+  Number of rotatable bonds = 0
+  Formal Charge = 1.630
+  Molecular Weight = 488.001
+  Heavy Atoms = 34
+-----------------------------------
+VERBOSE ORIENTING STATS :
+
+Orienting 8 anchor heavy atom centers
+Sphere Center Matching Parameters:
+   tolerance: 0.3; dist_min: 0; min_nodes: 4; max_nodes: 4
+Num of cliques generated: 1284
+ Residual Info:
+   min residual:    0.4432
+   median residual: 1.0748
+   max residual:    1.1994
+   mean residual:   1.0297
+   std residual:    0.1475
+ Node Sizes:
+   min nodes:    4
+   max nodes:    4
+   mean nodes:   4.0000
+Current clique:1000
+Current clique:1000
+(last_orient_flag==true)Current clique:1000
+(last_orient_flag==true)Current clique:0
+
+-----------------------------------
+Molecule: ZINC000111335081
+
+ Elapsed time for docking:	0 seconds
+
+ Anchors:		1
+ Orientations:		1000
+ Conformations:		1
+
+                          Grid_Score:          -22.394466
+                     Grid_vdw_energy:          -21.668238
+                      Grid_es_energy:           -0.726228
+                     HDB_Conf_Number:                  11
+                HDB_Internal_energy1:            4.530000
+                HDB_Internal_energy2:            0.000000
+
+
+1 Molecules Processed
+Total elapsed time:	0.082 seconds
+Number of molecules per second:	12.139
+Virtual memory used for this process: 84976 kilobytes
+Physical memory used for this process: 13308 kilobytes

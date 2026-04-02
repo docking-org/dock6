@@ -1,5 +1,11 @@
 DOCK Future Work
 
+New
+=============
+Investigate increasing compiler optimization flags.  Eg, benchmark with current flags
+then benchmark with -O3.  Motivated by Trent's dock3.5 score work.
+
+
 
 Urgent - before the next release
 =============

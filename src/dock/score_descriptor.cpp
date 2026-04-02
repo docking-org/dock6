@@ -114,8 +114,8 @@ Descriptor_Energy_Score::input_parameters(Parameter_Reader & parm, bool & primar
 	desc_use_hun = parm.query_param("descriptor_use_hungarian", "no", "yes no") == "yes";
         desc_use_volume = parm.query_param("descriptor_use_volume_overlap", "no", "yes no") == "yes";
         //desc_use_molprop = parm.query_param("descriptor_use_molecular_properties", "no", "yes no") == "yes";
-//        desc_use_gist = parm.query_param("descriptor_use_gist", "no", "yes no") == "yes";
-//        desc_use_cmg = parm.query_param("descriptor_use_dock3.5", "no", "yes no") == "yes";
+        desc_use_gist = parm.query_param("descriptor_use_gist", "no", "yes no") == "yes";
+        desc_use_cmg = parm.query_param("descriptor_use_dock3.5", "no", "yes no") == "yes";
 
 
         // If using grid_score, read in the parameters for grid_score. These lines are esentially
@@ -123,6 +123,7 @@ Descriptor_Energy_Score::input_parameters(Parameter_Reader & parm, bool & primar
         // the param query are prefixed with 'descriptor', and the options are stored in an object
         // of the Energy_Score class.
         if (desc_use_nrg){
+	    desc_score_valid = true;
 
             cout <<"\n--- Descriptor Score Parameters: Grid Score ---" <<endl;
           
@@ -168,7 +169,7 @@ Descriptor_Energy_Score::input_parameters(Parameter_Reader & parm, bool & primar
 
 
         if (desc_use_mg_nrg){
-
+            desc_score_valid = true;
             cout <<"\n--- Descriptor Score Parameters: Multigrid Score ---" <<endl;
 
             // This must be set to true for initialize and compute score functions
@@ -184,7 +185,7 @@ Descriptor_Energy_Score::input_parameters(Parameter_Reader & parm, bool & primar
         // the input names in the param query are prefixed with 'descriptor', and the options are
         // stored in an object of the Continuous_Energy_Score class.
         if (desc_use_cont_nrg){
-
+            desc_score_valid = true;
             cout <<"\n--- Descriptor Score Parameters: Continuous Energy Score ---" <<endl;
 
             // This must be set to true for initialize and compute score functions
@@ -259,7 +260,7 @@ Descriptor_Energy_Score::input_parameters(Parameter_Reader & parm, bool & primar
         // input names in the param query are prefixed with 'descriptor', and the options are 
         // stored in an object of the Footprint_Similarity_Score class.
         if (desc_use_fps){
-
+            desc_score_valid = true;
             cout <<"\n--- Descriptor Score Parameters: Footprint Similarity Score ---" <<endl;
 
             // This must be set to true for initialize and compute score functions
@@ -280,7 +281,7 @@ Descriptor_Energy_Score::input_parameters(Parameter_Reader & parm, bool & primar
 
          // Read in parameters to compute FMS score. Note: copied from score_ph4.cpp by LINGLING
         if (desc_use_ph4){
-
+            desc_score_valid = true;
             cout <<"\n--- Descriptor Score Parameters: Pharmacophore ---" <<endl;
 
             // This must be set to true for initialize and compute score functions
@@ -296,7 +297,7 @@ Descriptor_Energy_Score::input_parameters(Parameter_Reader & parm, bool & primar
         // Read in parameters to compute the fingerprint / Tanimoto. Note: this is not really a
         // scoring function, it fits better in the category of molecular property.
         if (desc_use_tan){
-
+            desc_score_valid = true;
             cout <<"\n--- Descriptor Score Parameters: Fingerprint / Tanimoto ---" <<endl;
             desc_fing_ref_filename = parm.query_param("descriptor_fingerprint_ref_filename", "fing_ref.mol2");
         }
@@ -304,7 +305,7 @@ Descriptor_Energy_Score::input_parameters(Parameter_Reader & parm, bool & primar
         // Read in parameters to compute the hungarian distance according to Allen and Rizzo, JCIM, 2014
         // The functional form is: Score = C1 ( (#refatoms - #unmatched) / #refatoms) + C2 (RMSD matched)
         if (desc_use_hun){
-
+            desc_score_valid = true;
             cout <<"\n--- Descriptor Score Parameters: Hungarian Matching Similarity ---" <<endl;
             desc_hun_ref_filename = parm.query_param("descriptor_hms_score_ref_filename", "hun_ref.mol2");
             desc_hun_matching_coeff = atof(parm.query_param("descriptor_hms_score_matching_coeff", "-5").c_str());
@@ -312,6 +313,7 @@ Descriptor_Energy_Score::input_parameters(Parameter_Reader & parm, bool & primar
         }
 
         if (desc_use_volume){
+	    desc_score_valid = true;
             cout <<"\n--- Descriptor Score Parameters: Volume Overlap Score ---" <<endl;
 
             // This must be set to true for initialize and compute score functions
@@ -320,14 +322,16 @@ Descriptor_Energy_Score::input_parameters(Parameter_Reader & parm, bool & primar
         }
 
         if (desc_use_gist){
+	    desc_score_valid = true;
             cout <<"\n--- Descriptor Score Parameters: GIST Score ---" <<endl;
 
             // This must be set to true for initialize and compute score functions
             desc_c_gist.use_score = true;
             desc_c_gist.input_parameters_main(parm,"descriptor_gist_score_");
         }
-/*
+
         if (desc_use_cmg){
+	    desc_score_valid = true;
             cout <<"\n--- Descriptor Score Parameters: DOCK3.5 Score ---" <<endl;
 
             // This must be set to true for initialize and compute score functions
@@ -335,7 +339,12 @@ Descriptor_Energy_Score::input_parameters(Parameter_Reader & parm, bool & primar
             //desc_c_cmg.input_parameters_main(parm,"descriptor_dock3.5_score_");
             desc_c_cmg.input_parameters_main(parm,"descriptor_dock3.5_");
         }
-*/
+	// Check and see we actually selected a score before allowing the user to continue
+	if (desc_score_valid == false){
+ 	    cout << "ERROR: You must select a component score for descriptor score! You have not selected any score! Program will terminate." << endl;
+            exit(0);
+	}
+
         // These parameters are used to toggle the weights of each function
         cout <<"\n--- Descriptor Score Weights ---" <<endl;
 
@@ -344,6 +353,7 @@ Descriptor_Energy_Score::input_parameters(Parameter_Reader & parm, bool & primar
         }
 
         if (desc_use_mg_nrg){
+
             desc_weight_mg_nrg = atoi(parm.query_param("descriptor_weight_multigrid_score", "1").c_str());
         }
 
@@ -372,11 +382,11 @@ Descriptor_Energy_Score::input_parameters(Parameter_Reader & parm, bool & primar
         if (desc_use_gist){
             desc_weight_gist = atoi(parm.query_param("descriptor_weight_gist_score", "-1").c_str());
         }
-/*
         if (desc_use_cmg){
             desc_weight_cmg = atoi(parm.query_param("descriptor_weight_dock3.5_score", "1").c_str());
         }
-*/
+	
+
 
 /*
         rot_bonds_scale  = atoi(parm.query_param("descriptor_score_rot_bonds_scale", "0").c_str());
@@ -400,7 +410,7 @@ Descriptor_Energy_Score::input_parameters(Parameter_Reader & parm, bool & primar
         if (desc_use_hun){ num++; }
         if (desc_use_volume){ num++; }
         if (desc_use_gist){ num++; }
-//        if (desc_use_cmg){ num++; }
+        if (desc_use_cmg){ num++; }
         int orig_num = num;
 
         // Print the functional form for the user
@@ -451,7 +461,7 @@ Descriptor_Energy_Score::input_parameters(Parameter_Reader & parm, bool & primar
         if (desc_use_volume){ function <<"(" <<desc_weight_volume <<" * Volume_Score)"; num--; }
 
         if (desc_use_gist){ function <<"(" <<desc_weight_gist <<" * GIST_Score)"; num--; }
-//        if (desc_use_cmg){ function <<"(" <<desc_weight_cmg <<" * DOCK3.5_Score)"; num--; }
+        if (desc_use_cmg){ function <<"(" <<desc_weight_cmg <<" * DOCK3.5_Score)"; num--; }
 
         //if (desc_use_molprop){ function <<8 * molecular_property"; }
 
@@ -551,13 +561,13 @@ Descriptor_Energy_Score::initialize(AMBER_TYPER & typer)
              << endl;
         desc_c_gist.initialize(typer);
     }
-/*
+
     if (desc_use_cmg){
         cout << "Initializing typer for DOCK3.5 Score within Descriptor Score..."
              << endl;
         desc_c_cmg.initialize(typer);
     }
-*/
+
     return;
 
 } // end Descriptor_Energy_Score::initialize()
@@ -657,13 +667,13 @@ Descriptor_Energy_Score::compute_score(DOCKMol & mol)
         //cout << " temp_gist_score =" << temp_gist_score <<endl;
         temp_desc_score += temp_gist_score * desc_weight_gist;
     }
-/*
+
     if (desc_use_cmg){
         if (!desc_c_cmg.compute_score(mol)) return false;
         temp_cmg_score = mol.current_score;
         temp_desc_score += temp_cmg_score * desc_weight_cmg;
     }
-*/
+
 
     mol.current_score = temp_desc_score;
     mol.current_data = output_score_summary(mol);
@@ -845,10 +855,10 @@ Descriptor_Energy_Score::output_score_summary(DOCKMol & mol)
         }
 
         if (desc_use_gist){
-            text << DELIMITER << setw(STRING_WIDTH) << "Property_GIST_Score:"
+            text << DELIMITER << setw(STRING_WIDTH) << "desc_GIST_Score:"
                  << setw(FLOAT_WIDTH) << fixed << temp_gist_score << endl;
         }
-/*
+
         if (desc_use_cmg){
             //text << DELIMITER << setw(STRING_WIDTH) << "Property_dock3.5_Score:"     << setw(FLOAT_WIDTH) << fixed << temp_cmg_score                    << endl;
             text << DELIMITER << setw(STRING_WIDTH) << "desc_Chemgrid_Score:"        << setw(FLOAT_WIDTH) << fixed << temp_cmg_score                    << endl;
@@ -868,7 +878,6 @@ Descriptor_Energy_Score::output_score_summary(DOCKMol & mol)
 //                    conf_entropy_component);
 //
         }
-*/
 
         if (use_internal_energy){
             text << DELIMITER << setw(STRING_WIDTH) << "Internal_energy_repulsive:"

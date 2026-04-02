@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released September 2024
 Copyright UCSF
 --------------------------------------
 
@@ -26,6 +26,15 @@ dn_num_ex_picks                                              200
 dn_pruning_conformer_score_cutoff                            100.0
 dn_pruning_conformer_score_scaling_factor                    2.0
 dn_pruning_clustering_cutoff                                 100.0
+dn_remove_duplicates                                         yes
+dn_max_duplicates_per_mol                                    0
+dn_write_pruned_duplicates                                   no
+dn_advanced_pruning                                          yes
+dn_prune_initial_sample                                      yes
+dn_sample_torsions                                           yes
+dn_prune_individual_torsions                                 yes
+dn_prune_combined_torsions                                   yes
+dn_random_root_selection                                     no
 dn_mol_wt_cutoff_type                                        soft
 dn_upper_constraint_mol_wt                                   550.0
 dn_lower_constraint_mol_wt                                   300.0
@@ -40,6 +49,7 @@ dn_max_root_size                                             25
 dn_max_layer_size                                            25
 dn_max_current_aps                                           5
 dn_max_scaffolds_per_layer                                   1
+dn_max_successful_att_per_root                               50000
 dn_write_checkpoints                                         yes
 dn_write_prune_dump                                          yes
 dn_write_orients                                             no
@@ -83,6 +93,10 @@ Grid Score Parameters
 ------------------------------------------------------------------------------------------
 grid_score_primary                                           no
 
+GIST Score Parameters
+------------------------------------------------------------------------------------------
+gist_score_primary                                           no
+
 MultiGrid Score Parameters
 ------------------------------------------------------------------------------------------
 multigrid_score_primary                                      no
@@ -120,6 +134,8 @@ descriptor_use_pharmacophore_score                           no
 descriptor_use_tanimoto                                      no
 descriptor_use_hungarian                                     no
 descriptor_use_volume_overlap                                no
+descriptor_use_gist                                          no
+descriptor_use_dock3.5                                       no
 
 --- Descriptor Score Parameters: Multigrid Score ---
 descriptor_multigrid_score_rep_rad_scale                     1
@@ -210,6 +226,7 @@ simplex_tors_step                                            10.0
 simplex_anchor_max_iterations                                500
 simplex_grow_max_iterations                                  500
 simplex_grow_tors_premin_iterations                          0
+simplex_final_min                                            no
 simplex_random_seed                                          0
 simplex_restraint_min                                        no
 
@@ -364,112 +381,162 @@ Reading in 31 grids
 ##### Now orienting anchor #1
   ##### Entering layer of growth #1
   Root size at the beginning of this layer = 40
-    From Root[0], created 6 new fragments with an added layer
-    From Root[1], created 6 new fragments with an added layer
-    From Root[2], created 6 new fragments with an added layer
-    From Root[3], created 6 new fragments with an added layer
-    From Root[4], created 6 new fragments with an added layer
-    From Root[5], created 6 new fragments with an added layer
-    From Root[6], created 6 new fragments with an added layer
-    From Root[7], created 6 new fragments with an added layer
-    From Root[8], created 6 new fragments with an added layer
-    From Root[9], created 6 new fragments with an added layer
-    From Root[10], created 6 new fragments with an added layer
-    From Root[11], created 6 new fragments with an added layer
-    From Root[12], created 6 new fragments with an added layer
-    From Root[13], created 6 new fragments with an added layer
-    From Root[14], created 6 new fragments with an added layer
-    From Root[15], created 6 new fragments with an added layer
-    From Root[16], created 6 new fragments with an added layer
-    From Root[17], created 6 new fragments with an added layer
-    From Root[18], created 6 new fragments with an added layer
-    From Root[19], created 6 new fragments with an added layer
-    From Root[20], created 6 new fragments with an added layer
-    From Root[21], created 6 new fragments with an added layer
-    From Root[22], created 6 new fragments with an added layer
-    From Root[23], created 6 new fragments with an added layer
-    From Root[24], created 6 new fragments with an added layer
-    From Root[25], created 6 new fragments with an added layer
-    From Root[26], created 6 new fragments with an added layer
-    From Root[27], created 6 new fragments with an added layer
-    From Root[28], created 6 new fragments with an added layer
-    From Root[29], created 6 new fragments with an added layer
-    From Root[30], created 6 new fragments with an added layer
-    From Root[31], created 6 new fragments with an added layer
-    From Root[32], created 6 new fragments with an added layer
-    From Root[33], created 6 new fragments with an added layer
-    From Root[34], created 6 new fragments with an added layer
-    From Root[35], created 6 new fragments with an added layer
-    From Root[36], created 6 new fragments with an added layer
-    From Root[37], created 6 new fragments with an added layer
-    From Root[38], created 6 new fragments with an added layer
-    From Root[39], created 6 new fragments with an added layer
-      From all frags in root, kept a total of 240 new fragments with an added layer
-      After pruning by the RMSD heuristic, that number goes down to 5
-      From this ensemble, the average molecular weight is 94.9714
-      From this ensemble, the average number of rotatable bonds is 1
-      From this ensemble, the average formal_charge is -2
-      While writing molecules to file, 0 molecules were rejected on the lower bound molecular weight.
-      After writing 0 of those to file, 5 are returned to root for the next iteration
+    Root [  0], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  94.20
+    Root [  1], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  92.06
+    Root [  2], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  93.76
+    Root [  3], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  83.74
+    Root [  4], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  90.17
+    Root [  5], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  91.83
+    Root [  6], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  86.31
+    Root [  7], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  85.88
+    Root [  8], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  86.01
+    Root [  9], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  80.82
+    Root [ 10], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  88.82
+    Root [ 11], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  90.06
+    Root [ 12], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  91.68
+    Root [ 13], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  95.86
+    Root [ 14], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  80.71
+    Root [ 15], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  82.60
+    Root [ 16], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  81.88
+    Root [ 17], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  94.17
+    Root [ 18], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  84.14
+    Root [ 19], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  97.73
+    Root [ 20], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  87.91
+    Root [ 21], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.03 |A/S  71.51
+    Root [ 22], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  81.62
+    Root [ 23], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.03 |A/S  79.47
+    Root [ 24], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.03 |A/S  70.93
+    Root [ 25], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.03 |A/S  75.70
+    Root [ 26], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  82.21
+    Root [ 27], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.03 |A/S  77.10
+    Root [ 28], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S 104.79
+    Root [ 29], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  89.11
+    Root [ 30], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.03 |A/S  78.59
+    Root [ 31], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  94.59
+    Root [ 32], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.03 |A/S  70.12
+    Root [ 33], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  89.91
+    Root [ 34], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  92.06
+    Root [ 35], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.03 |A/S  68.31
+    Root [ 36], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  87.28
+    Root [ 37], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.03 |A/S  73.08
+    Root [ 38], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.03 |A/S  71.91
+    Root [ 39], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.03 |A/S  70.06
+      From all attachments events, 80 fragments were collected in layer 1 prior to all pruning/filtering.
+      From accepted frags ( N= 0 ) in layer 1, 
+          Collected a total of 40 candidate root fragments, then that number goes down to 3 due to pruning by the RMSD heuristic.
+          The average molecular weight is 94.97
+          The average number of rotatable bonds is 1.00
+          The average formal_charge is -2.00
+          While writing molecules to file, 0 molecules were rejected on the lower bound molecular weight.
+          -------------------------------------------
+          0    duplicate fragments were found.
+          0    complete molecules were filtered
+          0    root fragments were filtered
+          0    completed molecules were written to file
+          -------------------------------------------
+          37   root frags intended for the next layer were further pruned via rmsd.
+          0    candidate root frags intended for the next layer were ignored due to limit on root size.
+
+    Layer 1 completed! Moving on the next layer with 3 root fragments.
+    For Layer 1, time duration is: 0.96 seconds with 83.19 with attachments per second.
 
   ##### Entering layer of growth #2
-  Root size at the beginning of this layer = 5
-    From Root[0], created 6 new fragments with an added layer
-    From Root[1], created 6 new fragments with an added layer
-    From Root[2], created 5 new fragments with an added layer
-    From Root[3], created 6 new fragments with an added layer
-    From Root[4], created 4 new fragments with an added layer
-      From all frags in root, kept a total of 27 new fragments with an added layer
-      After pruning by the RMSD heuristic, that number goes down to 4
-      From this ensemble, the average molecular weight is 108.998
-      From this ensemble, the average number of rotatable bonds is 2
-      From this ensemble, the average formal_charge is -2
-      While writing molecules to file, 0 molecules were rejected on the lower bound molecular weight.
-      After writing 0 of those to file, 4 are returned to root for the next iteration
+  Root size at the beginning of this layer = 3
+    Root [  0], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.03 |A/S  60.89
+    Root [  1], sccf atts      2 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.06 |A/S  31.60
+    Root [  2], sccf atts      2 |acc mols    2 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    2 |S     0.06 |A/S  35.64
+      From all attachments events, 6 fragments were collected in layer 2 prior to all pruning/filtering.
+      From accepted frags ( N= 0 ) in layer 2, 
+          Collected a total of 4 candidate root fragments, then that number goes down to 3 due to pruning by the RMSD heuristic.
+          The average molecular weight is 109.00
+          The average number of rotatable bonds is 2.00
+          The average formal_charge is -2.00
+          While writing molecules to file, 0 molecules were rejected on the lower bound molecular weight.
+          -------------------------------------------
+          0    duplicate fragments were found.
+          0    complete molecules were filtered
+          0    root fragments were filtered
+          0    completed molecules were written to file
+          -------------------------------------------
+          1    root frags intended for the next layer were further pruned via rmsd.
+          0    candidate root frags intended for the next layer were ignored due to limit on root size.
+
+    Layer 2 completed! Moving on the next layer with 3 root fragments.
+    For Layer 2, time duration is: 0.15 seconds with 39.07 with attachments per second.
 
   ##### Entering layer of growth #3
-  Root size at the beginning of this layer = 4
-    From Root[0], created 6 new fragments with an added layer
-    From Root[1], created 2 new fragments with an added layer
-    From Root[2], created 6 new fragments with an added layer
-    From Root[3], created 4 new fragments with an added layer
-      From all frags in root, kept a total of 18 new fragments with an added layer
-      After pruning by the RMSD heuristic, that number goes down to 5
-      From this ensemble, the average molecular weight is 137.009
-      From this ensemble, the average number of rotatable bonds is 3
-      From this ensemble, the average formal_charge is -2
-      While writing molecules to file, 0 molecules were rejected on the lower bound molecular weight.
-      After writing 0 of those to file, 5 are returned to root for the next iteration
+  Root size at the beginning of this layer = 3
+    Root [  0], sccf atts      1 |acc mols    2 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    2 |S     0.05 |A/S  18.90
+    Root [  1], sccf atts      1 |acc mols    4 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    4 |S     0.11 |A/S   9.11
+    Root [  2], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.14 |A/S   7.13
+      From all attachments events, 3 fragments were collected in layer 3 prior to all pruning/filtering.
+      From accepted frags ( N= 0 ) in layer 3, 
+          Collected a total of 7 candidate root fragments, then that number goes down to 6 due to pruning by the RMSD heuristic.
+          The average molecular weight is 137.01
+          The average number of rotatable bonds is 3.00
+          The average formal_charge is -2.00
+          While writing molecules to file, 0 molecules were rejected on the lower bound molecular weight.
+          -------------------------------------------
+          0    duplicate fragments were found.
+          0    complete molecules were filtered
+          0    root fragments were filtered
+          0    completed molecules were written to file
+          -------------------------------------------
+          1    root frags intended for the next layer were further pruned via rmsd.
+          0    candidate root frags intended for the next layer were ignored due to limit on root size.
+
+    Layer 3 completed! Moving on the next layer with 6 root fragments.
+    For Layer 3, time duration is: 0.31 seconds with 9.81 with attachments per second.
 
   ##### Entering layer of growth #4
-  Root size at the beginning of this layer = 5
-    From Root[0], created 1 new fragments with an added layer
-    From Root[1], created 1 new fragments with an added layer
-    From Root[2], created 1 new fragments with an added layer
-    From Root[3], created 1 new fragments with an added layer
-    From Root[4], created 1 new fragments with an added layer
-      From all frags in root, kept a total of 5 new fragments with an added layer
-      After pruning by the RMSD heuristic, that number goes down to 5
-      From this ensemble, the average molecular weight is 152.023
-      From this ensemble, the average number of rotatable bonds is 4
-      From this ensemble, the average formal_charge is -2
-      While writing molecules to file, 0 molecules were rejected on the lower bound molecular weight.
-      After writing 0 of those to file, 5 are returned to root for the next iteration
+  Root size at the beginning of this layer = 6
+    Root [  0], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  98.25
+    Root [  1], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  65.76
+    Root [  2], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  85.60
+    Root [  3], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  79.13
+    Root [  4], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  96.19
+    Root [  5], sccf atts      1 |acc mols    0 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    0 |S     0.02 |A/S  65.24
+      From all attachments events, 6 fragments were collected in layer 4 prior to all pruning/filtering.
+      From accepted frags ( N= 0 ) in layer 4, 
+          Collected a total of 5 candidate root fragments, then that number goes down to 5 due to pruning by the RMSD heuristic.
+          The average molecular weight is 152.02
+          The average number of rotatable bonds is 4.00
+          The average formal_charge is -2.00
+          While writing molecules to file, 0 molecules were rejected on the lower bound molecular weight.
+          -------------------------------------------
+          0    duplicate fragments were found.
+          0    complete molecules were filtered
+          0    root fragments were filtered
+          0    completed molecules were written to file
+          -------------------------------------------
+          0    root frags intended for the next layer were further pruned via rmsd.
+          0    candidate root frags intended for the next layer were ignored due to limit on root size.
+
+    Layer 4 completed! Moving on the next layer with 5 root fragments.
+    For Layer 4, time duration is: 0.08 seconds with 76.84 with attachments per second.
 
   ##### Entering layer of growth #5
   Root size at the beginning of this layer = 5
-    From Root[0], created 6 new fragments with an added layer
-    From Root[1], created 6 new fragments with an added layer
-    From Root[2], created 2 new fragments with an added layer
-    From Root[3], created 5 new fragments with an added layer
-    From Root[4], created 1 new fragments with an added layer
-      From all frags in root, kept a total of 20 new fragments with an added layer
-      After pruning by the RMSD heuristic, that number goes down to 6
-      From this ensemble, the average molecular weight is 169.03
-      From this ensemble, the average number of rotatable bonds is 5
-      From this ensemble, the average formal_charge is -2
-      While writing molecules to file, 6 molecules were rejected on the lower bound molecular weight.
-      After writing 0 of those to file, 0 are returned to root for the next iteration
+    Root [  0], sccf atts      1 |acc mols    1 |cmpd    1 |fltrd cmpd    0 |Prnd    0 |Kpt    0 |S     0.05 |A/S  18.64
+    Root [  1], sccf atts      1 |acc mols    1 |cmpd    1 |fltrd cmpd    0 |Prnd    0 |Kpt    0 |S     0.05 |A/S  20.12
+    Root [  2], sccf atts      1 |acc mols    1 |cmpd    1 |fltrd cmpd    0 |Prnd    0 |Kpt    0 |S     0.09 |A/S  11.68
+    Root [  3], sccf atts      1 |acc mols    0 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    0 |S     0.11 |A/S   8.92
+    Root [  4], sccf atts      1 |acc mols    1 |cmpd    1 |fltrd cmpd    0 |Prnd    0 |Kpt    0 |S     0.04 |A/S  22.60
+      From all attachments events, 5 fragments were collected in layer 5 prior to all pruning/filtering.
+      From accepted frags ( N= 4 ) in layer 5, 
+          Collected a total of 0 candidate root fragments, then that number goes down to 0 due to pruning by the RMSD heuristic.
+          While writing molecules to file, 1 molecules were rejected on the lower bound molecular weight.
+          -------------------------------------------
+          3    duplicate fragments were found.
+          1    complete molecules were filtered
+          0    root fragments were filtered
+          0    completed molecules were written to file
+          -------------------------------------------
+          0    root frags intended for the next layer were further pruned via rmsd.
+          0    candidate root frags intended for the next layer were ignored due to limit on root size.
+
+    Layer 5 completed! Moving on the next layer with 0 root fragments.
+    For Layer 5, time duration is: 0.35 seconds with 14.43 with attachments per second.
 
 Root is empty, continuing.
 
@@ -477,5 +544,8 @@ There are no more anchors. Exiting.
 
 
 
-310 Molecules Processed
-Total elapsed time:	3.789 seconds
+100 Attachments Processed
+Total elapsed time:	7.653 seconds
+Number of attachments per second:	13.067
+Virtual memory used for this process: 135440 kilobytes
+Physical memory used for this process: 58288 kilobytes

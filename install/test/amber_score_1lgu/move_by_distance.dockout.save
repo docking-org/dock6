@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released September 2024
 Copyright UCSF
 --------------------------------------
 
@@ -48,6 +48,10 @@ contact_score_primary                                        no
 Grid Score Parameters
 ------------------------------------------------------------------------------------------
 grid_score_primary                                           no
+
+GIST Score Parameters
+------------------------------------------------------------------------------------------
+gist_score_primary                                           no
 
 MultiGrid Score Parameters
 ------------------------------------------------------------------------------------------
@@ -112,18 +116,21 @@ amber_score_abort_on_unprepped_ligand                        yes
 Molecule Library Output Parameters
 ------------------------------------------------------------------------------------------
 ligand_outfile_prefix                                        move_by_distance
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
 Initializing Library File Routines...
+
 
 42 receptor residues are within 3 Angstroms of the active site.
 
 -----------------------------------
 Molecule: AAH
 
- Elapsed time for docking:	1.489 seconds
+ Elapsed time for docking:	1.711 seconds
 
  Anchors:		1
  Orientations:		1
@@ -136,4 +143,7 @@ Molecule: AAH
 
 
 1 Molecules Processed
-Total elapsed time:	3.039 seconds
+Total elapsed time:	3.397 seconds
+Number of molecules per second:	0.294
+Virtual memory used for this process: 117652 kilobytes
+Physical memory used for this process: 36244 kilobytes

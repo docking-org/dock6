@@ -19,6 +19,7 @@
 #include "master_score.h"
 #include "simplex.h"
 #include "trace.h"
+#include "utils.h"
 
 class Bump_Filter;
 class Master_Score;
@@ -76,8 +77,101 @@ CG_Conformer_Search::input_parameters(Parameter_Reader & parm)
                 << endl;
             exit(0);
         }
-        bondlenth = atof(parm.query_param(
-                "bondlenth", "1.8").c_str()); // 1.8 is a carbon-sulfur bond. 
+        //bondlength = atof(parm.query_param(
+        //        "covalent_bondlength", "1.8").c_str()); // 1.8 is a carbon-sulfur bond. dummy1-dummy2 bond lenth. 
+        //bondlength2 = atof(parm.query_param(
+        //        "covalent_bondlength2", "-1.0").c_str()); // dummy1-atom1 bond lenth. 
+        //angleval = atof(parm.query_param(
+        //        "covalent_angle", "-1.0").c_str()); //  dummy2-dummy1-atom1 (atom of ligand attached to dummy) angle.  
+        string bondlength_str = (parm.query_param(
+                "covalent_bondlength", "1.6:0.1:2.0").c_str()); // 1.8 is a carbon-sulfur bond. dummy1-dummy2 bond lenth. 
+
+        vector < string > list;
+        Tokenizer(bondlength_str, list,':'); 
+        cout << " #  covalent_bondlength format options: \n # 'blstart:blstep:blstop' ; 'blstart:blstop' ; or bl \n  # number of values = " << list.size() << endl;
+        if (list.size() == 3){
+            bondlength = atof(list[0].c_str());
+            blstep = atof(list[1].c_str());
+            blstop = atof(list[2].c_str());
+        }else if (list.size() == 2){
+            cout << " # default is used blstep: " << 0.1 << endl;
+            bondlength = atof(list[0].c_str());
+            blstep = 0.1;
+            blstop = atof(list[1].c_str());
+        } else if (list.size() == 1){
+            bondlength = atof(list[0].c_str());
+            cout << " # just on bond length is used " << bondlength << endl;
+            blstep = 0.1;
+            blstop = atof(list[0].c_str());
+        } else { 
+            cout << "Error..." << endl;
+            exit(0);
+        }
+        //exit(0);
+         
+
+        string bondlength2_str = (parm.query_param(
+                "covalent_bondlength2", "-1.0").c_str()); // dummy1-atom1 bond lenth. 
+
+        //vector < string > list;
+        Tokenizer(bondlength2_str, list,':');
+        cout << " # covalent_bondlength2 format options: \n # 'blstart2:blstep2:blstop2' ; 'blstart2:blstop2' ; or bl2 \n  # number of values = " << list.size() << endl;
+        if (list.size() == 3){
+            bondlength2 = atof(list[0].c_str());
+            blstep2 = atof(list[1].c_str());
+            blstop2 = atof(list[2].c_str());
+        }else if (list.size() == 2){
+            cout << " # default is used blstep2: " << 0.1 << endl;
+            bondlength2 = atof(list[0].c_str());
+            blstep2 = 0.1;
+            blstop2 = atof(list[1].c_str());
+        } else if (list.size() == 1){
+            bondlength2 = atof(list[0].c_str());
+            cout << " # just on bond length2 is used " << bondlength2 << endl;
+            blstep2 = 0.1;
+            blstop2 = atof(list[0].c_str());
+        } else {
+            cout << "Error..." << endl;
+            exit(0);
+        }
+
+
+        if (bondlength2 < 0.0) { 
+            cout << " # covalent_bondlength2 < 0.0: input bond length will be used for D1--A1.  " << endl;
+        }
+        if (bondlength < 0.0) {
+            cout << " # covalent_bondlength < 0.0: input bond length will be used for D2--D1. (D1--A1 will also keep input bond length.)" << endl;
+        } 
+
+        string angleval_str = (parm.query_param(
+                "covalent_angle", "-1.0").c_str()); //  dummy2-dummy1-atom1 (atom of ligand attached to dummy) angle.  
+
+        //vector < string > list;
+        Tokenizer(angleval_str, list,':');
+        cout << " # covalent_angle format options: \n # 'avstart:avstep:avstop' ; 'avstart:avstop' ; or av \n  # number of values = " << list.size() << endl;
+        if (list.size() == 3){
+            angleval = atof(list[0].c_str());
+            avstep = atof(list[1].c_str());
+            avstop = atof(list[2].c_str());
+        }else if (list.size() == 2){
+            cout << " # default is used avstep: " << 1.0 << endl;
+            angleval = atof(list[0].c_str());
+            avstep = 1.0;
+            avstop = atof(list[1].c_str());
+        } else if (list.size() == 1){
+            angleval = atof(list[0].c_str());
+            cout << " # just on angle_val is used " << angleval << endl;
+            avstep = 1.0;
+            avstop = atof(list[0].c_str());
+        } else {
+            cout << "Error..." << endl;
+            exit(0);
+        }
+        if (angleval < 0.0) {
+            cout << " # angle_val < 0.0: input angle length will be used for D2--D1--A1 .)" << endl;
+        } 
+
+
         if (pruning_clustering_cutoff <= 0) {
             cout << "ERROR:  Parameter must be an float greater than zero.  Program will terminate."
                 << endl;
@@ -85,7 +179,7 @@ CG_Conformer_Search::input_parameters(Parameter_Reader & parm)
         }
 
         dihideral_step = atof(parm.query_param(
-                "dihideral_step", "10.0").c_str()); // 36 will sample every 10 degrees
+                "covalent_dihedral_step", "10.0").c_str()); // 36 will sample every 10 degrees
         if (pruning_clustering_cutoff <= 0) {
             cout << "ERROR:  Parameter must be an float greater than zero.  Program will terminate.  "
                 << endl;
@@ -440,10 +534,10 @@ CG_Conformer_Search::atom_in_anchor_segments(SEGMENT seg, DOCKMol & mol)
     mol.dummy2  = dummy2;
     mol.atomtag = atomtag;
 
-    cout << "dummy1 = " << dummy1 << " , " 
-         << "dummy2 = " << dummy2 << " , " 
-         << "connected atom  = " << atomtag << endl;
-    //cout << "flag = " << flag << endl;
+    //cout << "dummy1 = " << dummy1 << " , " 
+    //     << "dummy2 = " << dummy2 << " , " 
+    //     << "connected atom  = " << atomtag << endl;
+    ////cout << "flag = " << flag << endl;
  }
 
 // 
@@ -523,7 +617,7 @@ CG_Conformer_Search::id_anchor_segments(DOCKMol & mol)
         anchors.clear();
         int num_anchors_val;
 
-        cout << max_anchor_num  << " " << temp_anchors.size() << endl;
+        // cout << max_anchor_num  << " " << temp_anchors.size() << endl;
 
         if (max_anchor_num > temp_anchors.size() ){
            cout << "max_anchor_nunum of segments." << endl;
@@ -534,7 +628,7 @@ CG_Conformer_Search::id_anchor_segments(DOCKMol & mol)
            num_anchors_val = max_anchor_num;
         }
         for (i = 0; i < num_anchors_val ; i++) {
-           cout << i << endl;
+           //cout << i << endl;
            tmp.first = temp_anchors[i].first;
            tmp.second = temp_anchors[i].second;
            anchors.push_back(tmp);
@@ -550,6 +644,7 @@ CG_Conformer_Search::id_anchor_segments(DOCKMol & mol)
 bool
 CG_Conformer_Search::next_anchor(DOCKMol & mol)
 {
+    //cout << "I AM HERE.  " << endl;
     DOCKMol         tmp_mol,
                     blank_mol;
     CONFORMER       tmp_conf;
@@ -562,16 +657,20 @@ CG_Conformer_Search::next_anchor(DOCKMol & mol)
 
     // If there are no structs in anchor_confs, generate a new anchor and
     // expand it
+    //cout << "anchor_confs.size() = " << anchor_confs.size() << endl;  
+    //cout << "anchors.size() = " << anchors.size() << endl;  
+    //cout << "current_anchor = " << current_anchor << endl;
+    // current_anchor++;
     if (anchor_confs.size() == 0) {
 
         // if there are no more anchors, or you have reached the end of the
         // list
-        if ((anchors.size() == 0) || (current_anchor == anchors.size())
-            || ((anchors[current_anchor].first < anchor_size)
-                && (current_anchor > 0))){
-            if (verbose) cout << "No more anchor fragments to be docked." << endl;
-            return false;
-        }
+        //if ((anchors.size() == 0) || (current_anchor == anchors.size())
+        //    || ((anchors[current_anchor].first < anchor_size)
+        //        && (current_anchor > 0))){
+        //    if (verbose) cout << "No more anchor fragments to be docked." << endl;
+        //    return false;
+        //}
 
         //copy_molecule(tmp_mol, orig);
         copy_molecule(tmp_mol, mol);
@@ -592,8 +691,10 @@ CG_Conformer_Search::next_anchor(DOCKMol & mol)
         layer_segments.resize(orig_segments.size());
 
         layers.clear();
-        extend_layers(anchors[current_anchor].second,
-                      anchors[current_anchor].second, 0);
+        //extend_layers(anchors[current_anchor].second,
+        //              anchors[current_anchor].second, 0);
+        extend_layers(anchors[0].second,
+                      anchors[0].second, 0);
 
         // cout << "@@@\t" << orig_segments.size() << "\t" << layers.size() <<
         // "\t" << layer_segments.size() << endl;
@@ -611,17 +712,7 @@ CG_Conformer_Search::next_anchor(DOCKMol & mol)
 
     }
 
-/**
-        int i,j,k;
-        for(i=0;i<layers.size();i++) {
-                for(j=0;j<layers[i].segments.size();j++) {
-                        for(k=0;k<layer_segments[layers[i].segments[j]].atoms.size();k++) {
-                                cout << i << "\t" << j << "\t" << layer_segments[layers[i].segments[j]].atoms[k]+1 << endl;
-                        }
-                }
-        }
-**/
-
+    //cout << "I AM HERE.  " << endl;
     // copy last mol from anchor_conf to mol
     copy_molecule(mol, anchor_confs[anchor_confs.size() - 1]);
     anchor_confs.pop_back();
@@ -755,301 +846,6 @@ CG_Conformer_Search::extend_layers(int previous_segment, int current_segment,
 
 }
 
-/*
-// +++++++++++++++++++++++++++++++++++++++++
-// This function will rotate the anchor about the covalent bond. 
-// 
-// this code is adapted from denovo.
-//// +++++++++++++++++++++++++++++++++++++++++
-//// Given two fragments and connection point data, combine them into one and return it
-//Fragment
-//DN_Build::combine_fragments( Fragment & frag1, int dummy1, int heavy1,
-//                             Fragment frag2, int dummy2, int heavy2 )
-//{
-bool
-CG_Conformer_Search::submit_anchor_orientation(DOCKMol & mol, bool more_orients)
-{
-    SCOREMol        tmp_mol;
-    float           mol_score;
-    //int             insert_point;
-    //int             i;
-
-    int             itmp;
-
-    ofstream myfile;
-    myfile.open ("debug.mol2");
-
-    Write_Mol2(mol, myfile);
-
-    cout << "CG_Conformer_Search::submit_anchor_orientation" << endl;
-    mol_score = mol.current_score;
-
-    SphereVec recsph; 
-
-    string file = "rec.sph";
-
-    itmp = read_spheres( file, recsph );
-    // rec residue is in the correct position - the objective is to translate / rotate lig
-    // so that the bond from dummy2->dummy1 is overlapping the bond from sphere2->sphere1
-
-    cout << "dummy atoms from the ligand\n"
-         << "DUMMY 1: \n"
-         << " " << mol.x[dummy1] 
-         << " " << mol.y[dummy1] 
-         << " " << mol.z[dummy1] << endl;
-
-    cout << "DUMMY2: \n" 
-         << " " << mol.x[dummy2] 
-         << " " << mol.y[dummy2] 
-         << " " << mol.z[dummy2] << endl;
-    cout << "ATOM for dhideral sampling: \n" 
-         << " " << mol.x[atomtag] 
-         << " " << mol.y[atomtag] 
-         << " " << mol.z[atomtag] << endl;
-
-
-    // Step 1. Adjust the bond length of frag2 to match covalent radii of new pair
-
-    // Calculate the desired bond length and remember as 'new_rad'
-    //float new_rad = calc_cov_radius(frag1.mol.atom_types[heavy1]) +
-    //                calc_cov_radius(frag2.mol.atom_types[heavy2]);
-    float new_rad = 1.4;
-
-    
-
-    // Calculate the x-y-z components of the current frag2 bond vector (bond_vec)
-    DOCKVector bond_vec;
-    bond_vec.x = mol.x[dummy1] - mol.x[dummy2];
-    bond_vec.y = mol.y[dummy1] - mol.y[dummy2];
-    bond_vec.z = mol.z[dummy1] - mol.z[dummy2];
-
-    // Normalize the bond vector then multiply each component by new_rad so that it is the desired
-    // length
-    bond_vec = bond_vec.normalize_vector();
-    bond_vec.x *= new_rad;
-    bond_vec.y *= new_rad;
-    bond_vec.z *= new_rad;
-    // Change the coordinates of the frag2 dummy atom so that the bond length is correct
-    mol.x[dummy2] = mol.x[dummy1] - bond_vec.x;
-    mol.y[dummy2] = mol.y[dummy1] - bond_vec.y;
-    mol.z[dummy2] = mol.z[dummy1] - bond_vec.z;
-    Write_Mol2(mol, myfile);
-
-
-    // Step 2. Translate dummy2 of frag2 to the origin
-
-    // Figure out what translation is required to move the dummy atom to the origin
-    DOCKVector trans1;
-    trans1.x = -mol.x[dummy2];
-    trans1.y = -mol.y[dummy2];
-    trans1.z = -mol.z[dummy2];
-
-    // Use the dockmol function to translate the fragment so the dummy atom is at the origin
-    mol.translate_mol(trans1);
-    myfile << "####### I AM HERE" << endl;
-    Write_Mol2(mol, myfile);
-
-    // Step 3. Calculate dot product to determine theta (theta = angle between vec1 and vec2)
-
-    // vec1 = vector pointing from heavy1 to dummy1 in frag1
-    DOCKVector vec1;
-    vec1.x = recsph[0].crds.x - recsph[1].crds.x;
-    vec1.y = recsph[0].crds.y - recsph[1].crds.y;
-    vec1.z = recsph[0].crds.z - recsph[1].crds.z;
-
-    cout  << "\n\nSpheres representing the covalent residue" << endl;
-    cout   <<  "Atom 1, place dummy 1 here:\n"; 
-    cout   <<  recsph[0].crds.x 
-    << " " <<  recsph[0].crds.y 
-    << " " <<  recsph[0].crds.z << endl; 
-    cout   <<  "Atom 2, place dummy 2 here:\n"; 
-    cout   <<  recsph[1].crds.x 
-    << " " <<  recsph[1].crds.y 
-    << " " <<  recsph[1].crds.z << endl; 
-    cout   <<  "Atom 3, for diherdral sampling\n"; 
-    cout   <<  recsph[2].crds.x 
-    << " " <<  recsph[2].crds.y 
-    << " " <<  recsph[2].crds.z << endl; 
-
-
-    // vec2 = vector pointing from dummy2 to heavy2 in frag2 (dummy2 is at the origin)
-    DOCKVector vec2;
-    vec2.x = mol.x[dummy2];
-    vec2.y = mol.y[dummy2];
-    vec2.z = mol.z[dummy2];
-
-    // Declare some variables
-    float dot;          // dot product value of vec1 and vec2
-    float vec1_magsq;   // vec1 magnitude-squared
-    float vec2_magsq;   // vec2 magnitude-squared
-    float cos_theta;    // cosine of theta
-    float sin_theta;    // sine of theta
-
-    // Compute the dot product using the function in utils.cpp
-    dot = dot_prod(vec1, vec2);
-
-    // Compute these magnitudes (squared)
-    vec1_magsq = (vec1.x * vec1.x) + (vec1.y * vec1.y) + (vec1.z * vec1.z);
-    vec2_magsq = (vec2.x * vec2.x) + (vec2.y * vec2.y) + (vec2.z * vec2.z);
-
-    // Compute cosine and sine of theta (theta itself is not actually calculated)
-    if (vec1_magsq != 0.0 && vec2_magsq != 0.0 ){
-      cos_theta = dot / (sqrt (vec1_magsq * vec2_magsq));
-    }
-    else{ // this only happens if the vector are already aligned, I think. 
-      cos_theta = 1;
-    }
-    sin_theta = sqrt (1 - (cos_theta * cos_theta));
-
-    cout << dot << " " <<
-            vec1_magsq << " " <<
-            vec2_magsq << " " <<
-            cos_theta << " " <<
-            sin_theta ;
-
-    // Step 4. Rotate vec2 to be coincident with vec1
-
-    // If cos_theta is -1, the vectors are parallel but in the opposite direction
-    if (cos_theta == -1){
-
-        // Declare the rotation matrix and rotate frag2
-        double finalmat[3][3] = { { -1, 0, 0}, {0, -1, 0}, {0, 0, -1} };
-        mol.rotate_mol(finalmat);
-    }
-
-    // If cos_theta is 1, vec1 and vec2 are already parallel - only translation is needed.
-    // Otherwise, enter this loop and calculate out how to rotate frag2
-    else if (cos_theta != 1) {
-
-        // Calculate cross product of vec1 and vec2 to get U (function from utils.cpp)
-        DOCKVector normalU = cross_prod(vec1, vec2);
-
-        // Calculate cross product of vec2 and U to get ~W
-        DOCKVector normalW = cross_prod(vec2, normalU);
-
-        // Normalize the vectors
-        vec2 = vec2.normalize_vector();
-        normalU = normalU.normalize_vector();
-        normalW = normalW.normalize_vector();
-
-
-        // (1) Make coordinate rotation matrix, which rotates {e1, e2, e3} coordinate to
-        // {normalW, vec2, normalU} coordinate
-        float coorRot[3][3];
-        coorRot[0][0] = normalW.x;  coorRot[0][1] = vec2.x;  coorRot[0][2] = normalU.x;
-        coorRot[1][0] = normalW.y;  coorRot[1][1] = vec2.y;  coorRot[1][2] = normalU.y;
-        coorRot[2][0] = normalW.z;  coorRot[2][1] = vec2.z;  coorRot[2][2] = normalU.z;
-
-
-        // (2) Make rotation matrix, which rotates vec2 theta angle on a plane of vec2 and normalW
-        // to the direction of normalW
-        float planeRot[3][3];
-        planeRot[0][0] =  cos_theta;  planeRot[0][1] = sin_theta;  planeRot[0][2] = 0;
-        planeRot[1][0] = -sin_theta;  planeRot[1][1] = cos_theta;  planeRot[1][2] = 0;
-        planeRot[2][0] =          0;  planeRot[2][1] =         0;  planeRot[2][2] = 1;
-
-
-        // (3) Make inverse  matrix of coorRot matrix - since coorRot is an orthogonal matrix,
-        // the inverse is its transpose, (coorRot)^T
-        float invcoorRot[3][3];
-        invcoorRot[0][0] = coorRot[0][0];  invcoorRot[0][1] = coorRot[1][0];
-        invcoorRot[0][2] = coorRot[2][0];
-       
-        invcoorRot[1][0] = coorRot[0][1];  invcoorRot[1][1] = coorRot[1][1];
-        invcoorRot[1][2] = coorRot[2][1];
-
-        invcoorRot[2][0] = coorRot[0][2];  invcoorRot[2][1] = coorRot[1][2];
-        invcoorRot[2][2] = coorRot[2][2];
-
-        // (4) Multiply three matrices together:  [coorRot * planeRot * invcoorRot]
-        float temp[3][3];
-        double finalmat[3][3];
-
-        // First multiply coorRot * planeRot, save as temp
-        for (int i=0; i<3; i++){
-            for (int j=0; j<3; j++){
-                temp[i][j] = 0.0;
-                for (int k=0; k<3; k++){
-                    temp[i][j] += coorRot[i][k]*planeRot[k][j];
-                }
-            }
-        }
-
-        // Then multiply temp * invcoorRot, save as finalmat
-        for (int i=0; i<3; i++){
-            for (int j=0; j<3; j++){
-                finalmat[i][j] = 0.0;
-                for (int k=0; k<3; k++){
-                    finalmat[i][j] += temp[i][k]*invcoorRot[k][j];
-                }
-            }
-        }
-
-        // Rotate frag2 using finalmat[3][3]
-        mol.rotate_mol(finalmat);
-    }
-
-    Write_Mol2(mol, myfile);
-
-    // Step 5. Translate frag2 to frag1
-
-    // This is the translation vector to move dummy2 to heavy1 (dummy2 is at the origin)
-    DOCKVector trans2;
-    trans2.x = recsph[1].crds.x;
-    trans2.y = recsph[1].crds.y;
-    trans2.z = recsph[1].crds.z;
-
-    // Use the dockmol function to translate frag2
-    mol.translate_mol(trans2);
-    Write_Mol2(mol, myfile);
-
-    //SCOREMol        tmp_mol;
-    //float           mol_score;
-
-*/
-
-   /**************************************
- *     
- *                     ( Ligand )
- *                     o a4
- *                    /
- *                   /
- *       a2  o---(---o a3
- *          /    di
- *         /
- *     a1 o
- *   (Receptor)
- *
- *  a1 is sphere 3
- *  a2 is sphere 2 and dummy 2
- *  a3 is sphere 1 and dummy 1 (this is the attachement point
- *  a4 is is a ligand atom
- *  di is the dihideral to sample
- *
-   ***************************************/ 
-/*
-   
-
-    float angle = 0.0;
-    while (angle < 2*PI){ // 360 degrees == 2*PI radians
-      myfile << "######## angle:  " << angle << endl;
-      set_torsion(
-      recsph[2].crds.x, mol.x[dummy1],  mol.x[dummy2], mol.x[atomtag],
-      recsph[2].crds.y, mol.y[dummy1],  mol.y[dummy2], mol.y[atomtag],
-      recsph[2].crds.z, mol.z[dummy1],  mol.z[dummy2], mol.z[atomtag],  
-      angle, mol);
-      anchor_positions.push_back(tmp_mol);
-      copy_molecule(anchor_positions[anchor_positions.size() - 1].
-                          second, mol);
-      Write_Mol2(mol,myfile); 
-
-      angle = angle + (10.0 * (PI/180.0)); // 10 degree incraments
-    }
-    myfile.close();
-
-
-}
-*/
 bool
 CG_Conformer_Search::submit_anchor_orientation(DOCKMol & mol, bool more_orients)
 {
@@ -1121,160 +917,6 @@ CG_Conformer_Search::submit_anchor_orientation(DOCKMol & mol, bool more_orients)
 
 }
 
-/*************************************/
-// This function seems to be using simple rotation matrices
-// Why not use the fancy quternion stuff? :sudipto
-// this function is is modifed from that which is in ?? 
-// note that the angles is the new dihideral angle requested.
-void
-CG_Conformer_Search::set_torsion(float x0, float x1, float x2, float x3, 
- float y0 , float y1, float y2, float y3, 
- float z0 , float z1, float z2, float z3, 
- float angle, DOCKMol & mol)
-{
-    //int             tor[4];
-    //vector < int   >atoms;
-    float           v1x,
-                    v1y,
-                    v1z,
-                    v2x,
-                    v2y,
-                    v2z,
-                    v3x,
-                    v3y,
-                    v3z;
-    float           c1x,
-                    c1y,
-                    c1z,
-                    c2x,
-                    c2y,
-                    c2z,
-                    c3x,
-                    c3y,
-                    c3z;
-    float           c1mag,
-                    c2mag,
-                    radang,
-                    costheta,
-                    m[9];
-    float           nx,
-                    ny,
-                    nz,
-                    mag,
-                    rotang,
-                    sn,
-                    cs,
-                    t,
-                    tx,
-                    ty,
-                    tz;
-    int             i,
-                    j,
-                    idx;
-
-
-    // calculate the torsion angle
-    v1x = x0 - x1;
-    v2x = x1 - x2;
-    v1y = y0 - y1;
-    v2y = y1 - y2;
-    v1z = z0 - z1;
-    v2z = z1 - z2;
-    v3x = x2 - x3;
-    v3y = y2 - y3;
-    v3z = z2 - z3;
-
-    c1x = v1y * v2z - v1z * v2y;
-    c2x = v2y * v3z - v2z * v3y;
-    c1y = -v1x * v2z + v1z * v2x;
-    c2y = -v2x * v3z + v2z * v3x;
-    c1z = v1x * v2y - v1y * v2x;
-    c2z = v2x * v3y - v2y * v3x;
-    c3x = c1y * c2z - c1z * c2y;
-    c3y = -c1x * c2z + c1z * c2x;
-    c3z = c1x * c2y - c1y * c2x;
-
-    c1mag = pow(c1x, 2) + pow(c1y, 2) + pow(c1z, 2);
-    c2mag = pow(c2x, 2) + pow(c2y, 2) + pow(c2z, 2);
-
-    if (c1mag * c2mag < 0.01)
-        costheta = 1.0;         // avoid div by zero error
-    else
-        costheta = (c1x * c2x + c1y * c2y + c1z * c2z) / (sqrt(c1mag * c2mag));
-
-    if (costheta < -0.999999)
-        costheta = -0.999999f;
-    if (costheta > 0.999999)
-        costheta = 0.999999f;
-
-    if ((v2x * c3x + v2y * c3y + v2z * c3z) > 0.0)
-        radang = -acos(costheta);
-    else
-        radang = acos(costheta);
-
-    // 
-    // now we have the torsion angle (radang) - set up the rot matrix
-    // 
-
-    // find the difference between current and requested
-    rotang = angle - radang;
-
-    sn = sin(rotang);
-    cs = cos(rotang);
-    t = 1 - cs;
-
-    // normalize the rotation vector
-    mag = sqrt(pow(v2x, 2) + pow(v2y, 2) + pow(v2z, 2));
-    nx = v2x / mag;
-    ny = v2y / mag;
-    nz = v2z / mag;
-
-    // set up the rotation matrix
-    m[0] = t * nx * nx + cs;
-    m[1] = t * nx * ny + sn * nz;
-    m[2] = t * nx * nz - sn * ny;
-    m[3] = t * nx * ny - sn * nz;
-    m[4] = t * ny * ny + cs;
-    m[5] = t * ny * nz + sn * nx;
-    m[6] = t * nx * nz + sn * ny;
-    m[7] = t * ny * nz - sn * nx;
-    m[8] = t * nz * nz + cs;
-
-    // 
-    // now the matrix is set - time to rotate the atoms
-    // 
-    tx = x1;
-    ty = y1;
-    tz = z1;
-
-    //for (i = 0; i < mol.num_atoms; i++) {
-        //j = atoms[i];
-    for (j = 0; j < mol.num_atoms; j++) {
-
-        // for(i=0;i<num_atoms;i++) {
-        // j = i;
-
-        // if(child_list[a2*num_atoms + i] == a3) { //////////////
-
-        mol.x[j] -= tx;
-        mol.y[j] -= ty;
-        mol.z[j] -= tz;
-
-        nx = mol.x[j] * m[0] + mol.y[j] * m[1] + mol.z[j] * m[2];
-        ny = mol.x[j] * m[3] + mol.y[j] * m[4] + mol.z[j] * m[5];
-        nz = mol.x[j] * m[6] + mol.y[j] * m[7] + mol.z[j] * m[8];
-
-        mol.x[j] = nx;
-        mol.y[j] = ny;
-        mol.z[j] = nz;
-        mol.x[j] += tx;
-        mol.y[j] += ty;
-        mol.z[j] += tz;
-
-        // } /////////////////////////
-    }
-
-}
 
 // +++++++++++++++++++++++++++++++++++++++++
 float
@@ -1404,7 +1046,7 @@ CG_Conformer_Search::grow_periphery(Master_Score & score,
     // /////////////////////////// ANCHORS //////////////////////////////
 
     if (verbose) cout << "-----------------------------------" << endl 
-         << "VERBOSE GROWTH STATS : ANCHOR #" <<  current_anchor << endl << endl;
+         << "VERBOSE GROWTH STATS : COVALENT_BOND_CONFIGURATION  #" <<  current_anchor << endl << endl;
 
     // add anchors to seed list
 

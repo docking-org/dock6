@@ -8,7 +8,7 @@
 
 
 #define VDWOFF -0.09
-#define MAX_ATOM_REC 1000
+#define MAX_ATOM_REC 2000
 #define MAX_ATOM_LIG 200
 
 #define SQR(x) ((x)*(x))
@@ -51,17 +51,23 @@ class           Chemgrid_Grid:public Base_Grid {
     FILE * grid_in;
     std::string     file_prefix;
     std::string     solv_file_prefix;
+    std::string     hsolv_file_prefix;
     FILE           *solv_grid_in;
+    FILE           *hsolv_grid_in;
     FILE           *rdsol_grid_in;
     int             dsize;      // For DelPhi grids kxr
+    bool            hsolv_flag;  // boolian to use hydrogen desolv grid
 
     float           dspacing;   // DelPhi grids kxr
     float           phi_coords[3];
     float           phi_origin[3];      // DelPhi grid box origin kxr
     float           oldmid[3];  // DelPhi grid box center kxr
     int             dspan[3];   // kxr
-    int             solv_grd_ex[3];
+    //int             solv_grd_ex[3]; // top corner of the desolv box
+    float           solv_grd_ex[3]; // top corner of the desolv box
+    int             solv_grd_N[3]; // grid dimensions 
     int             perang;
+
 
     XYZCRD          phi_corners[8];     // kxr
     int             phi_neighbors[8];   // kxr
@@ -84,6 +90,7 @@ class           Chemgrid_Grid:public Base_Grid {
     float          *bvdw;
     float          *es;
     float          *dslx;
+    float          *hdslx; // hydrogen desolvation grid, TEB 2020
     float          *dslb;
     int             atom_model;
     int             att_exp, rep_exp;
@@ -94,7 +101,7 @@ class           Chemgrid_Grid:public Base_Grid {
     void            read_chm_grid();
     void            read_odm_grid();
     void            read_rdsol_grid();
-    void            read_solv_grid();
+    void            read_solv_grid(bool);
         // DelPhi BKS interpolation data kxr
     void            phi_corner_coords();        // kxr
     bool            phi_box_boundaries(float x, float y, float z);      // kxr
@@ -116,7 +123,7 @@ class           Chemgrid_Score:public Base_Score {
     std::string     atomic_contrib;
     bool            use_chemgrid_score; // for chemgrid scoring kxr
     bool            use_conf_entropy;   // for conf entropy from rot bonds kxr
-    bool            add_ligand_internal;// for adding ligand internal energy to score kx
+//    bool            add_ligand_internal;// for adding ligand internal energy to score kx
     bool            use_solv_score;     // for solvent occlusion score kxr
     bool            redist_pos_desol;   // for redistributing positive desolvation
     bool            use_odm_score;      // for occlusion desolvation method kxr
@@ -125,6 +132,7 @@ class           Chemgrid_Score:public Base_Score {
     bool            write_atomic_energy;
     bool            use_delphi_score;   // for delphi elec. score kxr
     int             interpol_method;    // For choosing interpolation method
+    bool            hsolv_flag;  // boolian to use hydrogen desolv grid
 
     
     // Receptor desolvation grid globals kxr 0306
@@ -149,6 +157,7 @@ class           Chemgrid_Score:public Base_Score {
     void            input_parameters(Parameter_Reader & parm,
                                      bool & primary_score,
                                      bool & secondary_score);
+    void            input_parameters_main(Parameter_Reader & parm, std::string parm_head);
     void            initialize(AMBER_TYPER &);
     bool            compute_score(DOCKMol & mol);
     std::string     output_score_summary(float, float);
@@ -168,6 +177,8 @@ class           Chemgrid_Score:public Base_Score {
     bool            compute_ligand_desolvation(DOCKMol & mol, int atom_id);     // Lig. 
                                                                                 // desolvation 
 
+    bool            compute_ligand_desolvation_interpolate(DOCKMol & mol, int atom_id , float &, float &);     // Lig. 
+                                                                                            // desolvation TEB add on 2020/02/11
     // Receptor desolvation kxr
     float           rdsol_score;
     float           solx_val;

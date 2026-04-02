@@ -4,9 +4,11 @@
 #include <string.h>
 #include <sstream>
 #include "utils.h"
+#include "dockmol.h"
 
 using namespace std;
 
+class DOCKMol;
 
 // +++++++++++++++++++++++++++++++++++++++++
 int
@@ -799,5 +801,221 @@ float check_neg_angle(float v1[3],float v2[3],float M[3][3]){
          cout << "angle is negative" << endl;
          return -1.0;
      }
+}
+
+// This is to bring the DOCKMol to swing to the x axis and rotate at specified rotation
+// ONLY use when the molecule is translate to the origin.
+void
+rotate_on_x_axis(DOCKMol & tmp_mol, int origin_atomnum, int nbr_atomnum, float radians_turned){
+
+    // vec1 atom(origin) to the neighboring atom
+    DOCKVector vec1;
+
+    //get the neigherboing atom coor that is
+    // connected to the du atom
+
+    vec1.x = tmp_mol.x[nbr_atomnum];
+    vec1.y = tmp_mol.y[nbr_atomnum];
+    vec1.z = tmp_mol.z[nbr_atomnum];
+
+    //vec2 is origin pointing along x axis
+    DOCKVector vec2;
+    vec2.x = 1.00;
+    vec2.y = 0.0; 
+    vec2.z = 0.0; 
+  
+
+    // Declare some variables
+    float dot = 0.0; 
+    float vec1_magsq = 0.0;
+    float vec2_magsq = 0.0;
+    float cos_theta = 0.0;
+    float sin_theta = 0.0;
+    double finalmat[3][3];
+
+    //Compute dot product 
+    dot = dot_prod(vec1, vec2);
+
+    //Compute magnitudes squared
+    vec1_magsq = (vec1.x * vec1.x) + (vec1.y * vec1.y) + (vec1.z * vec1.z);
+    vec2_magsq = (vec2.x * vec2.x) + (vec2.y * vec2.y) + (vec2.z * vec2.z);
+
+    // Compute cos/sin theta
+    cos_theta = dot / (sqrt (vec1_magsq * vec2_magsq));
+ 
+    // Some numerical stuff to avoid 
+    if (cos_theta >= 1.0){
+        cos_theta = 1.0; 
+        sin_theta = 0.0; 
+    }
+    else if (cos_theta <= -1.0){
+        cos_theta = -1.0;
+        sin_theta = 0.0; 
+    }
+    else{
+        sin_theta = sqrt (1 - (cos_theta * cos_theta));
+    }
+
+    // if cos_theta = -1, vectors are parallel in opposite directions
+    if (cos_theta == -1){ 
+
+        //Declare the rotation matrix and rotate 
+        //float finalmat = { { -1, 0, 0}, {0, -1, 0}, {0, 0, -1} };
+ 
+        finalmat[0][0] =  -1; finalmat[0][1] =   0; finalmat[0][2] =   0; 
+        finalmat[1][0] =   0; finalmat[1][1] =  -1; finalmat[1][2] =   0; 
+        finalmat[2][0] =   0; finalmat[2][1] =   0; finalmat[2][2] =  -1;     
+
+        tmp_mol.rotate_mol(finalmat); 
+
+    } else if (cos_theta == 1){
+        finalmat[0][0] =  1; finalmat[0][1] = 0; finalmat[0][2] = 0;
+        finalmat[1][0] =  0; finalmat[1][1] = 1; finalmat[1][2] = 0;
+        finalmat[2][0] =  0; finalmat[2][1] = 0; finalmat[2][2] = 1;
+
+        tmp_mol.rotate_mol(finalmat); 
+
+    //If cos_theta is 1, vec1 and vec2 are perfect
+    //Otherwise, enter this loop and calculate lots of stuff
+    } else if (cos_theta != 1) { 
+        //Calculate cross product of vec1 and vec2 to get U
+        DOCKVector normalU = cross_prod(vec1, vec2);
+
+        //Calc cross product of vec2 and U to get ~W
+        DOCKVector normalW = cross_prod(vec2, normalU);
+
+        // Normalize the vectors
+        vec2 = vec2.normalize_vector();
+        normalU = normalU.normalize_vector();
+        normalW = normalW.normalize_vector();
+
+
+        // Make coorinate rotation matrix, which rotates coordinates to normalW, vec2, normalU coordinates
+        float coorRot[3][3];
+        coorRot[0][0] = normalW.x;  
+        coorRot[0][1] = vec2.x;  
+        coorRot[0][2] = normalU.x;
+        coorRot[1][0] = normalW.y;  
+        coorRot[1][1] = vec2.y;  
+        coorRot[1][2] = normalU.y;
+        coorRot[2][0] = normalW.z;  
+        coorRot[2][1] = vec2.z;  
+        coorRot[2][2] = normalU.z;
+
+        // make inverse matrix of coordRot matrix - since coorRot is an orthonal matrix 
+        // the inverse if its transpose, coorRot^T
+        float invcoorRot[3][3];
+        invcoorRot[0][0] = coorRot[0][0];  
+        invcoorRot[0][1] = coorRot[1][0];
+        invcoorRot[0][2] = coorRot[2][0];
+
+        invcoorRot[1][0] = coorRot[0][1];  
+        invcoorRot[1][1] = coorRot[1][1];
+        invcoorRot[1][2] = coorRot[2][1];
+
+        invcoorRot[2][0] = coorRot[0][2];  
+        invcoorRot[2][1] = coorRot[1][2];
+        invcoorRot[2][2] = coorRot[2][2];
+
+        // Make rotation matrix, which rotates vec2 theta angle on a plane of vec2 and normalW
+        // to the direction of normalW
+        float planeRot[3][3];
+        planeRot[0][0] =  cos_theta; planeRot[0][1] = -sin_theta; planeRot[0][2] = 0; 
+        planeRot[1][0] =  sin_theta; planeRot[1][1] =  cos_theta; planeRot[1][2] = 0; 
+        planeRot[2][0] =          0; planeRot[2][1] =          0; planeRot[2][2] = 1; 
+
+        //multiply 3 matrices together: coorRot*planeRot*invcoorRot
+        float temp[3][3];
+
+        // First multiply CoorRot * planceRot, save as temp
+        for (int i=0; i<3; i++){
+            for (int j=0; j<3; j++){
+                temp[i][j] = 0.0; 
+                for (int k=0; k<3; k++){
+                    temp[i][j] += coorRot[i][k]*planeRot[k][j];
+                }
+            }
+        }
+
+        //Then multiply temp* invcoorRot, save as finalmat
+        for (int i=0; i<3; i++){
+            for (int j=0; j<3; j++){
+                finalmat[i][j] = 0.0; 
+                for (int k=0; k<3; k++){
+                    finalmat[i][j] += temp[i][k]*invcoorRot[k][j];
+                }
+            }
+        }
+
+        //Rotate temp_mol using finalmat3/3
+        tmp_mol.rotate_mol(finalmat);   
+    }
+
+    //make rotation matrix that rotates on x axis based on radians turned
+
+    double radians_mat[3][3];
+    float x_cos_theta = cos( radians_turned );
+    float x_sin_theta = sin( radians_turned );
+
+    //// Some numerical stuff to avoid 
+    //if (x_cos_theta >= 1.0){
+    //    x_cos_theta = 1.0;
+    //    x_sin_theta = 0.0;
+    //}
+    //else if (x_cos_theta <= -1.0){
+    //    x_cos_theta = -1.0;
+    //    x_sin_theta = 0.0;
+    //}
+    //else{
+    //    x_sin_theta = sqrt (1 - (x_cos_theta * x_cos_theta));
+    //}
+
+    //// if x_cos_theta = -1, vectors are parallel in opposite directions
+    //if (x_cos_theta == -1){ 
+ 
+    //    radians_mat[0][0] =  -1; radians_mat[0][1] =   0; radians_mat[0][2] =  0; 
+    //    radians_mat[1][0] =   0; radians_mat[1][1] =  -1; radians_mat[1][2] =  0; 
+    //    radians_mat[2][0] =   0; radians_mat[2][1] =   0; radians_mat[2][2] = -1;     
+
+    //} else if (x_cos_theta == 1){
+  
+    //    radians_mat[0][0] =   1; radians_mat[0][1] =   0; radians_mat[0][2] =  0; 
+    //    radians_mat[1][0] =   0; radians_mat[1][1] =   1; radians_mat[1][2] =  0; 
+    //    radians_mat[2][0] =   0; radians_mat[2][1] =   0; radians_mat[2][2] =  1;
+    //} else {
+        
+        radians_mat[0][0] =  1; radians_mat[0][1] =           0; radians_mat[0][2] =            0; 
+        radians_mat[1][0] =  0; radians_mat[1][1] = x_cos_theta; radians_mat[1][2] = -x_sin_theta; 
+        radians_mat[2][0] =  0; radians_mat[2][1] = x_sin_theta; radians_mat[2][2] =  x_cos_theta;     
+    //}
+
+    tmp_mol.rotate_mol(radians_mat);
+
+    //std::cout << " == " << std::endl;
+    //std::cout << "tmp_mol.energy " << tmp_mol.energy << std::endl;
+    //std::cout << "x_cos_theta " << x_cos_theta << " x_sin_theta "  << x_sin_theta << std::endl;
+    //for (int i=0;i<3;i++){
+    //    for (int j =0;j<3;j++) {
+    //        std::cout << i << " " << j << ": " << radians_mat[i][j] << std::endl;
+    //    }
+    //}
+
+    //revert back to original place via reverse swinging
+    double invcoorFinalMat[3][3];
+    invcoorFinalMat[0][0] = finalmat[0][0];  
+    invcoorFinalMat[0][1] = finalmat[1][0];
+    invcoorFinalMat[0][2] = finalmat[2][0];
+
+    invcoorFinalMat[1][0] = finalmat[0][1];  
+    invcoorFinalMat[1][1] = finalmat[1][1];
+    invcoorFinalMat[1][2] = finalmat[2][1];
+
+    invcoorFinalMat[2][0] = finalmat[0][2];  
+    invcoorFinalMat[2][1] = finalmat[1][2];
+    invcoorFinalMat[2][2] = finalmat[2][2];
+
+    tmp_mol.rotate_mol(invcoorFinalMat);
+ 
+    return;
 }
 

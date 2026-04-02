@@ -14,6 +14,7 @@ grid_score_primary                                           yes
 grid_score_rep_rad_scale                                     1
 grid_score_vdw_scale                                         1
 grid_score_es_scale                                          1
+grid_lig_efficiency                                          no
 grid_score_grid_prefix                                       ../grid_generation/grid
 minimize_ligand                                              yes
 simplex_max_iterations                                       1000
@@ -24,6 +25,7 @@ simplex_cycle_converge                                       1.0
 simplex_trans_step                                           1.0
 simplex_rot_step                                             0.1
 simplex_tors_step                                            10.0
+simplex_final_min                                            no
 simplex_random_seed                                          0
 simplex_restraint_min                                        no
 atom_model                                                   all
@@ -31,6 +33,8 @@ vdw_defn_file                                                ../../../parameters
 flex_defn_file                                               ../../../parameters/flex.defn
 flex_drive_file                                              ../../../parameters/flex_drive.tbl
 ligand_outfile_prefix                                        minimize1
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no

@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released September 2024
 Copyright UCSF
 --------------------------------------
 
@@ -60,7 +60,11 @@ grid_score_primary                                           yes
 grid_score_rep_rad_scale                                     1
 grid_score_vdw_scale                                         1
 grid_score_es_scale                                          1
+grid_lig_efficiency                                          no
 grid_score_grid_prefix                                       ../3_grid/grid
+
+GIST Score Parameters
+------------------------------------------------------------------------------------------
 
 MultiGrid Score Parameters
 ------------------------------------------------------------------------------------------
@@ -109,6 +113,7 @@ simplex_cycle_converge                                       1.0
 simplex_trans_step                                           1.0
 simplex_rot_step                                             0.1
 simplex_tors_step                                            10.0
+simplex_final_min                                            no
 simplex_random_seed                                          0
 simplex_restraint_min                                        no
 
@@ -122,11 +127,14 @@ flex_drive_file                                              ../../../parameters
 Molecule Library Output Parameters
 ------------------------------------------------------------------------------------------
 ligand_outfile_prefix                                        rigid
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
 Initializing Library File Routines...
+
 Initializing Orienting Routines...
 Initializing Grid Score Routines...
  Reading the energy grid from ../3_grid/grid.nrg
@@ -137,17 +145,20 @@ Initializing Grid Score Routines...
 -----------------------------------
 Molecule: UNNAMED
 
- Elapsed time for docking:	2.502 seconds
+ Elapsed time for docking:	2.618 seconds
 
  Anchors:		1
  Orientations:		1000
  Conformations:		1000
 
-                          Grid_Score:          -29.553888
-                     Grid_vdw_energy:          -22.534115
-                      Grid_es_energy:           -7.019773
-           Internal_energy_repulsive:            0.888303
+                          Grid_Score:          -29.553905
+                     Grid_vdw_energy:          -22.534143
+                      Grid_es_energy:           -7.019761
+           Internal_energy_repulsive:            0.888298
 
 
 1 Molecules Processed
-Total elapsed time:	2.519 seconds
+Total elapsed time:	2.635 seconds
+Number of molecules per second:	0.380
+Virtual memory used for this process: 99500 kilobytes
+Physical memory used for this process: 15304 kilobytes

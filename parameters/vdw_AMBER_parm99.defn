@@ -248,7 +248,7 @@ valence		2
 gbradii		1.50
 gbscale		0.85
 
-definition	O.3 ( 2 H )
+definition	O.t3p ( 2 H )
 _____________________________________
 name            Sulfur
 atom_model      either
@@ -465,8 +465,8 @@ radius          0.000
 well_depth      0.000
 heavy_flag      0
 valence         10
-gbradii		0.000
-gbscale		0.000
+gbradii         0.000
+gbscale         0.000
 
 definition      Du
 _____________________________________

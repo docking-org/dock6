@@ -218,6 +218,10 @@ Footprint_Similarity_Score::input_parameters_main(Parameter_Reader & parm,
         if (tmp == "yes")
             fps_normalize_foot = true;
     }
+    else {
+        cout << fps_foot_compare_type << " is not a valid choice. Pearson or Euclidean" << endl;
+        exit(0);
+    } 
 
     // use all residues; yes or no
     tmp = parm.query_param(parm_head+"_foot_comp_all_residue", "yes", "yes no");
@@ -562,6 +566,17 @@ Footprint_Similarity_Score::compute_footprint(DOCKMol & mol)
                 dist = sqrt(((mol.x[i] - receptor.x[j])*(mol.x[i] - receptor.x[j])) +
                             ((mol.y[i] - receptor.y[j])*(mol.y[i] - receptor.y[j])) + 
                             ((mol.z[i] - receptor.z[j])*(mol.z[i] - receptor.z[j])));
+
+                // for covalent docking we use a dummy atoms that likely overlaps with a receptor atom. 
+                // if the distance is 0.0 then check if it is a dummy atom.  
+                if (dist < 0.0001 and mol.atom_types[i] == "Du"){
+                //if (mol.atom_types[i] == "Du"){
+                     // the dummy should have 0.0 charge and 0.0 vdw radius. 
+                     // skipe to next atom
+                     cout << "Dummy atom too close. skip to next atom. " << endl;
+                     continue;
+                }
+
                 //added by jwu for test
                 double temp;
                 //jwu_temp is just a temp variable to store the increase

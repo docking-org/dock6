@@ -5,7 +5,6 @@
 ##########                       Formal_Charge:                   0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
-##########                         Heavy_Atoms:                   0
 
 @<TRIPOS>MOLECULE
 ZINC00013564
@@ -60,7 +59,6 @@ bcc
 ##########                       Formal_Charge:                   0
 ##########                     HBond_Acceptors:                   1
 ##########                        HBond_Donors:                   0
-##########                         Heavy_Atoms:                   0
 
 @<TRIPOS>MOLECULE
 ZINC01555236
@@ -135,7 +133,6 @@ bcc
 ##########                       Formal_Charge:                   0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
-##########                         Heavy_Atoms:                   0
 
 @<TRIPOS>MOLECULE
 ZINC00150863

@@ -6,6 +6,7 @@ min_anchor_size                                              5
 pruning_use_clustering                                       yes
 pruning_max_orients                                          10
 pruning_clustering_cutoff                                    10
+pruning_orient_score_cutoff                                  1000.0
 pruning_conformer_score_cutoff                               100.0
 pruning_conformer_score_scaling_factor                       1.0
 use_clash_overlap                                            no
@@ -32,6 +33,7 @@ bump_filter                                                  no
 score_molecules                                              yes
 contact_score_primary                                        no
 grid_score_primary                                           no
+gist_score_primary                                           no
 multigrid_score_primary                                      no
 dock3.5_score_primary                                        no
 continuous_score_primary                                     no
@@ -45,6 +47,8 @@ descriptor_use_pharmacophore_score                           no
 descriptor_use_tanimoto                                      no
 descriptor_use_hungarian                                     no
 descriptor_use_volume_overlap                                yes
+descriptor_use_gist                                          no
+descriptor_use_dock3.5                                       no
 descriptor_grid_score_rep_rad_scale                          1
 descriptor_grid_score_vdw_scale                              1
 descriptor_grid_score_es_scale                               1
@@ -54,15 +58,15 @@ descriptor_volume_score_overlap_compute_method               analytical
 descriptor_weight_grid_score                                 1
 descriptor_weight_volume_overlap_score                       -40
 minimize_ligand                                              no
+simplex_final_min                                            no
 atom_model                                                   all
 vdw_defn_file                                                ../../../parameters/vdw_AMBER_parm99.defn
 flex_defn_file                                               ../../../parameters/flex.defn
 flex_drive_file                                              ../../../parameters/flex_drive.tbl
 chem_defn_file                                               ../../../parameters/chem.defn
 ligand_outfile_prefix                                        Des_VOS+SGE
+write_mol_solvation                                          no
 write_orientations                                           no
-num_scored_conformers                                        5
-write_conformations                                          no
-cluster_conformations                                        yes
-cluster_rmsd_threshold                                       2.0
+num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no

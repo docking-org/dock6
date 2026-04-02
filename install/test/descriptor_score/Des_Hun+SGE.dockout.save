@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released September 2024
 Copyright UCSF
 --------------------------------------
 
@@ -22,6 +22,7 @@ min_anchor_size                                              40
 pruning_use_clustering                                       yes
 pruning_max_orients                                          10
 pruning_clustering_cutoff                                    100
+pruning_orient_score_cutoff                                  1000.0
 pruning_conformer_score_cutoff                               100.0
 pruning_conformer_score_scaling_factor                       1.0
 use_clash_overlap                                            no
@@ -74,6 +75,10 @@ Grid Score Parameters
 ------------------------------------------------------------------------------------------
 grid_score_primary                                           no
 
+GIST Score Parameters
+------------------------------------------------------------------------------------------
+gist_score_primary                                           no
+
 MultiGrid Score Parameters
 ------------------------------------------------------------------------------------------
 multigrid_score_primary                                      no
@@ -110,6 +115,8 @@ descriptor_use_pharmacophore_score                           no
 descriptor_use_tanimoto                                      no
 descriptor_use_hungarian                                     yes
 descriptor_use_volume_overlap                                no
+descriptor_use_gist                                          no
+descriptor_use_dock3.5                                       no
 
 --- Descriptor Score Parameters: Grid Score ---
 descriptor_grid_score_rep_rad_scale                          1
@@ -157,6 +164,7 @@ simplex_tors_step                                            10.0
 simplex_anchor_max_iterations                                500
 simplex_grow_max_iterations                                  20
 simplex_grow_tors_premin_iterations                          0
+simplex_final_min                                            no
 simplex_random_seed                                          0
 simplex_restraint_min                                        no
 
@@ -170,13 +178,16 @@ flex_drive_file                                              ../../../parameters
 Molecule Library Output Parameters
 ------------------------------------------------------------------------------------------
 ligand_outfile_prefix                                        Des_Hun+SGE
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
 
 Initializing Conformer Generator Routines...
 Initializing Library File Routines...
+
 Initializing Orienting Routines...
 Initializing typer for Grid Score within Descriptor Score...
 Initializing Grid Score Routines...
@@ -189,22 +200,25 @@ Initializing Hungarian computation within Descriptor Score...
 -----------------------------------
 Molecule:  C1 
 
- Elapsed time for docking:	1.186 seconds
+ Elapsed time for docking:	1.312 seconds
 
  Anchors:		1
  Orientations:		100
- Conformations:		13
+ Conformations:		12
 
-                    Descriptor_Score:          -41.516785
-                          Grid_Score:          -37.025047
-                desc_Grid_vdw_energy:          -34.232349
-                 desc_Grid_es_energy:           -2.792699
- Hungarian_Matching_Similarity_Score:           -4.491737
+                    Descriptor_Score:          -42.228149
+                          Grid_Score:          -37.528290
+                desc_Grid_vdw_energy:          -34.178112
+                 desc_Grid_es_energy:           -3.350179
+ Hungarian_Matching_Similarity_Score:           -4.699858
        desc_HMS_num_unmtchd_hvy_atms:                   0
            desc_HMS_num_ref_hvy_atms:                  23
-        desc_HMS_rmsd_mtchd_hvy_atms:            0.508263
-           Internal_energy_repulsive:           36.686218
+        desc_HMS_rmsd_mtchd_hvy_atms:            0.300142
+           Internal_energy_repulsive:            8.397934
 
 
 1 Molecules Processed
-Total elapsed time:	1.193 seconds
+Total elapsed time:	1.317 seconds
+Number of molecules per second:	0.759
+Virtual memory used for this process: 93276 kilobytes
+Physical memory used for this process: 20488 kilobytes

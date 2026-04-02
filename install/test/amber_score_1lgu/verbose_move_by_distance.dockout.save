@@ -2,9 +2,9 @@
 
 
 --------------------------------------
-DOCK v6.11
+DOCK v6.12
 
-Released November 2023
+Released September 2024
 Copyright UCSF
 --------------------------------------
 
@@ -48,6 +48,10 @@ contact_score_primary                                        no
 Grid Score Parameters
 ------------------------------------------------------------------------------------------
 grid_score_primary                                           no
+
+GIST Score Parameters
+------------------------------------------------------------------------------------------
+gist_score_primary                                           no
 
 MultiGrid Score Parameters
 ------------------------------------------------------------------------------------------
@@ -112,11 +116,14 @@ amber_score_abort_on_unprepped_ligand                        yes
 Molecule Library Output Parameters
 ------------------------------------------------------------------------------------------
 ligand_outfile_prefix                                        move_by_distance
+write_mol_solvation                                          no
 write_orientations                                           no
 num_scored_conformers                                        1
+score_threshold                                              100.0
 rank_ligands                                                 no
 ------------------------------------------------------------------------------------------
 Initializing Library File Routines...
+
 Initializing Amber_Score...
 
 Reading the receptor input files.
@@ -332,7 +339,7 @@ Energy of the ligand lig.1 is -67.5808157458
 -----------------------------------
 Molecule: AAH
 
- Elapsed time for docking:	1.517 seconds
+ Elapsed time for docking:	1.728 seconds
 
  Anchors:		1
  Orientations:		1
@@ -345,4 +352,7 @@ Molecule: AAH
 
 
 1 Molecules Processed
-Total elapsed time:	3.282 seconds
+Total elapsed time:	3.427 seconds
+Number of molecules per second:	0.292
+Virtual memory used for this process: 117644 kilobytes
+Physical memory used for this process: 36236 kilobytes

@@ -356,7 +356,11 @@ GIST_Grid::read_gist_grid(string filename)
        fgets(line, 500, grid_in); // get last line
        sscanf(line, "%f\n",&read_gist[count]);
     }
+    else if(remainder == 0) {
+       // do nothing
+    }
     else {
+       cout << "remainder = " << remainder << endl;
        cout << "something is wrong . . ." << endl;
        exit(0);
     }
@@ -376,7 +380,7 @@ GIST_Grid::read_gist_grid(string filename)
           }
        }
     }
-    
+     
 /*
     // make sure things are right
     float  cx,cy,cz; // cords. 
@@ -395,21 +399,39 @@ GIST_Grid::read_gist_grid(string filename)
        }
     } 
 */    
+
     calc_corner_coords();
+
+    //cout << spacing << " " << x_min << " " << x_max << " " << y_min << " " << y_max << " " << z_min << " " << z_max << endl;
+    // pad
+    /*
+    float pad = 1.0;
+    x_min = x_min + pad;
+    x_max = x_max - pad;
+    y_min = y_min + pad;
+    y_max = y_max - pad;
+    z_min = z_min + pad;
+    z_max = z_max - pad;
+    */
+    delete[] read_gist; 
     //exit(0);
 }
 
 /******************************************/
 float
-GIST_Grid :: atomic_displacement(float x, float y, float z, float radius, bool* & boolgrid)
+//GIST_Grid :: atomic_displacement(float x, float y, float z, float radius, bool* boolgrid)
+GIST_Grid :: atomic_displacement(float x, float y, float z, float radius, std::map<unsigned int, bool> &displacemap)
 {   
-    float radius2 = pow(radius,2); // radius squard
+    //float radius2 = pow(radius,2); // radius squard
+    float radius2 = radius*radius; // radius squard
     float dist2;
     float sum = 0;
     int ind;
-    int box_about_side = ceil(radius / spacing * 2.0 ); // this is the size of one side of  box that contains the atom.
-    int hbox_about_side = ceil(radius / spacing ); // this is half the size of one side of  box that contains the atom.
-    cout << radius << " " << spacing << " " << box_about_side <<endl;
+    //int box_about_side = ceil(radius / spacing * 2.0 ); // this is the size of one side of  box that contains the atom.
+    //int hbox_about_side = ceil(radius / spacing ); // this is half the size of one side of  box that contains the atom.
+    int box_about_side  = (ceil(radius / spacing)+1.0) * 2.0 ; // this is the size of one side of  box that contains the atom.
+    int hbox_about_side =  ceil(radius / spacing)+1.0;         // this is half the size of one side of  box that contains the atom.
+    //cout << radius << " " << spacing << " " << box_about_side <<endl;
 
     float x_int = x - origin[0];
     float y_int = y - origin[1];
@@ -434,14 +456,20 @@ GIST_Grid :: atomic_displacement(float x, float y, float z, float radius, bool* 
                 float zcor = float(za) * spacing + origin[2];
                 dist2 = pow((xcor-x),2.0)+pow((ycor-y),2.0) + pow((zcor-z),2.0);
                 //cout << dist2<< " " << radius2 << endl;
-                if (dist2<radius2) {
+                if (dist2<=radius2) {
                    //cout << "I AM HERE" << endl;
                    ind = find_grid_index(xa, ya, za);
-                   if (!boolgrid[ind]){ // check if grid point is already displaced by another atom. 
-                      //cout << "I AM HERE" << endl;
-                      //cout <<"ATOM      1  N   LEU A   4    "<<xcor<<" "<<ycor<<" "<<zcor<<" "<< gist[ind] <<endl;
-                      boolgrid[ind] = true;
-                      sum = sum+gist[ind];
+                   if (ind > size) { 
+                      cout << "Warning index too big for grid ..." << endl;
+                   } 
+                   else {
+                      bool dflag = displacemap[ind];
+                      if (!(dflag)){ // check if grid point is already displaced by another atom. 
+                         //cout << "I AM HERE" << endl;
+                         //cout <<"ATOM      1  N   LEU A   4    "<<xcor<<" "<<ycor<<" "<<zcor<<" "<< gist[ind] <<endl;
+                         displacemap[ind] = true;
+                         sum = sum+gist[ind];
+                      }
                   }
                 }
             }//za  
@@ -454,13 +482,16 @@ GIST_Grid :: atomic_displacement(float x, float y, float z, float radius, bool* 
 float
 GIST_Grid :: atomic_blurry_displacement(float x, float y, float z, float radius, float sigma2)
 {   
-    float radius2 = pow(radius,2); // radius squard
+    // float sigma2 = pow(radius/2.0,2.0);
+    //float radius2 = pow(radius,2); // radius squard
+    float radius2 = radius*radius; // radius squard
     float dist2;
     float sum = 0;
     int ind;
-    int box_about_side = ceil(radius / spacing * 2.0 ); // this is the size of one side of  box that contains the atom.
-    int hbox_about_side = ceil(radius / spacing ); // this is half the size of one side of  box that contains the atom.
-    cout << radius << " " << spacing << " " << box_about_side <<endl;
+    //int box_about_side = ceil(radius / spacing * 2.0 ); // this is the size of one side of  box that contains the atom.
+    int box_about_side  = (ceil(radius / spacing)+1.0) * 2.0 ; // this is the size of one side of  box that contains the atom.
+    int hbox_about_side =  ceil(radius / spacing)+1.0;         // this is half the size of one side of  box that contains the atom.
+    //cout << radius << " " << spacing << " " << box_about_side <<endl;
 
     float x_int = x - origin[0];
     float y_int = y - origin[1];
@@ -483,22 +514,33 @@ GIST_Grid :: atomic_blurry_displacement(float x, float y, float z, float radius,
                 float xcor = float(xa) * spacing + origin[0];
                 float ycor = float(ya) * spacing + origin[1];
                 float zcor = float(za) * spacing + origin[2];
+                //cout << xa << " " << ya << " " << za << endl;
+                //cout << xcor << " " << ycor << " " << zcor << endl;
                 dist2 = pow((xcor-x),2.0)+pow((ycor-y),2.0) + pow((zcor-z),2.0);
-                if (dist2<radius2) {
-                   float gausian_weight = (1.0/sqrt(2.0 * PI * sigma2)) * pow(EXP,(-1.0*dist2/(2.0 * sigma2)));  
+                if (dist2<=radius2) {
+                   //float gausian_weight = (1.0/sqrt(2.0 * PI * sigma2)) * pow(EXP,(-1.0*dist2/(2.0 * sigma2)));  
+                   float gausian_weight = (1.0/sqrt(2.0 * PI * sigma2)) * exp(-1.0*dist2/(2.0 * sigma2));  
                    ind = find_grid_index(xa, ya, za);
-                   sum = sum+gausian_weight*gist[ind];
+                   if (ind > size) { 
+                      cout << "Warning index too big for grid ..." << endl;
+                   } 
+                   else {
+                      //cout << "gist = " << gist[ind] << endl;
+                      //cout << "g_weight = " << gausian_weight << endl;
+                      sum = sum+gausian_weight*gist[ind];
+                   }
                 }
             }//za  
         }//ya
     }//xa
+    //cout << "sum = " << sum << endl;
     return sum;
 }
 
 
 // This will write out the grid for the displaced region 
 void
-GIST_Grid::write_gist_grid(string fname, bool* & boolgrid)
+GIST_Grid::write_gist_grid(string fname, bool* boolgrid)
 {
     FILE* grid_out = fopen(fname.c_str(), "w");
     int count = 0;
@@ -518,10 +560,12 @@ GIST_Grid::write_gist_grid(string fname, bool* & boolgrid)
                }
                if (count < 2){
                    fprintf(grid_out, " ");
-                   count = count++;
+                   count = count + 1;
                }else{
+                   //cout << "I AM HERE" << endl;
                    fprintf(grid_out, "\n");
                    count = 0;
+                   //exit(0);
                }
                cout<<"Index: "<<ind<<" "<<ind2<<endl;
                ind2++;

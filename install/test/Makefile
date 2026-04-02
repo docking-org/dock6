@@ -10,7 +10,7 @@ test: silentclean timed_test
 dirtytest: timed_test
 
 # Run all DOCK tests
-dock: sampling traditional gbsa scoresofscores amberdock filtering \
+dock: sampling traditional gist gbsa scoresofscores amberdock filtering \
 	denovo parallel chemgrid 
 
 # Run DOCK database filtering tests
@@ -25,6 +25,8 @@ sampling:
 	cd conf_gen_int_score && make -e test
 	cd ligand_io && make -e test
 	cd ligand_orienting && make -e test
+	cd db2_search && make -e test
+	cd covalent_attach_and_grow && make -e test
 	cd minimization && make -e test
 
 # Run traditional DOCK scores tests
@@ -33,6 +35,10 @@ traditional:
 	cd continuous_score && make -e test
 	cd grid_score && make -e test
 #cd primary_secondary_score && make -e test
+
+# Run DOCK gist tests
+gist:
+	cd gist_score && make -e test
 
 # Run DOCK gbsa tests
 gbsa:
@@ -113,11 +119,12 @@ valgrinddock:
 # a non-zero-sized Makefile.
 clean:
 	@( \
+	rootpwd=`pwd` ;\
 	find . -name "Makefile" ! -size 0c -print | grep -v '\./Makefile' | \
 	while read path ;\
 	do \
 	    directory=`dirname $$path` ;\
-	    cd $$directory; make clean; cd .. ;\
+	    cd $$directory; make clean; cd $$rootpwd ;\
 	done ;\
 	)
 

@@ -6,9 +6,9 @@
 ##########                     HBond_Acceptors:                   1
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                  10
-##########                          Grid_Score:           -0.554125
-##########                     Grid_vdw_energy:           -1.959602
-##########                      Grid_es_energy:            1.405477
+##########                          Grid_Score:           -0.554076
+##########                     Grid_vdw_energy:           -1.959551
+##########                      Grid_es_energy:            1.405475
 
 @<TRIPOS>MOLECULE
 ZINC00158442
@@ -80,7 +80,7 @@ bcc
 ##########                                Name:        ZINC00158751
 ##########                    Molecular_Weight:             112.152
 ##########                DOCK_Rotatable_Bonds:                   1
-##########                       Formal_Charge:         0.000100005
+##########                       Formal_Charge:                   0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                   7
@@ -126,13 +126,13 @@ bcc
 ##########                                Name:        ZINC00013564
 ##########                    Molecular_Weight:             140.206
 ##########                DOCK_Rotatable_Bonds:                   0
-##########                       Formal_Charge:         0.000199944
+##########                       Formal_Charge:                   0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                   9
-##########                          Grid_Score:          -15.287382
+##########                          Grid_Score:          -15.287383
 ##########                     Grid_vdw_energy:          -17.370550
-##########                      Grid_es_energy:            2.083168
+##########                      Grid_es_energy:            2.083167
 
 @<TRIPOS>MOLECULE
 ZINC00013564
@@ -156,7 +156,7 @@ bcc
      12 H3         21.4729    9.6148   59.3919 H       1  <0>         0.0922
      13 H4         24.7911    8.8455   61.1468 H       1  <0>         0.1263
      14 H5         24.7164    7.1165   62.9031 H       1  <0>         0.1347
-     15 H6         22.8668    7.0891   64.5539 H       1  <0>         0.1336
+     15 H6         22.8668    7.0891   64.5540 H       1  <0>         0.1336
      16 H7         21.0823    8.8081   64.4446 H       1  <0>         0.1380
      17 H8         21.1325   10.5439   62.6990 H       1  <0>         0.1646
 @<TRIPOS>BOND
@@ -184,12 +184,12 @@ bcc
 ##########                                Name:        ZINC00150863
 ##########                    Molecular_Weight:             113.183
 ##########                DOCK_Rotatable_Bonds:                   0
-##########                       Formal_Charge:         9.99719e-05
+##########                       Formal_Charge:                   0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                   7
-##########                          Grid_Score:          -13.396927
-##########                     Grid_vdw_energy:          -13.679748
+##########                          Grid_Score:          -13.396925
+##########                     Grid_vdw_energy:          -13.679746
 ##########                      Grid_es_energy:            0.282820
 
 @<TRIPOS>MOLECULE
@@ -236,13 +236,13 @@ bcc
 ##########                                Name:        ZINC00152265
 ##########                    Molecular_Weight:             126.179
 ##########                DOCK_Rotatable_Bonds:                   1
-##########                       Formal_Charge:         9.99914e-05
+##########                       Formal_Charge:                   0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                   8
-##########                          Grid_Score:          -15.236704
+##########                          Grid_Score:          -15.236702
 ##########                     Grid_vdw_energy:          -13.851338
-##########                      Grid_es_energy:           -1.385365
+##########                      Grid_es_energy:           -1.385364
 
 @<TRIPOS>MOLECULE
 ZINC00152265
@@ -261,7 +261,7 @@ bcc
       7 C6         24.4135   10.4097   57.9121 C.2     1  <0>         0.6066
       8 O1         24.3986   11.3431   57.1137 O.2     1  <0>        -0.5258
       9 H1         23.7537    8.8339   63.2619 H       1  <0>         0.0506
-     10 H2         22.2754    9.7786   63.4864 H       1  <0>         0.0553
+     10 H2         22.2754    9.7786   63.4863 H       1  <0>         0.0553
      11 H3         22.2090    8.2469   62.6025 H       1  <0>         0.0507
      12 H4         22.2099   11.8235   61.8212 H       1  <0>         0.1589
      13 H5         23.0110   12.4540   59.3813 H       1  <0>         0.1708
@@ -288,13 +288,13 @@ bcc
 ##########                                Name:        ZINC00152280
 ##########                    Molecular_Weight:             140.206
 ##########                DOCK_Rotatable_Bonds:                   2
-##########                       Formal_Charge:        -4.65661e-08
+##########                       Formal_Charge:                  -0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                   9
-##########                          Grid_Score:          -17.706253
-##########                     Grid_vdw_energy:          -16.459993
-##########                      Grid_es_energy:           -1.246260
+##########                          Grid_Score:          -17.706257
+##########                     Grid_vdw_energy:          -16.459995
+##########                      Grid_es_energy:           -1.246262
 
 @<TRIPOS>MOLECULE
 ZINC00152280
@@ -313,8 +313,8 @@ bcc
       7 S1         23.9180    9.0606   60.2745 S.3     1  <0>         0.0529
       8 C7         22.8231    9.1382   62.7709 C.2     1  <0>         0.6070
       9 O1         22.2332    9.6109   63.7393 O.2     1  <0>        -0.5264
-     10 H1         24.1288   11.3186   55.9461 H       1  <0>         0.0386
-     11 H2         22.6197   11.0340   56.8318 H       1  <0>         0.0393
+     10 H1         24.1288   11.3185   55.9461 H       1  <0>         0.0386
+     11 H2         22.6197   11.0340   56.8317 H       1  <0>         0.0393
      12 H3         23.6775   12.3766   57.2948 H       1  <0>         0.0420
      13 H4         24.4237    9.4024   57.4862 H       1  <0>         0.0474
      14 H5         25.4660   10.7396   57.9434 H       1  <0>         0.0596
@@ -346,13 +346,13 @@ bcc
 ##########                                Name:        ZINC00157111
 ##########                    Molecular_Weight:             123.178
 ##########                DOCK_Rotatable_Bonds:                   2
-##########                       Formal_Charge:         7.45058e-08
+##########                       Formal_Charge:                   0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                   8
-##########                          Grid_Score:          -14.073079
-##########                     Grid_vdw_energy:          -12.586664
-##########                      Grid_es_energy:           -1.486415
+##########                          Grid_Score:          -14.073267
+##########                     Grid_vdw_energy:          -12.575705
+##########                      Grid_es_energy:           -1.497562
 
 @<TRIPOS>MOLECULE
 ZINC00157111
@@ -369,7 +369,7 @@ bcc
       5 C4         23.4201   10.1632   59.6162 C.2     1  <0>        -0.1252
       6 C5         23.3811   10.2419   58.1218 C.3     1  <0>         0.0503
       7 C6         24.6279   10.8236   57.6087 C.1     1  <0>         0.2147
-      8 N1         25.6140   11.2774   57.1986 N.1     1  <0>        -0.3748
+      8 N1         25.6105   11.2827   57.1961 N.1     1  <0>        -0.3748
       9 H1         24.3093    8.1355   59.9117 H       1  <0>         0.1571
      10 H2         24.1452    8.5417   62.4999 H       1  <0>         0.1742
      11 H3         22.5744   12.1243   60.2046 H       1  <0>         0.1745
@@ -396,13 +396,13 @@ bcc
 ##########                                Name:        ZINC00157152
 ##########                    Molecular_Weight:             126.179
 ##########                DOCK_Rotatable_Bonds:                   1
-##########                       Formal_Charge:         1.49012e-08
+##########                       Formal_Charge:                   0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                   8
-##########                          Grid_Score:          -15.555840
-##########                     Grid_vdw_energy:          -15.114218
-##########                      Grid_es_energy:           -0.441622
+##########                          Grid_Score:          -15.555817
+##########                     Grid_vdw_energy:          -15.114187
+##########                      Grid_es_energy:           -0.441629
 
 @<TRIPOS>MOLECULE
 ZINC00157152
@@ -448,7 +448,7 @@ bcc
 ##########                                Name:        ZINC00157402
 ##########                    Molecular_Weight:             126.179
 ##########                DOCK_Rotatable_Bonds:                   1
-##########                       Formal_Charge:         9.99123e-05
+##########                       Formal_Charge:                   0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                   8
@@ -500,13 +500,13 @@ bcc
 ##########                                Name:        ZINC00157467
 ##########                    Molecular_Weight:             114.168
 ##########                DOCK_Rotatable_Bonds:                   2
-##########                       Formal_Charge:        -0.000199951
+##########                       Formal_Charge:                  -0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   1
 ##########                         Heavy_Atoms:                   7
-##########                          Grid_Score:          -14.412565
-##########                     Grid_vdw_energy:          -13.521505
-##########                      Grid_es_energy:           -0.891060
+##########                          Grid_Score:          -14.412553
+##########                     Grid_vdw_energy:          -13.521490
+##########                      Grid_es_energy:           -0.891063
 
 @<TRIPOS>MOLECULE
 ZINC00157467
@@ -526,7 +526,7 @@ bcc
       8 H1         22.0026   11.3200   61.4808 H       1  <0>         0.4025
       9 H2         25.8047    9.0243   60.0546 H       1  <0>         0.1549
      10 H3         23.6623   10.5230   60.4756 H       1  <0>         0.1615
-     11 H4         25.9640    7.0827   61.8264 H       1  <0>         0.1716
+     11 H4         25.9640    7.0827   61.8265 H       1  <0>         0.1716
      12 H5         21.0417    9.3680   62.2614 H       1  <0>         0.0273
      13 H6         21.8808    9.6659   63.7919 H       1  <0>         0.0777
 @<TRIPOS>BOND
@@ -550,13 +550,13 @@ bcc
 ##########                                Name:        ZINC00157960
 ##########                    Molecular_Weight:             154.233
 ##########                DOCK_Rotatable_Bonds:                   1
-##########                       Formal_Charge:          0.00010002
+##########                       Formal_Charge:                   0
 ##########                     HBond_Acceptors:                   2
 ##########                        HBond_Donors:                   0
 ##########                         Heavy_Atoms:                  10
-##########                          Grid_Score:          -17.022007
-##########                     Grid_vdw_energy:          -16.388033
-##########                      Grid_es_energy:           -0.633974
+##########                          Grid_Score:          -17.022034
+##########                     Grid_vdw_energy:          -16.388054
+##########                      Grid_es_energy:           -0.633980
 
 @<TRIPOS>MOLECULE
 ZINC00157960

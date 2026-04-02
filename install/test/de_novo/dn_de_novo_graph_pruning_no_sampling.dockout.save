@@ -1,0 +1,552 @@
+
+
+
+--------------------------------------
+DOCK v6.12
+
+Released September 2024
+Copyright UCSF
+--------------------------------------
+
+
+Conformational Sampling Parameters
+------------------------------------------------------------------------------------------
+conformer_search_type                                        denovo
+
+De Novo Build Parameters
+------------------------------------------------------------------------------------------
+dn_fraglib_scaffold_file                                     ./dn_generate_fragments_scaffold.mol2
+dn_fraglib_linker_file                                       ./dn_generate_fragments_linker.mol2
+dn_fraglib_sidechain_file                                    ./dn_generate_fragments_sidechain.mol2
+dn_user_specified_anchor                                     no
+dn_torenv_table                                              ./dn_generate_fragments_torenv.dat
+dn_name_identifier                                           denovo
+dn_sampling_method                                           graph
+dn_graph_max_picks                                           30
+dn_graph_breadth                                             3
+dn_graph_depth                                               2
+dn_graph_temperature                                         100.0
+dn_pruning_conformer_score_cutoff                            100.0
+dn_pruning_conformer_score_scaling_factor                    2.0
+dn_pruning_clustering_cutoff                                 100.0
+dn_remove_duplicates                                         yes
+dn_max_duplicates_per_mol                                    0
+dn_write_pruned_duplicates                                   no
+dn_advanced_pruning                                          yes
+dn_prune_initial_sample                                      yes
+dn_sample_torsions                                           no
+WARNING: Torsional sampling has been DISABLED. This should only be done during the SIMPLE BUILD protocol!
+dn_random_root_selection                                     yes
+dn_mol_wt_cutoff_type                                        soft
+dn_upper_constraint_mol_wt                                   550.0
+dn_lower_constraint_mol_wt                                   300.0
+dn_mol_wt_std_dev                                            50.0
+dn_constraint_rot_bon                                        15
+dn_constraint_formal_charge                                  2.0
+dn_heur_unmatched_num                                        1
+dn_heur_matched_rmsd                                         2.0
+dn_unique_anchors                                            1
+dn_max_grow_layers                                           9
+dn_max_root_size                                             25
+dn_max_layer_size                                            25
+dn_max_current_aps                                           5
+dn_max_scaffolds_per_layer                                   1
+dn_max_successful_att_per_root                               50000
+dn_write_checkpoints                                         yes
+dn_write_prune_dump                                          no
+dn_write_orients                                             no
+dn_write_growth_trees                                        no
+dn_output_prefix                                             dn_de_novo_graph_pruning_no_sampling
+
+Internal Energy Parameters
+------------------------------------------------------------------------------------------
+use_internal_energy                                          yes
+internal_energy_rep_exp                                      12
+internal_energy_cutoff                                       100.0
+Note: Internal energy only includes repulsive VDW for growth and/or minimization.
+
+Database Filter Parameters
+------------------------------------------------------------------------------------------
+use_database_filter                                          no
+
+Orient Ligand Parameters
+------------------------------------------------------------------------------------------
+orient_ligand                                                yes
+automated_matching                                           yes
+receptor_site_file                                           ./dn_rec.spheres
+max_orientations                                             1000
+critical_points                                              no
+chemical_matching                                            no
+use_ligand_spheres                                           no
+
+Bump Filter Parameters
+------------------------------------------------------------------------------------------
+bump_filter                                                  no
+
+Master Score Parameters
+------------------------------------------------------------------------------------------
+score_molecules                                              yes
+
+Contact Score Parameters
+------------------------------------------------------------------------------------------
+contact_score_primary                                        no
+
+Grid Score Parameters
+------------------------------------------------------------------------------------------
+grid_score_primary                                           no
+
+GIST Score Parameters
+------------------------------------------------------------------------------------------
+gist_score_primary                                           no
+
+MultiGrid Score Parameters
+------------------------------------------------------------------------------------------
+multigrid_score_primary                                      no
+
+Dock3.5 Score Parameters
+------------------------------------------------------------------------------------------
+dock3.5_score_primary                                        no
+
+Continuous Energy Score Parameters
+------------------------------------------------------------------------------------------
+continuous_score_primary                                     no
+
+Footprint Similarity Score Parameters
+------------------------------------------------------------------------------------------
+footprint_similarity_score_primary                           no
+
+Pharmacophore Similarity Score Parameters
+------------------------------------------------------------------------------------------
+pharmacophore_score_primary                                  no
+
+Hbond Energy Score Parameters
+------------------------------------------------------------------------------------------
+hbond_score_primary                                          no
+
+Internal Energy Score Parameters
+------------------------------------------------------------------------------------------
+internal_energy_score_primary                                no
+
+Descriptor Score Parameters
+------------------------------------------------------------------------------------------
+descriptor_score_primary                                     yes
+descriptor_use_grid_score                                    no
+descriptor_use_multigrid_score                               yes
+descriptor_use_pharmacophore_score                           no
+descriptor_use_tanimoto                                      no
+descriptor_use_hungarian                                     no
+descriptor_use_volume_overlap                                no
+descriptor_use_gist                                          no
+descriptor_use_dock3.5                                       no
+
+--- Descriptor Score Parameters: Multigrid Score ---
+descriptor_multigrid_score_rep_rad_scale                     1
+descriptor_multigrid_score_vdw_scale                         1
+descriptor_multigrid_score_es_scale                          1
+descriptor_multigrid_score_number_of_grids                   31
+descriptor_multigrid_score_grid_prefix0                      ./dn_rec.resid_017
+descriptor_multigrid_score_grid_prefix1                      ./dn_rec.resid_018
+descriptor_multigrid_score_grid_prefix2                      ./dn_rec.resid_019
+descriptor_multigrid_score_grid_prefix3                      ./dn_rec.resid_020
+descriptor_multigrid_score_grid_prefix4                      ./dn_rec.resid_023
+descriptor_multigrid_score_grid_prefix5                      ./dn_rec.resid_031
+descriptor_multigrid_score_grid_prefix6                      ./dn_rec.resid_045
+descriptor_multigrid_score_grid_prefix7                      ./dn_rec.resid_046
+descriptor_multigrid_score_grid_prefix8                      ./dn_rec.resid_047
+descriptor_multigrid_score_grid_prefix9                      ./dn_rec.resid_048
+descriptor_multigrid_score_grid_prefix10                     ./dn_rec.resid_050
+descriptor_multigrid_score_grid_prefix11                     ./dn_rec.resid_054
+descriptor_multigrid_score_grid_prefix12                     ./dn_rec.resid_065
+descriptor_multigrid_score_grid_prefix13                     ./dn_rec.resid_066
+descriptor_multigrid_score_grid_prefix14                     ./dn_rec.resid_067
+descriptor_multigrid_score_grid_prefix15                     ./dn_rec.resid_071
+descriptor_multigrid_score_grid_prefix16                     ./dn_rec.resid_088
+descriptor_multigrid_score_grid_prefix17                     ./dn_rec.resid_091
+descriptor_multigrid_score_grid_prefix18                     ./dn_rec.resid_098
+descriptor_multigrid_score_grid_prefix19                     ./dn_rec.resid_099
+descriptor_multigrid_score_grid_prefix20                     ./dn_rec.resid_101
+descriptor_multigrid_score_grid_prefix21                     ./dn_rec.resid_103
+descriptor_multigrid_score_grid_prefix22                     ./dn_rec.resid_153
+descriptor_multigrid_score_grid_prefix23                     ./dn_rec.resid_154
+descriptor_multigrid_score_grid_prefix24                     ./dn_rec.resid_232
+descriptor_multigrid_score_grid_prefix25                     ./dn_rec.resid_259
+descriptor_multigrid_score_grid_prefix26                     ./dn_rec.resid_294
+descriptor_multigrid_score_grid_prefix27                     ./dn_rec.resid_301
+descriptor_multigrid_score_grid_prefix28                     ./dn_rec.resid_302
+descriptor_multigrid_score_grid_prefix29                     ./dn_rec.resid_303
+descriptor_multigrid_score_grid_prefix30                     ./dn_rec.resid_remaining
+multigrid_score_individual_rec_ensemble                      no
+multigrid_score_weights_text                                 no
+descriptor_multigrid_score_fp_ref_mol                        yes
+descriptor_multigrid_score_footprint_ref                     dn_lig.mol2
+descriptor_multigrid_score_foot_compare_type                 Euclidean
+-------------------------------------------------------------
+You chose to use the Euclidean distance as the metric 
+to compare the footprints.  When the value is 0 then 
+there is perfect agreement between the two footprints.
+As the agreement gets worse between the two
+footprints the value increases.
+-------------------------------------------------------------
+descriptor_multigrid_score_normalize_foot                    no
+-------------------------------------------------------------
+You chose to not normalize footprints which penalizes
+the score of the pose if the footprint is bad.
+-------------------------------------------------------------
+descriptor_multigrid_score_vdw_euc_scale                     1.0
+descriptor_multigrid_score_es_euc_scale                      1.0
+
+--- Descriptor Score Weights ---
+descriptor_weight_multigrid_score                            1
+
+Using these settings, the Descriptor Score function takes the form:
+Descriptor_Score = (1 * Multigrid_Score)
+
+Zou GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+
+Hawkins GB/SA Score Parameters
+------------------------------------------------------------------------------------------
+
+SASA Score Parameters
+------------------------------------------------------------------------------------------
+
+Amber Score Parameters
+------------------------------------------------------------------------------------------
+
+Simplex Minimization Parameters
+------------------------------------------------------------------------------------------
+minimize_ligand                                              yes
+minimize_anchor                                              yes
+minimize_flexible_growth                                     yes
+use_advanced_simplex_parameters                              no
+simplex_max_cycles                                           1
+simplex_score_converge                                       0.1
+simplex_cycle_converge                                       1.0
+simplex_trans_step                                           1.0
+simplex_rot_step                                             0.1
+simplex_tors_step                                            10.0
+simplex_anchor_max_iterations                                500
+simplex_grow_max_iterations                                  250
+simplex_grow_tors_premin_iterations                          0
+simplex_final_min                                            no
+simplex_random_seed                                          0
+simplex_restraint_min                                        no
+
+Atom Typing Parameters
+------------------------------------------------------------------------------------------
+atom_model                                                   all
+vdw_defn_file                                                ../../../parameters/vdw_de_novo.defn
+flex_defn_file                                               ../../../parameters/flex.defn
+flex_drive_file                                              ../../../parameters/flex_drive.tbl
+------------------------------------------------------------------------------------------
+
+Initializing De Novo Growth Routines...
+ Reading the scaffold library from ./dn_generate_fragments_scaffold.mol2...Done (#=0)
+ Reading the linker library from ./dn_generate_fragments_linker.mol2...Done (#=4)
+ Reading the sidechain library from ./dn_generate_fragments_sidechain.mol2...Done (#=2)
+ Reading the torenv table from ./dn_generate_fragments_torenv.dat...Done: (#=5)
+Initializing Orienting Routines...
+Initializing typer for Multigrid Score within Descriptor Score...
+To cite Multigrid Energy Score use: 
+ Balius, T. E.; Mukherjee, S.; Rizzo, R. C. Implementation and Evaluation of a Docking-rescoring Method using Molecular Footprint Comparisons. J. Comput. Chem., 2011, 32, 2273-2289
+
+Initializing Multi Grid Score Routines...
+Reading in 31 grids
+ Reading the energy grid from ./dn_rec.resid_017.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_017.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_018.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_018.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_019.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_019.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_020.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_020.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_023.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_023.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_031.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_031.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_045.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_045.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_046.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_046.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_047.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_047.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_048.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_048.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_050.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_050.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_054.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_054.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_065.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_065.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_066.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_066.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_067.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_067.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_071.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_071.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_088.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_088.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_091.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_091.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_098.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_098.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_099.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_099.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_101.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_101.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_103.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_103.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_153.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_153.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_154.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_154.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_232.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_232.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_259.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_259.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_294.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_294.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_301.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_301.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_302.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_302.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_303.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_303.bmp
+ Done reading the grid box quantifiers.
+ Reading the energy grid from ./dn_rec.resid_remaining.nrg
+ Done reading the energy grid.
+ Reading the grid box quantifiers from ./dn_rec.resid_remaining.bmp
+ Done reading the grid box quantifiers.
+
+
+##### Entering the main de novo build engine #####
+
+##### Now orienting anchor #1
+  ##### Entering layer of growth #1
+  Root size at the beginning of this layer = 40
+    Root [  0], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 180.36
+    Root [  1], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.00 |A/S 212.76
+    Root [  2], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 170.26
+    Root [  3], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 177.43
+    Root [  4], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 142.42
+    Root [  5], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 199.87
+    Root [  6], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 180.81
+    Root [  7], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.00 |A/S 216.31
+    Root [  8], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 184.16
+    Root [  9], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 175.70
+    Root [ 10], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 166.65
+    Root [ 11], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 188.57
+    Root [ 12], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.00 |A/S 209.81
+    Root [ 13], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.00 |A/S 217.89
+    Root [ 14], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 116.84
+    Root [ 15], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 168.53
+    Root [ 16], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.00 |A/S 210.08
+    Root [ 17], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 173.05
+    Root [ 18], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.00 |A/S 228.49
+    Root [ 19], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 169.03
+    Root [ 20], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 186.81
+    Root [ 21], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 184.04
+    Root [ 22], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.00 |A/S 200.46
+    Root [ 23], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 139.60
+    Root [ 24], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 128.07
+    Root [ 25], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 197.54
+    Root [ 26], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 181.29
+    Root [ 27], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.00 |A/S 200.94
+    Root [ 28], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.00 |A/S 218.41
+    Root [ 29], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 168.58
+    Root [ 30], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 181.68
+    Root [ 31], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 198.62
+    Root [ 32], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 197.22
+    Root [ 33], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.00 |A/S 203.76
+    Root [ 34], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.00 |A/S 207.68
+    Root [ 35], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 130.87
+    Root [ 36], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.00 |A/S 203.64
+    Root [ 37], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 199.01
+    Root [ 38], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 155.22
+    Root [ 39], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.00 |A/S 202.30
+      From all attachments events, 40 fragments were collected in layer 1 prior to all pruning/filtering.
+      From accepted frags ( N= 0 ) in layer 1, 
+          Collected a total of 40 candidate root fragments, then that number goes down to 4 due to pruning by the RMSD heuristic.
+          The average molecular weight is 94.97
+          The average number of rotatable bonds is 1.00
+          The average formal_charge is -2.00
+          Random root selection turned on - keeping up to 25 random fragments for the next layer.
+          While writing molecules to file, 0 molecules were rejected on the lower bound molecular weight.
+          -------------------------------------------
+          0    duplicate fragments were found.
+          0    complete molecules were filtered
+          0    root fragments were filtered
+          0    completed molecules were written to file
+          -------------------------------------------
+          36   root frags intended for the next layer were further pruned via rmsd.
+          0    candidate root frags intended for the next layer were ignored due to limit on root size.
+
+    Layer 1 completed! Moving on the next layer with 4 root fragments.
+    For Layer 1, time duration is: 0.23 seconds with 174.56 with attachments per second.
+
+  ##### Entering layer of growth #2
+  Root size at the beginning of this layer = 4
+    Root [  0], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S 138.81
+    Root [  1], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  66.44
+    Root [  2], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.01 |A/S  99.17
+    Root [  3], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  48.79
+      From all attachments events, 4 fragments were collected in layer 2 prior to all pruning/filtering.
+      From accepted frags ( N= 0 ) in layer 2, 
+          Collected a total of 4 candidate root fragments, then that number goes down to 4 due to pruning by the RMSD heuristic.
+          The average molecular weight is 109.00
+          The average number of rotatable bonds is 2.00
+          The average formal_charge is -2.00
+          Random root selection turned on - keeping up to 25 random fragments for the next layer.
+          While writing molecules to file, 0 molecules were rejected on the lower bound molecular weight.
+          -------------------------------------------
+          0    duplicate fragments were found.
+          0    complete molecules were filtered
+          0    root fragments were filtered
+          0    completed molecules were written to file
+          -------------------------------------------
+          0    root frags intended for the next layer were further pruned via rmsd.
+          0    candidate root frags intended for the next layer were ignored due to limit on root size.
+
+    Layer 2 completed! Moving on the next layer with 4 root fragments.
+    For Layer 2, time duration is: 0.05 seconds with 73.51 with attachments per second.
+
+  ##### Entering layer of growth #3
+  Root size at the beginning of this layer = 4
+    Root [  0], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  54.87
+    Root [  1], sccf atts      1 |acc mols    0 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    0 |S     0.02 |A/S  47.63
+    Root [  2], sccf atts      1 |acc mols    0 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    0 |S     0.02 |A/S  41.61
+    Root [  3], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  50.86
+      From all attachments events, 4 fragments were collected in layer 3 prior to all pruning/filtering.
+      From accepted frags ( N= 0 ) in layer 3, 
+          Collected a total of 2 candidate root fragments, then that number goes down to 2 due to pruning by the RMSD heuristic.
+          The average molecular weight is 137.01
+          The average number of rotatable bonds is 3.00
+          The average formal_charge is -2.00
+          Random root selection turned on - keeping up to 25 random fragments for the next layer.
+          While writing molecules to file, 0 molecules were rejected on the lower bound molecular weight.
+          -------------------------------------------
+          0    duplicate fragments were found.
+          0    complete molecules were filtered
+          0    root fragments were filtered
+          0    completed molecules were written to file
+          -------------------------------------------
+          0    root frags intended for the next layer were further pruned via rmsd.
+          0    candidate root frags intended for the next layer were ignored due to limit on root size.
+
+    Layer 3 completed! Moving on the next layer with 2 root fragments.
+    For Layer 3, time duration is: 0.08 seconds with 47.69 with attachments per second.
+
+  ##### Entering layer of growth #4
+  Root size at the beginning of this layer = 2
+    Root [  0], sccf atts      1 |acc mols    1 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    1 |S     0.02 |A/S  44.88
+    Root [  1], sccf atts      1 |acc mols    0 |cmpd    0 |fltrd cmpd    0 |Prnd    0 |Kpt    0 |S     0.02 |A/S  53.37
+      From all attachments events, 2 fragments were collected in layer 4 prior to all pruning/filtering.
+      From accepted frags ( N= 0 ) in layer 4, 
+          Collected a total of 1 candidate root fragments, then that number goes down to 1 due to pruning by the RMSD heuristic.
+          The average molecular weight is 152.02
+          The average number of rotatable bonds is 4.00
+          The average formal_charge is -2.00
+          Random root selection turned on - keeping up to 25 random fragments for the next layer.
+          While writing molecules to file, 0 molecules were rejected on the lower bound molecular weight.
+          -------------------------------------------
+          0    duplicate fragments were found.
+          0    complete molecules were filtered
+          0    root fragments were filtered
+          0    completed molecules were written to file
+          -------------------------------------------
+          0    root frags intended for the next layer were further pruned via rmsd.
+          0    candidate root frags intended for the next layer were ignored due to limit on root size.
+
+    Layer 4 completed! Moving on the next layer with 1 root fragments.
+    For Layer 4, time duration is: 0.04 seconds with 48.10 with attachments per second.
+
+  ##### Entering layer of growth #5
+  Root size at the beginning of this layer = 1
+    Root [  0], sccf atts      1 |acc mols    1 |cmpd    1 |fltrd cmpd    0 |Prnd    0 |Kpt    0 |S     0.02 |A/S  44.46
+      From all attachments events, 1 fragments were collected in layer 5 prior to all pruning/filtering.
+      From accepted frags ( N= 1 ) in layer 5, 
+          Collected a total of 0 candidate root fragments, then that number goes down to 0 due to pruning by the RMSD heuristic.
+          Random root selection turned on - keeping up to 25 random fragments for the next layer.
+          While writing molecules to file, 1 molecules were rejected on the lower bound molecular weight.
+          -------------------------------------------
+          0    duplicate fragments were found.
+          1    complete molecules were filtered
+          0    root fragments were filtered
+          0    completed molecules were written to file
+          -------------------------------------------
+          0    root frags intended for the next layer were further pruned via rmsd.
+          0    candidate root frags intended for the next layer were ignored due to limit on root size.
+
+    Layer 5 completed! Moving on the next layer with 0 root fragments.
+    For Layer 5, time duration is: 0.02 seconds with 43.85 with attachments per second.
+
+Root is empty, continuing.
+
+There are no more anchors. Exiting.
+
+
+
+51 Attachments Processed
+Total elapsed time:	6.265 seconds
+Number of attachments per second:	8.141
+Virtual memory used for this process: 135440 kilobytes
+Physical memory used for this process: 58264 kilobytes

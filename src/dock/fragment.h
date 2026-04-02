@@ -12,6 +12,7 @@
 #include "dockmol.h"
 #include "master_score.h"
 #include "utils.h"
+#include "iso_align.h"
 
 // +++++++++++++++++++++++++++++++++++++++++
 // Attachment points are the dummy atom + heavy atom it is connected to
@@ -19,9 +20,11 @@ class           AttPoint {
    public:
        int    dummy_atom;
        int    heavy_atom;
-
+       std::string frag_name;
       AttPoint();
       ~AttPoint();
+      AttPoint(const AttPoint&);
+      void operator=(const AttPoint&);
 };
 
 
@@ -30,24 +33,32 @@ class           AttPoint {
 class           Fragment {
 
     private:
-        std::vector <float>     *radial_dist_distri;
-        int                     num_du;
-        bool                    iso_aligned;
+        std::vector <float>             *radial_dist_distri;
+        int                             num_du;
+        bool                            iso_aligned;
+	float                           iso_score;
+        bool                            radial_set;
 
     public:
-        void                    is_iso_aligned();
-        void                    is_not_iso_aligned();
-        bool                    is_it_iso_aligned();
-        void                    calc_radial_dist_distri();
-        void                    set_radial_dist_distri(int,std::vector<float>);
-        std::vector<float>      get_radial_dist_distri(int);
-        void                    print_radial_dist_distri();
-        void                    allocate_radial_dist_distri();
-        void                    clear_radial_dist_distri();
-        void                    calc_num_du();
-        int                     get_num_du();
+        void                            is_iso_aligned();
+        void                            is_not_iso_aligned();
+        bool                            is_it_iso_aligned();
+        void                            calc_radial_dist_distri();
+        void                            set_radial_dist_distri(int,std::vector<float>);
+        std::vector<float>              get_radial_dist_distri(int);
+        void                            print_radial_dist_distri();
+        void                            allocate_radial_dist_distri();
+        void                            clear_radial_dist_distri();
+        void                            calc_num_du();
+        int                             get_num_du();
+	void                            set_iso_score(float);
+	float                           get_iso_score();
+        bool                            is_it_radial_set();
+        bool                            alloc_set;
+        Iso_Acessory::Scored_Triangle   best_tri;
 
-
+        Fragment(const Fragment&);
+        void operator=(const Fragment&);
 
    public:
   
@@ -59,6 +70,8 @@ class           Fragment {
        int                              scaffolds_this_layer;
        std::vector < std::pair < int, int > >  torenv_recheck_indices;
        std::vector < DOCKMol >                 frag_growth_tree;
+
+       void 				calc_mol_wt();
        // Need to update the DN code to utilize this information when comparing bonds - CS: 09/19/16
        std::vector < std::pair < int, std::string > > aps_bonds_type; // Bond number and type for each aps
 
@@ -70,17 +83,11 @@ class           Fragment {
         
        // To keep track of mutations
        int                              mut_type;
+       //
+       int                              freq_num;
 
-       /*#ifdef BUILD_DOCK_WITH_RDKIT
-       // Descriptor-driven de novo variables
-       bool                             fail_clogp;
-       bool                             fail_esol;
-       bool                             fail_qed;
-       bool                             fail_sa;
-       bool                             fail_stereo;
-       int                              dropped_at_layer;
-       #endif
-       */
+       // To debug issues w/ fragments
+       void print(int index, std:: string label);
 
        // Initialize fragment object
        Fragment              read_mol( Fragment &);

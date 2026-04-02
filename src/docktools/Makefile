@@ -10,24 +10,28 @@ SCRIPTS = make_phimap
 all: install
 
 install:
-	$(MAKE) -C chemgrids  install
-	$(MAKE) -C solvgrids  install
-	$(MAKE) -C convgrids  install
+	$(MAKE) -C chemgrids      install
+	$(MAKE) -C solvgrids      install
+	$(MAKE) -C solvgrids_sev  install
+	$(MAKE) -C convgrids      install
 	cp -p $(SCRIPTS) $(BIN)
 
 clean:
-	$(MAKE) -C chemgrids  clean
-	$(MAKE) -C solvgrids  clean
-	$(MAKE) -C convgrids  clean
+	$(MAKE) -C chemgrids      clean
+	$(MAKE) -C solvgrids      clean
+	$(MAKE) -C solvgrids_sev  clean
+	$(MAKE) -C convgrids      clean
 
 realclean:
-	$(MAKE) -C chemgrids  realclean
-	$(MAKE) -C solvgrids  realclean
-	$(MAKE) -C convgrids  realclean
+	$(MAKE) -C chemgrids      realclean
+	$(MAKE) -C solvgrids      realclean
+	$(MAKE) -C solvgrids_sev  realclean
+	$(MAKE) -C convgrids      realclean
 
 uninstall:
-	$(MAKE) -C chemgrids  uninstall
-	$(MAKE) -C solvgrids  uninstall
-	$(MAKE) -C convgrids  uninstall
+	$(MAKE) -C chemgrids      uninstall
+	$(MAKE) -C solvgrids      uninstall
+	$(MAKE) -C solvgrids_sev  uninstall
+	$(MAKE) -C convgrids      uninstall
 	cd $(BIN) && /bin/rm -f $(PROGS) $(SCRIPTS)
 

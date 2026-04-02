@@ -72,8 +72,8 @@ Master_Conformer_Search::input_parameters(Parameter_Reader & parm)
         << endl;
 
     // Other search methods would include HDB and possibly a Genetic Algorithm
-    //conformer_search_type = parm.query_param("conformer_search_type", "flex", "rigid | flex | denovo | covalent | genetic | HDB");
-    conformer_search_type = parm.query_param("conformer_search_type", "flex", "rigid | flex | denovo | covalent | genetic ");
+    conformer_search_type = parm.query_param("conformer_search_type", "flex", "rigid | flex | denovo | covalent | genetic | HDB");
+    //conformer_search_type = parm.query_param("conformer_search_type", "flex", "rigid | flex | denovo | covalent | genetic ");
 
     if (conformer_search_type.compare("rigid") == 0) {
         method = 0;
@@ -115,14 +115,15 @@ Master_Conformer_Search::input_parameters(Parameter_Reader & parm)
 
     }
     else if (conformer_search_type.compare("HDB") == 0) {
-         cout << "HDB is turned off" << endl;
-         exit(0); 
+         //cout << "HDB is turned off" << endl;
+         //exit(0); 
          method = 5;
-         flexible_ligand = true;
+         //flexible_ligand = true;
+         flexible_ligand = false;
          c_hdb_conf.input_parameters(parm);
          //c_dn_build.input_parameters(parm);
          //c_ga_recomb.initialize_internal_energy_parms(use_internal_energy, ie_rep_exp, ie_att_exp, ie_diel);
-         trace.note("Performing genetic algorithm.");
+         trace.note("Performing HDB algorithm.");
        
     }
          
@@ -183,6 +184,7 @@ Master_Conformer_Search::initialize()
     switch (method) {
 
     case 0: //Rigid
+        trace.note( "doing Rigid docking / min / single point" );
         break;
 
     case 1: //Flex
@@ -208,6 +210,10 @@ Master_Conformer_Search::initialize()
          c_ga_recomb.initialize();
          //c_dn_build.initialize();
          break;
+
+    case 5: //HDB 
+        trace.note( "doing Hierarchical DataBase search" );
+        break;
 
 
         // case 5:
@@ -242,6 +248,12 @@ Master_Conformer_Search::prepare_molecule(DOCKMol & mol)
         break;
     case 3:  //covalent
         c_cg_conf.prepare_molecule(mol);
+        break;
+    case 5:  // HDB
+        more_anchors = true;
+        last_conformer = true;
+        copy_molecule(orig, mol); //trent 2009-02-12
+        c_hdb_conf.prepare_molecule(mol);
         break;
 
     // WJA 08/22/2011 - not sure if we need to do this in dock.cpp yet
@@ -367,7 +379,7 @@ Master_Conformer_Search::grow_periphery(Master_Score & score,
         // we should move the internal energy initialization 
         // because it really should be called only once for each
         // new ligand during rigid docking
-        if (use_internal_energy) { // initializes internal energy ones for every achor
+        if (use_internal_energy && initialize_once) { // initializes internal energy ones for every achor
            score.primary_score->ie_att_exp = ie_att_exp;
            score.primary_score->ie_rep_exp = ie_rep_exp;
            score.primary_score->ie_diel = ie_diel;

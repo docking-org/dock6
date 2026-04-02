@@ -8,6 +8,7 @@
 #include "trace.h"
 //#include "master_score.h"
 
+#include <list>
 
 #ifdef BUILD_DOCK_WITH_RDKIT
 #include "rdtyper.h"
@@ -52,6 +53,11 @@ GA_Recomb::GA_Recomb(){
     ga_secondary_selection_method_sus = false;
     ga_secondary_selection_method_metropolis = false;
     num_segs_removed = 0;
+    use_limit_max_change = false; //BTB - max change
+    limit_max_change_ramp_gens = 5; //arbitrary value, as long as this is greater than zero it can exit the program when children are failed to be made
+    delta_max = LimitMaxChange();
+    dnm_enabled = false;
+
 }
 GA_Recomb::~GA_Recomb(){
     parents.clear();
@@ -61,6 +67,10 @@ GA_Recomb::~GA_Recomb(){
     tmp_parents.clear();
     mutants.clear();
     mutated_parents.clear();
+    divergent_children.clear();
+    pruned_parents.clear();
+
+
 }
 
 
@@ -382,6 +392,16 @@ GA_Recomb::input_parameters( Parameter_Reader & parm )
     ga_name_identifier = parm.query_param( "ga_name_identifier", "ga" );
 
     ga_output_prefix = parm.query_param("ga_output_prefix", "ga_output"); //2018.01.23 - LEP 
+
+     //max change btb 2023.06.07
+    //use_limit_max_change = (parm.query_param("ga_limit_change","no", " no | yes") == "yes");
+
+    if(use_limit_max_change){
+        delta_max.set_output_prefix(ga_output_prefix);
+        delta_max.input_parameters(parm);
+    }
+
+
     return;
 
 } // end GA_Recomb::input_parameters()
@@ -874,7 +894,7 @@ GA_Recomb::max_breeding( Master_Score & score, Simplex_Minimizer & simplex, AMBE
            fout_molecules.open (fout_prefix_name.str().c_str(), fstream::out|fstream::app );
            for (int j=0; j<parents.size(); j++){
                // Only Update name if a new molecule
-               naming_function(parents[j], i, j);
+               naming_function(parents[j], i, j, "");
                // Print necessary descriptors
                calc_descriptors(parents[j]);
                fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Name:" 
@@ -1096,9 +1116,14 @@ GA_Recomb::max_breeding( Master_Score & score, Simplex_Minimizer & simplex, AMBE
               cout << "Average Score offspring gen " << i+1 << ": " << ave_score << endl;
            }
            else{
-              if ( i >= ga_no_xover_exit_gen){
-                  cout << "WARNING: THERE ARE NO OFFSPRING (from pruning and crossover) AND THE PROGRAM WILL EXIT)"<<endl;
-                  exit(0);
+	      if ( i >= ga_no_xover_exit_gen){
+                  if (limit_max_change_ramp_gens > 0 ){
+                      cout << "WARNING: THERE ARE NO OFFSPRING (from pruning and crossover) AND THE PROGRAM WILL EXIT)"<<endl;
+                      exit(0);
+                  }
+                  else{
+                      limit_max_change_ramp_gens += 1;
+                  }
               }
            }
               // STEP 8B: Print molecules to file
@@ -1274,98 +1299,31 @@ GA_Recomb::max_breeding( Master_Score & score, Simplex_Minimizer & simplex, AMBE
                */  
 
                  ostringstream fout_molecules_name;
-                 // "I want the files to be listed in numerical order on my laptop" - Rob //LEP
-                 if ( i < 9 ){
-                    fout_molecules_name << ga_output_prefix << ".restart000" <<i+1 <<".mol2";
-                 }
-                 else if ( i < 99 ){
-                    fout_molecules_name << ga_output_prefix << ".restart00" <<i+1 <<".mol2";
-                 } 
-                 else if ( i < 999 ){
-                    fout_molecules_name << ga_output_prefix << ".restart0" <<i+1 <<".mol2";
-                 }
-                 else {
-                    fout_molecules_name << ga_output_prefix << ".restart" <<i+1 <<".mol2";
-                 }
+                  // "I want the files to be listed in numerical order on my laptop" - Rob //LEP
+                 std::ostringstream gen;
+                 gen << std::setw(4) << std::setfill('0') << i+1;
+                 fout_molecules_name << ga_output_prefix << ".restart" << gen.str() <<".mol2";
                  fstream fout_molecules;
-                 fout_molecules.open (fout_molecules_name.str().c_str(), fstream::out|fstream::app);
 
-                 for (int j=0; j<parents.size(); j++){
-                     calc_descriptors(parents[j]);
-                     // Only Update name if a new molecule
-                     if ( parents[j].parent == 0 ){
-                        naming_function(parents[j], i+1, j);
-                     }
-                     //calc_pairwise_distance(parents[j]); 
-                     fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Name:"
-                                    << setw(FLOAT_WIDTH) << parents[j].title <<endl;
-                     fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Generation:"
-                                    << setw(FLOAT_WIDTH) << i+1 << endl;
-                     fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Molecular_Weight:"
-                                    << setw(FLOAT_WIDTH) << fixed << setprecision(3) << parents[j].mol_wt <<endl;
-                     fout_molecules << DELIMITER << setw(STRING_WIDTH) << "DOCK_Rotatable_Bonds:"
-                                    << setw(FLOAT_WIDTH) << parents[j].rot_bonds <<endl;
-                     fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Hydrogen_Acceptors:"
-                                    << setw(FLOAT_WIDTH) << parents[j].hb_acceptors <<endl;
-                     fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Hydrogen_Donors:"
-                                    << setw(FLOAT_WIDTH) << parents[j].hb_donors <<endl;
-                     fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Formal_Charge:"
-                                    << setw(FLOAT_WIDTH) << fixed << setprecision(3) << round(parents[j].formal_charge) <<endl;
-                     #ifdef BUILD_DOCK_WITH_RDKIT
-                     RDTYPER rdprops;
-                     rdprops.calculate_descriptors(parents[j], ga_fragMap, true, ga_PAINSMap);
+                 print_molecules(fout_molecules_name.str().c_str(), parents, i, "");
+                 fout_molecules_name.str(std::string());
+                 if (Parameter_Reader::verbosity_level() > 1) {
+                     //print molecules pruned do to being too similar to other molecules (parents only right now)
+                    fout_molecules_name << ga_output_prefix << ".pruned" << gen.str() <<".mol2";
 
-                     std::vector<std::string> vecpnstmp{};
-                     vecpnstmp = parents[j].pns_name;
-                     std::string molpns_name = std::accumulate(vecpnstmp.begin(), vecpnstmp.end(), std::string(""));
+                    print_molecules(fout_molecules_name.str().c_str(), pruned_parents, i, "pruned_");
+                    fout_molecules_name.str(std::string());
+                 }//end printing pruned
+                 fout_molecules_name << ga_output_prefix << ".rejected" << gen.str() <<".mol2";
 
-                     fout_molecules << DELIMITER << setw(STRING_WIDTH) << "num_arom_rings:" 
-                                    << setw(FLOAT_WIDTH) << parents[j].num_arom_rings << endl;
-                     fout_molecules << DELIMITER << setw(STRING_WIDTH) << "num_alip_rings:"
-                                    << setw(FLOAT_WIDTH) << parents[j].num_alip_rings << endl;
-                     fout_molecules << DELIMITER << setw(STRING_WIDTH) << "num_sat_rings:" 
-                                    << setw(FLOAT_WIDTH) << parents[j].num_sat_rings << endl;
-                     fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Stereocenters:"
-                                    << setw(FLOAT_WIDTH) << parents[j].num_stereocenters << endl;
-                     fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Spiro_atoms:"
-                                    << setw(FLOAT_WIDTH) << parents[j].num_spiro_atoms << endl;
-                     fout_molecules << DELIMITER << setw(STRING_WIDTH) << "TPSA:"
-                                    << setw(FLOAT_WIDTH) << parents[j].tpsa << endl;
-                     fout_molecules << DELIMITER << setw(STRING_WIDTH) << "cLogP:"
-                                    << setw(FLOAT_WIDTH) << parents[j].clogp << endl;
-                     fout_molecules << DELIMITER << setw(STRING_WIDTH) << "ESOL:"
-                                    << setw(FLOAT_WIDTH) << parents[j].esol << endl;
-                     fout_molecules << DELIMITER << setw(STRING_WIDTH) << "QED:"
-                                    << setw(FLOAT_WIDTH) << parents[j].qed_score << endl;
-                     fout_molecules << DELIMITER << setw(STRING_WIDTH) << "SA_Score:"
-                                    << setw(FLOAT_WIDTH) << parents[j].sa_score << endl;
-                     fout_molecules << DELIMITER << setw(STRING_WIDTH) << "SMILES: "
-                                    << setw(FLOAT_WIDTH) << parents[j].smiles << endl;
-                     fout_molecules << DELIMITER << setw(STRING_WIDTH) << "num_of_PAINS:"
-                                    << setw(FLOAT_WIDTH) << parents[j].pns << endl;
-                     fout_molecules << DELIMITER << setw(STRING_WIDTH) << "PAINS_names:"
-                                    << setw(FLOAT_WIDTH) << molpns_name << endl;
-                     #endif
-
-                     if ( ga_niching ){
-                        if ( ga_niche_sharing ){
-                           fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Fitness_Score:"
-                                          << setw(FLOAT_WIDTH) << fixed << setprecision(3) << parents[j].fitness <<endl;
-                        }
-                        else{
-                           fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Rank:"
-                                          << setw(FLOAT_WIDTH) << parents[j].rank <<endl;
-                           fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Crowding_Distance:"
-                                          << setw(FLOAT_WIDTH) << fixed << setprecision(3) << parents[j].crowding_dist <<endl;
-                       }
-                    }
-                    fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Type:"
-                                   << setw(FLOAT_WIDTH) << parents[j].energy <<endl;
-                    fout_molecules << parents[j].current_data << endl;
-                    Write_Mol2(parents[j], fout_molecules);
+                 if (use_limit_max_change){
+                      print_molecules(fout_molecules_name.str().c_str(), divergent_children, i, "rejected_");
                  }
-                 fout_molecules.close();
                  fout_molecules_name.clear();
+                 gen.clear();
+                 divergent_children.clear();
+                 pruned_parents.clear();
+
               }//if check only
 
               // STEP 6: Print Generation timing to screen
@@ -1656,6 +1614,12 @@ GA_Recomb::check_exhaustive( Master_Score & score, Simplex_Minimizer & simplex, 
 void
 GA_Recomb::breeding_exhaustive( Master_Score & score, Simplex_Minimizer & simplex, AMBER_TYPER & c_typer, Orient & orient, int gen_num )
 {
+    //copy parents vector onto old parents for PDM - BTB
+    vector<DOCKMol> old_parents;
+    if (use_limit_max_change){
+        old_parents = parents;
+    }
+
     Trace trace( "GA_Recomb::breeding_exhaustive()" );
     // Step 1: Prepare parents for breeding
     // Activate parents before amber_typer
@@ -2113,8 +2077,13 @@ GA_Recomb::breeding_exhaustive( Master_Score & score, Simplex_Minimizer & simple
     if (scored_generation.size() == 0){
        cout << "WARNING: THERE ARE NO OFFSPRING (from pruning and crossover) AND THE PROGRAM WILL EXIT)"<<endl;
        if (ga_mutate_parents == false){
-          cout << "ERROR: Parent mutation needed" << endl;
-          exit(0);
+          if (limit_max_change_ramp_gens > 0){
+              cout << "ERROR: Parent mutation needed" << endl;
+              exit(0);
+          }
+          else{
+              limit_max_change_ramp_gens += 1;
+          }
        }
     }
 
@@ -2186,7 +2155,7 @@ GA_Recomb::breeding_exhaustive( Master_Score & score, Simplex_Minimizer & simple
                 // After scoring, prune the lot
                 fitness_pruning(ppruned, pfinal, score, simplex, c_typer);
                 //cout << "pfinal, parents" << endl;
-                uniqueness_prune_mut(pfinal, parents, score, c_typer);
+                uniqueness_prune_mut(pfinal, parents, pruned_parents, score, c_typer);
 
                 // Combine final mutated parents with original 
                 for (int i=0; i<pfinal.size(); i++ ){
@@ -2234,12 +2203,12 @@ GA_Recomb::breeding_exhaustive( Master_Score & score, Simplex_Minimizer & simple
             // If mutating the parents
             if ((ga_mutate_parents == true) && (mutated_parents.size() !=0)){
                   //cout << "scoredgen, mutatedparents" << endl;   
-                  uniqueness_prune_mut(scored_generation, mutated_parents, score, c_typer);
+                  uniqueness_prune_mut(scored_generation, mutated_parents, pruned_parents, score, c_typer);
             }
 
            // Prune offspring that are similar to the parents
             //cout << "scoredgen, parents" << endl;
-            uniqueness_prune_mut(scored_generation, parents, score, c_typer);
+            uniqueness_prune_mut(scored_generation, parents, pruned_parents, score, c_typer);
 
         }
         // Save mutated parents to offspring vector
@@ -2248,8 +2217,34 @@ GA_Recomb::breeding_exhaustive( Master_Score & score, Simplex_Minimizer & simple
                 scored_generation.push_back(mutated_parents[i]);
             }
         }
+        
+        // Prune offspring that are too disimilar to the parents - BTB 2022.08.23
+        if (use_limit_max_change){
+            int print_pre_PDM_molecules = 0;
+            if (print_pre_PDM_molecules){
+                std::ostringstream gen;
+                ostringstream fout_molecules_name; // this is to try and identify issues with PDM/dissimilar_RMSD - 2023.06.19
+                cout << endl << "entering PDM" << endl;
+                gen << std::setw(4) << std::setfill('0') << gen_num+1;
+                fout_molecules_name << ga_output_prefix << ".pre_PDM" << gen.str() <<".mol2";
+                print_molecules(fout_molecules_name.str().c_str(), scored_generation, gen_num, "pre-PDM_");
+                fout_molecules_name.clear();
+        }
+           if (gen_num==0){
+               //commented because it causes compilation issues
+               delta_max.set_c_typer(c_typer); //provide a ctyper for certain functions inside delta max, only need to do this once at the start; potential bug, start from non-zero generation, if gen_num is not set to zero this may not be set
+           }
+           delta_max.prune_divergent_molecules(scored_generation, divergent_children, old_parents, gen_num);
+           if (scored_generation.size() > 0){
+               limit_max_change_ramp_gens = 0;
+           }
+        }
+
         // Clear necessary vectors
         mutated_parents.clear();
+        if (use_limit_max_change){
+            old_parents.clear();
+        }
 
         return;
     }// end if ga mutations on loop
@@ -2263,7 +2258,12 @@ GA_Recomb::breeding_exhaustive( Master_Score & score, Simplex_Minimizer & simple
 void
 GA_Recomb::breeding_rand( Master_Score & score, Simplex_Minimizer & simplex, AMBER_TYPER & c_typer, Orient & orient, int gen_num )
 {
-
+ 
+    //copy parents vector onto old parents for PDM - BTB
+    vector<DOCKMol> old_parents;
+    if (use_limit_max_change){
+        old_parents = parents;
+    }
     Trace trace( "GA_Recomb::breeding_rand()" );
     // Step 1: Prepare parents for breeding
     // Activate parents before amber_typer
@@ -2818,9 +2818,14 @@ GA_Recomb::breeding_rand( Master_Score & score, Simplex_Minimizer & simplex, AMB
         //Check if size is 0 then exit
         if (scored_generation.size() == 0){
            cout << endl << "WARNING: THERE ARE NO OFFSPRING (after crossover and pruning)" <<endl;
-           if (ga_mutate_parents == false){
-              cout << "ERROR: THE PROGRAM WILL EXIT. Consider using parent mutations."<<endl;
-              exit(0);
+	   if (ga_mutate_parents == false){
+              if (limit_max_change_ramp_gens > 0 ){
+                  cout << "ERROR: THE PROGRAM WILL EXIT. Consider using parent mutations."<<endl;
+                  exit(0);
+              }
+              else{
+                  limit_max_change_ramp_gens += 1;
+              }
            }
         }
 
@@ -2926,7 +2931,7 @@ GA_Recomb::breeding_rand( Master_Score & score, Simplex_Minimizer & simplex, AMB
           // After scoring, prune the lot
           fitness_pruning(ppruned, pfinal, score, simplex, c_typer);
           //cout << "pfinal, parents" << endl;
-          uniqueness_prune_mut(pfinal, parents, score, c_typer);
+          uniqueness_prune_mut(pfinal, parents, pruned_parents, score, c_typer);
 
           // Combine final mutated parents with original 
           for (int i=0; i<pfinal.size(); i++ ){
@@ -2996,11 +3001,11 @@ GA_Recomb::breeding_rand( Master_Score & score, Simplex_Minimizer & simplex, AMB
        // If mutating the parents
        if ((ga_mutate_parents == true) && (mutated_parents.size() != 0)){
           //cout << "scoredgen, mutated parents"<< endl;    
-          uniqueness_prune_mut(scored_generation, mutated_parents, score, c_typer);
+          uniqueness_prune_mut(scored_generation, mutated_parents, pruned_parents, score, c_typer);
        }
        // Prune offspring that are similar to the parents
        cout << "scoredgen, parents" << endl;
-       uniqueness_prune_mut(scored_generation, parents, score, c_typer);
+       uniqueness_prune_mut(scored_generation, parents, pruned_parents, score, c_typer);
        double stop_time_step7 = time_seconds();
        if (verbose) cout << "\n" "-----------------------------------" "\n";
        if (verbose) cout << " Elapsed time Pruning-Mutate Offspring:\t" << stop_time_step7 - start_time_step7
@@ -3012,9 +3017,35 @@ GA_Recomb::breeding_rand( Master_Score & score, Simplex_Minimizer & simplex, AMB
            scored_generation.push_back(mutated_parents[i]);
        }
     }
+
+    // Prune offspring that are too disimilar to the parents - BTB 2022.08.23
+    if (use_limit_max_change){
+         int print_pre_PDM_molecules = 0;
+         if (print_pre_PDM_molecules){
+             std::ostringstream gen;
+             ostringstream fout_molecules_name; // this is to try and identify issues with PDM/dissimilar_RMSD - 2023.06.19
+             cout << endl << "entering PDM" << endl;
+             gen << std::setw(4) << std::setfill('0') << gen_num+1;
+             fout_molecules_name << ga_output_prefix << ".pre_PDM" << gen.str() <<".mol2";
+             print_molecules(fout_molecules_name.str().c_str(), scored_generation, gen_num, "pre-PDM_");
+             fout_molecules_name.clear();
+        }
+        if (gen_num==0){
+           //commented because it causes compilation issues
+           delta_max.set_c_typer(c_typer); //provide a ctyper for certain functions inside delta max, only need to do this once at the start; potential bug, start from non-zero generation, if gen_num is not set to zero this may not be set
+        }
+        delta_max.prune_divergent_molecules(scored_generation, divergent_children, old_parents, gen_num);
+        if (scored_generation.size() > 0){
+            limit_max_change_ramp_gens = 0;
+        }
+    }
+
+
     // Clear necessary vectors
     mutated_parents.clear();
-
+    if (use_limit_max_change){
+        old_parents.clear();
+    }
     return;
 
 } // end GA_Recomb::breeding_rand()
@@ -3477,51 +3508,38 @@ GA_Recomb::recomb_mols_xover( DOCKMol & mol1, int mol1o, int mol1t, DOCKMol &  m
     if (dnm_enabled){
         //Double check to make sure this matters for this set of parents
         if ( mol1.mol_dnm_flag || mol2.mol_dnm_flag ) {
-            int child_dnm_counter=0;
-            int p1_dnm_counter=0;
-            int p2_dnm_counter=0;
-            //Checks all inactive of mol1 for DNM - doesn't accept if so.
-            //Keeps a counter of all active DNM atoms along the way for a final
-            //check to make sure the molecule is valid (ie doesn't GAIN any DNM atoms)
+
+            int p1_dnm_active_counter = 0;
+            int p2_dnm_active_counter = 0;
+            int p1_dnm_inactive_counter = 0;
+            int p2_dnm_inactive_counter = 0;
+            //Checks all atoms of mol1 for DNM atoms - counts if they are active or inactive
             if ( mol1.mol_dnm_flag ) {
                 for ( int i=0; i<mol1.num_atoms; i++){
-                //    //If the atom is inactive AND marked as DNM
-                //    if ( mol1.atom_dnm_flag[i] && !mol1.atom_active_flags[i] ){
-                //        cout << "Crossover would result in loss of DNM segment. This crossover is invalid." << endl;
-                //        return;
-//
-                //    //If the atom is active AND marked as DNM
-                //    } else if ( mol1.atom_dnm_flag[i] && mol1.atom_active_flags[i] ){
-                //        child_dnm_counter++;
-                //        p1_dnm_counter++;
-                //    }
-                //}
+
                     if ( mol1.atom_dnm_flag[i] && mol1.atom_active_flags[i] ){
-                        child_dnm_counter++;
-                        p1_dnm_counter++;
+                        p1_dnm_active_counter++;
+                    } else if ( mol1.atom_dnm_flag[i] && !mol1.atom_active_flags[i] ) {  
+                        p1_dnm_inactive_counter++;
+
                     }
                 }
             }
-            //Checks all inactive of mol2 for DNM - doesn't accept if so.
+            //Checks all atoms of mol2 for DNM atoms - counts if they are active or inactive
             if ( mol2.mol_dnm_flag ) {
                 for ( int i=0; i<mol2.num_atoms; i++ ){
-                   ////If the atom is inactive AND marked as DNM
-                   //if ( mol2.atom_dnm_flag[i] && !mol2.atom_active_flags[i] ){
-                   //    cout << "Crossover would result in loss of DNM segment. This crossover is invalid." << endl;
-                   //    return;   
-                   ////If the atom is active AND marked as DNM
-                   //} else if ( mol2.atom_dnm_flag[i] && mol2.atom_active_flags[i] ){
-                   //    child_dnm_counter++;
-                   //    p2_dnm_counter++;
-                   //}
-
                     if ( mol2.atom_dnm_flag[i] && mol2.atom_active_flags[i] ){
-                            child_dnm_counter++;
-                            p2_dnm_counter++;
+                        p2_dnm_active_counter++;
+                    } else if ( mol1.atom_dnm_flag[i] && !mol1.atom_active_flags[i] ) {
+                        p2_dnm_inactive_counter++;
                     }
                 }
             }
-            if (child_dnm_counter != p1_dnm_counter || child_dnm_counter != p2_dnm_counter){
+
+            //Subtracts active DNM of a parent with the inactive of the other. Should = 0, otherwise 
+            // there is a loss of DNM functionality in the final molecule.
+            if ((p1_dnm_active_counter - p2_dnm_inactive_counter) != 0 || 
+                (p2_dnm_active_counter - p1_dnm_inactive_counter) != 0) {
                 cout << "Crossover would result in a differing number of DNM atoms. This crossover is invalid." << endl;
                 return;
             }
@@ -5020,9 +5038,10 @@ GA_Recomb::mutation_selection( DOCKMol & gen, std::vector <DOCKMol> & mfinal, Ma
     //    }
     //}
 //JDB start for DNM
+    bool dnm_encountered = false;
     if (dnm_enabled){
         seg_exclude_indices.clear(); //clear from last molecule
-        bool dnm_encountered=false;
+        //bool dnm_encountered=false;
         
         // For all segments in mol
         for (int i=0; i<num_segments; i++){
@@ -6147,7 +6166,7 @@ GA_Recomb::additions ( DOCKMol & anchor, int segment, Master_Score & score, Simp
     // Sort molecules by score
     if (c_dn.tmp_mutants.size() > 0){
        if (c_dn.tmp_mutants.size() > 1){
-          sort(c_dn.tmp_mutants.begin(), c_dn.tmp_mutants.end(), ga_fragment_sort);
+          c_dn.frag_sort(c_dn.tmp_mutants, ga_fragment_sort);
        }
        // While you have yet to find a valid molecule
         while (mutants.size() == 0){
@@ -6439,6 +6458,7 @@ GA_Recomb::rand_replacement( Fragment & ref, int final_seg, std::vector <Fragmen
     for ( int i=0; i<fraglib.size(); i++ ){
         tmp_fraglib.push_back(fraglib[i]);
     }
+
     
     // While N choices...
     int current = 0;
@@ -6462,11 +6482,11 @@ GA_Recomb::rand_replacement( Fragment & ref, int final_seg, std::vector <Fragmen
         // (2) Only replace rings with other rings
         if ( ref.ring_size > 0 ){
            if ( tmp_fraglib[frag_index].ring_size == 0 ){ 
-           // Delete the molecule from the vector
-           tmp_fraglib.erase(tmp_fraglib.begin()+frag_index);
+               // Delete the molecule from the vector
+               frag_erase(tmp_fraglib, frag_index);
                current++;
                passes++;
-               cout << "deleted frag from vector because no ring" << endl;
+               cout << "Deleted frag from vector because no ring" << endl;
                continue; 
             }
         }
@@ -6474,11 +6494,11 @@ GA_Recomb::rand_replacement( Fragment & ref, int final_seg, std::vector <Fragmen
         // NOTE - techically a ring where all of the aps are on 1 heavy atom would work
         else if ( ref.ring_size == 0 ){ 
            if ( tmp_fraglib[frag_index].ring_size != 0 ){ 
-           // Delete the molecule from the vector
-           tmp_fraglib.erase(tmp_fraglib.begin()+frag_index);
+              // Delete the molecule from the vector
+              frag_erase(tmp_fraglib, frag_index);
               current++;
               passes++;
-              cout << "deleted frag from vector because it has a ring" << endl;
+              cout << "Deleted frag from vector because it has a ring" << endl;
               continue; 
            }
         }
@@ -6491,7 +6511,7 @@ GA_Recomb::rand_replacement( Fragment & ref, int final_seg, std::vector <Fragmen
         if ( compare_aps_bond_types.size() == 0 ){
            compare_aps_bond_types.clear();
            // Delete the molecule from the vector
-           tmp_fraglib.erase(tmp_fraglib.begin()+frag_index);
+           frag_erase(tmp_fraglib, frag_index);
            cout << "Deleted fragment because bond types did not match" << endl;
            current++;
            passes++;
@@ -6526,7 +6546,7 @@ GA_Recomb::rand_replacement( Fragment & ref, int final_seg, std::vector <Fragmen
         if ((result.second < 1)) { 
            compare_aps_bond_types.clear();
            // Delete the molecule from the vector
-           tmp_fraglib.erase(tmp_fraglib.begin()+frag_index);
+           frag_erase(tmp_fraglib, frag_index);
            cout << "Deleted fragment because its too similar to chosen segment" << endl;
            current++;
            passes++;
@@ -6540,7 +6560,7 @@ GA_Recomb::rand_replacement( Fragment & ref, int final_seg, std::vector <Fragmen
         if ( allowed_results[2] == 0 ){
            allowed_results.clear();
            // Delete the molecule from the vector
-           tmp_fraglib.erase(tmp_fraglib.begin()+frag_index);
+           frag_erase(tmp_fraglib, frag_index);
            cout << "Deleted fragment because not matching bondtypes" << endl;
            current++; 
            passes++;
@@ -6635,7 +6655,7 @@ GA_Recomb::rand_replacement( Fragment & ref, int final_seg, std::vector <Fragmen
            // If there are no orients, continue to next fragment
            if ( final_orients.size() == 0 ){
               // Delete the molecule from the vector
-              tmp_fraglib.erase(tmp_fraglib.begin()+frag_index);
+              frag_erase(tmp_fraglib, frag_index);
               passes++;
               cout << "unsuccessful orienting" << endl;
               // DELETE
@@ -6718,7 +6738,7 @@ GA_Recomb::rand_replacement( Fragment & ref, int final_seg, std::vector <Fragmen
         // Delete the molecule from the vector
         compare_aps_bond_types.clear();
         allowed_results.clear();
-        tmp_fraglib.erase(tmp_fraglib.begin()+frag_index);
+        frag_erase(tmp_fraglib, frag_index);
     } 
     if (mutants.size() > 0){
         hard_filter(mutants);
@@ -8515,7 +8535,8 @@ GA_Recomb::minimize_children( DOCKMol & child, std::vector <DOCKMol> & molvec, M
 // // Prune children by similarity with parents DOCKMol vec using Hungarian Score
 // // If there are redundant molecules, keep the one with the best score between the
 // // children and parents
-void GA_Recomb::uniqueness_prune_mut( std::vector <DOCKMol> & children, std::vector <DOCKMol> & parents, Master_Score & score, AMBER_TYPER & typer)
+// // stores molecules pruned for not being unique in pruned_parents vec
+void GA_Recomb::uniqueness_prune_mut( std::vector <DOCKMol> & children, std::vector <DOCKMol> & parents, std::vector <DOCKMol> & pruned_parents, Master_Score & score, AMBER_TYPER & typer)
 {
     Trace trace( "GA_Recomb::uniqueness_prune_mut()" );
     double start_time = time_seconds();
@@ -8604,6 +8625,11 @@ void GA_Recomb::uniqueness_prune_mut( std::vector <DOCKMol> & children, std::vec
        if (!parents[i].used){
           saved.push_back(parents[i]);
        }
+       //BTB 2023.03.29 - in order to better account for parents getting replaced by identical children, push pruned parents to a vector for printing
+       else{
+          pruned_parents.push_back(parents[i]);
+       }
+
     }
     cout << "### Parents size before P-O pruning " << parents.size();
     parents.clear();
@@ -12307,7 +12333,7 @@ GA_Recomb::unique_parents(std::vector <DOCKMol> & tmp, Master_Score & score, Sim
 // Create a unique name with the parents, generation number, and location in file
 // If mol from all new, name is dn_gennum_loc
 void
-GA_Recomb::naming_function( DOCKMol & mol, int gen, int loc )
+GA_Recomb::naming_function( DOCKMol & mol, int gen, int loc, std::string prefix)
 {
 
    //cout << "inside NAMING FUNCTION" <<endl;
@@ -12336,6 +12362,9 @@ GA_Recomb::naming_function( DOCKMol & mol, int gen, int loc )
 
    // Add the items in list to the subst name
    ostringstream new_title;
+
+   //BTB 2022.10.24 - provide additional context for the molecule in the name
+   new_title << prefix;
    
    // Add gen first  
    if ( gen < 10 ){
@@ -12628,4 +12657,109 @@ GA_Recomb::set_DNM_bools_start( std::vector <DOCKMol> & parents)
 }
 // +++++++++++++++++++++++++++++++++++++++++++++++
 
+//function to erase a member from a vec of frags
+void
+GA_Recomb::frag_erase(std::vector<Fragment> & vec_frag, int position){
+    std::list<Fragment> list_growing(vec_frag.begin(), vec_frag.end());
+    vec_frag.clear();
+    std::list<Fragment>::iterator frag_pos = list_growing.begin();
+    std::advance(frag_pos, position);
+    list_growing.erase(frag_pos);
+
+    for (Fragment tmp_frag : list_growing){
+        vec_frag.push_back(tmp_frag);
+    }
+}
+
+// +++++++++++++++++++++++++++++++++++++++++++++++
+
+//BTB - print divergent molecules
+// file name, list of molecules, generation #
+void
+GA_Recomb::print_molecules(std::string fout_molecules_name, std::vector <DOCKMol> & parents, int i, std::string prefix){
+    fstream fout_molecules;
+    fout_molecules.open (fout_molecules_name, fstream::out|fstream::app);
+    for (int j=0; j<parents.size(); j++){
+        activate_mol(parents[j]);
+        // Print necessary descriptors
+        calc_descriptors(parents[j]);
+        // Only Update name if a new molecule
+        // BTB - if limit max change is on then the molecule is already named in PDM
+        if (parents[j].parent == 0){
+            naming_function(parents[j], i+1, j, prefix);
+        }
+
+
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Name:"
+                       << setw(FLOAT_WIDTH) << parents[j].title <<endl;
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Generation:"
+                       << setw(FLOAT_WIDTH) << i+1 <<endl;
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Molecular_Weight:"
+                       << setw(FLOAT_WIDTH) << fixed << setprecision(3) << parents[j].mol_wt <<endl;
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "DOCK_Rotatable_Bonds:"
+                       << setw(FLOAT_WIDTH) << parents[j].rot_bonds <<endl;
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Hydrogen_Acceptors:"
+                       << setw(FLOAT_WIDTH) << parents[j].hb_acceptors <<endl;
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Hydrogen_Donors:"
+                       << setw(FLOAT_WIDTH) << parents[j].hb_donors <<endl;
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Formal_Charge:"
+                       << setw(FLOAT_WIDTH) << fixed << setprecision(3) << round(parents[j].formal_charge) <<endl;
+
+        #ifdef BUILD_DOCK_WITH_RDKIT
+        RDTYPER rdprops;
+        rdprops.calculate_descriptors(parents[j], ga_fragMap, true, ga_PAINSMap);
+
+        std::vector<std::string> vecpnstmp{};
+        vecpnstmp = parents[j].pns_name;
+        std::string molpns_name = std::accumulate(vecpnstmp.begin(), vecpnstmp.end(), std::string(""));
+
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "num_arom_rings:"
+                       << setw(FLOAT_WIDTH) << parents[j].num_arom_rings << endl;
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "num_alip_rings:"
+                       << setw(FLOAT_WIDTH) << parents[j].num_alip_rings << endl;
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "num_sat_rings:"
+                       << setw(FLOAT_WIDTH) << parents[j].num_sat_rings << endl;
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Stereocenters:"
+                       << setw(FLOAT_WIDTH) << parents[j].num_stereocenters << endl;
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Spiro_atoms:"
+                       << setw(FLOAT_WIDTH) << parents[j].num_spiro_atoms << endl;
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "TPSA:"
+                       << setw(FLOAT_WIDTH) << parents[j].tpsa << endl;
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "cLogP:"
+                       << setw(FLOAT_WIDTH) << parents[j].clogp << endl;
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "ESOL:"
+                       << setw(FLOAT_WIDTH) << parents[j].esol << endl;
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "QED:"
+                       << setw(FLOAT_WIDTH) << parents[j].qed_score << endl;
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "SA_Score:"
+                       << setw(FLOAT_WIDTH) << parents[j].sa_score << endl;
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "SMILES: "
+                       << setw(FLOAT_WIDTH) << parents[j].smiles << endl;
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "num_of_PAINS:"
+                       << setw(FLOAT_WIDTH) << parents[j].pns << endl;
+        fout_molecules << DELIMITER << setw(STRING_WIDTH) << "PAINS_names:"
+                       << setw(FLOAT_WIDTH) << molpns_name << endl;
+        #endif
+        // Calculate the fitness score for the initial ensemble if niching is being used
+        if ( ga_niching ){
+           if ( ga_niche_sharing ){
+               fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Fitness_Score:"
+                              << setw(FLOAT_WIDTH) << fixed << setprecision(3) << parents[j].fitness <<endl;
+           }
+           else{
+              fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Rank:"
+                             << setw(FLOAT_WIDTH) << parents[j].rank <<endl;
+              fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Crowding_Distance:"
+                             << setw(FLOAT_WIDTH) << fixed << setprecision(3) << parents[j].crowding_dist <<endl;
+          }
+        }
+         fout_molecules << DELIMITER << setw(STRING_WIDTH) << "Type:"
+                        << setw(FLOAT_WIDTH) << parents[j].energy <<endl;
+         //current _data may not be initialized on write out
+         fout_molecules << parents[j].current_data << endl;
+         Write_Mol2(parents[j], fout_molecules);
+    }
+    fout_molecules.close();
+
+}
 

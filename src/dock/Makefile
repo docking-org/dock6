@@ -9,12 +9,12 @@ PROGS= dock6$(DOCK_SUFFIX)
 OBJS= amber_typer.o base_grid.o base_mpi.o base_score.o conf_gen_ag.o \
       conf_gen_cg.o conf_gen_dn.o conf_gen_dn_ga.o conf_gen_ga.o conf_gen_hdb.o \
       dock.o dockmol.o filter.o fingerprint.o fraggraph.o fragment.o \
-      gasteiger.o grid.o hungarian.o library_file.o master_conf.o master_score.o \
+      gasteiger.o grid.o hungarian.o library_file.o limit_max_change.o master_conf.o master_score.o \
       orient.o sasa.o score.o score_amber.o score_chemgrid.o \
       score_descriptor.o score_footprint.o score_ph4.o score_volume.o \
       score_gist.o score_hbond.o score_internal.o score_multigrid.o score_sasa.o \
-      score_solvent.o simplex.o sphere.o trace.o utils.o iso_align.o rdtyper.o
-
+      score_solvent.o simplex.o sphere.o trace.o utils.o iso_align.o mem_info.o rdtyper.o \
+      rddrive.o
 
 all:  $(PROGS)
 
@@ -66,7 +66,7 @@ amber_typer.o: amber_typer.h utils.h dockmol.h fingerprint.h
 base_grid.o: base_grid.h utils.h trace.h trace.inl
 base_mpi.o: base_mpi.h dockmol.h utils.h trace.h trace.inl
 base_score.o: amber_typer.h utils.h base_score.h dockmol.h trace.h trace.inl
-conf_gen_ag.o: conf_gen_ag.h dockmol.h utils.h fingerprint.h master_score.h
+conf_gen_ag.o: conf_gen_ag.h dockmol.h utils.h fingerprint.h master_score.h limit_max_change.h
 conf_gen_ag.o: score.h base_score.h score_multigrid.h score_footprint.h
 conf_gen_ag.o: score_ph4.h score_volume.h score_hbond.h score_internal.h
 conf_gen_ag.o: score_descriptor.h hungarian.h score_gist.h score_amber.h
@@ -81,7 +81,7 @@ conf_gen_cg.o: score_gist.h score_amber.h nab/nab.h defreal.h nab/nabtypes.h
 conf_gen_cg.o: nab/defreal.h score_chemgrid.h base_grid.h score_solvent.h
 conf_gen_cg.o: grid.h score_sasa.h sasa.h simplex.h trace.h trace.inl
 conf_gen_dn.o: conf_gen_dn.h amber_typer.h utils.h dockmol.h fragment.h iso_align.h
-conf_gen_dn.o: master_score.h score.h base_score.h score_multigrid.h
+conf_gen_dn.o: master_score.h mem_info.h score.h base_score.h score_multigrid.h
 conf_gen_dn.o: score_footprint.h score_ph4.h score_volume.h score_hbond.h
 conf_gen_dn.o: score_internal.h score_descriptor.h fingerprint.h hungarian.h
 conf_gen_dn.o: score_gist.h score_amber.h nab/nab.h defreal.h nab/nabtypes.h
@@ -110,7 +110,7 @@ conf_gen_hdb.o: score_descriptor.h fingerprint.h hungarian.h score_gist.h
 conf_gen_hdb.o: score_amber.h nab/nab.h defreal.h nab/nabtypes.h
 conf_gen_hdb.o: nab/defreal.h score_chemgrid.h base_grid.h score_solvent.h
 conf_gen_hdb.o: grid.h score_sasa.h sasa.h simplex.h trace.h trace.inl
-dock.o: amber_typer.h utils.h master_conf.h dockmol.h conf_gen_cg.h
+dock.o: amber_typer.h utils.h master_conf.h mem_info.h dockmol.h conf_gen_cg.h
 dock.o: conf_gen_ag.h conf_gen_dn.h fragment.h master_score.h score.h
 dock.o: base_score.h score_multigrid.h score_footprint.h score_ph4.h
 dock.o: score_volume.h score_hbond.h score_internal.h score_descriptor.h
@@ -145,6 +145,13 @@ library_file.o: score_internal.h score_descriptor.h fingerprint.h hungarian.h
 library_file.o: score_gist.h score_amber.h nab/nab.h defreal.h nab/nabtypes.h
 library_file.o: nab/defreal.h score_chemgrid.h base_grid.h score_solvent.h
 library_file.o: grid.h score_sasa.h sasa.h simplex.h trace.h trace.inl
+limit_max_change.o: limit_max_change.h master_score.h score.h base_score.h utils.h dockmol.h 
+limit_max_change.o: score_multigrid.h score_footprint.h score_ph4.h
+limit_max_change.o: score_volume.h score_hbond.h score_internal.h
+limit_max_change.o: score_descriptor.h fingerprint.h hungarian.h score_gist.h
+limit_max_change.o: score_amber.h nab/nab.h defreal.h nab/nabtypes.h
+limit_max_change.o: nab/defreal.h score_chemgrid.h base_grid.h score_solvent.h
+limit_max_change.o: grid.h score_sasa.h sasa.h 
 master_conf.o: master_conf.h dockmol.h utils.h conf_gen_cg.h conf_gen_ag.h
 master_conf.o: conf_gen_dn.h amber_typer.h fragment.h master_score.h score.h
 master_conf.o: base_score.h score_multigrid.h score_footprint.h score_ph4.h
@@ -208,10 +215,12 @@ simplex.o: nab/nabtypes.h nab/defreal.h score_chemgrid.h base_grid.h
 simplex.o: score_solvent.h grid.h score_sasa.h sasa.h simplex.h
 sphere.o: sphere.h utils.h
 trace.o: trace.h trace.inl
-utils.o: utils.h
+utils.o: utils.h dockmol.h
 xlogp.o: xlogp.h dockmol.h utils.h
 rdtyper.o: rdtyper.h dockmol.h
-iso_align.o: iso_align.h iso_align.cpp dockmol.h hungarian.h
+rddrive.o: rdtyper.h rddrive.h dockmol.h
+iso_align.o: iso_align.h iso_align.cpp dockmol.h hungarian.h fragment.h
+
 
 sffdock6$(DOCK_SUFFIX):  configured $(OBJS) nab_objects
 	$(LOAD) $(CFLAGS) -o $@ $(OBJS) \
