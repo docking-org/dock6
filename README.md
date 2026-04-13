@@ -34,10 +34,11 @@ The documentation is online at `http://dock.compbio.ucsf.edu/DOCK_6/dock6_manual
 
 For complete installation instructions, including the use of other compilers, RDKit, and Docker, see the installation section of the User's Manual.
 
-For the impatient, installation starts with "./configure -help" in the
-"install" directory.  That is, in a terminal window type this (and then press
-the "enter" key):
-cd install; ./configure -help
+To start, you can obtain this code by cloning the repository (or getting a previous release version from the [Releases page](https://github.com/docking-org/dock6/releases) for this repository).
+
+Once unpacked, installation starts with `./configure -help` in the `~/install` directory.  That is, in a terminal window type this (and then press the "enter" key):
+
+`cd install; ./configure -help`
 
 For more information, including tutorials, bug fixes, etc., please consult
 the UCSF DOCK Web page:
