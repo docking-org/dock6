@@ -1,5 +1,7 @@
 ### DOCK 6.13.1
 
+You can access the tar/zip files of the source code in the [Releases](https://github.com/docking-org/dock6/releases) section at right -->
+
 ## Quick Overview
 DOCK is molecular modeling program used to identify potential binding geometries and interactions of a molecule to a target. Specifically, docking is the identification of the low-energy binding modes of a small molecule, or ligand, within the active site of a macromolecule, or receptor, whose structure is known. A compound that interacts strongly with, or binds, a receptor associated with a disease may inhibit its function and thus act as a drug. Solving the docking problem computationally requires an accurate representation of the molecular energetics as well as an efficient algorithm to search the potential binding modes.
 
