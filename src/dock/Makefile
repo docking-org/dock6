@@ -9,6 +9,7 @@ PROGS= dock6$(DOCK_SUFFIX)
 OBJS= amber_typer.o base_grid.o base_mpi.o base_score.o conf_gen_ag.o \
       conf_gen_cg.o conf_gen_dn.o conf_gen_dn_ga.o conf_gen_ga.o conf_gen_hdb.o \
       dock.o dockmol.o filter.o fingerprint.o fraggraph.o fragment.o \
+      ga_descriptors.o ga_filters.o ga_selection.o ga_mutation.o ga_naming.o \
       gasteiger.o grid.o hungarian.o library_file.o limit_max_change.o master_conf.o master_score.o \
       orient.o sasa.o score.o score_amber.o score_chemgrid.o \
       score_descriptor.o score_footprint.o score_ph4.o score_volume.o \
@@ -22,6 +23,22 @@ install:  all
 	mv $(PROGS) $(BIN)
 
 dock:  dock6$(DOCK_SUFFIX)
+
+# --- Optional unit-test suite (doctest) -------------------------------------
+# Separate, opt-in target: the normal `make` / `make install` path never builds
+# or requires this, and it adds no dependency to the DOCK build. It delegates to
+# the self-contained tests/Makefile (which does NOT need ./configure), forwarding
+# this build's configured compiler so a lab build uses its own toolchain.
+# Standalone (no configure needed): cd tests && make run
+test:
+	cd tests && $(MAKE) CXX="$(CXX)" run
+
+test-clean:
+	cd tests && $(MAKE) clean
+
+# Fast syntax-only compile check of conf_gen_ga.cpp (no link, no full build).
+check-compile:
+	cd tests && $(MAKE) CXX="$(CXX)" check-compile
 
 clean:
 	/bin/rm -f $(OBJS)
@@ -102,7 +119,12 @@ conf_gen_ga.o: score_gist.h score_amber.h nab/nab.h defreal.h nab/nabtypes.h
 conf_gen_ga.o: nab/defreal.h score_chemgrid.h base_grid.h score_solvent.h
 conf_gen_ga.o: grid.h score_sasa.h sasa.h orient.h sphere.h simplex.h
 conf_gen_ga.o: conf_gen_ag.h conf_gen_dn.h fraggraph.h gasteiger.h trace.h
-conf_gen_ga.o: trace.inl
+conf_gen_ga.o: trace.inl ga_descriptors.h ga_filters.h ga_selection.h ga_mutation.h ga_naming.h
+ga_descriptors.o: ga_descriptors.h
+ga_filters.o: ga_filters.h
+ga_selection.o: ga_selection.h
+ga_mutation.o: ga_mutation.h
+ga_naming.o: ga_naming.h
 conf_gen_hdb.o: conf_gen_hdb.h dockmol.h utils.h master_score.h score.h
 conf_gen_hdb.o: base_score.h score_multigrid.h score_footprint.h score_ph4.h
 conf_gen_hdb.o: score_volume.h score_hbond.h score_internal.h

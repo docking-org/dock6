@@ -1,4 +1,9 @@
 #include "conf_gen_ga.h"
+#include "ga_descriptors.h"
+#include "ga_filters.h"
+#include "ga_selection.h"
+#include "ga_mutation.h"
+#include "ga_naming.h"
 #include "conf_gen_ag.h"
 //#include "conf_gen_dn.h"
 #include "conf_gen_dn_ga.h"
@@ -553,24 +558,25 @@ GA_Recomb::input_parameters( Parameter_Reader & parm )
     //ga_selection_method = parm.query_param("ga_selection_method", "elitism", "elitism | tournament | roulette | sus | metropolis");
     ga_selection_method = parm.query_param("ga_selection_method", "elitism", "elitism | tournament | roulette");
    
-    // Initialize options
-    ga_selection_method_elitism = false;
-    ga_selection_method_tournament = false;
-    ga_selection_method_roulette = false;
-    ga_selection_method_sus = false;
-    ga_selection_method_metropolis = false;
-
-    if (ga_selection_method.compare("elitism") == 0){
-        ga_selection_method_elitism = true;
-    } else if (ga_selection_method.compare("tournament") == 0){
-        ga_selection_method_tournament = true;
-    } else if (ga_selection_method.compare("roulette") == 0){
-        ga_selection_method_roulette = true;
-    } else if (ga_selection_method.compare("sus") == 0){
-        ga_selection_method_sus = true;
-    } else if (ga_selection_method.compare("metropolis") == 0){
-        ga_selection_method_metropolis = true;
-    } else {
+    // Decode the selection-method token into the enabling flags. Table-driven so a new
+    // strategy adds a row here (paired with a registry row in selection_method) rather
+    // than another else-if arm. For a valid token exactly one flag ends up true; the
+    // tokens are unique, so this is equivalent to the former "all false then set one".
+    struct SelectionOption { const char * token; bool GA_Recomb::* flag; };
+    static const SelectionOption selection_options[] = {
+        { "elitism",    &GA_Recomb::ga_selection_method_elitism    },
+        { "tournament", &GA_Recomb::ga_selection_method_tournament },
+        { "roulette",   &GA_Recomb::ga_selection_method_roulette   },
+        { "sus",        &GA_Recomb::ga_selection_method_sus        },
+        { "metropolis", &GA_Recomb::ga_selection_method_metropolis },
+    };
+    bool selection_matched = false;
+    for ( const SelectionOption & opt : selection_options ) {
+        bool on = ( ga_selection_method.compare(opt.token) == 0 );
+        this->*(opt.flag) = on;
+        if (on) { selection_matched = true; }
+    }
+    if ( !selection_matched ) {
         cout <<"You chose...poorly." <<endl;
         exit(0);
     }
@@ -3738,41 +3744,14 @@ float
 GA_Recomb::calc_cov_radius( string atom )
 {
     Trace trace( "GA_Recomb::calc_cov_radius()" );
-    // This function assumes that the atom type is a Sybyl atom type. These covalent
-    // radii come from the CRC handbook, and are generalized by element (see header
-    // file). MARK - Perhaps we could use some more rigorous numbers?
-
-    if ( atom == "H" )
-        { return COV_RADII_H; }
-
-    else if ( atom == "C.3" || atom == "C.2" || atom == "C.1" || atom == "C.ar" || atom  == "C.cat" )
-        { return COV_RADII_C; }
-
-    else if ( atom == "N.4" || atom == "N.3" || atom == "N.2" || atom == "N.1" || atom  == "N.ar" ||
-              atom == "N.am" || atom == "N.pl3" )
-        { return COV_RADII_N; }
-
-    else if ( atom == "O.3" || atom == "O.2" || atom == "O.co2" )
-        { return COV_RADII_O; }
-
-    else if ( atom == "S.3" || atom == "S.2" || atom == "S.O" || atom == "S.o" || atom == "S.O2" ||
-              atom == "S.o2" )
-        { return COV_RADII_S; }
-
-    else if ( atom == "P.3" )
-        { return COV_RADII_P; }
-
-    else if ( atom == "F" )
-        { return COV_RADII_F; }
-
-    else if ( atom == "Cl" )
-        { return COV_RADII_CL; }
-
-    else if ( atom == "Br" )
-        { return COV_RADII_BR; }
-
-    else
-        { cout <<"WARNING: Did not recognize the atom_type " <<atom <<" in DN_GA_Build::calc_cov_radius()\n"; return 0.71; }
+    // Behavior-preserving delegation to the extracted lookup; the warning (with its
+    // legacy DN_GA_Build text) stays here so output is unchanged.
+    bool recognized;
+    float radius = ga_descriptors::covalent_radius( atom, recognized );
+    if ( !recognized ) {
+        cout <<"WARNING: Did not recognize the atom_type " <<atom <<" in DN_GA_Build::calc_cov_radius()\n";
+    }
+    return radius;
 
 } // end GA_Recomb::calc_cov_radius()
 
@@ -5406,26 +5385,15 @@ GA_Recomb::mutation_selection( DOCKMol & gen, std::vector <DOCKMol> & mfinal, Ma
     cout << "sub_co : " << sub_co << endl;
     */
 
-    if (ga_mutate_deletion){
-	for(int i = 0; i < del_co; i++){
-            mutation_types.push_back(DELETION_TYPE);
-	}
-    }
-    if (ga_mutate_addition){
-	for(int i = 0; i < add_co; i++){
-            mutation_types.push_back(ADDITION_TYPE);
-	}
-    }
-    if (ga_mutate_substitution){
-	for(int i = 0; i < sub_co; i++){
-            mutation_types.push_back(SUBSTITUTION_TYPE);
-	}
-    }
-    if (ga_mutate_replacement){
-	for(int i = 0; i < rep_co; i++){
-            mutation_types.push_back(REPLACEMENT_TYPE);
-	}
-    }
+    // Each enabled type enters the pool `co` times (probability weighting), in the
+    // order deletion, addition, substitution, replacement; one is then drawn uniformly.
+    const ga_mutation::TypeWeight type_weights[] = {
+        { ga_mutate_deletion,     del_co, DELETION_TYPE     },
+        { ga_mutate_addition,     add_co, ADDITION_TYPE     },
+        { ga_mutate_substitution, sub_co, SUBSTITUTION_TYPE },
+        { ga_mutate_replacement,  rep_co, REPLACEMENT_TYPE  },
+    };
+    mutation_types = ga_mutation::build_weighted_type_pool( type_weights, 4 );
     int mutations_size = mutation_types.size();
     if (mutations_size == 0){
         cout << "Warning! No mutation types are enabled! Exiting!!" << endl;
@@ -5575,22 +5543,16 @@ GA_Recomb::mutation_selection( DOCKMol & gen, std::vector <DOCKMol> & mfinal, Ma
     int final_segment_type = 0;
     // If the molecule is not rigid
     if ( (rigid_ids.size() == 0) ){
-       vector<int> frag_types;
-       //if we have sidechains and are not doing replacement
-       if (sidechain_ids.size() > 0 && mutation_type != REPLACEMENT_TYPE){
-          //0 for sidechains (pre-processing directive, check conf_gen_ga.h file for SIDECHAIN_TYPE defn)
-          frag_types.push_back(SIDECHAIN_TYPE);
-       }
-       //if we have linkers and are not doing substitution
-       if (linker_ids.size() > 0){
-          //1 for linkers
-          frag_types.push_back(LINKER_TYPE);
-       }
-       //if we have scaffolds and are not doing substitution
-       if (scaffold_ids.size() > 0){
-          //2 for sacaffolds
-          frag_types.push_back(SCAFFOLD_TYPE);
-       }
+       // Candidate segment types available for this mutation, in the order
+       // sidechain, linker, scaffold; one is drawn uniformly below. (Sidechains are
+       // only offered when not doing a replacement.) Reuses the weighted-pool helper
+       // with coefficient 1 == "offer once if available".
+       const ga_mutation::TypeWeight seg_weights[] = {
+           { sidechain_ids.size() > 0 && mutation_type != REPLACEMENT_TYPE, 1, SIDECHAIN_TYPE },
+           { linker_ids.size() > 0,                                         1, LINKER_TYPE    },
+           { scaffold_ids.size() > 0,                                       1, SCAFFOLD_TYPE  },
+       };
+       vector<int> frag_types = ga_mutation::build_weighted_type_pool( seg_weights, 3 );
        segment_types = frag_types.size();
        //select fragment type for mutation
        if (segment_types == 0){
@@ -9597,28 +9559,28 @@ GA_Recomb::hard_filter( vector <DOCKMol> & temp_vec )
         }
 
         // Prune if Rot bonds are greater
-        if ( (temp_vec[i].rot_bonds > ga_constraint_rot_bon) ){
+        if ( ga_filters::exceeds_count_limit( temp_vec[i].rot_bonds, ga_constraint_rot_bon ) ){
            cout << "Did not pass RB check." << endl;
            invalid_rot++;
            binary[i] = 1;
         }
 
         // Prune if hydrogen acceptors are greater than constraint
-        if ((temp_vec[i].hb_acceptors > ga_constraint_H_accept) ){
+        if ( ga_filters::exceeds_count_limit( temp_vec[i].hb_acceptors, ga_constraint_H_accept ) ){
            cout << "Did not pass HA check." << endl;
            invalid_HA++;
            binary[i] = 1;
         }
-     
+
         // Prune if Hdonors are greater than constraint
-        if ((temp_vec[i].hb_donors > ga_constraint_H_donor) ){
+        if ( ga_filters::exceeds_count_limit( temp_vec[i].hb_donors, ga_constraint_H_donor ) ){
            cout << "Did not pass HD check." << endl;
            invalid_HD++;
            binary[i] = 1;
         }
 
         // Prune by formal charge range
-        if (((temp_vec[i].formal_charge > ga_constraint_formal_charge) || (temp_vec[i].formal_charge < -ga_constraint_formal_charge)) ){
+        if ( ga_filters::outside_charge_range( temp_vec[i].formal_charge, ga_constraint_formal_charge ) ){
            cout << "Did not pass FC check." << endl;
            invalid_formal++;
            binary[i] = 1;
@@ -9850,54 +9812,9 @@ void
 GA_Recomb::calc_mol_wt( DOCKMol & mol )
 {
     Trace trace( "GA_Recomb::calc_mol_wt()" );
-    //atomic weights from General Chemistry 3rd Edition Darrell D. Ebbing
-    float mw = 0.0;
-
-    for (int i=0; i<mol.num_atoms; i++) {
-
-        string atom = mol.atom_types[i];
-
-        if ( atom == "H")
-            { mw += 1.00794; }
-
-        else if ( atom == "C.3" || atom == "C.2" || atom == "C.1" || atom == "C.ar" || atom  == "C.cat" )
-            { mw += 12.011; }
-
-        else if ( atom == "N.4" || atom == "N.3" || atom == "N.2" || atom == "N.1" || atom  == "N.ar" ||
-                  atom == "N.am" || atom == "N.pl3" )
-            { mw += 14.00674; }
-
-        else if ( atom == "O.3" || atom == "O.2" || atom == "O.co2" )
-            { mw += 15.9994; }
-
-        else if ( atom == "S.3" || atom == "S.2" || atom == "S.O" || atom == "S.o" || atom == "S.O2" ||
-                  atom == "S.o2" )
-            { mw += 32.066; }
-
-        else if ( atom == "P.3" )
-            { mw += 30.973762; }
-
-        else if ( atom == "F" )
-            { mw += 18.9984032; }
-
-        else if ( atom == "Cl" )
-            { mw += 35.4527; }
-
-        else if ( atom == "Br" )
-            { mw += 79.904; }
-
-        else if ( atom == "I" )
-            { mw += 126.90447; }
-
-        else if ( atom == "Du" )
-            { mw += 0; }
-
-        else
-            { cout <<"WARNING: Did not recognize the atom_type " <<atom <<" in DN_GA_Build::calc_mol_wt()\n"; }
-
-    }
-
-    mol.mol_wt = mw;
+    // Behavior-preserving delegation to the extracted pure computation
+    // (atomic-weight table and float+double accumulation live in ga_descriptors).
+    mol.mol_wt = ga_descriptors::molecular_weight( mol.atom_types, mol.num_atoms );
     return;
 
 } // end GA_Recomb::calc_mol_wt()
@@ -9911,17 +9828,8 @@ void
 GA_Recomb::calc_rot_bonds( DOCKMol & mol )
 {
     Trace trace( "GA_Recomb::calc_rot_bonds()" );
-    // The number of rotatable bonds
-    int counter = 0;
-
-    for (int i=0; i<mol.num_bonds; i++){
-        if (mol.amber_bt_id[i] != -1 ){
-            counter++;
-        }
-    }
-
     // Assign it directly to the referenced mol object
-    mol.rot_bonds = counter;
+    mol.rot_bonds = ga_descriptors::count_rotatable_bonds( mol.amber_bt_id, mol.num_bonds );
 
     return;
 
@@ -9936,23 +9844,9 @@ void
 GA_Recomb::num_HA_HD( DOCKMol & mol )
 {
     Trace trace( "GA_Recomb::num_HA_HD()" );
-    // Populate HD fields	
-    int counter = 0;
-    for (int i=0; i<mol.num_atoms; i++){
-        if (mol.flag_acceptor[i] == true){
-           counter++;         
-        }
-    }
-    mol.hb_acceptors = counter;
-
-    // Populate HA fields	
-    counter = 0;
-    for (int i=0; i<mol.num_atoms; i++){
-        if (mol.flag_donator[i] == true){
-           counter++;         
-        }
-    }
-    mol.hb_donors = counter;
+    // acceptors then donors — order preserved from the original
+    mol.hb_acceptors = ga_descriptors::count_true_flags( mol.flag_acceptor, mol.num_atoms );
+    mol.hb_donors    = ga_descriptors::count_true_flags( mol.flag_donator, mol.num_atoms );
 
    return;
 
@@ -9969,15 +9863,8 @@ void
 GA_Recomb::calc_formal_charge( DOCKMol & mol )
 {
     Trace trace( "GA_Recomb::calc_formal_charge()" );
-    float charge = 0.0;
-
-    // Iterate over all atoms, find the partial charge
-    for (int i=0; i<mol.num_atoms; i++){
-        charge += mol.charges[i];
-    }
-
-    // Assign it directly to the referenced mol object
-    mol.formal_charge = charge;
+    // Molecule must be precharged with gasteiger (see header note).
+    mol.formal_charge = ga_descriptors::sum_charges( mol.charges, mol.num_atoms );
 
     return;
 } // end DN_GA_Build::calc_formal_charge();
@@ -10016,28 +9903,35 @@ GA_Recomb::selection_method ( Master_Score & score, AMBER_TYPER & typer )
     cout <<"#### Final parent size before selection: " << tmp_parents.size() <<endl;
     cout <<"#### Final offspring size before selection: " << scored_generation.size() <<endl;
     unpruned_molecule_counter[current_generation] = scored_generation.size();
-    // Call the appropriate function
-    if (ga_selection_method_elitism ){
-       cout << "Selection Method: Elitism" <<endl;
-       selection_elite(tmp_parents, score, typer);
-    }
-    else if (ga_selection_method_tournament ){
-       cout << "Selection Method: Tournament" <<endl;
-        selection_tournament(tmp_parents, score, typer);
-    }
-    else if (ga_selection_method_roulette ){
-       cout << "Selection Method: Roulette" <<endl;
-        selection_roulette(tmp_parents, score, typer);
-    }
-    else if (ga_selection_method_sus ){
-       cout << "Selection Method: SUS" <<endl;
-        selection_sus(tmp_parents, score, typer);
-    }
-    else if (ga_selection_method_metropolis ){
-       cout << "Selection Method: Metropolis" <<endl;
-        selection_metropolis(tmp_parents, score, typer);
+
+    // Table-driven selection dispatch. To add a strategy: register a row here
+    // (label, its enabling flag, and its handler) — the dispatch logic below never
+    // changes. This is behavior-identical to the former if/else-if ladder over the
+    // five booleans: rows are checked in order and the first enabled one wins.
+    struct SelectionStrategy {
+        const char *          label;
+        bool GA_Recomb::*     enabled;
+        void (GA_Recomb::*    run)( std::vector<DOCKMol> &, Master_Score &, AMBER_TYPER & );
+    };
+    static const SelectionStrategy strategies[] = {
+        { "Elitism",    &GA_Recomb::ga_selection_method_elitism,    &GA_Recomb::selection_elite      },
+        { "Tournament", &GA_Recomb::ga_selection_method_tournament, &GA_Recomb::selection_tournament },
+        { "Roulette",   &GA_Recomb::ga_selection_method_roulette,   &GA_Recomb::selection_roulette   },
+        { "SUS",        &GA_Recomb::ga_selection_method_sus,        &GA_Recomb::selection_sus        },
+        { "Metropolis", &GA_Recomb::ga_selection_method_metropolis, &GA_Recomb::selection_metropolis },
+    };
+    const int num_strategies = (int)( sizeof(strategies) / sizeof(strategies[0]) );
+
+    bool enabled[ sizeof(strategies) / sizeof(strategies[0]) ];
+    for ( int i = 0; i < num_strategies; i++ ) {
+        enabled[i] = this->*( strategies[i].enabled );
     }
 
+    int choice = ga_selection::first_enabled( enabled, num_strategies );
+    if ( choice >= 0 ) {
+        cout << "Selection Method: " << strategies[choice].label << endl;
+        ( this->*( strategies[choice].run ) )( tmp_parents, score, typer );
+    }
 
     // Activate all molecules
     activate_vector(parents);
@@ -13147,18 +13041,11 @@ GA_Recomb::naming_function( DOCKMol & mol, int gen, int loc, std::string prefix)
    new_title << prefix;
    
    // Add gen first  
-   if ( gen < 10 ){
-       new_title << ga_name_identifier << "_g000" << gen ;
-   }
-   else if ( gen < 100 ){
-       new_title << ga_name_identifier << "_g00" << gen ;
-   }
-   else if ( gen < 1000 ){
-       new_title << ga_name_identifier << "_g0" << gen ;
-   }
-   else {
-       new_title << ga_name_identifier << "_g" << gen ;
-   }
+   // Generation and location fields via the extracted formatter (identical output,
+   // incl. the gen-vs-loc padding asymmetry). prefix was already streamed above, so the
+   // formatter is asked only for the identifier+gen+loc core; the loc block below is
+   // therefore removed.
+   new_title << ga_naming::build_molecule_title( "", ga_name_identifier, gen, loc );
 
    //cout << "new_title: " << new_title << endl;
    //mol.title = new_title.str();
@@ -13184,19 +13071,7 @@ GA_Recomb::naming_function( DOCKMol & mol, int gen, int loc, std::string prefix)
    if (list.size() == 0){
       new_title << "dn";  
    }*/
-   //Add location
-   if ( loc < 10 ){
-       new_title << "_i000" << loc;
-   }
-   else if ( loc < 100 ){
-       new_title << "_i00" << loc;
-   }
-   else if ( loc < 1000 ){
-       new_title << "_i" << loc;
-   }
-   else {
-       new_title << "_i" << loc;
-   }
+   // (location already appended by build_molecule_title above)
 
    //new_title << "_r" << loc;
    /* Add generation and location
@@ -13622,52 +13497,14 @@ GA_Recomb::print_molecules(std::string fout_molecules_name, std::vector <DOCKMol
 // true means it is within range or pseudo accepted
 // flase means rejected 
 bool GA_Recomb::mw_cutoff( DOCKMol &temp_molecule ){
-    // Define variables
-    float  rand_num{};
-    float  rand_num_dec{};
-    double excessMW{};
-    double Z_scoreExcess{};
-    double acceptRate{};
-    bool   result = true;
-
-   
-    if ( ga_MW_cutoff_type.compare("soft") == 0 ) {
-        // if exceeds upper boundary accept or reject with some probability
-        if ( temp_molecule.mol_wt > ga_constraint_upper_mol_wt  ){
-            rand_num = (rand() % 100 +1) ; // This generates a random number from 1 to 100
-            rand_num_dec = rand_num / 100; 
-            excessMW = temp_molecule.mol_wt - ga_constraint_upper_mol_wt; //How much the growing molecule exceeds cutoff by
-            Z_scoreExcess = excessMW / ga_constraint_mol_wt_std_dev; // Similar to a Z score (how many std dev the excess mw is from the cutoff)
-            acceptRate = exp(-1 * Z_scoreExcess * Z_scoreExcess); //e raised to the expression inside the parentheses (similar to Metropolis)
-            if (acceptRate < rand_num_dec ) {
-                result =  false;
-            } 
-        }
-
-        // if exceeds lower boundary accept or reject with some probability
-        if ( temp_molecule.mol_wt < ga_constraint_lower_mol_wt ){
-            rand_num = (rand() % 100 +1) ; // This generates a random number from 1 to 100
-            rand_num_dec = rand_num / 100;
-            excessMW = ga_constraint_lower_mol_wt - temp_molecule.mol_wt; //How much the growing molecule exceeds cutoff by
-            Z_scoreExcess = excessMW / ga_constraint_mol_wt_std_dev; // Similar to a Z score (how many std dev the excess mw is from the cutoff)
-            acceptRate = exp(-1 * Z_scoreExcess * Z_scoreExcess); //e raised to the expression inside the parentheses (similar to Metropolis)
-            if (acceptRate < rand_num_dec ) {
-                result =  false; 
-            } 
-        }
-    } else {
-
-        if ( temp_molecule.mol_wt > ga_constraint_upper_mol_wt){
-            result =  false;
-        }
-        
-        if ( temp_molecule.mol_wt < ga_constraint_lower_mol_wt){
-            result =  false;
-        }
-
-    }
-
-    return result;
+    // Behavior-preserving delegation to the extracted predicate. The soft path's RNG
+    // draws happen inside passes_mw_cutoff via this rand() callback, at exactly the
+    // same points (and count) as before, so the RNG stream is unchanged.
+    bool soft = ( ga_MW_cutoff_type.compare("soft") == 0 );
+    return ga_filters::passes_mw_cutoff( soft, temp_molecule.mol_wt,
+                                         ga_constraint_lower_mol_wt, ga_constraint_upper_mol_wt,
+                                         ga_constraint_mol_wt_std_dev,
+                                         [](){ return rand(); } );
 } // End GA_Recom::mw_cutoff()
 
 
