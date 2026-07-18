@@ -1,0 +1,6 @@
+# TEMPLATE — replace with a real seeded DOCK_GA configuration.
+# Key requirements for a reproducible regression case:
+#   random_seed              <fixed integer>
+#   (minimization enabled, so the RNG is seeded — see regression/README.md)
+#   ga_max_generations       <small, e.g. 3>
+#   ga_ensemble_size         <small, e.g. 20>

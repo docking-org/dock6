@@ -1,0 +1,4 @@
+# build artifacts from the test suite
+run_tests
+run_tests.dSYM/
+*.o

@@ -1,0 +1,4 @@
+# regression run scratch (never commit)
+cases/*/outputs/
+cases/*/.check/
+cases/*/.capture/
